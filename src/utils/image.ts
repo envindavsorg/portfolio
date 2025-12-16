@@ -1,13 +1,19 @@
-import consola from 'consola';
 import sharp from 'sharp';
 
-const convertImageToJpeg = async (imageBuffer: Buffer) => {
+const convertImageToJpeg = async (imageBuffer: Buffer): Promise<Buffer> => {
 	try {
 		return await sharp(imageBuffer)
-			.jpeg({ quality: 90, progressive: true, mozjpeg: true })
+			.rotate()
+			.jpeg({
+				quality: 80,
+				progressive: true,
+				mozjpeg: true,
+				// Prevents color bleeding on red text/sharp lines
+				chromaSubsampling: '4:4:4',
+			})
 			.toBuffer();
 	} catch (error) {
-		consola.error('Error converting image to .jpeg !');
+		console.error(`Image conversion failed: ${(error as Error).message}`);
 		throw error;
 	}
 };

@@ -1,18 +1,33 @@
-const getPrompt = (url: string, isComponent?: boolean) => {
-	if (isComponent) {
-		return `
-I'm looking at this component documentation: ${url}.
+type PromptType = 'component' | 'general' | 'summary';
 
-I want to use it in an React (TypeScript) and eventually Next.js project.
+const getPrompt = (url: string, type: PromptType = 'general'): string => {
+	switch (type) {
+		case 'component':
+			return `
+You are an expert Senior React Developer and UI/UX Specialist.
+I am looking at this component documentation: ${url}
 
-Help me understand how to use it step-by-step, including explaining key concepts,
-showing practical examples with TypeScript code, and pointing out common pitfalls.
+Task:
+1. Analyze the component's API, props, and usage patterns.
+2. Explain how to integrate it into a Next.js (TypeScript) project.
+3. Provide a practical code example using Functional Components and Hooks.
+4. Highlight specific pitfalls regarding Server-Side Rendering (SSR) vs Client-Side Rendering ('use client').
 
-Be ready to answer follow-up questions and help debug issues based on the documentation.
-`;
+Please maintain a concise, technical tone.
+`.trim();
+
+		case 'summary':
+			return `
+Analyze the content at: ${url}
+Provide a high-level executive summary of the key points, followed by 3 potential questions a developer might ask about this topic.
+`.trim();
+
+		default:
+			return `
+I am providing this URL as context: ${url}
+Please analyze the content. I will be asking specific questions about its implementation and logic.
+`.trim();
 	}
-
-	return `Read ${url}, i want to ask questions about it.`;
 };
 
 export default getPrompt;

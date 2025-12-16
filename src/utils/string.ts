@@ -1,8 +1,23 @@
 import { formatIncompletePhoneNumber } from '@/lib/libphonenumber';
 
-export const decodeEmail = (email: string) => atob(email);
+const safeDecode = (str: string): string => {
+	if (!str) {
+		return '';
+	}
 
-export const decodePhoneNumber = (phone: string) => atob(phone);
+	try {
+		if (typeof Buffer !== 'undefined') {
+			return Buffer.from(str, 'base64').toString('utf-8');
+		}
+		return atob(str);
+	} catch (e) {
+		console.warn(`Failed to decode: ${str}`, e);
+		return str;
+	}
+};
 
-export const formatPhoneNumber = (phone: string) =>
-	formatIncompletePhoneNumber(phone);
+export const decodeEmail = (email: string): string => safeDecode(email);
+
+export const decodePhoneNumber = (phone: string): string => safeDecode(phone);
+
+export { formatIncompletePhoneNumber as formatPhoneNumber };

@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic';
 import type React from 'react';
 import { NavBar } from '@/components/navigation/NavBar';
 import { Sparkles } from '@/elements/animations/Sparkles';
-import { getGitHubUserData } from '@/features/root/actions/github.action';
 
 const RootContextMenu = dynamic(() =>
 	import('@/features/context/RootContextMenu').then(
@@ -19,8 +18,8 @@ export type AppLayoutProps = {
 };
 
 const AppLayout = async ({ children }: Readonly<AppLayoutProps>) => {
-	const { branch, commit } = await getGitHubUserData();
-	const { hash, date } = commit;
+	// const { branch, commit } = await getGitHubUserData();
+	// const { hash, date } = commit;
 
 	return (
 		<>

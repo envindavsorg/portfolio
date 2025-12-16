@@ -1,10 +1,15 @@
-import consola from 'consola';
+const copyText = async (text: string): Promise<boolean> => {
+	if (!navigator?.clipboard) {
+		console.warn('Clipboard not supported in this browser !');
+		return false;
+	}
 
-const copyText = async (text: string) => {
 	try {
 		await navigator.clipboard.writeText(text);
-	} catch {
-		consola.error(`Could not copy text for ${text} !`);
+		return true;
+	} catch (error) {
+		console.error('Copy failed !', error);
+		return false;
 	}
 };
 
