@@ -34,7 +34,7 @@ const DialogOverlay = ({
 	<DialogPrimitive.Overlay
 		className={cn(
 			'pointer-events-none fixed inset-0 z-50 select-none',
-			'bg-background/50 backdrop-blur-xs',
+			'hidden bg-background/50 backdrop-blur-xs sm:block',
 			'data-[state=closed]:fade-out-0 data-[state=closed]:animate-out',
 			'data-[state=open]:fade-in-0 data-[state=open]:animate-in',
 		)}
@@ -57,7 +57,7 @@ const DialogContent = ({
 			className={cn(
 				'fixed sm:top-auto sm:right-0 sm:bottom-0 sm:left-auto sm:m-6 sm:translate-x-0 sm:translate-y-0',
 				'rounded-2xl border border-input p-5 outline-none focus:outline-none',
-				'z-50 grid w-full max-w-[calc(100%-2rem)] sm:max-w-[375px]',
+				'z-50 hidden w-full max-w-[calc(100%-2rem)] sm:grid sm:max-w-[375px]',
 				'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-100 data-[state=open]:slide-in-from-bottom-20 data-[state=open]:animate-in data-[state=open]:duration-600',
 				'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:slide-out-to-top-20 data-[state=closed]:animate-out data-[state=closed]:duration-300',
 				'bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)]',

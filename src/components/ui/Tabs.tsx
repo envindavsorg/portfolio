@@ -54,7 +54,7 @@ export const TabsContent = ({
 	...props
 }: ComponentProps<typeof Primitive.Content>) => (
 	<Primitive.Content
-		className={cn('flex-1 outline-none', className)}
+		className={cn('flex-1 space-y-1 py-1 outline-none', className)}
 		data-slot="tabs-content"
 		{...props}
 	/>

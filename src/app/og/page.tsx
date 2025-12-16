@@ -1,5 +1,5 @@
-import { Header } from '@/components/features/root/header/Header';
-import { Overview } from '@/components/features/root/overview/Overview';
+import { Header } from '@/components/features/Header';
+import { Overview } from '@/components/features/Overview';
 import { Divider } from '@/components/ui/Divider';
 
 const Page = () => (

@@ -23,7 +23,6 @@ import Image, { type StaticImageData } from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { SOCIAL_LINKS } from '@/components/features/root/contact/data/social-links';
 import { Button } from '@/components/ui/Button';
 import {
 	CommandDialog,
@@ -36,6 +35,7 @@ import {
 } from '@/components/ui/Command';
 import { Separator } from '@/components/ui/Separator';
 import { CuzeacFlorinMark } from '@/features/assets/CuzeacFlorinMark';
+import { SOCIAL_LINKS } from '@/features/root/contact/data/social-links';
 import { cn } from '@/lib/utils';
 
 type CommandLinkItem = {

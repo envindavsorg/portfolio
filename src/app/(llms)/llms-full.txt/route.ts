@@ -1,5 +1,5 @@
-import { SOCIAL_LINKS } from '@/components/features/root/contact/data/social-links';
 import { SITE_INFO } from '@/config/site';
+import { SOCIAL_LINKS } from '@/features/root/contact/data/social-links';
 import { CERTIFICATIONS } from '@/features/root/data/certifications';
 import { EXPERIENCES } from '@/features/root/data/experiences';
 import { PROJECTS } from '@/features/root/data/projects';

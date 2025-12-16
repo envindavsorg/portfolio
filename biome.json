@@ -38,7 +38,8 @@
 			},
 			"complexity": {
 				"noExcessiveCognitiveComplexity": "off",
-				"noUselessStringRaw": "off"
+				"noUselessStringRaw": "off",
+				"noImportantStyles": "off"
 			},
 			"correctness": {
 				"useExhaustiveDependencies": "off",

@@ -29,6 +29,7 @@ export type User = {
 		website: string;
 	}[];
 	about: string;
+	photo: string;
 	avatar: string;
 	ogImage: string;
 	namePronunciationUrl: string;

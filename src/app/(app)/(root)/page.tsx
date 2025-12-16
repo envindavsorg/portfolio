@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
-import { Cover } from '@/components/features/root/cover/Cover';
+import { Cover } from '@/components/features/cover/Cover';
+import { CurriculumVitae } from '@/components/features/cv/CurriculumVitae';
+import { Header } from '@/components/features/Header';
+import { Overview } from '@/components/features/Overview';
+import { Divider } from '@/components/ui/Divider';
 import { USER } from '@/features/root/data/user';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
@@ -55,12 +59,12 @@ const Page = async () => {
 
 			<div className="mx-auto md:max-w-3xl">
 				<Cover capture={isCapture} />
-				{/*<Header capture={isCapture} />*/}
-				{/*<Divider />*/}
-				{/*<Overview />*/}
-				{/*<Divider />*/}
-				{/*<CV />*/}
-				{/*<Divider />*/}
+				<Header capture={isCapture} />
+				<Divider border />
+				<Overview />
+				<Divider border />
+				<CurriculumVitae />
+				<Divider border />
 				{/*<Contact*/}
 				{/*	capture={isCapture}*/}
 				{/*	github={github}*/}

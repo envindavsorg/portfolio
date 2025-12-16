@@ -1,6 +1,71 @@
+import {
+	BriefcaseIcon,
+	CatIcon,
+	EnvelopeIcon,
+	FlaskIcon,
+	GenderMaleIcon,
+	GithubLogoIcon,
+	NavigationArrowIcon,
+	PhoneIcon,
+} from '@phosphor-icons/react/ssr';
+import type React from 'react';
 import { AboutContent } from '@/content/About';
 import { CvContent } from '@/content/Cv';
-import type { User } from '@/types/user';
+
+type User = {
+	firstName: string;
+	lastName: string;
+	displayName: string;
+	username: string;
+	gender: string;
+	pronouns: string;
+	bio: string;
+
+	overview: {
+		id: string;
+		content: string;
+		icon: React.ElementType;
+		className: string;
+	}[];
+
+	flipSentences: string[];
+	address: string;
+	location: {
+		city: string;
+		zoom: {
+			max: number;
+			min: number;
+			default: number;
+			step: number;
+		};
+		latitude: number;
+		longitude: number;
+	};
+	phoneNumber: string;
+	email: string;
+	website: string;
+	jobTitle: string;
+	jobs: {
+		title: string;
+		company: string;
+		website: string;
+	}[];
+	about: string;
+	photo: string;
+	avatar: string;
+	ogImage: string;
+	namePronunciationUrl: string;
+	documents: {
+		cv: {
+			content: string;
+			url: string;
+			name: string;
+			title: string;
+		};
+	};
+	keywords: string[];
+	dateCreated: string;
+};
 
 export const USER: User = {
 	firstName: 'Florin',
@@ -8,13 +73,68 @@ export const USER: User = {
 	displayName: 'Florin',
 	username: 'envindavsorg',
 	gender: 'homme',
-	pronouns: 'il/lui (homme)',
+	pronouns: 'il/lui',
 	bio: 'Crée, code, innove. Les petits détails comptent.',
+
+	overview: [
+		{
+			id: 'job-title',
+			content: 'Développeur Front-End Senior',
+			icon: BriefcaseIcon,
+			className: 'col-span-full sm:col-span-3',
+		},
+		{
+			id: 'experience-level',
+			content: "7 ans d'expérience",
+			icon: FlaskIcon,
+			className: 'col-span-3',
+		},
+		{
+			id: 'location-city',
+			content: 'Paris, France',
+			icon: NavigationArrowIcon,
+			className: 'col-span-3 lg:col-span-2 lg:row-start-2',
+		},
+		{
+			id: 'github-username',
+			content: '@envindavsorg',
+			icon: GithubLogoIcon,
+			className: 'col-span-3 lg:col-span-2 lg:col-start-3 lg:row-start-2',
+		},
+		{
+			id: 'cat-person',
+			content: "J'adore les chats !",
+			icon: CatIcon,
+			className: 'col-span-3 lg:col-span-2 lg:col-start-5 lg:row-start-2',
+		},
+		{
+			id: 'phone-number',
+			content: 'MDYgNTggMDUgODYgNjU=',
+			icon: PhoneIcon,
+			className:
+				'col-span-full sm:col-span-3 lg:col-span-2 lg:col-start-1 lg:row-start-3',
+		},
+		{
+			id: 'email-address',
+			content: 'Y29udGFjdEBjdXplYWNmbG9yaW4uZnI=',
+			icon: EnvelopeIcon,
+			className:
+				'col-span-full sm:col-span-3 lg:col-span-2 lg:col-start-3 lg:row-start-3',
+		},
+		{
+			id: 'pronouns-info',
+			content: 'il/lui',
+			icon: GenderMaleIcon,
+			className:
+				'col-span-full sm:col-span-3 lg:col-span-2 lg:col-start-5 lg:row-start-3',
+		},
+	],
+
 	flipSentences: [
 		'Imagine, code, crée, inspire.',
 		'Chaque petit pixel compte !',
-		'Chaque petit détail compte !',
 		'Du concept au déploiement !',
+		'Chaque petit détail compte !',
 	],
 	address: 'Paris, France',
 	location: {
@@ -32,6 +152,7 @@ export const USER: User = {
 	email: 'Y29udGFjdEBjdXplYWNmbG9yaW4uZnI=',
 	website: 'cuzeacflorin.fr',
 	jobTitle: 'Développeur et designer web',
+	photo: '/images/photo.webp',
 	avatar: '/images/avatar.webp',
 	ogImage: '/images/og-image-dark.png?t=1755355653',
 	namePronunciationUrl: '/audio/florin.mp3',

@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import type React from 'react';
 import { useState } from 'react';
-import { ToggleButton } from '@/components/features/root/about/elements/ToggleButton';
+import { ToggleButton } from '@/features/root/about/elements/ToggleButton';
 
 type ToggleContentProps = {
 	children: React.ReactNode;

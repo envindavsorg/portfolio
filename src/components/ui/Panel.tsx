@@ -23,7 +23,7 @@ export const PanelHeader = ({
 	...props
 }: React.ComponentProps<'div'>) => (
 	<div
-		className={cn('screen-line-after px-4', className)}
+		className={cn('screen-line-after px-3', className)}
 		data-slot="panel-header"
 		{...props}
 	/>
@@ -49,7 +49,7 @@ export const PanelContent = ({
 	className,
 	...props
 }: React.ComponentProps<'div'>) => (
-	<div className={cn('p-4', className)} data-slot="panel-body" {...props} />
+	<div className={cn('p-3', className)} data-slot="panel-body" {...props} />
 );
 
 export const PanelFooter = ({
@@ -57,7 +57,10 @@ export const PanelFooter = ({
 	...props
 }: React.ComponentProps<'div'>) => (
 	<div
-		className={cn('screen-line-before px-4 py-2', className)}
+		className={cn(
+			'screen-line-before flex justify-end gap-3 px-3 py-2',
+			className,
+		)}
 		data-slot="panel-footer"
 		{...props}
 	/>

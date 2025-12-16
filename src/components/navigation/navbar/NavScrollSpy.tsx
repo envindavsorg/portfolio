@@ -51,7 +51,7 @@ type NavScrollSpyProps = {
 };
 
 export const NavScrollSpy = ({ items, className }: NavScrollSpyProps) => {
-	const shouldObserve = useMediaQuery('(min-width: 48rem)'); // 768px
+	const shouldObserve = useMediaQuery('(min-width: 768px)');
 	const itemIds = items
 		.map((link) => link.href?.split('#')[1])
 		.filter(Boolean);

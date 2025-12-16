@@ -55,7 +55,10 @@ const ContextMenuSubTrigger = ({
 	<ContextMenuPrimitive.SubTrigger
 		className={cn(
 			'flex items-center',
-			"cursor-default select-none rounded-xl px-3 py-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-inset:pl-8 data-[state=open]:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+			'cursor-default select-none rounded-md px-3 py-2 text-sm outline-hidden',
+			'focus:bg-accent focus:text-accent-foreground',
+			'data-[state=open]:bg-accent data-inset:pl-8 data-[state=open]:text-accent-foreground',
+			"[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 			className,
 		)}
 		data-inset={inset}
@@ -124,8 +127,12 @@ const ContextMenuItem = ({
 			'relative flex items-center gap-2',
 			'outline-hidden focus:bg-accent focus:text-accent-foreground',
 			'data-disabled:pointer-events-none data-disabled:opacity-50',
-			'data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20',
-			"cursor-default select-none rounded-xl px-3 py-2 text-sm data-inset:pl-8 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive!",
+			'data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20',
+			'data-[variant=destructive]:focus:text-destructive',
+			'data-[variant=destructive]:text-destructive data-[variant=destructive]:*:[svg]:text-destructive!',
+			'cursor-pointer select-none rounded-md p-2 text-sm data-inset:pl-8',
+			"[&_svg:not([class*='size-'])]:size-5 [&_svg]:pointer-events-none",
+			"[&_svg:not([class*='text-'])]:text-foreground [&_svg]:shrink-0",
 			className,
 		)}
 		data-inset={inset}
@@ -144,7 +151,11 @@ const ContextMenuCheckboxItem = ({
 	<ContextMenuPrimitive.CheckboxItem
 		checked={checked}
 		className={cn(
-			"relative flex cursor-default select-none items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+			'relative flex items-center gap-2',
+			'cursor-default select-none rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden',
+			'focus:bg-accent focus:text-accent-foreground',
+			'data-disabled:pointer-events-none data-disabled:opacity-50',
+			"[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 			className,
 		)}
 		data-slot="context-menu-checkbox-item"
@@ -152,7 +163,7 @@ const ContextMenuCheckboxItem = ({
 	>
 		<span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
 			<ContextMenuPrimitive.ItemIndicator>
-				<CheckIcon className="size-4" />
+				<CheckIcon className="size-5" />
 			</ContextMenuPrimitive.ItemIndicator>
 		</span>
 		{children}
@@ -166,7 +177,11 @@ const ContextMenuRadioItem = ({
 }: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem>) => (
 	<ContextMenuPrimitive.RadioItem
 		className={cn(
-			"relative flex cursor-default select-none items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+			'relative flex items-center gap-2',
+			'cursor-default select-none rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden',
+			'focus:bg-accent focus:text-accent-foreground',
+			'data-disabled:pointer-events-none data-disabled:opacity-50',
+			"[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 			className,
 		)}
 		data-slot="context-menu-radio-item"

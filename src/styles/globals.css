@@ -285,9 +285,17 @@
 		}
 	}
 
+	.prose {
+		color: var(--muted-foreground) !important;
+	}
+
 	.prose ul li::marker {
-		/* biome-ignore lint/complexity/noImportantStyles: need it to overwrite */
 		color: var(--color-theme) !important;
+	}
+
+	.prose span {
+		font-weight: var(--font-weight-medium);
+		color: var(--foreground);
 	}
 }
 

@@ -1,4 +1,4 @@
-import { SOCIAL_LINKS } from '@/components/features/root/contact/data/social-links';
+import { SOCIAL_LINKS } from '@/features/root/contact/data/social-links';
 import { techStack } from '@/features/root/data/tech-stack';
 import { USER } from '@/features/root/data/user';
 
