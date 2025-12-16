@@ -54,7 +54,8 @@ const ContextMenuSubTrigger = ({
 }) => (
 	<ContextMenuPrimitive.SubTrigger
 		className={cn(
-			"flex cursor-default select-none items-center rounded-xl px-3 py-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-inset:pl-8 data-[state=open]:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+			'flex items-center',
+			"cursor-default select-none rounded-xl px-3 py-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-inset:pl-8 data-[state=open]:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 			className,
 		)}
 		data-inset={inset}
@@ -72,7 +73,13 @@ const ContextMenuSubContent = ({
 }: React.ComponentProps<typeof ContextMenuPrimitive.SubContent>) => (
 	<ContextMenuPrimitive.SubContent
 		className={cn(
-			'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 z-50 min-w-32 origin-(--radix-context-menu-content-transform-origin) overflow-hidden rounded-2xl bg-popover p-1 text-popover-foreground shadow-popover ring ring-popover-border backdrop-blur-md data-[state=closed]:animate-out data-[state=open]:animate-in supports-backdrop-filter:bg-popover/90',
+			'z-50 min-w-64 origin-(--radix-context-menu-content-transform-origin)',
+			'overflow-hidden backdrop-blur-md supports-backdrop-filter:bg-popover/90',
+			'rounded-md bg-popover p-2 text-popover-foreground ring ring-popover-border',
+			'data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2',
+			'data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
+			'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:animate-out',
+			'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in',
 			className,
 		)}
 		data-slot="context-menu-sub-content"
@@ -87,7 +94,14 @@ const ContextMenuContent = ({
 	<ContextMenuPrimitive.Portal>
 		<ContextMenuPrimitive.Content
 			className={cn(
-				'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 z-50 max-h-(--radix-context-menu-content-available-height) min-w-32 origin-(--radix-context-menu-content-transform-origin) overflow-y-auto overflow-x-hidden rounded-2xl bg-popover p-1 text-popover-foreground shadow-popover ring ring-popover-border backdrop-blur-md data-[state=closed]:animate-out data-[state=open]:animate-in supports-backdrop-filter:bg-popover/90',
+				'max-h-(--radix-context-menu-content-available-height) min-w-64',
+				'z-50 origin-(--radix-context-menu-content-transform-origin)',
+				'overflow-y-auto overflow-x-hidden backdrop-blur-md supports-backdrop-filter:bg-popover/90',
+				'rounded-md bg-popover p-2 text-popover-foreground ring ring-popover-border',
+				'data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2',
+				'data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
+				'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:animate-out',
+				'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in',
 				className,
 			)}
 			data-slot="context-menu-content"
@@ -107,7 +121,11 @@ const ContextMenuItem = ({
 }) => (
 	<ContextMenuPrimitive.Item
 		className={cn(
-			"relative flex cursor-default select-none items-center gap-2 rounded-xl px-3 py-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-inset:pl-8 data-[variant=destructive]:text-destructive data-disabled:opacity-50 data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive!",
+			'relative flex items-center gap-2',
+			'outline-hidden focus:bg-accent focus:text-accent-foreground',
+			'data-disabled:pointer-events-none data-disabled:opacity-50',
+			'data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20',
+			"cursor-default select-none rounded-xl px-3 py-2 text-sm data-inset:pl-8 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 data-[variant=destructive]:*:[svg]:text-destructive!",
 			className,
 		)}
 		data-inset={inset}
