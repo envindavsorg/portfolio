@@ -41,7 +41,7 @@ const Footer = ({ commit }: FooterProps) => {
 			<div className="max-w-screen overflow-x-hidden px-2">
 				<div className="mx-auto md:max-w-3xl">
 					<Metadata commit={commit} />
-					<Divider />
+					<Divider border />
 				</div>
 			</div>
 

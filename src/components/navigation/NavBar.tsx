@@ -11,7 +11,7 @@ import { SiteHeaderWrapper } from './navbar/SiteHeaderWrapper';
 import { ToggleTheme } from './navbar/ToggleTheme';
 
 const CommandMenu = dynamic(() =>
-	import('./navbar/CommandMenu').then((mod) => mod.CommandMenu),
+	import('./command/CommandMenu').then((mod) => mod.CommandMenu),
 );
 
 const MobileNav = dynamic(() =>

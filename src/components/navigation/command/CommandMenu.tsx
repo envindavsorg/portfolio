@@ -1,7 +1,6 @@
 'use client';
 
 import {
-	ArrowElbowDownLeftIcon,
 	BriefcaseIcon,
 	CircleHalfTiltIcon,
 	CodeBlockIcon,
@@ -13,18 +12,13 @@ import {
 	MagnifyingGlassIcon,
 	MoonIcon,
 	PenNibIcon,
-	type Icon as PhosphorIcon,
 	StackIcon,
 	SunIcon,
 	UserSoundIcon,
 } from '@phosphor-icons/react';
-import { useCommandState } from 'cmdk';
-import Image, { type StaticImageData } from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { CuzeacFlorinMark } from '@/components/assets/CuzeacFlorinMark';
-import { SOCIAL_LINKS } from '@/components/features/contact/data/social-links';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import {
 	CommandDialog,
@@ -35,21 +29,16 @@ import {
 	CommandList,
 	CommandSeparator,
 } from '@/components/ui/Command';
-import { Separator } from '@/components/ui/Separator';
 import { cn } from '@/lib/utils';
-
-type CommandLinkItem = {
-	title: string;
-	href: string;
-	icon?: PhosphorIcon;
-	iconImage?: string | StaticImageData;
-	keywords?: string[];
-	openInNewTab?: boolean;
-};
+import { CommandLinkGroup } from './CommandLinkGroup';
+import { CommandMenuFooter } from './CommandMenuFooter';
+import { CommandMenuKbd } from './CommandMenuKbd';
+import { SOCIAL_LINK_ITEMS } from './data/data';
+import type { CommandLinkItem } from './types/types';
 
 const MENU_LINKS: CommandLinkItem[] = [
 	{
-		title: "Returner à l'accueil",
+		title: "Retourner à l'accueil",
 		href: '/',
 		icon: HouseIcon,
 	},
@@ -63,9 +52,14 @@ const MENU_LINKS: CommandLinkItem[] = [
 		href: '/components',
 		icon: CodeBlockIcon,
 	},
+	{
+		title: 'Outils pour développeurs',
+		href: '/utils',
+		icon: GearSixIcon,
+	},
 ];
 
-const MAIN_LINKS: CommandLinkItem[] = [
+export const MAIN_LINKS: CommandLinkItem[] = [
 	{
 		title: 'À propos de moi',
 		href: '/#about',
@@ -86,163 +80,21 @@ const MAIN_LINKS: CommandLinkItem[] = [
 		href: '/#projects',
 		icon: CubeIcon,
 	},
-	{
-		title: 'Ma carte de visite',
-		href: '/vcard',
-		icon: IdentificationCardIcon,
-	},
 ];
 
-const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map((item) => ({
-	title: item.title,
-	href: item.href,
-	iconImage: item.icon,
-	openInNewTab: true,
-}));
-
-type CommandLinkGroupProps = {
-	heading: string;
-	links: CommandLinkItem[];
-	fallbackIcon?: PhosphorIcon;
-	onLinkSelect: (href: string, openInNewTab?: boolean) => void;
-};
-
-const CommandLinkGroup = ({
-	heading,
-	links,
-	fallbackIcon,
-	onLinkSelect,
-}: CommandLinkGroupProps) => (
-	<CommandGroup heading={heading}>
-		{links.map((link: CommandLinkItem, idx: number) => {
-			const Icon = link?.icon ?? fallbackIcon ?? React.Fragment;
-
-			return (
-				<CommandItem
-					key={link.href}
-					keywords={link.keywords}
-					onSelect={() => onLinkSelect(link.href, link.openInNewTab)}
-				>
-					{link?.iconImage ? (
-						<Image
-							alt={link.title}
-							className="rounded-sm"
-							height={22}
-							src={link.iconImage}
-							unoptimized
-							width={22}
-						/>
-					) : (
-						<Icon className="size-4 text-foreground" />
-					)}
-					{link.title}{' '}
-					{heading === 'Menu principal :' && (
-						<sup className="font-semibold text-theme">
-							0{idx + 1}
-						</sup>
-					)}
-				</CommandItem>
-			);
-		})}
-	</CommandGroup>
-);
-
-type CommandKind = 'command' | 'page' | 'link';
-
-type CommandMetaMap = Map<
-	string,
-	{
-		commandKind: CommandKind;
-	}
->;
-
-const buildCommandMetaMap = () => {
-	const commandMetaMap: CommandMetaMap = new Map();
-
-	commandMetaMap.set('Download vCard', { commandKind: 'command' });
-
-	commandMetaMap.set('Light', { commandKind: 'command' });
-	commandMetaMap.set('Dark', { commandKind: 'command' });
-	commandMetaMap.set('Auto', { commandKind: 'command' });
-
-	commandMetaMap.set('Copy Mark as SVG', {
-		commandKind: 'command',
-	});
-	commandMetaMap.set('Copy Logotype as SVG', {
-		commandKind: 'command',
-	});
-	commandMetaMap.set('Download Brand Assets', {
-		commandKind: 'command',
-	});
-
-	for (const item of SOCIAL_LINK_ITEMS) {
-		commandMetaMap.set(item.title, {
-			commandKind: 'link',
-		});
-	}
-
-	return commandMetaMap;
-};
-
-const COMMAND_META_MAP = buildCommandMetaMap();
-
-const ENTER_ACTION_LABELS: Record<CommandKind, string> = {
-	command: 'Lancer la commande',
-	page: 'Aller à la page',
-	link: 'Ouvrir le lien',
-};
-
-const CommandMenuFooter = () => {
-	const selectedCommandKind = useCommandState(
-		(state) => COMMAND_META_MAP.get(state.value)?.commandKind ?? 'page',
-	);
-
-	return (
-		<>
-			<div className="flex h-10" />
-
-			<div className="absolute inset-x-0 bottom-0 flex h-10 items-center justify-between gap-2 border-t bg-zinc-100/30 px-4 font-medium text-xs dark:bg-zinc-800/30">
-				<CuzeacFlorinMark height={16} width={29} />
-
-				<div className="flex shrink-0 items-center gap-2">
-					<span>{ENTER_ACTION_LABELS[selectedCommandKind]}</span>
-					<CommandMenuKbd>
-						<ArrowElbowDownLeftIcon className="size-3" />
-					</CommandMenuKbd>
-					<Separator
-						className="data-[orientation=vertical]:h-4"
-						orientation="vertical"
-					/>
-					<span>Fermer</span>
-					<CommandMenuKbd className="font-medium text-xs">
-						esc
-					</CommandMenuKbd>
-				</div>
-			</div>
-		</>
-	);
-};
-
-const CommandMenuKbd = ({
-	className,
-	...props
-}: React.ComponentProps<'kbd'>) => (
-	<kbd
-		className={cn(
-			"pointer-events-none flex h-5 min-w-6 select-none items-center justify-center gap-1 rounded-sm bg-black/5 px-1 font-normal font-sans text-[13px] text-foreground shadow-[inset_0_-1px_2px] shadow-black/10 dark:bg-white/10 dark:text-shadow-xs dark:shadow-white/10 [&_svg:not([class*='size-'])]:size-3",
-			className,
-		)}
-		{...props}
-	/>
-);
-
 const postToCommandLinkItem = (post: Post): CommandLinkItem => {
-	const isComponent = post.metadata?.category === 'components';
+	const category = post.metadata?.category ?? 'article';
+
+	const categoryToRoute: Record<string, string> = {
+		components: 'components',
+		utils: 'utils',
+		article: 'blog',
+	};
 
 	return {
 		title: post.metadata.title,
-		href: isComponent ? `/components/${post.slug}` : `/blog/${post.slug}`,
-		keywords: isComponent ? ['component'] : undefined,
+		href: `/${categoryToRoute[category] ?? 'blog'}/${post.slug}`,
+		keywords: category === 'article' ? undefined : [category],
 	};
 };
 
@@ -359,7 +211,7 @@ export const CommandMenu = ({ posts }: CommandMenuProps) => {
 				<CommandDialog onOpenChange={setOpen} open={open}>
 					<CommandInput placeholder="Tapez une commande ou recherchez ..." />
 
-					<CommandList className="min-h-80">
+					<CommandList className="min-h-115">
 						<CommandEmpty>Aucun résultat ...</CommandEmpty>
 
 						<CommandLinkGroup
@@ -373,6 +225,20 @@ export const CommandMenu = ({ posts }: CommandMenuProps) => {
 						<CommandLinkGroup
 							heading="Contenu de mon portfolio :"
 							links={MAIN_LINKS}
+							onLinkSelect={handleOpenLink}
+						/>
+
+						<CommandSeparator />
+
+						<CommandLinkGroup
+							heading="Carte de visite :"
+							links={[
+								{
+									title: 'Télécharger ma carte de visite',
+									href: '/vcard',
+									icon: IdentificationCardIcon,
+								},
+							]}
 							onLinkSelect={handleOpenLink}
 						/>
 
@@ -418,14 +284,14 @@ export const CommandMenu = ({ posts }: CommandMenuProps) => {
 								keywords={['theme']}
 								onSelect={() => handleThemeChange('light')}
 							>
-								<SunIcon className="size-4 text-foreground" />
+								<SunIcon className="size-4 text-yellow-600 dark:text-yellow-300" />
 								Mode clair
 							</CommandItem>
 							<CommandItem
 								keywords={['theme']}
 								onSelect={() => handleThemeChange('dark')}
 							>
-								<MoonIcon className="size-4 text-foreground" />
+								<MoonIcon className="size-4 text-blue-600 dark:text-blue-300" />
 								Mode sombre
 							</CommandItem>
 							<CommandItem
@@ -438,7 +304,7 @@ export const CommandMenu = ({ posts }: CommandMenuProps) => {
 						</CommandGroup>
 					</CommandList>
 
-					<CommandMenuFooter />
+					<CommandMenuFooter posts={posts} />
 				</CommandDialog>
 			)}
 		</>
