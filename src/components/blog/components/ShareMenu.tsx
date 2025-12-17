@@ -18,8 +18,8 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
-import copyText from '@/utils/copy';
-import { getAbsoluteUrl } from '@/utils/url';
+import copyText from '@/lib/utils/copy';
+import { getAbsoluteUrl } from '@/lib/utils/url';
 
 type ShareMenuProps = {
 	url: string;

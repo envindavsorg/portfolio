@@ -1,5 +1,5 @@
 import type { NavigationItem } from '@/components/navigation/navbar/Nav';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 
 export const SITE_INFO = {
 	name: USER.displayName,

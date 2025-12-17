@@ -7,7 +7,7 @@ import {
 	PanelTitle,
 } from '@/components/ui/Panel';
 import { Prose } from '@/components/ui/Typography';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 import { AboutExpandable } from './AboutExpandable';
 
 export const About = (): React.JSX.Element => {

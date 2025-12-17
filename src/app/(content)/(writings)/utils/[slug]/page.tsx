@@ -7,7 +7,7 @@ import { MDX } from '@/components/blog/markdown/mdx';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
 import { SITE_INFO } from '@/config/site';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { metadata } from '@/lib/blog/utils/metadata';
 import { dayjs } from '@/lib/dayjs';

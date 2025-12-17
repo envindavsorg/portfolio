@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/ContextMenu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { cn } from '@/lib/utils';
-import { downloadFile } from '@/utils/download';
+import { downloadFile } from '@/lib/utils/download';
 import {
 	GREETINGS,
 	GREETINGS_CONFIG,

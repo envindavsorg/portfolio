@@ -1,6 +1,6 @@
 import { SOCIAL_LINKS } from '@/components/features/contact/data/social-links';
 import { techStack } from '@/components/features/stack/data/tech-stack';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 
 const content = `
 # À propos de moi

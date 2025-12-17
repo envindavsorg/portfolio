@@ -14,7 +14,7 @@ import {
 	UserSoundIcon,
 } from '@phosphor-icons/react';
 import { SOCIAL_LINKS } from '@/components/features/contact/data/social-links';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 import type { CommandLinkItem } from '../types/types';
 
 export const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map(
@@ -75,7 +75,7 @@ export const MAIN_LINKS: CommandLinkItem[] = [
 export const DOCUMENTS_LINKS: CommandLinkItem[] = [
 	{
 		title: 'Télécharger ma carte de visite',
-		href: '/vcard',
+		href: '/api/vcard',
 		icon: IdentificationCardIcon,
 	},
 	{

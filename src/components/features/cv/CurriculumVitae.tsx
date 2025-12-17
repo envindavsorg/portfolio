@@ -12,7 +12,7 @@ import {
 	PanelTitle,
 } from '@/components/ui/Panel';
 import { Prose } from '@/components/ui/Typography';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 
 export const CurriculumVitae = (): React.JSX.Element => (
 	<Panel>

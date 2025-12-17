@@ -13,24 +13,18 @@ import { Button } from '@/components/ui/Button';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
 import { SITE_INFO } from '@/config/site';
-import { USER } from '@/content/user';
-import {
-	findNeighbour,
-	getPostBySlug,
-	getPostsByCategory,
-} from '@/lib/blog/posts';
+import { USER } from '@/config/user';
+import { findNeighbour, getAllPosts, getPostBySlug } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 import { cn } from '@/lib/utils';
 
 type Props = {
-	params: Promise<{
-		slug: string;
-	}>;
+	params: Promise<{ slug: string }>;
 };
 
 export const generateStaticParams = async () => {
-	const posts = getPostsByCategory('components');
+	const posts = getAllPosts();
 	return posts.map((post) => ({
 		slug: post.slug,
 	}));
@@ -47,13 +41,13 @@ export const generateMetadata = async ({
 	}
 
 	const { title, description } = post.metadata;
-	const postUrl = `/components/${post.slug}`;
+	const postUrl = getPostUrl(post);
 
 	const og = openGraphImage({
 		title,
 		description,
 		ogImageParams: {
-			type: 'componentsArticle',
+			type: 'blogArticle',
 			title,
 			description,
 		},
@@ -67,6 +61,11 @@ export const generateMetadata = async ({
 	};
 };
 
+const getPostUrl = (post: Post) => {
+	const isComponent = post.metadata.category === 'components';
+	return isComponent ? `/components/${post.slug}` : `/blog/${post.slug}`;
+};
+
 const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
@@ -75,7 +74,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	image:
 		post.metadata.imageLight ||
 		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
-	url: `${SITE_INFO.url}/components/${post.slug}`,
+	url: `${SITE_INFO.url}${getPostUrl(post)}`,
 	datePublished: dayjs(post.metadata.createdAt).toISOString(),
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
 	author: {
@@ -94,12 +93,9 @@ const Page = async ({ params }: Props) => {
 		notFound();
 	}
 
-	if (post.metadata.category !== 'components') {
-		notFound();
-	}
-
 	const toc = getTableOfContents(post.content);
-	const allPosts = getPostsByCategory('components');
+
+	const allPosts = getAllPosts();
 	const { previous, next } = findNeighbour(allPosts, slug);
 
 	return (
@@ -115,7 +111,7 @@ const Page = async ({ params }: Props) => {
 			/>
 
 			<KeyboardShortcuts
-				basePath="/components"
+				basePath="/blog"
 				next={next}
 				previous={previous}
 			/>
@@ -126,23 +122,23 @@ const Page = async ({ params }: Props) => {
 					className="h-7 gap-2 rounded-lg px-0 font-mono text-muted-foreground"
 					variant="link"
 				>
-					<Link href="/components">
+					<Link href="/blog">
 						<ArrowLeftIcon className="size-4" />
-						Tous les composants
+						Tous les articles
 					</Link>
 				</Button>
 
 				<div className="flex items-center gap-2">
 					<LLMCopyButtonWithViewOptions
-						isComponent
-						markdownUrl={`/components/${post.slug}.mdx`}
+						isComponent={post.metadata.category === 'components'}
+						markdownUrl={`${getPostUrl(post)}.mdx`}
 					/>
 
-					<ShareMenu url={`/components/${post.slug}`} />
+					<ShareMenu url={getPostUrl(post)} />
 
 					{previous && (
 						<Button asChild size="icon:sm" variant="secondary">
-							<Link href={`/components/${previous.slug}`}>
+							<Link href={`/blog/${previous.slug}`}>
 								<ArrowLeftIcon className="size-4" />
 								<span className="sr-only">Précédent</span>
 							</Link>
@@ -151,7 +147,7 @@ const Page = async ({ params }: Props) => {
 
 					{next && (
 						<Button asChild size="icon:sm" variant="secondary">
-							<Link href={`/components/${next.slug}`}>
+							<Link href={`/blog/${next.slug}`}>
 								<span className="sr-only">Suivant</span>
 								<ArrowRightIcon className="size-4" />
 							</Link>
@@ -164,16 +160,30 @@ const Page = async ({ params }: Props) => {
 				<div
 					className={cn(
 						'h-8',
-						'before:absolute before:-left-[100vw] before:-z-1 before:h-full before:w-[200vw]',
+						'before:-left-[100vw] before:-z-1 before:absolute before:h-full before:w-[200vw]',
 						'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56',
 					)}
 				/>
 			</div>
 
 			<Prose className="px-4">
-				<h1 className="screen-line-after mb-6 font-semibold">
+				<h1 className="screen-line-after mb-1 font-semibold">
 					{post.metadata.title}
 				</h1>
+
+				<div className="screen-line-after flex gap-x-2 pb-1 text-muted-foreground text-sm">
+					<time
+						dateTime={dayjs(post.metadata.createdAt).toISOString()}
+					>
+						{dayjs(post.metadata.createdAt).format(
+							'dddd DD MMMM YYYY',
+						)}
+					</time>
+					<span>•</span>
+					<span>{post.reading?.time}</span>
+					<span>•</span>
+					<span>{post.reading?.words} mots</span>
+				</div>
 
 				<p className="lead my-6">{post.metadata.description}</p>
 

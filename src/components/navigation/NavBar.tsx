@@ -69,7 +69,7 @@ export const NavBar = () => {
 					>
 						<Link
 							aria-label="Flux RSS"
-							href="/rss"
+							href="/api/rss"
 							rel="noopener noreferrer"
 							target="_blank"
 						>

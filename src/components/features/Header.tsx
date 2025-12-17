@@ -2,7 +2,7 @@ import { SealCheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import type React from 'react';
 import { PronounceName } from '@/components/sound/PronounceName';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 import { cn } from '@/lib/utils';
 import { FlipSentences } from '@/registry/flip-sentences';
 

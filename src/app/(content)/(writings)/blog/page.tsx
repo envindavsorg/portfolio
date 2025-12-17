@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { metadata } from '@/app/(app)/(docs)/blog/metadata';
+import { metadata } from '@/app/(content)/(writings)/blog/metadata';
 import { Post } from '@/components/blog/components/Post';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
@@ -88,7 +88,7 @@ const BlogArticlesPage = async ({
 			</div>
 
 			<div className="relative pt-4">
-				<div className="absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
+				<div className="-z-1 absolute inset-0 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
 					<div className="border-edge border-r" />
 					<div className="border-edge border-l" />
 				</div>

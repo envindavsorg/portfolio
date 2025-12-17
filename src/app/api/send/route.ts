@@ -1,10 +1,10 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resend } from 'resend';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 import { CVEmailTemplate } from '@/emails/CVEmail';
+import { decodeEmail } from '@/lib/utils/string';
 import emailSchema from '@/schemas/email.schema';
-import { decodeEmail } from '@/utils/string';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

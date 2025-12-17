@@ -4,13 +4,13 @@ import { useIsClient } from '@uidotdev/usehooks';
 import type React from 'react';
 import { useMemo } from 'react';
 import { Panel, PanelContent } from '@/components/ui/Panel';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 import { cn } from '@/lib/utils';
 import {
 	decodeEmail,
 	decodePhoneNumber,
 	formatPhoneNumber,
-} from '@/utils/string';
+} from '@/lib/utils/string';
 
 type OverviewItemProps = {
 	icon: React.ElementType;

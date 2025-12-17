@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import { cn } from '@/lib/utils';
-import getPrompt from '@/utils/llm';
+import getPrompt from '@/lib/utils/llm';
 
 const cache = new Map<string, string>();
 

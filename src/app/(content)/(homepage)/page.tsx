@@ -16,7 +16,7 @@ import { Projects } from '@/components/features/projects/Projects';
 import { TechStack } from '@/components/features/stack/TechStack';
 import { Utils } from '@/components/features/tools/Utils';
 import { Divider } from '@/components/ui/Divider';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 

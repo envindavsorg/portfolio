@@ -4,7 +4,7 @@ import { EXPERIENCES } from '@/components/features/experiences/data/experiences'
 import { PROJECTS } from '@/components/features/projects/data/projects';
 import { techStack } from '@/components/features/stack/data/tech-stack';
 import { SITE_INFO } from '@/config/site';
-import { USER } from '@/content/user';
+import { USER } from '@/config/user';
 import { getLLMText } from '@/lib/blog/llm';
 import { getAllPosts } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
