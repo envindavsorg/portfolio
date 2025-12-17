@@ -1,6 +1,8 @@
 import dynamic from 'next/dynamic';
 import type React from 'react';
 import { Sparkles } from '@/components/animations/Sparkles';
+import { getGitHubUserData } from '@/components/features/contact/actions/github.action';
+import { Footer } from '@/components/navigation/Footer';
 import { NavBar } from '@/components/navigation/NavBar';
 
 const RootContextMenu = dynamic(() =>
@@ -18,8 +20,8 @@ export type AppLayoutProps = {
 };
 
 const AppLayout = async ({ children }: Readonly<AppLayoutProps>) => {
-	// const { branch, commit } = await getGitHubUserData();
-	// const { hash, date } = commit;
+	const { branch, commit } = await getGitHubUserData();
+	const { hash, date } = commit;
 
 	return (
 		<>
@@ -30,7 +32,7 @@ const AppLayout = async ({ children }: Readonly<AppLayoutProps>) => {
 				</main>
 			</RootContextMenu>
 			<Sparkles density={150} />
-			{/*<Footer commit={{ branch, hash, update: date }} />*/}
+			<Footer commit={{ branch, hash, update: date }} />
 			<ScrollTop />
 		</>
 	);
