@@ -9,16 +9,16 @@
   Imagine, code, crée, inspire.
 </p>
 
-<br/>
+---
 
 # [cuzeacflorin.fr](https://cuzeacflorin.fr)
 
 Un portfolio développeur minimaliste et pixel-perfect, avec une bibliothèque de composants
 et un blog pour présenter mon travail en tant que développeur frontend.
 
-Une petite démo ? [cuzeacflorin.fr](https://cuzeacflorin.fr)
+Une petite démo ? [C'est par ici !](https://cuzeacflorin.fr)
 
-
+<br/>
 
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D25.2.0-brightgreen?logo=node.js)](https://nodejs.org/)
 [![React Version](https://img.shields.io/badge/react-19.2.0-61DAFB?logo=react)](https://react.dev/)
@@ -28,14 +28,6 @@ Une petite démo ? [cuzeacflorin.fr](https://cuzeacflorin.fr)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 
 ---
-
-A minimal portfolio, component registry, and blog to showcase my work as a frontend developer.
-
-Check out the live site: [cuzeacflorin.fr](https://cuzeacflorin.fr)
-
-<a href="https://frogdr.com/cuzeacflorin.fr?utm_source=cuzeacflorin.fr" target="_blank">
-	<img src="https://frogdr.com/cuzeacflorin.fr/badge-white.svg?badge=1&round=1" alt="Monitor&#0032;your&#0032;Domain&#0032;Rating&#0032;with&#0032;FrogDR" width="250" height="54">
-</a>
 
 ## Screenshot
 
