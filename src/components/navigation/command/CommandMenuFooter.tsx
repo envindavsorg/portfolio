@@ -3,10 +3,14 @@ import { useCommandState } from 'cmdk';
 import type React from 'react';
 import { useMemo } from 'react';
 import { CuzeacFlorinMark } from '@/components/assets/CuzeacFlorinMark';
-import { MAIN_LINKS } from '@/components/navigation/command/CommandMenu';
 import { Separator } from '@/components/ui/Separator';
-import { CommandMenuKbd } from './CommandMenuKbd';
-import { SOCIAL_LINK_ITEMS } from './data/data';
+import { CommandMenuKbd } from './CommandMenuTrigger';
+import {
+	DOCUMENTS_LINKS,
+	MAIN_LINKS,
+	SOCIAL_LINK_ITEMS,
+	THEME_OPTIONS,
+} from './data/data';
 import type { CommandKind, CommandMetaMap } from './types/types';
 
 const ENTER_ACTION_LABELS: Record<CommandKind, string> = {
@@ -23,9 +27,11 @@ const ENTER_ACTION_LABELS: Record<CommandKind, string> = {
 const buildCommandMetaMap = (posts: Post[]): CommandMetaMap => {
 	const commandMetaMap: CommandMetaMap = new Map();
 
-	commandMetaMap.set('Télécharger ma carte de visite', {
-		commandKind: 'download',
-	});
+	for (const item of DOCUMENTS_LINKS) {
+		commandMetaMap.set(item.title, {
+			commandKind: 'download',
+		});
+	}
 
 	for (const item of MAIN_LINKS) {
 		commandMetaMap.set(item.title, {
@@ -45,9 +51,11 @@ const buildCommandMetaMap = (posts: Post[]): CommandMetaMap => {
 		});
 	}
 
-	commandMetaMap.set('Mode clair', { commandKind: 'command' });
-	commandMetaMap.set('Mode sombre', { commandKind: 'command' });
-	commandMetaMap.set('Thème automatique', { commandKind: 'command' });
+	for (const item of THEME_OPTIONS) {
+		commandMetaMap.set(item.label, {
+			commandKind: 'command',
+		});
+	}
 
 	return commandMetaMap;
 };

@@ -1,4 +1,7 @@
 declare global {
+	// types for theme switcher (using next-themes)
+	export type ThemeType = 'light' | 'dark' | 'system';
+
 	export type PageType =
 		| 'homepage'
 		| 'blog'
