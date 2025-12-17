@@ -1,5 +1,5 @@
 import { TextAaIcon } from '@phosphor-icons/react/ssr';
-import type { TOCItemType } from 'fumadocs-core/server';
+import type { TOCItemType } from 'fumadocs-core/toc';
 import Link from 'next/link';
 import type React from 'react';
 import type { Collapsible } from '@/components/ui/Collapsible';
