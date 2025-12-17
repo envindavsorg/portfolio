@@ -11,7 +11,7 @@
 
 <br/>
 
-# [cuzeacflorin.fr](https://cuzeacflorin.fr) &middot; [![GitHub License](https://img.shields.io/github/license/florincuzeac/cuzeacflorin.fr?label=License)]
+# [cuzeacflorin.fr](https://cuzeacflorin.fr) &middot; [![GitHub License](https://img.shields.io/github/license/envindavsorg/cuzeacflorin.fr?label=License)]
 
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D25.2.0-brightgreen?logo=node.js)](https://nodejs.org/)
 [![React Version](https://img.shields.io/badge/react-19.2.0-61DAFB?logo=react)](https://react.dev/)
