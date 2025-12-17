@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { metadata } from '@/app/(app)/(docs)/blog/metadata';
-import { Post } from '@/features/blog/components/Post';
-import { TagsFilter } from '@/features/blog/components/TagsFilter';
+import { Post } from '@/components/blog/components/Post';
+import { TagsFilter } from '@/components/blog/components/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
@@ -27,8 +27,7 @@ const BlogArticlesPage = async ({
 	searchParams,
 }: Readonly<BlogArticlesPageProps>) => {
 	const resolvedSearchParams = await searchParams;
-	// @ts-expect-error
-	const articles: Post[] = getPostsByCategory('article');
+	const articles: Post[] = getPostsByCategory('blog');
 
 	const allTags = [
 		'Tous les articles',

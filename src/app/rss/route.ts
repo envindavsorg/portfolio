@@ -1,5 +1,5 @@
 import { SITE_INFO } from '@/config/site';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 import { getAllPosts } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 

@@ -4,7 +4,7 @@ import { useIsClient } from '@uidotdev/usehooks';
 import type React from 'react';
 import { useMemo } from 'react';
 import { Panel, PanelContent } from '@/components/ui/Panel';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 import { cn } from '@/lib/utils';
 import {
 	decodeEmail,

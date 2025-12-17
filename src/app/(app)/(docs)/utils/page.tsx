@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
+import { TagsFilter } from '@/components/blog/components/TagsFilter';
+import { UtilsItem } from '@/components/features/tools/UtilsItem';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
-import { TagsFilter } from '@/features/blog/components/TagsFilter';
-import { UtilsItem } from '@/features/root/elements/UtilsItem';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { metadata } from '@/lib/blog/utils/metadata';
 import { dayjs } from '@/lib/dayjs';

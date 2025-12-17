@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import type React from 'react';
 import { CurriculumVitaeOverlay } from '@/components/features/cv/CurriculumVitaeOverlay';
 import { Button } from '@/components/ui/Button';
 import {
@@ -11,9 +12,9 @@ import {
 	PanelTitle,
 } from '@/components/ui/Panel';
 import { Prose } from '@/components/ui/Typography';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 
-export const CurriculumVitae = () => (
+export const CurriculumVitae = (): React.JSX.Element => (
 	<Panel>
 		<PanelHeader>
 			<PanelTitle>Découvrir mon CV</PanelTitle>
@@ -46,14 +47,6 @@ export const CurriculumVitae = () => (
 			</Link>
 
 			<CurriculumVitaeOverlay />
-
-			{/*<EmailCVDialog className="max-sm:hidden">
-				<Button>Recevoir par mail</Button>
-			</EmailCVDialog>
-
-			<EmailCVDrawer className="min-sm:hidden">
-				Recevoir par mail
-			</EmailCVDrawer>*/}
 		</PanelFooter>
 	</Panel>
 );

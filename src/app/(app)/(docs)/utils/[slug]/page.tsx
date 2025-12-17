@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
+import { IsNew } from '@/components/blog/components/IsNew';
+import { TopBar } from '@/components/blog/components/TopBar';
+import { MDX } from '@/components/blog/markdown/mdx';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
 import { SITE_INFO } from '@/config/site';
-import { IsNew } from '@/features/blog/components/IsNew';
-import { TopBar } from '@/features/blog/components/TopBar';
-import { MDX } from '@/features/blog/markdown/mdx';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { metadata } from '@/lib/blog/utils/metadata';
 import { dayjs } from '@/lib/dayjs';

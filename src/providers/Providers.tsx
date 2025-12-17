@@ -3,7 +3,7 @@
 import { Provider as JotaiProvider } from 'jotai';
 import dynamic from 'next/dynamic';
 import type React from 'react';
-import { FaviconSwitcher } from '@/elements/favicon/FaviconSwitcher';
+import { FaviconSwitcher } from '@/components/favicon/FaviconSwitcher';
 import { Analytics } from '@/providers/analytics/Analytics';
 import ProgressProvider from '@/providers/modules/ProgressProvider';
 import ThemeProvider from '@/providers/modules/ThemeProvider';

@@ -1,11 +1,22 @@
 import type { Metadata } from 'next';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
+import { Articles } from '@/components/features/Articles';
+import { About } from '@/components/features/about/About';
+import { Certs } from '@/components/features/certifications/Certs';
+import { Commits } from '@/components/features/commits/Commits';
+import { getGitHubUserData } from '@/components/features/contact/actions/github.action';
+import { getLinkedInFollowers } from '@/components/features/contact/actions/linkedin.action';
+import { Contact } from '@/components/features/contact/Contact';
 import { Cover } from '@/components/features/cover/Cover';
 import { CurriculumVitae } from '@/components/features/cv/CurriculumVitae';
+import { Experiences } from '@/components/features/experiences/Experience';
 import { Header } from '@/components/features/Header';
 import { Overview } from '@/components/features/Overview';
+import { Projects } from '@/components/features/projects/Projects';
+import { TechStack } from '@/components/features/stack/TechStack';
+import { Utils } from '@/components/features/tools/Utils';
 import { Divider } from '@/components/ui/Divider';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 
@@ -36,14 +47,13 @@ const getPageJsonLd = (): WithContext<PageSchema> => ({
 const isCapture = process.env.ENV_TYPE === 'capture';
 
 const Page = async () => {
-	// const [github, linkedin] = await Promise.all([
-	// 	getGitHubUserData().then((data) => data.followers),
-	// 	getLinkedInFollowers().then((data) => data.count),
-	// ]);
-	//
-	// const paragraphs = USER.about.trim().split('\n\n');
-	// const firstParagraph = paragraphs[0];
-	// const restParagraphs = paragraphs.slice(1).join('\n\n');
+	const [github, linkedin] = await Promise.all([
+		getGitHubUserData().then((data) => data.followers),
+		getLinkedInFollowers().then((data) => data.count),
+	]);
+
+	const { stars, followers, following, contributions } =
+		await getGitHubUserData();
 
 	return (
 		<>
@@ -65,30 +75,35 @@ const Page = async () => {
 				<Divider border />
 				<CurriculumVitae />
 				<Divider border />
-				{/*<Contact*/}
-				{/*	capture={isCapture}*/}
-				{/*	github={github}*/}
-				{/*	linkedin={linkedin}*/}
-				{/*/>*/}
-				{/*<Divider />*/}
-				{/*<About first={firstParagraph} rest={restParagraphs} />*/}
-				{/*<Divider />*/}
-				{/*<Commits />*/}
-				{/*<Divider />*/}
-				{/*<TechStack />*/}
-				{/*<Divider />*/}
-				{/*<Blog />*/}
-				{/*<Divider />*/}
-				{/*<Certs />*/}
-				{/*<Divider />*/}
-				{/*<Utils />*/}
-				{/*<Divider />*/}
-				{/*<Experiences />*/}
-				{/*<Divider />*/}
-				{/*<CV />*/}
-				{/*<Divider />*/}
-				{/*<Projects />*/}
-				{/*<Divider />*/}
+				<Contact
+					capture={isCapture}
+					github={github}
+					linkedin={linkedin}
+				/>
+				<Divider border />
+				<About />
+				<Divider border />
+				<Commits
+					stars={stars}
+					followers={followers}
+					following={following}
+					contributions={contributions}
+				/>
+				<Divider border />
+				<TechStack />
+				<Divider border />
+				<Articles />
+				<Divider border />
+				<Certs />
+				<Divider border />
+				<Utils />
+				<Divider border />
+				<Experiences />
+				<Divider border />
+				<Projects />
+				<Divider border />
+				<CurriculumVitae />
+				<Divider border />
 			</div>
 		</>
 	);

@@ -1,8 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resend } from 'resend';
+import { USER } from '@/content/user';
 import { CVEmailTemplate } from '@/emails/CVEmail';
-import { USER } from '@/features/root/data/user';
 import emailSchema from '@/schemas/email.schema';
 import { decodeEmail } from '@/utils/string';
 

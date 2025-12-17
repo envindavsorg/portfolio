@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import VCard from 'vcard-creator';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 import convertImageToJpeg from '@/utils/image';
 import { decodeEmail, decodePhoneNumber } from '@/utils/string';
 

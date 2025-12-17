@@ -3,7 +3,7 @@
 import { SpeakerHighIcon } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import type React from 'react';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 import { soundManager } from '@/lib/sound-manager';
 import { cn } from '@/lib/utils';
 

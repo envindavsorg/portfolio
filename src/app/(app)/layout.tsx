@@ -1,16 +1,16 @@
 import dynamic from 'next/dynamic';
 import type React from 'react';
+import { Sparkles } from '@/components/animations/Sparkles';
 import { NavBar } from '@/components/navigation/NavBar';
-import { Sparkles } from '@/elements/animations/Sparkles';
 
 const RootContextMenu = dynamic(() =>
-	import('@/features/context/RootContextMenu').then(
+	import('@/components/context/RootContextMenu').then(
 		(mod) => mod.RootContextMenu,
 	),
 );
 
 const ScrollTop = dynamic(() =>
-	import('@/features/layout/ScrollTop').then((mod) => mod.ScrollTop),
+	import('@/components/ui/ScrollTop').then((mod) => mod.ScrollTop),
 );
 
 export type AppLayoutProps = {

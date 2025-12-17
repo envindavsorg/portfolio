@@ -3,7 +3,7 @@
 import { useMotionValueEvent, useScroll } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { CuzeacFlorinMark } from '@/features/assets/CuzeacFlorinMark';
+import { CuzeacFlorinMark } from '@/components/assets/CuzeacFlorinMark';
 
 const calcDistance = (el: HTMLElement) => {
 	const rect = el.getBoundingClientRect();

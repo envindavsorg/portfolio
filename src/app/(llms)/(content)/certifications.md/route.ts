@@ -1,4 +1,4 @@
-import { CERTIFICATIONS } from '@/features/root/data/certifications';
+import { CERTIFICATIONS } from '@/components/features/certifications/data/certifications';
 
 const content = `
 # Mes certifications

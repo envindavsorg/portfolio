@@ -65,7 +65,7 @@ const NotFound = () => (
 
 		<Panel>
 			<PanelContent>
-				<Prose className="text-muted-foreground">
+				<Prose>
 					Oups, peut-être avez-vous cliqué sur un ancien lien ou
 					avez-vous fait une faute de frappe ...
 				</Prose>

@@ -1,16 +1,16 @@
 import { CheckIcon, InfoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
-import { Badge } from '@/components/ui/Badge';
 import {
 	AnimatedSpan,
 	Terminal,
 	TypingAnimation,
-} from '@/elements/animations/Terminal';
-import { ReactIcon } from '@/elements/icons/content/React';
-import { TailwindIcon } from '@/elements/icons/content/Tailwind';
-import { TypeScriptIcon } from '@/elements/icons/content/TypeScript';
-import { Post } from '@/features/blog/components/Post';
-import { TagsFilter } from '@/features/blog/components/TagsFilter';
+} from '@/components/animations/Terminal';
+import { Post } from '@/components/blog/components/Post';
+import { TagsFilter } from '@/components/blog/components/TagsFilter';
+import { ReactIcon } from '@/components/icons/content/React';
+import { TailwindIcon } from '@/components/icons/content/Tailwind';
+import { TypeScriptIcon } from '@/components/icons/content/TypeScript';
+import { Badge } from '@/components/ui/Badge';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';

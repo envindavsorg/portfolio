@@ -41,7 +41,7 @@ const getMDXData = (dir: string) => {
 };
 
 export const getAllPosts = () =>
-	getMDXData(join(process.cwd(), 'src/features/blog/content')).sort(
+	getMDXData(join(process.cwd(), 'src/components/blog/content')).sort(
 		(a, b) =>
 			new Date(b.metadata.createdAt).getTime() -
 			new Date(a.metadata.createdAt).getTime(),
@@ -50,6 +50,7 @@ export const getAllPosts = () =>
 export const getPostBySlug = (slug: string) =>
 	getAllPosts().find((post) => post.slug === slug);
 
+type PageType = 'article' | 'utils';
 export const getPostsByCategory = (category: PageType) =>
 	getAllPosts().filter((post) => post.metadata?.category === category);
 

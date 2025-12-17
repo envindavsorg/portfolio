@@ -1,11 +1,11 @@
 import type React from 'react';
 import type { SVGProps } from 'react';
-import { ArcIcon } from '@/elements/icons/browsers/Arc';
-import { ChromeIcon } from '@/elements/icons/browsers/Chrome';
-import { EdgeIcon } from '@/elements/icons/browsers/Edge';
-import { FirefoxIcon } from '@/elements/icons/browsers/Firefox';
-import { OperaIcon } from '@/elements/icons/browsers/Opera';
-import { SafariIcon } from '@/elements/icons/browsers/Safari';
+import { ArcIcon } from '@/components/icons/browsers/Arc';
+import { ChromeIcon } from '@/components/icons/browsers/Chrome';
+import { EdgeIcon } from '@/components/icons/browsers/Edge';
+import { FirefoxIcon } from '@/components/icons/browsers/Firefox';
+import { OperaIcon } from '@/components/icons/browsers/Opera';
+import { SafariIcon } from '@/components/icons/browsers/Safari';
 
 export type Browser =
 	| 'Arc Browser'

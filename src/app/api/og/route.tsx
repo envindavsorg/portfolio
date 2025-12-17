@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';

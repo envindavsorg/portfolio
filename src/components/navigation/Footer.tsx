@@ -5,9 +5,9 @@ import { TriangleDashedIcon, TriangleIcon } from '@phosphor-icons/react';
 import { useIntersectionObserver } from '@uidotdev/usehooks';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
+import { HeartIcon } from '@/components/icons/HeartIcon';
+import { PizzaIcon } from '@/components/icons/Pizza';
 import { Divider } from '@/components/ui/Divider';
-import { HeartIcon } from '@/elements/icons/HeartIcon';
-import { PizzaIcon } from '@/elements/icons/Pizza';
 import { cn } from '@/lib/utils';
 import { Metadata } from './Metadata';
 

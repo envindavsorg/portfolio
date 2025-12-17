@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Prose } from '@/components/ui/Typography';
-import { USER } from '@/features/root/data/user';
+import { USER } from '@/content/user';
 import { openGraphImage } from '@/lib/open-graph';
 import { Localhost } from './components/Localhost';
 import { metadata } from './metadata';
@@ -25,9 +25,7 @@ const Page = () => (
 		</div>
 
 		<div className="p-4">
-			<Prose className="text-muted-foreground">
-				{metadata.description}
-			</Prose>
+			<Prose>{metadata.description}</Prose>
 		</div>
 
 		<Localhost />
