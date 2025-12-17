@@ -27,80 +27,42 @@ Une petite démo ? [C'est par ici !](https://cuzeacflorin.fr)
 [![pnpm Version](https://img.shields.io/badge/pnpm-%3E%3D10.26.0-F69220?logo=pnpm)](https://pnpm.io/)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 
----
+<br/>
 
-## Screenshot
+## Présentation
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://cuzeacflorin.fr/images/screenshot-desktop-dark.webp?t=1758274686">
-  <source media="(prefers-color-scheme: light)" srcset="https://cuzeacflorin.fr/images/screenshot-desktop-light.webp?t=1758274686">
-  <img src="https://cuzeacflorin.fr/images/screenshot-desktop-light.webp?t=1758274686" alt="Screenshot">
-</picture>
-
-## Overview
-
-### Tech Stack
+### Stack technique
 
 - React +19
-- Next.js +15
+- Next.js +16
 - Tailwind CSS +4
 - TypeScript +5
 - shadcn/ui
 
-### Featured
+### Fonctionnalités principales
 
-- Clean & modern design with a focus on usability
-- Responsive layout for all devices
-- Accessibility-first approach
-- Performance-optimized with [Lighthouse](https://developers.google.com/speed/pagespeed/insights/)
-- Fast load times with [Next.js](https://nextjs.org) and [Vercel](https://vercel.com)
-- Image optimization with [Next.js Image](https://nextjs.org/docs/api-reference/next/image)
-- Smooth animations with [Motion](https://motion.dev)
-- Dark mode support with system preference detection
-- Built with [shadcn/ui](https://ui.shadcn.com)
-- Iconography with [Phosphor Icons](https://phosphoricons.com)
-- Documentation with [Fumadocs](https://fumadocs.dev)
-- Light & Dark theme support
-- vCard integration for easy contact saving
-- SEO optimization: [JSON-LD schema](https://json-ld.org), sitemap, robots
-- AI-friendly [/llms.txt](https://llmstxt.org)
-- Installable PWA
+- Design épuré et moderne, axé sur l'ergonomie
+- Interface responsive, adaptée à tous les écrans
+- Accessibilité en priorité
+- Performance optimisée avec [Lighthouse](https://developers.google.com/speed/pagespeed/insights/)
+- Chargement rapide grâce à [Next.js](https://nextjs.org) et [Vercel](https://vercel.com)
+- Optimisation des images avec [Next.js Image](https://nextjs.org/docs/api-reference/next/image)
+- Animations fluides avec [Motion](https://motion.dev)
+- Mode sombre avec détection des préférences système
+- Construit avec [shadcn/ui](https://ui.shadcn.com)
+- Icônes [Phosphor Icons](https://phosphoricons.com)
+- Documentation avec [Fumadocs](https://fumadocs.dev)
+- Thèmes clair et sombre
+- Intégration vCard pour enregistrer le contact facilement
+- SEO optimisé : [schéma JSON-LD](https://json-ld.org), sitemap, robots
+- Compatible IA avec [/llms.txt](https://llmstxt.org)
+- PWA installable
 
-### Blog
+## Licence
 
-- MDX & Markdown support for rich content
-- Blog posts stored in the `/blog/content` directory
-- Access markdown by adding `.mdx` to URLs, e.g. `/blog/content/welcome.mdx`
-- Syntax Highlighting for better readability of code snippets
-- SEO-friendly with meta tags and structured data
-- Social sharing buttons for easy content distribution
-- RSS Feed for easy content distribution
-- Dynamic OG Images for rich previews
+Sous licence [MIT](./LICENSE).
 
-### Component Registry
-
-Easily build and distribute your own components, hooks, and pages using a custom registry powered by the [shadcn CLI](https://ui.shadcn.com/docs/cli).
-
-Each component is well-documented through the Blog, featuring:
-
-- **Live Preview**: Interactive component demos
-- **Code Snippets**: Readable and copyable examples
-- **Beautiful Code Blocks**: Styled for clarity and dark mode
-- **Command Blocks**: One-click copy for quick install commands (`pnpm`, `npm`, `yarn`, `bun`)
-
-## Development
-
-Please refer to the [Development Guide](./DEVELOPMENT.md) for more details.
-
-## License
-
-Licensed under the [MIT license](./LICENSE).
-
-You're free to use my code!
-Just make sure to <ins>remove all my personal information</ins> before publishing your website.
-It's awesome to see my code being useful to someone!
-
-## Acknowledgments
+## Crédits
 
 - [React](https://react.dev)
 - [Next.js](https://nextjs.org)
@@ -111,4 +73,11 @@ It's awesome to see my code being useful to someone!
 - [Fumadocs](https://fumadocs.dev)
 - [Phosphor Icons](https://phosphoricons.com)
 - [Vercel](https://vercel.com)
-- And many other open-source libraries used in `package.json`
+- Et toutes les autres librairies open-source utilisées dans `package.json`
+
+<br/>
+<br/>
+
+<p align="center">
+    Cuzeac Florin - 2025
+</p>
