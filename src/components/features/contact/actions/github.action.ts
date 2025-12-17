@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidateTag, unstable_cache } from 'next/cache';
+import { unstable_cache, updateTag } from 'next/cache';
 import { octokit } from '@/lib/octokit';
 import { GITHUB_QUERY } from './query/github.query';
 import type { GitHubResponse, GitHubUserData } from './types/github.types';
@@ -81,4 +81,4 @@ export const getGitHubUserData = unstable_cache(
 	},
 );
 
-export const revalidateGitHubData = async () => revalidateTag(CACHE_TAG);
+export const revalidateGitHubData = async () => updateTag(CACHE_TAG);

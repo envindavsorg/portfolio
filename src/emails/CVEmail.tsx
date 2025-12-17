@@ -23,7 +23,7 @@ export const CVEmailTemplate = ({ firstName }: CVEmailTemplateProps) => (
 			<Preview>CV - Cuzeac Florin | cuzeacflorin.fr</Preview>
 			<Container style={container}>
 				<Img
-					alt="Cuzeac Florin"
+					alt="Cuzeac Florin | cuzeacflorin.fr"
 					height="42"
 					src="https://cuzeacflorin.fr/emails/logo.png"
 					style={logo}
