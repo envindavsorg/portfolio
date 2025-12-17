@@ -3,7 +3,6 @@
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { type HTMLMotionProps, motion } from 'motion/react';
 import React from 'react';
-
 import { cn } from '@/lib/utils';
 
 type AnimatedCheckboxProps = React.ComponentProps<

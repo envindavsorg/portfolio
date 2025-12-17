@@ -22,7 +22,7 @@ type Props = {
 };
 
 export const generateStaticParams = async () => {
-	const posts: Post[] = getPostsByCategory(type);
+	const posts: Post[] = getPostsByCategory('utils');
 	return posts.map(({ slug }) => ({ slug }));
 };
 
@@ -98,7 +98,7 @@ const Page = async ({ params }: Props) => {
 			/>
 
 			<TopBar
-				type={type}
+				type="utils"
 				slug={slug}
 				baseUrl="/utils"
 				postSlug={post.slug}

@@ -23,7 +23,20 @@
 		}
 	},
 	"files": {
-		"ignoreUnknown": false
+		"ignoreUnknown": false,
+		"includes": [
+			"**",
+			"!!node_modules",
+			"!!.next",
+			"!!dist",
+			"!!build",
+			"!!.turbo",
+			"!!.vercel",
+			"!!out",
+			"!!coverage",
+			"!!public/registry",
+			"!!.claude"
+		]
 	},
 	"linter": {
 		"enabled": true,

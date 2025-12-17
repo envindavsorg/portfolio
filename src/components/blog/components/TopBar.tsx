@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { findNeighbour, getPostsByCategory } from '@/lib/blog/posts';
 
 type TopBarProps = {
-	type: PageType;
+	type: 'article' | 'utils' | 'components';
 	slug: string;
 	baseUrl: string;
 	postSlug: string;

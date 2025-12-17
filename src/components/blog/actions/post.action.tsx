@@ -140,7 +140,8 @@ export const ViewOptions = ({
 				? markdownUrl
 				: new URL(markdownUrl, window.location.origin).toString();
 
-		const q = getPrompt(fullMarkdownUrl, isComponent);
+		const promptType = isComponent ? 'component' : 'general';
+		const q = getPrompt(fullMarkdownUrl, promptType);
 
 		const _items = [
 			{

@@ -27,7 +27,7 @@ const BlogArticlesPage = async ({
 	searchParams,
 }: Readonly<BlogArticlesPageProps>) => {
 	const resolvedSearchParams = await searchParams;
-	const articles: Post[] = getPostsByCategory('blog');
+	const articles: Post[] = getPostsByCategory('article');
 
 	const allTags = [
 		'Tous les articles',
@@ -88,7 +88,7 @@ const BlogArticlesPage = async ({
 			</div>
 
 			<div className="relative pt-4">
-				<div className="-z-1 absolute inset-0 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
+				<div className="absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
 					<div className="border-edge border-r" />
 					<div className="border-edge border-l" />
 				</div>

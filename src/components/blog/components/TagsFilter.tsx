@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import {
 	Drawer,
-	DrawerBody,
 	DrawerContent,
 	DrawerHeader,
 	DrawerTrigger,
@@ -89,48 +88,46 @@ const MobileTagFilter = ({
 				</h3>
 			</DrawerHeader>
 
-			<DrawerBody>
-				<div className="space-y-3">
-					{tags.map((tag: string) => {
-						const isActive =
-							tag === 'Tout'
-								? selectedTag === 'Tout'
-								: selectedTag === tag.toLowerCase();
+			<div className="space-y-3">
+				{tags.map((tag: string) => {
+					const isActive =
+						tag === 'Tout'
+							? selectedTag === 'Tout'
+							: selectedTag === tag.toLowerCase();
 
-						return (
-							<div
-								className="flex items-center justify-between"
-								key={tag}
-							>
-								<Button
-									className={cn(
-										'px-0 font-medium text-base',
-										isActive
-											? 'text-theme underline underline-offset-4'
-											: 'text-foreground',
-									)}
-									onClick={() => onTagClick(tag)}
-									variant="link"
-								>
-									{tag}
-								</Button>
-								{tagCounts?.[tag] && (
-									<Badge
-										className={cn(
-											'aspect-square border',
-											isActive
-												? 'border-theme text-theme'
-												: 'border-input text-foreground',
-										)}
-									>
-										{tagCounts[tag]}
-									</Badge>
+					return (
+						<div
+							className="flex items-center justify-between"
+							key={tag}
+						>
+							<Button
+								className={cn(
+									'px-0 font-medium text-base',
+									isActive
+										? 'text-theme underline underline-offset-4'
+										: 'text-foreground',
 								)}
-							</div>
-						);
-					})}
-				</div>
-			</DrawerBody>
+								onClick={() => onTagClick(tag)}
+								variant="link"
+							>
+								{tag}
+							</Button>
+							{tagCounts?.[tag] && (
+								<Badge
+									className={cn(
+										'aspect-square border',
+										isActive
+											? 'border-theme text-theme'
+											: 'border-input text-foreground',
+									)}
+								>
+									{tagCounts[tag]}
+								</Badge>
+							)}
+						</div>
+					);
+				})}
+			</div>
 		</DrawerContent>
 	</Drawer>
 );

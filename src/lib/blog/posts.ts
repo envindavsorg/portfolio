@@ -50,7 +50,7 @@ export const getAllPosts = () =>
 export const getPostBySlug = (slug: string) =>
 	getAllPosts().find((post) => post.slug === slug);
 
-type PageType = 'article' | 'utils';
+type PageType = 'article' | 'utils' | 'components';
 export const getPostsByCategory = (category: PageType) =>
 	getAllPosts().filter((post) => post.metadata?.category === category);
 

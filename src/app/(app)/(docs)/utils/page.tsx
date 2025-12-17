@@ -27,8 +27,9 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 	const { tag } = await searchParams;
 	const selectedTag = tag?.toLowerCase() || 'Tout';
 
-	const allPosts: Post[] = getPostsByCategory(type).sort((a: Post, b: Post) =>
-		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)),
+	const allPosts: Post[] = getPostsByCategory('utils').sort(
+		(a: Post, b: Post) =>
+			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)),
 	);
 
 	const tagCounts: Record<string, number> = {};

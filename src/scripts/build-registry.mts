@@ -1,11 +1,11 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import consola from 'consola';
 import { rimraf } from 'rimraf';
 import { type Registry, registrySchema } from 'shadcn/schema';
-import consola from 'consola';
-// @ts-ignore
+// @ts-expect-error
 const { registryConfig } = await import('@/config/registry.js');
-// @ts-ignore
+// @ts-expect-error
 const { registry } = await import('@/registry');
 
 const REGISTRY_PATH = path.join(process.cwd(), 'src/__registry__');

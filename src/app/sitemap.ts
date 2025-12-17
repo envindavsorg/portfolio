@@ -1,25 +1,80 @@
 import type { MetadataRoute } from 'next';
 import { SITE_INFO } from '@/config/site';
-import { getAllPosts, getPostsByCategory } from '@/lib/blog/posts';
+import { getAllPosts } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 
+const CATEGORY_ROUTES: Record<string, string> = {
+	article: 'blog',
+	components: 'components',
+	utils: 'utils',
+};
+
 const sitemap = (): MetadataRoute.Sitemap => {
-	const posts = getAllPosts().map((post) => ({
-		url: `${SITE_INFO.url}/blog/${post.slug}`,
-		lastModified: dayjs(post.metadata.updatedAt).toISOString(),
-	}));
+	const allPosts = getAllPosts();
 
-	const components = getPostsByCategory('components').map((post) => ({
-		url: `${SITE_INFO.url}/components/${post.slug}`,
-		lastModified: dayjs(post.metadata.updatedAt).toISOString(),
-	}));
+	const articles = allPosts.filter(
+		(p) => (p.metadata.category ?? 'article') === 'article',
+	);
+	const components = allPosts.filter(
+		(p) => p.metadata.category === 'components',
+	);
+	const utils = allPosts.filter((p) => p.metadata.category === 'utils');
 
-	const routes = ['', '/blog', '/components'].map((route) => ({
-		url: `${SITE_INFO.url}${route}`,
-		lastModified: dayjs().toISOString(),
-	}));
+	const getLatestDate = (posts: typeof allPosts) => {
+		if (posts.length === 0) {
+			return dayjs().toISOString();
+		}
 
-	return [...routes, ...posts, ...components];
+		return dayjs(posts[0].metadata.updatedAt).toISOString();
+	};
+
+	const staticRoutes: MetadataRoute.Sitemap = [
+		{
+			url: SITE_INFO.url,
+			lastModified: getLatestDate(allPosts),
+			changeFrequency: 'daily',
+			priority: 1,
+		},
+		{
+			url: `${SITE_INFO.url}/blog`,
+			lastModified: getLatestDate(articles),
+			changeFrequency: 'daily',
+			priority: 0.8,
+		},
+		{
+			url: `${SITE_INFO.url}/components`,
+			lastModified: getLatestDate(components),
+			changeFrequency: 'weekly',
+			priority: 0.8,
+		},
+		{
+			url: `${SITE_INFO.url}/utils`,
+			lastModified: getLatestDate(utils),
+			changeFrequency: 'weekly',
+			priority: 0.8,
+		},
+	];
+
+	const mapPostsToSitemap = (
+		posts: typeof allPosts,
+		routeBase: string,
+	): MetadataRoute.Sitemap => {
+		return posts.map((post) => ({
+			url: `${SITE_INFO.url}/${routeBase}/${post.slug}`,
+			lastModified: dayjs(post.metadata.updatedAt).toISOString(),
+			changeFrequency: 'weekly',
+			priority: 0.6,
+		}));
+	};
+
+	const articleUrls = mapPostsToSitemap(articles, CATEGORY_ROUTES.article);
+	const componentUrls = mapPostsToSitemap(
+		components,
+		CATEGORY_ROUTES.components,
+	);
+	const utilUrls = mapPostsToSitemap(utils, CATEGORY_ROUTES.utils);
+
+	return [...staticRoutes, ...articleUrls, ...componentUrls, ...utilUrls];
 };
 
 export default sitemap;
