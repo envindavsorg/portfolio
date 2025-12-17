@@ -38,8 +38,7 @@
 		"capture:components": "tsx --tsconfig ./tsconfig.scripts.json src/scripts/capture-components.ts",
 		"generate-libphonenumber-metadata": "libphonenumber-metadata-generator ./src/assets/libphonenumber.metadata.json --countries FR --extended",
 		"upgrade:next": "npx @next/codemod@latest upgrade latest",
-		"upgrade:tailwind": "npx @tailwindcss/upgrade@latest",
-		"prepare": "husky"
+		"upgrade:tailwind": "npx @tailwindcss/upgrade@latest"
 	},
 	"keywords": [
 		"portfolio",

@@ -1,4 +1,17 @@
-# [cuzeacflorin.fr](https://cuzeacflorin.fr)
+<p align="center">
+  <a href="https://www.cuzeacflorin.fr">
+    <img src="https://www.cuzeacflorin.fr/images/logo/github.png" alt="Cuzeac Florin" height="64">
+    <h3 align="center">Cuzeac Florin</h3>
+  </a>
+</p>
+
+<p align="center">
+  Imagine, code, crée, inspire.
+</p>
+
+<br/>
+
+---
 
 A minimal portfolio, component registry, and blog to showcase my work as a frontend developer.
 
