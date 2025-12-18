@@ -8,8 +8,9 @@ import {
 	TriangleDashedIcon,
 } from '@phosphor-icons/react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import type React from 'react';
-import { lazy, useMemo, useOptimistic, useTransition } from 'react';
+import { lazy, useCallback, useMemo, useOptimistic, useTransition } from 'react';
 import { toast } from 'sonner';
 import { variants } from '@/components/ui/Button';
 import {
@@ -76,6 +77,11 @@ export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
 			soundManager.playToastSound();
 			toast.success('Contenu copié dans le presse-papier !');
 
+			// Track LLM content copy event
+			posthog.capture('llm_content_copied', {
+				markdown_url: markdownUrl,
+			});
+
 			await delay(2000);
 		});
 	};
@@ -134,6 +140,17 @@ export const ViewOptions = ({
 	markdownUrl,
 	isComponent = false,
 }: ViewOptionsProps) => {
+	const handleExternalToolClick = useCallback(
+		(toolName: string) => {
+			posthog.capture('external_tool_opened', {
+				tool: toolName,
+				markdown_url: markdownUrl,
+				is_component: isComponent,
+			});
+		},
+		[markdownUrl, isComponent],
+	);
+
 	const items = useMemo(() => {
 		const fullMarkdownUrl =
 			typeof window === 'undefined'
@@ -148,6 +165,7 @@ export const ViewOptions = ({
 				title: 'Voir en Markdown',
 				href: fullMarkdownUrl,
 				icon: Icons.markdown,
+				tool: 'markdown',
 			},
 			{
 				title: 'Ouvrir dans ChatGPT',
@@ -156,6 +174,7 @@ export const ViewOptions = ({
 					q,
 				})}`,
 				icon: Icons.chatgpt,
+				tool: 'chatgpt',
 			},
 			{
 				title: 'Ouvrir dans Claude',
@@ -163,6 +182,7 @@ export const ViewOptions = ({
 					q,
 				})}`,
 				icon: Icons.claude,
+				tool: 'claude',
 			},
 		];
 
@@ -173,6 +193,7 @@ export const ViewOptions = ({
 					q,
 				})}`,
 				icon: Icons.v0,
+				tool: 'v0',
 			});
 		}
 
@@ -201,7 +222,7 @@ export const ViewOptions = ({
 				onCloseAutoFocus={(event: Event) => event.preventDefault()}
 				sideOffset={8}
 			>
-				{items.map(({ title, href, icon: Icon }) => (
+				{items.map(({ title, href, icon: Icon, tool }) => (
 					<DropdownMenuItem
 						asChild
 						className="font-medium"
@@ -211,6 +232,7 @@ export const ViewOptions = ({
 							href={href}
 							rel="noreferrer noopener"
 							target="_blank"
+							onClick={() => handleExternalToolClick(tool)}
 						>
 							<Icon className="size-4" />
 							{title}

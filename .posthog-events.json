@@ -1,0 +1,62 @@
+[
+  {
+    "eventName": "cv_email_request_submitted",
+    "eventDescription": "User submitted the form to receive CV via email - key conversion event",
+    "filePath": "src/components/features/cv/CurriculumVitaeOverlay.tsx"
+  },
+  {
+    "eventName": "cv_email_request_success",
+    "eventDescription": "CV email was successfully sent to the user",
+    "filePath": "src/components/features/cv/CurriculumVitaeOverlay.tsx"
+  },
+  {
+    "eventName": "cv_email_request_error",
+    "eventDescription": "Error occurred while sending CV email",
+    "filePath": "src/components/features/cv/CurriculumVitaeOverlay.tsx"
+  },
+  {
+    "eventName": "cv_download_clicked",
+    "eventDescription": "User clicked to view/download the CV directly",
+    "filePath": "src/components/features/cv/CurriculumVitae.tsx"
+  },
+  {
+    "eventName": "social_link_clicked",
+    "eventDescription": "User clicked on a social media link (LinkedIn or GitHub)",
+    "filePath": "src/components/features/contact/Contact.tsx"
+  },
+  {
+    "eventName": "blog_article_shared",
+    "eventDescription": "User shared a blog article via share menu",
+    "filePath": "src/components/blog/components/ShareMenu.tsx"
+  },
+  {
+    "eventName": "blog_link_copied",
+    "eventDescription": "User copied a blog article link to clipboard",
+    "filePath": "src/components/blog/components/ShareMenu.tsx"
+  },
+  {
+    "eventName": "code_snippet_copied",
+    "eventDescription": "User copied a code snippet from a blog post",
+    "filePath": "src/components/blog/elements/CopyButton.tsx"
+  },
+  {
+    "eventName": "llm_content_copied",
+    "eventDescription": "User copied markdown content for LLM usage",
+    "filePath": "src/components/blog/actions/post.action.tsx"
+  },
+  {
+    "eventName": "theme_changed",
+    "eventDescription": "User toggled between light and dark theme",
+    "filePath": "src/components/navigation/navbar/ToggleTheme.tsx"
+  },
+  {
+    "eventName": "vcard_downloaded",
+    "eventDescription": "User downloaded the business card (vCard)",
+    "filePath": "src/components/navigation/command/data/data.ts"
+  },
+  {
+    "eventName": "external_tool_opened",
+    "eventDescription": "User opened content in external tool (ChatGPT, Claude, v0)",
+    "filePath": "src/components/blog/actions/post.action.tsx"
+  }
+]

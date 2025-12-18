@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import type React from 'react';
 import type { WebSite, WithContext } from 'schema-dts';
+import ConsentManager from '@/components/manager/ConsentManager';
 import { META_THEME_COLORS, SITE_INFO } from '@/config/site';
 import { USER } from '@/config/user';
 import { mono, sans } from '@/lib/fonts';
@@ -135,7 +136,9 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 		</head>
 
 		<body>
-			<Providers>{children}</Providers>
+			<Providers>
+				<ConsentManager>{children}</ConsentManager>
+			</Providers>
 		</body>
 	</html>
 );

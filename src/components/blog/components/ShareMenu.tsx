@@ -8,6 +8,7 @@ import {
 	XLogoIcon,
 } from '@phosphor-icons/react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import { memo, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
@@ -41,7 +42,22 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 		copyText(absoluteUrl);
 		soundManager.playToastSound();
 		toast.success('Lien copié dans le presse-papier !');
+
+		// Track blog link copy event
+		posthog.capture('blog_link_copied', {
+			url: absoluteUrl,
+		});
 	}, [absoluteUrl]);
+
+	const handleShare = useCallback(
+		(platform: 'x' | 'linkedin') => {
+			posthog.capture('blog_article_shared', {
+				platform,
+				url: absoluteUrl,
+			});
+		},
+		[absoluteUrl],
+	);
 
 	return (
 		<DropdownMenu>
@@ -69,7 +85,12 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 				</DropdownMenuItem>
 
 				<DropdownMenuItem asChild className="font-medium">
-					<Link href={x} rel="noopener noreferrer" target="_blank">
+					<Link
+						href={x}
+						rel="noopener noreferrer"
+						target="_blank"
+						onClick={() => handleShare('x')}
+					>
 						<XLogoIcon className="size-4 text-foreground" />
 						Partager sur X
 					</Link>
@@ -80,6 +101,7 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 						href={linkedin}
 						rel="noopener noreferrer"
 						target="_blank"
+						onClick={() => handleShare('linkedin')}
 					>
 						<LinkedinLogoIcon className="size-4 text-foreground" />
 						Partager sur LinkedIn

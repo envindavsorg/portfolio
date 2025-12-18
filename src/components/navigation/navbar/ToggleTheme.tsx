@@ -2,6 +2,7 @@
 
 import { CircleHalfIcon } from '@phosphor-icons/react';
 import { useTheme } from 'next-themes';
+import posthog from 'posthog-js';
 import { useCallback } from 'react';
 import { Button } from '@/components/ui/Button';
 import { META_THEME_COLORS } from '@/config/site';
@@ -13,13 +14,21 @@ export const ToggleTheme = () => {
 	const { setMetaColor } = useMetaColor();
 
 	const switchTheme = useCallback(() => {
+		const newTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
+
 		soundManager.playThemeSound();
-		setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+		setTheme(newTheme);
 		setMetaColor(
 			resolvedTheme === 'dark'
 				? META_THEME_COLORS.light
 				: META_THEME_COLORS.dark,
 		);
+
+		// Track theme change event
+		posthog.capture('theme_changed', {
+			from_theme: resolvedTheme,
+			to_theme: newTheme,
+		});
 	}, [resolvedTheme, setTheme, setMetaColor]);
 
 	return (

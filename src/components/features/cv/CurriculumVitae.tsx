@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import type React from 'react';
 import { CurriculumVitaeOverlay } from '@/components/features/cv/CurriculumVitaeOverlay';
 import { Button } from '@/components/ui/Button';
@@ -42,6 +43,11 @@ export const CurriculumVitae = (): React.JSX.Element => (
 				href={USER.documents.cv.url}
 				rel="noopener noreferrer"
 				target="_blank"
+				onClick={() => {
+					posthog.capture('cv_download_clicked', {
+						cv_url: USER.documents.cv.url,
+					});
+				}}
 			>
 				<Button variant="outline">Voir et télécharger</Button>
 			</Link>

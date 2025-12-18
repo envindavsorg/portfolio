@@ -2,6 +2,7 @@
 
 import type { Player } from '@lordicon/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import posthog from 'posthog-js';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/Button';
@@ -63,10 +64,26 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 
 	const handleSubmit = useCallback(
 		async (data: EmailFormData) => {
+			// Track CV email request submission
+			posthog.capture('cv_email_request_submitted', {
+				device_type: isDesktop ? 'desktop' : 'mobile',
+			});
+
 			const success = await sendEmail(data);
 			setFormState(success ? 'success' : 'error');
+
+			// Track success or error outcome
+			if (success) {
+				posthog.capture('cv_email_request_success', {
+					device_type: isDesktop ? 'desktop' : 'mobile',
+				});
+			} else {
+				posthog.capture('cv_email_request_error', {
+					device_type: isDesktop ? 'desktop' : 'mobile',
+				});
+			}
 		},
-		[sendEmail],
+		[sendEmail, isDesktop],
 	);
 
 	const handleClose = useCallback(() => setOpen(false), []);

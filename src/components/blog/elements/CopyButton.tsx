@@ -1,6 +1,7 @@
 'use client';
 
 import { CheckIcon, CopyIcon, XCircleIcon } from '@phosphor-icons/react';
+import posthog from 'posthog-js';
 import { useMemo, useOptimistic, useTransition } from 'react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
@@ -32,6 +33,11 @@ export const CopyButton = ({ value, className, ...props }: CopyButtonProps) => {
 					try {
 						await navigator.clipboard.writeText(value);
 						setState('copied');
+
+						// Track code snippet copy event
+						posthog.capture('code_snippet_copied', {
+							snippet_length: value.length,
+						});
 					} catch {
 						setState('failed');
 					}
