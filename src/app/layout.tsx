@@ -132,7 +132,6 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 				}}
 				type="application/ld+json"
 			/>
-			<title>Mon portfolio - Cuzeac Florin</title>
 		</head>
 
 		<body>

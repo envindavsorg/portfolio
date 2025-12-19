@@ -15,6 +15,6 @@ const SpeedInsights = lazy(() =>
 export const Analytics = () => (
 	<Suspense fallback={null}>
 		<AnalyticsReact debug={true} mode="auto" />
-		<SpeedInsights debug={true} />
+		<SpeedInsights debug={process.env.NODE_ENV === 'development'} />
 	</Suspense>
 );
