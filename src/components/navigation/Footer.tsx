@@ -80,7 +80,7 @@ const Footer = ({ commit }: FooterProps) => {
 					>
 						<div className="mx-auto flex items-center justify-center gap-3 border-edge border-x bg-background px-4">
 							<Link
-								aria-label="LLM"
+								aria-label="Contexte essentiel - LLM"
 								className="flex items-center gap-x-1.5 text-muted-foreground transition-colors hover:text-foreground"
 								href="/llms.txt"
 								rel="noopener noreferrer"
@@ -96,7 +96,7 @@ const Footer = ({ commit }: FooterProps) => {
 							<div className="flex h-11 w-px bg-edge" />
 
 							<Link
-								aria-label="LLM"
+								aria-label="Contexte intégral - LLM"
 								className="flex items-center gap-x-1.5 text-muted-foreground transition-colors hover:text-foreground"
 								href="/llms-full.txt"
 								rel="noopener noreferrer"

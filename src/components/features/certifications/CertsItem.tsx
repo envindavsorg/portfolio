@@ -35,7 +35,6 @@ export const CertItem = ({
 
 	return (
 		<Link
-			aria-label={title}
 			className={cn('group/cert flex items-center pr-4', className)}
 			href={credentialURL}
 			rel="noopener"

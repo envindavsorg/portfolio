@@ -24,7 +24,7 @@ export const SocialLinkItem = ({
 	capture,
 }: SocialLinkItemProps): React.JSX.Element => (
 	<Link
-		aria-label={link.description}
+		aria-label={`${link.title} - ${link.description}`}
 		href={link.href}
 		rel="noopener noreferrer"
 		target="_blank"

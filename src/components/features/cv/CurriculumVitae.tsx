@@ -39,7 +39,6 @@ export const CurriculumVitae = (): React.JSX.Element => (
 
 		<PanelFooter>
 			<Link
-				aria-label={USER.documents.cv.title}
 				href={USER.documents.cv.url}
 				rel="noopener noreferrer"
 				target="_blank"

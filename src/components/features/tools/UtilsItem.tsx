@@ -17,7 +17,7 @@ export const UtilsItem = memo(({ post }: UtilsItemProps): React.JSX.Element => {
 	const Icon = getIconForUtilsTags(tags);
 
 	return (
-		<Link aria-label={title} href={`/utils/${slug}`}>
+		<Link href={`/utils/${slug}`}>
 			<article className="group/utils screen-line-after flex items-center pr-4 hover:bg-accent2">
 				<div
 					className={cn(
