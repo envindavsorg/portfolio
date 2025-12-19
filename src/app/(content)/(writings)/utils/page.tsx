@@ -1,20 +1,23 @@
 import type { Metadata } from 'next';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
 import { UtilsItem } from '@/components/features/tools/UtilsItem';
+import { WritingsHeading } from '@/components/features/writings/Heading';
 import { Divider } from '@/components/ui/Divider';
-import { Prose } from '@/components/ui/Typography';
 import { getPostsByCategory } from '@/lib/blog/posts';
-import { metadata } from '@/lib/blog/utils/metadata';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 
-const { title, description, type } = metadata;
-
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
-		title,
-		description,
-		ogImageParams: { type, title, description },
+		title: 'Outils pour développeurs',
+		description:
+			"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
+		ogImageParams: {
+			type: 'utils',
+			title: 'Outils pour développeurs',
+			description:
+				"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
+		},
 	});
 
 type UtilsPageProps = Readonly<{
@@ -57,18 +60,10 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 
 	return (
 		<>
-			<div className="screen-line-after px-3">
-				<h1 className="font-semibold text-2xl sm:text-3xl">
-					{metadata.title}{' '}
-					<sup className="font-normal text-sm text-theme">
-						{allPosts.length}
-					</sup>
-				</h1>
-			</div>
-
-			<div className="screen-line-after px-3 py-1.5">
-				<Prose>{metadata.description}</Prose>
-			</div>
+			<WritingsHeading
+				title="Outils pour développeurs"
+				description="Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs."
+			/>
 
 			<TagsFilter
 				selectedTag={selectedTag}
@@ -76,7 +71,7 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 				tags={allTags}
 			/>
 
-			<Divider />
+			<Divider className="screen-line-after" />
 
 			{utils.map((post: Post) => (
 				<UtilsItem key={post.slug} post={post} />

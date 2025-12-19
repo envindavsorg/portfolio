@@ -62,6 +62,7 @@ export const JSONFormatter = () => {
 						value={output}
 						id="jsonTextAreaOutput"
 						rows={6}
+						readOnly
 					/>
 				</div>
 			</div>

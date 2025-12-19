@@ -34,7 +34,6 @@ export const hexToHsl = (hex: string): [number, number, number] => {
 		const d = max - min;
 		s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 
-		// biome-ignore lint/style/useDefaultSwitchClause: no default needed
 		switch (max) {
 			case r:
 				h = (g - b) / d + (g < b ? 6 : 0);

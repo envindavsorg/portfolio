@@ -24,7 +24,6 @@ export const rehypeNpmCommand = () => (tree: UnistTree) => {
 			);
 		}
 
-		// npx create-
 		if (node.properties?.__rawString__?.startsWith('npx create-')) {
 			const npmCommand = node.properties?.__rawString__;
 			node.properties.__pnpm__ = npmCommand.replace(
@@ -39,7 +38,6 @@ export const rehypeNpmCommand = () => (tree: UnistTree) => {
 			node.properties.__bun__ = npmCommand.replace('npx', 'bunx --bun');
 		}
 
-		// npm create
 		if (node.properties?.__rawString__?.startsWith('npm create')) {
 			const npmCommand = node.properties?.__rawString__;
 			node.properties.__pnpm__ = npmCommand.replace(
@@ -69,7 +67,6 @@ export const rehypeNpmCommand = () => (tree: UnistTree) => {
 			node.properties.__bun__ = npmCommand.replace('npx', 'bunx --bun');
 		}
 
-		// npm run
 		if (node.properties?.__rawString__?.startsWith('npm run')) {
 			const npmCommand = node.properties?.__rawString__;
 			node.properties.__pnpm__ = npmCommand.replace('npm run', 'pnpm');

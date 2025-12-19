@@ -1,4 +1,3 @@
-// Hook personnalisé pour vérifier le statut des ports.
 import { useCallback, useEffect, useState } from 'react';
 
 export type PortStatus = {
@@ -11,7 +10,6 @@ type UsePortStatusOptions = {
 	enabled?: boolean;
 };
 
-// vérifie si chaque port est actif via une requête HEAD HTTP.
 export const usePortStatus = (
 	ports: number[],
 	options: UsePortStatusOptions = {},
@@ -22,7 +20,6 @@ export const usePortStatus = (
 	const [isChecking, setIsChecking] = useState(false);
 	const [lastChecked, setLastChecked] = useState<Date | null>(null);
 
-	// vérifie si un port spécifique est actif ou non.
 	const checkPortStatus = useCallback(
 		async (port: number): Promise<boolean> => {
 			try {
@@ -48,7 +45,6 @@ export const usePortStatus = (
 		[timeout],
 	);
 
-	// vérifie le statut de tous les ports.
 	const checkAllPorts = useCallback(async () => {
 		if (!enabled || ports.length === 0) {
 			return;
@@ -68,7 +64,6 @@ export const usePortStatus = (
 		setIsChecking(false);
 	}, [ports, enabled, checkPortStatus]);
 
-	// force une vérification immédiate.
 	const forceCheck = useCallback(() => {
 		checkAllPorts();
 	}, [checkAllPorts]);

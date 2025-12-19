@@ -10,7 +10,13 @@ import {
 import Link from 'next/link';
 import posthog from 'posthog-js';
 import type React from 'react';
-import { lazy, useCallback, useMemo, useOptimistic, useTransition } from 'react';
+import {
+	lazy,
+	useCallback,
+	useMemo,
+	useOptimistic,
+	useTransition,
+} from 'react';
 import { toast } from 'sonner';
 import { variants } from '@/components/ui/Button';
 import {
@@ -77,7 +83,6 @@ export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
 			soundManager.playToastSound();
 			toast.success('Contenu copié dans le presse-papier !');
 
-			// Track LLM content copy event
 			posthog.capture('llm_content_copied', {
 				markdown_url: markdownUrl,
 			});

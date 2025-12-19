@@ -64,7 +64,6 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 
 	const handleSubmit = useCallback(
 		async (data: EmailFormData) => {
-			// Track CV email request submission
 			posthog.capture('cv_email_request_submitted', {
 				device_type: isDesktop ? 'desktop' : 'mobile',
 			});
@@ -72,7 +71,6 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 			const success = await sendEmail(data);
 			setFormState(success ? 'success' : 'error');
 
-			// Track success or error outcome
 			if (success) {
 				posthog.capture('cv_email_request_success', {
 					device_type: isDesktop ? 'desktop' : 'mobile',

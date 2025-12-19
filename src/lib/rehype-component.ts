@@ -61,7 +61,6 @@ export const rehypeComponent = () => {
 						'showLineNumbers',
 					);
 
-					// Add code as children so that rehype can take over at build time.
 					node.children?.push(
 						u('element', {
 							tagName: 'pre',
@@ -110,14 +109,12 @@ export const rehypeComponent = () => {
 				try {
 					const component = Index[name];
 
-					// Read the source file.
 					const filePath = component.files[0]?.path;
 					let source = fs.readFileSync(filePath, 'utf8');
 
 					source = source.replaceAll('@/registry/', '@/components/');
 					source = source.replaceAll('export default', 'export');
 
-					// Add code as children so that rehype can take over at build time.
 					node.children?.push(
 						u('element', {
 							tagName: 'pre',

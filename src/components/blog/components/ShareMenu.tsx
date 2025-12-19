@@ -42,8 +42,6 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 		copyText(absoluteUrl);
 		soundManager.playToastSound();
 		toast.success('Lien copié dans le presse-papier !');
-
-		// Track blog link copy event
 		posthog.capture('blog_link_copied', {
 			url: absoluteUrl,
 		});

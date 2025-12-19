@@ -54,7 +54,6 @@ export const GET = async (req: NextRequest) => {
 
 		const styles = getTypeStyles(type);
 
-		// Load Geist fonts from local assets using file system
 		const fontPath = join(process.cwd(), 'src', 'assets', 'fonts');
 		const [fontRegular, fontMedium, fontBold] = await Promise.all([
 			readFile(join(fontPath, 'Geist-Regular.ttf')),
@@ -188,7 +187,6 @@ export const GET = async (req: NextRequest) => {
 	} catch (error) {
 		logger.error('Error generating OG image:', error);
 
-		// Return a fallback image on error
 		return new ImageResponse(
 			<div
 				style={{

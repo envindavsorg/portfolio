@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import { metadata } from '@/app/(content)/(writings)/blog/metadata';
 import { Post } from '@/components/blog/components/Post';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
+import { WritingsHeading } from '@/components/features/writings/Heading';
+import { Divider } from '@/components/ui/Divider';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
@@ -9,92 +10,77 @@ import { openGraphImage } from '@/lib/open-graph';
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
 		title: 'Mes articles de blog',
-		description: 'Retrouvez tous mes articles de blog.',
+		description:
+			'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		ogImageParams: {
 			type: 'blog',
 			title: 'Mes articles de blog',
-			description: 'Retrouvez tous mes articles de blog.',
+			description:
+				'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		},
 	});
 
-type BlogArticlesPageProps = {
+type BlogPageProps = Readonly<{
 	searchParams: Promise<{
 		tag?: string;
 	}>;
-};
+}>;
 
-const BlogArticlesPage = async ({
-	searchParams,
-}: Readonly<BlogArticlesPageProps>) => {
-	const resolvedSearchParams = await searchParams;
-	const articles: Post[] = getPostsByCategory('article');
+const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
+	const { tag } = await searchParams;
+	const selectedTag = tag?.toLowerCase() || 'Tout';
 
-	const allTags = [
-		'Tous les articles',
-		...Array.from(
-			new Set(
-				articles.flatMap(
-					(article: Post) => article.metadata.tags || [],
-				),
-			),
-		).sort(),
-	];
-	const selectedTag = resolvedSearchParams.tag || 'Tous les articles';
-	const filteredArticles =
-		selectedTag === 'Tous les articles'
-			? articles
-			: articles.filter((article: Post) =>
-					article.metadata.tags?.includes(selectedTag),
-				);
-
-	const tagCounts = allTags.reduce(
-		(acc, tag) => {
-			if (tag === 'Tous les articles') {
-				acc[tag] = articles.length;
-			} else {
-				acc[tag] = articles.filter((article: Post) =>
-					article.metadata.tags?.includes(tag),
-				).length;
-			}
-			return acc;
-		},
-		{} as Record<string, number>,
+	const allArticles: Post[] = getPostsByCategory('article').sort(
+		(a: Post, b: Post) =>
+			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)),
 	);
+
+	const tagCounts: Record<string, number> = {};
+	for (const post of allArticles) {
+		for (const tag of post.metadata.tags || []) {
+			tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+		}
+	}
+
+	const sortedTags = Object.keys(tagCounts).sort();
+	const allTags = ['Tout', ...sortedTags];
+	const finalTagCounts = {
+		Tout: allArticles.length,
+		...tagCounts,
+	};
+
+	const articles =
+		selectedTag === 'Tout'
+			? allArticles
+			: allArticles.filter((article: Post) =>
+					article.metadata.tags?.some(
+						(tag) => tag.toLowerCase() === selectedTag,
+					),
+				);
 
 	return (
 		<div className="min-h-svh">
-			<div className="screen-line-after px-4">
-				<h1 className="font-semibold text-3xl sm:text-4xl">
-					{metadata.title}
-				</h1>
-			</div>
+			<WritingsHeading
+				title="Mes articles de blog"
+				description="Retrouvez tous mes articles de blog où je partage mon expérience en développement web. J'y aborde les bonnes pratiques, les patterns modernes, les solutions aux problèmes techniques du quotidien, et mes découvertes sur l'écosystème JavaScript. Chaque article est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise. Mon objectif : documenter mon apprentissage et aider d'autres développeurs qui rencontrent les mêmes défis."
+			/>
 
-			<div className="screen-line-after p-4">
-				<p className="text-balance font-mono text-muted-foreground text-sm">
-					{metadata.description}
-				</p>
-			</div>
+			<TagsFilter
+				selectedTag={selectedTag}
+				tagCounts={finalTagCounts}
+				tags={allTags}
+			/>
 
-			<div className="screen-line-after p-4">
-				{allTags.length > 0 && (
-					<div className="mx-auto w-full max-w-7xl">
-						<TagsFilter
-							selectedTag={selectedTag}
-							tagCounts={tagCounts}
-							tags={allTags}
-						/>
-					</div>
-				)}
-			</div>
+			<Divider />
 
-			<div className="relative pt-4">
-				<div className="-z-1 absolute inset-0 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
+			<div className="relative">
+				<div className="absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
 					<div className="border-edge border-r" />
 					<div className="border-edge border-l" />
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					{filteredArticles
+					{articles
 						.slice()
 						.sort((a, b) =>
 							dayjs(b.metadata.createdAt).diff(
@@ -116,4 +102,4 @@ const BlogArticlesPage = async ({
 	);
 };
 
-export default BlogArticlesPage;
+export default BlogPage;

@@ -120,7 +120,7 @@ const Page = async ({ params }: Props) => {
 				previous={previous}
 			/>
 
-			<div className="flex items-center justify-between p-2 pl-4">
+			<div className="screen-line-before flex items-center justify-between px-3 py-2">
 				<Button
 					asChild
 					className="h-7 gap-2 rounded-lg px-0 font-mono text-muted-foreground"
@@ -164,7 +164,7 @@ const Page = async ({ params }: Props) => {
 				<div
 					className={cn(
 						'h-8',
-						'before:-left-[100vw] before:-z-1 before:absolute before:h-full before:w-[200vw]',
+						'before:absolute before:-left-[100vw] before:-z-1 before:h-full before:w-[200vw]',
 						'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56',
 					)}
 				/>

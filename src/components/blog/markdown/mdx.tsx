@@ -204,7 +204,6 @@ const components: MDXRemoteProps['components'] = {
 	),
 	YouTubeEmbed,
 	FramedImage,
-	// utils
 	Base64Utils: Base64,
 	ColorGeneratorUtils: ColorGenerator,
 	LoremIpsumGeneratorUtils: LoremIpsumGenerator,

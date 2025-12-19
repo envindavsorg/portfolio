@@ -31,7 +31,7 @@ export const TopBar = ({
 				previous={previous}
 			/>
 
-			<div className="screen-line-after flex items-center justify-between px-3 py-1.5">
+			<div className="screen-line-before screen-line-after flex items-center justify-between px-3 py-2">
 				<Link href={baseUrl}>
 					<Button
 						className="group/return px-0 hover:text-theme"

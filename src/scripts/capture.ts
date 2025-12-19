@@ -16,15 +16,15 @@ export const SIZE = {
 	desktop: {
 		width: 1920,
 		height: 1080,
-	}, // Full HD
+	},
 	mobile: {
 		width: 440,
 		height: 956,
-	}, // iPhone 16 Pro Max
+	},
 	'og-image': {
 		width: 1200,
 		height: 630,
-	}, // Open Graph image size
+	},
 } as const;
 
 const captureScreenshot = async ({
@@ -43,14 +43,12 @@ const captureScreenshot = async ({
 	for (const theme of themes) {
 		const page: Page = await browser.newPage();
 
-		// set viewport size
 		const { width, height } = SIZE[size];
 		await page.setViewport({
 			width,
 			height,
 		});
 
-		// emulate dark or light mode
 		await page.emulateMediaFeatures([
 			{
 				name: 'prefers-color-scheme',
@@ -58,18 +56,14 @@ const captureScreenshot = async ({
 			},
 		]);
 
-		// set theme in localStorage
-		// this must be done before any content is loaded to avoid a flash of incorrect theme
 		await page.evaluateOnNewDocument((theme) => {
 			localStorage.setItem('theme', theme);
 		}, theme);
 
-		// navigate to the page
 		await page.goto(url, {
 			waitUntil: 'networkidle2',
 		});
 
-		// wait for 2 seconds to ensure all fonts and images are loaded
 		await new Promise((resolve) => setTimeout(resolve, 2000));
 
 		const fileName: string = `${size}-${theme}.${type}`;

@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/Panel';
 import { Prose } from '@/components/ui/Typography';
 import { getPostsByCategory } from '@/lib/blog/posts';
-import { metadata } from '@/lib/blog/utils/metadata';
 import { dayjs } from '@/lib/dayjs';
 
 export const Utils = (): React.JSX.Element => {
@@ -25,12 +24,15 @@ export const Utils = (): React.JSX.Element => {
 	return (
 		<Panel id="utils">
 			<PanelHeader className="flex items-center justify-between">
-				<PanelTitle>{metadata.title}</PanelTitle>
+				<PanelTitle>Outils pour développeurs</PanelTitle>
 				<PostsLength items={utils} slug="outil" />
 			</PanelHeader>
 
 			<PanelContent className="screen-line-after">
-				<Prose>{metadata.description}</Prose>
+				<Prose>
+					Optimisez votre workflow avec cette suite d'outils web
+					gratuits pour développeurs.
+				</Prose>
 			</PanelContent>
 
 			<div className="relative">

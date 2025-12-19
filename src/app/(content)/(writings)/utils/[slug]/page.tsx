@@ -9,11 +9,8 @@ import { Prose } from '@/components/ui/Typography';
 import { SITE_INFO } from '@/config/site';
 import { USER } from '@/config/user';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
-import { metadata } from '@/lib/blog/utils/metadata';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
-
-const { type } = metadata;
 
 type Props = {
 	params: Promise<{
@@ -81,7 +78,7 @@ const Page = async ({ params }: Props) => {
 	}
 
 	const { category } = post.metadata;
-	if (category !== type) {
+	if (category !== 'utils') {
 		notFound();
 	}
 
@@ -107,7 +104,7 @@ const Page = async ({ params }: Props) => {
 
 			<Divider />
 
-			<div className="screen-line-after flex items-center justify-between px-3">
+			<div className="screen-line-before screen-line-after flex items-center justify-between px-3">
 				<h1 className="font-semibold text-2xl sm:text-3xl">
 					{post.metadata.title}
 				</h1>

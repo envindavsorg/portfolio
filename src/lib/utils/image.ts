@@ -8,7 +8,6 @@ const convertImageToJpeg = async (imageBuffer: Buffer): Promise<Buffer> => {
 				quality: 80,
 				progressive: true,
 				mozjpeg: true,
-				// Prevents color bleeding on red text/sharp lines
 				chromaSubsampling: '4:4:4',
 			})
 			.toBuffer();

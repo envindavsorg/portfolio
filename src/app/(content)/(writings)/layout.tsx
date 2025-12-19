@@ -5,7 +5,7 @@ type DocsLayoutProps = Readonly<{
 	children: React.ReactNode;
 }>;
 
-const DocsLayout = ({ children }: DocsLayoutProps) => (
+const DocsLayout = ({ children }: DocsLayoutProps): React.JSX.Element => (
 	<div className="mx-auto min-h-svh border-edge border-x md:max-w-3xl">
 		<Divider />
 

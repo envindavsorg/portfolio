@@ -10,7 +10,7 @@ export const Divider = ({ className, border = false }: DividerProps) => (
 		className={cn(
 			'h-8',
 			border && 'relative flex w-full border-edge border-x',
-			'before:-left-[100vw] before:-z-1 before:absolute before:h-8 before:w-[200vw]',
+			'before:absolute before:-left-[100vw] before:-z-1 before:h-8 before:w-[200vw]',
 			'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)]',
 			'before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56',
 			className,

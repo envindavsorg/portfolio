@@ -37,6 +37,18 @@ const ConsentManager = ({
 							description:
 								'Personnalisez vos paramètres de confidentialité ici. Vous pouvez choisir les types de cookies et de technologies de suivi que vous autorisez.',
 						},
+						consentTypes: {
+							necessary: {
+								title: 'Strictement nécessaires',
+								description:
+									'Ces cookies sont essentiels pour le fonctionnement du site et ne peuvent pas être désactivés dans nos systèmes.',
+							},
+							measurement: {
+								title: 'Mesure et analyse',
+								description:
+									'Ces cookies nous aident à comprendre comment les visiteurs interagissent avec notre site en collectant et en rapportant des informations de manière anonyme.',
+							},
+						},
 					},
 				},
 			},
@@ -84,6 +96,7 @@ const ConsentManager = ({
 		/>
 
 		<ConsentManagerDialog
+			trapFocus={true}
 			theme={{
 				'dialog.root': {
 					style: {
@@ -114,15 +127,7 @@ const ConsentManager = ({
 				},
 				'dialog.footer': {
 					style: {
-						'--dialog-stroke-color': 'var(--border)',
-						'--dialog-stroke-color-dark': 'var(--border)',
-
-						'--dialog-branding-icon-height': '1.125rem',
-						'--dialog-branding-font-size': '0.875rem',
-
-						'--dialog-foreground-color': 'var(--muted-foreground)',
-						'--dialog-foreground-color-dark':
-							'var(--muted-foreground)',
+						display: 'none',
 					},
 				},
 				'widget.accordion.item': {

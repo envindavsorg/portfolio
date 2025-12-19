@@ -4,7 +4,7 @@ import Link from 'next/link';
 import type React from 'react';
 import { memo } from 'react';
 import { IsNew } from '@/components/blog/components/IsNew';
-import { getIconForUtilsTags } from '@/lib/blog/utils/tags';
+import { getIconForUtilsTags } from '@/lib/blog/tags';
 import { cn } from '@/lib/utils';
 
 type UtilsItemProps = {

@@ -47,7 +47,6 @@ export const remarkComponent = () => async (tree: UnistTree) => {
 						: component.files[0]?.path;
 				}
 
-				// Read the source file.
 				const filePath = src;
 				let source = fs.readFileSync(filePath, 'utf8');
 
@@ -88,7 +87,6 @@ export const remarkComponent = () => async (tree: UnistTree) => {
 			try {
 				const component = Index[name];
 
-				// Read the source file.
 				const filePath = component.files[0]?.path;
 				let source = fs.readFileSync(filePath, 'utf8');
 

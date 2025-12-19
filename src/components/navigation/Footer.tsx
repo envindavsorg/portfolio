@@ -87,7 +87,7 @@ const Footer = ({ commit }: FooterProps) => {
 								target="_blank"
 							>
 								<TriangleDashedIcon className="size-5" />
-								<span className="text-balance font-mono text-muted-foreground text-xs sm:text-sm">
+								<span className="text-balance font-mono text-muted-foreground text-xs">
 									Contexte essentiel
 								</span>
 							</Link>
@@ -103,7 +103,7 @@ const Footer = ({ commit }: FooterProps) => {
 								target="_blank"
 							>
 								<TriangleIcon className="size-5" />
-								<span className="text-balance font-mono text-muted-foreground text-xs sm:text-sm">
+								<span className="text-balance font-mono text-muted-foreground text-xs">
 									Contexte intégral
 								</span>
 							</Link>

@@ -1,6 +1,3 @@
-// This is the source code of the "remark-code-import" library,
-// customized to fit the project.
-
 import fs from 'node:fs';
 import { EOL } from 'node:os';
 import path from 'node:path';

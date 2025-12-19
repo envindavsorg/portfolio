@@ -33,8 +33,6 @@ export const CopyButton = ({ value, className, ...props }: CopyButtonProps) => {
 					try {
 						await navigator.clipboard.writeText(value);
 						setState('copied');
-
-						// Track code snippet copy event
 						posthog.capture('code_snippet_copied', {
 							snippet_length: value.length,
 						});
