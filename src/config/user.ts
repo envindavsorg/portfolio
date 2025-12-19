@@ -8,72 +8,16 @@ import {
 	NavigationArrowIcon,
 	PhoneIcon,
 } from '@phosphor-icons/react/ssr';
-import type React from 'react';
-
-type User = {
-	firstName: string;
-	lastName: string;
-	displayName: string;
-	username: string;
-	gender: string;
-	pronouns: string;
-	bio: string;
-
-	overview: {
-		id: string;
-		content: string;
-		icon: React.ElementType;
-		className: string;
-	}[];
-
-	flipSentences: string[];
-	address: string;
-	location: {
-		city: string;
-		zoom: {
-			max: number;
-			min: number;
-			default: number;
-			step: number;
-		};
-		latitude: number;
-		longitude: number;
-	};
-	phoneNumber: string;
-	email: string;
-	website: string;
-	jobTitle: string;
-	jobs: {
-		title: string;
-		company: string;
-		website: string;
-	}[];
-	about: string;
-	photo: string;
-	avatar: string;
-	ogImage: string;
-	namePronunciationUrl: string;
-	documents: {
-		cv: {
-			content: string;
-			url: string;
-			name: string;
-			title: string;
-		};
-	};
-	keywords: string[];
-	dateCreated: string;
-};
 
 export const USER: User = {
 	firstName: 'Florin',
 	lastName: 'Cuzeac',
-	displayName: 'Florin',
 	username: 'envindavsorg',
 	gender: 'homme',
 	pronouns: 'il/lui',
 	bio: 'Crée, code, innove. Les petits détails comptent.',
-
+	phoneNumber: 'MDYgNTggMDUgODYgNjU=',
+	emailAddress: 'Y29udGFjdEBjdXplYWNmbG9yaW4uZnI=',
 	overview: [
 		{
 			id: 'job-title',
@@ -127,27 +71,9 @@ export const USER: User = {
 				'col-span-full sm:col-span-3 lg:col-span-2 lg:col-start-5 lg:row-start-3',
 		},
 	],
-
-	flipSentences: [
-		'Imagine, code, crée, inspire.',
-		'Chaque petit pixel compte !',
-		'Du concept au déploiement !',
-		'Chaque petit détail compte !',
-	],
-	address: 'Paris, France',
 	location: {
-		city: 'Paris',
-		zoom: {
-			max: 12,
-			min: 3,
-			default: 10,
-			step: 0.5,
-		},
-		latitude: 48.858_093,
-		longitude: 2.294_694,
+		city: 'Paris, France',
 	},
-	phoneNumber: 'MDYgNTggMDUgODYgNjU=',
-	email: 'Y29udGFjdEBjdXplYWNmbG9yaW4uZnI=',
 	website: 'cuzeacflorin.fr',
 	jobTitle: 'Développeur et designer web',
 	photo: '/images/photo.webp',

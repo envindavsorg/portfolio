@@ -1,18 +1,22 @@
 {
-	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
-	"name": "flip-sentences",
-	"type": "registry:component",
-	"title": "Flip Sentences",
-	"author": "envindavsorg <contact@cuzeacflorin.fr>",
-	"description": "Un composant React animé avec motion/react qui fait défiler automatiquement une liste de phrases avec une transition fluide.",
-	"dependencies": ["motion"],
-	"registryDependencies": ["@envindavsorg/utils"],
-	"files": [
-		{
-			"path": "src/registry/flip-sentences/FlipSentences.tsx",
-			"content": "'use client';\n\nimport { AnimatePresence, motion } from 'motion/react';\nimport type React from 'react';\nimport { useEffect, useRef, useState } from 'react';\nimport { cn } from '@/lib/utils';\n\ntype FlipSentencesProps = {\n\tclassName?: string;\n\tsentences: string[];\n\tinterval?: number;\n};\n\nexport const FlipSentences = ({\n\tclassName,\n\tsentences,\n\tinterval = 2500,\n}: FlipSentencesProps) => {\n\tconst [currentIndex, setCurrentIndex] = useState(0);\n\tconst intervalRef = useRef<NodeJS.Timeout | null>(null);\n\n\tuseEffect(() => {\n\t\tconst startInterval = () => {\n\t\t\tintervalRef.current = setInterval(() => {\n\t\t\t\tsetCurrentIndex((prev) => (prev + 1) % sentences.length);\n\t\t\t}, interval);\n\t\t};\n\n\t\tconst handleVisibilityChange = () => {\n\t\t\tif (document.visibilityState === 'visible') {\n\t\t\t\tif (!intervalRef.current) {\n\t\t\t\t\tsetCurrentIndex((prev) => (prev + 1) % sentences.length);\n\t\t\t\t\tstartInterval();\n\t\t\t\t}\n\t\t\t} else if (intervalRef.current) {\n\t\t\t\tclearInterval(intervalRef.current);\n\t\t\t\tintervalRef.current = null;\n\t\t\t}\n\t\t};\n\n\t\tstartInterval();\n\t\tdocument.addEventListener('visibilitychange', handleVisibilityChange);\n\n\t\treturn () => {\n\t\t\tif (intervalRef.current) {\n\t\t\t\tclearInterval(intervalRef.current);\n\t\t\t}\n\t\t\tdocument.removeEventListener('visibilitychange', handleVisibilityChange);\n\t\t};\n\t}, [sentences.length, interval]);\n\n\treturn (\n\t\t<AnimatePresence mode=\"wait\">\n\t\t\t<motion.p\n\t\t\t\tanimate={{ y: 0, opacity: 1 }}\n\t\t\t\tclassName={cn(\n\t\t\t\t\t'select-none text-balance font-mono text-muted-foreground text-sm',\n\t\t\t\t\tclassName\n\t\t\t\t)}\n\t\t\t\texit={{ y: -8, opacity: 0 }}\n\t\t\t\tinitial={{ y: 8, opacity: 0 }}\n\t\t\t\tkey={currentIndex}\n\t\t\t\ttransition={{ duration: 0.3, ease: 'linear' }}\n\t\t\t>\n\t\t\t\t{sentences[currentIndex]}\n\t\t\t</motion.p>\n\t\t</AnimatePresence>\n\t);\n};\n",
-			"type": "registry:component"
-		}
-	],
-	"docs": "https://cuzeacflorin.fr/components/flip-sentences"
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "flip-sentences",
+  "title": "Flip Sentences",
+  "author": "envindavsorg <contact@cuzeacflorin.fr>",
+  "description": "Un composant React animé avec motion/react qui fait défiler automatiquement une liste de phrases avec une transition fluide.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@envindavsorg/utils"
+  ],
+  "files": [
+    {
+      "path": "src/registry/flip-sentences/FlipSentences.tsx",
+      "content": "'use client';\n\nimport { AnimatePresence, motion } from 'motion/react';\nimport type React from 'react';\nimport { useEffect, useState } from 'react';\nimport { cn } from '@/lib/utils';\n\ntype FlipSentencesProps = {\n\tclassName?: string;\n\tsentences: string[];\n\tinterval?: number;\n\tdisableAnimation?: boolean;\n};\n\nexport const FlipSentences = ({\n\tclassName,\n\tsentences,\n\tinterval = 4000,\n\tdisableAnimation = false,\n}: FlipSentencesProps): React.JSX.Element => {\n\tconst [currentIndex, setCurrentIndex] = useState(0);\n\n\tuseEffect(() => {\n\t\tif (disableAnimation) {\n\t\t\tsetCurrentIndex(0);\n\t\t\treturn;\n\t\t}\n\n\t\tlet timer: NodeJS.Timeout;\n\n\t\tconst startTimer = () => {\n\t\t\ttimer = setInterval(() => {\n\t\t\t\tsetCurrentIndex((prev) => (prev + 1) % sentences.length);\n\t\t\t}, interval);\n\t\t};\n\n\t\tconst handleVisibility = () => {\n\t\t\tif (document.hidden) {\n\t\t\t\tclearInterval(timer);\n\t\t\t} else {\n\t\t\t\tsetCurrentIndex((prev) => (prev + 1) % sentences.length);\n\t\t\t\tstartTimer();\n\t\t\t}\n\t\t};\n\n\t\tstartTimer();\n\t\tdocument.addEventListener('visibilitychange', handleVisibility);\n\n\t\treturn () => {\n\t\t\tclearInterval(timer);\n\t\t\tdocument.removeEventListener('visibilitychange', handleVisibility);\n\t\t};\n\t}, [sentences.length, interval, disableAnimation]);\n\n\tif (disableAnimation) {\n\t\treturn (\n\t\t\t<div className={cn('relative', className)}>\n\t\t\t\t<p className=\"text-balance font-mono text-muted-foreground text-sm\">\n\t\t\t\t\t{sentences[0]}\n\t\t\t\t</p>\n\t\t\t</div>\n\t\t);\n\t}\n\n\treturn (\n\t\t<div className={cn('relative overflow-hidden', className)}>\n\t\t\t<AnimatePresence mode=\"wait\">\n\t\t\t\t<motion.p\n\t\t\t\t\tkey={sentences[currentIndex]}\n\t\t\t\t\tinitial={{ y: 10, opacity: 0 }}\n\t\t\t\t\tanimate={{ y: 0, opacity: 1 }}\n\t\t\t\t\texit={{ y: -10, opacity: 0 }}\n\t\t\t\t\ttransition={{ duration: 0.25, ease: 'easeOut' }}\n\t\t\t\t\tclassName=\"text-balance font-mono text-muted-foreground text-sm\"\n\t\t\t\t>\n\t\t\t\t\t{sentences[currentIndex]}\n\t\t\t\t</motion.p>\n\t\t\t</AnimatePresence>\n\n\t\t\t<span className=\"invisible block h-0\" aria-hidden=\"true\">\n\t\t\t\t{[...sentences].sort((a, b) => b.length - a.length)[0]}\n\t\t\t</span>\n\t\t</div>\n\t);\n};\n",
+      "type": "registry:component"
+    }
+  ],
+  "docs": "https://cuzeacflorin.fr/components/flip-sentences",
+  "type": "registry:component"
 }

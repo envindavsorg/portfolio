@@ -28,13 +28,16 @@
 			"**",
 			"!!node_modules",
 			"!!.next",
+			"!!next-env.d.ts",
 			"!!dist",
 			"!!build",
 			"!!.turbo",
 			"!!.vercel",
 			"!!out",
 			"!!coverage",
-			"!!public/registry",
+			"!!public/r",
+			"!!src/__registry__",
+			"!!src/scripts/build-registry.mts",
 			"!!.claude"
 		]
 	},
@@ -42,52 +45,23 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-			"a11y": {
-				"noStaticElementInteractions": "off",
-				"noNoninteractiveElementInteractions": "off",
-				"useSemanticElements": "off",
-				"useAltText": "off",
-				"noSvgWithoutTitle": "off"
-			},
 			"complexity": {
-				"noExcessiveCognitiveComplexity": "off",
-				"noUselessStringRaw": "off",
 				"noImportantStyles": "off"
 			},
 			"correctness": {
-				"useExhaustiveDependencies": "off",
-				"noUnknownTypeSelector": "off",
-				"noNestedComponentDefinitions": "off"
+				"useExhaustiveDependencies": "off"
 			},
 			"security": {
 				"noDangerouslySetInnerHtml": "off"
 			},
 			"performance": {
-				"noBarrelFile": "off",
 				"noImgElement": "off",
 				"useTopLevelRegex": "off"
 			},
-			"style": {
-				"noMagicNumbers": "off",
-				"useFilenamingConvention": "off",
-				"noNestedTernary": "off",
-				"noParameterAssign": "off",
-				"noNonNullAssertion": "off"
-			},
 			"suspicious": {
-				"useAwait": "off",
-				"noExplicitAny": "off",
-				"noUnknownAtRules": "off",
-				"noArrayIndexKey": "off",
-				"noImplicitAnyLet": "off",
-				"noEvolvingTypes": "off",
-				"noConfusingVoidType": "off"
+				"noArrayIndexKey": "off"
 			},
 			"nursery": {
-				"noShadow": "off",
-				"useMaxParams": "off",
-				"noReactForwardRef": "off",
-				"noUnusedExpressions": "off",
 				"useSortedClasses": {
 					"fix": "safe",
 					"options": {

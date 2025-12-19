@@ -24,28 +24,23 @@ export const ColorPicker = ({ color, onChangeAction }: ColorPickerProps) => {
 	const [colorInput, setColorInput] = useState(color);
 	const [isOpen, setIsOpen] = useState(false);
 
-	useEffect(() => {
-		handleColorChange(color);
-	}, [color]);
-
 	const handleColorChange = (newColor: string) => {
 		const normalizedColor = normalizeColor(newColor);
 		setColorInput(normalizedColor);
 
-		let h, s, l;
-		if (normalizedColor.startsWith('#')) {
-			[h, s, l] = hexToHsl(normalizedColor);
-		} else {
-			[h, s, l] = normalizedColor.match(/\d+(\.\d+)?/g)?.map(Number) || [
-				0, 0, 0,
-			];
-		}
+		const [h, s, l] = normalizedColor.startsWith('#')
+			? hexToHsl(normalizedColor)
+			: normalizedColor.match(/\d+(\.\d+)?/g)?.map(Number) || [0, 0, 0];
 
 		setHsl([h, s, l]);
 		onChangeAction(
 			`hsl(${h.toFixed(1)}, ${s.toFixed(1)}%, ${l.toFixed(1)}%)`,
 		);
 	};
+
+	useEffect(() => {
+		handleColorChange(color);
+	}, [color]);
 
 	const handleHueChange = (hue: number) => {
 		const newHsl: [number, number, number] = [hue, hsl[1], hsl[2]];

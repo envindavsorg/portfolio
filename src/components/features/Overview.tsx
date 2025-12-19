@@ -36,7 +36,7 @@ const OverviewItem = ({
 
 		if (id === 'email-address') {
 			return isClient
-				? decodeEmail(USER.email)
+				? decodeEmail(USER.emailAddress)
 				: '•••••••@••••••••••••.••';
 		}
 

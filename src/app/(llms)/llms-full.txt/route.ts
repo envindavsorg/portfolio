@@ -20,8 +20,8 @@ ${USER.about.trim()}
 
 - Prénom: ${USER.firstName}
 - Nom: ${USER.lastName}
-- Nom d'affichage: ${USER.displayName}
-- Ville: ${USER.address}
+- Nom d'affichage: ${USER.firstName}
+- Ville: ${USER.location.city}
 - Site: ${USER.website}
 
 ### Réseaux sociaux
@@ -74,7 +74,7 @@ const getBlogContent = async () => {
 };
 
 const getContent =
-	async () => `<SYSTEM>Ce document contient des informations complètes sur le profil professionnel, le portfolio et le contenu de blog de ${USER.displayName}. Il inclut les détails personnels, l'expérience professionnelle, les projets, les réalisations, les certifications et tous les articles de blog publiés. Ces données sont formatées pour être consommées par les Grands Modèles de Langage (LLMs) afin de fournir des informations précises et à jour sur le parcours, les compétences et l'expertise de ${USER.displayName} en tant que Développeur Full-Stack et Front-End.</SYSTEM>
+	async () => `<SYSTEM>Ce document contient des informations complètes sur le profil professionnel, le portfolio et le contenu de blog de ${USER.firstName}. Il inclut les détails personnels, l'expérience professionnelle, les projets, les réalisations, les certifications et tous les articles de blog publiés. Ces données sont formatées pour être consommées par les Grands Modèles de Langage (LLMs) afin de fournir des informations précises et à jour sur le parcours, les compétences et l'expertise de ${USER.firstName} en tant que Développeur Full-Stack et Front-End.</SYSTEM>
 
 # cuzeacflorin.fr
 

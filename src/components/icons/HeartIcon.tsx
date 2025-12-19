@@ -2,7 +2,7 @@
 
 import { Player } from '@lordicon/react';
 import type React from 'react';
-import Heart from '@/lottie/heart.json' with { type: 'json' };
+import Heart from '@/components/lottie/heart.json' with { type: 'json' };
 
 type HeartIconProps = {
 	colorize?: string;

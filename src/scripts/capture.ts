@@ -3,7 +3,8 @@ import { join } from 'node:path';
 import { green, red, yellow } from 'colorette';
 import consola from 'consola';
 import { type Browser, launch, type Page } from 'puppeteer-core';
-import type { CaptureScreenshot, FilePath, Theme } from '@/types/capture';
+
+type FilePath = `${string}.webp` | `${string}.png` | `${string}.jpeg`;
 
 const executablePath =
 	'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -26,6 +27,14 @@ export const SIZE = {
 		height: 630,
 	},
 } as const;
+
+type CaptureScreenshot = {
+	browser: Browser;
+	url: string;
+	size: keyof typeof SIZE;
+	themes?: 'light' | 'dark' | ('light' | 'dark')[];
+	type?: 'webp' | 'png' | 'jpeg';
+};
 
 const captureScreenshot = async ({
 	browser,
@@ -87,11 +96,21 @@ const main = async (): Promise<void> => {
 		executablePath,
 	});
 
-	const themes: Theme[] = ['light', 'dark'];
+	const themes = ['light', 'dark'] as 'light' | 'dark'[];
 
 	try {
-		await captureScreenshot({ browser, url, size: 'desktop', themes });
-		await captureScreenshot({ browser, url, size: 'mobile', themes });
+		await captureScreenshot({
+			browser,
+			url,
+			size: 'desktop',
+			themes,
+		});
+		await captureScreenshot({
+			browser,
+			url,
+			size: 'mobile',
+			themes,
+		});
 		await captureScreenshot({
 			browser,
 			url: `${url}/og`,

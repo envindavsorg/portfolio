@@ -38,7 +38,7 @@ const getPageJsonLd = (): WithContext<PageSchema> => ({
 	dateModified: dayjs().toISOString(),
 	mainEntity: {
 		'@type': 'Person',
-		name: USER.displayName,
+		name: USER.firstName,
 		identifier: USER.username,
 		image: USER.avatar,
 	},

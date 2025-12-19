@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Experience } from '@/components/features/experiences/data/experiences';
+import type { Experience } from './data/experiences';
 import { ExperiencePositionItem } from './ExperiencePositionItem';
 
 type ExperienceItemProps = {
@@ -10,11 +10,7 @@ export const ExperienceItem = ({
 	experience,
 }: ExperienceItemProps): React.JSX.Element => (
 	<div className="screen-line-after space-y-4 py-4">
-		<div className="flex items-center gap-3">
-			<div className="flex size-6 shrink-0 select-none items-center justify-center">
-				<span className="flex size-2 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-			</div>
-
+		<div className="flex items-center justify-between gap-3">
 			<h3 className="text-balance font-medium text-base leading-snug sm:text-lg">
 				{experience.companyName}
 			</h3>

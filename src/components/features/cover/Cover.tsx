@@ -86,7 +86,7 @@ export const Cover = ({
 				<div
 					className={cn(
 						'flex select-none items-center justify-center border-edge border-x text-foreground',
-						'screen-line-before screen-line-after before:-top-px after:-bottom-px aspect-2/1 sm:aspect-3/1',
+						'screen-line-before screen-line-after aspect-2/1 before:-top-px after:-bottom-px sm:aspect-3/1',
 						'bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)]',
 						'bg-black/0.75 bg-center bg-size-[10px_10px] dark:bg-white/0.75',
 						'[--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5',

@@ -1,68 +1,85 @@
 {
-	"$schema": "https://ui.shadcn.com/schema/registry.json",
-	"name": "envindavsorg",
-	"homepage": "https://cuzeacflorin.fr/components",
-	"items": [
-		{
-			"name": "utils",
-			"type": "registry:lib",
-			"title": "Fonctions utilitaires",
-			"author": "envindavsorg <contact@cuzeacflorin.fr>",
-			"dependencies": ["clsx", "tailwind-merge"],
-			"files": [
-				{
-					"path": "src/lib/utils.ts",
-					"type": "registry:lib"
-				}
-			]
-		},
-		{
-			"name": "theme-switcher",
-			"type": "registry:component",
-			"title": "Theme Switcher",
-			"author": "envindavsorg <contact@cuzeacflorin.fr>",
-			"description": "Un composant de sélection de thème pour les applications Next.js avec next-themes et Tailwind CSS, supportant les modes système, clair et sombre.",
-			"dependencies": ["next-themes", "@phosphor-icons/react", "motion"],
-			"registryDependencies": ["@envindavsorg/utils"],
-			"files": [
-				{
-					"path": "src/registry/theme-switcher/ThemeSwitcher.tsx",
-					"type": "registry:component"
-				}
-			],
-			"docs": "https://cuzeacflorin.fr/components/theme-switcher-component"
-		},
-		{
-			"name": "apple-hello-effect",
-			"type": "registry:component",
-			"title": "Apple Hello Effect",
-			"author": "envindavsorg <contact@cuzeacflorin.fr>",
-			"description": "Créez un effet d'écriture Bonjour, Hello et Hola inspiré d'Apple en utilisant motion/react.",
-			"dependencies": ["motion"],
-			"registryDependencies": ["@envindavsorg/utils"],
-			"files": [
-				{
-					"path": "src/registry/apple-hello-effect/AppleHelloEffect.tsx",
-					"type": "registry:component"
-				}
-			],
-			"docs": "https://cuzeacflorin.fr/components/writing-effect-inspired-by-apple"
-		},
-		{
-			"name": "flip-sentences",
-			"type": "registry:component",
-			"title": "Flip Sentences",
-			"author": "envindavsorg <contact@cuzeacflorin.fr>",
-			"description": "Un composant React animé avec motion/react qui fait défiler automatiquement une liste de phrases avec une transition fluide.",
-			"dependencies": ["motion"],
-			"registryDependencies": ["@envindavsorg/utils"],
-			"files": [
-				{
-					"path": "src/registry/flip-sentences/FlipSentences.tsx",
-					"type": "registry:component"
-				}
-			],
-			"docs": "https://cuzeacflorin.fr/components/flip-sentences"
-		}
-	]
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "ncdai",
+  "homepage": "https://cuzeacflorin.fr/components",
+  "items": [
+    {
+      "name": "utils",
+      "title": "Fonctions utilitaires",
+      "author": "envindavsorg <contact@cuzeacflorin.fr>",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "type": "registry:lib"
+    },
+    {
+      "name": "theme-switcher",
+      "title": "Theme Switcher",
+      "author": "envindavsorg <contact@cuzeacflorin.fr>",
+      "description": "Un composant de sélection de thème pour les applications Next.js avec next-themes et Tailwind CSS, supportant les modes système, clair et sombre.",
+      "dependencies": [
+        "next-themes",
+        "@phosphor-icons/react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@envindavsorg/utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/theme-switcher/ThemeSwitcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "https://cuzeacflorin.fr/components/theme-switcher-component",
+      "type": "registry:component"
+    },
+    {
+      "name": "apple-hello-effect",
+      "title": "Apple Hello Effect",
+      "author": "envindavsorg <contact@cuzeacflorin.fr>",
+      "description": "Créez un effet d'écriture Bonjour, Hello et Hola inspiré d'Apple en utilisant motion/react.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@envindavsorg/utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/apple-hello-effect/AppleHelloEffect.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "https://cuzeacflorin.fr/components/writing-effect-inspired-by-apple",
+      "type": "registry:component"
+    },
+    {
+      "name": "flip-sentences",
+      "title": "Flip Sentences",
+      "author": "envindavsorg <contact@cuzeacflorin.fr>",
+      "description": "Un composant React animé avec motion/react qui fait défiler automatiquement une liste de phrases avec une transition fluide.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@envindavsorg/utils"
+      ],
+      "files": [
+        {
+          "path": "src/registry/flip-sentences/FlipSentences.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "https://cuzeacflorin.fr/components/flip-sentences",
+      "type": "registry:component"
+    }
+  ]
 }

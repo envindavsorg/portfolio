@@ -61,6 +61,7 @@ export const AnimatedCheckbox = ({
 						initial="unchecked"
 						animate={isChecked ? 'checked' : 'unchecked'}
 					>
+						<title>Checkbox</title>
 						<motion.path
 							strokeLinecap="round"
 							strokeLinejoin="round"

@@ -34,7 +34,6 @@ const ThemeOption = ({
 	onClick: (value: string) => void;
 }) => (
 	<button
-		aria-checked={isActive}
 		aria-label={value}
 		className={cn(
 			'relative flex size-10 items-center justify-center rounded-full transition-all',
@@ -44,7 +43,6 @@ const ThemeOption = ({
 				: 'text-zinc-400 hover:text-zinc-950 dark:text-zinc-500 dark:hover:text-zinc-50',
 		)}
 		onClick={() => onClick(value)}
-		role="radio"
 		type="button"
 	>
 		{icon}

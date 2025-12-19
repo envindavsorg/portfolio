@@ -75,11 +75,9 @@ export const ProjectsItem = ({
 									<dt className="sr-only">
 										Période du projet
 									</dt>
-									<dd className="flex items-center gap-0.5">
+									<dd className="flex items-center gap-1">
 										<span>{start}</span>
-										<span className="px-2 font-mono">
-											-
-										</span>
+										<span className="font-mono">-</span>
 										{isOngoing ? (
 											<>
 												<InfinityIcon
@@ -100,7 +98,7 @@ export const ProjectsItem = ({
 							<Tooltip>
 								<TooltipTrigger asChild>
 									<a
-										className="after:-inset-2 relative flex size-6 shrink-0 items-center justify-center text-muted-foreground after:absolute hover:text-foreground"
+										className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground after:absolute after:-inset-2 hover:text-foreground"
 										href={project.link}
 										rel="noopener"
 										target="_blank"

@@ -18,7 +18,7 @@ const getWebSiteJsonLd = (): WithContext<WebSite> => ({
 	alternateName: [USER.username],
 });
 
-const darkModeScript = String.raw`
+const darkModeScript = `
 	try {
         const isDark = localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
 	},
 	title: {
 		template: `%s – ${SITE_INFO.name}`,
-		default: `${USER.displayName} – ${USER.jobTitle}`,
+		default: `${USER.firstName} – ${USER.jobTitle}`,
 	},
 	description: SITE_INFO.description,
 	keywords: SITE_INFO.keywords,

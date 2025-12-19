@@ -55,20 +55,20 @@ export const ExperiencePositionItem = ({
 				<CollapsibleTrigger
 					className={cn(
 						'block w-full select-none text-left',
-						'before:-top-1 before:-right-1 before:-bottom-1.5 before:-z-1 relative before:absolute before:left-7 before:rounded-lg hover:before:bg-accent2',
+						'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg hover:before:bg-accent2',
 					)}
 				>
 					<div className="relative z-1 mb-1 flex items-center gap-3">
 						<div
 							aria-hidden
 							className={cn(
-								'flex size-6 shrink-0 items-center justify-center rounded-lg',
+								'flex size-6 shrink-0 items-center justify-center rounded-md',
 								'bg-muted text-muted-foreground',
 								'border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background',
 							)}
 						>
 							<ExperienceIcon
-								className="pointer-events-none size-4 text-theme"
+								className="pointer-events-none size-3 text-theme"
 								icon={position.icon}
 								weight="duotone"
 							/>
@@ -103,7 +103,7 @@ export const ExperiencePositionItem = ({
 
 						<dl>
 							<dt className="sr-only">Durée dans l'entreprise</dt>
-							<dd className="flex items-center gap-0.5">
+							<dd className="flex items-center gap-1">
 								<span>{start}</span>
 								<span className="font-mono">-</span>
 								{isOngoing ? (

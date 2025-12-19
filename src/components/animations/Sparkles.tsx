@@ -92,7 +92,7 @@ export const Sparkles = memo(
 		return (
 			<div
 				className={cn(
-					'-z-10 pointer-events-none fixed inset-0 size-full overflow-hidden',
+					'pointer-events-none fixed inset-0 -z-10 size-full overflow-hidden',
 					className,
 				)}
 			>

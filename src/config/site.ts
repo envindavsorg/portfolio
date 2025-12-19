@@ -2,7 +2,7 @@ import type { NavigationItem } from '@/components/navigation/navbar/Nav';
 import { USER } from '@/config/user';
 
 export const SITE_INFO = {
-	name: USER.displayName,
+	name: USER.firstName,
 	url: 'https://cuzeacflorin.fr',
 	ogImage: USER.ogImage,
 	description: USER.bio,

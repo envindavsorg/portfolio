@@ -2,7 +2,7 @@
 
 import { Player } from '@lordicon/react';
 import type React from 'react';
-import ArrowUp from '@/lottie/arrow-up.json' with { type: 'json' };
+import ArrowUp from '@/components/lottie/arrow-up.json' with { type: 'json' };
 
 type ArrowUpIconProps = {
 	colorize?: string;

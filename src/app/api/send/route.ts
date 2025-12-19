@@ -36,7 +36,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		const content = buffer.toString('base64');
 
 		const { error } = await resend.emails.send({
-			from: `${USER.firstName} ${USER.lastName} <${decodeEmail(USER.email)}>`,
+			from: `${USER.firstName} ${USER.lastName} <${decodeEmail(USER.emailAddress)}>`,
 			to: [recipientEmail],
 			subject: `CV - ${USER.firstName} ${USER.lastName} | ${USER.website}`,
 			react: CVEmailTemplate({ firstName, recipientEmail }),

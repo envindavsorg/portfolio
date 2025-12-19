@@ -11,8 +11,8 @@ ${USER.about.trim()}
 
 - Prénom: ${USER.firstName}
 - Nom: ${USER.lastName}
-- Nom d'affichage: ${USER.displayName}
-- Ville: ${USER.address}
+- Nom d'affichage: ${USER.firstName}
+- Ville: ${USER.location.city}
 - Site internet: ${USER.website}
 
 ## Réseaux sociaux

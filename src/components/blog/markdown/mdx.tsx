@@ -36,7 +36,6 @@ import { rehypeComponent } from '@/lib/rehype-component';
 import { rehypeNpmCommand } from '@/lib/rehype-npm-command';
 import { remarkCodeImport } from '@/lib/remark-code-import';
 import { cn } from '@/lib/utils';
-import type { NpmCommands } from '@/types/unist';
 
 const JSONIcon = lazy(() =>
 	import('@/components/icons/content/JSON').then((m) => ({
@@ -144,7 +143,12 @@ const components: MDXRemoteProps['components'] = {
 	}: React.ComponentProps<'pre'> & {
 		__withMeta__?: boolean;
 		__rawString__?: string;
-	} & NpmCommands) {
+	} & {
+		__pnpm__?: string;
+		__yarn__?: string;
+		__npm__?: string;
+		__bun__?: string;
+	}) {
 		const isNpmCommand = __pnpm__ && __yarn__ && __npm__ && __bun__;
 
 		if (isNpmCommand) {

@@ -5,7 +5,6 @@ import { lazy, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import type { PackageManager } from '@/hooks/use-config';
 import useConfig from '@/hooks/use-config';
-import type { NpmCommands } from '@/types/unist';
 import { CopyButton } from './CopyButton';
 
 const PNPMIcon = lazy(() =>
@@ -52,7 +51,12 @@ export const CodeBlockCommand = ({
 	__yarn__,
 	__npm__,
 	__bun__,
-}: NpmCommands) => {
+}: {
+	__pnpm__?: string;
+	__yarn__?: string;
+	__npm__?: string;
+	__bun__?: string;
+}) => {
 	const [config, setConfig] = useConfig();
 
 	const packageManager = config.packageManager || 'pnpm';

@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { visit } from 'unist-util-visit';
 import { Index } from '@/__registry__';
-import type { UnistNode, UnistTree } from '@/types/unist';
 import { logger } from './logger';
 
 const getNodeAttributeByName = (node: UnistNode, name: string) =>

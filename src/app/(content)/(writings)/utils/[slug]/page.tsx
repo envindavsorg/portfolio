@@ -63,7 +63,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
 	author: {
 		'@type': 'Person',
-		name: USER.displayName,
+		name: USER.firstName,
 		identifier: USER.username,
 		image: USER.avatar,
 	},

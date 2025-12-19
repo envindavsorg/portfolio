@@ -4,7 +4,7 @@ import { Divider } from '@/components/ui/Divider';
 
 const Page = () => (
 	<div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl">
-		<div className="screen-line-after after:-bottom-px grow border-edge border-x">
+		<div className="screen-line-after grow border-edge border-x after:-bottom-px">
 			<div className="flex h-4" />
 		</div>
 

@@ -251,11 +251,9 @@ export const Terminal = ({
 			return children;
 		}
 
-		const array = Children.toArray(children);
-
-		return array.map((child, index) => (
-			<ItemIndexContext.Provider key={index} value={index}>
-				{child as React.ReactNode}
+		return Children.map(children, (child, index) => (
+			<ItemIndexContext.Provider value={index}>
+				{child}
 			</ItemIndexContext.Provider>
 		));
 	}, [children, sequence]);

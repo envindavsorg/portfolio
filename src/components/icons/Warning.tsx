@@ -2,14 +2,14 @@
 
 import { Player } from '@lordicon/react';
 import type React from 'react';
-import Pizza from '@/lottie/warning.json' with { type: 'json' };
+import Pizza from '@/components/lottie/warning.json' with { type: 'json' };
 
 type WarningIconProps = {
 	colorize?: string;
 	ref?: React.Ref<Player>;
 	size?: number;
 	state?: 'in-error' | 'hover-error-1' | 'hover-error-2';
-	onCompleteAction: () => void | undefined;
+	onCompleteAction: () => undefined;
 };
 
 export const WarningIcon = ({

@@ -2,7 +2,7 @@
 
 import { Player } from '@lordicon/react';
 import type React from 'react';
-import Pizza from '@/lottie/pizza.json' with { type: 'json' };
+import Pizza from '@/components/lottie/pizza.json' with { type: 'json' };
 
 type PizzaIconProps = {
 	colorize?: string;

@@ -69,7 +69,12 @@ export const Header = ({ capture }: HeaderProps): React.JSX.Element => (
 
 				<div className="min-h-[2rem] border-edge border-t py-1 pl-4">
 					<FlipSentences
-						sentences={USER.flipSentences}
+						sentences={[
+							'Imagine, code, crée, inspire.',
+							'Chaque petit pixel compte !',
+							'Du concept au déploiement !',
+							'Chaque petit détail compte !',
+						]}
 						disableAnimation={capture}
 					/>
 				</div>

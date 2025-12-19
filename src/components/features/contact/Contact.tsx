@@ -20,7 +20,7 @@ export const Contact = memo(
 				<div className="relative">
 					<div
 						aria-hidden="true"
-						className="-z-1 pointer-events-none absolute inset-0 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2"
+						className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2"
 					>
 						<div className="border-edge border-r" />
 						<div className="border-edge border-l" />

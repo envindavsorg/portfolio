@@ -78,7 +78,7 @@ const captureGif = async (
 		})) as Buffer;
 
 		const png = PNG.sync.read(screenshot);
-		(encoder.addFrame as any)(png.data);
+		encoder.addFrame(new Uint8ClampedArray(png.data));
 
 		await new Promise((resolve) => setTimeout(resolve, frameInterval));
 

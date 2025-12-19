@@ -111,9 +111,10 @@ const nextConfig: NextConfig = {
 };
 
 export default withPostHogConfig(nextConfig, {
-	personalApiKey: process.env.NEXT_PUBLIC_POSTHOG_SOURCE_MAPS_UPLOAD_KEY!,
-	envId: process.env.NEXT_PUBLIC_POSTHOG_ENV_ID!,
-	host: process.env.NEXT_PUBLIC_POSTHOG_HOST!,
+	personalApiKey:
+		process.env.NEXT_PUBLIC_POSTHOG_SOURCE_MAPS_UPLOAD_KEY ?? '',
+	envId: process.env.NEXT_PUBLIC_POSTHOG_ENV_ID ?? '',
+	host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? '',
 	sourcemaps: {
 		enabled: true,
 		project: 'cuzeacflorin.fr',
