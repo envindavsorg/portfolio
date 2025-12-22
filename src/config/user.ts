@@ -90,7 +90,7 @@ Vous y trouverez un **aperçu complet** de mon expertise et de ma progression da
 Pour recevoir une **copie actualisée** directement dans votre boîte e-mail, cliquez sur le bouton ci-dessous.
 Je serai ravi d'échanger avec vous sur d'éventuelles opportunités de collaboration.
 `,
-			url: 'https://cfhi75vpdo.ufs.sh/f/tIhJKzZYPGQB90x1lnfzmMd4kitPhxzKc9jr1IvD6ZAR3VN5',
+			url: 'https://cfhi75vpdo.ufs.sh/f/tIhJKzZYPGQBq3bQllCjGzmQByFvYMdbDwUilx4TH8AX3eZ5',
 			name: 'cv_florin_cuzeac.pdf',
 			title: 'Voir ou télécharger mon CV',
 		},
