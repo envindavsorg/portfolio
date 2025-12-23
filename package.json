@@ -22,11 +22,11 @@
     "directory": "packages/envindavsorg"
   },
   "scripts": {
-    "dev": "next dev -p 1408",
-    "dev:capture": "ENV_TYPE=capture next dev -p 1409",
-    "build": "next build",
-    "start": "next start",
-    "preview": "next build && next start -p 1408",
+    "dev": "NODE_OPTIONS='--no-deprecation' next dev -p 1408",
+    "dev:capture": "NODE_OPTIONS='--no-deprecation' ENV_TYPE=capture next dev -p 1409",
+    "build": "NODE_OPTIONS='--no-deprecation' next build",
+    "start": "NODE_OPTIONS='--no-deprecation' next start",
+    "preview": "NODE_OPTIONS='--no-deprecation' next build && NODE_OPTIONS='--no-deprecation' next start -p 1408",
     "lint": "biome check .",
     "lint:fix": "biome format . --write",
     "check-types": "tsc --noEmit --pretty",

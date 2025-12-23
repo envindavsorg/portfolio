@@ -11,12 +11,13 @@ import { z } from 'zod';
 		GITHUB_API_TOKEN: z.string().min(1, 'GitHub API token is required'),
 		GITHUB_USERNAME: z.string().optional(),
 		GITHUB_REPO_NAME: z.string().optional(),
+
 		TURBO_TOKEN: z.string().optional(),
 		TURBO_TEAM: z.string().optional(),
-		OPENSTATUS_API_KEY: z.string().optional(),
-		OPENSTATUS_SLUG: z.string().optional().default('cuzeacflorin-fr'),
+
 		BLOB_READ_WRITE_TOKEN: z.string().optional(),
 		API_TOKEN: z.string().optional(),
+
 		RESEND_API_KEY: z.string().optional(),
 	});
 
