@@ -4,12 +4,12 @@ import { Player } from '@lordicon/react';
 import type React from 'react';
 import ArrowUp from '@/components/lottie/arrow-up.json' with { type: 'json' };
 
-type ArrowUpIconProps = {
+interface ArrowUpIconProps {
 	colorize?: string;
 	ref?: React.Ref<Player>;
 	size?: number;
 	state?: 'in-arrow-up' | 'hover-arrow-up-1' | 'hover-arrow-up-2';
-};
+}
 
 const ArrowUpIcon = ({
 	colorize = 'var(--color-foreground)',

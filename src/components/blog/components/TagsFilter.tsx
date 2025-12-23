@@ -15,11 +15,11 @@ import {
 } from '@/components/ui/Drawer';
 import { cn } from '@/lib/utils';
 
-type TagsFilterProps = {
+interface TagsFilterProps {
 	tags: string[];
 	selectedTag: string;
 	tagCounts?: Record<string, number>;
-};
+}
 
 type TagFilterListProps = TagsFilterProps & {
 	onTagClick: (tag: string) => void;

@@ -3,9 +3,9 @@
 import { ThemeProvider as AppThemeProvider } from 'next-themes';
 import type React from 'react';
 
-type AppThemeProviderProps = {
+interface AppThemeProviderProps {
 	children: React.ReactNode;
-};
+}
 
 const ThemeProvider = ({
 	children,

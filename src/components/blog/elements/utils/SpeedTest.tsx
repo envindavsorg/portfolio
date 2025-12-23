@@ -24,10 +24,10 @@ type SpeedResult = ReturnType<
 	typeof SpeedTestEngine.prototype.results.getSummary
 >;
 
-type TestState = {
+interface TestState {
 	status: 'idle' | 'running' | 'finished';
 	result: Partial<SpeedResult>;
-};
+}
 
 const INITIAL_RESULT: Partial<SpeedResult> = {
 	download: undefined,
@@ -48,10 +48,10 @@ const createSpeedTestEngine = () =>
 		],
 	});
 
-type PulsatingCircleProps = {
+interface PulsatingCircleProps {
 	isRunning: boolean;
 	isFinished: boolean;
-};
+}
 
 const PulsatingCircle = memo(
 	(props: PulsatingCircleProps): React.JSX.Element => (
@@ -103,13 +103,13 @@ const formatValue = (val: number | undefined, unit: string): string => {
 	return num.toFixed(2);
 };
 
-type SpeedTestProps = {
+interface SpeedTestProps {
 	status: TestState['status'];
 	label: string;
 	value: number | undefined;
 	measure: string;
 	icon: Icon;
-};
+}
 
 const SpeedTestItem = memo(
 	({

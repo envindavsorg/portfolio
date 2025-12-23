@@ -12,12 +12,12 @@ import {
 	formatPhoneNumber,
 } from '@/lib/utils/string';
 
-type OverviewItemProps = {
+interface OverviewItemProps {
 	icon: React.ElementType;
 	content: React.ReactNode;
 	id: string;
 	className?: string;
-};
+}
 
 const OverviewItem = ({
 	icon: Icon,

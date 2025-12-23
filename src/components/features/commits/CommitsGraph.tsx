@@ -19,9 +19,9 @@ import {
 import { dayjs } from '@/lib/dayjs';
 import { USER } from '@/lib/user';
 
-type CommitsGraphProps = {
+interface CommitsGraphProps {
 	contributions: Activity[];
-};
+}
 
 export const CommitsGraph = ({
 	contributions,

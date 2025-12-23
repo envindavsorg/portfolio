@@ -1,4 +1,4 @@
-export type Certification = {
+export interface Certification {
 	title: string;
 	issuer: string;
 	issuerLogoURL?: string;
@@ -6,7 +6,7 @@ export type Certification = {
 	issueDate: string;
 	credentialID: string;
 	credentialURL: string;
-};
+}
 
 export const CERTIFICATIONS: Certification[] = [
 	{

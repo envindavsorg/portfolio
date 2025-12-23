@@ -1,13 +1,13 @@
 import type React from 'react';
 import { CodeCollapsibleWrapper } from '@/components/blog/elements/CodeCollapsibleWrapper';
 
-type ComponentSourceProps = {
+interface ComponentSourceProps {
 	name: string;
 	src?: string;
 	title?: string;
 	showLineNumbers?: boolean;
 	collapsible?: boolean;
-};
+}
 
 export const ComponentSource = ({
 	className,

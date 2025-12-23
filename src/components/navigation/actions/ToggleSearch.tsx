@@ -53,12 +53,12 @@ import {
 	THEME_OPTIONS,
 } from './data';
 
-type ToggleSearchLinkGroupProps = {
+interface ToggleSearchLinkGroupProps {
 	heading: string;
 	links: CommandLinkItem[];
 	fallbackIcon?: PhosphorIcon;
 	onLinkSelect: (href: string, openInNewTab?: boolean) => void;
-};
+}
 
 const ToggleSearchLinkGroup = memo(
 	({
@@ -105,9 +105,9 @@ const ToggleSearchLinkGroup = memo(
 	}
 );
 
-type ToggleSearchTriggerProps = {
+interface ToggleSearchTriggerProps {
 	setOpenAction: (open: boolean) => void;
-};
+}
 
 export const ToggleSearchTrigger = ({
 	setOpenAction,
@@ -185,9 +185,9 @@ const buildCommandMetaMap = (posts: Post[]): CommandMetaMap => {
 	return commandMetaMap;
 };
 
-type ToggleSearchFooterProps = {
+interface ToggleSearchFooterProps {
 	posts: Post[];
-};
+}
 
 const ToggleSearchFooter = ({
 	posts,
@@ -234,9 +234,9 @@ export const postToCommandLinkItem = (post: Post): CommandLinkItem => {
 	};
 };
 
-type ToggleSearchProps = {
+interface ToggleSearchProps {
 	posts: Post[];
-};
+}
 
 export const ToggleSearch = ({
 	posts = [],

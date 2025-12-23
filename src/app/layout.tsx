@@ -101,9 +101,9 @@ export const viewport: Viewport = {
 	themeColor: META_THEME_COLORS.light,
 };
 
-type RootLayoutProps = {
+interface RootLayoutProps {
 	children: React.ReactNode;
-};
+}
 
 const RootLayout = ({ children }: RootLayoutProps) => (
 	<html

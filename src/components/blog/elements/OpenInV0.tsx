@@ -9,9 +9,9 @@ const V0Icon = lazy(() =>
 	}))
 );
 
-type OpenInV0Props = {
+interface OpenInV0Props {
 	url: string;
-};
+}
 
 export const OpenInV0 = ({ url }: OpenInV0Props): React.JSX.Element => (
 	<Button

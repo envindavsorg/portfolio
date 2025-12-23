@@ -8,9 +8,9 @@ import { variants } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { ConsentManagerClient } from './ConsentManagerClient';
 
-type ConsentManagerProps = {
+interface ConsentManagerProps {
 	children: React.ReactNode;
-};
+}
 
 const ConsentManager = ({
 	children,

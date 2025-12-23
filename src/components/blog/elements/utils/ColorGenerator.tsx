@@ -18,9 +18,9 @@ import { ColorPicker } from '@/components/ui/ColorPicker';
 import { Prose } from '@/components/ui/Typography';
 import { soundManager } from '@/lib/sound-manager';
 
-type ColorScheme = {
+interface ColorScheme {
 	[key: string]: string;
-};
+}
 
 export const ColorGenerator = (): React.JSX.Element => {
 	const [colorScheme, setColorScheme] = useState<ColorScheme>({

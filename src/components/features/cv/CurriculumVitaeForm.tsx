@@ -13,13 +13,13 @@ import { Input } from '@/components/ui/Input';
 import type useEmailForm from '@/hooks/use-email-form';
 import type { EmailFormData } from '@/hooks/use-email-form';
 
-type CurriculumVitaeFormProps = {
+interface CurriculumVitaeFormProps {
 	form: ReturnType<typeof useEmailForm>['form'];
 	isLoading: boolean;
 	onSubmitAction: (data: EmailFormData) => Promise<void>;
 	className?: string;
 	children?: React.ReactNode;
-};
+}
 
 export const CurriculumVitaeForm = ({
 	form,

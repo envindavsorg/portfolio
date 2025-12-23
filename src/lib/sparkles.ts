@@ -1,6 +1,6 @@
 import type { ISourceOptions } from '@tsparticles/engine';
 
-export type SparkleConfig = {
+export interface SparkleConfig {
 	density?: number;
 	minSize?: number;
 	maxSize?: number;
@@ -8,7 +8,7 @@ export type SparkleConfig = {
 	color?: string;
 	background?: string;
 	reducedMotion?: boolean;
-};
+}
 
 export const createSparkleOptions = (config: SparkleConfig): ISourceOptions => {
 	const {

@@ -5,12 +5,12 @@ import type React from 'react';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-type FlipSentencesProps = {
+interface FlipSentencesProps {
 	className?: string;
 	sentences: string[];
 	interval?: number;
 	disableAnimation?: boolean;
-};
+}
 
 export const FlipSentences = ({
 	className,

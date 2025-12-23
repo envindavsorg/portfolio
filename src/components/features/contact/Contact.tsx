@@ -5,11 +5,11 @@ import { FOLLOWERS_CONFIG } from './config/followers-config';
 import { SOCIAL_LINKS } from './data/social-links';
 import { SocialLinkItem } from './SocialLinkItem';
 
-type ContactProps = {
+interface ContactProps {
 	github: number;
 	linkedin: number;
 	capture?: boolean;
-};
+}
 
 export const Contact = memo(
 	({ github, linkedin, capture = false }: ContactProps): React.JSX.Element => {

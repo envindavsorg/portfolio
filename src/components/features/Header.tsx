@@ -6,9 +6,9 @@ import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 import { FlipSentences } from '@/registry/flip-sentences';
 
-export type HeaderProps = {
+export interface HeaderProps {
 	capture?: boolean;
-};
+}
 
 const PATTERN_STYLE = {
 	backgroundImage: `repeating-linear-gradient(

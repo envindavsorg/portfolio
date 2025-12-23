@@ -33,13 +33,13 @@ const COMPONENTS = [
 
 const THEMES = ['light', 'dark'] as const;
 
-type CaptureComponentOptions = {
+interface CaptureComponentOptions {
 	browser: Browser;
 	componentName: string;
 	theme: (typeof THEMES)[number];
 	canReplay: boolean;
 	duration?: number;
-};
+}
 
 const captureGif = async (
 	_page: Page,

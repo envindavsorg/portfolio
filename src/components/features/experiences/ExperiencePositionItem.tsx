@@ -39,9 +39,9 @@ export const ExperienceIcon = ({
 	return <IconComponent {...props} />;
 };
 
-type ExperiencePositionItemProps = {
+interface ExperiencePositionItemProps {
 	position: ExperiencePosition;
-};
+}
 
 export const ExperiencePositionItem = ({
 	position,

@@ -9,7 +9,7 @@ import { memo, useEffect, useMemo, useState } from 'react';
 import { checkPerformanceSupport, createSparkleOptions } from '@/lib/sparkles';
 import { cn } from '@/lib/utils';
 
-type SparklesProps = {
+interface SparklesProps {
 	id?: string;
 	className?: string;
 	density?: number;
@@ -19,7 +19,7 @@ type SparklesProps = {
 	background?: string;
 	particleColor?: string;
 	delayLoad?: number;
-};
+}
 
 export const Sparkles = memo(
 	({

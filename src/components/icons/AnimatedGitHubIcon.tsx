@@ -12,10 +12,10 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export type AnimatedGithubIconHandle = {
+export interface AnimatedGithubIconHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
-};
+}
 
 interface AnimatedGithubIconProps extends HTMLAttributes<HTMLDivElement> {
 	size?: number;

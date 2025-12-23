@@ -1,8 +1,8 @@
-type OpenGraphImageParams = {
+interface OpenGraphImageParams {
 	type: PageType;
 	title: string;
 	description: string;
-};
+}
 
 const openGraphImageUrl = ({
 	type = 'homepage',
@@ -24,11 +24,11 @@ const openGraphImageUrl = ({
 	return `${endpoint}?${params.toString()}`;
 };
 
-type OpenGraphImageProps = {
+interface OpenGraphImageProps {
 	title: string;
 	description: string;
 	ogImageParams: OpenGraphImageParams;
-};
+}
 
 export const openGraphImage = ({
 	title,

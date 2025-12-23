@@ -8,10 +8,10 @@ import emailSchema from '@/schemas/email.schema';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-type BodyData = {
+interface BodyData {
 	firstName: string;
 	recipientEmail: string;
-};
+}
 
 export const POST = async (request: Request): Promise<Response> => {
 	try {

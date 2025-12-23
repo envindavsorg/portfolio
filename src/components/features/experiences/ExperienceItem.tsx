@@ -2,9 +2,9 @@ import type React from 'react';
 import type { Experience } from './data/experiences';
 import { ExperiencePositionItem } from './ExperiencePositionItem';
 
-type ExperienceItemProps = {
+interface ExperienceItemProps {
 	experience: Experience;
-};
+}
 
 export const ExperienceItem = ({
 	experience,

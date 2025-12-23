@@ -21,10 +21,10 @@ export const getIcon = (name: string | undefined) => {
 	return <Icon />;
 };
 
-type CertItemProps = {
+interface CertItemProps {
 	className?: string;
 	certification: Certification;
-};
+}
 
 export const CertItem = ({
 	className,

@@ -4,9 +4,9 @@ import { ClientSideOptionsProvider } from '@c15t/nextjs/client';
 import { posthog } from 'posthog-js';
 import type React from 'react';
 
-type ConsentManagerClientProps = {
+interface ConsentManagerClientProps {
 	children: React.ReactNode;
-};
+}
 
 export const ConsentManagerClient = ({
 	children,

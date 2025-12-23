@@ -4,10 +4,10 @@ import { type ComponentType, lazy, Suspense } from 'react';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 
-type IconProps = {
+interface IconProps {
 	className?: string;
 	'aria-hidden'?: boolean;
-};
+}
 
 const icons: Record<
 	string,

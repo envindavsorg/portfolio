@@ -1,6 +1,6 @@
 export type ExperiencePositionIcon = 'code' | 'design' | 'education';
 
-export type ExperiencePosition = {
+export interface ExperiencePosition {
 	id: string;
 	title: string;
 	employmentPeriod: {
@@ -12,14 +12,14 @@ export type ExperiencePosition = {
 	icon?: ExperiencePositionIcon;
 	skills?: string[];
 	isExpanded?: boolean;
-};
+}
 
-export type Experience = {
+export interface Experience {
 	id: string;
 	companyName: string;
 	positions: ExperiencePosition[];
 	isCurrentEmployer?: boolean;
-};
+}
 
 export const EXPERIENCES: Experience[] = [
 	{

@@ -10,12 +10,12 @@ import { Tag } from '@/components/ui/Tag';
 import type { ContributionDay } from '../contact/actions/types/github.types';
 import { CommitsGraph, CommitsGraphFallback } from './CommitsGraph';
 
-type CommitsProps = {
+interface CommitsProps {
 	stars: number;
 	followers: number;
 	following: number;
 	contributions: ContributionDay[];
-};
+}
 
 export const Commits = ({
 	stars,

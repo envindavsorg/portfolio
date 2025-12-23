@@ -22,10 +22,10 @@ import {
 import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 
-type ProjectItemProps = {
+interface ProjectItemProps {
 	className?: string;
 	project: Project;
-};
+}
 
 export const ProjectsItem = ({
 	className,

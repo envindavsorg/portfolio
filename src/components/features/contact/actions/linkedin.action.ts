@@ -3,10 +3,10 @@
 import { list } from '@vercel/blob';
 import { unstable_cache } from 'next/cache';
 
-export type LinkedInData = {
+export interface LinkedInData {
 	count: number;
 	updatedAt: string;
-};
+}
 
 const BLOB_FILENAME = 'linkedin-followers.json';
 const CACHE_TAG = 'linkedin-followers';

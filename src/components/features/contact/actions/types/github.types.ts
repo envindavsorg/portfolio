@@ -1,10 +1,10 @@
-export type ContributionDay = {
+export interface ContributionDay {
 	date: string;
 	count: number;
 	level: number;
-};
+}
 
-export type GitHubUserData = {
+export interface GitHubUserData {
 	login: string;
 	name: string;
 	avatar: string;
@@ -17,9 +17,9 @@ export type GitHubUserData = {
 		date: string | undefined;
 	};
 	contributions: ContributionDay[];
-};
+}
 
-export type GitHubResponse = {
+export interface GitHubResponse {
 	user: {
 		login: string;
 		name: string;
@@ -56,4 +56,4 @@ export type GitHubResponse = {
 			};
 		} | null;
 	} | null;
-};
+}

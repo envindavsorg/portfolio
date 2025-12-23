@@ -13,10 +13,10 @@ import React, {
 	useState,
 } from 'react';
 
-type ChevronsDownUpIconHandle = {
+interface ChevronsDownUpIconHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
-};
+}
 
 type ChevronsDownUpIconProps = ComponentProps<'svg'>;
 
@@ -121,9 +121,9 @@ export const CollapsibleContent = forwardRef<
 	)
 );
 
-type CollapsibleContextType = {
+interface CollapsibleContextType {
 	open: boolean;
-};
+}
 
 const CollapsibleContext = createContext<CollapsibleContextType | null>(null);
 

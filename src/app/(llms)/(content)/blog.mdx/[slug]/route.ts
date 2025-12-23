@@ -7,9 +7,9 @@ export const generateStaticParams = async (): Promise<{ slug: string }[]> => {
 	return posts.map(({ slug }) => ({ slug }));
 };
 
-type ParamsProps = {
+interface ParamsProps {
 	params: Promise<{ slug: string }>;
-};
+}
 
 export const GET = async (
 	_request: Request,

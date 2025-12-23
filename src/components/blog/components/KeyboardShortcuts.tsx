@@ -4,15 +4,15 @@ import { useRouter } from 'next/navigation';
 import type React from 'react';
 import { useCallback, useEffect } from 'react';
 
-type Post = {
+interface Post {
 	slug: string;
-};
+}
 
-type KeyboardShortcutsProps = {
+interface KeyboardShortcutsProps {
 	basePath: string;
 	previous: Post | null;
 	next: Post | null;
-};
+}
 
 export const KeyboardShortcuts = ({
 	basePath,

@@ -6,10 +6,10 @@ import { PlaneIcon } from '@/components/icons/Plane';
 import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 
-type SuccessMessageProps = {
+interface SuccessMessageProps {
 	children?: React.ReactNode;
 	className?: string;
-};
+}
 
 export const SuccessMessage = memo(
 	forwardRef<Player, SuccessMessageProps>(

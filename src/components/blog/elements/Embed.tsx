@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import type React from 'react';
 
-type YouTubeEmbedProps = {
+interface YouTubeEmbedProps {
 	videoId: string;
 	title: string;
-};
+}
 
 export const YouTubeEmbed = ({
 	videoId,

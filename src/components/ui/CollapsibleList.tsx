@@ -8,7 +8,7 @@ import {
 	CollapsibleTrigger,
 } from '@/components/ui/Collapsible';
 
-type CollapsibleListProps<T> = {
+interface CollapsibleListProps<T> {
 	items: T[];
 	renderItemAction: (item: T) => React.ReactNode;
 	max?: number;
@@ -18,7 +18,7 @@ type CollapsibleListProps<T> = {
 		showMore?: string;
 		showLess?: string;
 	};
-};
+}
 
 export const CollapsibleList = <T,>({
 	items,

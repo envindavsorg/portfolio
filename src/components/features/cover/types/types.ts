@@ -14,14 +14,14 @@ export type Greeting = (typeof GREETINGS)[number];
 
 export type GreetingId = (typeof GREETINGS_CONFIG)[number]['id'];
 
-export type Labels = {
+export interface Labels {
 	svg: string;
 	png: string;
 	all: string;
-};
+}
 
-export type FileType = {
+export interface FileType {
 	type: 'svg' | 'png';
 	Icon: typeof FileSvgIcon | typeof FilePngIcon;
 	getLabel: (labels: Labels) => string;
-};
+}

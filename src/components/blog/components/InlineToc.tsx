@@ -11,9 +11,9 @@ import {
 } from '@/components/ui/Collapsible';
 import { cn } from '@/lib/utils';
 
-type InlineTocProps = {
+interface InlineTocProps {
 	items: TOCItemType[];
-};
+}
 
 export const InlineToc = ({
 	items,

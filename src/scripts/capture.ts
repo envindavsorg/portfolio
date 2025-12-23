@@ -28,13 +28,13 @@ export const SIZE = {
 	},
 } as const;
 
-type CaptureScreenshot = {
+interface CaptureScreenshot {
 	browser: Browser;
 	urlLink: string;
 	size: keyof typeof SIZE;
 	themes?: 'light' | 'dark' | ('light' | 'dark')[];
 	type?: 'webp' | 'png' | 'jpeg';
-};
+}
 
 const captureScreenshot = async ({
 	browser,

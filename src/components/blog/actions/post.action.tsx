@@ -40,9 +40,9 @@ const ICONS = {
 	failed: TriangleDashedIcon,
 } as const;
 
-type LLMCopyButtonProps = {
+interface LLMCopyButtonProps {
 	markdownUrl: string;
-};
+}
 
 export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
 	const [state, setState] = useOptimistic<
@@ -136,10 +136,10 @@ const Icons = {
 	claude: (props: IconProps) => <ClaudeIcon {...props} />,
 };
 
-type ViewOptionsProps = {
+interface ViewOptionsProps {
 	markdownUrl: string;
 	isComponent?: boolean;
-};
+}
 
 export const ViewOptions = ({
 	markdownUrl,
@@ -243,10 +243,10 @@ export const ViewOptions = ({
 	);
 };
 
-type LLMCopyButtonWithViewOptionsProps = {
+interface LLMCopyButtonWithViewOptionsProps {
 	markdownUrl: string;
 	isComponent?: boolean;
-};
+}
 
 export const LLMCopyButtonWithViewOptions = ({
 	markdownUrl,

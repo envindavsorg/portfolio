@@ -19,10 +19,10 @@ const ReactIcon = lazy(() =>
 	}))
 );
 
-type PostProps = {
+interface PostProps {
 	post: Post;
 	shouldPreloadImage?: boolean;
-};
+}
 
 export const Post = ({
 	post,

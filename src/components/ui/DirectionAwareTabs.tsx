@@ -5,16 +5,16 @@ import React, { type ReactNode, useMemo, useState } from 'react';
 import useMeasure from 'react-use-measure';
 import { cn } from '@/lib/utils';
 
-type Tab = {
+interface Tab {
 	id: number;
 	label: string;
 	content: ReactNode;
-};
+}
 
-type OgImageSectionProps = {
+interface OgImageSectionProps {
 	tabs: Tab[];
 	onChangeAction?: () => void;
-};
+}
 
 export const DirectionAwareTabs = ({
 	tabs,

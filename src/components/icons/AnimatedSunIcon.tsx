@@ -12,10 +12,10 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export type AnimatedSunIconHandle = {
+export interface AnimatedSunIconHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
-};
+}
 
 interface AnimatedSunIconProps extends HTMLAttributes<HTMLDivElement> {
 	size?: number;

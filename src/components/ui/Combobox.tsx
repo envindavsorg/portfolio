@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/Popover';
 import { cn } from '@/lib/utils';
 
-type ComboboxProps = {
+interface ComboboxProps {
 	data: {
 		value: string;
 		label: string;
@@ -29,7 +29,7 @@ type ComboboxProps = {
 	disabled?: boolean;
 	search: boolean;
 	className?: string;
-};
+}
 
 export const Combobox = (props: ComboboxProps): React.JSX.Element => {
 	const [open, setOpen] = useState(false);

@@ -23,9 +23,9 @@ import { soundManager } from '@/lib/sound-manager';
 import copyText from '@/lib/utils/copy';
 import { getAbsoluteUrl } from '@/lib/utils/url';
 
-type ShareMenuProps = {
+interface ShareMenuProps {
 	url: string;
-};
+}
 
 export const ShareMenu = memo(({ url }: ShareMenuProps): React.JSX.Element => {
 	const absoluteUrl = useMemo(() => getAbsoluteUrl(url), [url]);

@@ -1,4 +1,4 @@
-export type Project = {
+export interface Project {
 	id: string;
 	title: string;
 	period: {
@@ -10,7 +10,7 @@ export type Project = {
 	description?: string;
 	logo?: string;
 	isExpanded?: boolean;
-};
+}
 
 export const PROJECTS: Project[] = [
 	{

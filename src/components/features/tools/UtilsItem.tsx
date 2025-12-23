@@ -7,9 +7,9 @@ import { IsNew } from '@/components/blog/components/IsNew';
 import { getIconForUtilsTags } from '@/lib/blog/tags';
 import { cn } from '@/lib/utils';
 
-type UtilsItemProps = {
+interface UtilsItemProps {
 	post: Post;
-};
+}
 
 export const UtilsItem = memo(({ post }: UtilsItemProps): React.JSX.Element => {
 	const { metadata, slug } = post;

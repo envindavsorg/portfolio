@@ -10,12 +10,12 @@ import { cn } from '@/lib/utils';
 import type { FOLLOWERS_CONFIG } from './config/followers-config';
 import type { SOCIAL_LINKS } from './data/social-links';
 
-type SocialLinkItemProps = {
+interface SocialLinkItemProps {
 	link: (typeof SOCIAL_LINKS)[number];
 	count: number;
 	config?: (typeof FOLLOWERS_CONFIG)[keyof typeof FOLLOWERS_CONFIG];
 	capture: boolean;
-};
+}
 
 export const SocialLinkItem = ({
 	link,

@@ -13,11 +13,11 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-type SequenceContextValue = {
+interface SequenceContextValue {
 	completeItem: (index: number) => void;
 	activeIndex: number;
 	sequenceStarted: boolean;
-};
+}
 
 const SequenceContext = createContext<SequenceContextValue | null>(null);
 
@@ -199,12 +199,12 @@ export const TypingAnimation = ({
 	);
 };
 
-type TerminalProps = {
+interface TerminalProps {
 	children: React.ReactNode;
 	className?: string;
 	sequence?: boolean;
 	startOnView?: boolean;
-};
+}
 
 export const Terminal = ({
 	children,

@@ -26,9 +26,9 @@ const ICON_MAP: Record<string, React.ElementType> = {
 	Outils: GearSixIcon,
 };
 
-type NavBarMobileProps = {
+interface NavBarMobileProps {
 	items: NavigationItem[];
-};
+}
 
 export const NavBarMobile = ({
 	items,

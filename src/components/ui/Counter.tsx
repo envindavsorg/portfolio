@@ -5,13 +5,13 @@ import type React from 'react';
 import { memo, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-type CounterProps = {
+interface CounterProps {
 	value: number;
 	interval?: number;
 	step?: number;
 	children?: React.ReactNode;
 	className?: string;
-};
+}
 
 export const Counter = memo(
 	({

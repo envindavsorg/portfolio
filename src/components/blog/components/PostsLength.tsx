@@ -2,10 +2,10 @@ import type React from 'react';
 import type { Certification } from '@/components/features/certifications/data/certifications';
 import type { Project } from '@/components/features/projects/data/projects';
 
-type PostsLengthProps = {
+interface PostsLengthProps {
 	items: Post[] | Certification[] | Project[];
 	slug: string;
-};
+}
 
 export const PostsLength = ({
 	items,

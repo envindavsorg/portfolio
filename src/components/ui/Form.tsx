@@ -24,12 +24,12 @@ const Slot = SlotPrimitive.Slot;
 
 const Form = FormProvider;
 
-type FormFieldContextValue<
+interface FormFieldContextValue<
 	TFieldValues extends FieldValues = FieldValues,
 	TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+> {
 	name: TName;
-};
+}
 
 const FormFieldContext = createContext<FormFieldContextValue>(
 	{} as FormFieldContextValue
@@ -69,9 +69,9 @@ const useFormField = () => {
 	};
 };
 
-type FormItemContextValue = {
+interface FormItemContextValue {
 	id: string;
-};
+}
 
 const FormItemContext = createContext<FormItemContextValue>(
 	{} as FormItemContextValue

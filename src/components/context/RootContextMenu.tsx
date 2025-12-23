@@ -21,9 +21,9 @@ import useMetaColor from '@/hooks/use-meta-color';
 import { soundManager } from '@/lib/sound-manager';
 import { META_THEME_COLORS } from '@/lib/theme';
 
-type RootContextMenuProps = {
+interface RootContextMenuProps {
 	children: React.ReactNode;
-};
+}
 
 export const RootContextMenu = ({
 	children,

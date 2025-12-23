@@ -16,9 +16,9 @@ const MAIN_NAV: NavigationItem[] = [
 	{ title: 'Outils', href: '/utils' },
 ];
 
-type NavBarProps = {
+interface NavBarProps {
 	posts: Post[];
-};
+}
 
 export const NavBar = ({ posts }: NavBarProps): React.JSX.Element => (
 	<NavBarWrapper

@@ -3,9 +3,9 @@ import { memo } from 'react';
 import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 
-type IsNewProps = {
+interface IsNewProps {
 	className?: string;
-};
+}
 
 export const IsNew = memo(
 	({ className }: IsNewProps): React.JSX.Element => (

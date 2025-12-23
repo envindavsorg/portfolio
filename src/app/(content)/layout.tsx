@@ -16,9 +16,9 @@ const ScrollTop = dynamic(() =>
 	import('@/components/ui/ScrollTop').then((mod) => mod.ScrollTop)
 );
 
-export type AppLayoutProps = {
+export interface AppLayoutProps {
 	children: React.ReactNode;
-};
+}
 
 const AppLayout = async ({ children }: Readonly<AppLayoutProps>) => {
 	const posts: Post[] = getAllPosts();

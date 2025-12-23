@@ -15,7 +15,7 @@ declare global {
 		| 'utilsArticle';
 
 	// types for unist tree
-	type UnistNode = {
+	interface UnistNode {
 		type: string;
 		name?: string;
 		tagName?: string;
@@ -35,15 +35,15 @@ declare global {
 			type?: string;
 		}[];
 		children?: UnistNode[];
-	};
+	}
 
-	type UnistTree = {
+	interface UnistTree {
 		type: string;
 		children: UnistNode[];
-	};
+	}
 
 	// types for blog, components, and utils posts
-	type PostMetadata = {
+	interface PostMetadata {
 		title: string;
 		description: string;
 		imageDark?: string;
@@ -54,9 +54,9 @@ declare global {
 		tags?: string[];
 		author?: string;
 		new?: boolean;
-	};
+	}
 
-	type Post = {
+	interface Post {
 		metadata: PostMetadata;
 		slug: string;
 		content: string;
@@ -64,16 +64,16 @@ declare global {
 			time: string;
 			words: number;
 		};
-	};
+	}
 
-	type PostReadingTime = {
+	interface PostReadingTime {
 		time: string;
 		minutes: number;
 		words: number;
-	};
+	}
 
 	// types for user profile
-	type User = {
+	interface User {
 		firstName: string;
 		lastName: string;
 		username: string;
@@ -113,23 +113,23 @@ declare global {
 		};
 		keywords: string[];
 		dateCreated: string;
-	};
+	}
 
 	// types for navigation bar
-	type NavigationItem = {
+	interface NavigationItem {
 		title: string;
 		href: string;
-	};
+	}
 
 	// types for navbar command menu
-	type CommandLinkItem = {
+	interface CommandLinkItem {
 		title: string;
 		href: string;
 		icon?: React.ElementType;
 		iconImage?: StaticImageData;
 		keywords?: string[];
 		openInNewTab?: boolean;
-	};
+	}
 
 	type CommandKind =
 		| 'command'

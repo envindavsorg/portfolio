@@ -13,10 +13,10 @@ const ICONS = {
 	failed: XCircleIcon,
 } as const;
 
-type CopyButtonProps = {
+interface CopyButtonProps {
 	value: string;
 	className?: string;
-};
+}
 
 export const CopyButton = ({
 	value,

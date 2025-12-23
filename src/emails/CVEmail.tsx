@@ -12,10 +12,10 @@ import {
 } from '@react-email/components';
 import type React from 'react';
 
-type CVEmailTemplateProps = {
+interface CVEmailTemplateProps {
 	firstName: string;
 	recipientEmail: string;
-};
+}
 
 export const CVEmailTemplate = ({
 	firstName,

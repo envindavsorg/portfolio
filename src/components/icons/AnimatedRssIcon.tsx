@@ -11,10 +11,10 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export type AnimatedRssIconHandle = {
+export interface AnimatedRssIconHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
-};
+}
 
 interface AnimatedRssIconProps extends HTMLAttributes<HTMLDivElement> {
 	size?: number;

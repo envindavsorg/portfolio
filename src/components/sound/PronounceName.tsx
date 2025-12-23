@@ -7,10 +7,10 @@ import { soundManager } from '@/lib/sound-manager';
 import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 
-type PronounceNameProps = {
+interface PronounceNameProps {
 	sound: string;
 	className?: string;
-};
+}
 
 export const PronounceName = ({
 	sound,

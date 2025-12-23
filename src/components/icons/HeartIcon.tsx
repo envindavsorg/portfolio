@@ -4,12 +4,12 @@ import { Player } from '@lordicon/react';
 import type React from 'react';
 import Heart from '@/components/lottie/heart.json' with { type: 'json' };
 
-type HeartIconProps = {
+interface HeartIconProps {
 	colorize?: string;
 	ref?: React.Ref<Player>;
 	size?: number;
 	state?: 'in-reveal' | 'hover-pinch' | 'morph-select';
-};
+}
 
 const HeartIcon = ({
 	colorize = 'light-dark(var(--color-red-600), var(--color-red-300))',

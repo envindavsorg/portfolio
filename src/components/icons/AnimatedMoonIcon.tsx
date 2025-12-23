@@ -12,10 +12,10 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export type AnimatedMoonIconHandle = {
+export interface AnimatedMoonIconHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
-};
+}
 
 interface AnimatedMoonIconProps extends HTMLAttributes<HTMLDivElement> {
 	size?: number;

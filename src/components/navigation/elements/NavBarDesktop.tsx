@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation';
 import type React from 'react';
 import { cn } from '@/lib/utils';
 
-type NavBarDesktopProps = {
+interface NavBarDesktopProps {
 	items: NavigationItem[];
-};
+}
 
 export const NavBarDesktop = ({
 	items,

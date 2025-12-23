@@ -1,6 +1,8 @@
 import type React from 'react';
 
-export type Props = { children: React.ReactNode };
+export interface Props {
+	children: React.ReactNode;
+}
 export type Provider = (p: Props) => React.JSX.Element;
 
 export const Compose = (...p: Provider[]) =>

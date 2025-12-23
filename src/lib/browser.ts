@@ -16,10 +16,10 @@ export type Browser =
 	| 'Opera'
 	| 'Inconnu';
 
-export type BrowserInfo = {
+export interface BrowserInfo {
 	name: Browser;
 	icon: ((props: SVGProps<SVGSVGElement>) => React.JSX.Element) | null;
-};
+}
 
 const icons: Record<Browser, BrowserInfo['icon']> = {
 	'Arc Browser': ArcIcon,

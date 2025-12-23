@@ -5,10 +5,10 @@ import { WarningIcon } from '@/components/icons/Warning';
 import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 
-type ErrorMessageProps = {
+interface ErrorMessageProps {
 	children?: React.ReactNode;
 	className?: string;
-};
+}
 
 export const ErrorMessage = memo(
 	forwardRef<Player, ErrorMessageProps>(

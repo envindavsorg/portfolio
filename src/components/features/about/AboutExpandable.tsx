@@ -7,10 +7,10 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 
-type AboutExpandableProps = {
+interface AboutExpandableProps {
 	intro: React.ReactNode;
 	moreContent?: React.ReactNode;
-};
+}
 
 export const AboutExpandable = ({
 	intro,

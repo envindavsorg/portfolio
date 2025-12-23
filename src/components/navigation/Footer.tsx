@@ -11,13 +11,13 @@ import { Divider } from '@/components/ui/Divider';
 import { cn } from '@/lib/utils';
 import { Metadata } from './Metadata';
 
-type FooterProps = {
+interface FooterProps {
 	commit?: {
 		branch: string | undefined;
 		hash: string | undefined;
 		update: string | undefined;
 	};
-};
+}
 
 const Footer = ({ commit }: FooterProps) => {
 	const playerHeartRef = useRef<Player>(null);

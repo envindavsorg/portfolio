@@ -11,11 +11,11 @@ import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 import { USER } from '@/lib/user';
 
-type Props = {
+interface Props {
 	params: Promise<{
 		slug: string;
 	}>;
-};
+}
 
 export const generateStaticParams = async () => {
 	const posts: Post[] = getPostsByCategory('utils');

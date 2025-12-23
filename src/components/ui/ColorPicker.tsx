@@ -14,10 +14,10 @@ import {
 } from '@/components/ui/Popover';
 import { hexToHsl, normalizeColor, trimColorString } from '@/lib/palette';
 
-type ColorPickerProps = {
+interface ColorPickerProps {
 	color: string;
 	onChangeAction: (color: string) => void;
-};
+}
 
 export const ColorPicker = ({
 	color,

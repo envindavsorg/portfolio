@@ -4,12 +4,12 @@ import { Player } from '@lordicon/react';
 import type React from 'react';
 import Pizza from '@/components/lottie/pizza.json' with { type: 'json' };
 
-type PizzaIconProps = {
+interface PizzaIconProps {
 	colorize?: string;
 	ref?: React.Ref<Player>;
 	size?: number;
 	state?: 'in-pizza' | 'hover-pizza';
-};
+}
 
 const PizzaIcon = ({
 	colorize = 'var(--color-yellow-400)',

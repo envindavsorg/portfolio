@@ -6,13 +6,13 @@ import { ShareMenu } from '@/components/blog/components/ShareMenu';
 import { Button } from '@/components/ui/Button';
 import { findNeighbour, getPostsByCategory } from '@/lib/blog/posts';
 
-type TopBarProps = {
+interface TopBarProps {
 	type: 'article' | 'utils' | 'components';
 	slug: string;
 	baseUrl: string;
 	postSlug: string;
 	title: string;
-};
+}
 
 export const TopBar = ({
 	type,

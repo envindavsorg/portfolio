@@ -22,11 +22,11 @@ import { openGraphImage } from '@/lib/open-graph';
 import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 
-type Props = {
+interface Props {
 	params: Promise<{
 		slug: string;
 	}>;
-};
+}
 
 export const generateStaticParams = async () => {
 	const posts = getPostsByCategory('components');

@@ -24,10 +24,10 @@ import {
 } from './constants/constants';
 import type { Greeting, GreetingId } from './types/types';
 
-type CoverProps = {
+interface CoverProps {
 	loop?: boolean;
 	capture?: boolean;
-};
+}
 
 export const Cover = ({
 	loop = true,

@@ -4,13 +4,13 @@ import { Player } from '@lordicon/react';
 import type React from 'react';
 import Pizza from '@/components/lottie/warning.json' with { type: 'json' };
 
-type WarningIconProps = {
+interface WarningIconProps {
 	colorize?: string;
 	ref?: React.Ref<Player>;
 	size?: number;
 	state?: 'in-error' | 'hover-error-1' | 'hover-error-2';
 	onCompleteAction: () => undefined;
-};
+}
 
 export const WarningIcon = ({
 	colorize = 'var(--color-destructive)',

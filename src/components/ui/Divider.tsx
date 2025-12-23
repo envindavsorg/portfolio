@@ -1,10 +1,10 @@
 import type React from 'react';
 import { cn } from '@/lib/utils';
 
-type DividerProps = {
+interface DividerProps {
 	className?: string;
 	border?: boolean;
-};
+}
 
 export const Divider = ({
 	className,

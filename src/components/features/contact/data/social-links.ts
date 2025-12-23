@@ -2,13 +2,13 @@ import type { StaticImageData } from 'next/image';
 import githubImage from '@/images/github.webp';
 import linkedinImage from '@/images/linkedin.webp';
 
-export type SocialLinksProps = {
+export interface SocialLinksProps {
 	icon: StaticImageData;
 	title: string;
 	handle: string;
 	description?: string;
 	href: string;
-};
+}
 
 export const SOCIAL_LINKS: SocialLinksProps[] = [
 	{

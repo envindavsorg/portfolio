@@ -1,9 +1,9 @@
 import { type ComponentType, lazy, type SVGProps } from 'react';
 
-export type Stack = {
+export interface Stack {
 	icon: ComponentType<SVGProps<SVGSVGElement>>;
 	title: string;
-};
+}
 
 const BunIcon = lazy(() =>
 	import('@/components/icons/content/Bun').then((m) => ({

@@ -13,11 +13,11 @@ import { Panel } from '@/components/ui/Panel';
 import useBrowser from '@/hooks/use-browser';
 import { dayjs } from '@/lib/dayjs';
 
-type MetadataItemProps = {
+interface MetadataItemProps {
 	icon: React.ElementType;
 	label: string;
 	value: string;
-};
+}
 
 const MetadataItem = memo<MetadataItemProps>(({ icon: Icon, label, value }) => (
 	<div className="flex items-center gap-x-3">
@@ -29,13 +29,13 @@ const MetadataItem = memo<MetadataItemProps>(({ icon: Icon, label, value }) => (
 	</div>
 ));
 
-export type MetadataProps = {
+export interface MetadataProps {
 	commit?: {
 		branch: string | undefined;
 		hash: string | undefined;
 		update: string | undefined;
 	};
-};
+}
 
 const Metadata = ({ commit }: MetadataProps) => {
 	const { name, icon: BrowserIcon } = useBrowser();
