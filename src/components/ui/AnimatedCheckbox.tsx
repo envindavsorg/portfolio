@@ -1,25 +1,23 @@
 'use client';
 
-import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import { Indicator, Root } from '@radix-ui/react-checkbox';
 import { type HTMLMotionProps, motion } from 'motion/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-type AnimatedCheckboxProps = React.ComponentProps<
-	typeof CheckboxPrimitive.Root
-> &
+type AnimatedCheckboxProps = React.ComponentProps<typeof Root> &
 	HTMLMotionProps<'button'>;
 
 export const AnimatedCheckbox = ({
 	className,
 	onCheckedChange,
 	...props
-}: AnimatedCheckboxProps) => {
+}: AnimatedCheckboxProps): React.JSX.Element => {
 	const [isChecked, setIsChecked] = React.useState(
-		props?.checked ?? props?.defaultChecked ?? false,
+		props?.checked ?? props?.defaultChecked ?? false
 	);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (props?.checked !== undefined) {
 			setIsChecked(props.checked);
 		}
@@ -30,42 +28,38 @@ export const AnimatedCheckbox = ({
 			setIsChecked(checked);
 			onCheckedChange?.(checked);
 		},
-		[onCheckedChange],
+		[onCheckedChange]
 	);
 
 	return (
-		<CheckboxPrimitive.Root
-			{...props}
-			onCheckedChange={handleCheckedChange}
-			asChild
-		>
+		<Root {...props} asChild onCheckedChange={handleCheckedChange}>
 			<motion.button
-				data-slot="checkbox"
 				className={cn(
 					'peer size-4 shrink-0 cursor-pointer rounded-[4px] border border-input outline-none transition-colors duration-500 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=checked]:border-theme data-[state=checked]:bg-theme data-[state=checked]:text-background dark:bg-input/30 dark:aria-invalid:ring-destructive/40',
-					className,
+					className
 				)}
-				whileTap={{ scale: 0.95 }}
+				data-slot="checkbox"
 				whileHover={{ scale: 1.05 }}
+				whileTap={{ scale: 0.95 }}
 				{...props}
 			>
-				<CheckboxPrimitive.Indicator forceMount asChild>
+				<Indicator asChild forceMount>
 					<motion.svg
-						data-slot="checkbox-indicator"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						strokeWidth="3.5"
-						stroke="currentColor"
-						className="size-3.5"
-						initial="unchecked"
 						animate={isChecked ? 'checked' : 'unchecked'}
+						className="size-3.5"
+						data-slot="checkbox-indicator"
+						fill="none"
+						initial="unchecked"
+						stroke="currentColor"
+						strokeWidth="3.5"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
 					>
 						<title>Checkbox</title>
 						<motion.path
+							d="M4.5 12.75l6 6 9-13.5"
 							strokeLinecap="round"
 							strokeLinejoin="round"
-							d="M4.5 12.75l6 6 9-13.5"
 							variants={{
 								checked: {
 									pathLength: 1,
@@ -85,8 +79,8 @@ export const AnimatedCheckbox = ({
 							}}
 						/>
 					</motion.svg>
-				</CheckboxPrimitive.Indicator>
+				</Indicator>
 			</motion.button>
-		</CheckboxPrimitive.Root>
+		</Root>
 	);
 };

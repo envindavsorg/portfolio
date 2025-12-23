@@ -24,7 +24,7 @@ export const SuccessMessage = memo(
 				<div
 					className={cn(
 						'flex flex-col items-center justify-center text-center',
-						className,
+						className
 					)}
 				>
 					<Confetti
@@ -55,15 +55,14 @@ export const SuccessMessage = memo(
 							Le mail est en route !
 						</h3>
 						<Prose>
-							N'hésitez pas à vérifier votre{' '}
-							<span>boîte de réception</span> et votre dossier de{' '}
-							<span>courrier indésirable</span> aussi.
+							N'hésitez pas à vérifier votre <span>boîte de réception</span> et
+							votre dossier de <span>courrier indésirable</span> aussi.
 						</Prose>
 					</div>
 
 					{children}
 				</div>
 			);
-		},
-	),
+		}
+	)
 );

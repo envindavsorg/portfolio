@@ -15,10 +15,8 @@ const icons: Record<
 > = {
 	bash: () =>
 		import('./content/Bash').then((mod) => ({ default: mod.BashIcon })),
-	bun: () =>
-		import('./content/Bun').then((mod) => ({ default: mod.BunIcon })),
-	css: () =>
-		import('./content/CSS').then((mod) => ({ default: mod.CSSIcon })),
+	bun: () => import('./content/Bun').then((mod) => ({ default: mod.BunIcon })),
+	css: () => import('./content/CSS').then((mod) => ({ default: mod.CSSIcon })),
 	express: () =>
 		import('./content/Express').then((mod) => ({
 			default: mod.ExpressIcon,
@@ -35,8 +33,7 @@ const icons: Record<
 		import('./content/Motion').then((mod) => ({
 			default: mod.MotionIcon,
 		})),
-	git: () =>
-		import('./content/Git').then((mod) => ({ default: mod.GitIcon })),
+	git: () => import('./content/Git').then((mod) => ({ default: mod.GitIcon })),
 	github: () =>
 		import('./content/GitHub').then((mod) => ({ default: mod.GitHubIcon })),
 	html: () =>
@@ -65,16 +62,14 @@ const icons: Record<
 		import('./content/Next').then((mod) => ({ default: mod.NextJSIcon })),
 	node: () =>
 		import('./content/Node').then((mod) => ({ default: mod.NodejsIcon })),
-	npm: () =>
-		import('./content/NPM').then((mod) => ({ default: mod.NPMIcon })),
+	npm: () => import('./content/NPM').then((mod) => ({ default: mod.NPMIcon })),
 	pnpm: () =>
 		import('./content/PNPM').then((mod) => ({ default: mod.PNPMIcon })),
 	postgre: () =>
 		import('./content/Postgre').then((mod) => ({
 			default: mod.PostgreIcon,
 		})),
-	pug: () =>
-		import('./content/Pug').then((mod) => ({ default: mod.PugIcon })),
+	pug: () => import('./content/Pug').then((mod) => ({ default: mod.PugIcon })),
 	python: () =>
 		import('./content/Python').then((mod) => ({ default: mod.PythonIcon })),
 	react: () =>
@@ -102,8 +97,7 @@ const icons: Record<
 			default: mod.TypeScriptIcon,
 		})),
 	v0: () => import('./content/V0').then((mod) => ({ default: mod.V0Icon })),
-	vue: () =>
-		import('./content/Vue').then((mod) => ({ default: mod.VueIcon })),
+	vue: () => import('./content/Vue').then((mod) => ({ default: mod.VueIcon })),
 	vuetify: () =>
 		import('./content/Vuetify').then((mod) => ({
 			default: mod.VuetifyIcon,
@@ -118,7 +112,7 @@ const IconSkeleton = ({ className }: IconSkeletonProps) => (
 	<span
 		className={cn(
 			'inline-block animate-pulse rounded bg-neutral-200 dark:bg-neutral-700',
-			className,
+			className
 		)}
 	/>
 );

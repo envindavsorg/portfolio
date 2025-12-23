@@ -14,18 +14,14 @@ export const CodeCollapsibleWrapper = ({
 	className,
 	children,
 	...props
-}: React.ComponentProps<typeof Collapsible>) => (
+}: React.ComponentProps<typeof Collapsible>): React.JSX.Element => (
 	<CollapsibleWithContext
 		className={cn('group/collapsible not-prose relative my-6', className)}
 		{...props}
 	>
 		<CollapsibleTrigger asChild>
 			<div className="absolute top-2 right-10 z-10 flex items-center gap-2">
-				<Button
-					className="size-6 rounded-md"
-					size="icon"
-					variant="secondary"
-				>
+				<Button className="size-6 rounded-md" size="icon" variant="secondary">
 					<CollapsibleChevronsIcon />
 				</Button>
 

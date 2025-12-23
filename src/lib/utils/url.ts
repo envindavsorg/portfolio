@@ -5,7 +5,7 @@ export const urlToFilename = (url: string) =>
 
 export const addQueryParams = (
 	urlString: string,
-	query: Record<string, string>,
+	query: Record<string, string>
 ): string => {
 	const dummyBase = 'http://base.com';
 	const isRelative = !urlString.startsWith('http');
@@ -13,11 +13,11 @@ export const addQueryParams = (
 	try {
 		const url = new URL(urlString, dummyBase);
 
-		Object.entries(query).forEach(([key, value]) => {
+		for (const [key, value] of Object.entries(query)) {
 			if (value !== undefined && value !== null) {
 				url.searchParams.set(key, value);
 			}
-		});
+		}
 
 		return isRelative ? url.pathname + url.search : url.toString();
 	} catch (_error) {
@@ -36,9 +36,7 @@ export const getAbsoluteUrl = (url: string): string => {
 
 	const siteUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL;
 	if (siteUrl) {
-		const baseUrl = siteUrl.startsWith('http')
-			? siteUrl
-			: `https://${siteUrl}`;
+		const baseUrl = siteUrl.startsWith('http') ? siteUrl : `https://${siteUrl}`;
 		return new URL(url, baseUrl).toString();
 	}
 

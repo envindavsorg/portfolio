@@ -37,7 +37,7 @@ export const Cover = ({
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [shouldAdvance, setShouldAdvance] = useState(false);
 	const [activeTab, setActiveTab] = useState<GreetingId>(
-		GREETINGS_CONFIG[0].id,
+		GREETINGS_CONFIG[0].id
 	);
 	const [direction, setDirection] = useState(0);
 
@@ -64,19 +64,15 @@ export const Cover = ({
 
 	const handleTabChange = (newTabId: string) => {
 		const oldIndex = GREETINGS_CONFIG.findIndex(
-			(item) => item.id === activeTab,
+			(item) => item.id === activeTab
 		);
-		const newIndex = GREETINGS_CONFIG.findIndex(
-			(item) => item.id === newTabId,
-		);
+		const newIndex = GREETINGS_CONFIG.findIndex((item) => item.id === newTabId);
 
 		setDirection(newIndex > oldIndex ? 1 : -1);
 		setActiveTab(newTabId as GreetingId);
 	};
 
-	const activeData = GREETINGS_CONFIG.find(
-		(config) => config.id === activeTab,
-	);
+	const activeData = GREETINGS_CONFIG.find((config) => config.id === activeTab);
 	const currentGreeting: Greeting = GREETINGS[currentIndex];
 	const { Component, className } = GREETINGS_MAP[currentGreeting];
 
@@ -89,24 +85,24 @@ export const Cover = ({
 						'screen-line-before screen-line-after aspect-2/1 before:-top-px after:-bottom-px sm:aspect-3/1',
 						'bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)]',
 						'bg-black/0.75 bg-center bg-size-[10px_10px] dark:bg-white/0.75',
-						'[--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5',
+						'[--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5'
 					)}
 				>
 					<AnimatePresence mode="wait">
 						<Component
-							key={currentGreeting}
+							capture={capture}
 							className={className}
+							key={currentGreeting}
 							onAnimationComplete={handleAnimationComplete}
 							speed={1}
 							strokeWidth={15}
-							capture={capture}
 						/>
 					</AnimatePresence>
 				</div>
 			</ContextMenuTrigger>
 
 			<ContextMenuContent>
-				<Tabs value={activeTab} onValueChange={handleTabChange}>
+				<Tabs onValueChange={handleTabChange} value={activeTab}>
 					<TabsList>
 						{GREETINGS_CONFIG.map(({ id, flag: Flag }) => (
 							<TabsTrigger key={id} value={id}>
@@ -116,52 +112,41 @@ export const Cover = ({
 					</TabsList>
 
 					<div className="overflow-hidden">
-						<AnimatePresence
-							mode="wait"
-							custom={direction}
-							initial={false}
-						>
+						<AnimatePresence custom={direction} initial={false} mode="wait">
 							{activeData && (
 								<motion.div
-									key={activeData.id}
-									custom={direction}
-									variants={variants}
-									initial="enter"
 									animate="center"
+									custom={direction}
 									exit="exit"
+									initial="enter"
+									key={activeData.id}
 									transition={{
 										duration: 0.15,
 										ease: 'easeOut',
 									}}
+									variants={variants}
 								>
-									{GREETINGS_FILE_TYPES.map(
-										({ type, Icon, getLabel }) => (
-											<ContextMenuItem
-												key={type}
-												onClick={() => {
-													const filename = `${activeData.asset}-${resolvedTheme}.${type}`;
-													downloadFile(
-														`/assets/${activeData.asset}/${type}/${filename}`,
-														filename,
-													);
-												}}
-											>
-												<Icon className="text-theme" />
-												<p>
-													{getLabel(activeData.label)}
-												</p>
-											</ContextMenuItem>
-										),
-									)}
+									{GREETINGS_FILE_TYPES.map(({ type, Icon, getLabel }) => (
+										<ContextMenuItem
+											key={type}
+											onClick={() => {
+												const filename = `${activeData.asset}-${resolvedTheme}.${type}`;
+												downloadFile(
+													`/assets/${activeData.asset}/${type}/${filename}`,
+													filename
+												);
+											}}
+										>
+											<Icon className="text-theme" />
+											<p>{getLabel(activeData.label)}</p>
+										</ContextMenuItem>
+									))}
 
 									<ContextMenuSeparator />
 
 									<ContextMenuItem
 										onClick={() =>
-											downloadFile(
-												'/assets/all-effects.zip',
-												'all-effects.zip',
-											)
+											downloadFile('/assets/all-effects.zip', 'all-effects.zip')
 										}
 									>
 										<DownloadIcon className="text-theme" />

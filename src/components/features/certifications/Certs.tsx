@@ -20,21 +20,21 @@ export const Certs = (): React.JSX.Element => (
 
 		<PanelContent className="screen-line-after">
 			<Prose>
-				La technologie évolue rapidement, et rester à jour est
-				essentiel. Ces certifications valident mes compétences
-				techniques et démontrent mon engagement envers l'excellence et
-				l'apprentissage continu dans le développement web moderne.
+				La technologie évolue rapidement, et rester à jour est essentiel. Ces
+				certifications valident mes compétences techniques et démontrent mon
+				engagement envers l'excellence et l'apprentissage continu dans le
+				développement web moderne.
 			</Prose>
 		</PanelContent>
 
 		<CollapsibleList
 			items={CERTIFICATIONS}
-			max={2}
 			keyExtractorAction={(item) => item.credentialID}
 			labels={{
 				showMore: 'Voir toutes les certifications',
 				showLess: 'Fermer',
 			}}
+			max={2}
 			renderItemAction={(item) => <CertItem certification={item} />}
 		/>
 	</Panel>

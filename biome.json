@@ -1,85 +1,107 @@
 {
-	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
-		"lineWidth": 80,
-		"formatWithErrors": true,
-		"useEditorconfig": true
-	},
-	"css": {
-		"formatter": {
-			"lineWidth": 120
-		},
-		"parser": {
-			"tailwindDirectives": true
-		}
-	},
-	"assist": {
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	},
-	"files": {
-		"ignoreUnknown": false,
-		"includes": [
-			"**",
-			"!!node_modules",
-			"!!.next",
-			"!!next-env.d.ts",
-			"!!dist",
-			"!!build",
-			"!!.turbo",
-			"!!.vercel",
-			"!!out",
-			"!!coverage",
-			"!!public/r",
-			"!!src/__registry__",
-			"!!src/scripts/build-registry.mts",
-			"!!.claude"
-		]
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"complexity": {
-				"noImportantStyles": "off"
-			},
-			"correctness": {
-				"useExhaustiveDependencies": "off"
-			},
-			"security": {
-				"noDangerouslySetInnerHtml": "off"
-			},
-			"performance": {
-				"noImgElement": "off",
-				"useTopLevelRegex": "off"
-			},
-			"suspicious": {
-				"noArrayIndexKey": "off"
-			},
-			"nursery": {
-				"useSortedClasses": {
-					"fix": "safe",
-					"options": {
-						"attributes": ["classList", "className"],
-						"functions": ["clsx", "cva", "tw", "cn"]
-					},
-					"level": "warn"
-				}
-			}
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "single",
-			"semicolons": "always"
-		},
-		"parser": {
-			"unsafeParameterDecoratorsEnabled": true
-		}
-	}
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/core"],
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "tab",
+    "lineWidth": 80,
+    "formatWithErrors": true,
+    "useEditorconfig": true
+  },
+  "css": {
+    "formatter": {
+      "lineWidth": 120
+    },
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "!!node_modules",
+      "!!.next",
+      "!!next-env.d.ts",
+      "!!dist",
+      "!!build",
+      "!!.turbo",
+      "!!.vercel",
+      "!!out",
+      "!!coverage",
+      "!!public/r",
+      "!!src/__registry__",
+      "!!src/scripts/build-registry.mts",
+      "!!.claude"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "noStaticElementInteractions": "off",
+        "noNoninteractiveElementInteractions": "off",
+        "noSvgWithoutTitle": "off"
+      },
+      "complexity": {
+        "noImportantStyles": "off",
+        "noExcessiveCognitiveComplexity": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
+      "style": {
+        "noNestedTernary": "off",
+        "useFilenamingConvention": "off",
+        "noParameterAssign": "off",
+        "noExportedImports": "off"
+      },
+      "performance": {
+        "noImgElement": "off",
+        "useTopLevelRegex": "off",
+        "noBarrelFile": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "useAwait": "off"
+      },
+      "nursery": {
+        "noLeakedRender": "off",
+        "noUnusedExpressions": "off",
+        "useMaxParams": {
+          "options": {
+            "max": 6
+          },
+          "level": "warn"
+        },
+        "useSortedClasses": {
+          "fix": "safe",
+          "options": {
+            "attributes": ["classList", "className"],
+            "functions": ["clsx", "cva", "tw", "cn"]
+          },
+          "level": "warn"
+        }
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "always"
+    },
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    }
+  }
 }

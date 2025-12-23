@@ -1,7 +1,11 @@
+import type React from 'react';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Kbd = ({ className, ...props }: ComponentProps<'kbd'>) => (
+export const Kbd = ({
+	className,
+	...props
+}: ComponentProps<'kbd'>): React.JSX.Element => (
 	<kbd
 		className={cn(
 			'inline-flex items-center justify-center gap-1',
@@ -10,14 +14,17 @@ export const Kbd = ({ className, ...props }: ComponentProps<'kbd'>) => (
 			"[&_svg:not([class*='size-'])]:size-3",
 			'[[data-slot=tooltip-content]_&]:bg-background/20 dark:[[data-slot=tooltip-content]_&]:bg-background/10',
 			'[[data-slot=tooltip-content]_&]:text-background',
-			className,
+			className
 		)}
 		data-slot="kbd"
 		{...props}
 	/>
 );
 
-export const KbdGroup = ({ className, ...props }: ComponentProps<'div'>) => (
+export const KbdGroup = ({
+	className,
+	...props
+}: ComponentProps<'div'>): React.JSX.Element => (
 	<kbd
 		className={cn('inline-flex items-center gap-1', className)}
 		data-slot="kbd-group"

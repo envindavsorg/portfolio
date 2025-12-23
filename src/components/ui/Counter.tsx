@@ -20,7 +20,7 @@ export const Counter = memo(
 		step = 1,
 		children,
 		className,
-	}: CounterProps) => {
+	}: CounterProps): React.JSX.Element => {
 		const [displayValue, setDisplayValue] = useState(0);
 
 		useEffect(() => {
@@ -56,9 +56,8 @@ export const Counter = memo(
 
 		return (
 			<span className={cn(className)}>
-				<NumberFlow respectMotionPreference value={displayValue} />{' '}
-				{children}
+				<NumberFlow respectMotionPreference value={displayValue} /> {children}
 			</span>
 		);
-	},
+	}
 );

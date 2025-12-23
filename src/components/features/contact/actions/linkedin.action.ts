@@ -37,5 +37,5 @@ const fetchLinkedInData = async (): Promise<LinkedInData> => {
 export const getLinkedInFollowers = unstable_cache(
 	fetchLinkedInData,
 	[CACHE_TAG],
-	{ revalidate: CACHE_REVALIDATE, tags: [CACHE_TAG] },
+	{ revalidate: CACHE_REVALIDATE, tags: [CACHE_TAG] }
 );

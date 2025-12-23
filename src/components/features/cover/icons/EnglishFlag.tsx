@@ -11,15 +11,7 @@ export const EnglishFlag = memo(
 			{...props}
 		>
 			<title>English</title>
-			<rect
-				fill="#071b65"
-				height="24"
-				rx="4"
-				ry="4"
-				width="30"
-				x="1"
-				y="4"
-			/>
+			<rect fill="#071b65" height="24" rx="4" ry="4" width="30" x="1" y="4" />
 			<path
 				d="M5.101,4h-.101c-1.981,0-3.615,1.444-3.933,3.334L26.899,28h.101c1.981,0,3.615-1.444,3.933-3.334L5.101,4Z"
 				fill="#fff"
@@ -65,5 +57,5 @@ export const EnglishFlag = memo(
 				opacity=".2"
 			/>
 		</svg>
-	),
+	)
 );

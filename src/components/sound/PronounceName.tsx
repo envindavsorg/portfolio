@@ -3,8 +3,8 @@
 import { SpeakerHighIcon } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import type React from 'react';
-import { USER } from '@/config/user';
 import { soundManager } from '@/lib/sound-manager';
+import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 
 type PronounceNameProps = {
@@ -21,7 +21,7 @@ export const PronounceName = ({
 		className={cn(
 			'relative translate-y-px select-none',
 			'cursor-pointer text-muted-foreground hover:text-foreground',
-			className,
+			className
 		)}
 		onClick={() => soundManager.playAudio(sound)}
 		title={`${USER.firstName} ${USER.lastName}`}

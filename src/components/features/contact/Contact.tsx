@@ -1,4 +1,4 @@
-import type { JSX } from 'react';
+import type React from 'react';
 import { memo } from 'react';
 import { Panel } from '@/components/ui/Panel';
 import { FOLLOWERS_CONFIG } from './config/followers-config';
@@ -12,7 +12,7 @@ type ContactProps = {
 };
 
 export const Contact = memo(
-	({ github, linkedin, capture = false }: ContactProps): JSX.Element => {
+	({ github, linkedin, capture = false }: ContactProps): React.JSX.Element => {
 		const counts: Record<string, number> = { github, linkedin };
 
 		return (
@@ -29,21 +29,17 @@ export const Contact = memo(
 					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 						{SOCIAL_LINKS.map((link) => {
 							const config =
-								FOLLOWERS_CONFIG[
-									link.title as keyof typeof FOLLOWERS_CONFIG
-								];
+								FOLLOWERS_CONFIG[link.title as keyof typeof FOLLOWERS_CONFIG];
 
-							const currentCount = config
-								? (counts[config.key] ?? 0)
-								: 0;
+							const currentCount = config ? (counts[config.key] ?? 0) : 0;
 
 							return (
 								<SocialLinkItem
-									key={link.href}
-									link={link}
+									capture={capture}
 									config={config}
 									count={currentCount}
-									capture={capture}
+									key={link.href}
+									link={link}
 								/>
 							);
 						})}
@@ -51,5 +47,5 @@ export const Contact = memo(
 				</div>
 			</Panel>
 		);
-	},
+	}
 );

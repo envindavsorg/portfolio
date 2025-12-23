@@ -17,7 +17,7 @@ import { dayjs } from '@/lib/dayjs';
 export const Utils = (): React.JSX.Element => {
 	const utils: Post[] = getPostsByCategory('utils')
 		.sort((a: Post, b: Post) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)),
+			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 		)
 		.slice(0, 4);
 
@@ -30,8 +30,8 @@ export const Utils = (): React.JSX.Element => {
 
 			<PanelContent className="screen-line-after">
 				<Prose>
-					Optimisez votre workflow avec cette suite d'outils web
-					gratuits pour développeurs.
+					Optimisez votre workflow avec cette suite d'outils web gratuits pour
+					développeurs.
 				</Prose>
 			</PanelContent>
 

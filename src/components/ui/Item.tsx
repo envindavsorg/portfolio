@@ -4,10 +4,13 @@ import type React from 'react';
 import { Separator } from '@/components/ui/Separator';
 import { cn } from '@/lib/utils';
 
-const ItemGroup = ({ className, ...props }: React.ComponentProps<'div'>) => (
+const ItemGroup = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		data-slot="item-group"
 		className={cn('group/item-group flex flex-col', className)}
+		data-slot="item-group"
 		{...props}
 	/>
 );
@@ -15,11 +18,11 @@ const ItemGroup = ({ className, ...props }: React.ComponentProps<'div'>) => (
 const ItemSeparator = ({
 	className,
 	...props
-}: React.ComponentProps<typeof Separator>) => (
+}: React.ComponentProps<typeof Separator>): React.JSX.Element => (
 	<Separator
+		className={cn('my-0', className)}
 		data-slot="item-separator"
 		orientation="horizontal"
-		className={cn('my-0', className)}
 		{...props}
 	/>
 );
@@ -42,7 +45,7 @@ const itemVariants = cva(
 			variant: 'default',
 			size: 'default',
 		},
-	},
+	}
 );
 
 const Item = ({
@@ -52,14 +55,16 @@ const Item = ({
 	asChild = false,
 	...props
 }: React.ComponentProps<'div'> &
-	VariantProps<typeof itemVariants> & { asChild?: boolean }) => {
+	VariantProps<typeof itemVariants> & {
+		asChild?: boolean;
+	}): React.JSX.Element => {
 	const Comp = asChild ? Slot : 'div';
 	return (
 		<Comp
+			className={cn(itemVariants({ variant, size, className }))}
+			data-size={size}
 			data-slot="item"
 			data-variant={variant}
-			data-size={size}
-			className={cn(itemVariants({ variant, size, className }))}
 			{...props}
 		/>
 	);
@@ -72,46 +77,54 @@ const itemMediaVariants = cva(
 			variant: {
 				default: 'bg-transparent',
 				icon: "size-8 rounded-sm border bg-muted [&_svg:not([class*='size-'])]:size-4",
-				image: 'size-10 overflow-hidden rounded-sm [&_img]:size-full [&_img]:object-cover',
+				image:
+					'size-10 overflow-hidden rounded-sm [&_img]:size-full [&_img]:object-cover',
 			},
 		},
 		defaultVariants: {
 			variant: 'default',
 		},
-	},
+	}
 );
 
 const ItemMedia = ({
 	className,
 	variant = 'default',
 	...props
-}: React.ComponentProps<'div'> & VariantProps<typeof itemMediaVariants>) => (
+}: React.ComponentProps<'div'> &
+	VariantProps<typeof itemMediaVariants>): React.JSX.Element => (
 	<div
+		className={cn(itemMediaVariants({ variant, className }))}
 		data-slot="item-media"
 		data-variant={variant}
-		className={cn(itemMediaVariants({ variant, className }))}
 		{...props}
 	/>
 );
 
-const ItemContent = ({ className, ...props }: React.ComponentProps<'div'>) => (
+const ItemContent = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		data-slot="item-content"
 		className={cn(
 			'flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none',
-			className,
+			className
 		)}
+		data-slot="item-content"
 		{...props}
 	/>
 );
 
-const ItemTitle = ({ className, ...props }: React.ComponentProps<'div'>) => (
+const ItemTitle = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		data-slot="item-title"
 		className={cn(
 			'flex w-fit items-center gap-2 font-medium text-sm leading-snug',
-			className,
+			className
 		)}
+		data-slot="item-title"
 		{...props}
 	/>
 );
@@ -119,44 +132,53 @@ const ItemTitle = ({ className, ...props }: React.ComponentProps<'div'>) => (
 const ItemDescription = ({
 	className,
 	...props
-}: React.ComponentProps<'p'>) => (
+}: React.ComponentProps<'p'>): React.JSX.Element => (
 	<p
-		data-slot="item-description"
 		className={cn(
 			'line-clamp-2 text-balance font-normal text-muted-foreground text-sm leading-normal',
 			'[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
-			className,
+			className
 		)}
+		data-slot="item-description"
 		{...props}
 	/>
 );
 
-const ItemActions = ({ className, ...props }: React.ComponentProps<'div'>) => (
+const ItemActions = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		data-slot="item-actions"
 		className={cn('flex items-center gap-2', className)}
+		data-slot="item-actions"
 		{...props}
 	/>
 );
 
-const ItemHeader = ({ className, ...props }: React.ComponentProps<'div'>) => (
+const ItemHeader = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
+		className={cn(
+			'flex basis-full items-center justify-between gap-2',
+			className
+		)}
 		data-slot="item-header"
-		className={cn(
-			'flex basis-full items-center justify-between gap-2',
-			className,
-		)}
 		{...props}
 	/>
 );
 
-const ItemFooter = ({ className, ...props }: React.ComponentProps<'div'>) => (
+const ItemFooter = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		data-slot="item-footer"
 		className={cn(
 			'flex basis-full items-center justify-between gap-2',
-			className,
+			className
 		)}
+		data-slot="item-footer"
 		{...props}
 	/>
 );

@@ -57,8 +57,7 @@ const nextConfig: NextConfig = {
 		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 		minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
 		dangerouslyAllowSVG: true,
-		contentSecurityPolicy:
-			"default-src 'self'; script-src 'none'; sandbox;",
+		contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 	},
 	// This is required to support PostHog trailing slash API requests
 	skipTrailingSlashRedirect: true,
@@ -111,8 +110,7 @@ const nextConfig: NextConfig = {
 };
 
 export default withPostHogConfig(nextConfig, {
-	personalApiKey:
-		process.env.NEXT_PUBLIC_POSTHOG_SOURCE_MAPS_UPLOAD_KEY ?? '',
+	personalApiKey: process.env.NEXT_PUBLIC_POSTHOG_SOURCE_MAPS_UPLOAD_KEY ?? '',
 	envId: process.env.NEXT_PUBLIC_POSTHOG_ENV_ID ?? '',
 	host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? '',
 	sourcemaps: {

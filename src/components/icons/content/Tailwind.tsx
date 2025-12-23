@@ -1,6 +1,9 @@
+import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const TailwindIcon = (props: SVGProps<SVGSVGElement>) => (
+export const TailwindIcon = (
+	props: SVGProps<SVGSVGElement>
+): React.JSX.Element => (
 	<svg
 		height="1em"
 		preserveAspectRatio="xMidYMid"

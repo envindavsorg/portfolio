@@ -45,13 +45,14 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 
 	const { form, isLoading, sendEmail } = useEmailForm();
 
-	useEffect(() => {
-		return () => {
+	useEffect(
+		() => () => {
 			if (resetTimeoutRef.current) {
 				clearTimeout(resetTimeoutRef.current);
 			}
-		};
-	}, []);
+		},
+		[]
+	);
 
 	useEffect(() => {
 		if (!open) {
@@ -81,46 +82,39 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 				});
 			}
 		},
-		[sendEmail, isDesktop],
+		[sendEmail, isDesktop]
 	);
 
 	const handleClose = useCallback(() => setOpen(false), []);
 
 	if (isDesktop) {
 		return (
-			<Dialog open={open} onOpenChange={setOpen}>
+			<Dialog onOpenChange={setOpen} open={open}>
 				<DialogTrigger asChild>
 					<Button>Recevoir par mail</Button>
 				</DialogTrigger>
 
-				<DialogContent
-					onInteractOutside={(event) => event.preventDefault()}
-				>
+				<DialogContent onInteractOutside={(event) => event.preventDefault()}>
 					{formState === 'form' && (
 						<>
 							<DialogHeader>
 								<DialogTitle>
-									Recevez mon CV <br /> directement dans votre
-									boîte mail !
+									Recevez mon CV <br /> directement dans votre boîte mail !
 								</DialogTitle>
 								<DialogDescription>
-									Entrez votre prénom et votre adresse e-mail
-									dans le formulaire ci-dessous pour recevoir
-									immédiatement mon CV.
+									Entrez votre prénom et votre adresse e-mail dans le formulaire
+									ci-dessous pour recevoir immédiatement mon CV.
 								</DialogDescription>
 							</DialogHeader>
 							<CurriculumVitaeForm
 								className="mt-6 space-y-3"
-								onSubmitAction={handleSubmit}
 								form={form}
 								isLoading={isLoading}
+								onSubmitAction={handleSubmit}
 							>
 								<div className="mt-6 flex flex-row items-center justify-between">
 									<DialogClose asChild>
-										<Button
-											onClick={handleClose}
-											variant="outline"
-										>
+										<Button onClick={handleClose} variant="outline">
 											Annuler
 										</Button>
 									</DialogClose>
@@ -141,17 +135,10 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 					{formState === 'success' && (
 						<>
 							<VisuallyHidden asChild>
-								<DialogTitle>
-									Le mail est en route !
-								</DialogTitle>
+								<DialogTitle>Le mail est en route !</DialogTitle>
 							</VisuallyHidden>
-							<SuccessMessage
-								ref={iconRef}
-								className="aspect-square"
-							>
-								<Button onClick={handleClose}>
-									D'accord !
-								</Button>
+							<SuccessMessage className="aspect-square" ref={iconRef}>
+								<Button onClick={handleClose}>D'accord !</Button>
 							</SuccessMessage>
 						</>
 					)}
@@ -159,17 +146,10 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 					{formState === 'error' && (
 						<>
 							<VisuallyHidden asChild>
-								<DialogTitle>
-									Une erreur est survenue !
-								</DialogTitle>
+								<DialogTitle>Une erreur est survenue !</DialogTitle>
 							</VisuallyHidden>
-							<ErrorMessage
-								ref={iconRef}
-								className="aspect-square"
-							>
-								<Button onClick={handleClose}>
-									Je comprends !
-								</Button>
+							<ErrorMessage className="aspect-square" ref={iconRef}>
+								<Button onClick={handleClose}>Je comprends !</Button>
 							</ErrorMessage>
 						</>
 					)}
@@ -179,36 +159,32 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 	}
 
 	return (
-		<Drawer open={open} onOpenChange={setOpen}>
+		<Drawer onOpenChange={setOpen} open={open}>
 			<DrawerTrigger asChild>
 				<Button>Recevoir par mail</Button>
 			</DrawerTrigger>
 
-			<DrawerContent
-				onInteractOutside={(event) => event.preventDefault()}
-			>
+			<DrawerContent onInteractOutside={(event) => event.preventDefault()}>
 				{formState === 'form' && (
 					<>
 						<DrawerHeader className="!pt-6 text-left">
 							<DrawerTitle className="max-w-[18rem] font-semibold text-xl sm:text-2xl">
-								Recevez mon CV directement dans votre boîte mail
-								!
+								Recevez mon CV directement dans votre boîte mail !
 							</DrawerTitle>
 
 							<DrawerDescription>
 								Entrez votre <span>prénom</span> et votre{' '}
-								<span>adresse e-mail</span> dans le formulaire
-								ci-dessous pour{' '}
-								<span className="text-theme">recevoir</span>{' '}
-								immédiatement mon CV.
+								<span>adresse e-mail</span> dans le formulaire ci-dessous pour{' '}
+								<span className="text-theme">recevoir</span> immédiatement mon
+								CV.
 							</DrawerDescription>
 						</DrawerHeader>
 
 						<CurriculumVitaeForm
 							className="mt-4 space-y-3 px-4"
-							onSubmitAction={handleSubmit}
 							form={form}
 							isLoading={isLoading}
+							onSubmitAction={handleSubmit}
 						>
 							<DrawerFooter className="!px-0">
 								<Button disabled={isLoading} type="submit">
@@ -221,10 +197,7 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 									)}
 								</Button>
 								<DrawerClose asChild>
-									<Button
-										onClick={handleClose}
-										variant="outline"
-									>
+									<Button onClick={handleClose} variant="outline">
 										Fermer la fenêtre
 									</Button>
 								</DrawerClose>
@@ -238,7 +211,7 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 						<VisuallyHidden asChild>
 							<DrawerTitle>Le mail est en route !</DrawerTitle>
 						</VisuallyHidden>
-						<SuccessMessage ref={iconRef} className="px-6 py-8">
+						<SuccessMessage className="px-6 py-8" ref={iconRef}>
 							<Button onClick={handleClose}>D'accord !</Button>
 						</SuccessMessage>
 					</>
@@ -249,10 +222,8 @@ export const CurriculumVitaeOverlay = (): React.JSX.Element => {
 						<VisuallyHidden asChild>
 							<DrawerTitle>Une erreur est survenue !</DrawerTitle>
 						</VisuallyHidden>
-						<ErrorMessage ref={iconRef} className="px-6 py-8">
-							<Button onClick={handleClose}>
-								Je comprends !
-							</Button>
+						<ErrorMessage className="px-6 py-8" ref={iconRef}>
+							<Button onClick={handleClose}>Je comprends !</Button>
 						</ErrorMessage>
 					</>
 				)}

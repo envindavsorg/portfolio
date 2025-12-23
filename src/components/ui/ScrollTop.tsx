@@ -10,13 +10,14 @@ import { cn } from '@/lib/utils';
 
 const VISIBILITY_THRESHOLD = 400;
 
-const ScrollTop = ({ className, ...props }: React.ComponentProps<'button'>) => {
+const ScrollTop = ({
+	className,
+	...props
+}: React.ComponentProps<'button'>): React.JSX.Element => {
 	const { scrollY } = useScroll();
 
 	const [visible, setVisible] = useState(false);
-	const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>(
-		'down',
-	);
+	const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
 	const playerRef = useRef<Player>(null);
 	const prevScrollYRef = useRef(0);
 
@@ -57,7 +58,7 @@ const ScrollTop = ({ className, ...props }: React.ComponentProps<'button'>) => {
 				'duration-300 data-[scroll-direction=down]:opacity-30',
 				'data-[scroll-direction=up]:opacity-100',
 				'data-[visible=false]:opacity-0',
-				className,
+				className
 			)}
 			data-scroll-direction={scrollDirection}
 			data-visible={visible}

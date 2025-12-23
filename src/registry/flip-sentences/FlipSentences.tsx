@@ -66,18 +66,18 @@ export const FlipSentences = ({
 		<div className={cn('relative overflow-hidden', className)}>
 			<AnimatePresence mode="wait">
 				<motion.p
-					key={sentences[currentIndex]}
-					initial={{ y: 10, opacity: 0 }}
 					animate={{ y: 0, opacity: 1 }}
-					exit={{ y: -10, opacity: 0 }}
-					transition={{ duration: 0.25, ease: 'easeOut' }}
 					className="text-balance font-mono text-muted-foreground text-sm"
+					exit={{ y: -10, opacity: 0 }}
+					initial={{ y: 10, opacity: 0 }}
+					key={sentences[currentIndex]}
+					transition={{ duration: 0.25, ease: 'easeOut' }}
 				>
 					{sentences[currentIndex]}
 				</motion.p>
 			</AnimatePresence>
 
-			<span className="invisible block h-0" aria-hidden="true">
+			<span aria-hidden="true" className="invisible block h-0">
 				{[...sentences].sort((a, b) => b.length - a.length)[0]}
 			</span>
 		</div>

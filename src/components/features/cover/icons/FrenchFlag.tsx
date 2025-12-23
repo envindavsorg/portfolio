@@ -31,5 +31,5 @@ export const FrenchFlag = memo(
 				opacity=".2"
 			/>
 		</svg>
-	),
+	)
 );

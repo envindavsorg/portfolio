@@ -12,8 +12,6 @@ import { MDX } from '@/components/blog/markdown/mdx';
 import { Button } from '@/components/ui/Button';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
-import { SITE_INFO } from '@/config/site';
-import { USER } from '@/config/user';
 import {
 	findNeighbour,
 	getPostBySlug,
@@ -21,6 +19,7 @@ import {
 } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 
 type Props = {
@@ -75,7 +74,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	image:
 		post.metadata.imageLight ||
 		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
-	url: `${SITE_INFO.url}/components/${post.slug}`,
+	url: `https://cuzeacflorin.fr/components/${post.slug}`,
 	datePublished: dayjs(post.metadata.createdAt).toISOString(),
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
 	author: {
@@ -106,10 +105,7 @@ const Page = async ({ params }: Props) => {
 		<>
 			<script
 				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(getPageJsonLd(post)).replace(
-						/</g,
-						'\\u003c',
-					),
+					__html: JSON.stringify(getPageJsonLd(post)).replace(/</g, '\\u003c'),
 				}}
 				type="application/ld+json"
 			/>
@@ -165,7 +161,7 @@ const Page = async ({ params }: Props) => {
 					className={cn(
 						'h-8',
 						'before:absolute before:-left-[100vw] before:-z-1 before:h-full before:w-[200vw]',
-						'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56',
+						'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56'
 					)}
 				/>
 			</div>

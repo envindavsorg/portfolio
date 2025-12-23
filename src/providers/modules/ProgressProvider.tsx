@@ -7,7 +7,10 @@ type AppProgressProviderProps = {
 	children: React.ReactNode;
 };
 
-const ProgressProvider = ({ children, ...props }: AppProgressProviderProps) => (
+const ProgressProvider = ({
+	children,
+	...props
+}: AppProgressProviderProps): React.JSX.Element => (
 	<AppProgressProvider
 		color="var(--color-theme)"
 		delay={500}

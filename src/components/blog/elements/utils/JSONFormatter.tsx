@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
 import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 
-export const JSONFormatter = () => {
+export const JSONFormatter = (): React.JSX.Element => {
 	const [input, setInput] = useState('');
 	const [output, setOutput] = useState('');
 	const { buttonText, handleCopy } = useCopyToClipboard();
@@ -27,7 +27,7 @@ export const JSONFormatter = () => {
 				setOutput('Oups, le JSON est incorrect !');
 			}
 		},
-		[],
+		[]
 	);
 
 	return (
@@ -35,34 +35,34 @@ export const JSONFormatter = () => {
 			<div className="screen-line-after flex flex-col gap-y-6 py-3">
 				<div className="flex flex-col gap-y-2">
 					<Label
-						htmlFor="jsonTextArea"
 						className="text-muted-foreground text-xs"
+						htmlFor="jsonTextArea"
 					>
 						JSON
 					</Label>
 					<Textarea
 						className="outline-0"
+						id="jsonTextArea"
 						onChange={handleChange}
 						placeholder="Collez le JSON ici ..."
-						value={input}
-						id="jsonTextArea"
 						rows={6}
+						value={input}
 					/>
 				</div>
 
 				<div className="flex flex-col gap-y-2">
 					<Label
-						htmlFor="jsonTextAreaOutput"
 						className="text-muted-foreground text-xs"
+						htmlFor="jsonTextAreaOutput"
 					>
 						JSON mis en forme
 					</Label>
 					<Textarea
 						className="outline-0"
-						value={output}
 						id="jsonTextAreaOutput"
-						rows={6}
 						readOnly
+						rows={6}
+						value={output}
 					/>
 				</div>
 			</div>

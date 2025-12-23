@@ -76,7 +76,7 @@ src/
 ├── actions/          # Server Actions
 │   └── github.action.ts
 ├── config/           # Configuration
-│   ├── site.ts       # Site metadata and navigation
+│   ├── theme.ts       # Site metadata and navigation
 │   └── registry.ts   # Registry configuration
 ├── hooks/            # Custom React hooks
 ├── utils/            # Utility functions
@@ -118,7 +118,7 @@ npx shadcn@latest add @envindavsorg/apple-hello-effect
 
 - **Biome**: `biome.json` - Linting and formatting rules (extends ultracite)
 - **TypeScript**: `tsconfig.json` - Strict mode enabled, `@/*` path alias
-- **Site Config**: `src/config/site.ts` - TopBar, metadata, GitHub repo info
+- **Site Config**: `src/config/theme.ts` - TopBar, metadata, GitHub repo info
 - **Registry Config**: `src/config/registry.ts` - Component registry configuration
 - **Environment**: `.env.local` - Required for GitHub token and app URL
 

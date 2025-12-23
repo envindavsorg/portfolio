@@ -47,5 +47,5 @@ export const SpanishFlag = memo(
 				fill="#a0251e"
 			/>
 		</svg>
-	),
+	)
 );

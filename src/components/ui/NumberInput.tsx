@@ -30,8 +30,8 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 			thousandSeparator,
 			placeholder,
 			defaultValue,
-			min = -Infinity,
-			max = Infinity,
+			min = Number.NEGATIVE_INFINITY,
+			max = Number.POSITIVE_INFINITY,
 			onValueChange,
 			fixedDecimalScale = false,
 			decimalScale = 0,
@@ -40,17 +40,17 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 			value: controlledValue,
 			...props
 		},
-		ref,
-	) => {
+		ref
+	): React.JSX.Element => {
 		const [value, setValue] = useState<number | undefined>(
-			controlledValue ?? defaultValue,
+			controlledValue ?? defaultValue
 		);
 
 		const handleIncrement = useCallback(() => {
 			setValue((prev) =>
 				prev === undefined
 					? (stepper ?? 1)
-					: Math.min(prev + (stepper ?? 1), max),
+					: Math.min(prev + (stepper ?? 1), max)
 			);
 		}, [stepper, max]);
 
@@ -58,7 +58,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 			setValue((prev) =>
 				prev === undefined
 					? -(stepper ?? 1)
-					: Math.max(prev - (stepper ?? 1), min),
+					: Math.max(prev - (stepper ?? 1), min)
 			);
 		}, [stepper, min]);
 
@@ -100,22 +100,22 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 		return (
 			<div className="flex items-center">
 				<NumericFormat
-					value={value}
-					onValueChange={handleChange}
-					thousandSeparator={thousandSeparator}
+					allowNegative={min < 0}
+					className="relative rounded-r-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+					customInput={Input}
 					decimalScale={decimalScale}
 					fixedDecimalScale={fixedDecimalScale}
-					allowNegative={min < 0}
-					valueIsNumericString
-					onBlur={handleBlur}
+					getInputRef={ref}
 					max={max}
 					min={min}
-					suffix={suffix}
-					prefix={prefix}
-					customInput={Input}
+					onBlur={handleBlur}
+					onValueChange={handleChange}
 					placeholder={placeholder}
-					className="relative rounded-r-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-					getInputRef={ref}
+					prefix={prefix}
+					suffix={suffix}
+					thousandSeparator={thousandSeparator}
+					value={value}
+					valueIsNumericString
 					{...props}
 				/>
 
@@ -123,23 +123,23 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 					<Button
 						aria-label="Increase value"
 						className="h-5 rounded-none border-input border-b-[0.5px] border-l-0 px-2 focus-visible:relative"
-						variant="outline"
-						onClick={handleIncrement}
 						disabled={value === max}
+						onClick={handleIncrement}
+						variant="outline"
 					>
 						<CaretUpIcon className="size-3" />
 					</Button>
 					<Button
 						aria-label="Decrease value"
 						className="h-5 rounded-none border-input border-t-[0.5px] border-l-0 px-2 focus-visible:relative"
-						variant="outline"
-						onClick={handleDecrement}
 						disabled={value === min}
+						onClick={handleDecrement}
+						variant="outline"
 					>
 						<CaretDownIcon className="size-3" />
 					</Button>
 				</div>
 			</div>
 		);
-	},
+	}
 );

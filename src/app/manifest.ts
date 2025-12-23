@@ -1,10 +1,10 @@
 import type { MetadataRoute } from 'next';
-import { SITE_INFO } from '@/config/site';
+import { USER } from '@/lib/user';
 
 const manifest = (): MetadataRoute.Manifest => ({
-	short_name: SITE_INFO.name,
-	name: SITE_INFO.name,
-	description: SITE_INFO.description,
+	short_name: USER.firstName,
+	name: USER.firstName,
+	description: USER.bio,
 	icons: [
 		{
 			src: '/icon-192x192.png',

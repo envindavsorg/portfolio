@@ -28,7 +28,7 @@ const NotFound = () => (
 							'size-26 select-none sm:size-32 lg:size-40',
 							'ring-1 ring-border ring-offset-2 ring-offset-background',
 							'font-extrabold font-mono text-3xl text-theme md:text-5xl',
-							'bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-center bg-size-[10px_10px] [--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5',
+							'bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-center bg-size-[10px_10px] [--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5'
 						)}
 					>
 						<Counter step={2} value={4} />
@@ -42,7 +42,7 @@ const NotFound = () => (
 				<div
 					className={cn(
 						'flex grow items-end pb-1 pl-4',
-						'bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] [--pattern-foreground:var(--color-edge)]/56',
+						'bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] [--pattern-foreground:var(--color-edge)]/56'
 					)}
 				>
 					<div className="line-clamp-1 select-none font-mono text-xs text-zinc-300 dark:text-zinc-800">
@@ -66,8 +66,8 @@ const NotFound = () => (
 		<Panel>
 			<PanelContent>
 				<Prose>
-					Peut-être avez-vous cliqué sur un ancien lien ou avez-vous
-					fait une faute de frappe ...
+					Peut-être avez-vous cliqué sur un ancien lien ou avez-vous fait une
+					faute de frappe ...
 				</Prose>
 			</PanelContent>
 			<div className="screen-line-before flex justify-center py-2">

@@ -16,7 +16,7 @@ const contributionLevelToNumber = (
 		| 'FIRST_QUARTILE'
 		| 'SECOND_QUARTILE'
 		| 'THIRD_QUARTILE'
-		| 'FOURTH_QUARTILE',
+		| 'FOURTH_QUARTILE'
 ): number => {
 	const levelMap = {
 		NONE: 0,
@@ -41,17 +41,16 @@ const fetchGitHubData = async (): Promise<GitHubUserData> => {
 			repoName: GITHUB_REPO_NAME,
 			from: from.toISOString(),
 			to: to.toISOString(),
-		},
+		}
 	);
 
-	const contributions =
-		user.contributionsCollection.contributionCalendar.weeks
-			.flatMap((week) => week.contributionDays)
-			.map((day) => ({
-				date: day.date,
-				count: day.contributionCount,
-				level: contributionLevelToNumber(day.contributionLevel),
-			}));
+	const contributions = user.contributionsCollection.contributionCalendar.weeks
+		.flatMap((week) => week.contributionDays)
+		.map((day) => ({
+			date: day.date,
+			count: day.contributionCount,
+			level: contributionLevelToNumber(day.contributionLevel),
+		}));
 
 	return {
 		login: user.login,
@@ -61,7 +60,7 @@ const fetchGitHubData = async (): Promise<GitHubUserData> => {
 		following: user.following.totalCount,
 		stars: user.repositories.nodes.reduce(
 			(total, repo) => total + repo.stargazers.totalCount,
-			0,
+			0
 		),
 		branch: repository?.defaultBranchRef?.name,
 		commit: {
@@ -78,7 +77,7 @@ export const getGitHubUserData = unstable_cache(
 	{
 		revalidate: CACHE_REVALIDATE,
 		tags: [CACHE_TAG],
-	},
+	}
 );
 
 export const revalidateGitHubData = async () => updateTag(CACHE_TAG);

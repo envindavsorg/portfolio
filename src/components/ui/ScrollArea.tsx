@@ -8,7 +8,9 @@ const ScrollArea = ({
 	className,
 	children,
 	...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) => (
+}: React.ComponentProps<
+	typeof ScrollAreaPrimitive.Root
+>): React.JSX.Element => (
 	<ScrollAreaPrimitive.Root
 		className={cn('relative', className)}
 		data-slot="scroll-area"
@@ -29,7 +31,9 @@ const ScrollBar = ({
 	className,
 	orientation = 'vertical',
 	...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) => (
+}: React.ComponentProps<
+	typeof ScrollAreaPrimitive.ScrollAreaScrollbar
+>): React.JSX.Element => (
 	<ScrollAreaPrimitive.ScrollAreaScrollbar
 		className={cn(
 			'flex touch-none select-none p-px transition-colors',
@@ -37,7 +41,7 @@ const ScrollBar = ({
 				'h-full w-2.5 border-l border-l-transparent',
 			orientation === 'horizontal' &&
 				'h-2.5 flex-col border-t border-t-transparent',
-			className,
+			className
 		)}
 		data-slot="scroll-area-scrollbar"
 		orientation={orientation}

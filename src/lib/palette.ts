@@ -44,6 +44,7 @@ export const hexToHsl = (hex: string): [number, number, number] => {
 			case b:
 				h = (r - g) / d + 4;
 				break;
+			default:
 		}
 
 		h /= 6;

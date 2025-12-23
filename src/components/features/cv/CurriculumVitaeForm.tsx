@@ -29,10 +29,7 @@ export const CurriculumVitaeForm = ({
 	children,
 }: CurriculumVitaeFormProps): React.JSX.Element => (
 	<Form {...form}>
-		<form
-			className={className}
-			onSubmit={form.handleSubmit(onSubmitAction)}
-		>
+		<form className={className} onSubmit={form.handleSubmit(onSubmitAction)}>
 			<FormField
 				control={form.control}
 				name="firstName"
@@ -40,11 +37,7 @@ export const CurriculumVitaeForm = ({
 					<FormItem>
 						<FormLabel>Votre prénom :</FormLabel>
 						<FormControl>
-							<Input
-								disabled={isLoading}
-								placeholder="..."
-								{...field}
-							/>
+							<Input disabled={isLoading} placeholder="..." {...field} />
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -56,9 +49,7 @@ export const CurriculumVitaeForm = ({
 				name="recipientEmail"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel className="text-xs">
-							Votre adresse e-mail :
-						</FormLabel>
+						<FormLabel className="text-xs">Votre adresse e-mail :</FormLabel>
 						<FormControl>
 							<Input
 								disabled={isLoading}

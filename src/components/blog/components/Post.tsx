@@ -5,6 +5,7 @@ import {
 } from '@phosphor-icons/react/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
+import type React from 'react';
 import { lazy } from 'react';
 import { IsNew } from '@/components/blog/components/IsNew';
 import { Tag } from '@/components/ui/Tag';
@@ -15,7 +16,7 @@ import { cn } from '@/lib/utils';
 const ReactIcon = lazy(() =>
 	import('@/components/icons/content/React').then((m) => ({
 		default: m.ReactIcon,
-	})),
+	}))
 );
 
 type PostProps = {
@@ -23,11 +24,14 @@ type PostProps = {
 	shouldPreloadImage?: boolean;
 };
 
-export const Post = ({ post, shouldPreloadImage }: PostProps) => (
+export const Post = ({
+	post,
+	shouldPreloadImage,
+}: PostProps): React.JSX.Element => (
 	<Link
 		className={cn(
 			'group/post flex flex-col gap-y-4 p-4',
-			'max-sm:screen-line-before max-sm:screen-line-after sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after',
+			'max-sm:screen-line-before max-sm:screen-line-after sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after'
 		)}
 		href={
 			post.metadata.category === 'article'
@@ -60,9 +64,7 @@ export const Post = ({ post, shouldPreloadImage }: PostProps) => (
 
 				<div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10" />
 
-				{post.metadata.new && (
-					<IsNew className="absolute top-3 right-5" />
-				)}
+				{post.metadata.new && <IsNew className="absolute top-3 right-5" />}
 				{post.metadata.tags?.includes('React') && (
 					<ReactIcon
 						aria-hidden
@@ -86,14 +88,8 @@ export const Post = ({ post, shouldPreloadImage }: PostProps) => (
 					<dd className="flex gap-x-2 font-medium text-sm">
 						<Tag className="flex items-center gap-x-2 text-foreground">
 							<CalendarBlankIcon className="size-4 text-theme" />
-							<time
-								dateTime={dayjs(
-									post.metadata.createdAt,
-								).toISOString()}
-							>
-								{dayjs(post.metadata.createdAt).format(
-									'ddd DD MMM',
-								)}
+							<time dateTime={dayjs(post.metadata.createdAt).toISOString()}>
+								{dayjs(post.metadata.createdAt).format('ddd DD MMM')}
 							</time>
 						</Tag>
 						<Tag className="flex items-center gap-x-2 text-foreground">

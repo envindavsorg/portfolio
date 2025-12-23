@@ -20,23 +20,22 @@ export const Projects = (): React.JSX.Element => (
 
 		<PanelContent className="screen-line-after">
 			<Prose>
-				Une sélection de projets qui illustrent mon parcours et mes
-				compétences. Du développement d'applications web modernes aux
-				expérimentations techniques, chaque projet représente un défi
-				relevé et des compétences acquises. Certains sont en production,
-				d'autres sont des side-projects qui me permettent d'explorer de
-				nouvelles technologies.
+				Une sélection de projets qui illustrent mon parcours et mes compétences.
+				Du développement d'applications web modernes aux expérimentations
+				techniques, chaque projet représente un défi relevé et des compétences
+				acquises. Certains sont en production, d'autres sont des side-projects
+				qui me permettent d'explorer de nouvelles technologies.
 			</Prose>
 		</PanelContent>
 
 		<CollapsibleList
 			items={PROJECTS}
-			max={4}
 			keyExtractorAction={(item) => item.id}
 			labels={{
 				showMore: 'Voir tous les projets',
 				showLess: 'Fermer',
 			}}
+			max={4}
 			renderItemAction={(item) => <ProjectsItem project={item} />}
 		/>
 	</Panel>

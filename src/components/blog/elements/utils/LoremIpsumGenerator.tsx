@@ -1,6 +1,7 @@
 'use client';
 
 import { CopyIcon } from '@phosphor-icons/react';
+import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { AnimatedCheckbox } from '@/components/ui/AnimatedCheckbox';
 import { Button } from '@/components/ui/Button';
@@ -28,7 +29,7 @@ const generationOptions = [
 
 declare type GenerationUnit = 'words' | 'sentences' | 'paragraphs';
 
-export const LoremIpsumGenerator = () => {
+export const LoremIpsumGenerator = (): React.JSX.Element => {
 	const [inputAmount, setInputAmount] = useState(2);
 	const [textAreaRows, setTextAreaRows] = useState(9);
 	const [output, setOutput] = useState('');
@@ -64,32 +65,30 @@ export const LoremIpsumGenerator = () => {
 		<>
 			<div className="screen-line-after flex flex-col gap-y-2 py-3">
 				<Label
-					htmlFor="howManyParagraphs"
 					className="text-muted-foreground text-xs"
+					htmlFor="howManyParagraphs"
 				>
 					Combien de paragraphes ?
 				</Label>
 				<div className="flex items-center gap-3">
 					<div className="flex-1">
 						<NumberInput
-							id="howManyParagraphs"
-							placeholder="Entrez le nombre de paragraphes ..."
-							min={1}
-							max={25}
-							value={inputAmount}
 							defaultValue={2}
-							onValueChange={handleChange}
+							id="howManyParagraphs"
+							max={25}
+							min={1}
 							onFocus={(event) => event.target.select()}
+							onValueChange={handleChange}
+							placeholder="Entrez le nombre de paragraphes ..."
+							value={inputAmount}
 						/>
 					</div>
 					<Combobox
 						className="w-42"
 						data={generationOptions}
-						onSelect={(value: GenerationUnit) =>
-							setGenerationUnit(value)
-						}
-						value={generationUnit}
+						onSelect={(value: GenerationUnit) => setGenerationUnit(value)}
 						search={false}
+						value={generationUnit}
 					/>
 				</div>
 			</div>
@@ -100,14 +99,9 @@ export const LoremIpsumGenerator = () => {
 						checked={startWithStandard}
 						disabled={generationUnit === 'words'}
 						id="standardSentence"
-						onCheckedChange={() =>
-							setStartWithStandard(!startWithStandard)
-						}
+						onCheckedChange={() => setStartWithStandard(!startWithStandard)}
 					/>
-					<Label
-						className="cursor-pointer"
-						htmlFor="standardSentence"
-					>
+					<Label className="cursor-pointer" htmlFor="standardSentence">
 						Lorem Ipsum en premier
 					</Label>
 				</div>
@@ -126,16 +120,16 @@ export const LoremIpsumGenerator = () => {
 
 			<div className="screen-line-after flex flex-col gap-y-2 py-3">
 				<Label
-					htmlFor="generatedText"
 					className="text-muted-foreground text-xs"
+					htmlFor="generatedText"
 				>
 					Texte généré
 				</Label>
 				<Textarea
+					id="generatedText"
 					readOnly
 					rows={textAreaRows}
 					value={output}
-					id="generatedText"
 				/>
 			</div>
 

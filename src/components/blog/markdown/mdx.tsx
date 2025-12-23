@@ -40,37 +40,37 @@ import { cn } from '@/lib/utils';
 const JSONIcon = lazy(() =>
 	import('@/components/icons/content/JSON').then((m) => ({
 		default: m.JSONIcon,
-	})),
+	}))
 );
 
 const CSSIcon = lazy(() =>
 	import('@/components/icons/content/CSS').then((m) => ({
 		default: m.CSSIcon,
-	})),
+	}))
 );
 
 const JavaScriptIcon = lazy(() =>
 	import('@/components/icons/content/JavaScript').then((m) => ({
 		default: m.JavaScriptIcon,
-	})),
+	}))
 );
 
 const TypeScriptIcon = lazy(() =>
 	import('@/components/icons/content/TypeScript').then((m) => ({
 		default: m.TypeScriptIcon,
-	})),
+	}))
 );
 
 const ReactIcon = lazy(() =>
 	import('@/components/icons/content/React').then((m) => ({
 		default: m.ReactIcon,
-	})),
+	}))
 );
 
 const ShadcnIcon = lazy(() =>
 	import('@/components/icons/content/Shadcn').then((m) => ({
 		default: m.ShadcnIcon,
-	})),
+	}))
 );
 
 const getIconForLanguageExtension = (language: string) => {
@@ -115,13 +115,9 @@ const components: MDXRemoteProps['components'] = {
 			/>
 		);
 	},
-	figcaption: ({
-		children,
-		...props
-	}: React.ComponentProps<'figcaption'>) => {
+	figcaption: ({ children, ...props }: React.ComponentProps<'figcaption'>) => {
 		const iconExtension =
-			'data-language' in props &&
-			typeof props['data-language'] === 'string'
+			'data-language' in props && typeof props['data-language'] === 'string'
 				? getIconForLanguageExtension(props['data-language'])
 				: null;
 
@@ -254,16 +250,8 @@ const options: MDXRemoteProps['options'] = {
 			],
 			() => (tree) => {
 				visit(tree, (node) => {
-					if (
-						node?.type === 'element' &&
-						node?.tagName === 'figure'
-					) {
-						if (
-							!(
-								'data-rehype-pretty-code-figure' in
-								node.properties
-							)
-						) {
+					if (node?.type === 'element' && node?.tagName === 'figure') {
+						if (!('data-rehype-pretty-code-figure' in node.properties)) {
 							return;
 						}
 
@@ -274,8 +262,7 @@ const options: MDXRemoteProps['options'] = {
 
 						preElement.properties.__withMeta__ =
 							node.children.at(0).tagName === 'figcaption';
-						preElement.properties.__rawString__ =
-							node.__rawString__;
+						preElement.properties.__rawString__ = node.__rawString__;
 					}
 				});
 			},
@@ -285,6 +272,6 @@ const options: MDXRemoteProps['options'] = {
 	},
 };
 
-export const MDX = ({ code }: { code: string }) => (
+export const MDX = ({ code }: { code: string }): React.JSX.Element => (
 	<MDXRemote components={components} options={options} source={code} />
 );

@@ -13,7 +13,7 @@ import {
 	PanelTitle,
 } from '@/components/ui/Panel';
 import { Prose } from '@/components/ui/Typography';
-import { USER } from '@/config/user';
+import { USER } from '@/lib/user';
 
 export const CurriculumVitae = (): React.JSX.Element => (
 	<Panel>
@@ -24,29 +24,28 @@ export const CurriculumVitae = (): React.JSX.Element => (
 		<PanelContent className="space-y-2">
 			<Prose>
 				Découvrez mon parcours professionnel à travers mon{' '}
-				<span>CV détaillé</span>, qui retrace mes expériences,
-				compétences techniques et réalisations dans le développement web
-				full-stack. Vous y trouverez un <span>aperçu complet</span> de
-				mon expertise et de ma progression dans le domaine.
+				<span>CV détaillé</span>, qui retrace mes expériences, compétences
+				techniques et réalisations dans le développement web full-stack. Vous y
+				trouverez un <span>aperçu complet</span> de mon expertise et de ma
+				progression dans le domaine.
 			</Prose>
 			<Prose>
-				Pour recevoir une <span>copie actualisée</span> directement dans
-				votre boîte e-mail, cliquez sur le bouton ci-dessous. Je serai
-				ravi d'échanger avec vous sur d'éventuelles opportunités de
-				collaboration.
+				Pour recevoir une <span>copie actualisée</span> directement dans votre
+				boîte e-mail, cliquez sur le bouton ci-dessous. Je serai ravi d'échanger
+				avec vous sur d'éventuelles opportunités de collaboration.
 			</Prose>
 		</PanelContent>
 
 		<PanelFooter>
 			<Link
 				href={USER.documents.cv.url}
-				rel="noopener noreferrer"
-				target="_blank"
 				onClick={() => {
 					posthog.capture('cv_download_clicked', {
 						cv_url: USER.documents.cv.url,
 					});
 				}}
+				rel="noopener noreferrer"
+				target="_blank"
 			>
 				<Button variant="outline">Voir et télécharger</Button>
 			</Link>

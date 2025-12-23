@@ -17,7 +17,7 @@ const UTILS_TAG_ICONS = {
 } as const;
 
 export const getIconForUtilsTags = (
-	tags?: string[],
+	tags?: string[]
 ): React.ForwardRefExoticComponent<IconProps> | null => {
 	const tag = tags?.find((t: string) => t in UTILS_TAG_ICONS);
 	return tag ? UTILS_TAG_ICONS[tag as keyof typeof UTILS_TAG_ICONS] : null;

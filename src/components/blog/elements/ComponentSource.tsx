@@ -13,7 +13,7 @@ export const ComponentSource = ({
 	className,
 	collapsible = true,
 	children,
-}: React.ComponentProps<'div'> & ComponentSourceProps) => {
+}: React.ComponentProps<'div'> & ComponentSourceProps): React.JSX.Element => {
 	if (!collapsible) {
 		return <div className={className}>{children}</div>;
 	}

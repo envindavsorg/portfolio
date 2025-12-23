@@ -16,9 +16,9 @@ import { Projects } from '@/components/features/projects/Projects';
 import { TechStack } from '@/components/features/stack/TechStack';
 import { Utils } from '@/components/features/tools/Utils';
 import { Divider } from '@/components/ui/Divider';
-import { USER } from '@/config/user';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+import { USER } from '@/lib/user';
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
@@ -59,10 +59,7 @@ const Page = async () => {
 		<>
 			<script
 				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(getPageJsonLd()).replace(
-						/</g,
-						'\\u003c',
-					),
+					__html: JSON.stringify(getPageJsonLd()).replace(/</g, '\\u003c'),
 				}}
 				type="application/ld+json"
 			/>
@@ -75,19 +72,15 @@ const Page = async () => {
 				<Divider border />
 				<CurriculumVitae />
 				<Divider border />
-				<Contact
-					capture={isCapture}
-					github={github}
-					linkedin={linkedin}
-				/>
+				<Contact capture={isCapture} github={github} linkedin={linkedin} />
 				<Divider border />
 				<About />
 				<Divider border />
 				<Commits
-					stars={stars}
+					contributions={contributions}
 					followers={followers}
 					following={following}
-					contributions={contributions}
+					stars={stars}
 				/>
 				<Divider border />
 				<TechStack />

@@ -34,7 +34,7 @@ const useEmailForm = () => {
 				return false;
 			}
 		},
-		[form],
+		[form]
 	);
 
 	return {

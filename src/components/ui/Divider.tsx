@@ -1,3 +1,4 @@
+import type React from 'react';
 import { cn } from '@/lib/utils';
 
 type DividerProps = {
@@ -5,7 +6,10 @@ type DividerProps = {
 	border?: boolean;
 };
 
-export const Divider = ({ className, border = false }: DividerProps) => (
+export const Divider = ({
+	className,
+	border = false,
+}: DividerProps): React.JSX.Element => (
 	<div
 		className={cn(
 			'h-8',
@@ -13,7 +17,7 @@ export const Divider = ({ className, border = false }: DividerProps) => (
 			'before:absolute before:-left-[100vw] before:-z-1 before:h-8 before:w-[200vw]',
 			'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)]',
 			'before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56',
-			className,
+			className
 		)}
 	/>
 );

@@ -78,7 +78,7 @@ const getRandomBetween = (min: number, max: number): number =>
 const getRandomWords = (amount: number): string =>
 	Array.from(
 		{ length: amount },
-		() => words[getRandomBetween(0, words.length - 1)],
+		() => words[getRandomBetween(0, words.length - 1)]
 	).join(' ');
 
 const generateSentence = (startWithStandard: boolean): string => {
@@ -90,10 +90,10 @@ const generateSentence = (startWithStandard: boolean): string => {
 
 const generateSentences = (
 	amount: number,
-	startWithStandard: boolean,
+	startWithStandard: boolean
 ): string => {
 	const sentences = Array.from({ length: amount }, () =>
-		generateSentence(false),
+		generateSentence(false)
 	);
 
 	if (startWithStandard) {
@@ -106,12 +106,12 @@ const generateSentences = (
 const generateParagraphs = (
 	amount: number,
 	startWithStandard: boolean,
-	asHTML: boolean,
+	asHTML: boolean
 ): string =>
 	Array.from({ length: amount }, () => {
 		const paragraph = generateSentences(
 			getRandomBetween(3, 6),
-			startWithStandard,
+			startWithStandard
 		);
 		return asHTML ? `<p>${paragraph}</p>` : paragraph;
 	}).join('\n\n');

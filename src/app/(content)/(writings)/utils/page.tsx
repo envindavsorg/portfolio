@@ -32,13 +32,13 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 
 	const allPosts: Post[] = getPostsByCategory('utils').sort(
 		(a: Post, b: Post) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)),
+			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
 	const tagCounts: Record<string, number> = {};
 	for (const post of allPosts) {
-		for (const tag of post.metadata.tags || []) {
-			tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+		for (const tagName of post.metadata.tags || []) {
+			tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
 		}
 	}
 
@@ -54,15 +54,15 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 			? allPosts
 			: allPosts.filter((article: Post) =>
 					article.metadata.tags?.some(
-						(tag) => tag.toLowerCase() === selectedTag,
-					),
+						(tagName) => tagName.toLowerCase() === selectedTag
+					)
 				);
 
 	return (
 		<>
 			<WritingsHeading
-				title="Outils pour développeurs"
 				description="Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs."
+				title="Outils pour développeurs"
 			/>
 
 			<TagsFilter

@@ -22,12 +22,10 @@ export const UtilsItem = memo(({ post }: UtilsItemProps): React.JSX.Element => {
 				<div
 					className={cn(
 						'm-3 flex aspect-square size-8 shrink-0 items-center justify-center',
-						'rounded-lg border border-edge bg-muted ring-1 ring-edge ring-offset-1 ring-offset-background',
+						'rounded-lg border border-edge bg-muted ring-1 ring-edge ring-offset-1 ring-offset-background'
 					)}
 				>
-					{Icon && (
-						<Icon className="pointer-events-none size-5 text-theme" />
-					)}
+					{Icon && <Icon className="pointer-events-none size-5 text-theme" />}
 				</div>
 
 				<h3 className="flex h-14 flex-1 items-center border-edge border-l px-3 font-medium underline-offset-4 group-hover/utils:underline">

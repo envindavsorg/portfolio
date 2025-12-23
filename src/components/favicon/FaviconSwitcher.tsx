@@ -13,7 +13,7 @@ export const FaviconSwitcher = (): null => {
 				: '/favicons/favicon-light.ico';
 
 		for (const link of document.querySelectorAll<HTMLLinkElement>(
-			'link[rel="icon"]',
+			'link[rel="icon"]'
 		)) {
 			link.href = faviconUrl;
 		}

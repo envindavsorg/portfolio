@@ -32,13 +32,13 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 
 	const allArticles: Post[] = getPostsByCategory('article').sort(
 		(a: Post, b: Post) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)),
+			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
 	const tagCounts: Record<string, number> = {};
 	for (const post of allArticles) {
-		for (const tag of post.metadata.tags || []) {
-			tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+		for (const tagName of post.metadata.tags || []) {
+			tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
 		}
 	}
 
@@ -54,15 +54,15 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 			? allArticles
 			: allArticles.filter((article: Post) =>
 					article.metadata.tags?.some(
-						(tag) => tag.toLowerCase() === selectedTag,
-					),
+						(tagName) => tagName.toLowerCase() === selectedTag
+					)
 				);
 
 	return (
 		<div className="min-h-svh">
 			<WritingsHeading
-				title="Mes articles de blog"
 				description="Retrouvez tous mes articles de blog où je partage mon expérience en développement web. J'y aborde les bonnes pratiques, les patterns modernes, les solutions aux problèmes techniques du quotidien, et mes découvertes sur l'écosystème JavaScript. Chaque article est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise. Mon objectif : documenter mon apprentissage et aider d'autres développeurs qui rencontrent les mêmes défis."
+				title="Mes articles de blog"
 			/>
 
 			<TagsFilter
@@ -83,16 +83,10 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 					{articles
 						.slice()
 						.sort((a, b) =>
-							dayjs(b.metadata.createdAt).diff(
-								dayjs(a.metadata.createdAt),
-							),
+							dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 						)
 						.map((post: Post, idx: number) => (
-							<Post
-								key={post.slug}
-								post={post}
-								shouldPreloadImage={idx <= 4}
-							/>
+							<Post key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
 						))}
 				</div>
 			</div>

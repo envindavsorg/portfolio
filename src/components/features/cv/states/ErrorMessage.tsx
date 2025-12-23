@@ -23,7 +23,7 @@ export const ErrorMessage = memo(
 				<div
 					className={cn(
 						'flex aspect-square flex-col items-center justify-center text-center',
-						className,
+						className
 					)}
 				>
 					<WarningIcon
@@ -42,15 +42,14 @@ export const ErrorMessage = memo(
 							Une erreur est survenue !
 						</h3>
 						<Prose>
-							Oups, il semble qu'il y ait eu un{' '}
-							<span>problème</span> lors de l'envoi du mail.
-							Veuillez réessayer plus tard.
+							Oups, il semble qu'il y ait eu un <span>problème</span> lors de
+							l'envoi du mail. Veuillez réessayer plus tard.
 						</Prose>
 					</div>
 
 					{children}
 				</div>
 			);
-		},
-	),
+		}
+	)
 );

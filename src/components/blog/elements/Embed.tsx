@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type React from 'react';
 
 type YouTubeEmbedProps = {
@@ -5,7 +6,10 @@ type YouTubeEmbedProps = {
 	title: string;
 };
 
-export const YouTubeEmbed = ({ videoId, title }: YouTubeEmbedProps) => (
+export const YouTubeEmbed = ({
+	videoId,
+	title,
+}: YouTubeEmbedProps): React.JSX.Element => (
 	<div className="relative">
 		<iframe
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -20,9 +24,11 @@ export const YouTubeEmbed = ({ videoId, title }: YouTubeEmbedProps) => (
 	</div>
 );
 
-export const FramedImage = ({ ...props }: React.ComponentProps<'img'>) => (
+export const FramedImage = ({
+	...props
+}: React.ComponentProps<typeof Image>): React.JSX.Element => (
 	<figure className="relative [&_img]:rounded-lg">
-		<img {...props} alt="Frame" />
+		<Image {...props} alt="Frame" />
 		<div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />
 	</figure>
 );

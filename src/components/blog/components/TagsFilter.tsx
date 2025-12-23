@@ -3,6 +3,7 @@
 import { CaretDownIcon } from '@phosphor-icons/react';
 import { capitalize } from 'es-toolkit/string';
 import { usePathname, useRouter } from 'next/navigation';
+import type React from 'react';
 import { useCallback } from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -29,7 +30,7 @@ const DesktopTagFilter = ({
 	selectedTag,
 	tagCounts,
 	onTagClick,
-}: TagFilterListProps) => (
+}: TagFilterListProps): React.JSX.Element => (
 	<div className="screen-line-after hidden flex-wrap gap-x-4 px-3 py-1.5 md:flex">
 		{tags.map((tag: string) => {
 			const isActive =
@@ -44,7 +45,7 @@ const DesktopTagFilter = ({
 							'px-0',
 							isActive
 								? 'text-theme underline underline-offset-4'
-								: 'text-foreground',
+								: 'text-foreground'
 						)}
 						onClick={() => onTagClick(tag)}
 						variant="link"
@@ -55,7 +56,7 @@ const DesktopTagFilter = ({
 						<sup
 							className={cn(
 								'font-medium text-[10px]',
-								isActive ? 'text-theme' : 'text-foreground',
+								isActive ? 'text-theme' : 'text-foreground'
 							)}
 						>
 							{tagCounts[tag]}
@@ -83,9 +84,7 @@ const MobileTagFilter = ({
 
 		<DrawerContent className="md:hidden">
 			<DrawerHeader>
-				<h3 className="font-semibold text-base">
-					Filtrer par catégorie :
-				</h3>
+				<h3 className="font-semibold text-base">Filtrer par catégorie :</h3>
 			</DrawerHeader>
 
 			<div className="space-y-3">
@@ -96,16 +95,13 @@ const MobileTagFilter = ({
 							: selectedTag === tag.toLowerCase();
 
 					return (
-						<div
-							className="flex items-center justify-between"
-							key={tag}
-						>
+						<div className="flex items-center justify-between" key={tag}>
 							<Button
 								className={cn(
 									'px-0 font-medium text-base',
 									isActive
 										? 'text-theme underline underline-offset-4'
-										: 'text-foreground',
+										: 'text-foreground'
 								)}
 								onClick={() => onTagClick(tag)}
 								variant="link"
@@ -118,7 +114,7 @@ const MobileTagFilter = ({
 										'aspect-square border',
 										isActive
 											? 'border-theme text-theme'
-											: 'border-input text-foreground',
+											: 'border-input text-foreground'
 									)}
 								>
 									{tagCounts[tag]}
@@ -143,7 +139,7 @@ export const TagsFilter = ({
 	const handleTagClick = useCallback(
 		(tag: string) => {
 			const params: URLSearchParams = new URLSearchParams(
-				window.location.search,
+				window.location.search
 			);
 
 			if (tag === 'Tout') {
@@ -156,7 +152,7 @@ export const TagsFilter = ({
 				scroll: false,
 			});
 		},
-		[pathname, router],
+		[pathname, router]
 	);
 
 	if (tags.length <= 1) {

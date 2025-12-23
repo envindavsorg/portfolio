@@ -39,7 +39,7 @@ export const AnimatedSpan = ({
 	className,
 	startOnView = false,
 	...props
-}: AnimatedSpanProps) => {
+}: AnimatedSpanProps): React.JSX.Element => {
 	const elementRef = useRef<HTMLDivElement | null>(null);
 	const isInView = useInView(elementRef as React.RefObject<Element>, {
 		amount: 0.3,
@@ -62,20 +62,13 @@ export const AnimatedSpan = ({
 		if (sequence.activeIndex === itemIndex) {
 			setHasStarted(true);
 		}
-	}, [
-		sequence?.activeIndex,
-		sequence?.sequenceStarted,
-		hasStarted,
-		itemIndex,
-	]);
+	}, [sequence?.activeIndex, sequence?.sequenceStarted, hasStarted, itemIndex]);
 
 	const shouldAnimate = sequence ? hasStarted : startOnView ? isInView : true;
 
 	return (
 		<motion.div
-			animate={
-				shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: -5 }
-			}
+			animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: -5 }}
 			className={cn('grid font-normal text-sm tracking-tight', className)}
 			initial={{ opacity: 0, y: -5 }}
 			onAnimationComplete={() => {
@@ -113,11 +106,9 @@ export const TypingAnimation = ({
 	as: Component = 'span',
 	startOnView = true,
 	...props
-}: TypingAnimationProps) => {
+}: TypingAnimationProps): React.JSX.Element => {
 	if (typeof children !== 'string') {
-		throw new Error(
-			'TypingAnimation: children must be a string. Received:',
-		);
+		throw new Error('TypingAnimation: children must be a string. Received:');
 	}
 
 	const MotionComponent = useMemo(
@@ -125,7 +116,7 @@ export const TypingAnimation = ({
 			motion.create(Component, {
 				forwardMotionProps: true,
 			}),
-		[Component],
+		[Component]
 	);
 
 	const [displayedText, setDisplayedText] = useState<string>('');
@@ -183,7 +174,7 @@ export const TypingAnimation = ({
 		const typingEffect = setInterval(() => {
 			if (i < children.length) {
 				setDisplayedText(children.substring(0, i + 1));
-				i++;
+				i += 1;
 			} else {
 				clearInterval(typingEffect);
 				if (sequence && itemIndex !== null) {
@@ -220,7 +211,7 @@ export const Terminal = ({
 	className,
 	sequence = true,
 	startOnView = true,
-}: TerminalProps) => {
+}: TerminalProps): React.JSX.Element => {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const isInView = useInView(containerRef as React.RefObject<Element>, {
 		amount: 0.3,
@@ -238,7 +229,7 @@ export const Terminal = ({
 		return {
 			completeItem: (index: number) => {
 				setActiveIndex((current) =>
-					index === current ? current + 1 : current,
+					index === current ? current + 1 : current
 				);
 			},
 			activeIndex,
@@ -260,10 +251,7 @@ export const Terminal = ({
 
 	const content = (
 		<div
-			className={cn(
-				'z-0 h-full max-h-[400px] w-full bg-background',
-				className,
-			)}
+			className={cn('z-0 h-full max-h-[400px] w-full bg-background', className)}
 			ref={containerRef}
 		>
 			<pre className="no-scrollbar p-4">

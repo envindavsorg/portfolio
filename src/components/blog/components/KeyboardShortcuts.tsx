@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import type React from 'react';
 import { useCallback, useEffect } from 'react';
 
 type Post = {
@@ -17,7 +18,7 @@ export const KeyboardShortcuts = ({
 	basePath,
 	previous,
 	next,
-}: KeyboardShortcutsProps) => {
+}: KeyboardShortcutsProps): React.JSX.Element | null => {
 	const router = useRouter();
 
 	const navigate = useCallback(
@@ -26,7 +27,7 @@ export const KeyboardShortcuts = ({
 				router.push(`${basePath}/${post.slug}`);
 			}
 		},
-		[router, basePath],
+		[router, basePath]
 	);
 
 	useEffect(() => {

@@ -1,6 +1,7 @@
 'use client';
 
 import { TerminalWindowIcon } from '@phosphor-icons/react';
+import type React from 'react';
 import { lazy, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import type { PackageManager } from '@/hooks/use-config';
@@ -10,25 +11,25 @@ import { CopyButton } from './CopyButton';
 const PNPMIcon = lazy(() =>
 	import('@/components/icons/content/PNPM').then((m) => ({
 		default: m.PNPMIcon,
-	})),
+	}))
 );
 
 const YarnIcon = lazy(() =>
 	import('@/components/icons/content/Yarn').then((m) => ({
 		default: m.YarnIcon,
-	})),
+	}))
 );
 
 const NPMIcon = lazy(() =>
 	import('@/components/icons/content/NPM').then((m) => ({
 		default: m.NPMIcon,
-	})),
+	}))
 );
 
 const BunIcon = lazy(() =>
 	import('@/components/icons/content/Bun').then((m) => ({
 		default: m.BunIcon,
-	})),
+	}))
 );
 
 const getIconForPackageManager = (manager: string) => {
@@ -56,7 +57,7 @@ export const CodeBlockCommand = ({
 	__yarn__?: string;
 	__npm__?: string;
 	__bun__?: string;
-}) => {
+}): React.JSX.Element => {
 	const [config, setConfig] = useConfig();
 
 	const packageManager = config.packageManager || 'pnpm';
@@ -68,7 +69,7 @@ export const CodeBlockCommand = ({
 			npm: __npm__,
 			bun: __bun__,
 		}),
-		[__pnpm__, __yarn__, __npm__, __bun__],
+		[__pnpm__, __yarn__, __npm__, __bun__]
 	);
 
 	return (

@@ -5,7 +5,9 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import { rehypeAddQueryParams } from '@/lib/rehype-add-query-params';
 
-export const Markdown = (props: React.ComponentProps<typeof MarkdownAsync>) => (
+export const Markdown = (
+	props: React.ComponentProps<typeof MarkdownAsync>
+): React.JSX.Element => (
 	<MarkdownAsync
 		rehypePlugins={[
 			rehypeRaw,

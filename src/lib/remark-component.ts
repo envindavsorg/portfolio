@@ -53,10 +53,7 @@ export const remarkComponent = () => async (tree: UnistTree) => {
 				source = source.replaceAll('export default', 'export');
 
 				const title = getNodeAttributeByName(node, 'title');
-				const showLineNumbers = getNodeAttributeByName(
-					node,
-					'showLineNumbers',
-				);
+				const showLineNumbers = getNodeAttributeByName(node, 'showLineNumbers');
 
 				const codeBlock = {
 					type: 'code',

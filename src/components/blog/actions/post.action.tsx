@@ -107,25 +107,25 @@ export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
 const MarkdownIcon = lazy(() =>
 	import('@/components/icons/content/Markdown').then((m) => ({
 		default: m.MarkdownIcon,
-	})),
+	}))
 );
 
 const V0Icon = lazy(() =>
 	import('@/components/icons/content/V0').then((m) => ({
 		default: m.V0Icon,
-	})),
+	}))
 );
 
 const ChatGPTIcon = lazy(() =>
 	import('@/components/icons/content/ChatGPT').then((m) => ({
 		default: m.ChatGPTIcon,
-	})),
+	}))
 );
 
 const ClaudeIcon = lazy(() =>
 	import('@/components/icons/content/Claude').then((m) => ({
 		default: m.ClaudeIcon,
-	})),
+	}))
 );
 
 type IconProps = React.HTMLAttributes<SVGElement>;
@@ -153,7 +153,7 @@ export const ViewOptions = ({
 				is_component: isComponent,
 			});
 		},
-		[markdownUrl, isComponent],
+		[markdownUrl, isComponent]
 	);
 
 	const items = useMemo(() => {
@@ -214,9 +214,7 @@ export const ViewOptions = ({
 				>
 					<CaretDownIcon className="mr-1 size-4 group-data-[state=open]/toggle:hidden" />
 					<CaretUpIcon className="mr-1 size-4 group-data-[state=closed]/toggle:hidden" />
-					<span className="sr-only">
-						Voir les options de visualisation
-					</span>
+					<span className="sr-only">Voir les options de visualisation</span>
 				</button>
 			</DropdownMenuTrigger>
 
@@ -228,16 +226,12 @@ export const ViewOptions = ({
 				sideOffset={8}
 			>
 				{items.map(({ title, href, icon: Icon, tool }) => (
-					<DropdownMenuItem
-						asChild
-						className="font-medium"
-						key={href}
-					>
+					<DropdownMenuItem asChild className="font-medium" key={href}>
 						<Link
 							href={href}
+							onClick={() => handleExternalToolClick(tool)}
 							rel="noreferrer noopener"
 							target="_blank"
-							onClick={() => handleExternalToolClick(tool)}
 						>
 							<Icon className="size-4" />
 							{title}
@@ -264,7 +258,7 @@ export const LLMCopyButtonWithViewOptions = ({
 				size: 'sm',
 				variant: 'secondary',
 				className: 'gap-0 divide-x px-0 font-sans dark:divide-white/10',
-			}),
+			})
 		)}
 	>
 		<LLMCopyButton markdownUrl={markdownUrl} />

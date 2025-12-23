@@ -1,5 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
+import type React from 'react';
 import { KeyboardShortcuts } from '@/components/blog/components/KeyboardShortcuts';
 import { ShareMenu } from '@/components/blog/components/ShareMenu';
 import { Button } from '@/components/ui/Button';
@@ -19,26 +20,18 @@ export const TopBar = ({
 	baseUrl,
 	postSlug,
 	title,
-}: TopBarProps) => {
+}: TopBarProps): React.JSX.Element => {
 	const allPosts: Post[] = getPostsByCategory(type);
 	const { previous, next } = findNeighbour(allPosts, slug);
 
 	return (
 		<>
-			<KeyboardShortcuts
-				basePath="/utils"
-				next={next}
-				previous={previous}
-			/>
+			<KeyboardShortcuts basePath="/utils" next={next} previous={previous} />
 
 			<div className="screen-line-before screen-line-after flex items-center justify-between px-3 py-2">
 				<Link href={baseUrl}>
-					<Button
-						className="group/return px-0 hover:text-theme"
-						variant="link"
-					>
-						<ArrowLeftIcon className="group-hover/return:text-theme" />{' '}
-						{title}
+					<Button className="group/return px-0 hover:text-theme" variant="link">
+						<ArrowLeftIcon className="group-hover/return:text-theme" /> {title}
 					</Button>
 				</Link>
 

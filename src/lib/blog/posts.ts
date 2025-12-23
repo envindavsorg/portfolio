@@ -44,7 +44,7 @@ export const getAllPosts = () =>
 	getMDXData(join(process.cwd(), 'src/components/blog/content')).sort(
 		(a, b) =>
 			new Date(b.metadata.createdAt).getTime() -
-			new Date(a.metadata.createdAt).getTime(),
+			new Date(a.metadata.createdAt).getTime()
 	);
 
 export const getPostBySlug = (slug: string) =>

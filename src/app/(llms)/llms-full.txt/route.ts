@@ -3,11 +3,10 @@ import { SOCIAL_LINKS } from '@/components/features/contact/data/social-links';
 import { EXPERIENCES } from '@/components/features/experiences/data/experiences';
 import { PROJECTS } from '@/components/features/projects/data/projects';
 import { techStack } from '@/components/features/stack/data/tech-stack';
-import { SITE_INFO } from '@/config/site';
-import { USER } from '@/config/user';
 import { getLLMText } from '@/lib/blog/llm';
 import { getAllPosts } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
+import { USER } from '@/lib/user';
 
 const allPosts: Post[] = getAllPosts();
 
@@ -38,11 +37,10 @@ const experienceText = `
 ${EXPERIENCES.map((item) =>
 	item.positions
 		.map((position) => {
-			const skills =
-				position.skills?.map((skill) => skill).join(', ') || 'N/A';
+			const skills = position.skills?.map((skill) => skill).join(', ') || 'N/A';
 			return `### ${position.title} | ${item.companyName}\n\nDurée: ${position.employmentPeriod.start} - ${position.employmentPeriod.end || 'Maintenant'}\n\nCompétences: ${skills}\n\n${position.description?.trim()}`;
 		})
-		.join('\n\n'),
+		.join('\n\n')
 ).join('\n\n')}
 `;
 
@@ -51,9 +49,7 @@ const projectsText = `
 
 ${PROJECTS.map((item) => {
 	const skills = `\n\nCompétences: ${item.skills.join(', ')}`;
-	const description = item.description
-		? `\n\n${item.description.trim()}`
-		: '';
+	const description = item.description ? `\n\n${item.description.trim()}` : '';
 	return `### ${item.title}\n\nLien du projet: ${item.link}${skills}${description}`;
 }).join('\n\n')}
 `;
@@ -67,8 +63,8 @@ const getBlogContent = async () => {
 	const text = await Promise.all(
 		allPosts.map(
 			async (item) =>
-				`---\ntitle: "${item.metadata.title}"\ndescription: "${item.metadata.description}"\nlast_updated: "${dayjs(item.metadata.updatedAt).format('dddd DD MMMM YYYY')}"\nsource: "${SITE_INFO.url}/blog/${item.slug}"\n---\n\n${await getLLMText(item)}`,
-		),
+				`---\ntitle: "${item.metadata.title}"\ndescription: "${item.metadata.description}"\nlast_updated: "${dayjs(item.metadata.updatedAt).format('dddd DD MMMM YYYY')}"\nsource: "https://cuzeacflorin.fr/blog/${item.slug}"\n---\n\n${await getLLMText(item)}`
+		)
 	);
 	return text.join('\n\n');
 };

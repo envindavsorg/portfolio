@@ -54,7 +54,7 @@ src/
 
 ### Important Files
 
-- `src/config/site.ts` - Site configuration and navigation
+- `src/config/theme.ts` - Site configuration and navigation
 - `src/config/registry.ts` - Registry configuration
 - `src/features/profile/data/user.ts` - User profile data
 - `src/registry/index.ts` - Registry entry point
@@ -172,7 +172,7 @@ See `.env.example` for required variables:
 
 ### Site Configuration
 
-- **TopBar**: `MAIN_NAV` in `src/config/site.ts` (Accueil, Blog, Composants)
+- **TopBar**: `MAIN_NAV` in `src/config/theme.ts` (Accueil, Blog, Composants)
 - **Theme Colors**: `META_THEME_COLORS` (light: #FFFFFF, dark: #09090B)
 - **GitHub Username**: envindavsorg
 - **GitHub Repo**: envindavsorg/cuzeacflorin.fr
@@ -240,7 +240,7 @@ When adapting this codebase, ensure ALL personal information is replaced:
 **Key Areas to Update**:
 
 - All files in `src/features/profile/data/` (see User Profile section above)
-- `src/config/site.ts` - Site name, navigation, GitHub repo, UTM params
+- `src/config/theme.ts` - Site name, navigation, GitHub repo, UTM params
 - Blog posts in `src/features/blog/content/`
 - Asset URLs (images, logos, audio files) throughout the codebase
 

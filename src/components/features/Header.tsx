@@ -2,7 +2,7 @@ import { SealCheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import type React from 'react';
 import { PronounceName } from '@/components/sound/PronounceName';
-import { USER } from '@/config/user';
+import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 import { FlipSentences } from '@/registry/flip-sentences';
 
@@ -29,13 +29,13 @@ export const Header = ({ capture }: HeaderProps): React.JSX.Element => (
 					alt={`${USER.firstName} ${USER.lastName}`}
 					className={cn(
 						'aspect-square size-26 object-cover object-top sm:size-32 lg:size-40',
-						'select-none rounded-full ring-1 ring-border ring-offset-3 ring-offset-background',
+						'select-none rounded-full ring-1 ring-border ring-offset-3 ring-offset-background'
 					)}
 					fetchPriority="high"
-					src={USER.photo}
 					height={1404}
-					width={1190}
 					sizes="(max-width: 640px) 104px, (max-width: 1024px) 128px, 160px"
+					src={USER.photo}
+					width={1190}
 				/>
 			</div>
 		</div>
@@ -44,7 +44,7 @@ export const Header = ({ capture }: HeaderProps): React.JSX.Element => (
 			<div
 				className={cn(
 					'flex grow items-end pb-1 pl-4',
-					'[--pattern-foreground:var(--color-edge)]/56',
+					'[--pattern-foreground:var(--color-edge)]/56'
 				)}
 				style={PATTERN_STYLE}
 			>
@@ -69,13 +69,13 @@ export const Header = ({ capture }: HeaderProps): React.JSX.Element => (
 
 				<div className="min-h-[2rem] border-edge border-t py-1 pl-4">
 					<FlipSentences
+						disableAnimation={capture}
 						sentences={[
 							'Imagine, code, crée, inspire.',
 							'Chaque petit pixel compte !',
 							'Du concept au déploiement !',
 							'Chaque petit détail compte !',
 						]}
-						disableAnimation={capture}
 					/>
 				</div>
 			</div>

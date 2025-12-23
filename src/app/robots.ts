@@ -1,5 +1,4 @@
 import type { MetadataRoute } from 'next';
-import { SITE_INFO } from '@/config/site';
 
 const robots = (): MetadataRoute.Robots => ({
 	rules: [
@@ -8,7 +7,7 @@ const robots = (): MetadataRoute.Robots => ({
 			disallow: ['/api/*', '/ingest/*'],
 		},
 	],
-	sitemap: `${SITE_INFO.url}/sitemap.xml`,
+	sitemap: 'https://cuzeacflorin.fr/sitemap.xml',
 });
 
 export default robots;

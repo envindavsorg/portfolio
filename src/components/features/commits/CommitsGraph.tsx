@@ -16,8 +16,8 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/ui/Tooltip';
-import { GITHUB_USERNAME } from '@/config/site';
 import { dayjs } from '@/lib/dayjs';
+import { USER } from '@/lib/user';
 
 type CommitsGraphProps = {
 	contributions: Activity[];
@@ -61,11 +61,10 @@ export const CommitsGraph = ({
 			<ContributionGraphTotalCount>
 				{({ totalCount, year }) => (
 					<div className="text-muted-foreground text-xs">
-						{totalCount.toLocaleString('en')} contributions en{' '}
-						{year} sur{' '}
+						{totalCount.toLocaleString('en')} contributions en {year} sur{' '}
 						<a
 							className="font-medium underline underline-offset-4"
-							href={`https://github.com/${GITHUB_USERNAME}`}
+							href={`https://github.com/${USER.username}`}
 							rel="noopener"
 							target="_blank"
 						>

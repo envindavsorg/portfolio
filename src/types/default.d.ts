@@ -2,10 +2,10 @@ import type React from 'react';
 
 declare global {
 	// types for theme switcher (using next-themes)
-	export type ThemeType = 'light' | 'dark' | 'system';
+	type ThemeType = 'light' | 'dark' | 'system';
 
 	// types for page layout and OG image generation
-	export type PageType =
+	type PageType =
 		| 'homepage'
 		| 'blog'
 		| 'blogArticle'
@@ -15,7 +15,7 @@ declare global {
 		| 'utilsArticle';
 
 	// types for unist tree
-	export type UnistNode = {
+	type UnistNode = {
 		type: string;
 		name?: string;
 		tagName?: string;
@@ -37,13 +37,13 @@ declare global {
 		children?: UnistNode[];
 	};
 
-	export type UnistTree = {
+	type UnistTree = {
 		type: string;
 		children: UnistNode[];
 	};
 
 	// types for blog, components, and utils posts
-	export type PostMetadata = {
+	type PostMetadata = {
 		title: string;
 		description: string;
 		imageDark?: string;
@@ -56,7 +56,7 @@ declare global {
 		new?: boolean;
 	};
 
-	export type Post = {
+	type Post = {
 		metadata: PostMetadata;
 		slug: string;
 		content: string;
@@ -66,7 +66,7 @@ declare global {
 		};
 	};
 
-	export type PostReadingTime = {
+	type PostReadingTime = {
 		time: string;
 		minutes: number;
 		words: number;
@@ -114,4 +114,32 @@ declare global {
 		keywords: string[];
 		dateCreated: string;
 	};
+
+	// types for navigation bar
+	type NavigationItem = {
+		title: string;
+		href: string;
+	};
+
+	// types for navbar command menu
+	type CommandLinkItem = {
+		title: string;
+		href: string;
+		icon?: React.ElementType;
+		iconImage?: StaticImageData;
+		keywords?: string[];
+		openInNewTab?: boolean;
+	};
+
+	type CommandKind =
+		| 'command'
+		| 'page'
+		| 'link'
+		| 'utils'
+		| 'article'
+		| 'components'
+		| 'section'
+		| 'download';
+
+	type CommandMetaMap = Map<string, { commandKind: CommandKind }>;
 }

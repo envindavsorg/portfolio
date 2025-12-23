@@ -17,15 +17,17 @@ import {
 	ContextMenuSeparator,
 	ContextMenuTrigger,
 } from '@/components/ui/ContextMenu';
-import { META_THEME_COLORS } from '@/config/site';
 import useMetaColor from '@/hooks/use-meta-color';
 import { soundManager } from '@/lib/sound-manager';
+import { META_THEME_COLORS } from '@/lib/theme';
 
 type RootContextMenuProps = {
 	children: React.ReactNode;
 };
 
-export const RootContextMenu = ({ children }: RootContextMenuProps) => {
+export const RootContextMenu = ({
+	children,
+}: RootContextMenuProps): React.JSX.Element => {
 	const router = useRouter();
 	const { resolvedTheme, setTheme } = useTheme();
 	const { setMetaColor } = useMetaColor();
@@ -44,7 +46,7 @@ export const RootContextMenu = ({ children }: RootContextMenuProps) => {
 		setMetaColor(
 			resolvedTheme === 'dark'
 				? META_THEME_COLORS.light
-				: META_THEME_COLORS.dark,
+				: META_THEME_COLORS.dark
 		);
 	}, [resolvedTheme, setTheme, setMetaColor]);
 

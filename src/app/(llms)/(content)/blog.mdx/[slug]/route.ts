@@ -13,12 +13,12 @@ type ParamsProps = {
 
 export const GET = async (
 	_request: Request,
-	{ params }: ParamsProps,
+	{ params }: ParamsProps
 ): Promise<Response> => {
 	const { slug } = await params;
 
 	const allPosts: Post[] = getAllPosts();
-	const post = allPosts.find((post: Post) => post.slug === slug);
+	const post = allPosts.find((article: Post) => article.slug === slug);
 
 	if (!post) {
 		notFound();

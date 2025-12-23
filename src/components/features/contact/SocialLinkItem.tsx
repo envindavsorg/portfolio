@@ -25,14 +25,12 @@ export const SocialLinkItem = ({
 }: SocialLinkItemProps): React.JSX.Element => (
 	<Link
 		aria-label={`${link.title} - ${link.description}`}
-		href={link.href}
-		rel="noopener noreferrer"
-		target="_blank"
 		className={cn(
 			'group/link flex cursor-pointer select-none items-center gap-x-3 rounded-2xl p-4 transition-colors',
 			'max-sm:screen-line-before max-sm:screen-line-after',
-			'sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after',
+			'sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after'
 		)}
+		href={link.href}
 		onClick={() => {
 			posthog.capture('social_link_clicked', {
 				platform: link.title.toLowerCase(),
@@ -40,14 +38,16 @@ export const SocialLinkItem = ({
 				url: link.href,
 			});
 		}}
+		rel="noopener noreferrer"
+		target="_blank"
 	>
 		<Image
 			alt={link.title}
 			className="shrink-0 object-cover object-center"
 			height={46}
-			width={46}
-			src={link.icon}
 			quality={90}
+			src={link.icon}
+			width={46}
 		/>
 
 		<div className="flex flex-1 flex-col gap-y-0.5">
@@ -58,11 +58,7 @@ export const SocialLinkItem = ({
 					<>
 						{' - '}
 						<span className="font-semibold text-theme">
-							{capture ? (
-								count
-							) : (
-								<Counter step={config.step} value={count} />
-							)}{' '}
+							{capture ? count : <Counter step={config.step} value={count} />}{' '}
 							{config.label}
 						</span>
 					</>

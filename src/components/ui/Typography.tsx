@@ -10,7 +10,7 @@ const Prose = ({
 	...props
 }: React.ComponentProps<'div'> & {
 	asChild?: boolean;
-}) => {
+}): React.JSX.Element => {
 	const Comp = asChild ? Slot : 'div';
 
 	return (
@@ -21,7 +21,7 @@ const Prose = ({
 				'prose-a:break-words prose-a:font-medium prose-a:text-foreground prose-a:underline prose-a:underline-offset-4',
 				'prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:font-normal prose-code:text-sm prose-code:before:content-none prose-code:after:content-none',
 				'prose-hr:border-edge',
-				className,
+				className
 			)}
 			data-slot="prose"
 			{...props}
@@ -29,7 +29,10 @@ const Prose = ({
 	);
 };
 
-const Code = ({ className, ...props }: React.ComponentProps<'code'>) => {
+const Code = ({
+	className,
+	...props
+}: React.ComponentProps<'code'>): React.JSX.Element => {
 	const isCodeBlock = 'data-language' in props;
 
 	return (
@@ -37,7 +40,7 @@ const Code = ({ className, ...props }: React.ComponentProps<'code'>) => {
 			className={cn(
 				!isCodeBlock &&
 					'not-prose rounded-md border bg-muted/50 px-[0.3rem] py-[0.2rem] font-mono text-sm',
-				className,
+				className
 			)}
 			data-slot={isCodeBlock ? 'code-block' : 'code-inline'}
 			{...props}

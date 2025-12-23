@@ -1,8 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resend } from 'resend';
-import { USER } from '@/config/user';
 import { CVEmailTemplate } from '@/emails/CVEmail';
+import { USER } from '@/lib/user';
 import { decodeEmail } from '@/lib/utils/string';
 import emailSchema from '@/schemas/email.schema';
 
@@ -24,7 +24,7 @@ export const POST = async (request: Request): Promise<Response> => {
 					error: 'Données invalides',
 					details: validation.error.issues,
 				},
-				{ status: 400 },
+				{ status: 400 }
 			);
 		}
 
@@ -46,7 +46,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		if (error) {
 			return Response.json(
 				{ error: "Erreur lors de l'envoi du mail !" },
-				{ status: 500 },
+				{ status: 500 }
 			);
 		}
 
@@ -56,7 +56,7 @@ export const POST = async (request: Request): Promise<Response> => {
 	} catch {
 		return Response.json(
 			{ error: 'Une erreur serveur est survenue !' },
-			{ status: 500 },
+			{ status: 500 }
 		);
 	}
 };

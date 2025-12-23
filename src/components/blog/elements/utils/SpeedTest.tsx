@@ -8,6 +8,7 @@ import {
 	SpeedometerIcon,
 	UploadIcon,
 } from '@phosphor-icons/react';
+import type React from 'react';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import {
@@ -35,8 +36,8 @@ const INITIAL_RESULT: Partial<SpeedResult> = {
 	jitter: undefined,
 };
 
-const createSpeedTestEngine = () => {
-	return new SpeedTestEngine({
+const createSpeedTestEngine = () =>
+	new SpeedTestEngine({
 		autoStart: false,
 		measurements: [
 			{ type: 'latency', numPackets: 5 },
@@ -46,31 +47,32 @@ const createSpeedTestEngine = () => {
 			{ type: 'upload', bytes: 1e7, count: 1, bypassMinDuration: true },
 		],
 	});
-};
 
 type PulsatingCircleProps = {
 	isRunning: boolean;
 	isFinished: boolean;
 };
 
-const PulsatingCircle = memo((props: PulsatingCircleProps) => (
-	<span className="relative flex items-center justify-center">
-		<span
-			className={cn(
-				'absolute inline-flex size-3 animate-ping rounded-full opacity-50',
-				props.isRunning && 'bg-blue-600 dark:bg-blue-300',
-				props.isFinished && 'bg-green-600 dark:bg-green-300',
-			)}
-		/>
-		<span
-			className={cn(
-				'relative inline-flex size-2 rounded-full',
-				props.isRunning && 'bg-blue-600 dark:bg-blue-300',
-				props.isFinished && 'bg-green-600 dark:bg-green-300',
-			)}
-		/>
-	</span>
-));
+const PulsatingCircle = memo(
+	(props: PulsatingCircleProps): React.JSX.Element => (
+		<span className="relative flex items-center justify-center">
+			<span
+				className={cn(
+					'absolute inline-flex size-3 animate-ping rounded-full opacity-50',
+					props.isRunning && 'bg-blue-600 dark:bg-blue-300',
+					props.isFinished && 'bg-green-600 dark:bg-green-300'
+				)}
+			/>
+			<span
+				className={cn(
+					'relative inline-flex size-2 rounded-full',
+					props.isRunning && 'bg-blue-600 dark:bg-blue-300',
+					props.isFinished && 'bg-green-600 dark:bg-green-300'
+				)}
+			/>
+		</span>
+	)
+);
 
 const getButtonLabel = (status: TestState['status']) => {
 	switch (status) {
@@ -85,11 +87,10 @@ const getButtonLabel = (status: TestState['status']) => {
 	}
 };
 
-const cleanSummary = (summary: SpeedResult): Partial<SpeedResult> => {
-	return Object.fromEntries(
-		Object.entries(summary).filter(([, value]) => value !== undefined),
+const cleanSummary = (summary: SpeedResult): Partial<SpeedResult> =>
+	Object.fromEntries(
+		Object.entries(summary).filter(([, value]) => value !== undefined)
 	) as Partial<SpeedResult>;
-};
 
 const formatValue = (val: number | undefined, unit: string): string => {
 	const num = val ?? 0;
@@ -111,33 +112,34 @@ type SpeedTestProps = {
 };
 
 const SpeedTestItem = memo(
-	({ status, label, value, measure, icon }: SpeedTestProps) => {
-		const Icon = icon;
+	({
+		status,
+		label,
+		value,
+		measure,
+		icon: SpeedTestItemIcon,
+	}: SpeedTestProps): React.JSX.Element => {
 		const displayValue = useMemo(
 			() => formatValue(value, measure),
-			[value, measure],
+			[value, measure]
 		);
 
 		const borderClassName = useMemo(
 			() =>
 				cn(
-					status === 'running' &&
-						'border-blue-600 dark:border-blue-300',
-					status === 'finished' &&
-						'border-green-600 dark:border-green-300',
+					status === 'running' && 'border-blue-600 dark:border-blue-300',
+					status === 'finished' && 'border-green-600 dark:border-green-300'
 				),
-			[status],
+			[status]
 		);
 
 		return (
-			<Item variant="outline" size="sm" className={borderClassName}>
+			<Item className={borderClassName} size="sm" variant="outline">
 				<ItemMedia>
-					<Icon className="size-5 sm:size-6" />
+					<SpeedTestItemIcon className="size-5 sm:size-6" />
 				</ItemMedia>
 				<ItemContent className="flex flex-row items-center gap-x-3">
-					<ItemTitle className="text-base sm:text-lg">
-						{label}
-					</ItemTitle>
+					<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
 					<PulsatingCircle
 						isFinished={status === 'finished'}
 						isRunning={status === 'running'}
@@ -151,10 +153,10 @@ const SpeedTestItem = memo(
 				</ItemActions>
 			</Item>
 		);
-	},
+	}
 );
 
-export const SpeedTest = () => {
+export const SpeedTest = (): React.JSX.Element => {
 	const [testState, setTestState] = useState<TestState>({
 		status: 'idle',
 		result: INITIAL_RESULT,
@@ -230,32 +232,32 @@ export const SpeedTest = () => {
 		<>
 			<div className="flex flex-col gap-y-3 py-3">
 				<SpeedTestItem
-					status={testState.status}
-					label="Téléchargement"
-					value={testState.result.download}
-					measure="Mb/s"
 					icon={DownloadIcon}
-				/>
-				<SpeedTestItem
-					status={testState.status}
-					label="Téléversement"
-					value={testState.result.upload}
+					label="Téléchargement"
 					measure="Mb/s"
+					status={testState.status}
+					value={testState.result.download}
+				/>
+				<SpeedTestItem
 					icon={UploadIcon}
+					label="Téléversement"
+					measure="Mb/s"
+					status={testState.status}
+					value={testState.result.upload}
 				/>
 				<SpeedTestItem
-					status={testState.status}
-					label="Latence"
-					value={testState.result.latency}
-					measure="ms"
 					icon={SpeedometerIcon}
+					label="Latence"
+					measure="ms"
+					status={testState.status}
+					value={testState.result.latency}
 				/>
 				<SpeedTestItem
-					status={testState.status}
-					label="Gigue"
-					value={testState.result.jitter}
-					measure="ms"
 					icon={GaugeIcon}
+					label="Gigue"
+					measure="ms"
+					status={testState.status}
+					value={testState.result.jitter}
 				/>
 			</div>
 

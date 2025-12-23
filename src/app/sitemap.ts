@@ -1,5 +1,4 @@
 import type { MetadataRoute } from 'next';
-import { SITE_INFO } from '@/config/site';
 import { getAllPosts } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 
@@ -13,10 +12,10 @@ const sitemap = (): MetadataRoute.Sitemap => {
 	const allPosts = getAllPosts();
 
 	const articles = allPosts.filter(
-		(p) => (p.metadata.category ?? 'article') === 'article',
+		(p) => (p.metadata.category ?? 'article') === 'article'
 	);
 	const components = allPosts.filter(
-		(p) => p.metadata.category === 'components',
+		(p) => p.metadata.category === 'components'
 	);
 	const utils = allPosts.filter((p) => p.metadata.category === 'utils');
 
@@ -30,25 +29,25 @@ const sitemap = (): MetadataRoute.Sitemap => {
 
 	const staticRoutes: MetadataRoute.Sitemap = [
 		{
-			url: SITE_INFO.url,
+			url: 'https://cuzeacflorin.fr',
 			lastModified: getLatestDate(allPosts),
 			changeFrequency: 'daily',
 			priority: 1,
 		},
 		{
-			url: `${SITE_INFO.url}/blog`,
+			url: 'https://cuzeacflorin.fr/blog',
 			lastModified: getLatestDate(articles),
 			changeFrequency: 'daily',
 			priority: 0.8,
 		},
 		{
-			url: `${SITE_INFO.url}/components`,
+			url: 'https://cuzeacflorin.fr/components',
 			lastModified: getLatestDate(components),
 			changeFrequency: 'weekly',
 			priority: 0.8,
 		},
 		{
-			url: `${SITE_INFO.url}/utils`,
+			url: 'https://cuzeacflorin.fr/utils',
 			lastModified: getLatestDate(utils),
 			changeFrequency: 'weekly',
 			priority: 0.8,
@@ -57,20 +56,19 @@ const sitemap = (): MetadataRoute.Sitemap => {
 
 	const mapPostsToSitemap = (
 		posts: typeof allPosts,
-		routeBase: string,
-	): MetadataRoute.Sitemap => {
-		return posts.map((post) => ({
-			url: `${SITE_INFO.url}/${routeBase}/${post.slug}`,
+		routeBase: string
+	): MetadataRoute.Sitemap =>
+		posts.map((post) => ({
+			url: `https://cuzeacflorin.fr/${routeBase}/${post.slug}`,
 			lastModified: dayjs(post.metadata.updatedAt).toISOString(),
 			changeFrequency: 'weekly',
 			priority: 0.6,
 		}));
-	};
 
 	const articleUrls = mapPostsToSitemap(articles, CATEGORY_ROUTES.article);
 	const componentUrls = mapPostsToSitemap(
 		components,
-		CATEGORY_ROUTES.components,
+		CATEGORY_ROUTES.components
 	);
 	const utilUrls = mapPostsToSitemap(utils, CATEGORY_ROUTES.utils);
 

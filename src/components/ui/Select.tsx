@@ -21,19 +21,21 @@ import {
 import type React from 'react';
 import { cn } from '@/lib/utils';
 
-export const Select = ({ ...props }: React.ComponentProps<typeof Root>) => (
+export const Select = ({
+	...props
+}: React.ComponentProps<typeof Root>): React.JSX.Element => (
 	<Root data-slot="select" {...props} />
 );
 
 export const SelectGroup = ({
 	...props
-}: React.ComponentProps<typeof Group>) => (
+}: React.ComponentProps<typeof Group>): React.JSX.Element => (
 	<Group data-slot="select-group" {...props} />
 );
 
 export const SelectValue = ({
 	...props
-}: React.ComponentProps<typeof Value>) => (
+}: React.ComponentProps<typeof Value>): React.JSX.Element => (
 	<Value data-slot="select-value" {...props} />
 );
 
@@ -44,11 +46,11 @@ export const SelectTrigger = ({
 	...props
 }: React.ComponentProps<typeof Trigger> & {
 	size?: 'sm' | 'default';
-}) => (
+}): React.JSX.Element => (
 	<Trigger
 		className={cn(
 			"flex w-fit items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none transition-[color,box-shadow] disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[size=default]:h-10 data-[size=sm]:h-8 data-[placeholder]:text-muted-foreground *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:hover:bg-input/50 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
-			className,
+			className
 		)}
 		data-size={size}
 		data-slot="select-trigger"
@@ -64,11 +66,11 @@ export const SelectTrigger = ({
 const SelectScrollUpButton = ({
 	className,
 	...props
-}: React.ComponentProps<typeof ScrollUpButton>) => (
+}: React.ComponentProps<typeof ScrollUpButton>): React.JSX.Element => (
 	<ScrollUpButton
 		className={cn(
 			'flex cursor-default items-center justify-center py-1',
-			className,
+			className
 		)}
 		data-slot="select-scroll-up-button"
 		{...props}
@@ -80,11 +82,11 @@ const SelectScrollUpButton = ({
 const SelectScrollDownButton = ({
 	className,
 	...props
-}: React.ComponentProps<typeof ScrollDownButton>) => (
+}: React.ComponentProps<typeof ScrollDownButton>): React.JSX.Element => (
 	<ScrollDownButton
 		className={cn(
 			'flex cursor-default items-center justify-center py-1',
-			className,
+			className
 		)}
 		data-slot="select-scroll-down-button"
 		{...props}
@@ -99,7 +101,7 @@ export const SelectContent = ({
 	position = 'popper',
 	align = 'center',
 	...props
-}: React.ComponentProps<typeof Content>) => (
+}: React.ComponentProps<typeof Content>): React.JSX.Element => (
 	<Portal>
 		<Content
 			align={align}
@@ -107,7 +109,7 @@ export const SelectContent = ({
 				'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-y-auto overflow-x-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=closed]:animate-out data-[state=open]:animate-in',
 				position === 'popper' &&
 					'data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1',
-				className,
+				className
 			)}
 			data-slot="select-content"
 			position={position}
@@ -118,7 +120,7 @@ export const SelectContent = ({
 				className={cn(
 					'p-1',
 					position === 'popper' &&
-						'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1',
+						'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1'
 				)}
 			>
 				{children}
@@ -131,7 +133,7 @@ export const SelectContent = ({
 export const SelectLabel = ({
 	className,
 	...props
-}: React.ComponentProps<typeof Label>) => (
+}: React.ComponentProps<typeof Label>): React.JSX.Element => (
 	<Label
 		className={cn('px-2 py-1.5 text-muted-foreground text-xs', className)}
 		data-slot="select-label"
@@ -143,11 +145,11 @@ export const SelectItem = ({
 	className,
 	children,
 	...props
-}: React.ComponentProps<typeof Item>) => (
+}: React.ComponentProps<typeof Item>): React.JSX.Element => (
 	<Item
 		className={cn(
 			"relative flex w-full cursor-default select-none items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
-			className,
+			className
 		)}
 		data-slot="select-item"
 		{...props}
@@ -164,12 +166,9 @@ export const SelectItem = ({
 export const SelectSeparator = ({
 	className,
 	...props
-}: React.ComponentProps<typeof Separator>) => (
+}: React.ComponentProps<typeof Separator>): React.JSX.Element => (
 	<Separator
-		className={cn(
-			'pointer-events-none -mx-1 my-1 h-px bg-border',
-			className,
-		)}
+		className={cn('pointer-events-none -mx-1 my-1 h-px bg-border', className)}
 		data-slot="select-separator"
 		{...props}
 	/>

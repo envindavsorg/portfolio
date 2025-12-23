@@ -25,7 +25,7 @@ export const AppleHelloEffect = ({
 	speed = 1,
 	onAnimationComplete,
 	...props
-}: Props) => {
+}: Props): React.JSX.Element => {
 	const calc = (x: number) => x * speed;
 
 	return (

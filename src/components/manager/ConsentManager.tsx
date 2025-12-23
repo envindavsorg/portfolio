@@ -63,7 +63,7 @@ const ConsentManager = ({
 					noStyle: true,
 					className: cn(
 						'relative w-full max-w-(--banner-max-width) divide-y overflow-hidden rounded-2xl',
-						'bg-popover text-popover-foreground shadow-popover ring ring-popover-border',
+						'bg-popover text-popover-foreground shadow-popover ring ring-popover-border'
 					),
 				},
 				'banner.header.title': {
@@ -96,7 +96,6 @@ const ConsentManager = ({
 		/>
 
 		<ConsentManagerDialog
-			trapFocus={true}
 			theme={{
 				'dialog.root': {
 					style: {
@@ -118,8 +117,7 @@ const ConsentManager = ({
 				},
 				'dialog.title': {
 					noStyle: true,
-					className:
-						'text-lg leading-none font-semibold text-foreground',
+					className: 'text-lg leading-none font-semibold text-foreground',
 				},
 				'dialog.description': {
 					noStyle: true,
@@ -142,7 +140,7 @@ const ConsentManager = ({
 					noStyle: true,
 					className: cn(
 						'flex flex-1 items-center rounded-lg px-4 py-3 font-semibold text-foreground text-sm **:[svg]:hidden',
-						'outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
+						'outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
 					),
 				},
 				'widget.accordion.content': {
@@ -161,7 +159,7 @@ const ConsentManager = ({
 						'border border-transparent shadow-xs',
 						'outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
 						'disabled:cursor-not-allowed disabled:opacity-50',
-						'data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
+						'data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80'
 					),
 				},
 				'widget.switch.track': {
@@ -171,7 +169,7 @@ const ConsentManager = ({
 					noStyle: true,
 					className: cn(
 						'pointer-events-none block size-4 rounded-full bg-background ring-0 transition-transform',
-						'data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground',
+						'data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground'
 					),
 				},
 				'widget.footer.reject-button': {
@@ -187,6 +185,7 @@ const ConsentManager = ({
 					className: variants({ variant: 'default' }),
 				},
 			}}
+			trapFocus={true}
 		/>
 
 		<ConsentManagerClient>{children}</ConsentManagerClient>

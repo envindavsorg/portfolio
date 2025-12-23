@@ -30,7 +30,7 @@ export const SIZE = {
 
 type CaptureScreenshot = {
 	browser: Browser;
-	url: string;
+	urlLink: string;
 	size: keyof typeof SIZE;
 	themes?: 'light' | 'dark' | ('light' | 'dark')[];
 	type?: 'webp' | 'png' | 'jpeg';
@@ -38,7 +38,7 @@ type CaptureScreenshot = {
 
 const captureScreenshot = async ({
 	browser,
-	url,
+	urlLink,
 	size,
 	themes = ['light'],
 	type = 'webp',
@@ -65,11 +65,11 @@ const captureScreenshot = async ({
 			},
 		]);
 
-		await page.evaluateOnNewDocument((theme) => {
-			localStorage.setItem('theme', theme);
+		await page.evaluateOnNewDocument((themeElement) => {
+			localStorage.setItem('theme', themeElement);
 		}, theme);
 
-		await page.goto(url, {
+		await page.goto(urlLink, {
 			waitUntil: 'networkidle2',
 		});
 
@@ -84,7 +84,7 @@ const captureScreenshot = async ({
 		const relativePath = path.replace(process.cwd(), '');
 
 		consola.info(
-			`${size === 'og-image' ? 'OG Image' : 'Screenshot'} saved : ${yellow(relativePath)}`,
+			`${size === 'og-image' ? 'OG Image' : 'Screenshot'} saved : ${yellow(relativePath)}`
 		);
 
 		await page.close();
@@ -101,32 +101,29 @@ const main = async (): Promise<void> => {
 	try {
 		await captureScreenshot({
 			browser,
-			url,
+			urlLink: url,
 			size: 'desktop',
 			themes,
 		});
 		await captureScreenshot({
 			browser,
-			url,
+			urlLink: url,
 			size: 'mobile',
 			themes,
 		});
 		await captureScreenshot({
 			browser,
-			url: `${url}/og`,
+			urlLink: `${url}/og`,
 			size: 'og-image',
 			themes: ['dark'],
 			type: 'png',
 		});
 
 		consola.success(
-			`All screenshots and og image ${green('captured successfully')} !`,
+			`All screenshots and og image ${green('captured successfully')} !`
 		);
 	} catch (error) {
-		consola.error(
-			`${red('Error capturing')} screenshots or og image:`,
-			error,
-		);
+		consola.error(`${red('Error capturing')} screenshots or og image:`, error);
 	} finally {
 		await browser.close();
 	}

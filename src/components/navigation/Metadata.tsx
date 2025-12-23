@@ -64,7 +64,7 @@ const Metadata = ({ commit }: MetadataProps) => {
 				value: `${width}x${height} pixels`,
 			},
 		],
-		[BrowserIcon, name, commit, width, height],
+		[BrowserIcon, name, commit, width, height]
 	);
 
 	return (

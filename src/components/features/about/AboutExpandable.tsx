@@ -29,16 +29,17 @@ export const AboutExpandable = ({
 			<AnimatePresence initial={false}>
 				{isExpanded && (
 					<motion.div
-						id="about-content-expanded"
-						initial={{
-							opacity: 0,
-							height: 0,
-						}}
 						animate={{
 							opacity: 1,
 							height: 'auto',
 						}}
+						className="overflow-hidden"
 						exit={{
+							opacity: 0,
+							height: 0,
+						}}
+						id="about-content-expanded"
+						initial={{
 							opacity: 0,
 							height: 0,
 						}}
@@ -46,7 +47,6 @@ export const AboutExpandable = ({
 							duration: 0.3,
 							ease: [0.4, 0, 0.2, 1],
 						}}
-						className="overflow-hidden"
 					>
 						<div className="mt-4">{moreContent}</div>
 					</motion.div>
@@ -55,16 +55,16 @@ export const AboutExpandable = ({
 
 			<div className="screen-line-before flex justify-center py-2 md:justify-end">
 				<Button
+					aria-controls="about-content-expanded"
+					aria-expanded={isExpanded}
 					onClick={() => setIsExpanded(!isExpanded)}
 					variant="secondary"
-					aria-expanded={isExpanded}
-					aria-controls="about-content-expanded"
 				>
 					{isExpanded ? 'Voir moins' : 'Voir plus'}
 					<CaretDownIcon
 						className={cn(
 							'ml-2 size-4 transition-transform duration-300',
-							isExpanded && 'rotate-180',
+							isExpanded && 'rotate-180'
 						)}
 					/>
 				</Button>

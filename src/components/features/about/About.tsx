@@ -7,7 +7,7 @@ import {
 	PanelTitle,
 } from '@/components/ui/Panel';
 import { Prose } from '@/components/ui/Typography';
-import { USER } from '@/config/user';
+import { USER } from '@/lib/user';
 import { AboutExpandable } from './AboutExpandable';
 
 export const About = (): React.JSX.Element => {
@@ -27,9 +27,7 @@ export const About = (): React.JSX.Element => {
 				<Prose>
 					<AboutExpandable
 						intro={<Markdown>{introText}</Markdown>}
-						moreContent={
-							restText ? <Markdown>{restText}</Markdown> : null
-						}
+						moreContent={restText ? <Markdown>{restText}</Markdown> : null}
 					/>
 				</Prose>
 			</PanelContent>

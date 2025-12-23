@@ -32,7 +32,7 @@ const ThemeOption = ({
 	value: string;
 	isActive?: boolean;
 	onClick: (value: string) => void;
-}) => (
+}): React.JSX.Element => (
 	<button
 		aria-label={value}
 		className={cn(
@@ -40,7 +40,7 @@ const ThemeOption = ({
 			'[&_svg]:size-5 [&_svg]:cursor-pointer',
 			isActive
 				? 'text-zinc-950 dark:text-zinc-50'
-				: 'text-zinc-400 hover:text-zinc-950 dark:text-zinc-500 dark:hover:text-zinc-50',
+				: 'text-zinc-400 hover:text-zinc-950 dark:text-zinc-500 dark:hover:text-zinc-50'
 		)}
 		onClick={() => onClick(value)}
 		type="button"

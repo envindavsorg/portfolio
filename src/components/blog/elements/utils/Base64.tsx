@@ -5,7 +5,7 @@ import {
 	CheckIcon,
 	CopyIcon,
 } from '@phosphor-icons/react';
-import { type ChangeEvent, useCallback, useState } from 'react';
+import React, { type ChangeEvent, useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
 import { DirectionAwareTabs } from '@/components/ui/DirectionAwareTabs';
@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
 import { cn } from '@/lib/utils';
 
-export const Base64 = () => {
+export const Base64 = (): React.JSX.Element => {
 	const [encodeInputText, setEncodeInputText] = useState('');
 	const [encodeOutputText, setEncodeOutputText] = useState('');
 	const [decodeInputText, setDecodeInputText] = useState('');
@@ -25,7 +25,7 @@ export const Base64 = () => {
 		try {
 			const uint8Array = new TextEncoder().encode(text);
 			const binaryString = Array.from(uint8Array, (byte) =>
-				String.fromCodePoint(byte),
+				String.fromCodePoint(byte)
 			).join('');
 			const encoded = btoa(binaryString);
 			setEncodeOutputText(encoded);
@@ -43,7 +43,7 @@ export const Base64 = () => {
 
 			if (!base64Regex.test(cleanText)) {
 				setError(
-					'Format Base64 invalide. Utilisez uniquement A-Z, a-z, 0-9, +, / et =',
+					'Format Base64 invalide. Utilisez uniquement A-Z, a-z, 0-9, +, / et ='
 				);
 				setDecodeOutputText('');
 				return;
@@ -53,15 +53,15 @@ export const Base64 = () => {
 			const binaryString = atob(urlDecoded);
 			const uint8Array = Uint8Array.from(
 				binaryString,
-				(char) => char.codePointAt(0) ?? 0,
+				(char) => char.codePointAt(0) ?? 0
 			);
 			const decoded = new TextDecoder('utf-8', { fatal: true }).decode(
-				uint8Array,
+				uint8Array
 			);
 
 			if (decoded.includes('\uFFFD')) {
 				setError(
-					'Le texte décodé contient des caractères invalides. Vérifiez le Base64.',
+					'Le texte décodé contient des caractères invalides. Vérifiez le Base64.'
 				);
 				setDecodeOutputText('');
 				return;
@@ -71,7 +71,7 @@ export const Base64 = () => {
 			setError(null);
 		} catch (_err) {
 			setError(
-				'Erreur lors du décodage. Vérifiez que le texte est un Base64 valide.',
+				'Erreur lors du décodage. Vérifiez que le texte est un Base64 valide.'
 			);
 			setDecodeOutputText('');
 		}
@@ -86,7 +86,7 @@ export const Base64 = () => {
 				setEncodeOutputText('');
 			}
 		},
-		[encodeToBase64],
+		[encodeToBase64]
 	);
 
 	const handleDecodeInputChange = useCallback(
@@ -99,7 +99,7 @@ export const Base64 = () => {
 				setError(null);
 			}
 		},
-		[decodeFromBase64],
+		[decodeFromBase64]
 	);
 
 	const handleCopy = useCallback((text: string, field: string) => {
@@ -125,20 +125,12 @@ export const Base64 = () => {
 				<div className="flex w-full flex-col gap-y-6 overflow-hidden py-3">
 					<div className="flex flex-col gap-y-3">
 						<div className="flex items-center justify-between">
-							<Label
-								className="text-xl sm:text-2xl"
-								htmlFor="encodeText"
-							>
+							<Label className="text-xl sm:text-2xl" htmlFor="encodeText">
 								Texte à encoder
 							</Label>
 							{encodeInputText && (
 								<Button
-									onClick={() =>
-										handleCopy(
-											encodeInputText,
-											'encode-input',
-										)
-									}
+									onClick={() => handleCopy(encodeInputText, 'encode-input')}
 									variant="outline"
 								>
 									{copiedField === 'encode-input' ? (
@@ -155,32 +147,24 @@ export const Base64 = () => {
 						</div>
 						<Textarea
 							className="outline-0"
-							onChange={(
-								event: ChangeEvent<HTMLTextAreaElement>,
-							) => handleEncodeInputChange(event.target.value)}
-							placeholder="Entrez votre texte ici..."
-							value={encodeInputText}
-							rows={4}
 							id="encodeText"
+							onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+								handleEncodeInputChange(event.target.value)
+							}
+							placeholder="Entrez votre texte ici..."
+							rows={4}
+							value={encodeInputText}
 						/>
 					</div>
 
 					<div className="flex flex-col gap-y-3">
 						<div className="flex items-center justify-between">
-							<Label
-								className="text-xl sm:text-2xl"
-								htmlFor="decodedText"
-							>
+							<Label className="text-xl sm:text-2xl" htmlFor="decodedText">
 								Base64
 							</Label>
 							{encodeOutputText && (
 								<Button
-									onClick={() =>
-										handleCopy(
-											encodeOutputText,
-											'encode-output',
-										)
-									}
+									onClick={() => handleCopy(encodeOutputText, 'encode-output')}
 									variant="outline"
 								>
 									{copiedField === 'encode-output' ? (
@@ -209,20 +193,12 @@ export const Base64 = () => {
 				<div className="flex w-full flex-col gap-y-6 overflow-hidden py-3">
 					<div className="flex flex-col gap-y-3">
 						<div className="flex items-center justify-between">
-							<Label
-								className="text-xl sm:text-2xl"
-								htmlFor="encodedText"
-							>
+							<Label className="text-xl sm:text-2xl" htmlFor="encodedText">
 								Base64
 							</Label>
 							{decodeInputText && (
 								<Button
-									onClick={() =>
-										handleCopy(
-											decodeInputText,
-											'decode-input',
-										)
-									}
+									onClick={() => handleCopy(decodeInputText, 'decode-input')}
 									variant="outline"
 								>
 									{copiedField === 'decode-input' ? (
@@ -239,31 +215,23 @@ export const Base64 = () => {
 						</div>
 						<Textarea
 							className="outline-0"
-							onChange={(
-								event: ChangeEvent<HTMLTextAreaElement>,
-							) => handleDecodeInputChange(event.target.value)}
+							id="encodedText"
+							onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+								handleDecodeInputChange(event.target.value)
+							}
 							placeholder="Collez du Base64 ici pour le décoder..."
 							value={decodeInputText}
-							id="encodedText"
 						/>
 					</div>
 
 					<div className="flex flex-col gap-y-3">
 						<div className="flex items-center justify-between">
-							<Label
-								className="text-xl sm:text-2xl"
-								htmlFor="decodesText"
-							>
+							<Label className="text-xl sm:text-2xl" htmlFor="decodesText">
 								Texte décodé
 							</Label>
 							{decodeOutputText && (
 								<Button
-									onClick={() =>
-										handleCopy(
-											decodeOutputText,
-											'decode-output',
-										)
-									}
+									onClick={() => handleCopy(decodeOutputText, 'decode-output')}
 									variant="outline"
 								>
 									{copiedField === 'decode-output' ? (
@@ -281,7 +249,7 @@ export const Base64 = () => {
 						<div
 							className={cn(
 								'min-h-[100px] w-full overflow-auto rounded-md bg-accent px-3 py-2 text-sm',
-								error && 'text-destructive',
+								error && 'text-destructive'
 							)}
 						>
 							{error ? error : decodeOutputText}

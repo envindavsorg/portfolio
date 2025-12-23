@@ -1,6 +1,9 @@
+import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const MarkdownIcon = (props: SVGProps<SVGSVGElement>) => (
+export const MarkdownIcon = (
+	props: SVGProps<SVGSVGElement>
+): React.JSX.Element => (
 	<svg
 		height="1em"
 		viewBox="0 0 208 128"

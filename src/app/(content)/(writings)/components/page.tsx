@@ -39,13 +39,13 @@ const ComponentsPage = async ({
 
 	const allComponents: Post[] = getPostsByCategory('components').sort(
 		(a: Post, b: Post) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)),
+			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
 	const tagCounts: Record<string, number> = {};
 	for (const post of allComponents) {
-		for (const tag of post.metadata.tags || []) {
-			tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+		for (const tagName of post.metadata.tags || []) {
+			tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
 		}
 	}
 
@@ -61,8 +61,8 @@ const ComponentsPage = async ({
 			? allComponents
 			: allComponents.filter((article: Post) =>
 					article.metadata.tags?.some(
-						(tag) => tag.toLowerCase() === selectedTag,
-					),
+						(tagName) => tagName.toLowerCase() === selectedTag
+					)
 				);
 
 	return (
@@ -70,13 +70,13 @@ const ComponentsPage = async ({
 			<WritingsTerminal />
 
 			<WritingsHeading
-				title="Composants React"
 				description="Accélérez vos développements avec une collection complète de
 					composants et hooks React optimisés, conçus pour des
 					applications modernes et performantes. Compatibles App
 					Router, Server Components et Server Actions. Intégration
 					transparente avec les dernières fonctionnalités de Next.js
 					16."
+				title="Composants React"
 			/>
 
 			<div className="screen-line-after px-3 py-2">
@@ -114,16 +114,10 @@ const ComponentsPage = async ({
 					{components
 						.slice()
 						.sort((a, b) =>
-							dayjs(b.metadata.createdAt).diff(
-								dayjs(a.metadata.createdAt),
-							),
+							dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 						)
 						.map((post: Post, idx: number) => (
-							<Post
-								key={post.slug}
-								post={post}
-								shouldPreloadImage={idx <= 4}
-							/>
+							<Post key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
 						))}
 				</div>
 			</div>

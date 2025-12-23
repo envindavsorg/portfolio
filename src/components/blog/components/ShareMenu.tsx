@@ -9,6 +9,7 @@ import {
 } from '@phosphor-icons/react';
 import Link from 'next/link';
 import posthog from 'posthog-js';
+import type React from 'react';
 import { memo, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
@@ -26,14 +27,14 @@ type ShareMenuProps = {
 	url: string;
 };
 
-export const ShareMenu = memo(({ url }: ShareMenuProps) => {
+export const ShareMenu = memo(({ url }: ShareMenuProps): React.JSX.Element => {
 	const absoluteUrl = useMemo(() => getAbsoluteUrl(url), [url]);
 	const shareUrls = useMemo(
 		() => ({
 			x: `https://x.com/intent/tweet?url=${encodeURIComponent(absoluteUrl)}`,
 			linkedin: `https://www.linkedin.com/sharing/share-offsite?url=${encodeURIComponent(absoluteUrl)}`,
 		}),
-		[absoluteUrl],
+		[absoluteUrl]
 	);
 
 	const { x, linkedin } = shareUrls;
@@ -54,7 +55,7 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 				url: absoluteUrl,
 			});
 		},
-		[absoluteUrl],
+		[absoluteUrl]
 	);
 
 	return (
@@ -85,9 +86,9 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 				<DropdownMenuItem asChild className="font-medium">
 					<Link
 						href={x}
+						onClick={() => handleShare('x')}
 						rel="noopener noreferrer"
 						target="_blank"
-						onClick={() => handleShare('x')}
 					>
 						<XLogoIcon className="size-4 text-foreground" />
 						Partager sur X
@@ -97,9 +98,9 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 				<DropdownMenuItem asChild className="font-medium">
 					<Link
 						href={linkedin}
+						onClick={() => handleShare('linkedin')}
 						rel="noopener noreferrer"
 						target="_blank"
-						onClick={() => handleShare('linkedin')}
 					>
 						<LinkedinLogoIcon className="size-4 text-foreground" />
 						Partager sur LinkedIn

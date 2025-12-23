@@ -17,12 +17,11 @@ export const Experiences = (): React.JSX.Element => (
 
 		<PanelContent className="screen-line-after">
 			<Prose>
-				Retour sur mon parcours professionnel et les expériences qui
-				m'ont permis de grandir en tant que développeur. De la refonte
-				d'applications à grande échelle à l'intégration de
-				fonctionnalités complexes, chaque poste a été une opportunité
-				d'apprendre, de relever des défis techniques et de collaborer
-				avec des équipes talentueuses.
+				Retour sur mon parcours professionnel et les expériences qui m'ont
+				permis de grandir en tant que développeur. De la refonte d'applications
+				à grande échelle à l'intégration de fonctionnalités complexes, chaque
+				poste a été une opportunité d'apprendre, de relever des défis techniques
+				et de collaborer avec des équipes talentueuses.
 			</Prose>
 		</PanelContent>
 

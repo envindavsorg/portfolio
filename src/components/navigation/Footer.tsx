@@ -53,18 +53,12 @@ const Footer = ({ commit }: FooterProps) => {
 								<p className="text-balance font-mono text-muted-foreground text-xs sm:text-sm">
 									Développé avec beaucoup d'
 								</p>
-								<HeartIcon
-									ref={playerHeartRef}
-									state="hover-pinch"
-								/>
+								<HeartIcon ref={playerHeartRef} state="hover-pinch" />
 							</div>
 							<p className="text-balance font-mono text-muted-foreground text-xs sm:text-sm">
 								et de
 							</p>
-							<PizzaIcon
-								ref={playerPizzaRef}
-								state="hover-pizza"
-							/>
+							<PizzaIcon ref={playerPizzaRef} state="hover-pizza" />
 							<p className="text-balance font-mono text-muted-foreground text-xs sm:text-sm">
 								à Paris.
 							</p>
@@ -75,7 +69,7 @@ const Footer = ({ commit }: FooterProps) => {
 						className={cn(
 							'screen-line-before screen-line-after flex w-full before:z-1 after:z-1',
 							'bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)]',
-							'bg-size-[10px_10px] [--pattern-foreground:var(--color-edge)]/56',
+							'bg-size-[10px_10px] [--pattern-foreground:var(--color-edge)]/56'
 						)}
 					>
 						<div className="mx-auto flex items-center justify-center gap-3 border-edge border-x bg-background px-4">

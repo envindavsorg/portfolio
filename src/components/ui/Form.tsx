@@ -2,7 +2,12 @@
 
 import type { Label as LabelPrimitive } from 'radix-ui';
 import { Slot as SlotPrimitive } from 'radix-ui';
-import { type ComponentProps, createContext, useContext, useId } from 'react';
+import React, {
+	type ComponentProps,
+	createContext,
+	useContext,
+	useId,
+} from 'react';
 import {
 	Controller,
 	type ControllerProps,
@@ -27,7 +32,7 @@ type FormFieldContextValue<
 };
 
 const FormFieldContext = createContext<FormFieldContextValue>(
-	{} as FormFieldContextValue,
+	{} as FormFieldContextValue
 );
 
 const FormField = <
@@ -69,10 +74,13 @@ type FormItemContextValue = {
 };
 
 const FormItemContext = createContext<FormItemContextValue>(
-	{} as FormItemContextValue,
+	{} as FormItemContextValue
 );
 
-const FormItem = ({ className, ...props }: ComponentProps<'div'>) => {
+const FormItem = ({
+	className,
+	...props
+}: ComponentProps<'div'>): React.JSX.Element => {
 	const id = useId();
 
 	return (
@@ -89,14 +97,14 @@ const FormItem = ({ className, ...props }: ComponentProps<'div'>) => {
 const FormLabel = ({
 	className,
 	...props
-}: ComponentProps<typeof LabelPrimitive.Root>) => {
+}: ComponentProps<typeof LabelPrimitive.Root>): React.JSX.Element => {
 	const { error, formItemId } = useFormField();
 
 	return (
 		<Label
 			className={cn(
 				'font-medium text-xs data-[error=true]:text-destructive',
-				className,
+				className
 			)}
 			data-error={!!error}
 			data-slot="form-label"
@@ -106,16 +114,16 @@ const FormLabel = ({
 	);
 };
 
-const FormControl = ({ ...props }: ComponentProps<typeof Slot>) => {
+const FormControl = ({
+	...props
+}: ComponentProps<typeof Slot>): React.JSX.Element => {
 	const { error, formItemId, formDescriptionId, formMessageId } =
 		useFormField();
 
 	return (
 		<Slot
 			aria-describedby={
-				error
-					? `${formDescriptionId} ${formMessageId}`
-					: `${formDescriptionId}`
+				error ? `${formDescriptionId} ${formMessageId}` : `${formDescriptionId}`
 			}
 			aria-invalid={!!error}
 			data-slot="form-control"
@@ -125,7 +133,10 @@ const FormControl = ({ ...props }: ComponentProps<typeof Slot>) => {
 	);
 };
 
-const FormDescription = ({ className, ...props }: ComponentProps<'p'>) => {
+const FormDescription = ({
+	className,
+	...props
+}: ComponentProps<'p'>): React.JSX.Element => {
 	const { formDescriptionId } = useFormField();
 
 	return (
@@ -138,7 +149,10 @@ const FormDescription = ({ className, ...props }: ComponentProps<'p'>) => {
 	);
 };
 
-const FormMessage = ({ className, ...props }: ComponentProps<'p'>) => {
+const FormMessage = ({
+	className,
+	...props
+}: ComponentProps<'p'>): React.JSX.Element | null => {
 	const { error, formMessageId } = useFormField();
 	const body = error ? String(error?.message ?? '') : props.children;
 

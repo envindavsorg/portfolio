@@ -1,6 +1,9 @@
+import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const ClaudeIcon = (props: SVGProps<SVGSVGElement>) => (
+export const ClaudeIcon = (
+	props: SVGProps<SVGSVGElement>
+): React.JSX.Element => (
 	<svg {...props} preserveAspectRatio="xMidYMid" viewBox="0 0 256 257">
 		<title>Claude</title>
 		<path

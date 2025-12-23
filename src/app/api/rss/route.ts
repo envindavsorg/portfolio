@@ -1,7 +1,6 @@
-import { SITE_INFO } from '@/config/site';
-import { USER } from '@/config/user';
 import { getAllPosts } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
+import { USER } from '@/lib/user';
 
 export const dynamic = 'force-static';
 
@@ -22,19 +21,19 @@ export const GET = () => {
     <item>
       <title><![CDATA[ ${post.metadata.title} ]]></title>
       <description><![CDATA[ ${post.metadata.description || ''} ]]></description>
-      <link>${SITE_INFO.url}/blog/${post.slug}</link>
-      <guid isPermaLink="false">${SITE_INFO.url}/blog/${post.slug}</guid>
+      <link>https://cuzeacflorin.fr/blog/${post.slug}</link>
+      <guid isPermaLink="false">https://cuzeacflorin.fr/blog/${post.slug}</guid>
       <dc:creator><![CDATA[ ${USER.firstName} ]]></dc:creator>
       <pubDate>${dayjs(post.metadata.createdAt).format('ddd, DD MMM YYYY HH:mm:ss [GMT]')}</pubDate>
       <content:encoded>
         <p>${escapeXml(post.metadata.description || '')}</p>
         <div style="margin-top: 50px; font-style: italic;">
-          <strong><a href="${SITE_INFO.url}/blog/${post.slug}">Continuer la lecture</a>.</strong>
+          <strong><a href="https://cuzeacflorin.fr/blog/${post.slug}">Continuer la lecture</a>.</strong>
         </div>
         <br />
         <br />
       </content:encoded>
-    </item>`,
+    </item>`
 		)
 		.join('\n');
 
@@ -42,11 +41,11 @@ export const GET = () => {
 <rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
     <title><![CDATA[ Le coin de ${USER.firstName} ]]></title>
-    <description><![CDATA[ ${SITE_INFO.description} ]]></description>
-    <link>${SITE_INFO.url}/</link>
+    <description><![CDATA[ ${USER.bio} ]]></description>
+    <link>https://cuzeacflorin.fr/</link>
     <generator>RSS for Node</generator>
     <lastBuildDate>${dayjs().format('ddd, DD MMM YYYY HH:mm:ss [GMT]')}</lastBuildDate>
-    <atom:link href="${SITE_INFO.url}/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://cuzeacflorin.fr/rss.xml" rel="self" type="application/rss+xml"/>
     ${itemsXml}
   </channel>
 </rss>`;

@@ -2,6 +2,7 @@
 
 import { CheckIcon, CopyIcon, XCircleIcon } from '@phosphor-icons/react';
 import posthog from 'posthog-js';
+import type React from 'react';
 import { useMemo, useOptimistic, useTransition } from 'react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
@@ -17,10 +18,12 @@ type CopyButtonProps = {
 	className?: string;
 };
 
-export const CopyButton = ({ value, className, ...props }: CopyButtonProps) => {
-	const [state, setState] = useOptimistic<'idle' | 'copied' | 'failed'>(
-		'idle',
-	);
+export const CopyButton = ({
+	value,
+	className,
+	...props
+}: CopyButtonProps): React.JSX.Element => {
+	const [state, setState] = useOptimistic<'idle' | 'copied' | 'failed'>('idle');
 	const [, startTransition] = useTransition();
 
 	const Icon = useMemo(() => ICONS[state], [state]);

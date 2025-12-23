@@ -12,7 +12,7 @@ import {
 	parseISO,
 	subWeeks,
 } from 'date-fns';
-import {
+import React, {
 	type CSSProperties,
 	createContext,
 	Fragment,
@@ -96,7 +96,7 @@ const useContributionGraph = () => {
 
 	if (!context) {
 		throw new Error(
-			'ContributionGraph components must be used within a ContributionGraph',
+			'ContributionGraph components must be used within a ContributionGraph'
 		);
 	}
 
@@ -109,11 +109,11 @@ const fillHoles = (activities: Activity[]): Activity[] => {
 	}
 
 	const sortedActivities = [...activities].sort((a, b) =>
-		a.date.localeCompare(b.date),
+		a.date.localeCompare(b.date)
 	);
 
 	const calendar = new Map<string, Activity>(
-		activities.map((a) => [a.date, a]),
+		activities.map((a) => [a.date, a])
 	);
 
 	const firstActivity = sortedActivities[0] as Activity;
@@ -143,7 +143,7 @@ const fillHoles = (activities: Activity[]): Activity[] => {
 
 const groupByWeeks = (
 	activities: Activity[],
-	weekStart: WeekDay = 0,
+	weekStart: WeekDay = 0
 ): Week[] => {
 	if (activities.length === 0) {
 		return [];
@@ -158,9 +158,9 @@ const groupByWeeks = (
 			: subWeeks(nextDay(firstDate, weekStart), 1);
 
 	const paddedActivities = [
-		...(new Array(
-			differenceInCalendarDays(firstDate, firstCalendarDate),
-		).fill(undefined) as Activity[]),
+		...(new Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(
+			undefined
+		) as Activity[]),
 		...normalizedActivities,
 	];
 
@@ -169,37 +169,32 @@ const groupByWeeks = (
 	return new Array(numberOfWeeks)
 		.fill(undefined)
 		.map((_, weekIndex) =>
-			paddedActivities.slice(weekIndex * 7, weekIndex * 7 + 7),
+			paddedActivities.slice(weekIndex * 7, weekIndex * 7 + 7)
 		);
 };
 
 const getMonthLabels = (
 	weeks: Week[],
-	monthNames: string[] = DEFAULT_MONTH_LABELS,
+	monthNames: string[] = DEFAULT_MONTH_LABELS
 ): MonthLabel[] =>
 	weeks
 		.reduce<MonthLabel[]>((labels, week, weekIndex) => {
-			const firstActivity = week.find(
-				(activity) => activity !== undefined,
-			);
+			const firstActivity = week.find((activity) => activity !== undefined);
 
 			if (!firstActivity) {
 				throw new Error(
-					`Unexpected error: Week ${weekIndex + 1} is empty: [${week}].`,
+					`Unexpected error: Week ${weekIndex + 1} is empty: [${week}].`
 				);
 			}
 
 			const month = monthNames[getMonth(parseISO(firstActivity.date))];
 
 			if (!month) {
-				const monthName = new Date(firstActivity.date).toLocaleString(
-					'en-US',
-					{
-						month: 'short',
-					},
-				);
+				const monthName = new Date(firstActivity.date).toLocaleString('en-US', {
+					month: 'short',
+				});
 				throw new Error(
-					`Unexpected error: undefined month label for ${monthName}.`,
+					`Unexpected error: undefined month label for ${monthName}.`
 				);
 			}
 
@@ -253,12 +248,9 @@ export const ContributionGraph = ({
 	weekStart = 0,
 	className,
 	...props
-}: ContributionGraphProps) => {
+}: ContributionGraphProps): React.JSX.Element | null => {
 	const maxLevel = Math.max(1, maxLevelProp);
-	const weeks = useMemo(
-		() => groupByWeeks(data, weekStart),
-		[data, weekStart],
-	);
+	const weeks = useMemo(() => groupByWeeks(data, weekStart), [data, weekStart]);
 	const LABEL_MARGIN = 8;
 
 	const labels = { ...DEFAULT_LABELS, ...labelsProp };
@@ -301,10 +293,7 @@ export const ContributionGraph = ({
 			}}
 		>
 			<div
-				className={cn(
-					'flex w-max max-w-full flex-col gap-2',
-					className,
-				)}
+				className={cn('flex w-max max-w-full flex-col gap-2', className)}
 				style={{ fontSize, ...style }}
 				{...props}
 			/>
@@ -324,13 +313,13 @@ export const ContributionGraphBlock = ({
 	weekIndex,
 	className,
 	...props
-}: ContributionGraphBlockProps) => {
+}: ContributionGraphBlockProps): React.JSX.Element => {
 	const { blockSize, blockMargin, blockRadius, labelHeight, maxLevel } =
 		useContributionGraph();
 
 	if (activity.level < 0 || activity.level > maxLevel) {
 		throw new RangeError(
-			`Provided activity level ${activity.level} for ${activity.date} is out of range. It must be between 0 and ${maxLevel}.`,
+			`Provided activity level ${activity.level} for ${activity.date} is out of range. It must be between 0 and ${maxLevel}.`
 		);
 	}
 
@@ -342,7 +331,7 @@ export const ContributionGraphBlock = ({
 				'data-[level="2"]:fill-blue-600/40 dark:data-[level="2"]:fill-yellow-300/40',
 				'data-[level="3"]:fill-blue-600/60 dark:data-[level="3"]:fill-yellow-300/60',
 				'data-[level="4"]:fill-blue-600/80 dark:data-[level="4"]:fill-yellow-300/80',
-				className,
+				className
 			)}
 			data-count={activity.count}
 			data-date={activity.date}
@@ -376,21 +365,18 @@ export const ContributionGraphCalendar = ({
 	className,
 	children,
 	...props
-}: ContributionGraphCalendarProps) => {
+}: ContributionGraphCalendarProps): React.JSX.Element => {
 	const { weeks, width, height, blockSize, blockMargin, labels } =
 		useContributionGraph();
 
 	const monthLabels = useMemo(
 		() => getMonthLabels(weeks, labels.months),
-		[weeks, labels.months],
+		[weeks, labels.months]
 	);
 
 	return (
 		<div
-			className={cn(
-				'max-w-full overflow-x-auto overflow-y-hidden',
-				className,
-			)}
+			className={cn('max-w-full overflow-x-auto overflow-y-hidden', className)}
 			{...props}
 		>
 			<svg
@@ -425,7 +411,7 @@ export const ContributionGraphCalendar = ({
 								{children({ activity, dayIndex, weekIndex })}
 							</Fragment>
 						);
-					}),
+					})
 				)}
 			</svg>
 		</div>
@@ -437,11 +423,11 @@ export type ContributionGraphFooterProps = HTMLAttributes<HTMLDivElement>;
 export const ContributionGraphFooter = ({
 	className,
 	...props
-}: ContributionGraphFooterProps) => (
+}: ContributionGraphFooterProps): React.JSX.Element => (
 	<div
 		className={cn(
 			'flex flex-wrap gap-1 whitespace-nowrap sm:gap-x-4',
-			className,
+			className
 		)}
 		{...props}
 	/>
@@ -458,7 +444,7 @@ export const ContributionGraphTotalCount = ({
 	className,
 	children,
 	...props
-}: ContributionGraphTotalCountProps) => {
+}: ContributionGraphTotalCountProps): React.JSX.Element => {
 	const { totalCount, year, labels } = useContributionGraph();
 
 	if (children) {
@@ -487,7 +473,7 @@ export const ContributionGraphLegend = ({
 	className,
 	children,
 	...props
-}: ContributionGraphLegendProps) => {
+}: ContributionGraphLegendProps): React.JSX.Element => {
 	const { labels, maxLevel, blockSize, blockRadius } = useContributionGraph();
 
 	return (
@@ -510,7 +496,7 @@ export const ContributionGraphLegend = ({
 								'data-[level="1"]:fill-blue-600/20 dark:data-[level="1"]:fill-yellow-300/20',
 								'data-[level="2"]:fill-blue-600/40 dark:data-[level="2"]:fill-yellow-300/40',
 								'data-[level="3"]:fill-blue-600/60 dark:data-[level="3"]:fill-yellow-300/60',
-								'data-[level="4"]:fill-blue-600/80 dark:data-[level="4"]:fill-yellow-300/80',
+								'data-[level="4"]:fill-blue-600/80 dark:data-[level="4"]:fill-yellow-300/80'
 							)}
 							data-level={level}
 							height={blockSize}
@@ -519,7 +505,7 @@ export const ContributionGraphLegend = ({
 							width={blockSize}
 						/>
 					</svg>
-				),
+				)
 			)}
 			<span className="ml-2 text-muted-foreground text-xs">
 				{labels.legend?.more || 'Plus'}

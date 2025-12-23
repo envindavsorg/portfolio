@@ -17,7 +17,7 @@ import { dayjs } from '@/lib/dayjs';
 export const Articles = (): React.JSX.Element => {
 	const articles: Post[] = getPostsByCategory('article')
 		.sort((a: Post, b: Post) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)),
+			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 		)
 		.slice(0, 4);
 
@@ -30,16 +30,14 @@ export const Articles = (): React.JSX.Element => {
 
 			<PanelContent className="screen-line-after">
 				<Prose>
-					Retrouvez tous mes <span>articles de blog</span> où je
-					partage mon expérience en développement web. J'y aborde les{' '}
-					<span>bonnes pratiques</span>, les{' '}
-					<span>patterns modernes</span>, les solutions aux problèmes
-					techniques du quotidien, et mes découvertes sur l'écosystème
-					JavaScript. Chaque article est le fruit d'une{' '}
-					<span>expérience concrète</span>, d'un{' '}
-					<span>bug résolu</span> ou d'une technique apprise. Mon
-					objectif : documenter mon apprentissage et aider d'autres
-					développeurs qui rencontrent les mêmes défis.
+					Retrouvez tous mes <span>articles de blog</span> où je partage mon
+					expérience en développement web. J'y aborde les{' '}
+					<span>bonnes pratiques</span>, les <span>patterns modernes</span>, les
+					solutions aux problèmes techniques du quotidien, et mes découvertes
+					sur l'écosystème JavaScript. Chaque article est le fruit d'une{' '}
+					<span>expérience concrète</span>, d'un <span>bug résolu</span> ou
+					d'une technique apprise. Mon objectif : documenter mon apprentissage
+					et aider d'autres développeurs qui rencontrent les mêmes défis.
 				</Prose>
 			</PanelContent>
 

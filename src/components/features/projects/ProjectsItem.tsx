@@ -54,7 +54,7 @@ export const ProjectsItem = ({
 							aria-hidden
 							className={cn(
 								'mx-4 flex size-8 shrink-0 items-center justify-center bg-muted',
-								'rounded-lg border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background',
+								'rounded-lg border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background'
 							)}
 						>
 							<CodaLogoIcon
@@ -72,9 +72,7 @@ export const ProjectsItem = ({
 								</h2>
 
 								<dl className="text-muted-foreground text-xs sm:text-sm">
-									<dt className="sr-only">
-										Période du projet
-									</dt>
+									<dt className="sr-only">Période du projet</dt>
 									<dd className="flex items-center gap-1">
 										<span>{start}</span>
 										<span className="font-mono">-</span>
@@ -84,9 +82,7 @@ export const ProjectsItem = ({
 													aria-hidden
 													className="size-4 translate-y-[0.5px]"
 												/>
-												<span className="sr-only">
-													(en cours)
-												</span>
+												<span className="sr-only">(en cours)</span>
 											</>
 										) : (
 											<span>{end}</span>
@@ -104,14 +100,10 @@ export const ProjectsItem = ({
 										target="_blank"
 									>
 										<LinkIcon className="pointer-events-none size-5" />
-										<span className="sr-only">
-											Ouvrir le lien du projet
-										</span>
+										<span className="sr-only">Ouvrir le lien du projet</span>
 									</a>
 								</TooltipTrigger>
-								<TooltipContent>
-									Ouvrir le projet
-								</TooltipContent>
+								<TooltipContent>Ouvrir le projet</TooltipContent>
 							</Tooltip>
 
 							<div
@@ -136,10 +128,7 @@ export const ProjectsItem = ({
 							{project.skills.length > 0 && (
 								<ul className="flex flex-wrap gap-1.5">
 									{project.skills.map((skill, index) => (
-										<li
-											className="flex"
-											key={index + skill}
-										>
+										<li className="flex" key={index + skill}>
 											<Tag>{skill}</Tag>
 										</li>
 									))}

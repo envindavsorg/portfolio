@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import VCard from 'vcard-creator';
-import { USER } from '@/config/user';
+import { USER } from '@/lib/user';
 import convertImageToJpeg from '@/lib/utils/image';
 import { decodeEmail, decodePhoneNumber } from '@/lib/utils/string';
 
@@ -39,7 +39,8 @@ const getVCardPhoto = async (url: string) => {
 export const GET = async (): Promise<Response> => {
 	const card = new VCard();
 
-	card.addName(USER.lastName, USER.firstName)
+	card
+		.addName(USER.lastName, USER.firstName)
 		.addPhoneNumber(decodePhoneNumber(USER.phoneNumber))
 		.addAddress(USER.location.city)
 		.addEmail(decodeEmail(USER.emailAddress))

@@ -30,7 +30,7 @@ export const ComponentPreview = ({
 	canReplay?: boolean;
 	notProse?: boolean;
 	codeCollapsible?: boolean;
-}) => {
+}): React.JSX.Element => {
 	const [replay, setReplay] = useState(0);
 
 	const Codes = React.Children.toArray(children) as React.ReactElement[];
@@ -42,8 +42,7 @@ export const ComponentPreview = ({
 		if (!Component) {
 			return (
 				<p className="text-muted-foreground text-sm">
-					Le composant{' '}
-					<CodeInline className="font-semibold">{name}</CodeInline>{' '}
+					Le composant <CodeInline className="font-semibold">{name}</CodeInline>{' '}
 					n'existe pas dans le registre.
 				</p>
 			);
@@ -53,10 +52,7 @@ export const ComponentPreview = ({
 	}, [name]);
 
 	return (
-		<div
-			className={cn('my-6', notProse && 'not-prose', className)}
-			{...props}
-		>
+		<div className={cn('my-6', notProse && 'not-prose', className)} {...props}>
 			<Tabs className="gap-4" defaultValue="preview">
 				<TabsList>
 					<TabsTrigger className="cursor-pointer" value="preview">
@@ -77,9 +73,7 @@ export const ComponentPreview = ({
 									<Tooltip>
 										<TooltipTrigger asChild>
 											<Button
-												onClick={() =>
-													setReplay((v) => v + 1)
-												}
+												onClick={() => setReplay((v) => v + 1)}
 												size="icon"
 												variant="outline"
 											>

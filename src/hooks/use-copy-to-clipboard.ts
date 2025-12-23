@@ -12,7 +12,7 @@ const useCopyToClipboard = (initialText = 'Copier') => {
 				setTimeoutId(id);
 			});
 		},
-		[initialText],
+		[initialText]
 	);
 
 	useEffect(
@@ -21,7 +21,7 @@ const useCopyToClipboard = (initialText = 'Copier') => {
 				clearTimeout(timeoutId);
 			}
 		},
-		[timeoutId],
+		[timeoutId]
 	);
 
 	return { buttonText, handleCopy };

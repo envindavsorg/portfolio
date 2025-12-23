@@ -4,17 +4,17 @@ import Script from 'next/script';
 import type React from 'react';
 import type { WebSite, WithContext } from 'schema-dts';
 import ConsentManager from '@/components/manager/ConsentManager';
-import { META_THEME_COLORS, SITE_INFO } from '@/config/site';
-import { USER } from '@/config/user';
 import { mono, sans } from '@/lib/fonts';
+import { META_THEME_COLORS } from '@/lib/theme';
+import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 import { Providers } from '@/providers/Providers';
 
 const getWebSiteJsonLd = (): WithContext<WebSite> => ({
 	'@context': 'https://schema.org',
 	'@type': 'WebSite',
-	name: SITE_INFO.name,
-	url: SITE_INFO.url,
+	name: USER.firstName,
+	url: 'https://cuzeacflorin.fr',
 	alternateName: [USER.username],
 });
 
@@ -41,25 +41,25 @@ const darkModeScript = `
 `;
 
 export const metadata: Metadata = {
-	metadataBase: new URL(SITE_INFO.url),
+	metadataBase: 'https://cuzeacflorin.fr',
 	alternates: {
 		canonical: '/',
 	},
 	title: {
-		template: `%s – ${SITE_INFO.name}`,
+		template: `%s – ${USER.firstName} ${USER.lastName}`,
 		default: `${USER.firstName} – ${USER.jobTitle}`,
 	},
-	description: SITE_INFO.description,
-	keywords: SITE_INFO.keywords,
+	description: USER.bio,
+	keywords: USER.keywords,
 	authors: [
 		{
 			name: 'envindavsorg',
-			url: SITE_INFO.url,
+			url: 'https://cuzeacflorin.fr',
 		},
 	],
 	creator: 'envindavsorg',
 	openGraph: {
-		siteName: SITE_INFO.name,
+		siteName: `${USER.firstName} ${USER.lastName}`,
 		url: '/',
 		type: 'profile',
 		firstName: USER.firstName,
@@ -68,10 +68,10 @@ export const metadata: Metadata = {
 		gender: USER.gender,
 		images: [
 			{
-				url: SITE_INFO.ogImage,
+				url: USER.ogImage,
 				width: 1200,
 				height: 630,
-				alt: SITE_INFO.name,
+				alt: `${USER.firstName} ${USER.lastName}`,
 			},
 		],
 	},
@@ -110,7 +110,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 		className={cn(
 			'no-scrollbar h-full antialiased',
 			sans.variable,
-			mono.variable,
+			mono.variable
 		)}
 		lang="en"
 		suppressHydrationWarning
@@ -120,15 +120,10 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 				dangerouslySetInnerHTML={{ __html: darkModeScript }}
 				type="text/javascript"
 			/>
-			<Script
-				src={`data:text/javascript;base64,${btoa(darkModeScript)}`}
-			/>
+			<Script src={`data:text/javascript;base64,${btoa(darkModeScript)}`} />
 			<script
 				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(getWebSiteJsonLd()).replace(
-						/</g,
-						'\\u003c',
-					),
+					__html: JSON.stringify(getWebSiteJsonLd()).replace(/</g, '\\u003c'),
 				}}
 				type="application/ld+json"
 			/>

@@ -7,31 +7,41 @@ import { cn } from '@/lib/utils';
 
 const ContextMenu = ({
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Root>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.Root
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.Root data-slot="context-menu" {...props} />
 );
 
 const ContextMenuTrigger = ({
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Trigger>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.Trigger
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.Trigger data-slot="context-menu-trigger" {...props} />
 );
 
 const ContextMenuGroup = ({
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Group>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.Group
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />
 );
 
 const ContextMenuPortal = ({
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Portal>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.Portal
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.Portal data-slot="context-menu-portal" {...props} />
 );
 
 const ContextMenuSub = ({
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Sub>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.Sub
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.Sub data-slot="context-menu-sub" {...props} />
 );
 
@@ -51,7 +61,7 @@ const ContextMenuSubTrigger = ({
 	...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & {
 	inset?: boolean;
-}) => (
+}): React.JSX.Element => (
 	<ContextMenuPrimitive.SubTrigger
 		className={cn(
 			'flex items-center',
@@ -59,7 +69,7 @@ const ContextMenuSubTrigger = ({
 			'focus:bg-accent focus:text-accent-foreground',
 			'data-[state=open]:bg-accent data-inset:pl-8 data-[state=open]:text-accent-foreground',
 			"[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-			className,
+			className
 		)}
 		data-inset={inset}
 		data-slot="context-menu-sub-trigger"
@@ -73,7 +83,9 @@ const ContextMenuSubTrigger = ({
 const ContextMenuSubContent = ({
 	className,
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.SubContent>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.SubContent
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.SubContent
 		className={cn(
 			'z-50 min-w-64 origin-(--radix-context-menu-content-transform-origin)',
@@ -83,7 +95,7 @@ const ContextMenuSubContent = ({
 			'data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
 			'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:animate-out',
 			'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in',
-			className,
+			className
 		)}
 		data-slot="context-menu-sub-content"
 		{...props}
@@ -93,7 +105,9 @@ const ContextMenuSubContent = ({
 const ContextMenuContent = ({
 	className,
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Content>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.Content
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.Portal>
 		<ContextMenuPrimitive.Content
 			className={cn(
@@ -105,7 +119,7 @@ const ContextMenuContent = ({
 				'data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
 				'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:animate-out',
 				'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in',
-				className,
+				className
 			)}
 			data-slot="context-menu-content"
 			{...props}
@@ -121,7 +135,7 @@ const ContextMenuItem = ({
 }: React.ComponentProps<typeof ContextMenuPrimitive.Item> & {
 	inset?: boolean;
 	variant?: 'default' | 'destructive';
-}) => (
+}): React.JSX.Element => (
 	<ContextMenuPrimitive.Item
 		className={cn(
 			'relative flex items-center gap-2',
@@ -133,7 +147,7 @@ const ContextMenuItem = ({
 			'cursor-pointer select-none rounded-md p-2 text-sm data-inset:pl-8',
 			"[&_svg:not([class*='size-'])]:size-5 [&_svg]:pointer-events-none",
 			"[&_svg:not([class*='text-'])]:text-foreground [&_svg]:shrink-0",
-			className,
+			className
 		)}
 		data-inset={inset}
 		data-slot="context-menu-item"
@@ -147,7 +161,9 @@ const ContextMenuCheckboxItem = ({
 	children,
 	checked,
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.CheckboxItem
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.CheckboxItem
 		checked={checked}
 		className={cn(
@@ -156,7 +172,7 @@ const ContextMenuCheckboxItem = ({
 			'focus:bg-accent focus:text-accent-foreground',
 			'data-disabled:pointer-events-none data-disabled:opacity-50',
 			"[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-			className,
+			className
 		)}
 		data-slot="context-menu-checkbox-item"
 		{...props}
@@ -174,7 +190,9 @@ const ContextMenuRadioItem = ({
 	className,
 	children,
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.RadioItem
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.RadioItem
 		className={cn(
 			'relative flex items-center gap-2',
@@ -182,7 +200,7 @@ const ContextMenuRadioItem = ({
 			'focus:bg-accent focus:text-accent-foreground',
 			'data-disabled:pointer-events-none data-disabled:opacity-50',
 			"[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-			className,
+			className
 		)}
 		data-slot="context-menu-radio-item"
 		{...props}
@@ -202,11 +220,11 @@ const ContextMenuLabel = ({
 	...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Label> & {
 	inset?: boolean;
-}) => (
+}): React.JSX.Element => (
 	<ContextMenuPrimitive.Label
 		className={cn(
 			'px-2 py-1.5 font-medium text-foreground text-sm data-inset:pl-8',
-			className,
+			className
 		)}
 		data-inset={inset}
 		data-slot="context-menu-label"
@@ -217,7 +235,9 @@ const ContextMenuLabel = ({
 const ContextMenuSeparator = ({
 	className,
 	...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Separator>) => (
+}: React.ComponentProps<
+	typeof ContextMenuPrimitive.Separator
+>): React.JSX.Element => (
 	<ContextMenuPrimitive.Separator
 		className={cn('-mx-1 my-1 h-px bg-border', className)}
 		data-slot="context-menu-separator"
@@ -228,11 +248,11 @@ const ContextMenuSeparator = ({
 const ContextMenuShortcut = ({
 	className,
 	...props
-}: React.ComponentProps<'span'>) => (
+}: React.ComponentProps<'span'>): React.JSX.Element => (
 	<span
 		className={cn(
 			'ml-auto text-muted-foreground text-xs tracking-widest',
-			className,
+			className
 		)}
 		data-slot="context-menu-shortcut"
 		{...props}

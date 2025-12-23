@@ -14,8 +14,7 @@ import {
 	UserSoundIcon,
 } from '@phosphor-icons/react';
 import { SOCIAL_LINKS } from '@/components/features/contact/data/social-links';
-import { USER } from '@/config/user';
-import type { CommandLinkItem } from '../types/types';
+import { USER } from '@/lib/user';
 
 export const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map(
 	(item) => ({
@@ -23,7 +22,7 @@ export const SOCIAL_LINK_ITEMS: CommandLinkItem[] = SOCIAL_LINKS.map(
 		href: item.href,
 		iconImage: item.icon,
 		openInNewTab: true,
-	}),
+	})
 );
 
 export const MENU_LINKS: CommandLinkItem[] = [

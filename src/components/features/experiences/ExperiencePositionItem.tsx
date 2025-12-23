@@ -55,7 +55,7 @@ export const ExperiencePositionItem = ({
 				<CollapsibleTrigger
 					className={cn(
 						'block w-full select-none text-left',
-						'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg hover:before:bg-accent2',
+						'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg hover:before:bg-accent2'
 					)}
 				>
 					<div className="relative z-1 mb-1 flex items-center gap-3">
@@ -64,7 +64,7 @@ export const ExperiencePositionItem = ({
 							className={cn(
 								'flex size-6 shrink-0 items-center justify-center rounded-md',
 								'bg-muted text-muted-foreground',
-								'border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background',
+								'border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background'
 							)}
 						>
 							<ExperienceIcon
@@ -112,9 +112,7 @@ export const ExperiencePositionItem = ({
 											aria-hidden
 											className="size-4 translate-y-[0.5px]"
 										/>
-										<span className="sr-only">
-											Aujourd'hui
-										</span>
+										<span className="sr-only">Aujourd'hui</span>
 									</>
 								) : (
 									<span>{end}</span>
@@ -131,16 +129,15 @@ export const ExperiencePositionItem = ({
 						</Prose>
 					)}
 
-					{Array.isArray(position.skills) &&
-						position.skills.length > 0 && (
-							<ul className="flex flex-wrap gap-1.5 pt-2 pl-9">
-								{position.skills.map((skill, index) => (
-									<li className="flex" key={index + skill}>
-										<Tag>{skill}</Tag>
-									</li>
-								))}
-							</ul>
-						)}
+					{Array.isArray(position.skills) && position.skills.length > 0 && (
+						<ul className="flex flex-wrap gap-1.5 pt-2 pl-9">
+							{position.skills.map((skill, index) => (
+								<li className="flex" key={index + skill}>
+									<Tag>{skill}</Tag>
+								</li>
+							))}
+						</ul>
+					)}
 				</CollapsibleContent>
 			</div>
 		</CollapsibleWithContext>

@@ -11,5 +11,5 @@ export const Compose = (...p: Provider[]) =>
 					<Acc>{children}</Acc>
 				</P>
 			),
-		({ children }: Props) => <>{children}</>,
+		({ children }: Props) => <>{children}</>
 	);

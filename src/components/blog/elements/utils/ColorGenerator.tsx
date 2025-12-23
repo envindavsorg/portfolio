@@ -10,6 +10,7 @@ import {
 } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { Poline, positionFunctions } from 'poline';
+import type React from 'react';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
@@ -21,7 +22,7 @@ type ColorScheme = {
 	[key: string]: string;
 };
 
-export const ColorGenerator = () => {
+export const ColorGenerator = (): React.JSX.Element => {
 	const [colorScheme, setColorScheme] = useState<ColorScheme>({
 		background: '0 0% 100%',
 		foreground: '240 10% 3.9%',
@@ -76,9 +77,9 @@ export const ColorGenerator = () => {
 			Object.keys(newColorScheme).forEach((key, index) => {
 				if (key !== lockedColor) {
 					const color = colors[index % colors.length];
-					const [h, s, l] = color
-						.match(/\d+(\.\d+)?/g)
-						?.map(Number) || [0, 0, 0];
+					const [h, s, l] = color.match(/\d+(\.\d+)?/g)?.map(Number) || [
+						0, 0, 0,
+					];
 
 					let adjustedLightness = l;
 
@@ -91,7 +92,7 @@ export const ColorGenerator = () => {
 					}
 
 					newColorScheme[key] = `${h.toFixed(1)} ${s.toFixed(
-						1,
+						1
 					)}% ${adjustedLightness.toFixed(1)}%`;
 				}
 			});
@@ -173,20 +174,14 @@ export const ColorGenerator = () => {
 				{Object.entries(colorScheme).map(([key, value]) => (
 					<div className="relative" key={key}>
 						<div className="flex items-center justify-between">
-							<span className="text-muted-foreground text-xs">
-								{key}
-							</span>
+							<span className="text-muted-foreground text-xs">{key}</span>
 							<Button
 								className="mr-6"
 								onClick={() => toggleLock(key)}
 								size="icon"
 								variant="ghost"
 							>
-								{lockedColor === key ? (
-									<LockKeyIcon />
-								) : (
-									<LockSimpleOpenIcon />
-								)}
+								{lockedColor === key ? <LockKeyIcon /> : <LockSimpleOpenIcon />}
 							</Button>
 						</div>
 
@@ -210,10 +205,9 @@ export const ColorGenerator = () => {
 
 			<div className="screen-line-before py-1.5">
 				<Prose>
-					Explorez une palette de couleurs harmonieuses générée pour
-					vos projets web. Chaque couleur est soigneusement
-					sélectionnée pour assurer une esthétique cohérente et
-					attrayante.
+					Explorez une palette de couleurs harmonieuses générée pour vos projets
+					web. Chaque couleur est soigneusement sélectionnée pour assurer une
+					esthétique cohérente et attrayante.
 				</Prose>
 			</div>
 
@@ -225,24 +219,14 @@ export const ColorGenerator = () => {
 					transition={{ duration: 0.5 }}
 				>
 					{Object.entries(colorScheme).map(([key, value]) => (
-						<div
-							className="flex items-center justify-between"
-							key={key}
-						>
-							<span className="text-muted-foreground text-xs">
-								{key}
-							</span>
+						<div className="flex items-center justify-between" key={key}>
+							<span className="text-muted-foreground text-xs">{key}</span>
 							<Button
 								className="font-mono"
 								onClick={() => {
-									navigator.clipboard.writeText(
-										`--${key}: ${value};`,
-									);
+									navigator.clipboard.writeText(`--${key}: ${value};`);
 									setCopiedColor(key);
-									setTimeout(
-										() => setCopiedColor(null),
-										2000,
-									);
+									setTimeout(() => setCopiedColor(null), 2000);
 								}}
 								size="sm"
 								style={{

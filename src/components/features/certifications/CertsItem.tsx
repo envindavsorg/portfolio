@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 
 const Icons = {
 	vercel: (
-		props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>,
+		props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>
 	) => <VercelIcon {...props} />,
 };
 
@@ -45,7 +45,7 @@ export const CertItem = ({
 				className={cn(
 					'mx-4 flex size-8 shrink-0 select-none items-center justify-center rounded-lg',
 					'border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background',
-					'bg-muted text-muted-foreground [&_svg]:size-4',
+					'bg-muted text-muted-foreground [&_svg]:size-4'
 				)}
 			>
 				{getIcon(issuerIconName)}

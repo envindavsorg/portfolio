@@ -7,11 +7,11 @@ const Slot = SlotPrimitive.Slot;
 export const Panel = ({
 	className,
 	...props
-}: React.ComponentProps<'section'>) => (
+}: React.ComponentProps<'section'>): React.JSX.Element => (
 	<section
 		className={cn(
 			'screen-line-before screen-line-after border-edge border-x',
-			className,
+			className
 		)}
 		data-slot="panel"
 		{...props}
@@ -21,7 +21,7 @@ export const Panel = ({
 export const PanelHeader = ({
 	className,
 	...props
-}: React.ComponentProps<'div'>) => (
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
 		className={cn('screen-line-after px-3', className)}
 		data-slot="panel-header"
@@ -33,7 +33,7 @@ export const PanelTitle = ({
 	className,
 	asChild = false,
 	...props
-}: React.ComponentProps<'h2'> & { asChild?: boolean }) => {
+}: React.ComponentProps<'h2'> & { asChild?: boolean }): React.JSX.Element => {
 	const Comp = asChild ? Slot : 'h2';
 
 	return (
@@ -48,18 +48,18 @@ export const PanelTitle = ({
 export const PanelContent = ({
 	className,
 	...props
-}: React.ComponentProps<'div'>) => (
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div className={cn('p-3', className)} data-slot="panel-body" {...props} />
 );
 
 export const PanelFooter = ({
 	className,
 	...props
-}: React.ComponentProps<'div'>) => (
+}: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
 		className={cn(
 			'screen-line-before flex justify-end gap-3 px-3 py-2',
-			className,
+			className
 		)}
 		data-slot="panel-footer"
 		{...props}

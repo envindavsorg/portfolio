@@ -75,7 +75,7 @@ export const checkPerformanceSupport = (): boolean => {
 	}
 
 	const reducedMotion = window.matchMedia(
-		'(prefers-reduced-motion: reduce)',
+		'(prefers-reduced-motion: reduce)'
 	).matches;
 	const hardwareConcurrency = navigator.hardwareConcurrency || 2;
 	const sufficientHardware = hardwareConcurrency > 2;

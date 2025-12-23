@@ -52,7 +52,7 @@ const detectArc = (): boolean => {
 
 	const styles = getComputedStyle(document.documentElement);
 	const count = vars.filter(
-		(item) => styles.getPropertyValue(item).trim() !== '',
+		(item) => styles.getPropertyValue(item).trim() !== ''
 	).length;
 
 	if (count >= 2) {
@@ -80,9 +80,7 @@ const detectArc = (): boolean => {
 		};
 
 		if (
-			data?.brands?.some((brand) =>
-				brand.brand?.toLowerCase().includes('arc'),
-			)
+			data?.brands?.some((brand) => brand.brand?.toLowerCase().includes('arc'))
 		) {
 			return true;
 		}

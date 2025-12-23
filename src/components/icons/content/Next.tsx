@@ -1,6 +1,9 @@
+import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const NextJSIcon = (props: SVGProps<SVGSVGElement>) => (
+export const NextJSIcon = (
+	props: SVGProps<SVGSVGElement>
+): React.JSX.Element => (
 	<svg
 		fill="none"
 		height="1em"

@@ -1,6 +1,7 @@
+import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const CSSIcon = (props: SVGProps<SVGSVGElement>) => (
+export const CSSIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
 	<svg
 		height="1em"
 		viewBox="0 0 452 520"

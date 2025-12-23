@@ -6,11 +6,10 @@ import { TopBar } from '@/components/blog/components/TopBar';
 import { MDX } from '@/components/blog/markdown/mdx';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
-import { SITE_INFO } from '@/config/site';
-import { USER } from '@/config/user';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+import { USER } from '@/lib/user';
 
 type Props = {
 	params: Promise<{
@@ -58,7 +57,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	image:
 		post.metadata.imageLight ||
 		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
-	url: `${SITE_INFO.url}/utils/${post.slug}`,
+	url: `https://cuzeacflorin.fr/utils/${post.slug}`,
 	datePublished: dayjs(post.metadata.createdAt).toISOString(),
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
 	author: {
@@ -86,20 +85,17 @@ const Page = async ({ params }: Props) => {
 		<>
 			<script
 				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(getPageJsonLd(post)).replace(
-						/</g,
-						'\\u003c',
-					),
+					__html: JSON.stringify(getPageJsonLd(post)).replace(/</g, '\\u003c'),
 				}}
 				type="application/ld+json"
 			/>
 
 			<TopBar
-				type="utils"
-				slug={slug}
 				baseUrl="/utils"
 				postSlug={post.slug}
+				slug={slug}
 				title="Tous les outils"
+				type="utils"
 			/>
 
 			<Divider />
