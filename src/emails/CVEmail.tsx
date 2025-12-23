@@ -29,7 +29,9 @@ export const CVEmailTemplate = ({ firstName }: CVEmailTemplateProps) => (
 					style={logo}
 					width="42"
 				/>
+
 				<Heading style={heading}>Bonjour {firstName} !</Heading>
+
 				<Text style={paragraph}>
 					Merci de votre intérêt pour mon profil. Vous trouverez en
 					pièce jointe mon CV au format PDF. N'hésitez pas à me
