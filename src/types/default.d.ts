@@ -118,15 +118,15 @@ declare global {
 	// types for navigation bar
 	interface NavigationItem {
 		title: string;
+		description: string;
 		href: string;
 	}
 
 	// types for navbar command menu
 	interface CommandLinkItem {
 		title: string;
-		href: string;
+		url: string;
 		icon?: React.ElementType;
-		iconImage?: StaticImageData;
 		keywords?: string[];
 		openInNewTab?: boolean;
 	}

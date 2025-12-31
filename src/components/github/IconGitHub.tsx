@@ -12,12 +12,12 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface AnimatedGithubIconHandle {
+export interface IconGitHubHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
 }
 
-interface AnimatedGithubIconProps extends HTMLAttributes<HTMLDivElement> {
+interface IconGitHubProps extends HTMLAttributes<HTMLDivElement> {
 	size?: number;
 }
 
@@ -66,10 +66,7 @@ const TAIL_VARIANTS: Variants = {
 	},
 };
 
-export const AnimatedGithubIcon = forwardRef<
-	AnimatedGithubIconHandle,
-	AnimatedGithubIconProps
->(
+export const IconGitHub = forwardRef<IconGitHubHandle, IconGitHubProps>(
 	(
 		{ onMouseEnter, onMouseLeave, className, size = 28, ...props },
 		ref

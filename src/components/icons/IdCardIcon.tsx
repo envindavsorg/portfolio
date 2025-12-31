@@ -1,5 +1,6 @@
 'use client';
 
+import type { Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
 import {
@@ -11,28 +12,38 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface AnimatedSearchIconHandle {
+export interface IdCardIconHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
 }
 
-interface AnimatedSearchIconProps extends HTMLAttributes<HTMLDivElement> {
+interface IdCardIconProps extends HTMLAttributes<HTMLDivElement> {
 	size?: number;
 }
 
-export const AnimatedSearchIcon = forwardRef<
-	AnimatedSearchIconHandle,
-	AnimatedSearchIconProps
->(
-	(
-		{ onMouseEnter, onMouseLeave, className, size = 28, ...props },
-		ref
-	): React.JSX.Element => {
+const VARIANTS: Variants = {
+	normal: {
+		pathLength: 1,
+		opacity: 1,
+	},
+	animate: (custom: number) => ({
+		pathLength: [0, 1],
+		opacity: [0, 1],
+		transition: {
+			duration: 0.3,
+			delay: custom * 0.1,
+		},
+	}),
+};
+
+export const IdCardIcon = forwardRef<IdCardIconHandle, IdCardIconProps>(
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const controls = useAnimation();
 		const isControlledRef = useRef(false);
 
 		useImperativeHandle(ref, () => {
 			isControlledRef.current = true;
+
 			return {
 				startAnimation: () => controls.start('animate'),
 				stopAnimation: () => controls.start('normal'),
@@ -68,32 +79,45 @@ export const AnimatedSearchIcon = forwardRef<
 				onMouseLeave={handleMouseLeave}
 				{...props}
 			>
-				<motion.svg
-					animate={controls}
+				<svg
 					fill="none"
 					height={size}
 					stroke="currentColor"
 					strokeLinecap="round"
 					strokeLinejoin="round"
 					strokeWidth="2"
-					transition={{
-						duration: 1,
-						bounce: 0.3,
-					}}
-					variants={{
-						normal: { x: 0, y: 0 },
-						animate: {
-							x: [0, 0, -3, 0],
-							y: [0, -4, 0, 0],
-						},
-					}}
 					viewBox="0 0 24 24"
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<circle cx="11" cy="11" r="8" />
-					<path d="m21 21-4.3-4.3" />
-				</motion.svg>
+					<motion.path
+						animate={controls}
+						custom={2}
+						d="M16 10h2"
+						variants={VARIANTS}
+					/>
+					<motion.path
+						animate={controls}
+						custom={2}
+						d="M16 14h2"
+						variants={VARIANTS}
+					/>
+					<motion.path
+						animate={controls}
+						custom={0}
+						d="M6.17 15a3 3 0 0 1 5.66 0"
+						variants={VARIANTS}
+					/>
+					<motion.circle
+						animate={controls}
+						custom={1}
+						cx="9"
+						cy="11"
+						r="2"
+						variants={VARIANTS}
+					/>
+					<rect height="14" rx="2" width="20" x="2" y="5" />
+				</svg>
 			</div>
 		);
 	}

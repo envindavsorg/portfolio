@@ -1,15 +1,15 @@
 'use client';
 
-import { Tooltip as Primitive } from 'radix-ui';
+import { Tooltip as TooltipPrimitive } from 'radix-ui';
 import type React from 'react';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
-export const TooltipProvider = ({
+const TooltipProvider = ({
 	delayDuration = 0,
 	...props
-}: ComponentProps<typeof Primitive.Provider>): React.JSX.Element => (
-	<Primitive.Provider
+}: ComponentProps<typeof TooltipPrimitive.Provider>): React.JSX.Element => (
+	<TooltipPrimitive.Provider
 		data-slot="tooltip-provider"
 		delayDuration={delayDuration}
 		{...props}
@@ -18,28 +18,30 @@ export const TooltipProvider = ({
 
 export const Tooltip = ({
 	...props
-}: ComponentProps<typeof Primitive.Root>): React.JSX.Element => (
+}: ComponentProps<typeof TooltipPrimitive.Root>): React.JSX.Element => (
 	<TooltipProvider>
-		<Primitive.Root data-slot="tooltip" {...props} />
+		<TooltipPrimitive.Root data-slot="tooltip" {...props} />
 	</TooltipProvider>
 );
 
 export const TooltipTrigger = ({
 	...props
-}: ComponentProps<typeof Primitive.Trigger>): React.JSX.Element => (
-	<Primitive.Trigger data-slot="tooltip-trigger" {...props} />
+}: ComponentProps<typeof TooltipPrimitive.Trigger>): React.JSX.Element => (
+	<TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
 );
 
 export const TooltipContent = ({
 	className,
-	sideOffset = 4,
+	sideOffset = 5,
 	children,
 	...props
-}: ComponentProps<typeof Primitive.Content>): React.JSX.Element => (
-	<Primitive.Portal>
-		<Primitive.Content
+}: ComponentProps<typeof TooltipPrimitive.Content>): React.JSX.Element => (
+	<TooltipPrimitive.Portal>
+		<TooltipPrimitive.Content
 			className={cn(
-				'z-50 w-fit max-w-xs origin-(--transform-origin) rounded-md bg-foreground px-4 py-2 text-background',
+				'flex w-fit max-w-xs items-center gap-x-2',
+				'z-50 rounded-md bg-foreground px-3 py-2 text-background',
+				'origin-(--transform-origin)',
 				'fade-in-0 zoom-in-95 animate-in font-medium font-mono text-sm',
 				'data-[side=top]:slide-in-from-bottom-2 data-[side=bottom]:slide-in-from-top-2',
 				'data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
@@ -51,13 +53,13 @@ export const TooltipContent = ({
 			{...props}
 		>
 			{children}
-			<Primitive.Arrow
+			<TooltipPrimitive.Arrow
 				className={cn(
 					'bg-foreground fill-foreground data-[side=bottom]:top-1 data-[side=left]:top-1/2! data-[side=right]:top-1/2! data-[side=left]:-right-1 data-[side=top]:-bottom-2.5 data-[side=right]:-left-1 data-[side=left]:-translate-y-1/2 data-[side=right]:-translate-y-1/2',
 					'size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-xs',
 					'data-[side=top]:rounded-tl-sm data-[side=bottom]:rounded-br-sm'
 				)}
 			/>
-		</Primitive.Content>
-	</Primitive.Portal>
+		</TooltipPrimitive.Content>
+	</TooltipPrimitive.Portal>
 );

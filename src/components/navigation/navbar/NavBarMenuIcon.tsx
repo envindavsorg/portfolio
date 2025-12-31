@@ -6,7 +6,7 @@ import type React from 'react';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-interface MenuIconProps extends React.ComponentProps<'div'> {
+interface NavBarMenuIconProps extends React.ComponentProps<'div'> {
 	isOpen: boolean;
 	size?: number;
 }
@@ -29,12 +29,12 @@ const LINE_VARIANTS: Variants = {
 	}),
 };
 
-export const AnimatedMenuIcon = ({
+export const NavBarMenuIcon = ({
 	isOpen,
 	className,
 	size = 28,
 	...props
-}: MenuIconProps): React.JSX.Element => {
+}: NavBarMenuIconProps): React.JSX.Element => {
 	const controls = useAnimation();
 
 	useEffect(() => {

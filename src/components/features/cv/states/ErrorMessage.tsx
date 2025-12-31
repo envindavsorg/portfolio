@@ -1,7 +1,7 @@
 import type { Player } from '@lordicon/react';
 import type React from 'react';
 import { forwardRef, memo, useEffect } from 'react';
-import { WarningIcon } from '@/components/icons/Warning';
+import { WarningIcon } from '@/components/icons/lottie/Warning';
 import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 

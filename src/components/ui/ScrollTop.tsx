@@ -4,7 +4,7 @@ import type { Player } from '@lordicon/react';
 import { useMotionValueEvent, useScroll } from 'motion/react';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowUpIcon } from '@/components/icons/ArrowUpIcon';
+import { ArrowUpIcon } from '@/components/icons/lottie/ArrowUpIcon';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 

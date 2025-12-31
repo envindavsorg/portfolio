@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import posthog from 'posthog-js';
+import type React from 'react';
 import { useCallback } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Button } from '@/components/ui/Button';
@@ -14,10 +15,10 @@ import {
 import useMetaColor from '@/hooks/use-meta-color';
 import { soundManager } from '@/lib/sound-manager';
 import { META_THEME_COLORS } from '@/lib/theme';
-import { AnimatedMoonIcon } from '../../icons/AnimatedMoonIcon';
-import { AnimatedSunIcon } from '../../icons/AnimatedSunIcon';
+import { IconMoon } from './IconMoon';
+import { IconSun } from './IconSun';
 
-export const ToggleTheme = () => {
+export const ThemeSwitcher = (): React.JSX.Element => {
 	const { resolvedTheme, setTheme } = useTheme();
 	const { setMetaColor } = useMetaColor();
 
@@ -37,14 +38,16 @@ export const ToggleTheme = () => {
 		});
 	}, [resolvedTheme, setTheme, setMetaColor]);
 
-	const viewTransition = () => {
+	const viewTransition = useCallback(() => {
 		if (!document.startViewTransition) {
 			switchTheme();
+			return;
 		}
-		document.startViewTransition(switchTheme);
-	};
 
-	useHotkeys('d', viewTransition);
+		document.startViewTransition(switchTheme);
+	}, [switchTheme]);
+
+	useHotkeys('d', viewTransition, [viewTransition]);
 
 	return (
 		<Tooltip>
@@ -55,8 +58,8 @@ export const ToggleTheme = () => {
 					size="icon"
 					variant="outline"
 				>
-					<AnimatedMoonIcon className="relative hidden after:absolute after:-inset-2 [html.dark_&]:block" />
-					<AnimatedSunIcon className="relative hidden after:absolute after:-inset-2 [html.light_&]:block" />
+					<IconMoon className="relative hidden after:absolute after:-inset-2 [html.dark_&]:block" />
+					<IconSun className="relative hidden after:absolute after:-inset-2 [html.light_&]:block" />
 					<span className="sr-only">Changer de thème</span>
 				</Button>
 			</TooltipTrigger>

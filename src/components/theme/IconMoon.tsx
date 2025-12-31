@@ -12,12 +12,12 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface AnimatedMoonIconHandle {
+export interface IconMoonHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
 }
 
-interface AnimatedMoonIconProps extends HTMLAttributes<HTMLDivElement> {
+interface IconMoonProps extends HTMLAttributes<HTMLDivElement> {
 	size?: number;
 }
 
@@ -35,10 +35,7 @@ const SVG_TRANSITION: Transition = {
 	ease: 'easeInOut',
 };
 
-export const AnimatedMoonIcon = forwardRef<
-	AnimatedMoonIconHandle,
-	AnimatedMoonIconProps
->(
+export const IconMoon = forwardRef<IconMoonHandle, IconMoonProps>(
 	(
 		{ onMouseEnter, onMouseLeave, className, size = 28, ...props },
 		ref

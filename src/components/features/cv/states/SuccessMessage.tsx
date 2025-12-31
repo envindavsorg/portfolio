@@ -2,7 +2,7 @@ import type { Player } from '@lordicon/react';
 import type React from 'react';
 import { forwardRef, memo, useEffect } from 'react';
 import Confetti from 'react-confetti';
-import { PlaneIcon } from '@/components/icons/Plane';
+import { PlaneIcon } from '@/components/icons/lottie/Plane';
 import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 

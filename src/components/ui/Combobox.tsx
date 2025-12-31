@@ -57,9 +57,11 @@ export const Combobox = (props: ComboboxProps): React.JSX.Element => {
 
 			<PopoverContent className={cn('h-auto p-0', props.className)}>
 				<Command>
-					{props.search && <CommandInput placeholder="Search..." />}
+					{props.search && (
+						<CommandInput placeholder="Tapez une commande ou recherchez ..." />
+					)}
 					<CommandList className="h-auto">
-						<CommandEmpty>Nothing to see here.</CommandEmpty>
+						<CommandEmpty>Aucun résultat ...</CommandEmpty>
 						<CommandGroup>
 							{props.data.map((item) => (
 								<CommandItem

@@ -1,6 +1,6 @@
 'use client';
 
-import type { Variants } from 'motion/react';
+import type { Transition, Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
 import {
@@ -12,36 +12,39 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface AnimatedSunIconHandle {
+export interface HomeIconHandle {
 	startAnimation: () => void;
 	stopAnimation: () => void;
 }
 
-interface AnimatedSunIconProps extends HTMLAttributes<HTMLDivElement> {
+interface HomeIconProps extends HTMLAttributes<HTMLDivElement> {
 	size?: number;
 }
 
-const PATH_VARIANTS: Variants = {
-	normal: { opacity: 1 },
-	animate: (i: number) => ({
-		opacity: [0, 1],
-		transition: { delay: i * 0.1, duration: 0.3 },
-	}),
+const DEFAULT_TRANSITION: Transition = {
+	duration: 0.6,
+	opacity: { duration: 0.2 },
 };
 
-export const AnimatedSunIcon = forwardRef<
-	AnimatedSunIconHandle,
-	AnimatedSunIconProps
->(
-	(
-		{ onMouseEnter, onMouseLeave, className, size = 28, ...props },
-		ref
-	): React.JSX.Element => {
+const PATH_VARIANTS: Variants = {
+	normal: {
+		pathLength: 1,
+		opacity: 1,
+	},
+	animate: {
+		opacity: [0, 1],
+		pathLength: [0, 1],
+	},
+};
+
+export const HomeIcon = forwardRef<HomeIconHandle, HomeIconProps>(
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const controls = useAnimation();
 		const isControlledRef = useRef(false);
 
 		useImperativeHandle(ref, () => {
 			isControlledRef.current = true;
+
 			return {
 				startAnimation: () => controls.start('animate'),
 				stopAnimation: () => controls.start('normal'),
@@ -69,10 +72,12 @@ export const AnimatedSunIcon = forwardRef<
 			},
 			[controls, onMouseLeave]
 		);
-
 		return (
 			<div
-				className={cn(className)}
+				className={cn(
+					'relative shrink-0 after:absolute after:-inset-2',
+					className
+				)}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				{...props}
@@ -88,25 +93,13 @@ export const AnimatedSunIcon = forwardRef<
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<circle cx="12" cy="12" r="4" />
-					{[
-						'M12 3v1',
-						'M12 20v1',
-						'M3 12h1',
-						'M20 12h1',
-						'm18.364 5.636-.707.707',
-						'm6.343 17.657-.707.707',
-						'm5.636 5.636.707.707',
-						'm17.657 17.657.707.707',
-					].map((d, index) => (
-						<motion.path
-							animate={controls}
-							custom={index + 1}
-							d={d}
-							key={d}
-							variants={PATH_VARIANTS}
-						/>
-					))}
+					<path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+					<motion.path
+						animate={controls}
+						d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"
+						transition={DEFAULT_TRANSITION}
+						variants={PATH_VARIANTS}
+					/>
 				</svg>
 			</div>
 		);

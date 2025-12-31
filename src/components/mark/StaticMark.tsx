@@ -1,11 +1,5 @@
-'use client';
-
-import { useMotionValueEvent, useScroll } from 'motion/react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import type React from 'react';
-import { forwardRef, useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
+import { forwardRef } from 'react';
 
 export const StaticMark = forwardRef<
 	SVGSVGElement,
@@ -74,63 +68,3 @@ export const StaticMark = forwardRef<
 		</svg>
 	)
 );
-
-const MotionMark = (): React.JSX.Element => {
-	const svgRef = useRef<SVGSVGElement>(null);
-	const triggerDistanceRef = useRef(160);
-	const { scrollY } = useScroll();
-
-	useMotionValueEvent(scrollY, 'change', (latest) => {
-		svgRef.current?.toggleAttribute(
-			'data-visible',
-			latest >= triggerDistanceRef.current
-		);
-	});
-
-	useEffect(() => {
-		const target = document.getElementById('js-cover-mark');
-		if (!target) {
-			return;
-		}
-
-		const updateDistance = () => {
-			const rect = target.getBoundingClientRect();
-			const scrollTop = document.documentElement.scrollTop;
-			triggerDistanceRef.current = scrollTop + rect.top + rect.height - 56;
-		};
-
-		updateDistance();
-
-		const observer = new ResizeObserver(updateDistance);
-		observer.observe(target);
-
-		return () => observer.disconnect();
-	}, []);
-
-	return (
-		<StaticMark
-			className={cn(
-				'translate-y-2 opacity-0 transition-all duration-300',
-				'data-[visible]:translate-y-0 data-[visible]:opacity-100'
-			)}
-			ref={svgRef}
-		/>
-	);
-};
-
-export const NavBarMark = (): React.JSX.Element => {
-	const pathname = usePathname();
-	const isHome = ['/', '/index'].includes(pathname);
-
-	return isHome ? (
-		<MotionMark />
-	) : (
-		<Link
-			aria-label="Retour à l'accueil"
-			className="w-fit [&_svg]:h-7"
-			href="/"
-		>
-			<StaticMark />
-		</Link>
-	);
-};

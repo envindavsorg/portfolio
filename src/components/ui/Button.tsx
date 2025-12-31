@@ -54,6 +54,7 @@ export const variants = cva(
 type ButtonProps = ComponentProps<'button'> &
 	VariantProps<typeof variants> & {
 		asChild?: boolean;
+		shadow?: boolean;
 	};
 
 export const Button = ({
@@ -61,13 +62,18 @@ export const Button = ({
 	variant,
 	size,
 	asChild = false,
+	shadow = false,
 	...props
 }: ButtonProps): React.JSX.Element => {
 	const Comp = asChild ? Slot : 'button';
 
 	return (
 		<Comp
-			className={cn(variants({ variant, size, className }))}
+			className={cn(
+				variants({ variant, size, className }),
+				shadow &&
+					'border dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15 dark:border-0'
+			)}
 			data-slot="button"
 			{...props}
 		/>
