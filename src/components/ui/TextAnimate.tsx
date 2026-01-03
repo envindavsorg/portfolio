@@ -1,11 +1,6 @@
 'use client';
 
-import {
-	AnimatePresence,
-	type MotionProps,
-	motion,
-	type Variants,
-} from 'motion/react';
+import { AnimatePresence, type MotionProps, motion, type Variants } from 'motion/react';
 import React, { type ElementType, memo } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -35,6 +30,7 @@ interface TextAnimateProps extends MotionProps {
 	once?: boolean;
 	animation?: AnimationVariant;
 	accessible?: boolean;
+	themed?: boolean;
 }
 
 const staggerTimings: Record<AnimationType, number> = {
@@ -283,6 +279,7 @@ const TextAnimateBase = ({
 	by = 'word',
 	animation = 'fadeIn',
 	accessible = true,
+	themed = false,
 	...props
 }: TextAnimateProps): React.JSX.Element => {
 	const MotionComponent = motion.create(Component);
@@ -367,6 +364,8 @@ const TextAnimateBase = ({
 					<motion.span
 						aria-hidden={accessible ? true : undefined}
 						className={cn(
+							by === 'word' && 'text-balance text-foreground text-sm',
+							themed && 'text-theme',
 							by === 'line' ? 'block' : 'inline-block whitespace-pre',
 							by === 'character' && '',
 							segmentClassName
