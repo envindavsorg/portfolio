@@ -28,10 +28,7 @@ export const variants = cva(
 					'bg-secondary text-secondary-foreground hover:bg-secondary/80',
 					'dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15',
 				],
-				outline: [
-					'bg-background hover:bg-accent',
-					'border border-input hover:text-accent-foreground',
-				],
+				outline: ['bg-background hover:bg-accent', 'border border-input hover:text-accent-foreground'],
 				ghost: 'hover:bg-accent hover:text-accent-foreground',
 				link: 'text-foreground underline-offset-4 hover:underline',
 			},
@@ -71,8 +68,7 @@ export const Button = ({
 		<Comp
 			className={cn(
 				variants({ variant, size, className }),
-				shadow &&
-					'border dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15 dark:border-0'
+				shadow && 'border dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15 dark:border-0'
 			)}
 			data-slot="button"
 			{...props}
