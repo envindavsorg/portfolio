@@ -5,7 +5,7 @@ import Link from 'next/link';
 import posthog from 'posthog-js';
 import type React from 'react';
 import { useRef } from 'react';
-import { GitHubIcon, type IconGitHubHandle } from '@/components/icons/animated/GitHubIcon';
+import { GitHubIcon, type GitHubIconHandle } from '@/components/icons/animated/GitHubIcon';
 import { LinkedinIcon, type LinkedinIconHandle } from '@/components/icons/animated/LinkedInIcon';
 import { Counter } from '@/components/ui/Counter';
 import { cn } from '@/lib/utils';
@@ -19,7 +19,7 @@ interface SocialLinkItemProps {
 	content: SocialLinksProps;
 }
 
-type IconHandle = IconGitHubHandle | LinkedinIconHandle;
+type IconHandle = GitHubIconHandle | LinkedinIconHandle;
 
 const isCapture = process.env.ENV_TYPE === 'capture';
 
