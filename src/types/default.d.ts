@@ -1,6 +1,26 @@
-import type React from 'react';
+import type { ElementType } from 'react';
 
 declare global {
+	// SERVER ACTION TYPES
+	// types for GitHub commit data
+	interface CommitData {
+		branch?: string;
+		hash?: string;
+		updated?: string;
+	}
+
+	interface CommitResponse {
+		repository: {
+			defaultBranchRef: {
+				name: string;
+				target: {
+					oid: string;
+					committedDate: string;
+				};
+			} | null;
+		} | null;
+	}
+
 	// types for theme switcher (using next-themes)
 	type ThemeType = 'light' | 'dark' | 'system';
 
@@ -85,7 +105,7 @@ declare global {
 		overview: {
 			id: string;
 			content: string;
-			icon: React.ElementType;
+			icon: ElementType;
 			className: string;
 		}[];
 		location: {
@@ -126,7 +146,7 @@ declare global {
 	interface CommandLinkItem {
 		title: string;
 		url: string;
-		icon?: React.ElementType;
+		icon?: ElementType;
 		keywords?: string[];
 		openInNewTab?: boolean;
 	}
@@ -142,4 +162,26 @@ declare global {
 		| 'download';
 
 	type CommandMetaMap = Map<string, { commandKind: CommandKind }>;
+
+	// types for browser hook
+	type Browser =
+		| 'Arc Browser'
+		| 'Mozilla Firefox'
+		| 'Google Chrome'
+		| 'Apple Safari'
+		| 'Microsoft Edge';
+
+	interface BrowserInfo {
+		name: Browser;
+		image: string;
+		comment: string;
+	}
+
+	// types for footer metadata
+	interface FooterMeta {
+		image: string | undefined;
+		label: string;
+		value: Browser | undefined;
+		comment: string | undefined;
+	}
 }

@@ -1,20 +1,19 @@
 'use client';
 
-import {
-	ArrowLeftIcon,
-	ArrowsClockwiseIcon,
-	MoonIcon,
-	SunIcon,
-} from '@phosphor-icons/react';
+import { MoonIcon, SunIcon } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import type React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
+import {
+	ArrowLeftIcon,
+	type ArrowLeftIconHandle,
+} from '@/components/icons/ArrowLeftIcon';
+import { RefreshIcon } from '@/components/icons/RefreshIcon';
 import {
 	ContextMenu,
 	ContextMenuContent,
 	ContextMenuItem,
-	ContextMenuSeparator,
 	ContextMenuTrigger,
 } from '@/components/ui/ContextMenu';
 import useMetaColor from '@/hooks/use-meta-color';
@@ -50,22 +49,39 @@ export const RootContextMenu = ({
 		);
 	}, [resolvedTheme, setTheme, setMetaColor]);
 
+	const arrowIconRef = useRef<ArrowLeftIconHandle>(null);
+	const refreshIconRef = useRef<ArrowLeftIconHandle>(null);
+
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
 
-			<ContextMenuContent className="w-64">
-				<ContextMenuItem onClick={handleBack}>
-					<ArrowLeftIcon className="size-5" />
+			<ContextMenuContent>
+				<ContextMenuItem
+					onClick={handleBack}
+					onMouseEnter={() => arrowIconRef.current?.startAnimation?.()}
+					onMouseLeave={() => arrowIconRef.current?.stopAnimation?.()}
+				>
+					<ArrowLeftIcon
+						className="relative after:absolute after:-inset-2"
+						ref={arrowIconRef}
+						size={16}
+					/>
 					Retour
 				</ContextMenuItem>
 
-				<ContextMenuItem onClick={handleReload}>
-					<ArrowsClockwiseIcon className="size-5" />
+				<ContextMenuItem
+					onClick={handleReload}
+					onMouseEnter={() => refreshIconRef.current?.startAnimation?.()}
+					onMouseLeave={() => refreshIconRef.current?.stopAnimation?.()}
+				>
+					<RefreshIcon
+						className="relative after:absolute after:-inset-2"
+						ref={refreshIconRef}
+						size={16}
+					/>
 					Recharger la page
 				</ContextMenuItem>
-
-				<ContextMenuSeparator />
 
 				<ContextMenuItem
 					onClick={() => {

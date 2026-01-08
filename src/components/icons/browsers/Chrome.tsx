@@ -9,7 +9,6 @@ const ChromeIcon = (props: SVGProps<SVGSVGElement>) => (
 		xmlns="http://www.w3.org/2000/svg"
 		{...props}
 	>
-		<title>Chrome</title>
 		<path
 			d="M95.252 142.873c26.304 0 47.627-21.324 47.627-47.628s-21.323-47.628-47.627-47.628-47.627 21.324-47.627 47.628 21.323 47.628 47.627 47.628z"
 			fill="#fff"

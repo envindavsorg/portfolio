@@ -111,7 +111,7 @@ const ContextMenuContent = ({
 	<ContextMenuPrimitive.Portal>
 		<ContextMenuPrimitive.Content
 			className={cn(
-				'max-h-(--radix-context-menu-content-available-height) min-w-64',
+				'max-h-(--radix-context-menu-content-available-height) min-w-50',
 				'z-50 origin-(--radix-context-menu-content-transform-origin)',
 				'overflow-y-auto overflow-x-hidden backdrop-blur-md supports-backdrop-filter:bg-popover/90',
 				'rounded-md bg-popover p-2 text-popover-foreground ring ring-popover-border',
@@ -138,7 +138,7 @@ const ContextMenuItem = ({
 }): React.JSX.Element => (
 	<ContextMenuPrimitive.Item
 		className={cn(
-			'relative flex items-center gap-2',
+			'relative flex items-center gap-x-3',
 			'outline-hidden focus:bg-accent focus:text-accent-foreground',
 			'data-disabled:pointer-events-none data-disabled:opacity-50',
 			'data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20',

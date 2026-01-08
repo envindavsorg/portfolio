@@ -71,13 +71,13 @@ export const ThemeSwitcher = () => {
 	}, []);
 
 	if (!isMounted) {
-		return <div className="flex h-8 w-24" />;
+		return <div className="h-8 w-2 sm:flex" />;
 	}
 
 	return (
 		<motion.div
 			animate={{ opacity: 1 }}
-			className="inline-flex items-center overflow-hidden rounded-full bg-white ring-1 ring-zinc-200 ring-inset dark:bg-zinc-950 dark:ring-zinc-700"
+			className="relative items-center overflow-hidden rounded-full bg-white ring-1 ring-zinc-200 ring-inset dark:bg-zinc-950 dark:ring-zinc-700"
 			initial={{ opacity: 0 }}
 			key={String(isMounted)}
 			role="radiogroup"

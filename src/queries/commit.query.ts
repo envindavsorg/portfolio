@@ -1,0 +1,15 @@
+export const COMMIT_QUERY = `
+	query ($owner: String!, $repo: String!) {
+		repository(owner: $owner, name: $repo) {
+			defaultBranchRef {
+				name
+				target {
+					... on Commit {
+						oid
+						committedDate
+					}
+				}
+			}
+		}
+	}
+`;

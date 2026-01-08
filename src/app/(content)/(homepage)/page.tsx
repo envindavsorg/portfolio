@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
-import { Articles } from '@/components/features/Articles';
+import { CurriculumVitae } from '@/components/features/cv/CurriculumVitae';
+import { Divider } from '@/components/ui/Divider';
+/*import { Articles } from '@/components/features/Articles';
 import { About } from '@/components/features/about/About';
 import { Certs } from '@/components/features/certifications/Certs';
 import { Commits } from '@/components/features/commits/Commits';
@@ -15,7 +17,7 @@ import { Overview } from '@/components/features/Overview';
 import { Projects } from '@/components/features/projects/Projects';
 import { TechStack } from '@/components/features/stack/TechStack';
 import { Utils } from '@/components/features/tools/Utils';
-import { Divider } from '@/components/ui/Divider';
+import { Divider } from '@/components/ui/Divider';*/
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 import { USER } from '@/lib/user';
@@ -44,16 +46,16 @@ const getPageJsonLd = (): WithContext<PageSchema> => ({
 	},
 });
 
-const isCapture = process.env.ENV_TYPE === 'capture';
+// const isCapture = process.env.ENV_TYPE === 'capture';
 
 const Page = async () => {
-	const [github, linkedin] = await Promise.all([
+	/*const [github, linkedin] = await Promise.all([
 		getGitHubUserData().then((data) => data.followers),
 		getLinkedInFollowers().then((data) => data.count),
 	]);
 
 	const { stars, followers, following, contributions } =
-		await getGitHubUserData();
+		await getGitHubUserData();*/
 
 	return (
 		<>
@@ -65,7 +67,7 @@ const Page = async () => {
 			/>
 
 			<div className="mx-auto md:max-w-3xl">
-				<Cover capture={isCapture} />
+				{/*<Cover capture={isCapture} />
 				<Header capture={isCapture} />
 				<Divider border />
 				<Overview />
@@ -94,7 +96,10 @@ const Page = async () => {
 				<Experiences />
 				<Divider border />
 				<Projects />
-				<Divider border />
+				<Divider border />*/}
+
+				<div className="py-20" />
+
 				<CurriculumVitae />
 				<Divider border />
 			</div>

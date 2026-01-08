@@ -14,7 +14,7 @@ export const IsNew = memo(
 				<span className="absolute inline-flex size-3 animate-ping rounded-full bg-theme opacity-50" />
 				<span className="relative inline-flex size-2 rounded-full bg-theme" />
 			</span>
-			<Prose className="!text-xs !font-medium text-theme max-md:hidden">
+			<Prose className="!text-sm !font-medium text-theme max-md:hidden">
 				Nouveau
 			</Prose>
 		</div>

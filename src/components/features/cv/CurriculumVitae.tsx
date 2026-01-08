@@ -12,13 +12,18 @@ import {
 	PanelHeader,
 	PanelTitle,
 } from '@/components/ui/Panel';
+import { TextAnimate } from '@/components/ui/TextAnimate';
 import { Prose } from '@/components/ui/Typography';
 import { USER } from '@/lib/user';
 
 export const CurriculumVitae = (): React.JSX.Element => (
 	<Panel>
 		<PanelHeader>
-			<PanelTitle>Découvrir mon CV</PanelTitle>
+			<PanelTitle>
+				<TextAnimate animation="slideUp" by="word">
+					Découvrir mon CV
+				</TextAnimate>
+			</PanelTitle>
 		</PanelHeader>
 
 		<PanelContent className="space-y-2">

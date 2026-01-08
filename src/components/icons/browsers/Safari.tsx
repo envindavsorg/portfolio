@@ -9,7 +9,6 @@ const SafariIcon = (props: SVGProps<SVGSVGElement>) => (
 		xmlnsXlink="http://www.w3.org/1999/xlink"
 		{...props}
 	>
-		<title>Safari</title>
 		<defs>
 			<linearGradient id="safari__b">
 				<stop offset={0} stopColor="#06c2e7" />

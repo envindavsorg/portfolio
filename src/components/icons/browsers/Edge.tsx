@@ -8,7 +8,6 @@ const EdgeIcon = (props: SVGProps<SVGSVGElement>) => (
 		xmlns="http://www.w3.org/2000/svg"
 		{...props}
 	>
-		<title>Edge</title>
 		<defs>
 			<radialGradient
 				cx={161.8}

@@ -52,7 +52,8 @@
       },
       "complexity": {
         "noImportantStyles": "off",
-        "noExcessiveCognitiveComplexity": "off"
+        "noExcessiveCognitiveComplexity": "off",
+        "noUselessSwitchCase": "off"
       },
       "correctness": {
         "useExhaustiveDependencies": "off"
