@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resend } from 'resend';
-import { CVEmailTemplate } from '@/emails/CVEmail';
+import { CurriculumVitaeTemplate } from '@/components/features/cv/CurriculumVitaeTemplate';
 import { USER } from '@/lib/user';
 import { decodeEmail } from '@/lib/utils/string';
 import emailSchema from '@/schemas/email.schema';
@@ -39,24 +39,18 @@ export const POST = async (request: Request): Promise<Response> => {
 			from: `${USER.firstName} ${USER.lastName} <${decodeEmail(USER.emailAddress)}>`,
 			to: [recipientEmail],
 			subject: `CV - ${USER.firstName} ${USER.lastName} | ${USER.website}`,
-			react: CVEmailTemplate({ firstName, recipientEmail }),
+			react: CurriculumVitaeTemplate({ firstName, recipientEmail }),
 			attachments: [{ filename, content }],
 		});
 
 		if (error) {
-			return Response.json(
-				{ error: "Erreur lors de l'envoi du mail !" },
-				{ status: 500 }
-			);
+			return Response.json({ error: "Erreur lors de l'envoi du mail !" }, { status: 500 });
 		}
 
 		return Response.json({
 			message: 'Email envoyé avec succès ! ',
 		});
 	} catch {
-		return Response.json(
-			{ error: 'Une erreur serveur est survenue !' },
-			{ status: 500 }
-		);
+		return Response.json({ error: 'Une erreur serveur est survenue !' }, { status: 500 });
 	}
 };

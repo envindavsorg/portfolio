@@ -99,6 +99,7 @@ const Page = async () => {
 
 				<div className="py-20" />
 
+				<Divider border />
 				<Projects />
 				<Divider border />
 				<CurriculumVitae />

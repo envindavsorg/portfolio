@@ -12,18 +12,20 @@ import {
 } from '@react-email/components';
 import type React from 'react';
 
-interface CVEmailTemplateProps {
+interface CurriculumVitaeTemplateProps {
 	firstName: string;
 	recipientEmail: string;
 }
 
-export const CVEmailTemplate = ({
+const CurriculumVitaeTemplate = ({
 	firstName,
-}: CVEmailTemplateProps): React.JSX.Element => (
+}: CurriculumVitaeTemplateProps): React.JSX.Element => (
 	<Html>
 		<Head />
+
 		<Body style={main}>
 			<Preview>CV - Cuzeac Florin | cuzeacflorin.fr</Preview>
+
 			<Container style={container}>
 				<Img
 					alt="Cuzeac Florin | cuzeacflorin.fr"
@@ -36,9 +38,8 @@ export const CVEmailTemplate = ({
 				<Heading style={heading}>Bonjour {firstName} !</Heading>
 
 				<Text style={paragraph}>
-					Merci de votre intérêt pour mon profil. Vous trouverez en pièce jointe
-					mon CV au format PDF. N'hésitez pas à me contacter si vous avez des
-					questions.
+					Merci de votre intérêt pour mon profil. Vous trouverez en pièce jointe mon CV au format
+					PDF. N'hésitez pas à me contacter si vous avez des questions.
 				</Text>
 
 				<Hr style={hr} />
@@ -94,3 +95,7 @@ const reportLink = {
 	fontSize: '14px',
 	color: '#b4becc',
 };
+
+CurriculumVitaeTemplate.displayName = 'CurriculumVitaeTemplate';
+
+export { CurriculumVitaeTemplate };

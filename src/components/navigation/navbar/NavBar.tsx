@@ -8,18 +8,37 @@ import { ContextLlm } from '@/components/llm/ContextLlm';
 import { Mark } from '@/components/mark/Mark';
 import { FeedRss } from '@/components/rss/FeedRss';
 import { ThemeSwitcher } from '@/components/theme/ThemeSwitcher';
-import { NAVIGATION_DATA } from '@/data/navbar';
 import { cn } from '@/lib/utils';
 import { NavBarContent } from './NavBarContent';
 import { NavBarWrapper } from './NavBarWrapper';
 
 const CommandContent = dynamic(
-	() =>
-		import('@/components/command/CommandContent').then(
-			(mod) => mod.CommandContent
-		),
+	() => import('@/components/command/CommandContent').then((mod) => mod.CommandContent),
 	{ ssr: false }
 );
+
+const NAVIGATION_DATA: NavigationItem[] = [
+	{
+		title: 'Accueil',
+		description: "Retour à l'accueil",
+		href: '/',
+	},
+	{
+		title: 'Blog',
+		description: 'Mes articles de blog',
+		href: '/blog',
+	},
+	{
+		title: 'Composants',
+		description: 'Bibliothèque de composants UI',
+		href: '/components',
+	},
+	{
+		title: 'Outils',
+		description: 'Outils et utilitaires',
+		href: '/utils',
+	},
+];
 
 interface NavBarProps {
 	posts: Post[];
