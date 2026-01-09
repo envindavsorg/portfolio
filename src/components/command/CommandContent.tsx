@@ -210,18 +210,18 @@ export const CommandContent = ({
 				<CommandTrigger setOpenAction={setOpen} />
 
 				<Dialog onOpenChange={setOpen} open={open}>
-					<VisuallyHidden>
-						<DialogTitle>Palette de commandes</DialogTitle>
-						<DialogDescription>
-							Utilisez la barre de recherche ...
-						</DialogDescription>
-					</VisuallyHidden>
-
 					<DialogContent
 						className="overflow-hidden bg-popover p-0 backdrop-blur-lg supports-backdrop-filter:bg-popover/90 max-sm:top-16 max-sm:translate-y-0"
 						data-slot="command-dialog-content"
 						overlay={true}
 					>
+						<VisuallyHidden>
+							<DialogTitle>Palette de commandes</DialogTitle>
+							<DialogDescription>
+								Utilisez la barre de recherche ...
+							</DialogDescription>
+						</VisuallyHidden>
+
 						<Command className="**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]]:px-1 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-10 [&_[cmdk-item]]:px-3 [&_[cmdk-item]]:py-2 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
 							{commandContent}
 						</Command>
@@ -236,14 +236,14 @@ export const CommandContent = ({
 			<CommandTrigger setOpenAction={setOpen} />
 
 			<Drawer onOpenChange={setOpen} open={open}>
-				<VisuallyHidden>
-					<DrawerTitle>Palette de commandes</DrawerTitle>
-					<DrawerDescription>
-						Utilisez la barre de recherche ...
-					</DrawerDescription>
-				</VisuallyHidden>
-
 				<DrawerContent className="overflow-hidden bg-popover p-0 backdrop-blur-lg supports-backdrop-filter:bg-popover/90">
+					<VisuallyHidden>
+						<DrawerTitle>Palette de commandes</DrawerTitle>
+						<DrawerDescription>
+							Utilisez la barre de recherche ...
+						</DrawerDescription>
+					</VisuallyHidden>
+
 					<Command className="**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]]:px-1 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-10 [&_[cmdk-item]]:px-3 [&_[cmdk-item]]:py-2 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
 						{commandContent}
 					</Command>

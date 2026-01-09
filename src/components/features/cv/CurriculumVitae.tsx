@@ -1,61 +1,17 @@
-'use client';
-
-import Link from 'next/link';
-import posthog from 'posthog-js';
 import type React from 'react';
-import { CurriculumVitaeOverlay } from '@/components/features/cv/CurriculumVitaeOverlay';
-import { Button } from '@/components/ui/Button';
-import {
-	Panel,
-	PanelContent,
-	PanelFooter,
-	PanelHeader,
-	PanelTitle,
-} from '@/components/ui/Panel';
-import { TextAnimate } from '@/components/ui/TextAnimate';
-import { Prose } from '@/components/ui/Typography';
-import { USER } from '@/lib/user';
+import { Panel } from '@/components/ui/Panel';
+import { CurriculumVitaeContent } from './CurriculumVitaeContent';
+import { CurriculumVitaeFooter } from './CurriculumVitaeFooter';
+import { CurriculumVitaeTitle } from './CurriculumVitaeTitle';
 
-export const CurriculumVitae = (): React.JSX.Element => (
+const CurriculumVitae = (): React.JSX.Element => (
 	<Panel>
-		<PanelHeader>
-			<PanelTitle>
-				<TextAnimate animation="slideUp" by="word">
-					Découvrir mon CV
-				</TextAnimate>
-			</PanelTitle>
-		</PanelHeader>
-
-		<PanelContent className="space-y-2">
-			<Prose>
-				Découvrez mon parcours professionnel à travers mon{' '}
-				<span>CV détaillé</span>, qui retrace mes expériences, compétences
-				techniques et réalisations dans le développement web full-stack. Vous y
-				trouverez un <span>aperçu complet</span> de mon expertise et de ma
-				progression dans le domaine.
-			</Prose>
-			<Prose>
-				Pour recevoir une <span>copie actualisée</span> directement dans votre
-				boîte e-mail, cliquez sur le bouton ci-dessous. Je serai ravi d'échanger
-				avec vous sur d'éventuelles opportunités de collaboration.
-			</Prose>
-		</PanelContent>
-
-		<PanelFooter>
-			<Link
-				href={USER.documents.cv.url}
-				onClick={() => {
-					posthog.capture('cv_download_clicked', {
-						cv_url: USER.documents.cv.url,
-					});
-				}}
-				rel="noopener noreferrer"
-				target="_blank"
-			>
-				<Button variant="outline">Voir et télécharger</Button>
-			</Link>
-
-			<CurriculumVitaeOverlay />
-		</PanelFooter>
+		<CurriculumVitaeTitle />
+		<CurriculumVitaeContent />
+		<CurriculumVitaeFooter />
 	</Panel>
 );
+
+CurriculumVitae.displayName = 'CV';
+
+export { CurriculumVitae };

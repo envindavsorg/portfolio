@@ -9,10 +9,7 @@ const Drawer = ({
 	shouldScaleBackground = true,
 	...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>): React.JSX.Element => (
-	<DrawerPrimitive.Root
-		shouldScaleBackground={shouldScaleBackground}
-		{...props}
-	/>
+	<DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
 );
 
 const DrawerTrigger = DrawerPrimitive.Trigger;
@@ -43,13 +40,13 @@ const DrawerContent = forwardRef<
 			<DrawerOverlay />
 			<DrawerPrimitive.Content
 				className={cn(
-					'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-0 border bg-background',
+					'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-0 border bg-background px-5 pb-5',
 					className
 				)}
 				ref={ref}
 				{...props}
 			>
-				<div className="py-3">
+				<div className="pt-3 pb-6">
 					<div className="mx-auto h-0.5 w-[100px] rounded-full bg-muted-foreground" />
 				</div>
 				{children}
@@ -62,20 +59,14 @@ const DrawerHeader = ({
 	className,
 	...props
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
-	<div
-		className={cn('grid gap-1.5 p-4 text-center sm:text-left', className)}
-		{...props}
-	/>
+	<div className={cn('mb-4 flex flex-col gap-2 text-left', className)} {...props} />
 );
 
 const DrawerFooter = ({
 	className,
 	...props
 }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element => (
-	<div
-		className={cn('mt-auto flex flex-col gap-2 p-4', className)}
-		{...props}
-	/>
+	<div className={cn('mt-6 flex flex-row items-center justify-between', className)} {...props} />
 );
 
 const DrawerTitle = forwardRef<
@@ -84,10 +75,7 @@ const DrawerTitle = forwardRef<
 >(
 	({ className, ...props }, ref): React.JSX.Element => (
 		<DrawerPrimitive.Title
-			className={cn(
-				'font-semibold text-lg leading-none tracking-tight',
-				className
-			)}
+			className={cn('font-semibold text-lg text-theme leading-normal', className)}
 			ref={ref}
 			{...props}
 		/>
@@ -100,10 +88,7 @@ const DrawerDescription = forwardRef<
 >(
 	({ className, ...props }, ref): React.JSX.Element => (
 		<DrawerPrimitive.Description
-			className={cn(
-				'prose prose-sm prose-zinc dark:prose-invert max-w-none font-mono text-foreground',
-				className
-			)}
+			className={cn('text-muted-foreground text-sm', className)}
 			ref={ref}
 			{...props}
 		/>

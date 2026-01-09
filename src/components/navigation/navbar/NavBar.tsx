@@ -1,20 +1,31 @@
+'use client';
+
+import dynamic from 'next/dynamic';
 import type React from 'react';
 import { memo } from 'react';
-import { CommandContent } from '@/components/command/CommandContent';
 import { ActionGitHub } from '@/components/github/ActionGitHub';
 import { ContextLlm } from '@/components/llm/ContextLlm';
 import { Mark } from '@/components/mark/Mark';
 import { FeedRss } from '@/components/rss/FeedRss';
 import { ThemeSwitcher } from '@/components/theme/ThemeSwitcher';
 import { NAVIGATION_DATA } from '@/data/navbar';
-import { getAllPosts } from '@/lib/blog/posts';
 import { cn } from '@/lib/utils';
 import { NavBarContent } from './NavBarContent';
 import { NavBarWrapper } from './NavBarWrapper';
 
-export const NavBar = memo((): React.JSX.Element => {
-	const posts = getAllPosts();
+const CommandContent = dynamic(
+	() =>
+		import('@/components/command/CommandContent').then(
+			(mod) => mod.CommandContent
+		),
+	{ ssr: false }
+);
 
+interface NavBarProps {
+	posts: Post[];
+}
+
+export const NavBar = memo(({ posts }: NavBarProps): React.JSX.Element => {
 	return (
 		<NavBarWrapper>
 			<div

@@ -60,8 +60,6 @@ const DialogContent = ({
 				'z-50 hidden w-full max-w-[calc(100%-2rem)] sm:grid sm:max-w-[375px]',
 				'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-100 data-[state=open]:slide-in-from-bottom-20 data-[state=open]:animate-in data-[state=open]:duration-600',
 				'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:slide-out-to-top-20 data-[state=closed]:animate-out data-[state=closed]:duration-300',
-				'bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)]',
-				'bg-background bg-center bg-size-[10px_10px] [--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5',
 				className
 			)}
 			data-slot="dialog-content"
@@ -72,21 +70,15 @@ const DialogContent = ({
 	</DialogPortal>
 );
 
-const DialogHeader = ({
-	className,
-	...props
-}: React.ComponentProps<'div'>): React.JSX.Element => (
+const DialogHeader = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		className={cn('flex flex-col gap-2 text-center sm:text-left', className)}
+		className={cn('mb-4 flex flex-col gap-2 text-left', className)}
 		data-slot="dialog-header"
 		{...props}
 	/>
 );
 
-const DialogFooter = ({
-	className,
-	...props
-}: React.ComponentProps<'div'>): React.JSX.Element => (
+const DialogFooter = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
 		className={cn('mt-6 flex flex-row items-center justify-between', className)}
 		data-slot="dialog-footer"
@@ -99,7 +91,7 @@ const DialogTitle = ({
 	...props
 }: React.ComponentProps<typeof DialogPrimitive.Title>): React.JSX.Element => (
 	<DialogPrimitive.Title
-		className={cn('font-semibold text-lg leading-normal', className)}
+		className={cn('font-semibold text-lg text-theme leading-normal', className)}
 		data-slot="dialog-title"
 		{...props}
 	/>
@@ -108,9 +100,7 @@ const DialogTitle = ({
 const DialogDescription = ({
 	className,
 	...props
-}: React.ComponentProps<
-	typeof DialogPrimitive.Description
->): React.JSX.Element => (
+}: React.ComponentProps<typeof DialogPrimitive.Description>): React.JSX.Element => (
 	<DialogPrimitive.Description
 		className={cn('text-muted-foreground text-sm', className)}
 		data-slot="dialog-description"

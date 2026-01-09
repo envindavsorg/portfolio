@@ -1,12 +1,6 @@
-import {
-	CodaLogoIcon,
-	InfinityIcon,
-	LinkIcon,
-} from '@phosphor-icons/react/ssr';
-import Image from 'next/image';
+import Link from 'next/link';
 import type React from 'react';
-import { Markdown } from '@/components/blog/markdown/markdown';
-import type { Project } from '@/components/features/projects/data/projects';
+import { LinkIcon } from '@/components/icons/LinkIcon';
 import {
 	CollapsibleChevronsIcon,
 	CollapsibleContent,
@@ -14,130 +8,91 @@ import {
 	CollapsibleWithContext,
 } from '@/components/ui/Collapsible';
 import { Tag } from '@/components/ui/Tag';
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from '@/components/ui/Tooltip';
-import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
+import type { Project } from './ProjectsContent';
 
 interface ProjectItemProps {
-	className?: string;
 	project: Project;
 }
 
-export const ProjectsItem = ({
-	className,
-	project,
-}: ProjectItemProps): React.JSX.Element => {
-	const { start, end } = project.period;
-	const isOngoing = !end;
+const ProjectsItem = ({ project }: ProjectItemProps): React.JSX.Element => {
+	const Icon = project.icon;
 
 	return (
-		<CollapsibleWithContext asChild defaultOpen={project.isExpanded}>
-			<div className={className}>
-				<div className="flex items-center hover:bg-accent2">
-					{project.logo ? (
-						<Image
-							alt={project.title}
-							aria-hidden="true"
-							className="mx-4 flex size-6 shrink-0 select-none"
-							height={32}
-							quality={100}
-							src={project.logo}
-							unoptimized
-							width={32}
-						/>
-					) : (
-						<div
-							aria-hidden
-							className={cn(
-								'mx-4 flex size-8 shrink-0 items-center justify-center bg-muted',
-								'rounded-lg border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background'
-							)}
-						>
-							<CodaLogoIcon
-								className="pointer-events-none size-5 text-theme"
-								weight="duotone"
-							/>
-						</div>
-					)}
-
-					<div className="flex-1 border-edge border-l border-dashed">
-						<CollapsibleTrigger className="flex w-full select-none items-center gap-4 p-4 pr-2 text-left">
-							<div className="flex-1">
-								<h2 className="mb-1 text-balance font-medium text-base leading-snug sm:text-lg">
-									{project.title}
-								</h2>
-
-								<dl className="text-muted-foreground text-xs sm:text-sm">
-									<dt className="sr-only">Période du projet</dt>
-									<dd className="flex items-center gap-1">
-										<span>{start}</span>
-										<span className="font-mono">-</span>
-										{isOngoing ? (
-											<>
-												<InfinityIcon
-													aria-hidden
-													className="size-4 translate-y-[0.5px]"
-												/>
-												<span className="sr-only">(en cours)</span>
-											</>
-										) : (
-											<span>{end}</span>
-										)}
-									</dd>
-								</dl>
-							</div>
-
-							<Tooltip>
-								<TooltipTrigger asChild>
-									<a
-										className="relative flex size-6 shrink-0 items-center justify-center text-muted-foreground after:absolute after:-inset-2 hover:text-foreground"
-										href={project.link}
-										rel="noopener"
-										target="_blank"
-									>
-										<LinkIcon className="pointer-events-none size-5" />
-										<span className="sr-only">Ouvrir le lien du projet</span>
-									</a>
-								</TooltipTrigger>
-								<TooltipContent>Ouvrir le projet</TooltipContent>
-							</Tooltip>
-
-							<div
-								aria-hidden
-								className="shrink-0 text-muted-foreground [&_svg]:size-4"
-							>
-								<CollapsibleChevronsIcon />
-							</div>
-						</CollapsibleTrigger>
-					</div>
+		<CollapsibleWithContext defaultOpen={project.isExpanded}>
+			<div className="flex items-center hover:bg-accent2">
+				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
+					<Icon className="pointer-events-none size-7" />
 				</div>
 
-				<CollapsibleContent className="group overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-					<div className="border-edge border-t border-dashed">
-						<div className="space-y-4 p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in">
-							{project.description && (
-								<Prose>
-									<Markdown>{project.description}</Markdown>
-								</Prose>
-							)}
-
-							{project.skills.length > 0 && (
-								<ul className="flex flex-wrap gap-1.5">
-									{project.skills.map((skill, index) => (
-										<li className="flex" key={index + skill}>
-											<Tag>{skill}</Tag>
-										</li>
-									))}
-								</ul>
-							)}
-						</div>
+				<CollapsibleTrigger className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge border-l p-3 text-left">
+					<div className="flex flex-1 flex-col gap-y-1">
+						<h2 className="text-balance font-semibold text-base">
+							{project.name}{' '}
+							<span className="font-normal text-theme text-xs">({project.type})</span>
+						</h2>
+						<p className="text-muted-foreground text-xs max-sm:hidden">{project.title}</p>
 					</div>
-				</CollapsibleContent>
+
+					<Link aria-label={project.name} href={project.link} rel="noopener" target="_blank">
+						<LinkIcon className="relative after:absolute after:-inset-2" size={20} />
+					</Link>
+
+					<CollapsibleChevronsIcon />
+				</CollapsibleTrigger>
 			</div>
+
+			<CollapsibleContent className="group overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+				<div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in min-sm:hidden">
+					<p className="text-muted-foreground text-xs">{project.title}</p>
+				</div>
+
+				<div className="grid auto-rows-[100px] grid-cols-1 gap-4 border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in md:grid-cols-3">
+					{project.description.map((text, i) => {
+						const isWide = i === 0 || i === 3 || i === 4 || i === 7;
+
+						return (
+							<div
+								className={cn(
+									'group relative flex flex-col justify-between overflow-hidden rounded-xl border bg-background p-4',
+									isWide ? 'md:col-span-2' : 'md:col-span-1'
+								)}
+								key={text}
+							>
+								<span className="absolute -top-2 -right-1 select-none font-bold text-[3rem] text-theme leading-none tracking-tighter opacity-[0.1] transition-opacity duration-300">
+									{i + 1}
+								</span>
+								<div className="z-10 flex items-center gap-2">
+									<span className="flex h-6 items-center justify-center rounded-full bg-primary/10 px-2.5 font-bold font-mono text-[10px] text-primary">
+										{(i + 1).toString().padStart(2, '0')}
+									</span>
+									<div className="h-px w-8 bg-border" />
+								</div>
+								<p className="z-10 text-balance font-medium text-foreground text-sm leading-snug tracking-tight">
+									{text}
+								</p>
+								<div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+							</div>
+						);
+					})}
+				</div>
+
+				<div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in">
+					{project.skills.length > 0 && (
+						<ul className="flex flex-wrap gap-1.5">
+							{project.skills.map((skill, index) => (
+								<li className="flex" key={index + skill}>
+									<Tag>{skill}</Tag>
+								</li>
+							))}
+						</ul>
+					)}
+				</div>
+			</CollapsibleContent>
 		</CollapsibleWithContext>
 	);
 };
+
+ProjectsItem.displayName = 'ProjectsItem';
+
+export { ProjectsItem };
