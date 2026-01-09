@@ -2,8 +2,10 @@
 
 import Image from 'next/image';
 import type React from 'react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { TimeDisplay } from '@/components/blocs/TimeDisplay';
 import { HeartIcon } from '@/components/icons/HeartIcon';
+import { Button } from '@/components/ui/Button';
 import { Divider } from '@/components/ui/Divider';
 import { Panel } from '@/components/ui/Panel';
 import useBrowser from '@/hooks/use-browser';
@@ -21,6 +23,7 @@ export const Footer = ({
 	hash,
 	updated,
 }: FooterProps): React.JSX.Element => {
+	const [is24Hour, setIs24Hour] = useState<boolean>(true);
 	const browser = useBrowser();
 
 	const items = useMemo(() => {
@@ -81,6 +84,22 @@ export const Footer = ({
 					))}
 				</div>
 			</Panel>
+
+			<div className="mx-auto md:max-w-3xl">
+				<Divider border className="h-4 before:h-4" />
+			</div>
+
+			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-between border-edge border-x p-2 md:max-w-3xl">
+				<TimeDisplay is24Hour={is24Hour} />
+				<div className="flex items-center gap-x-3 *:h-6 *:w-4 *:underline-offset-2 *:transition-colors *:hover:bg-transparent *:hover:text-theme *:hover:underline">
+					<Button onClick={() => setIs24Hour(true)} variant="ghost">
+						24h
+					</Button>
+					<Button onClick={() => setIs24Hour(false)} variant="ghost">
+						12h
+					</Button>
+				</div>
+			</div>
 
 			<div className="mx-auto md:max-w-3xl">
 				<Divider border className="h-4 before:h-4" />
