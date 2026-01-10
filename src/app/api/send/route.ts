@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resend } from 'resend';
-import { CurriculumVitaeTemplate } from '@/features/(homepage)/cv/CurriculumVitaeTemplate';
+import { CvTemplate } from '@/features/(homepage)/cv/CvTemplate';
 import { USER } from '@/lib/user';
 import { decodeEmail } from '@/lib/utils/string';
 import emailSchema from '@/schemas/email.schema';
@@ -39,7 +39,7 @@ export const POST = async (request: Request): Promise<Response> => {
 			from: `${USER.firstName} ${USER.lastName} <${decodeEmail(USER.emailAddress)}>`,
 			to: [recipientEmail],
 			subject: `CV - ${USER.firstName} ${USER.lastName} | ${USER.website}`,
-			react: CurriculumVitaeTemplate({ firstName, recipientEmail }),
+			react: CvTemplate({ firstName, recipientEmail }),
 			attachments: [{ filename, content }],
 		});
 

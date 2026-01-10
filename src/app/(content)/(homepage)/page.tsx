@@ -8,7 +8,7 @@ import { Certifications } from '@/features/(homepage)/certifications/Certificati
 import { Commits } from '@/features/(homepage)/commits/Commits';
 import { Contact } from '@/features/(homepage)/contact/Contact';
 import { Cover } from '@/features/(homepage)/cover/Cover';
-import { CurriculumVitae } from '@/features/(homepage)/cv/CurriculumVitae';
+import { Cv } from '@/features/(homepage)/cv/Cv';
 import { Experiences } from '@/features/(homepage)/experiences/Experiences';
 import { Header } from '@/features/(homepage)/header/Header';
 import { Overview } from '@/features/(homepage)/overview/Overview';
@@ -58,7 +58,7 @@ const Page = (): React.JSX.Element => (
 			<Divider border />
 			<Overview />
 			<Divider border />
-			<CurriculumVitae />
+			<Cv />
 			<Divider border />
 			<Contact />
 			<Divider border />
@@ -78,7 +78,7 @@ const Page = (): React.JSX.Element => (
 			<Divider border />
 			<Projects />
 			<Divider border />
-			<CurriculumVitae />
+			<Cv />
 			<Divider border />
 		</div>
 	</>
