@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
 import { CurriculumVitae } from '@/components/features/cv/CurriculumVitae';
+import { Experiences } from '@/components/features/experiences/Experiences';
 import { Projects } from '@/components/features/projects/Projects';
 import { Divider } from '@/components/ui/Divider';
 /*import { Articles } from '@/components/features/Articles';
@@ -93,12 +94,12 @@ const Page = async () => {
 				<Certs />
 				<Divider border />
 				<Utils />
-				<Divider border />
-				<Experiences />
 				<Divider border />*/}
 
 				<div className="py-20" />
 
+				<Divider border />
+				<Experiences />
 				<Divider border />
 				<Projects />
 				<Divider border />

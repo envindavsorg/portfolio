@@ -82,7 +82,7 @@ const PROJECTS: Project[] = [
 	},
 ];
 
-const ProjectsContent = (): React.JSX.Element | null => {
+const ProjectsContent = (): React.JSX.Element => {
 	const { visibleItems, hiddenItems } = useMemo(
 		() => ({
 			visibleItems: PROJECTS.slice(0, 2),
@@ -90,10 +90,6 @@ const ProjectsContent = (): React.JSX.Element | null => {
 		}),
 		[PROJECTS, 2]
 	);
-
-	if (!PROJECTS.length) {
-		return null;
-	}
 
 	const keyExtractorAction = (item: Project) => item.id;
 	const getKey = (item: Project, index: number) =>
@@ -130,16 +126,16 @@ const ProjectsContent = (): React.JSX.Element | null => {
 			</PanelContent>
 
 			<Collapsible className="screen-line-before">
-				{visibleItems.map((item, index) => (
-					<div className="border-edge border-b" key={getKey(item, index)}>
+				{visibleItems.map((item: Project, idx: number) => (
+					<div className="border-edge border-b" key={getKey(item, idx)}>
 						<ProjectsItem project={item} />
 					</div>
 				))}
 
 				{hiddenItems.length > 0 && (
 					<CollapsibleContent>
-						{hiddenItems.map((item, index) => (
-							<div className="border-edge border-b" key={getKey(item, 2 + index)}>
+						{hiddenItems.map((item: Project, idx: number) => (
+							<div className="border-edge border-b" key={getKey(item, 2 + idx)}>
 								<ProjectsItem project={item} />
 							</div>
 						))}
