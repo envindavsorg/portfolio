@@ -5,7 +5,7 @@ import { dayjs } from '@/lib/dayjs';
 import { ArticlesContent } from './ArticlesContent';
 import { ArticlesTitle } from './ArticlesTitle';
 
-export const Articles = (): React.JSX.Element => {
+const Articles = (): React.JSX.Element => {
 	const articles: Post[] = getPostsByCategory('article').sort((a: Post, b: Post) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
@@ -17,3 +17,7 @@ export const Articles = (): React.JSX.Element => {
 		</Panel>
 	);
 };
+
+Articles.displayName = 'Articles';
+
+export { Articles };

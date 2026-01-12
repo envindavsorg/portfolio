@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
+import { About } from '@/components/features/(homepage)/about/About';
 import { Articles } from '@/components/features/(homepage)/articles/Articles';
 import { Certifications } from '@/components/features/(homepage)/certifications/Certifications';
+import { Commits } from '@/components/features/(homepage)/commits/Commits';
 import { CurriculumVitae } from '@/components/features/(homepage)/cv/CurriculumVitae';
 import { Experiences } from '@/components/features/(homepage)/experiences/Experiences';
 import { Projects } from '@/components/features/(homepage)/projects/Projects';
+import { TechStack } from '@/components/features/(homepage)/stack/TechStack';
 import { Tools } from '@/components/features/(homepage)/tools/Tools';
 import { Divider } from '@/components/ui/Divider';
 /*import { Articles } from '@/components/features/Articles';
@@ -52,10 +55,7 @@ const Page = async () => {
 	/*const [github, linkedin] = await Promise.all([
 		getGitHubUserData().then((data) => data.followers),
 		getLinkedInFollowers().then((data) => data.count),
-	]);
-
-	const { stars, followers, following, contributions } =
-		await getGitHubUserData();*/
+	]);*/
 
 	return (
 		<>
@@ -76,23 +76,17 @@ const Page = async () => {
 				<Divider border />
 				<Contact capture={isCapture} github={github} linkedin={linkedin} />
 				<Divider border />
-				<About />
-				<Divider border />
-				<Commits
-					contributions={contributions}
-					followers={followers}
-					following={following}
-					stars={stars}
-				/>
-				<Divider border />
-				<TechStack />
-				<Divider border />
 
-				<Divider border />
-				*/}
+				<Divider border />*/}
 
 				<div className="py-20" />
 
+				<Divider border />
+				<About />
+				<Divider border />
+				<Commits />
+				<Divider border />
+				<TechStack />
 				<Divider border />
 				<Articles />
 				<Divider border />

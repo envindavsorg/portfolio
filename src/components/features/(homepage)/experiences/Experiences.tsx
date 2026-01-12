@@ -4,9 +4,13 @@ import { EXPERIENCES } from './content';
 import { ExperiencesContent } from './ExperiencesContent';
 import { ExperiencesTitle } from './ExperiencesTitle';
 
-export const Experiences = (): React.JSX.Element => (
+const Experiences = (): React.JSX.Element => (
 	<Panel id="experience">
 		<ExperiencesTitle />
 		<ExperiencesContent content={EXPERIENCES} />
 	</Panel>
 );
+
+Experiences.displayName = 'Experiences';
+
+export { Experiences };

@@ -74,7 +74,7 @@ src/
 │   ├── utils.ts      # General utilities (cn, etc.)
 │   └── rehype-*.ts   # MDX processing plugins
 ├── actions/          # Server Actions
-│   └── github.action.ts
+│   └── data.action.ts
 ├── config/           # Configuration
 │   ├── theme.ts       # Site metadata and navigation
 │   └── registry.ts   # Registry configuration
@@ -87,7 +87,7 @@ src/
 
 **Feature-Based Organization**: Code is organized by feature domain (blog, navigation, profile) rather than technical type. Each feature contains its own components, hooks, and logic.
 
-**Server Actions**: GitHub data fetching uses Server Actions (see `src/actions/github.action.ts`). These are async functions that run on the server and can be called from Client Components.
+**Server Actions**: GitHub data fetching uses Server Actions (see `src/actions/data.action.ts`). These are async functions that run on the server and can be called from Client Components.
 
 **Dynamic Imports**: Heavy components like context menus and scroll-to-top are dynamically imported in layouts to optimize initial bundle size.
 

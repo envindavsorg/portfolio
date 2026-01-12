@@ -1,7 +1,8 @@
-import { type ComponentType, lazy, type SVGProps } from 'react';
+import type React from 'react';
+import { lazy } from 'react';
 
 export interface Stack {
-	icon: ComponentType<SVGProps<SVGSVGElement>>;
+	icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 	title: string;
 }
 
@@ -116,7 +117,7 @@ const VueIcon = lazy(() =>
 	}))
 );
 
-export const techStack: Stack[] = [
+export const TECH_STACK: Stack[] = [
 	{ icon: HTML5Icon, title: 'HTML5' },
 	{ icon: CSSIcon, title: 'CSS' },
 	{ icon: SassIcon, title: 'Sass' },

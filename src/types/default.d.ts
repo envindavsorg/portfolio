@@ -21,6 +21,55 @@ declare global {
 		} | null;
 	}
 
+	// types for GitHub data
+	type ContributionLevel =
+		| 'NONE'
+		| 'FIRST_QUARTILE'
+		| 'SECOND_QUARTILE'
+		| 'THIRD_QUARTILE'
+		| 'FOURTH_QUARTILE';
+
+	interface ContributionDay {
+		date: string;
+		count: number;
+		level: number;
+	}
+
+	export interface GitHubData {
+		login: string;
+		name: string;
+		avatar: string;
+		followers: number;
+		following: number;
+		stars: number;
+		contributions: ContributionDay[];
+	}
+
+	export interface GitHubDataResponse {
+		user: {
+			login: string;
+			name: string;
+			avatarUrl: string;
+			followers: { totalCount: number };
+			following: { totalCount: number };
+			repositories: {
+				nodes: { stargazers: { totalCount: number } }[];
+			};
+			contributionsCollection: {
+				contributionCalendar: {
+					totalContributions: number;
+					weeks: {
+						contributionDays: {
+							contributionCount: number;
+							date: string;
+							contributionLevel: ContributionLevel;
+						}[];
+					}[];
+				};
+			};
+		};
+	}
+
 	// types for theme switcher (using next-themes)
 	type ThemeType = 'light' | 'dark' | 'system';
 
@@ -118,7 +167,6 @@ declare global {
 			company: string;
 			website: string;
 		}[];
-		about: string;
 		photo: string;
 		avatar: string;
 		ogImage: string;
@@ -183,5 +231,31 @@ declare global {
 		label: string;
 		value: Browser | undefined;
 		comment: string | undefined;
+	}
+
+	// types for GitHub contribution graph
+	type WeekDay = 0 | 1 | 2 | 3 | 4 | 5 | 6; // Type for weekday (0 = Sunday, 6 = Saturday)
+
+	interface CommitActivity {
+		date: string;
+		count: number;
+		level: number;
+	}
+
+	type Week = Array<CommitActivity | undefined>;
+
+	interface Labels {
+		months?: string[];
+		weekdays?: string[];
+		totalCount?: string;
+		legend?: {
+			less?: string;
+			more?: string;
+		};
+	}
+
+	interface MonthLabel {
+		weekIndex: number;
+		label: string;
 	}
 }

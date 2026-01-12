@@ -1,20 +1,16 @@
 import dynamic from 'next/dynamic';
 import type React from 'react';
-import { getCommitData } from '@/actions/commit.action';
+import { getCommitData } from '@/actions/github/commit.action';
 import { Sparkles } from '@/components/animations/Sparkles';
 import { Footer } from '@/components/navigation/Footer';
 import { NavBar } from '@/components/navigation/navbar/NavBar';
 import { getAllPosts } from '@/lib/blog/posts';
 
 const RootContextMenu = dynamic(() =>
-	import('@/components/context/RootContextMenu').then(
-		(mod) => mod.RootContextMenu
-	)
+	import('@/components/context/RootContextMenu').then((mod) => mod.RootContextMenu)
 );
 
-const ScrollTop = dynamic(() =>
-	import('@/components/ui/ScrollTop').then((mod) => mod.ScrollTop)
-);
+const ScrollTop = dynamic(() => import('@/components/ui/ScrollTop').then((mod) => mod.ScrollTop));
 
 export interface AppLayoutProps {
 	children: React.ReactNode;

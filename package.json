@@ -93,7 +93,6 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "consola": "^3.4.2",
-    "date-fns": "^4.1.0",
     "dayjs": "^1.11.19",
     "es-toolkit": "^1.43.0",
     "fumadocs-core": "^16.4.6",

@@ -5,7 +5,7 @@ import { dayjs } from '@/lib/dayjs';
 import { ToolsContent } from './ToolsContent';
 import { ToolsTitle } from './ToolsTitle';
 
-export const Tools = (): React.JSX.Element => {
+const Tools = (): React.JSX.Element => {
 	const utils: Post[] = getPostsByCategory('utils').sort((a: Post, b: Post) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
@@ -17,3 +17,7 @@ export const Tools = (): React.JSX.Element => {
 		</Panel>
 	);
 };
+
+Tools.displayName = 'Tools';
+
+export { Tools };

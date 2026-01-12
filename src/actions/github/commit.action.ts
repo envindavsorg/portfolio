@@ -2,9 +2,10 @@
 
 import { unstable_cache } from 'next/cache';
 import { octokit } from '@/lib/octokit';
-import { COMMIT_QUERY } from '@/queries/commit.query';
+import { COMMIT_QUERY } from '@/queries/github/commit.query';
 
 const CACHE_TAG = 'github-commit';
+const CACHE_REVALIDATE = 3600;
 
 const fetchCommitData = async (): Promise<CommitData> => {
 	try {
@@ -27,6 +28,6 @@ const fetchCommitData = async (): Promise<CommitData> => {
 };
 
 export const getCommitData = unstable_cache(fetchCommitData, [CACHE_TAG], {
-	revalidate: 3600,
+	revalidate: CACHE_REVALIDATE,
 	tags: [CACHE_TAG],
 });
