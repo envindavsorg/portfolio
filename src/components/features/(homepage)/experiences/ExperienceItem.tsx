@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type React from 'react';
-import type { Experience } from '@/components/features/experiences/ExperiencesContent';
+import { AnimatedDot } from '@/components/animations/AnimatedDot';
 import { LinkIcon } from '@/components/icons/LinkIcon';
 import {
 	CollapsibleChevronsIcon,
@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/Collapsible';
 import { Tag } from '@/components/ui/Tag';
 import { cn } from '@/lib/utils';
+import type { Experience } from './content';
 
 interface ExperienceItemProps {
 	experience: Experience;
@@ -20,32 +21,42 @@ const ExperienceItem = ({ experience }: ExperienceItemProps): React.JSX.Element 
 	const isOngoing = !end;
 
 	return (
-		<CollapsibleWithContext defaultOpen={experience.isExpanded}>
-			<div className="flex items-center hover:bg-accent2">
-				<CollapsibleTrigger className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge border-l p-3 text-left">
+		<CollapsibleWithContext>
+			<div className={cn('flex items-center', experience.link && 'hover:bg-accent2')}>
+				<CollapsibleTrigger
+					className={cn(
+						'flex flex-1 items-center gap-4',
+						'w-full select-none p-3 text-left',
+						experience.link && 'cursor-pointer'
+					)}
+				>
 					<div className="flex flex-1 flex-col gap-y-1">
-						<h2 className="flex items-center gap-x-2 text-balance font-semibold text-base">
-							{experience.isCurrentEmployer && (
-								<span className="relative flex items-center justify-center">
-									<span className="absolute inline-flex size-3 animate-ping rounded-full bg-theme opacity-50" />
-									<span className="relative inline-flex size-2 rounded-full bg-theme" />
-									<span className="sr-only">Poste actuellement occupé</span>
-								</span>
-							)}{' '}
-							{experience.company}{' '}
-							{experience.type && (
-								<span className="font-normal text-theme text-xs">({experience.type})</span>
-							)}
-						</h2>
-						<div className="flex items-center gap-x-2">
-							<p className="text-muted-foreground text-xs">{experience.title}</p>
-							<span className="h-2 w-px bg-foreground" />
-							<dl className="font-semibold text-muted-foreground text-xs">
+						<div className="flex items-center gap-x-3">
+							{experience.isCurrentEmployer && <AnimatedDot label="Poste actuellement occupé" />}
+							<div className="flex items-baseline gap-x-1.5">
+								<h2 className="text-balance font-semibold text-base">{experience.company}</h2>
+								{experience.type && (
+									<span className="font-normal text-theme text-xs">({experience.type})</span>
+								)}
+							</div>
+						</div>
+
+						<div className="flex items-center gap-x-3">
+							<dl className="font-medium text-muted-foreground text-xs">
+								<dt className="sr-only">Poste occupé dans l'entreprise</dt>
+								<dd>
+									<p>{experience.title}</p>
+								</dd>
+							</dl>
+
+							<span className="size-1 rounded-full bg-muted-foreground" />
+
+							<dl className="font-medium text-muted-foreground text-xs">
 								<dt className="sr-only">Durée dans l'entreprise</dt>
-								<dd className="flex items-center gap-1">
-									<span>{start}</span>
-									<span className="font-mono">-</span>
-									{isOngoing ? <span>Aujourd'hui</span> : <span>{end}</span>}
+								<dd>
+									<p>
+										{start} - {isOngoing ? "aujourd'hui" : end}
+									</p>
 								</dd>
 							</dl>
 						</div>
@@ -54,6 +65,7 @@ const ExperienceItem = ({ experience }: ExperienceItemProps): React.JSX.Element 
 					{experience.link && (
 						<Link
 							aria-label={experience.company}
+							className="z-20"
 							href={experience.link}
 							rel="noopener"
 							target="_blank"

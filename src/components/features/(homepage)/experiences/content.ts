@@ -1,12 +1,3 @@
-import { CaretDownIcon } from '@phosphor-icons/react/ssr';
-import type React from 'react';
-import { useMemo } from 'react';
-import { ExperienceItem } from '@/components/features/experiences/ExperienceItem';
-import { Button } from '@/components/ui/Button';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
-import { PanelContent } from '@/components/ui/Panel';
-import { TextAnimate } from '@/components/ui/TextAnimate';
-
 export interface Experience {
 	id: string;
 	company: string;
@@ -19,11 +10,10 @@ export interface Experience {
 	};
 	skills?: string[];
 	description?: string[];
-	isExpanded?: boolean;
 	isCurrentEmployer?: boolean;
 }
 
-const EXPERIENCES: Experience[] = [
+export const EXPERIENCES: Experience[] = [
 	{
 		id: 'wefix-by-fnac',
 		company: 'WeFix by Fnac',
@@ -36,13 +26,11 @@ const EXPERIENCES: Experience[] = [
 		skills: [
 			'React',
 			'Next.js',
-			'TypeScript',
 			'Redux',
 			'TypeScript',
 			'Tailwind.css',
 			'HTML5',
 			'CSS3',
-			'CSS',
 			'Git',
 			'UX/UI',
 			'Figma',
@@ -62,7 +50,6 @@ const EXPERIENCES: Experience[] = [
 			'Création de landing pages',
 			'Refonte site e-commerce et espace client pour un design moderne sur web et mobile, optimisé pour la conversion et la rétention client.',
 		],
-		isExpanded: false,
 		isCurrentEmployer: true,
 	},
 	{
@@ -93,7 +80,6 @@ const EXPERIENCES: Experience[] = [
 			'Créé une carte interactive pour afficher les données des stations de surveillance.',
 			'Conçu une landing page WordPress personnalisable',
 		],
-		isExpanded: false,
 		isCurrentEmployer: false,
 	},
 	{
@@ -113,11 +99,10 @@ const EXPERIENCES: Experience[] = [
 			"Optimisé l'architecture front-end pour garantir des performances élevées malgré un volume important de données sensibles, avec un système de cache intelligent et un chargement progressif des contenus.",
 			'Mis en place un système de gestion de contenu modulaire permettant aux administrateurs de publier et mettre à jour facilement les actualités, documents et ressources internes sans intervention technique.',
 		],
-		isExpanded: false,
 		isCurrentEmployer: false,
 	},
 	{
-		id: 'c47f5903-88ae-4512-8a50-0b91b0cf99b6',
+		id: 'etna-master',
 		company: 'ETNA (École des Technologies Numériques Avancées)',
 		title: 'Master développement web et mobile (Bac+5)',
 		period: {
@@ -126,7 +111,7 @@ const EXPERIENCES: Experience[] = [
 		},
 	},
 	{
-		id: '70131ed8-36d9-4e54-8c78-eaed18240eca',
+		id: 'um2-licence',
 		company: 'Licence Scientifique - Université des Sciences UM2 Montpellier',
 		title: 'Licence Scientifique (Bac+3), spécialité Biologie',
 		period: {
@@ -135,7 +120,7 @@ const EXPERIENCES: Experience[] = [
 		},
 	},
 	{
-		id: '36c4c6fb-02d0-48c0-8947-fda6e9a24af7',
+		id: 'bac-s-jean-moulin',
 		company: ' Lycée Jean Moulin (Pézenas)',
 		title: 'Baccalauréat Scientifique (Bac), spécialité Biologie',
 		period: {
@@ -144,80 +129,3 @@ const EXPERIENCES: Experience[] = [
 		},
 	},
 ];
-
-const ExperiencesContent = (): React.JSX.Element | null => {
-	const { visibleItems, hiddenItems } = useMemo(
-		() => ({
-			visibleItems: EXPERIENCES.slice(0, 3),
-			hiddenItems: EXPERIENCES.slice(3),
-		}),
-		[EXPERIENCES, 3]
-	);
-
-	const keyExtractorAction = (item: Experience) => item.id;
-	const getKey = (item: Experience, index: number) =>
-		keyExtractorAction ? keyExtractorAction(item) : index;
-
-	return (
-		<>
-			<PanelContent className="*:prose *:prose-sm *:prose-zinc dark:*:prose-invert space-y-2 *:max-w-none *:font-mono *:text-foreground">
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
-					Retour sur mon parcours professionnel et les expériences qui m'ont permis de grandir en
-					tant que développeur Front-End, puis Full-Stack.
-				</TextAnimate>
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="!text-theme !font-medium"
-					delay={0.6}
-				>
-					Ensemble, ces expériences constituent le socle de mes compétences actuelles et reflètent
-					ma passion pour la création de solutions web innovantes et performantes.
-				</TextAnimate>
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.8}>
-					De la refonte d'applications à grande échelle à l'intégration de fonctionnalités
-					complexes, chaque poste a été une opportunité d'apprendre, de relever des défis techniques
-					et de collaborer avec des équipes talentueuses.
-				</TextAnimate>
-			</PanelContent>
-
-			<Collapsible className="screen-line-before">
-				{visibleItems.map((item: Experience, idx: number) => (
-					<div className="border-edge border-b" key={getKey(item, idx)}>
-						<ExperienceItem experience={item} />
-					</div>
-				))}
-
-				{hiddenItems.length > 0 && (
-					<CollapsibleContent>
-						{hiddenItems.map((item: Experience, idx: number) => (
-							<div className="border-edge border-b" key={getKey(item, 2 + idx)}>
-								<ExperienceItem experience={item} />
-							</div>
-						))}
-					</CollapsibleContent>
-				)}
-
-				{hiddenItems.length > 0 && (
-					<div className="flex justify-center py-2 md:justify-end md:pr-4">
-						<CollapsibleTrigger asChild>
-							<Button className="group flex items-center gap-2">
-								<span className="group-data-[state=open]:hidden">Afficher plus</span>
-								<span className="hidden group-data-[state=open]:inline">Afficher moins</span>
-								<CaretDownIcon
-									aria-hidden="true"
-									className="size-4 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180"
-								/>
-							</Button>
-						</CollapsibleTrigger>
-					</div>
-				)}
-			</Collapsible>
-		</>
-	);
-};
-
-ExperiencesContent.displayName = 'ExperiencesContent';
-
-export { ExperiencesContent };

@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
-import { CurriculumVitae } from '@/components/features/cv/CurriculumVitae';
-import { Experiences } from '@/components/features/experiences/Experiences';
-import { Projects } from '@/components/features/projects/Projects';
+import { Certifications } from '@/components/features/(homepage)/certifications/Certifications';
+import { CurriculumVitae } from '@/components/features/(homepage)/cv/CurriculumVitae';
+import { Experiences } from '@/components/features/(homepage)/experiences/Experiences';
+import { Projects } from '@/components/features/(homepage)/projects/Projects';
+import { Tools } from '@/components/features/(homepage)/tools/Tools';
 import { Divider } from '@/components/ui/Divider';
 /*import { Articles } from '@/components/features/Articles';
 import { About } from '@/components/features/about/About';
@@ -12,14 +14,9 @@ import { getGitHubUserData } from '@/components/features/contact/actions/github.
 import { getLinkedInFollowers } from '@/components/features/contact/actions/linkedin.action';
 import { Contact } from '@/components/features/contact/Contact';
 import { Cover } from '@/components/features/cover/Cover';
-import { CurriculumVitae } from '@/components/features/cv/CurriculumVitae';
-import { Experiences } from '@/components/features/experiences/Experience';
 import { Header } from '@/components/features/Header';
 import { Overview } from '@/components/features/Overview';
-import { Projects } from '@/components/features/projects/Projects';
-import { TechStack } from '@/components/features/stack/TechStack';
-import { Utils } from '@/components/features/tools/Utils';
-import { Divider } from '@/components/ui/Divider';*/
+import { TechStack } from '@/components/features/stack/TechStack';*/
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 import { USER } from '@/lib/user';
@@ -91,13 +88,14 @@ const Page = async () => {
 				<Divider border />
 				<Articles />
 				<Divider border />
-				<Certs />
-				<Divider border />
-				<Utils />
-				<Divider border />*/}
+				*/}
 
 				<div className="py-20" />
 
+				<Divider border />
+				<Certifications />
+				<Divider border />
+				<Tools />
 				<Divider border />
 				<Experiences />
 				<Divider border />

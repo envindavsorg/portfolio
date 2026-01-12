@@ -9,17 +9,17 @@ import {
 } from '@/components/ui/Collapsible';
 import { Tag } from '@/components/ui/Tag';
 import { cn } from '@/lib/utils';
-import type { Project } from './ProjectsContent';
+import type { Project } from './content';
 
 interface ProjectItemProps {
 	project: Project;
 }
 
-const ProjectsItem = ({ project }: ProjectItemProps): React.JSX.Element => {
+const ProjectItem = ({ project }: ProjectItemProps): React.JSX.Element => {
 	const Icon = project.icon;
 
 	return (
-		<CollapsibleWithContext defaultOpen={project.isExpanded}>
+		<CollapsibleWithContext>
 			<div className="flex items-center hover:bg-accent2">
 				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
 					<Icon className="pointer-events-none size-7" />
@@ -34,7 +34,13 @@ const ProjectsItem = ({ project }: ProjectItemProps): React.JSX.Element => {
 						<p className="text-muted-foreground text-xs max-sm:hidden">{project.title}</p>
 					</div>
 
-					<Link aria-label={project.name} href={project.link} rel="noopener" target="_blank">
+					<Link
+						aria-label={project.name}
+						className="z-20"
+						href={project.link}
+						rel="noopener"
+						target="_blank"
+					>
 						<LinkIcon className="relative after:absolute after:-inset-2" size={20} />
 					</Link>
 
@@ -93,6 +99,6 @@ const ProjectsItem = ({ project }: ProjectItemProps): React.JSX.Element => {
 	);
 };
 
-ProjectsItem.displayName = 'ProjectsItem';
+ProjectItem.displayName = 'ProjectsItem';
 
-export { ProjectsItem };
+export { ProjectItem };

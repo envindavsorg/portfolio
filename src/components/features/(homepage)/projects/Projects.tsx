@@ -1,12 +1,13 @@
 import type React from 'react';
 import { Panel } from '@/components/ui/Panel';
+import { PROJECTS } from './content';
 import { ProjectsContent } from './ProjectsContent';
 import { ProjectsTitle } from './ProjectsTitle';
 
 const Projects = (): React.JSX.Element => (
 	<Panel id="projects">
 		<ProjectsTitle />
-		<ProjectsContent />
+		<ProjectsContent content={PROJECTS} />
 	</Panel>
 );
 

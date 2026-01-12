@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
-import { UtilsItem } from '@/components/features/tools/UtilsItem';
+import { ToolItem } from '@/components/features/(homepage)/tools/ToolItem';
 import { WritingsHeading } from '@/components/features/writings/Heading';
 import { Divider } from '@/components/ui/Divider';
 import { getPostsByCategory } from '@/lib/blog/posts';
@@ -30,9 +30,8 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 	const { tag } = await searchParams;
 	const selectedTag = tag?.toLowerCase() || 'Tout';
 
-	const allPosts: Post[] = getPostsByCategory('utils').sort(
-		(a: Post, b: Post) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+	const allPosts: Post[] = getPostsByCategory('utils').sort((a: Post, b: Post) =>
+		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
 	const tagCounts: Record<string, number> = {};
@@ -53,9 +52,7 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 		selectedTag === 'Tout'
 			? allPosts
 			: allPosts.filter((article: Post) =>
-					article.metadata.tags?.some(
-						(tagName) => tagName.toLowerCase() === selectedTag
-					)
+					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
 				);
 
 	return (
@@ -65,16 +62,12 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 				title="Outils pour développeurs"
 			/>
 
-			<TagsFilter
-				selectedTag={selectedTag}
-				tagCounts={finalTagCounts}
-				tags={allTags}
-			/>
+			<TagsFilter selectedTag={selectedTag} tagCounts={finalTagCounts} tags={allTags} />
 
 			<Divider className="screen-line-after" />
 
 			{utils.map((post: Post) => (
-				<UtilsItem key={post.slug} post={post} />
+				<ToolItem key={post.slug} post={post} />
 			))}
 		</>
 	);

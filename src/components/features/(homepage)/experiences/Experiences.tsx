@@ -1,11 +1,12 @@
 import type React from 'react';
 import { Panel } from '@/components/ui/Panel';
+import { EXPERIENCES } from './content';
 import { ExperiencesContent } from './ExperiencesContent';
 import { ExperiencesTitle } from './ExperiencesTitle';
 
 export const Experiences = (): React.JSX.Element => (
 	<Panel id="experience">
 		<ExperiencesTitle />
-		<ExperiencesContent />
+		<ExperiencesContent content={EXPERIENCES} />
 	</Panel>
 );

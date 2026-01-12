@@ -1,7 +1,7 @@
-import { CERTIFICATIONS } from '@/components/features/certifications/data/certifications';
+import { CERTIFICATIONS } from '@/components/features/(homepage)/certifications/data/certifications';
+import { EXPERIENCES } from '@/components/features/(homepage)/experiences/data/experiences';
+import { PROJECTS } from '@/components/features/(homepage)/projects/data/projects';
 import { SOCIAL_LINKS } from '@/components/features/contact/data/social-links';
-import { EXPERIENCES } from '@/components/features/experiences/data/experiences';
-import { PROJECTS } from '@/components/features/projects/data/projects';
 import { techStack } from '@/components/features/stack/data/tech-stack';
 import { getLLMText } from '@/lib/blog/llm';
 import { getAllPosts } from '@/lib/blog/posts';
