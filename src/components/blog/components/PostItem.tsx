@@ -1,8 +1,4 @@
-import {
-	BookBookmarkIcon,
-	CalendarBlankIcon,
-	ClockIcon,
-} from '@phosphor-icons/react/ssr';
+import { BookBookmarkIcon, CalendarBlankIcon, ClockIcon } from '@phosphor-icons/react/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
 import type React from 'react';
@@ -19,25 +15,18 @@ const ReactIcon = lazy(() =>
 	}))
 );
 
-interface PostProps {
+interface PostItemProps {
 	post: Post;
 	shouldPreloadImage?: boolean;
 }
 
-export const Post = ({
-	post,
-	shouldPreloadImage,
-}: PostProps): React.JSX.Element => (
+export const PostItem = ({ post, shouldPreloadImage }: PostItemProps): React.JSX.Element => (
 	<Link
 		className={cn(
 			'group/post flex flex-col gap-y-4 p-4',
 			'max-sm:screen-line-before max-sm:screen-line-after sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after'
 		)}
-		href={
-			post.metadata.category === 'article'
-				? `/blog/${post.slug}`
-				: `/components/${post.slug}`
-		}
+		href={post.metadata.category === 'article' ? `/blog/${post.slug}` : `/components/${post.slug}`}
 	>
 		{post.metadata.imageDark && post.metadata.imageLight && (
 			<div className="relative select-none [&_img]:aspect-1200/630 [&_img]:rounded-xl">
@@ -66,19 +55,14 @@ export const Post = ({
 
 				{post.metadata.new && <IsNew className="absolute top-3 right-5" />}
 				{post.metadata.tags?.includes('React') && (
-					<ReactIcon
-						aria-hidden
-						className="absolute top-3.5 left-3.5 size-5 shrink-0"
-					/>
+					<ReactIcon aria-hidden className="absolute top-3.5 left-3.5 size-5 shrink-0" />
 				)}
 			</div>
 		)}
 
 		<div className="flex flex-col">
-			<h2 className="text-balance font-medium text-base leading-snug sm:text-lg">
-				{post.metadata.title}
-			</h2>
-			<Prose className="mt-1.5 text-muted-foreground">
+			<h2 className="text-balance font-semibold text-base">{post.metadata.title}</h2>
+			<Prose className="mt-1.5 font-medium text-muted-foreground text-xs">
 				{post.metadata.description}
 			</Prose>
 

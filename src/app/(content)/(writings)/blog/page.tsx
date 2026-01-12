@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Post } from '@/components/blog/components/Post';
+import { PostItem } from '@/components/blog/components/PostItem';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
 import { WritingsHeading } from '@/components/features/writings/Heading';
 import { Divider } from '@/components/ui/Divider';
@@ -30,9 +30,8 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 	const { tag } = await searchParams;
 	const selectedTag = tag?.toLowerCase() || 'Tout';
 
-	const allArticles: Post[] = getPostsByCategory('article').sort(
-		(a: Post, b: Post) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+	const allArticles: PostItem[] = getPostsByCategory('article').sort((a: PostItem, b: PostItem) =>
+		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
 	const tagCounts: Record<string, number> = {};
@@ -52,10 +51,8 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 	const articles =
 		selectedTag === 'Tout'
 			? allArticles
-			: allArticles.filter((article: Post) =>
-					article.metadata.tags?.some(
-						(tagName) => tagName.toLowerCase() === selectedTag
-					)
+			: allArticles.filter((article: PostItem) =>
+					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
 				);
 
 	return (
@@ -65,11 +62,7 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 				title="Mes articles de blog"
 			/>
 
-			<TagsFilter
-				selectedTag={selectedTag}
-				tagCounts={finalTagCounts}
-				tags={allTags}
-			/>
+			<TagsFilter selectedTag={selectedTag} tagCounts={finalTagCounts} tags={allTags} />
 
 			<Divider />
 
@@ -82,11 +75,9 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					{articles
 						.slice()
-						.sort((a, b) =>
-							dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-						)
-						.map((post: Post, idx: number) => (
-							<Post key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
+						.sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+						.map((post: PostItem, idx: number) => (
+							<PostItem key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
 						))}
 				</div>
 			</div>

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Post } from '@/components/blog/components/Post';
+import { PostItem } from '@/components/blog/components/PostItem';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
 import { WritingsHeading } from '@/components/features/writings/Heading';
 import { WritingsTerminal } from '@/components/features/writings/Terminal';
@@ -15,13 +15,11 @@ import { openGraphImage } from '@/lib/open-graph';
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
 		title: 'Composants React',
-		description:
-			'Ma collection de snippets React réutilisables dans tous vos projets.',
+		description: 'Ma collection de snippets React réutilisables dans tous vos projets.',
 		ogImageParams: {
 			type: 'components',
 			title: 'Composants React',
-			description:
-				'Ma collection de snippets React réutilisables dans tous vos projets.',
+			description: 'Ma collection de snippets React réutilisables dans tous vos projets.',
 		},
 	});
 
@@ -31,15 +29,12 @@ type ComponentsPageProps = Readonly<{
 	}>;
 }>;
 
-const ComponentsPage = async ({
-	searchParams,
-}: Readonly<ComponentsPageProps>) => {
+const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) => {
 	const { tag } = await searchParams;
 	const selectedTag = tag?.toLowerCase() || 'Tout';
 
-	const allComponents: Post[] = getPostsByCategory('components').sort(
-		(a: Post, b: Post) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+	const allComponents: PostItem[] = getPostsByCategory('components').sort(
+		(a: PostItem, b: PostItem) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
 	const tagCounts: Record<string, number> = {};
@@ -59,10 +54,8 @@ const ComponentsPage = async ({
 	const components =
 		selectedTag === 'Tout'
 			? allComponents
-			: allComponents.filter((article: Post) =>
-					article.metadata.tags?.some(
-						(tagName) => tagName.toLowerCase() === selectedTag
-					)
+			: allComponents.filter((article: PostItem) =>
+					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
 				);
 
 	return (
@@ -96,11 +89,7 @@ const ComponentsPage = async ({
 				</div>
 			</div>
 
-			<TagsFilter
-				selectedTag={selectedTag}
-				tagCounts={finalTagCounts}
-				tags={allTags}
-			/>
+			<TagsFilter selectedTag={selectedTag} tagCounts={finalTagCounts} tags={allTags} />
 
 			<Divider />
 
@@ -113,11 +102,9 @@ const ComponentsPage = async ({
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					{components
 						.slice()
-						.sort((a, b) =>
-							dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-						)
-						.map((post: Post, idx: number) => (
-							<Post key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
+						.sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+						.map((post: PostItem, idx: number) => (
+							<PostItem key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
 						))}
 				</div>
 			</div>
