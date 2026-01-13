@@ -2,7 +2,7 @@ import type React from 'react';
 import { memo } from 'react';
 import { PanelContent } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';
-import { AboutPointer } from '@/features/(homepage)/about/AboutPointer';
+import { AboutPointer } from '@/features/(homepage)/6_about/AboutPointer';
 
 interface AboutContentProps {
 	expanded: boolean;

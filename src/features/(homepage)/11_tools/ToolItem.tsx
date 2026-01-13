@@ -1,11 +1,5 @@
 import type { IconProps } from '@phosphor-icons/react';
-import {
-	GaugeIcon,
-	PaletteIcon,
-	TableIcon,
-	TextTIcon,
-	VaultIcon,
-} from '@phosphor-icons/react/dist/ssr';
+import { GaugeIcon, PaletteIcon, TableIcon, TextTIcon, VaultIcon } from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link';
 import type React from 'react';
 import { memo } from 'react';

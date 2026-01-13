@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
 import { Divider } from '@/components/ui/Divider';
-import { ToolItem } from '@/features/(homepage)/tools/ToolItem';
+import { ToolItem } from '@/features/(homepage)/11_tools/ToolItem';
 import { WritingsHeading } from '@/features/(writings)/Heading';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
@@ -10,13 +10,11 @@ import { openGraphImage } from '@/lib/open-graph';
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
 		title: 'Outils pour développeurs',
-		description:
-			"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
+		description: "Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
 		ogImageParams: {
 			type: 'utils',
 			title: 'Outils pour développeurs',
-			description:
-				"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
+			description: "Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
 		},
 	});
 

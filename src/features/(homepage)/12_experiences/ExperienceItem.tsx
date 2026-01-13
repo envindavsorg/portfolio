@@ -35,9 +35,7 @@ const ExperienceItem = ({ experience }: ExperienceItemProps): React.JSX.Element 
 							{experience.isCurrentEmployer && <AnimatedDot label="Poste actuellement occupé" />}
 							<div className="flex items-baseline gap-x-1.5">
 								<h2 className="text-balance font-semibold text-base">{experience.company}</h2>
-								{experience.type && (
-									<span className="font-normal text-theme text-xs">({experience.type})</span>
-								)}
+								{experience.type && <span className="font-normal text-theme text-xs">({experience.type})</span>}
 							</div>
 						</div>
 

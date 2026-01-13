@@ -22,24 +22,18 @@ const CertificationsContent = ({ content }: CertificationsContentProps): React.J
 	);
 
 	const keyExtractorAction = (item: Certification) => item.credentialID;
-	const getKey = (item: Certification, index: number) =>
-		keyExtractorAction ? keyExtractorAction(item) : index;
+	const getKey = (item: Certification, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 
 	return (
 		<>
-			<PanelContent className="screen-line-after *:prose *:prose-sm *:prose-zinc dark:*:prose-invert space-y-2 *:max-w-none *:font-mono *:text-foreground">
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
+			<PanelContent className="screen-line-after">
+				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
 					La technologie évolue rapidement, et rester à jour est essentiel.
 				</TextAnimate>
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="!text-theme !font-medium"
-					delay={0.6}
-				>
-					Ces certifications valident mes compétences techniques et démontrent mon engagement envers
-					l'excellence et l'apprentissage continu dans le développement web moderne.
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.6} themed>
+					Ces certifications valident mes compétences techniques et démontrent mon engagement envers l'excellence et
+					l'apprentissage continu dans le développement web moderne.
 				</TextAnimate>
 			</PanelContent>
 

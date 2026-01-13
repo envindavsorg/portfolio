@@ -22,30 +22,24 @@ const ToolsContent = ({ content }: ToolsContentProps): React.JSX.Element => {
 	);
 
 	const keyExtractorAction = (item: Post) => item.slug;
-	const getKey = (item: Post, index: number) =>
-		keyExtractorAction ? keyExtractorAction(item) : index;
+	const getKey = (item: Post, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 
 	return (
 		<>
-			<PanelContent className="screen-line-after *:prose *:prose-sm *:prose-zinc dark:*:prose-invert space-y-2 *:max-w-none *:font-mono *:text-foreground">
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
-					Découvrez une suite d'outils web entièrement gratuits, spécialement conçue pour simplifier
-					le quotidien des développeurs et accélérer vos projets.
+			<PanelContent className="screen-line-after">
+				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
+					Découvrez une suite d'outils web entièrement gratuits, spécialement conçue pour simplifier le quotidien des
+					développeurs et accélérer vos projets.
 				</TextAnimate>
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="!text-theme !font-medium"
-					delay={0.6}
-				>
-					En regroupant ces utilitaires essentiels au même endroit, cette collection vous permet
-					d'optimiser votre workflow en réduisant considérablement le temps passé sur des tâches
-					répétitives.
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.6} themed>
+					En regroupant ces utilitaires essentiels au même endroit, cette collection vous permet d'optimiser votre
+					workflow en réduisant considérablement le temps passé sur des tâches répétitives.
 				</TextAnimate>
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.8}>
-					Explorez dès maintenant cette boîte à outils numérique pour booster votre productivité
-					sans la moindre contrainte technique.
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.8}>
+					Explorez dès maintenant cette boîte à outils numérique pour booster votre productivité sans la moindre
+					contrainte technique.
 				</TextAnimate>
 			</PanelContent>
 

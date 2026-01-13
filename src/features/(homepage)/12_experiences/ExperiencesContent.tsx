@@ -3,7 +3,7 @@ import type React from 'react';
 import { useMemo } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
-import { PanelContent } from '@/components/ui/Panel';
+import { PanelContent, PanelFooter } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';
 import type { Experience } from './content';
 import { ExperienceItem } from './ExperienceItem';
@@ -22,30 +22,24 @@ const ExperiencesContent = ({ content }: ExperiencesContentProps): React.JSX.Ele
 	);
 
 	const keyExtractorAction = (item: Experience) => item.id;
-	const getKey = (item: Experience, index: number) =>
-		keyExtractorAction ? keyExtractorAction(item) : index;
+	const getKey = (item: Experience, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 
 	return (
 		<>
-			<PanelContent className="*:prose *:prose-sm *:prose-zinc dark:*:prose-invert space-y-2 *:max-w-none *:font-mono *:text-foreground">
+			<PanelContent>
 				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
-					Retour sur mon parcours professionnel et les expériences qui m'ont permis de grandir en
-					tant que développeur Front-End, puis Full-Stack.
+					Retour sur mon parcours professionnel et les expériences qui m'ont permis de grandir en tant que développeur
+					Front-End, puis Full-Stack.
 				</TextAnimate>
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="!text-theme !font-medium"
-					delay={0.6}
-				>
-					Ensemble, ces expériences constituent le socle de mes compétences actuelles et reflètent
-					ma passion pour la création de solutions web innovantes et performantes.
+
+				<TextAnimate animation="fadeIn" as="p" by="word" className="mt-3" delay={0.6} themed>
+					Ensemble, ces expériences constituent le socle de mes compétences actuelles et reflètent ma passion pour la
+					création de solutions web innovantes et performantes.
 				</TextAnimate>
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.8}>
-					De la refonte d'applications à grande échelle à l'intégration de fonctionnalités
-					complexes, chaque poste a été une opportunité d'apprendre, de relever des défis techniques
-					et de collaborer avec des équipes talentueuses.
+
+				<TextAnimate animation="fadeIn" as="p" by="word" className="mt-3" delay={0.8}>
+					De la refonte d'applications à grande échelle à l'intégration de fonctionnalités complexes, chaque poste a été
+					une opportunité d'apprendre, de relever des défis techniques et de collaborer avec des équipes talentueuses.
 				</TextAnimate>
 			</PanelContent>
 
@@ -67,7 +61,7 @@ const ExperiencesContent = ({ content }: ExperiencesContentProps): React.JSX.Ele
 				)}
 
 				{hiddenContent.length > 0 && (
-					<div className="flex justify-center py-2 md:justify-end md:pr-4">
+					<PanelFooter className="before:bg-transparent">
 						<CollapsibleTrigger asChild>
 							<Button className="group flex items-center gap-2">
 								<span className="group-data-[state=open]:hidden">Afficher plus</span>
@@ -78,7 +72,7 @@ const ExperiencesContent = ({ content }: ExperiencesContentProps): React.JSX.Ele
 								/>
 							</Button>
 						</CollapsibleTrigger>
-					</div>
+					</PanelFooter>
 				)}
 			</Collapsible>
 		</>

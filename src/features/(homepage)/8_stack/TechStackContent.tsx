@@ -10,34 +10,28 @@ interface TechStackContentProps {
 
 const TechStackContent = ({ content }: TechStackContentProps): React.JSX.Element => {
 	const keyExtractorAction = (item: Stack) => item.title;
-	const getKey = (item: Stack, index: number) =>
-		keyExtractorAction ? keyExtractorAction(item) : index;
+	const getKey = (item: Stack, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 
 	return (
 		<>
-			<PanelContent className="screen-line-after *:prose *:prose-sm *:prose-zinc dark:*:prose-invert space-y-2 *:max-w-none *:font-mono *:text-foreground">
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
-					Mon expertise se concentre sur l'écosystème JavaScript moderne. Au quotidien, je développe
-					avec React, Next.js et TypeScript, en utilisant Tailwind CSS pour le styling et Motion
-					pour les animations.
+			<PanelContent>
+				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
+					Mon expertise se concentre sur l'écosystème JavaScript moderne. Au quotidien, je développe avec React, Next.js
+					et TypeScript, en utilisant Tailwind CSS pour le styling et Motion pour les animations.
 				</TextAnimate>
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.6}>
-					Côté back-end, je travaille avec Node.js et des frameworks comme Express ou Fastify,
-					connectés à MongoDB ou PostgreSQL.
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.6}>
+					Côté back-end, je travaille avec Node.js et des frameworks comme Express ou Fastify, connectés à MongoDB ou
+					PostgreSQL.
 				</TextAnimate>
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="!text-theme !font-medium"
-					delay={0.8}
-				>
-					Je maîtrise l'ensemble de la chaîne de développement, de la conception sur Figma au
-					déploiement, en passant par Git pour le versioning.
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.8} themed>
+					Je maîtrise l'ensemble de la chaîne de développement, de la conception sur Figma au déploiement, en passant
+					par Git pour le versioning.
 				</TextAnimate>
 			</PanelContent>
 
-			<PanelContent className="screen-line-after">
+			<PanelContent className="screen-line-before">
 				<Marquee>
 					<MarqueeFade side="left" />
 					<MarqueeFade side="right" />
@@ -57,7 +51,7 @@ const TechStackContent = ({ content }: TechStackContentProps): React.JSX.Element
 				</Marquee>
 			</PanelContent>
 
-			<PanelContent className="screen-line-after">
+			<PanelContent className="screen-line-before">
 				<Marquee>
 					<MarqueeFade side="left" />
 					<MarqueeFade side="right" />

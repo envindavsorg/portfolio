@@ -1,8 +1,8 @@
-import { CERTIFICATIONS } from '@/features/(homepage)/certifications/data/certifications';
-import { SOCIAL_LINKS } from '@/features/(homepage)/contact/data/social-links';
-import { EXPERIENCES } from '@/features/(homepage)/experiences/data/experiences';
-import { PROJECTS } from '@/features/(homepage)/projects/data/projects';
-import { techStack } from '@/features/(homepage)/stack/data/tech-stack';
+import { SOCIAL_LINKS } from '@/features/(homepage)/5_contact/data/social-links';
+import { techStack } from '@/features/(homepage)/8_stack/data/tech-stack';
+import { CERTIFICATIONS } from '@/features/(homepage)/10_certifications/data/certifications';
+import { EXPERIENCES } from '@/features/(homepage)/12_experiences/data/experiences';
+import { PROJECTS } from '@/features/(homepage)/13_projects/data/projects';
 import { getLLMText } from '@/lib/blog/llm';
 import { getAllPosts } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';

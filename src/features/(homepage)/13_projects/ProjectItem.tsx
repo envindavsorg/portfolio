@@ -28,19 +28,12 @@ const ProjectItem = ({ project }: ProjectItemProps): React.JSX.Element => {
 				<CollapsibleTrigger className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge border-l p-3 text-left">
 					<div className="flex flex-1 flex-col gap-y-1">
 						<h2 className="text-balance font-semibold text-base">
-							{project.name}{' '}
-							<span className="font-normal text-theme text-xs">({project.type})</span>
+							{project.name} <span className="font-normal text-theme text-xs">({project.type})</span>
 						</h2>
 						<p className="text-muted-foreground text-xs max-sm:hidden">{project.title}</p>
 					</div>
 
-					<Link
-						aria-label={project.name}
-						className="z-20"
-						href={project.link}
-						rel="noopener"
-						target="_blank"
-					>
+					<Link aria-label={project.name} className="z-20" href={project.link} rel="noopener" target="_blank">
 						<LinkIcon className="relative after:absolute after:-inset-2" size={20} />
 					</Link>
 

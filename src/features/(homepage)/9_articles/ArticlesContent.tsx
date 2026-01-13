@@ -11,33 +11,27 @@ interface ArticlesContentProps {
 
 const ArticlesContent = ({ content }: ArticlesContentProps): React.JSX.Element => {
 	const keyExtractorAction = (item: Post) => item.slug;
-	const getKey = (item: Post, index: number) =>
-		keyExtractorAction ? keyExtractorAction(item) : index;
+	const getKey = (item: Post, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 
 	return (
 		<>
-			<PanelContent className="screen-line-after *:prose *:prose-sm *:prose-zinc dark:*:prose-invert space-y-2 *:max-w-none *:font-mono *:text-foreground">
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
+			<PanelContent>
+				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
 					Retrouvez tous mes articles de blog où je partage mon expérience en développement web.
 				</TextAnimate>
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="!text-theme !font-medium"
-					delay={0.6}
-				>
-					J'y aborde les bonnes pratiques, les patterns modernes, les solutions aux problèmes
-					techniques du quotidien, et mes découvertes sur l'écosystème JavaScript. Chaque article
-					est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise.
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.6} themed>
+					J'y aborde les bonnes pratiques, les patterns modernes, les solutions aux problèmes techniques du quotidien,
+					et mes découvertes sur l'écosystème JavaScript. Chaque article est le fruit d'une expérience concrète, d'un
+					bug résolu ou d'une technique apprise.
 				</TextAnimate>
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.8}>
-					Mon objectif : documenter mon apprentissage et aider d'autres développeurs qui rencontrent
-					les mêmes défis.
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.8}>
+					Mon objectif : documenter mon apprentissage et aider d'autres développeurs qui rencontrent les mêmes défis.
 				</TextAnimate>
 			</PanelContent>
 
-			<div className="relative py-4">
+			<div className="screen-line-before relative py-4">
 				<div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
 					<div className="border-edge border-r" />
 					<div className="border-edge border-l" />

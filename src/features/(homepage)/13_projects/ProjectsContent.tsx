@@ -3,7 +3,7 @@ import type React from 'react';
 import { useMemo } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
-import { PanelContent } from '@/components/ui/Panel';
+import { PanelContent, PanelFooter } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';
 import type { Project } from './content';
 import { ProjectItem } from './ProjectItem';
@@ -22,36 +22,23 @@ const ProjectsContent = ({ content }: ProjectsContentProps): React.JSX.Element =
 	);
 
 	const keyExtractorAction = (item: Project) => item.id;
-	const getKey = (item: Project, index: number) =>
-		keyExtractorAction ? keyExtractorAction(item) : index;
+	const getKey = (item: Project, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 
 	return (
 		<>
-			<PanelContent className="*:prose *:prose-sm *:prose-zinc dark:*:prose-invert space-y-2 *:max-w-none *:font-mono *:text-foreground">
+			<PanelContent>
 				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
 					Une sélection de projets qui illustrent mon parcours et mes compétences.
 				</TextAnimate>
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="!text-theme !font-medium"
-					delay={0.6}
-				>
-					Du développement d'applications web modernes aux expérimentations techniques,
+
+				<TextAnimate animation="fadeIn" as="p" by="word" className="mt-3" delay={0.6} themed>
+					Du développement d'applications web modernes aux expérimentations techniques, chaque projet représente un défi
+					relevé et des compétences acquises.
 				</TextAnimate>
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="!text-theme !font-medium -mt-2"
-					delay={0.6}
-				>
-					chaque projet représente un défi relevé et des compétences acquises.
-				</TextAnimate>
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.8}>
-					Certains sont en production, d'autres sont des side-projects qui me permettent d'explorer
-					de nouvelles technologies.
+
+				<TextAnimate animation="fadeIn" as="p" by="word" className="mt-3" delay={0.8}>
+					Certains sont en production, d'autres sont des side-projects qui me permettent d'explorer de nouvelles
+					technologies.
 				</TextAnimate>
 			</PanelContent>
 
@@ -73,7 +60,7 @@ const ProjectsContent = ({ content }: ProjectsContentProps): React.JSX.Element =
 				)}
 
 				{hiddenContent.length > 0 && (
-					<div className="flex justify-center py-2 md:justify-end md:pr-4">
+					<PanelFooter className="before:bg-transparent">
 						<CollapsibleTrigger asChild>
 							<Button className="group flex items-center gap-2">
 								<span className="group-data-[state=open]:hidden">Afficher plus</span>
@@ -84,7 +71,7 @@ const ProjectsContent = ({ content }: ProjectsContentProps): React.JSX.Element =
 								/>
 							</Button>
 						</CollapsibleTrigger>
-					</div>
+					</PanelFooter>
 				)}
 			</Collapsible>
 		</>

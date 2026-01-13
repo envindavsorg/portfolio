@@ -20,16 +20,7 @@ export const PROJECTS: Project[] = [
 		icon: NPMIcon,
 		type: 'librairie',
 		link: 'https://www.npmjs.com/package/ts-safe-path',
-		skills: [
-			'Open Source',
-			'TypeScript',
-			'Node.js',
-			'ESM',
-			'Vite',
-			'Rollup',
-			'Vitest',
-			'Playwright',
-		],
+		skills: ['Open Source', 'TypeScript', 'Node.js', 'ESM', 'Vite', 'Rollup', 'Vitest', 'Playwright'],
 		title: 'Un utilitaire TypeScript léger pour manipuler des objets de manière type-safe.',
 		description: [
 			'Autocomplétion complète pour tous les chemins imbriqués',

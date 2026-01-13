@@ -1,5 +1,5 @@
-import { SOCIAL_LINKS } from '@/features/(homepage)/contact/data/social-links';
-import { techStack } from '@/features/(homepage)/stack/data/tech-stack';
+import { SOCIAL_LINKS } from '@/features/(homepage)/5_contact/data/social-links';
+import { techStack } from '@/features/(homepage)/8_stack/data/tech-stack';
 import { USER } from '@/lib/user';
 
 const content = `
