@@ -10,10 +10,7 @@ export type MarqueeProps = HTMLAttributes<HTMLDivElement>;
 
 export const Marquee = memo(
 	({ className, ...props }: MarqueeProps): React.JSX.Element => (
-		<div
-			className={cn('relative w-full overflow-hidden', className)}
-			{...props}
-		/>
+		<div className={cn('relative w-full overflow-hidden', className)} {...props} />
 	)
 );
 
@@ -25,23 +22,14 @@ export const MarqueeContent = ({
 	pauseOnHover = true,
 	...props
 }: MarqueeContentProps): React.JSX.Element => (
-	<FastMarquee
-		autoFill={autoFill}
-		loop={loop}
-		pauseOnHover={pauseOnHover}
-		{...props}
-	/>
+	<FastMarquee autoFill={autoFill} loop={loop} pauseOnHover={pauseOnHover} {...props} />
 );
 
 export type MarqueeFadeProps = HTMLAttributes<HTMLDivElement> & {
 	side: 'left' | 'right';
 };
 
-export const MarqueeFade = ({
-	className,
-	side,
-	...props
-}: MarqueeFadeProps): React.JSX.Element => (
+export const MarqueeFade = ({ className, side, ...props }: MarqueeFadeProps): React.JSX.Element => (
 	<div
 		className={cn(
 			'absolute top-0 bottom-0 z-10 h-full w-24 from-background to-transparent',
@@ -54,9 +42,6 @@ export const MarqueeFade = ({
 
 export type MarqueeItemProps = HTMLAttributes<HTMLDivElement>;
 
-export const MarqueeItem = ({
-	className,
-	...props
-}: MarqueeItemProps): React.JSX.Element => (
+export const MarqueeItem = ({ className, ...props }: MarqueeItemProps): React.JSX.Element => (
 	<div className={cn('mx-2 shrink-0 object-contain', className)} {...props} />
 );

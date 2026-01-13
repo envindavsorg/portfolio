@@ -21,14 +21,7 @@ import { ColorGenerator } from '@/components/blog/elements/utils/ColorGenerator'
 import { JSONFormatter } from '@/components/blog/elements/utils/JSONFormatter';
 import { LoremIpsumGenerator } from '@/components/blog/elements/utils/LoremIpsumGenerator';
 import { SpeedTest } from '@/components/blog/elements/utils/SpeedTest';
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/Table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Code, Heading } from '@/components/ui/Typography';
 import { rehypeAddQueryParams } from '@/lib/rehype-add-query-params';
@@ -143,14 +136,7 @@ const components: MDXRemoteProps['components'] = {
 		const isNpmCommand = __pnpm__ && __yarn__ && __npm__ && __bun__;
 
 		if (isNpmCommand) {
-			return (
-				<CodeBlockCommand
-					__bun__={__bun__}
-					__npm__={__npm__}
-					__pnpm__={__pnpm__}
-					__yarn__={__yarn__}
-				/>
-			);
+			return <CodeBlockCommand __bun__={__bun__} __npm__={__npm__} __pnpm__={__pnpm__} __yarn__={__yarn__} />;
 		}
 
 		return (
@@ -166,12 +152,8 @@ const components: MDXRemoteProps['components'] = {
 	ComponentSource,
 	CodeCollapsibleWrapper,
 	CodeTabs,
-	Steps: (props) => (
-		<div className="prose-h3:text-wrap md:ml-3.5 md:border-l md:pl-7.5" {...props} />
-	),
-	Step: ({ className, ...props }: React.ComponentProps<'h3'>) => (
-		<h3 className={cn('step', className)} {...props} />
-	),
+	Steps: (props) => <div className="prose-h3:text-wrap md:ml-3.5 md:border-l md:pl-7.5" {...props} />,
+	Step: ({ className, ...props }: React.ComponentProps<'h3'>) => <h3 className={cn('step', className)} {...props} />,
 	Tabs,
 	TabsList,
 	TabsTrigger,

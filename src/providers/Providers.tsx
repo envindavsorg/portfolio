@@ -9,16 +9,9 @@ import ProgressProvider from '@/providers/modules/ProgressProvider';
 import ThemeProvider from '@/providers/modules/ThemeProvider';
 import { Compose, type Provider } from '@/providers/utils/Compose';
 
-const Toaster = dynamic(
-	() => import('@/components/ui/Sonner').then((mod) => mod.Toaster),
-	{ ssr: false }
-);
+const Toaster = dynamic(() => import('@/components/ui/Sonner').then((mod) => mod.Toaster), { ssr: false });
 
-const AppProviders: Provider = Compose(
-	JotaiProvider,
-	ThemeProvider,
-	ProgressProvider
-);
+const AppProviders: Provider = Compose(JotaiProvider, ThemeProvider, ProgressProvider);
 
 interface ProvidersProps {
 	children: React.ReactNode;

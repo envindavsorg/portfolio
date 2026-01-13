@@ -1,25 +1,15 @@
 'use client';
 
 import { Content, Portal, Root, Trigger } from '@radix-ui/react-popover';
-import React, {
-	type ComponentPropsWithoutRef,
-	type ComponentRef,
-	forwardRef,
-} from 'react';
+import React, { type ComponentPropsWithoutRef, type ComponentRef, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export const Popover = Root;
 
 export const PopoverTrigger = Trigger;
 
-export const PopoverContent = forwardRef<
-	ComponentRef<typeof Content>,
-	ComponentPropsWithoutRef<typeof Content>
->(
-	(
-		{ className, align = 'center', sideOffset = 4, ...props },
-		ref
-	): React.JSX.Element => (
+export const PopoverContent = forwardRef<ComponentRef<typeof Content>, ComponentPropsWithoutRef<typeof Content>>(
+	({ className, align = 'center', sideOffset = 4, ...props }, ref): React.JSX.Element => (
 		<Portal>
 			<Content
 				align={align}

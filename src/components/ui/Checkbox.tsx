@@ -2,17 +2,10 @@
 
 import { CheckIcon } from '@phosphor-icons/react';
 import { Indicator, Root } from '@radix-ui/react-checkbox';
-import React, {
-	type ComponentPropsWithoutRef,
-	type ComponentRef,
-	forwardRef,
-} from 'react';
+import React, { type ComponentPropsWithoutRef, type ComponentRef, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Checkbox = forwardRef<
-	ComponentRef<typeof Root>,
-	ComponentPropsWithoutRef<typeof Root>
->(
+export const Checkbox = forwardRef<ComponentRef<typeof Root>, ComponentPropsWithoutRef<typeof Root>>(
 	({ className, ...props }, ref): React.JSX.Element => (
 		<Root
 			className={cn(

@@ -10,7 +10,7 @@ const RootContextMenu = dynamic(() =>
 	import('@/components/context/RootContextMenu').then((mod) => mod.RootContextMenu)
 );
 
-export interface AppLayoutProps {
+interface AppLayoutProps {
 	children: React.ReactNode;
 }
 

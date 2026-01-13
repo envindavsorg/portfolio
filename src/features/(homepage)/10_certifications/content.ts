@@ -35,8 +35,7 @@ export const CERTIFICATIONS: Certification[] = [
 		issuerIconName: 'nextjs',
 		issueDate: '2025-10-03',
 		credentialID: 'seo-99069-1759756935192',
-		credentialURL:
-			'https://nextjs.org/learn/certificate?course=seo&user=99069&certId=seo-99069-1759756935192',
+		credentialURL: 'https://nextjs.org/learn/certificate?course=seo&user=99069&certId=seo-99069-1759756935192',
 		coverImageURL: '/assets/images/certifications/nextjs-seo-fundamentals.webp',
 	},
 	{

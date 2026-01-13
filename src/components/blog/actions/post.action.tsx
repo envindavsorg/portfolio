@@ -1,24 +1,13 @@
 'use client';
 
-import {
-	CaretDownIcon,
-	CaretUpIcon,
-	CheckIcon,
-	CopyIcon,
-	TriangleDashedIcon,
-} from '@phosphor-icons/react';
+import { CaretDownIcon, CaretUpIcon, CheckIcon, CopyIcon, TriangleDashedIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import posthog from 'posthog-js';
 import type React from 'react';
 import { lazy, useCallback, useMemo, useOptimistic, useTransition } from 'react';
 import { toast } from 'sonner';
 import { variants } from '@/components/ui/Button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import { cn } from '@/lib/utils';
 import getPrompt from '@/lib/utils/llm';
@@ -147,9 +136,7 @@ export const ViewOptions = ({ markdownUrl, isComponent = false }: ViewOptionsPro
 
 	const items = useMemo(() => {
 		const fullMarkdownUrl =
-			typeof window === 'undefined'
-				? markdownUrl
-				: new URL(markdownUrl, window.location.origin).toString();
+			typeof window === 'undefined' ? markdownUrl : new URL(markdownUrl, window.location.origin).toString();
 
 		const promptType = isComponent ? 'component' : 'general';
 		const q = getPrompt(fullMarkdownUrl, promptType);
@@ -216,12 +203,7 @@ export const ViewOptions = ({ markdownUrl, isComponent = false }: ViewOptionsPro
 			>
 				{items.map(({ title, href, icon: Icon, tool }) => (
 					<DropdownMenuItem asChild className="font-medium" key={href}>
-						<Link
-							href={href}
-							onClick={() => handleExternalToolClick(tool)}
-							rel="noreferrer noopener"
-							target="_blank"
-						>
+						<Link href={href} onClick={() => handleExternalToolClick(tool)} rel="noreferrer noopener" target="_blank">
 							<Icon className="size-4" />
 							{title}
 						</Link>

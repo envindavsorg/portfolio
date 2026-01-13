@@ -4,13 +4,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { usePathname, useRouter } from 'next/navigation';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-	Command,
-	CommandEmpty,
-	CommandInput,
-	CommandList,
-	CommandSeparator,
-} from '@/components/ui/Command';
+import { Command, CommandEmpty, CommandInput, CommandList, CommandSeparator } from '@/components/ui/Command';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/Dialog';
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@/components/ui/Drawer';
 import useMediaQuery from '@/hooks/use-media-query';
@@ -129,36 +123,20 @@ export const CommandContent = ({ posts = [] }: CommandContentProps): React.JSX.E
 			<CommandList className="min-h-[460px]">
 				<CommandEmpty>Aucun résultat ...</CommandEmpty>
 
-				<CommandLinkGroup
-					heading="Menu principal :"
-					links={filteredMenuLinks}
-					onLinkSelect={handleOpenLink}
-				/>
+				<CommandLinkGroup heading="Menu principal :" links={filteredMenuLinks} onLinkSelect={handleOpenLink} />
 
 				<CommandSeparator className="my-2" />
 
-				<CommandLinkGroup
-					heading="Contenu de mon portfolio :"
-					links={MAIN_LINKS}
-					onLinkSelect={handleOpenLink}
-				/>
+				<CommandLinkGroup heading="Contenu de mon portfolio :" links={MAIN_LINKS} onLinkSelect={handleOpenLink} />
 
 				<CommandSeparator className="my-2" />
 
-				<CommandLinkGroup
-					heading="Documents à télécharger :"
-					links={DOCUMENTS_LINKS}
-					onLinkSelect={handleOpenLink}
-				/>
+				<CommandLinkGroup heading="Documents à télécharger :" links={DOCUMENTS_LINKS} onLinkSelect={handleOpenLink} />
 
 				<CommandSeparator className="my-2" />
 
 				{articlesLinks.length > 0 && (
-					<CommandLinkGroup
-						heading="Derniers articles de blog :"
-						links={articlesLinks}
-						onLinkSelect={handleOpenLink}
-					/>
+					<CommandLinkGroup heading="Derniers articles de blog :" links={articlesLinks} onLinkSelect={handleOpenLink} />
 				)}
 
 				<CommandSeparator className="my-2" />
@@ -174,11 +152,7 @@ export const CommandContent = ({ posts = [] }: CommandContentProps): React.JSX.E
 				<CommandSeparator className="my-2" />
 
 				{utilsLinks.length > 0 && (
-					<CommandLinkGroup
-						heading="Derniers outils :"
-						links={utilsLinks}
-						onLinkSelect={handleOpenLink}
-					/>
+					<CommandLinkGroup heading="Derniers outils :" links={utilsLinks} onLinkSelect={handleOpenLink} />
 				)}
 			</CommandList>
 

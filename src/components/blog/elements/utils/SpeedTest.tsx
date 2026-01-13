@@ -1,28 +1,14 @@
 'use client';
 
 import SpeedTestEngine from '@cloudflare/speedtest';
-import {
-	DownloadIcon,
-	GaugeIcon,
-	type Icon,
-	SpeedometerIcon,
-	UploadIcon,
-} from '@phosphor-icons/react';
+import { DownloadIcon, GaugeIcon, type Icon, SpeedometerIcon, UploadIcon } from '@phosphor-icons/react';
 import type React from 'react';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/Button';
-import {
-	Item,
-	ItemActions,
-	ItemContent,
-	ItemMedia,
-	ItemTitle,
-} from '@/components/ui/Item';
+import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from '@/components/ui/Item';
 import { cn } from '@/lib/utils';
 
-type SpeedResult = ReturnType<
-	typeof SpeedTestEngine.prototype.results.getSummary
->;
+type SpeedResult = ReturnType<typeof SpeedTestEngine.prototype.results.getSummary>;
 
 interface TestState {
 	status: 'idle' | 'running' | 'finished';
@@ -88,9 +74,7 @@ const getButtonLabel = (status: TestState['status']) => {
 };
 
 const cleanSummary = (summary: SpeedResult): Partial<SpeedResult> =>
-	Object.fromEntries(
-		Object.entries(summary).filter(([, value]) => value !== undefined)
-	) as Partial<SpeedResult>;
+	Object.fromEntries(Object.entries(summary).filter(([, value]) => value !== undefined)) as Partial<SpeedResult>;
 
 const formatValue = (val: number | undefined, unit: string): string => {
 	const num = val ?? 0;
@@ -112,17 +96,8 @@ interface SpeedTestProps {
 }
 
 const SpeedTestItem = memo(
-	({
-		status,
-		label,
-		value,
-		measure,
-		icon: SpeedTestItemIcon,
-	}: SpeedTestProps): React.JSX.Element => {
-		const displayValue = useMemo(
-			() => formatValue(value, measure),
-			[value, measure]
-		);
+	({ status, label, value, measure, icon: SpeedTestItemIcon }: SpeedTestProps): React.JSX.Element => {
+		const displayValue = useMemo(() => formatValue(value, measure), [value, measure]);
 
 		const borderClassName = useMemo(
 			() =>
@@ -140,16 +115,11 @@ const SpeedTestItem = memo(
 				</ItemMedia>
 				<ItemContent className="flex flex-row items-center gap-x-3">
 					<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
-					<PulsatingCircle
-						isFinished={status === 'finished'}
-						isRunning={status === 'running'}
-					/>
+					<PulsatingCircle isFinished={status === 'finished'} isRunning={status === 'running'} />
 				</ItemContent>
 				<ItemActions className="items-baseline gap-x-1 font-bold font-mono text-xl tabular-nums leading-none sm:text-2xl">
 					{displayValue}
-					<span className="font-normal text-muted-foreground text-xs sm:text-sm">
-						{measure}
-					</span>
+					<span className="font-normal text-muted-foreground text-xs sm:text-sm">{measure}</span>
 				</ItemActions>
 			</Item>
 		);

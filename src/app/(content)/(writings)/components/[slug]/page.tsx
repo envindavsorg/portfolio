@@ -12,11 +12,7 @@ import { MDX } from '@/components/blog/markdown/mdx';
 import { Button } from '@/components/ui/Button';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
-import {
-	findNeighbour,
-	getPostBySlug,
-	getPostsByCategory,
-} from '@/lib/blog/posts';
+import { findNeighbour, getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 import { USER } from '@/lib/user';
@@ -35,9 +31,7 @@ export const generateStaticParams = async () => {
 	}));
 };
 
-export const generateMetadata = async ({
-	params,
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
 	const slug = (await params).slug;
 	const post = getPostBySlug(slug);
 
@@ -71,9 +65,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	'@type': 'BlogPosting',
 	headline: post.metadata.title,
 	description: post.metadata.description,
-	image:
-		post.metadata.imageLight ||
-		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
+	image: post.metadata.imageLight || `/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
 	url: `https://cuzeacflorin.fr/components/${post.slug}`,
 	datePublished: dayjs(post.metadata.createdAt).toISOString(),
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
@@ -110,18 +102,10 @@ const Page = async ({ params }: Props) => {
 				type="application/ld+json"
 			/>
 
-			<KeyboardShortcuts
-				basePath="/components"
-				next={next}
-				previous={previous}
-			/>
+			<KeyboardShortcuts basePath="/components" next={next} previous={previous} />
 
 			<div className="screen-line-before flex items-center justify-between px-3 py-2">
-				<Button
-					asChild
-					className="h-7 gap-2 rounded-lg px-0 font-mono text-muted-foreground"
-					variant="link"
-				>
+				<Button asChild className="h-7 gap-2 rounded-lg px-0 font-mono text-muted-foreground" variant="link">
 					<Link href="/components">
 						<ArrowLeftIcon className="size-4" />
 						Tous les composants
@@ -129,10 +113,7 @@ const Page = async ({ params }: Props) => {
 				</Button>
 
 				<div className="flex items-center gap-2">
-					<LLMCopyButtonWithViewOptions
-						isComponent
-						markdownUrl={`/components/${post.slug}.mdx`}
-					/>
+					<LLMCopyButtonWithViewOptions isComponent markdownUrl={`/components/${post.slug}.mdx`} />
 
 					<ShareMenu url={`/components/${post.slug}`} />
 
@@ -167,9 +148,7 @@ const Page = async ({ params }: Props) => {
 			</div>
 
 			<Prose className="px-4">
-				<h1 className="screen-line-after mb-6 font-semibold">
-					{post.metadata.title}
-				</h1>
+				<h1 className="screen-line-after mb-6 font-semibold">{post.metadata.title}</h1>
 
 				<p className="lead my-6">{post.metadata.description}</p>
 

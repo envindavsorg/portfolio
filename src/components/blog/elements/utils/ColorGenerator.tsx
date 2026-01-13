@@ -53,9 +53,7 @@ export const ColorGenerator = (): React.JSX.Element => {
 			const anchorColors: [number, number, number][] = [];
 
 			if (lockedColor) {
-				const [h, s, l] = prevScheme[lockedColor]
-					.split(' ')
-					.map(Number.parseFloat);
+				const [h, s, l] = prevScheme[lockedColor].split(' ').map(Number.parseFloat);
 				anchorColors.push([h, s / 100, l / 100]);
 			}
 
@@ -77,9 +75,7 @@ export const ColorGenerator = (): React.JSX.Element => {
 			Object.keys(newColorScheme).forEach((key, index) => {
 				if (key !== lockedColor) {
 					const color = colors[index % colors.length];
-					const [h, s, l] = color.match(/\d+(\.\d+)?/g)?.map(Number) || [
-						0, 0, 0,
-					];
+					const [h, s, l] = color.match(/\d+(\.\d+)?/g)?.map(Number) || [0, 0, 0];
 
 					let adjustedLightness = l;
 
@@ -91,9 +87,7 @@ export const ColorGenerator = (): React.JSX.Element => {
 						adjustedLightness = Math.min(Math.max(l, 70), 90);
 					}
 
-					newColorScheme[key] = `${h.toFixed(1)} ${s.toFixed(
-						1
-					)}% ${adjustedLightness.toFixed(1)}%`;
+					newColorScheme[key] = `${h.toFixed(1)} ${s.toFixed(1)}% ${adjustedLightness.toFixed(1)}%`;
 				}
 			});
 
@@ -175,12 +169,7 @@ export const ColorGenerator = (): React.JSX.Element => {
 					<div className="relative" key={key}>
 						<div className="flex items-center justify-between">
 							<span className="text-muted-foreground text-xs">{key}</span>
-							<Button
-								className="mr-6"
-								onClick={() => toggleLock(key)}
-								size="icon"
-								variant="ghost"
-							>
+							<Button className="mr-6" onClick={() => toggleLock(key)} size="icon" variant="ghost">
 								{lockedColor === key ? <LockKeyIcon /> : <LockSimpleOpenIcon />}
 							</Button>
 						</div>
@@ -189,9 +178,7 @@ export const ColorGenerator = (): React.JSX.Element => {
 							<ColorPicker
 								color={`hsl(${value})`}
 								onChangeAction={(newColor) => {
-									const [h, s, l] = newColor
-										.match(/\d+(\.\d+)?/g)
-										?.map(Number) || [0, 0, 0];
+									const [h, s, l] = newColor.match(/\d+(\.\d+)?/g)?.map(Number) || [0, 0, 0];
 									setColorScheme({
 										...colorScheme,
 										[key]: `${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`,
@@ -205,9 +192,8 @@ export const ColorGenerator = (): React.JSX.Element => {
 
 			<div className="screen-line-before py-1.5">
 				<Prose>
-					Explorez une palette de couleurs harmonieuses générée pour vos projets
-					web. Chaque couleur est soigneusement sélectionnée pour assurer une
-					esthétique cohérente et attrayante.
+					Explorez une palette de couleurs harmonieuses générée pour vos projets web. Chaque couleur est soigneusement
+					sélectionnée pour assurer une esthétique cohérente et attrayante.
 				</Prose>
 			</div>
 
@@ -237,11 +223,7 @@ export const ColorGenerator = (): React.JSX.Element => {
 								variant="outline"
 							>
 								{value}
-								{copiedColor === key ? (
-									<CheckIcon className="ml-2 size-4" />
-								) : (
-									<CopyIcon className="ml-2 size-4" />
-								)}
+								{copiedColor === key ? <CheckIcon className="ml-2 size-4" /> : <CopyIcon className="ml-2 size-4" />}
 							</Button>
 						</div>
 					))}

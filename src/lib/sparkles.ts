@@ -11,14 +11,7 @@ export interface SparkleConfig {
 }
 
 export const createSparkleOptions = (config: SparkleConfig): ISourceOptions => {
-	const {
-		density = 50,
-		minSize = 0.5,
-		maxSize = 1,
-		speed = 2,
-		color = '#FFFFFF',
-		background = 'transparent',
-	} = config;
+	const { density = 50, minSize = 0.5, maxSize = 1, speed = 2, color = '#FFFFFF', background = 'transparent' } = config;
 
 	return {
 		background: {
@@ -74,9 +67,7 @@ export const checkPerformanceSupport = (): boolean => {
 		return false;
 	}
 
-	const reducedMotion = window.matchMedia(
-		'(prefers-reduced-motion: reduce)'
-	).matches;
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const hardwareConcurrency = navigator.hardwareConcurrency || 2;
 	const sufficientHardware = hardwareConcurrency > 2;
 

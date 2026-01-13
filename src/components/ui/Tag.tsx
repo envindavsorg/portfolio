@@ -2,10 +2,7 @@ import type React from 'react';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Tag = ({
-	className,
-	...props
-}: ComponentProps<'span'>): React.JSX.Element => (
+export const Tag = ({ className, ...props }: ComponentProps<'span'>): React.JSX.Element => (
 	<span
 		className={cn(
 			'inline-flex items-center',

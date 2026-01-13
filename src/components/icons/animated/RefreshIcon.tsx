@@ -2,13 +2,7 @@
 
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
-import {
-	forwardRef,
-	type HTMLAttributes,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type HTMLAttributes, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface RefreshIconHandle {
@@ -56,12 +50,7 @@ export const RefreshIcon = forwardRef<RefreshIconHandle, RefreshIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<motion.svg
 					animate={controls}
 					fill="none"

@@ -1,8 +1,4 @@
-import {
-	ConsentManagerDialog,
-	ConsentManagerProvider,
-	CookieBanner,
-} from '@c15t/nextjs';
+import { ConsentManagerDialog, ConsentManagerProvider, CookieBanner } from '@c15t/nextjs';
 import type React from 'react';
 import { variants } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
@@ -12,9 +8,7 @@ interface ConsentManagerProps {
 	children: React.ReactNode;
 }
 
-const ConsentManager = ({
-	children,
-}: ConsentManagerProps): React.JSX.Element => (
+const ConsentManager = ({ children }: ConsentManagerProps): React.JSX.Element => (
 	<ConsentManagerProvider
 		options={{
 			translations: {
@@ -108,12 +102,10 @@ const ConsentManager = ({
 						'--dialog-border-color-dark': 'var(--border)',
 					},
 					noStyle: true,
-					className:
-						'rounded-2xl border-none bg-background shadow-popover ring ring-popover-border',
+					className: 'rounded-2xl border-none bg-background shadow-popover ring ring-popover-border',
 				},
 				'dialog.overlay': {
-					className:
-						'[--dialog-overlay-background-color-dark:var(--color-black)]/50',
+					className: '[--dialog-overlay-background-color-dark:var(--color-black)]/50',
 				},
 				'dialog.title': {
 					noStyle: true,

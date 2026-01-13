@@ -19,15 +19,7 @@ interface CommandLinkRowProps {
 }
 
 const CommandLinkRow = memo(
-	({
-		title,
-		url,
-		keywords,
-		onSelect,
-		icon: Icon,
-		position,
-		openInNewTab,
-	}: CommandLinkRowProps) => {
+	({ title, url, keywords, onSelect, icon: Icon, position, openInNewTab }: CommandLinkRowProps) => {
 		const iconRef = useRef<AnimatedIconHandle>(null);
 
 		return (
@@ -56,29 +48,20 @@ interface CommandLinkGroupProps {
 }
 
 export const CommandLinkGroup = memo(
-	({
-		heading,
-		links,
-		onLinkSelect,
-	}: CommandLinkGroupProps): React.JSX.Element | null => (
+	({ heading, links, onLinkSelect }: CommandLinkGroupProps): React.JSX.Element | null => (
 		<CommandGroup heading={heading}>
-			{links.map(
-				(
-					{ title, url, keywords, icon, openInNewTab }: CommandLinkItem,
-					idx: number
-				) => (
-					<CommandLinkRow
-						icon={icon}
-						key={title}
-						keywords={keywords}
-						onSelect={onLinkSelect}
-						openInNewTab={openInNewTab}
-						position={idx}
-						title={title}
-						url={url}
-					/>
-				)
-			)}
+			{links.map(({ title, url, keywords, icon, openInNewTab }: CommandLinkItem, idx: number) => (
+				<CommandLinkRow
+					icon={icon}
+					key={title}
+					keywords={keywords}
+					onSelect={onLinkSelect}
+					openInNewTab={openInNewTab}
+					position={idx}
+					title={title}
+					url={url}
+				/>
+			))}
 		</CommandGroup>
 	)
 );

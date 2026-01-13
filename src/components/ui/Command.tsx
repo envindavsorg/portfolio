@@ -6,10 +6,7 @@ import { useRef } from 'react';
 import { SearchIcon, type SearchIconHandle } from '@/components/icons/animated/SearchIcon';
 import { cn } from '@/lib/utils';
 
-export const Command = ({
-	className,
-	...props
-}: React.ComponentProps<typeof CommandPrimitive>): React.JSX.Element => (
+export const Command = ({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>): React.JSX.Element => (
 	<CommandPrimitive
 		className={cn('flex h-full w-full flex-col overflow-hidden text-foreground', className)}
 		data-slot="command"
@@ -17,9 +14,7 @@ export const Command = ({
 	/>
 );
 
-export const CommandInput = ({
-	...props
-}: React.ComponentProps<typeof CommandPrimitive.Input>): React.JSX.Element => {
+export const CommandInput = ({ ...props }: React.ComponentProps<typeof CommandPrimitive.Input>): React.JSX.Element => {
 	const iconRef = useRef<SearchIconHandle>(null);
 
 	return (
@@ -53,14 +48,8 @@ export const CommandList = ({
 	/>
 );
 
-export const CommandEmpty = ({
-	...props
-}: React.ComponentProps<typeof CommandPrimitive.Empty>): React.JSX.Element => (
-	<CommandPrimitive.Empty
-		className="py-8 text-center font-mono text-sm"
-		data-slot="command-empty"
-		{...props}
-	/>
+export const CommandEmpty = ({ ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>): React.JSX.Element => (
+	<CommandPrimitive.Empty className="py-8 text-center font-mono text-sm" data-slot="command-empty" {...props} />
 );
 
 export const CommandGroup = ({
@@ -84,11 +73,7 @@ export const CommandSeparator = ({
 	className,
 	...props
 }: React.ComponentProps<typeof CommandPrimitive.Separator>): React.JSX.Element => (
-	<CommandPrimitive.Separator
-		className={cn('h-px bg-input', className)}
-		data-slot="command-separator"
-		{...props}
-	/>
+	<CommandPrimitive.Separator className={cn('h-px bg-input', className)} data-slot="command-separator" {...props} />
 );
 
 export const CommandItem = ({

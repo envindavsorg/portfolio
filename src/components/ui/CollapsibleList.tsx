@@ -2,11 +2,7 @@ import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import type React from 'react';
 import { useMemo } from 'react';
 import { Button } from '@/components/ui/Button';
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from '@/components/ui/Collapsible';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
 
 interface CollapsibleListProps<T> {
 	items: T[];
@@ -40,8 +36,7 @@ export const CollapsibleList = <T,>({
 		return null;
 	}
 
-	const getKey = (item: T, index: number) =>
-		keyExtractorAction ? keyExtractorAction(item) : index;
+	const getKey = (item: T, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 
 	return (
 		<Collapsible className={className}>
@@ -54,10 +49,7 @@ export const CollapsibleList = <T,>({
 			{hiddenItems.length > 0 && (
 				<CollapsibleContent>
 					{hiddenItems.map((item, index) => (
-						<div
-							className="border-edge border-b"
-							key={getKey(item, max + index)}
-						>
+						<div className="border-edge border-b" key={getKey(item, max + index)}>
 							{renderItemAction(item)}
 						</div>
 					))}
@@ -68,12 +60,8 @@ export const CollapsibleList = <T,>({
 				<div className="flex justify-center py-2 md:justify-end md:pr-4">
 					<CollapsibleTrigger asChild>
 						<Button className="group flex items-center gap-2">
-							<span className="group-data-[state=open]:hidden">
-								{labels.showMore}
-							</span>
-							<span className="hidden group-data-[state=open]:inline">
-								{labels.showLess}
-							</span>
+							<span className="group-data-[state=open]:hidden">{labels.showMore}</span>
+							<span className="hidden group-data-[state=open]:inline">{labels.showLess}</span>
 
 							<CaretDownIcon
 								aria-hidden="true"

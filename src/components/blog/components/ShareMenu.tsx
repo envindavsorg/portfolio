@@ -1,24 +1,13 @@
 'use client';
 
-import {
-	ExportIcon,
-	LinkedinLogoIcon,
-	LinkIcon,
-	XIcon,
-	XLogoIcon,
-} from '@phosphor-icons/react';
+import { ExportIcon, LinkedinLogoIcon, LinkIcon, XIcon, XLogoIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import posthog from 'posthog-js';
 import type React from 'react';
 import { memo, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import copyText from '@/lib/utils/copy';
 import { getAbsoluteUrl } from '@/lib/utils/url';
@@ -84,24 +73,14 @@ export const ShareMenu = memo(({ url }: ShareMenuProps): React.JSX.Element => {
 				</DropdownMenuItem>
 
 				<DropdownMenuItem asChild className="font-medium">
-					<Link
-						href={x}
-						onClick={() => handleShare('x')}
-						rel="noopener noreferrer"
-						target="_blank"
-					>
+					<Link href={x} onClick={() => handleShare('x')} rel="noopener noreferrer" target="_blank">
 						<XLogoIcon className="size-4 text-foreground" />
 						Partager sur X
 					</Link>
 				</DropdownMenuItem>
 
 				<DropdownMenuItem asChild className="font-medium">
-					<Link
-						href={linkedin}
-						onClick={() => handleShare('linkedin')}
-						rel="noopener noreferrer"
-						target="_blank"
-					>
+					<Link href={linkedin} onClick={() => handleShare('linkedin')} rel="noopener noreferrer" target="_blank">
 						<LinkedinLogoIcon className="size-4 text-foreground" />
 						Partager sur LinkedIn
 					</Link>

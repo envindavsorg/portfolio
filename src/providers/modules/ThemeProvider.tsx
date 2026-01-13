@@ -7,10 +7,7 @@ interface AppThemeProviderProps {
 	children: React.ReactNode;
 }
 
-const ThemeProvider = ({
-	children,
-	...props
-}: AppThemeProviderProps): React.JSX.Element => (
+const ThemeProvider = ({ children, ...props }: AppThemeProviderProps): React.JSX.Element => (
 	<AppThemeProvider
 		attribute="class"
 		defaultTheme="system"

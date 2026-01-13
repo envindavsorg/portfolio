@@ -29,19 +29,8 @@ type BadgeProps = ComponentProps<'span'> &
 		asChild?: boolean;
 	};
 
-export const Badge = ({
-	className,
-	variant,
-	asChild = false,
-	...props
-}: BadgeProps): React.JSX.Element => {
+export const Badge = ({ className, variant, asChild = false, ...props }: BadgeProps): React.JSX.Element => {
 	const Comp = asChild ? Slot : 'span';
 
-	return (
-		<Comp
-			className={cn(variants({ variant }), className)}
-			data-slot="badge"
-			{...props}
-		/>
-	);
+	return <Comp className={cn(variants({ variant }), className)} data-slot="badge" {...props} />;
 };

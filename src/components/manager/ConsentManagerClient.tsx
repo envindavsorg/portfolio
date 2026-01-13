@@ -8,9 +8,7 @@ interface ConsentManagerClientProps {
 	children: React.ReactNode;
 }
 
-export const ConsentManagerClient = ({
-	children,
-}: ConsentManagerClientProps): React.JSX.Element => (
+export const ConsentManagerClient = ({ children }: ConsentManagerClientProps): React.JSX.Element => (
 	<ClientSideOptionsProvider
 		callbacks={{
 			onConsentSet({ preferences }) {

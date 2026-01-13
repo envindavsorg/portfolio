@@ -1,12 +1,8 @@
 const PROTOCOL_REGEX = /^(?:\w+:)?\/\//;
 
-export const urlToFilename = (url: string) =>
-	url.replace(PROTOCOL_REGEX, '').replace(/[^a-zA-Z0-9._-]/g, '-');
+export const urlToFilename = (url: string) => url.replace(PROTOCOL_REGEX, '').replace(/[^a-zA-Z0-9._-]/g, '-');
 
-export const addQueryParams = (
-	urlString: string,
-	query: Record<string, string>
-): string => {
+export const addQueryParams = (urlString: string, query: Record<string, string>): string => {
 	const dummyBase = 'http://base.com';
 	const isRelative = !urlString.startsWith('http');
 

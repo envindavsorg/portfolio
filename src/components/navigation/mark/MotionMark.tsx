@@ -10,10 +10,7 @@ export const MotionMark = (): React.JSX.Element => {
 	const { scrollY } = useScroll();
 
 	useMotionValueEvent(scrollY, 'change', (latest) => {
-		svgRef.current?.toggleAttribute(
-			'data-visible',
-			latest >= triggerDistanceRef.current
-		);
+		svgRef.current?.toggleAttribute('data-visible', latest >= triggerDistanceRef.current);
 	});
 
 	useEffect(() => {

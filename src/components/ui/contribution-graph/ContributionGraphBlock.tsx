@@ -45,9 +45,7 @@ const ContributionGraphBlock = ({
 		</TooltipTrigger>
 
 		<TooltipContent className="px-2 py-1 font-medium text-xs" side="left" sideOffset={0}>
-			{activity.count === 0
-				? 'Aucune contribution'
-				: `${activity.count} contribution${activity.count > 1 ? 's' : ''}`}{' '}
+			{activity.count === 0 ? 'Aucune contribution' : `${activity.count} contribution${activity.count > 1 ? 's' : ''}`}{' '}
 			le {dayjs(activity.date).format('ddd DD MMM')}
 		</TooltipContent>
 	</Tooltip>

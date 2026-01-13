@@ -5,9 +5,7 @@ import { z } from 'zod';
 
 (() => {
 	const envSchema = z.object({
-		NODE_ENV: z
-			.enum(['development', 'production', 'test'])
-			.default('development'),
+		NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 		GITHUB_API_TOKEN: z.string().min(1, 'GitHub API token is required'),
 		GITHUB_USERNAME: z.string().optional(),
 		GITHUB_REPO_NAME: z.string().optional(),

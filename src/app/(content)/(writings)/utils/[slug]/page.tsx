@@ -22,9 +22,7 @@ export const generateStaticParams = async () => {
 	return posts.map(({ slug }) => ({ slug }));
 };
 
-export const generateMetadata = async ({
-	params,
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
 	const { slug } = await params;
 	const post = getPostBySlug(slug);
 
@@ -54,9 +52,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	'@type': 'BlogPosting',
 	headline: post.metadata.title,
 	description: post.metadata.description,
-	image:
-		post.metadata.imageLight ||
-		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
+	image: post.metadata.imageLight || `/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
 	url: `https://cuzeacflorin.fr/utils/${post.slug}`,
 	datePublished: dayjs(post.metadata.createdAt).toISOString(),
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
@@ -90,20 +86,12 @@ const Page = async ({ params }: Props) => {
 				type="application/ld+json"
 			/>
 
-			<TopBar
-				baseUrl="/utils"
-				postSlug={post.slug}
-				slug={slug}
-				title="Tous les outils"
-				type="utils"
-			/>
+			<TopBar baseUrl="/utils" postSlug={post.slug} slug={slug} title="Tous les outils" type="utils" />
 
 			<Divider />
 
 			<div className="screen-line-before screen-line-after flex items-center justify-between px-3">
-				<h1 className="font-semibold text-2xl sm:text-3xl">
-					{post.metadata.title}
-				</h1>
+				<h1 className="font-semibold text-2xl sm:text-3xl">{post.metadata.title}</h1>
 				{post.metadata.new && <IsNew />}
 			</div>
 

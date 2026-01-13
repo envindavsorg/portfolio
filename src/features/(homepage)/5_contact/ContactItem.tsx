@@ -60,8 +60,7 @@ const ContactItem = ({ followers, content }: SocialLinkItemProps): React.JSX.Ele
 					{content.username}
 					{config && (
 						<span className="font-light text-theme text-xs">
-							({isCapture ? currentCount : <Counter step={config.step} value={currentCount} />}{' '}
-							{config.label})
+							({isCapture ? currentCount : <Counter step={config.step} value={currentCount} />} {config.label})
 						</span>
 					)}
 				</p>

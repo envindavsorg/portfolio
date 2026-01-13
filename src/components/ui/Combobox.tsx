@@ -4,19 +4,8 @@ import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import type React from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-} from '@/components/ui/Command';
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/ui/Popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/Command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 import { cn } from '@/lib/utils';
 
 interface ComboboxProps {
@@ -57,24 +46,15 @@ export const Combobox = (props: ComboboxProps): React.JSX.Element => {
 
 			<PopoverContent className={cn('h-auto p-0', props.className)}>
 				<Command>
-					{props.search && (
-						<CommandInput placeholder="Tapez une commande ou recherchez ..." />
-					)}
+					{props.search && <CommandInput placeholder="Tapez une commande ou recherchez ..." />}
 					<CommandList className="h-auto">
 						<CommandEmpty>Aucun résultat ...</CommandEmpty>
 						<CommandGroup>
 							{props.data.map((item) => (
-								<CommandItem
-									key={item.value}
-									onSelect={() => setNewValue(item.value)}
-									value={item.label}
-								>
+								<CommandItem key={item.value} onSelect={() => setNewValue(item.value)} value={item.label}>
 									{item.label}
 									<CheckIcon
-										className={cn(
-											'ml-auto size-4',
-											props.value === item.value ? 'opacity-100' : 'opacity-0'
-										)}
+										className={cn('ml-auto size-4', props.value === item.value ? 'opacity-100' : 'opacity-0')}
 									/>
 								</CommandItem>
 							))}

@@ -48,9 +48,7 @@ interface CommandFooterProps {
 export const CommandFooter = ({ posts }: CommandFooterProps): React.JSX.Element => {
 	const commandMetaMap = useMemo(() => buildCommandMetaMap(posts), [posts]);
 
-	const selectedCommandKind = useCommandState(
-		(state) => commandMetaMap.get(state.value)?.commandKind ?? 'page'
-	);
+	const selectedCommandKind = useCommandState((state) => commandMetaMap.get(state.value)?.commandKind ?? 'page');
 
 	return (
 		<>

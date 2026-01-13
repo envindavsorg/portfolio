@@ -1,2 +1,2 @@
-ignores: ["prettier", "@tailwindcss/postcss", "@tailwindcss/typography", "tailwindcss", "tw-animate-css", "ultracite"]
+ignores: ["prettier", "@tailwindcss/postcss", "@tailwindcss/typography", "tailwindcss", "tsup", "tw-animate-css", "ultracite"]
 skip-missing: true

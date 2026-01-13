@@ -10,13 +10,11 @@ import { openGraphImage } from '@/lib/open-graph';
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
 		title: 'Mes articles de blog',
-		description:
-			'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
+		description: 'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		ogImageParams: {
 			type: 'blog',
 			title: 'Mes articles de blog',
-			description:
-				'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
+			description: 'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		},
 	});
 
@@ -30,7 +28,7 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 	const { tag } = await searchParams;
 	const selectedTag = tag?.toLowerCase() || 'Tout';
 
-	const allArticles: PostItem[] = getPostsByCategory('article').sort((a: PostItem, b: PostItem) =>
+	const allArticles: Post[] = getPostsByCategory('article').sort((a: Post, b: Post) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
@@ -51,7 +49,7 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 	const articles =
 		selectedTag === 'Tout'
 			? allArticles
-			: allArticles.filter((article: PostItem) =>
+			: allArticles.filter((article: Post) =>
 					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
 				);
 
@@ -76,7 +74,7 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 					{articles
 						.slice()
 						.sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
-						.map((post: PostItem, idx: number) => (
+						.map((post: Post, idx: number) => (
 							<PostItem key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
 						))}
 				</div>

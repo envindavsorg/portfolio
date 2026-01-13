@@ -14,13 +14,7 @@ interface CounterProps {
 }
 
 export const Counter = memo(
-	({
-		value,
-		interval = 150,
-		step = 1,
-		children,
-		className,
-	}: CounterProps): React.JSX.Element => {
+	({ value, interval = 150, step = 1, children, className }: CounterProps): React.JSX.Element => {
 		const [displayValue, setDisplayValue] = useState(0);
 
 		useEffect(() => {

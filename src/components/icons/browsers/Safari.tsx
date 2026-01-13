@@ -41,14 +41,7 @@ export const SafariIcon = (props: SVGProps<SVGSVGElement>) => (
 			>
 				<feGaussianBlur stdDeviation={0.957_673_62} />
 			</filter>
-			<filter
-				colorInterpolationFilters="sRGB"
-				height={1.096}
-				id="safari__c"
-				width={1.096}
-				x={-0.048}
-				y={-0.048}
-			>
+			<filter colorInterpolationFilters="sRGB" height={1.096} id="safari__c" width={1.096} x={-0.048} y={-0.048}>
 				<feGaussianBlur stdDeviation={3.564_310_7} />
 			</filter>
 			<radialGradient

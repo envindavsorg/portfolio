@@ -4,27 +4,12 @@ import type React from 'react';
 import { Separator } from '@/components/ui/Separator';
 import { cn } from '@/lib/utils';
 
-const ItemGroup = ({
-	className,
-	...props
-}: React.ComponentProps<'div'>): React.JSX.Element => (
-	<div
-		className={cn('group/item-group flex flex-col', className)}
-		data-slot="item-group"
-		{...props}
-	/>
+const ItemGroup = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
+	<div className={cn('group/item-group flex flex-col', className)} data-slot="item-group" {...props} />
 );
 
-const ItemSeparator = ({
-	className,
-	...props
-}: React.ComponentProps<typeof Separator>): React.JSX.Element => (
-	<Separator
-		className={cn('my-0', className)}
-		data-slot="item-separator"
-		orientation="horizontal"
-		{...props}
-	/>
+const ItemSeparator = ({ className, ...props }: React.ComponentProps<typeof Separator>): React.JSX.Element => (
+	<Separator className={cn('my-0', className)} data-slot="item-separator" orientation="horizontal" {...props} />
 );
 
 const itemVariants = cva(
@@ -77,8 +62,7 @@ const itemMediaVariants = cva(
 			variant: {
 				default: 'bg-transparent',
 				icon: "size-8 rounded-sm border bg-muted [&_svg:not([class*='size-'])]:size-4",
-				image:
-					'size-10 overflow-hidden rounded-sm [&_img]:size-full [&_img]:object-cover',
+				image: 'size-10 overflow-hidden rounded-sm [&_img]:size-full [&_img]:object-cover',
 			},
 		},
 		defaultVariants: {
@@ -91,8 +75,7 @@ const ItemMedia = ({
 	className,
 	variant = 'default',
 	...props
-}: React.ComponentProps<'div'> &
-	VariantProps<typeof itemMediaVariants>): React.JSX.Element => (
+}: React.ComponentProps<'div'> & VariantProps<typeof itemMediaVariants>): React.JSX.Element => (
 	<div
 		className={cn(itemMediaVariants({ variant, className }))}
 		data-slot="item-media"
@@ -101,38 +84,23 @@ const ItemMedia = ({
 	/>
 );
 
-const ItemContent = ({
-	className,
-	...props
-}: React.ComponentProps<'div'>): React.JSX.Element => (
+const ItemContent = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		className={cn(
-			'flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none',
-			className
-		)}
+		className={cn('flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none', className)}
 		data-slot="item-content"
 		{...props}
 	/>
 );
 
-const ItemTitle = ({
-	className,
-	...props
-}: React.ComponentProps<'div'>): React.JSX.Element => (
+const ItemTitle = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		className={cn(
-			'flex w-fit items-center gap-2 font-medium text-sm leading-snug',
-			className
-		)}
+		className={cn('flex w-fit items-center gap-2 font-medium text-sm leading-snug', className)}
 		data-slot="item-title"
 		{...props}
 	/>
 );
 
-const ItemDescription = ({
-	className,
-	...props
-}: React.ComponentProps<'p'>): React.JSX.Element => (
+const ItemDescription = ({ className, ...props }: React.ComponentProps<'p'>): React.JSX.Element => (
 	<p
 		className={cn(
 			'line-clamp-2 text-balance font-normal text-muted-foreground text-sm leading-normal',
@@ -144,40 +112,21 @@ const ItemDescription = ({
 	/>
 );
 
-const ItemActions = ({
-	className,
-	...props
-}: React.ComponentProps<'div'>): React.JSX.Element => (
-	<div
-		className={cn('flex items-center gap-2', className)}
-		data-slot="item-actions"
-		{...props}
-	/>
+const ItemActions = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
+	<div className={cn('flex items-center gap-2', className)} data-slot="item-actions" {...props} />
 );
 
-const ItemHeader = ({
-	className,
-	...props
-}: React.ComponentProps<'div'>): React.JSX.Element => (
+const ItemHeader = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		className={cn(
-			'flex basis-full items-center justify-between gap-2',
-			className
-		)}
+		className={cn('flex basis-full items-center justify-between gap-2', className)}
 		data-slot="item-header"
 		{...props}
 	/>
 );
 
-const ItemFooter = ({
-	className,
-	...props
-}: React.ComponentProps<'div'>): React.JSX.Element => (
+const ItemFooter = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
 	<div
-		className={cn(
-			'flex basis-full items-center justify-between gap-2',
-			className
-		)}
+		className={cn('flex basis-full items-center justify-between gap-2', className)}
 		data-slot="item-footer"
 		{...props}
 	/>

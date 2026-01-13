@@ -19,9 +19,7 @@ export const rehypeComponent = () => async (tree: UnistTree) => {
 
 		if (node.name === 'ComponentSource') {
 			const name = getNodeAttributeByName(node, 'name')?.value as string;
-			const fileName = getNodeAttributeByName(node, 'fileName')?.value as
-				| string
-				| undefined;
+			const fileName = getNodeAttributeByName(node, 'fileName')?.value as string | undefined;
 
 			if (!(name || srcPath)) {
 				return null;
@@ -37,10 +35,7 @@ export const rehypeComponent = () => async (tree: UnistTree) => {
 					src = fileName
 						? component.files.find((file: unknown) => {
 								if (typeof file === 'string') {
-									return (
-										file.endsWith(`${fileName}.tsx`) ||
-										file.endsWith(`${fileName}.ts`)
-									);
+									return file.endsWith(`${fileName}.tsx`) || file.endsWith(`${fileName}.ts`);
 								}
 								return false;
 							}) || component.files[0]?.path
@@ -67,10 +62,7 @@ export const rehypeComponent = () => async (tree: UnistTree) => {
 									className: [`language-${path.extname(filePath).slice(1)}`],
 								},
 								data: {
-									meta: [
-										title ? `title="${title.value}"` : '',
-										showLineNumbers ? 'showLineNumbers' : '',
-									].join(' '),
+									meta: [title ? `title="${title.value}"` : '', showLineNumbers ? 'showLineNumbers' : ''].join(' '),
 								},
 								children: [
 									{

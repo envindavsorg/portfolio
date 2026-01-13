@@ -3,19 +3,10 @@ import { memo } from 'react';
 
 export const SpanishFlag = memo(
 	(props: React.SVGProps<SVGSVGElement>): React.JSX.Element => (
-		<svg
-			height="32"
-			viewBox="0 0 32 32"
-			width="32"
-			xmlns="http://www.w3.org/2000/svg"
-			{...props}
-		>
+		<svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg" {...props}>
 			<title>Spanish</title>
 			<path d="M1 10H31V22H1z" fill="#f1c142" />
-			<path
-				d="M5,4H27c2.208,0,4,1.792,4,4v3H1v-3c0-2.208,1.792-4,4-4Z"
-				fill="#a0251e"
-			/>
+			<path d="M5,4H27c2.208,0,4,1.792,4,4v3H1v-3c0-2.208,1.792-4,4-4Z" fill="#a0251e" />
 			<path
 				d="M5,21H27c2.208,0,4,1.792,4,4v3H1v-3c0-2.208,1.792-4,4-4Z"
 				fill="#a0251e"

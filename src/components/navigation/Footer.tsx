@@ -92,13 +92,7 @@ export const Footer = ({ branch, hash, updated }: FooterProps): React.JSX.Elemen
 							key={label}
 						>
 							{image && (
-								<Image
-									alt={label}
-									className="size-12 shrink-0 object-contain"
-									height={96}
-									src={image}
-									width={96}
-								/>
+								<Image alt={label} className="size-12 shrink-0 object-contain" height={96} src={image} width={96} />
 							)}
 							<div className="flex flex-col gap-y-1">
 								<span className="text-muted-foreground text-xs">{label}</span>
@@ -136,10 +130,7 @@ export const Footer = ({ branch, hash, updated }: FooterProps): React.JSX.Elemen
 
 			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 md:max-w-3xl">
 				<p className="text-balance text-muted-foreground text-xs">Développé avec beaucoup d'</p>
-				<HeartIcon
-					className="relative me-1 text-destructive after:absolute after:-inset-2"
-					size={12}
-				/>
+				<HeartIcon className="relative me-1 text-destructive after:absolute after:-inset-2" size={12} />
 				<p className="text-balance text-muted-foreground text-xs">à Paris.</p>
 			</div>
 

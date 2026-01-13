@@ -7,22 +7,14 @@ import { USER } from '@/lib/user';
 
 export const runtime = 'nodejs';
 
-type PageType =
-	| 'homepage'
-	| 'blog'
-	| 'blogArticle'
-	| 'components'
-	| 'componentsArticle'
-	| 'utils'
-	| 'utilsArticle';
+type PageType = 'homepage' | 'blog' | 'blogArticle' | 'components' | 'componentsArticle' | 'utils' | 'utilsArticle';
 
 export const GET = async (req: NextRequest) => {
 	try {
 		const { searchParams } = req.nextUrl;
 
 		const type = (searchParams.get('type') as PageType) || 'homepage';
-		const title =
-			searchParams.get('title') || `${USER.firstName} ${USER.lastName}`;
+		const title = searchParams.get('title') || `${USER.firstName} ${USER.lastName}`;
 		const description = searchParams.get('description') || USER.bio;
 
 		const getTypeStyles = (pageType: PageType) => {

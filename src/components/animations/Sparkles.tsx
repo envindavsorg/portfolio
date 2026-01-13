@@ -91,12 +91,7 @@ export const Sparkles = memo(
 		}
 
 		return (
-			<div
-				className={cn(
-					'pointer-events-none fixed inset-0 -z-10 size-full overflow-hidden',
-					className
-				)}
-			>
+			<div className={cn('pointer-events-none fixed inset-0 -z-10 size-full overflow-hidden', className)}>
 				<Particles className="size-full" id={id} options={options} />
 			</div>
 		);

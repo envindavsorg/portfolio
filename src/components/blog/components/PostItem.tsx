@@ -62,9 +62,7 @@ export const PostItem = ({ post, shouldPreloadImage }: PostItemProps): React.JSX
 
 		<div className="flex flex-col">
 			<h2 className="text-balance font-semibold text-base">{post.metadata.title}</h2>
-			<Prose className="mt-1.5 font-medium text-muted-foreground text-xs">
-				{post.metadata.description}
-			</Prose>
+			<Prose className="mt-1.5 font-medium text-muted-foreground text-xs">{post.metadata.description}</Prose>
 
 			{post.metadata.category === 'article' && (
 				<dl className="mt-3">

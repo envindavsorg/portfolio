@@ -4,33 +4,23 @@ import { Dialog as DialogPrimitive } from 'radix-ui';
 import type React from 'react';
 import { cn } from '@/lib/utils';
 
-const Dialog = ({
-	...props
-}: React.ComponentProps<typeof DialogPrimitive.Root>): React.JSX.Element => (
+const Dialog = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>): React.JSX.Element => (
 	<DialogPrimitive.Root data-slot="dialog" {...props} />
 );
 
-const DialogTrigger = ({
-	...props
-}: React.ComponentProps<typeof DialogPrimitive.Trigger>): React.JSX.Element => (
+const DialogTrigger = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>): React.JSX.Element => (
 	<DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 );
 
-const DialogPortal = ({
-	...props
-}: React.ComponentProps<typeof DialogPrimitive.Portal>): React.JSX.Element => (
+const DialogPortal = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Portal>): React.JSX.Element => (
 	<DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
 );
 
-const DialogClose = ({
-	...props
-}: React.ComponentProps<typeof DialogPrimitive.Close>): React.JSX.Element => (
+const DialogClose = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>): React.JSX.Element => (
 	<DialogPrimitive.Close data-slot="dialog-close" {...props} />
 );
 
-const DialogOverlay = ({
-	...props
-}: React.ComponentProps<typeof DialogPrimitive.Overlay>): React.JSX.Element => (
+const DialogOverlay = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Overlay>): React.JSX.Element => (
 	<DialogPrimitive.Overlay
 		className={cn(
 			'pointer-events-none fixed inset-0 z-50 select-none',
@@ -71,11 +61,7 @@ const DialogContent = ({
 );
 
 const DialogHeader = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
-	<div
-		className={cn('mb-4 flex flex-col gap-2 text-left', className)}
-		data-slot="dialog-header"
-		{...props}
-	/>
+	<div className={cn('mb-4 flex flex-col gap-2 text-left', className)} data-slot="dialog-header" {...props} />
 );
 
 const DialogFooter = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (

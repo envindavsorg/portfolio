@@ -55,9 +55,7 @@ export const FlipSentences = ({
 	if (disableAnimation) {
 		return (
 			<div className={cn('relative', className)}>
-				<p className="text-balance font-mono text-muted-foreground text-sm">
-					{sentences[0]}
-				</p>
+				<p className="text-balance font-mono text-muted-foreground text-sm">{sentences[0]}</p>
 			</div>
 		);
 	}

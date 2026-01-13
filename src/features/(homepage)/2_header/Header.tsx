@@ -38,10 +38,7 @@ const Header = (): React.JSX.Element => (
 
 		<div className="flex flex-1 flex-col">
 			<div
-				className={cn(
-					'flex grow items-end pb-1 pl-4',
-					'[--pattern-foreground:var(--color-edge)]/56'
-				)}
+				className={cn('flex grow items-end pb-1 pl-4', '[--pattern-foreground:var(--color-edge)]/56')}
 				style={PATTERN_STYLE}
 			>
 				<div className="line-clamp-1 select-none font-mono text-xs text-zinc-300 dark:text-zinc-800">
@@ -55,9 +52,7 @@ const Header = (): React.JSX.Element => (
 						{USER.firstName} {USER.lastName}
 					</h1>
 
-					{USER.namePronunciationUrl && !isCapture && (
-						<HeaderPronounceName sound={USER.namePronunciationUrl} />
-					)}
+					{USER.namePronunciationUrl && !isCapture && <HeaderPronounceName sound={USER.namePronunciationUrl} />}
 				</div>
 
 				<div className="min-h-[2rem] border-edge border-t py-1 pl-4">

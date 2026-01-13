@@ -54,8 +54,7 @@ export const eachDayOfInterval = (start: Dayjs, end: Dayjs): Dayjs[] => {
 // Helper function to get the next occurrence of a specific weekday
 export const nextDay = (date: Dayjs, targetWeekDay: WeekDay): Dayjs => {
 	const currentDay = date.day();
-	const daysToAdd =
-		targetWeekDay >= currentDay ? targetWeekDay - currentDay : 7 - currentDay + targetWeekDay;
+	const daysToAdd = targetWeekDay >= currentDay ? targetWeekDay - currentDay : 7 - currentDay + targetWeekDay;
 	return date.add(daysToAdd, 'day');
 };
 
@@ -113,10 +112,7 @@ export const groupByWeeks = (activities: CommitActivity[], weekStart: WeekDay = 
 		.map((_, weekIndex) => paddedActivities.slice(weekIndex * 7, weekIndex * 7 + 7));
 };
 
-export const getMonthLabels = (
-	weeks: Week[],
-	monthNames: string[] = DEFAULT_MONTH_LABELS
-): MonthLabel[] =>
+export const getMonthLabels = (weeks: Week[], monthNames: string[] = DEFAULT_MONTH_LABELS): MonthLabel[] =>
 	weeks
 		.reduce<MonthLabel[]>((labels, week, weekIndex) => {
 			const firstActivity = week.find((activity) => activity !== undefined);

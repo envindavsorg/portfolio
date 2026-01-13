@@ -1,8 +1,6 @@
 import type { MetadataJson } from 'libphonenumber-js/core';
 import { formatIncompletePhoneNumber as _formatIncompletePhoneNumber } from 'libphonenumber-js/core';
-import metadataJson from '@/assets/libphonenumber.metadata.json' with {
-	type: 'json',
-};
+import metadataJson from '@/assets/libphonenumber.metadata.json' with { type: 'json' };
 
 const metadata = metadataJson as MetadataJson;
 
@@ -20,5 +18,4 @@ const metadata = metadataJson as MetadataJson;
  *
  * @see https://www.npmjs.com/package/libphonenumber-js#customizing-metadata
  */
-export const formatIncompletePhoneNumber = (phone: string) =>
-	_formatIncompletePhoneNumber(phone, metadata);
+export const formatIncompletePhoneNumber = (phone: string) => _formatIncompletePhoneNumber(phone, metadata);

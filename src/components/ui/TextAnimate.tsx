@@ -68,10 +68,7 @@ const defaultItemVariants: Variants = {
 	},
 };
 
-const defaultItemAnimationVariants: Record<
-	AnimationVariant,
-	{ container: Variants; item: Variants }
-> = {
+const defaultItemAnimationVariants: Record<AnimationVariant, { container: Variants; item: Variants }> = {
 	fadeIn: {
 		container: defaultContainerVariants,
 		item: {

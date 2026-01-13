@@ -3,13 +3,7 @@
 import type { Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
-import {
-	forwardRef,
-	type HTMLAttributes,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type HTMLAttributes, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface IdCardIconHandle {
@@ -73,12 +67,7 @@ export const IdCardIcon = forwardRef<IdCardIconHandle, IdCardIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}
@@ -90,32 +79,10 @@ export const IdCardIcon = forwardRef<IdCardIconHandle, IdCardIconProps>(
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<motion.path
-						animate={controls}
-						custom={2}
-						d="M16 10h2"
-						variants={VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						custom={2}
-						d="M16 14h2"
-						variants={VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						custom={0}
-						d="M6.17 15a3 3 0 0 1 5.66 0"
-						variants={VARIANTS}
-					/>
-					<motion.circle
-						animate={controls}
-						custom={1}
-						cx="9"
-						cy="11"
-						r="2"
-						variants={VARIANTS}
-					/>
+					<motion.path animate={controls} custom={2} d="M16 10h2" variants={VARIANTS} />
+					<motion.path animate={controls} custom={2} d="M16 14h2" variants={VARIANTS} />
+					<motion.path animate={controls} custom={0} d="M6.17 15a3 3 0 0 1 5.66 0" variants={VARIANTS} />
+					<motion.circle animate={controls} custom={1} cx="9" cy="11" r="2" variants={VARIANTS} />
 					<rect height="14" rx="2" width="20" x="2" y="5" />
 				</svg>
 			</div>

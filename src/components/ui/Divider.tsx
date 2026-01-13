@@ -6,10 +6,7 @@ interface DividerProps {
 	border?: boolean;
 }
 
-export const Divider = ({
-	className,
-	border = false,
-}: DividerProps): React.JSX.Element => (
+export const Divider = ({ className, border = false }: DividerProps): React.JSX.Element => (
 	<div
 		className={cn(
 			'h-8',

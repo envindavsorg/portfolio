@@ -18,9 +18,5 @@ export const ComponentSource = ({
 		return <div className={className}>{children}</div>;
 	}
 
-	return (
-		<CodeCollapsibleWrapper className={className}>
-			{children}
-		</CodeCollapsibleWrapper>
-	);
+	return <CodeCollapsibleWrapper className={className}>{children}</CodeCollapsibleWrapper>;
 };

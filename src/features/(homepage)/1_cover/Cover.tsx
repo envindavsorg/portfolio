@@ -15,13 +15,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { cn } from '@/lib/utils';
 import { downloadFile } from '@/lib/utils/download';
-import {
-	GREETINGS,
-	GREETINGS_CONFIG,
-	GREETINGS_FILE_TYPES,
-	GREETINGS_MAP,
-	variants,
-} from './constants/constants';
+import { GREETINGS, GREETINGS_CONFIG, GREETINGS_FILE_TYPES, GREETINGS_MAP, variants } from './constants/constants';
 import type { Greeting, GreetingId } from './types/types';
 
 const isCapture = process.env.ENV_TYPE === 'capture';
@@ -135,9 +129,7 @@ export const Cover = ({ loop = true }: CoverProps): React.JSX.Element => {
 
 									<ContextMenuSeparator />
 
-									<ContextMenuItem
-										onClick={() => downloadFile('/assets/all-effects.zip', 'all-effects.zip')}
-									>
+									<ContextMenuItem onClick={() => downloadFile('/assets/all-effects.zip', 'all-effects.zip')}>
 										<DownloadIcon className="text-theme" />
 										<p>{activeData.label.all}</p>
 									</ContextMenuItem>

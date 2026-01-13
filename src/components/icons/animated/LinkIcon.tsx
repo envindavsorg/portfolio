@@ -68,12 +68,7 @@ export const LinkIcon = forwardRef<LinkIconHandle, LinkIconProps>(
 			[controls, onMouseLeave]
 		);
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}

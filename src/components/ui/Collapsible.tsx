@@ -10,10 +10,7 @@ export const Collapsible = Primitive.Root;
 
 export const CollapsibleTrigger = Primitive.CollapsibleTrigger;
 
-export const CollapsibleContent = forwardRef<
-	HTMLDivElement,
-	ComponentProps<typeof Primitive.CollapsibleContent>
->(
+export const CollapsibleContent = forwardRef<HTMLDivElement, ComponentProps<typeof Primitive.CollapsibleContent>>(
 	({ children, className, ...props }, ref): React.JSX.Element => (
 		<Primitive.CollapsibleContent asChild className={className} ref={ref} {...props}>
 			<motion.div
@@ -76,9 +73,6 @@ export const CollapsibleChevronsIcon = (): React.JSX.Element => {
 	const Icon = open ? ChevronsDownUpIcon : ChevronsUpDownIcon;
 
 	return (
-		<Icon
-			className="relative before:absolute before:inset-0 before:-left-[100vw] before:content-['']"
-			size={20}
-		/>
+		<Icon className="relative before:absolute before:inset-0 before:-left-[100vw] before:content-['']" size={20} />
 	);
 };

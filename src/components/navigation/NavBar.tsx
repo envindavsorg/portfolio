@@ -139,12 +139,7 @@ export const NavBar = memo(({ posts }: NavBarProps): React.JSX.Element => {
 						</Button>
 					</Link>
 
-					<Link
-						aria-label="Contexte essentiel - LLM"
-						href="/llms.txt"
-						rel="noopener noreferrer"
-						target="_blank"
-					>
+					<Link aria-label="Contexte essentiel - LLM" href="/llms.txt" rel="noopener noreferrer" target="_blank">
 						<Button shadow size="icon" variant="outline">
 							<LlmIcon className="relative after:absolute after:-inset-2" />
 							<span className="sr-only">Contexte essentiel - LLM</span>

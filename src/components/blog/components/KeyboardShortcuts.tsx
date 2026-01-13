@@ -14,11 +14,7 @@ interface KeyboardShortcutsProps {
 	next: Post | null;
 }
 
-export const KeyboardShortcuts = ({
-	basePath,
-	previous,
-	next,
-}: KeyboardShortcutsProps): React.JSX.Element | null => {
+export const KeyboardShortcuts = ({ basePath, previous, next }: KeyboardShortcutsProps): React.JSX.Element | null => {
 	const router = useRouter();
 
 	const navigate = useCallback(
@@ -41,9 +37,7 @@ export const KeyboardShortcuts = ({
 
 			const target = event.target as HTMLElement;
 
-			const isInput =
-				target.isContentEditable ||
-				['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
+			const isInput = target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
 
 			if (isInput) {
 				return;

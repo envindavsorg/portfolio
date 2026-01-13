@@ -14,13 +14,7 @@ interface TopBarProps {
 	title: string;
 }
 
-export const TopBar = ({
-	type,
-	slug,
-	baseUrl,
-	postSlug,
-	title,
-}: TopBarProps): React.JSX.Element => {
+export const TopBar = ({ type, slug, baseUrl, postSlug, title }: TopBarProps): React.JSX.Element => {
 	const allPosts: Post[] = getPostsByCategory(type);
 	const { previous, next } = findNeighbour(allPosts, slug);
 

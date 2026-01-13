@@ -7,12 +7,7 @@ import type React from 'react';
 import { useCallback, useRef } from 'react';
 import { ArrowLeftIcon, type ArrowLeftIconHandle } from '@/components/icons/animated/ArrowLeftIcon';
 import { RefreshIcon } from '@/components/icons/animated/RefreshIcon';
-import {
-	ContextMenu,
-	ContextMenuContent,
-	ContextMenuItem,
-	ContextMenuTrigger,
-} from '@/components/ui/ContextMenu';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/ContextMenu';
 import useMetaColor from '@/hooks/use-meta-color';
 import { soundManager } from '@/lib/sound-manager';
 import { META_THEME_COLORS } from '@/lib/theme';
@@ -53,11 +48,7 @@ export const RootContextMenu = ({ children }: RootContextMenuProps): React.JSX.E
 					onMouseEnter={() => arrowIconRef.current?.startAnimation?.()}
 					onMouseLeave={() => arrowIconRef.current?.stopAnimation?.()}
 				>
-					<ArrowLeftIcon
-						className="relative after:absolute after:-inset-2"
-						ref={arrowIconRef}
-						size={16}
-					/>
+					<ArrowLeftIcon className="relative after:absolute after:-inset-2" ref={arrowIconRef} size={16} />
 					Retour
 				</ContextMenuItem>
 
@@ -66,11 +57,7 @@ export const RootContextMenu = ({ children }: RootContextMenuProps): React.JSX.E
 					onMouseEnter={() => refreshIconRef.current?.startAnimation?.()}
 					onMouseLeave={() => refreshIconRef.current?.stopAnimation?.()}
 				>
-					<RefreshIcon
-						className="relative after:absolute after:-inset-2"
-						ref={refreshIconRef}
-						size={16}
-					/>
+					<RefreshIcon className="relative after:absolute after:-inset-2" ref={refreshIconRef} size={16} />
 					Recharger la page
 				</ContextMenuItem>
 

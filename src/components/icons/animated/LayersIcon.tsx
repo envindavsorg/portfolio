@@ -3,13 +3,7 @@
 import type { Transition } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
-import {
-	forwardRef,
-	type HTMLAttributes,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type HTMLAttributes, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface LayersIconHandle {
@@ -69,12 +63,7 @@ export const LayersIcon = forwardRef<LayersIconHandle, LayersIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}

@@ -59,12 +59,7 @@ export const SunIcon = forwardRef<SunIconHandle, SunIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}
@@ -87,13 +82,7 @@ export const SunIcon = forwardRef<SunIconHandle, SunIconProps>(
 						'm5.636 5.636.707.707',
 						'm17.657 17.657.707.707',
 					].map((d, index) => (
-						<motion.path
-							animate={controls}
-							custom={index + 1}
-							d={d}
-							key={d}
-							variants={PATH_VARIANTS}
-						/>
+						<motion.path animate={controls} custom={index + 1} d={d} key={d} variants={PATH_VARIANTS} />
 					))}
 				</svg>
 			</div>

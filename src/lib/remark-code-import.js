@@ -4,13 +4,7 @@ import path from 'node:path';
 import stripIndent from 'strip-indent';
 import { visit } from 'unist-util-visit';
 
-const extractLines = (
-	content,
-	fromLine,
-	hasDash,
-	toLine,
-	preserveTrailingNewline = false
-) => {
+const extractLines = (content, fromLine, hasDash, toLine, preserveTrailingNewline = false) => {
 	const lines = content.split(EOL);
 	const start = fromLine || 1;
 
@@ -45,18 +39,13 @@ export const remarkCodeImport = (options = {}) => {
 		});
 
 		for (const [node] of codes) {
-			const fileMeta = (node.meta || '')
-				.split(/(?<!\\) /g)
-				.find((meta) => meta.startsWith('file='));
+			const fileMeta = (node.meta || '').split(/(?<!\\) /g).find((meta) => meta.startsWith('file='));
 
 			if (!fileMeta) {
 				continue;
 			}
 
-			const res =
-				/^file=(?<path>.+?)(?:(?:#(?:L(?<from>\d+)(?<dash>-)?)?)(?:L(?<to>\d+))?)?$/.exec(
-					fileMeta
-				);
+			const res = /^file=(?<path>.+?)(?:(?:#(?:L(?<from>\d+)(?<dash>-)?)?)(?:L(?<to>\d+))?)?$/.exec(fileMeta);
 
 			if (!res?.groups?.path) {
 				throw new Error(`Unable to parse file path ${fileMeta}`);
@@ -64,29 +53,19 @@ export const remarkCodeImport = (options = {}) => {
 
 			const filePath = res.groups.path;
 
-			const fromLine = res.groups.from
-				? Number.parseInt(res.groups.from, 10)
-				: undefined;
+			const fromLine = res.groups.from ? Number.parseInt(res.groups.from, 10) : undefined;
 
 			const hasDash = !!res.groups.dash || fromLine === undefined;
 
-			const toLine = res.groups.to
-				? Number.parseInt(res.groups.to, 10)
-				: undefined;
+			const toLine = res.groups.to ? Number.parseInt(res.groups.to, 10) : undefined;
 
-			const normalizedFilePath = filePath
-				.replace(/^@/, rootDir)
-				.replace(/\\ /g, ' ');
+			const normalizedFilePath = filePath.replace(/^@/, rootDir).replace(/\\ /g, ' ');
 
 			const fileAbsPath = path.resolve(file.dirname, normalizedFilePath);
 
 			const relativePathFromRootDir = path.relative(rootDir, fileAbsPath);
 
-			if (
-				!rootDir ||
-				relativePathFromRootDir.startsWith(`..${path.sep}`) ||
-				path.isAbsolute(relativePathFromRootDir)
-			) {
+			if (!rootDir || relativePathFromRootDir.startsWith(`..${path.sep}`) || path.isAbsolute(relativePathFromRootDir)) {
 				throw new Error(
 					`Attempted to import code from "${fileAbsPath}", which is outside from the rootDir "${rootDir}"`
 				);
@@ -94,13 +73,7 @@ export const remarkCodeImport = (options = {}) => {
 
 			const fileContent = fs.readFileSync(fileAbsPath, 'utf8');
 
-			node.value = extractLines(
-				fileContent,
-				fromLine,
-				hasDash,
-				toLine,
-				options.preserveTrailingNewline
-			);
+			node.value = extractLines(fileContent, fromLine, hasDash, toLine, options.preserveTrailingNewline);
 
 			if (options.removeRedundantIndentations) {
 				node.value = stripIndent(node.value);

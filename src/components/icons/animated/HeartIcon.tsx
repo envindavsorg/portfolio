@@ -2,13 +2,7 @@
 
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
-import {
-	forwardRef,
-	type HTMLAttributes,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type HTMLAttributes, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface HeartIconHandle {
@@ -21,10 +15,7 @@ interface HeartIconProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const HeartIcon = forwardRef<HeartIconHandle, HeartIconProps>(
-	(
-		{ onMouseEnter, onMouseLeave, className, size = 28, ...props },
-		ref
-	): React.JSX.Element => {
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref): React.JSX.Element => {
 		const controls = useAnimation();
 		const isControlledRef = useRef(false);
 
@@ -60,12 +51,7 @@ export const HeartIcon = forwardRef<HeartIconHandle, HeartIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<motion.svg
 					animate={controls}
 					fill="none"

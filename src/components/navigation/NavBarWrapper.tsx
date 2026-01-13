@@ -4,9 +4,7 @@ import { useMotionValueEvent, useScroll } from 'motion/react';
 import type React from 'react';
 import { useCallback, useEffect, useRef } from 'react';
 
-export const NavBarWrapper = (
-	props: React.ComponentProps<'header'>
-): React.JSX.Element => {
+export const NavBarWrapper = (props: React.ComponentProps<'header'>): React.JSX.Element => {
 	const headerRef = useRef<HTMLHeadElement>(null);
 	const { scrollY } = useScroll();
 

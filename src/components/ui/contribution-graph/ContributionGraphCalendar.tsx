@@ -18,12 +18,7 @@ const ContributionGraphCalendar = ({
 
 	return (
 		<div className="no-scrollbar max-w-full overflow-x-auto overflow-y-hidden" {...props}>
-			<svg
-				className="block overflow-visible"
-				height={height}
-				viewBox={`0 0 ${width} ${height}`}
-				width={width}
-			>
+			<svg className="block overflow-visible" height={height} viewBox={`0 0 ${width} ${height}`} width={width}>
 				<g className="fill-current selection:fill-selection-foreground">
 					{monthLabels.map(({ weekIndex, label }) => (
 						<text
@@ -43,11 +38,7 @@ const ContributionGraphCalendar = ({
 							return null;
 						}
 
-						return (
-							<Fragment key={`${weekIndex}-${dayIndex}`}>
-								{children({ activity, dayIndex, weekIndex })}
-							</Fragment>
-						);
+						return <Fragment key={`${weekIndex}-${dayIndex}`}>{children({ activity, dayIndex, weekIndex })}</Fragment>;
 					})
 				)}
 			</svg>

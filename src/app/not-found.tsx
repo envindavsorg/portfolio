@@ -46,10 +46,8 @@ const NotFound = () => (
 					)}
 				>
 					<div className="line-clamp-1 select-none font-mono text-xs text-zinc-300 dark:text-zinc-800">
-						<span className="min-sm:hidden">text-3xl</span>{' '}
-						<span className="max-sm:hidden">text-4xl</span>{' '}
-						<span>text-foreground</span> <span>font-semibold</span>{' '}
-						<span>text-balance</span>
+						<span className="min-sm:hidden">text-3xl</span> <span className="max-sm:hidden">text-4xl</span>{' '}
+						<span>text-foreground</span> <span>font-semibold</span> <span>text-balance</span>
 					</div>
 				</div>
 
@@ -65,10 +63,7 @@ const NotFound = () => (
 
 		<Panel>
 			<PanelContent>
-				<Prose>
-					Peut-être avez-vous cliqué sur un ancien lien ou avez-vous fait une
-					faute de frappe ...
-				</Prose>
+				<Prose>Peut-être avez-vous cliqué sur un ancien lien ou avez-vous fait une faute de frappe ...</Prose>
 			</PanelContent>
 			<div className="screen-line-before flex justify-center py-2">
 				<Button asChild>

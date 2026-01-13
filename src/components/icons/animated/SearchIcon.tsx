@@ -2,13 +2,7 @@
 
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
-import {
-	forwardRef,
-	type HTMLAttributes,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type HTMLAttributes, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface SearchIconHandle {
@@ -21,10 +15,7 @@ interface SearchIconProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const SearchIcon = forwardRef<SearchIconHandle, SearchIconProps>(
-	(
-		{ onMouseEnter, onMouseLeave, className, size = 28, ...props },
-		ref
-	): React.JSX.Element => {
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref): React.JSX.Element => {
 		const controls = useAnimation();
 		const isControlledRef = useRef(false);
 
@@ -60,10 +51,7 @@ export const SearchIcon = forwardRef<SearchIconHandle, SearchIconProps>(
 
 		return (
 			<div
-				className={cn(
-					'relative shrink-0 after:absolute after:-inset-2',
-					className
-				)}
+				className={cn('relative shrink-0 after:absolute after:-inset-2', className)}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				{...props}

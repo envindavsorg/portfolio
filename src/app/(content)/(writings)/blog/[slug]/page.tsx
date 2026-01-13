@@ -29,9 +29,7 @@ export const generateStaticParams = async () => {
 	}));
 };
 
-export const generateMetadata = async ({
-	params,
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
 	const slug = (await params).slug;
 	const post = getPostBySlug(slug);
 
@@ -70,9 +68,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	'@type': 'BlogPosting',
 	headline: post.metadata.title,
 	description: post.metadata.description,
-	image:
-		post.metadata.imageLight ||
-		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
+	image: post.metadata.imageLight || `/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
 	url: `https://cuzeacflorin.fr${getPostUrl(post)}`,
 	datePublished: dayjs(post.metadata.createdAt).toISOString(),
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
@@ -109,11 +105,7 @@ const Page = async ({ params }: Props) => {
 			<KeyboardShortcuts basePath="/blog" next={next} previous={previous} />
 
 			<div className="screen-line-before flex items-center justify-between px-3 py-2">
-				<Button
-					asChild
-					className="h-7 gap-2 rounded-lg px-0 font-mono text-muted-foreground"
-					variant="link"
-				>
+				<Button asChild className="h-7 gap-2 rounded-lg px-0 font-mono text-muted-foreground" variant="link">
 					<Link href="/blog">
 						<ArrowLeftIcon className="size-4" />
 						Tous les articles
@@ -159,9 +151,7 @@ const Page = async ({ params }: Props) => {
 			</div>
 
 			<Prose className="px-4">
-				<h1 className="screen-line-after mb-1 font-semibold">
-					{post.metadata.title}
-				</h1>
+				<h1 className="screen-line-after mb-1 font-semibold">{post.metadata.title}</h1>
 
 				<div className="screen-line-after flex gap-x-2 pb-1 text-muted-foreground text-sm">
 					<time dateTime={dayjs(post.metadata.createdAt).toISOString()}>

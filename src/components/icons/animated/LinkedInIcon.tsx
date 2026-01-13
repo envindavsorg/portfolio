@@ -133,12 +133,7 @@ const LinkedinIcon = forwardRef<LinkedinIconHandle, LinkedinIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}
@@ -165,14 +160,7 @@ const LinkedinIcon = forwardRef<LinkedinIconHandle, LinkedinIconProps>(
 						x="2"
 						y="9"
 					/>
-					<motion.circle
-						animate={circleControls}
-						cx="4"
-						cy="4"
-						initial="normal"
-						r="2"
-						variants={CIRCLE_VARIANTS}
-					/>
+					<motion.circle animate={circleControls} cx="4" cy="4" initial="normal" r="2" variants={CIRCLE_VARIANTS} />
 				</svg>
 			</div>
 		);

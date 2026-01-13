@@ -1,4 +1,4 @@
-import { CERTIFICATIONS } from '@/features/(homepage)/10_certifications/data/certifications';
+import { CERTIFICATIONS } from '@/features/(homepage)/10_certifications/content';
 
 const content = `
 # Mes certifications

@@ -18,11 +18,7 @@ interface CopyButtonProps {
 	className?: string;
 }
 
-export const CopyButton = ({
-	value,
-	className,
-	...props
-}: CopyButtonProps): React.JSX.Element => {
+export const CopyButton = ({ value, className, ...props }: CopyButtonProps): React.JSX.Element => {
 	const [state, setState] = useOptimistic<'idle' | 'copied' | 'failed'>('idle');
 	const [, startTransition] = useTransition();
 

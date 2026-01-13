@@ -107,19 +107,12 @@ interface RootLayoutProps {
 
 const RootLayout = ({ children }: RootLayoutProps) => (
 	<html
-		className={cn(
-			'no-scrollbar h-full antialiased',
-			sans.variable,
-			mono.variable
-		)}
+		className={cn('no-scrollbar h-full antialiased', sans.variable, mono.variable)}
 		lang="en"
 		suppressHydrationWarning
 	>
 		<head>
-			<script
-				dangerouslySetInnerHTML={{ __html: darkModeScript }}
-				type="text/javascript"
-			/>
+			<script dangerouslySetInnerHTML={{ __html: darkModeScript }} type="text/javascript" />
 			<Script src={`data:text/javascript;base64,${btoa(darkModeScript)}`} />
 			<script
 				dangerouslySetInnerHTML={{

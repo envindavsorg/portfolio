@@ -9,24 +9,16 @@ const TooltipProvider = ({
 	delayDuration = 0,
 	...props
 }: ComponentProps<typeof TooltipPrimitive.Provider>): React.JSX.Element => (
-	<TooltipPrimitive.Provider
-		data-slot="tooltip-provider"
-		delayDuration={delayDuration}
-		{...props}
-	/>
+	<TooltipPrimitive.Provider data-slot="tooltip-provider" delayDuration={delayDuration} {...props} />
 );
 
-export const Tooltip = ({
-	...props
-}: ComponentProps<typeof TooltipPrimitive.Root>): React.JSX.Element => (
+export const Tooltip = ({ ...props }: ComponentProps<typeof TooltipPrimitive.Root>): React.JSX.Element => (
 	<TooltipProvider>
 		<TooltipPrimitive.Root data-slot="tooltip" {...props} />
 	</TooltipProvider>
 );
 
-export const TooltipTrigger = ({
-	...props
-}: ComponentProps<typeof TooltipPrimitive.Trigger>): React.JSX.Element => (
+export const TooltipTrigger = ({ ...props }: ComponentProps<typeof TooltipPrimitive.Trigger>): React.JSX.Element => (
 	<TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
 );
 

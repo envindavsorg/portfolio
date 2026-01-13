@@ -1,17 +1,8 @@
 import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const VuetifyIcon = (
-	props: SVGProps<SVGSVGElement>
-): React.JSX.Element => (
-	<svg
-		fill="none"
-		height="1em"
-		viewBox="0 0 400 400"
-		width="1em"
-		xmlns="http://www.w3.org/2000/svg"
-		{...props}
-	>
+export const VuetifyIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+	<svg fill="none" height="1em" viewBox="0 0 400 400" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>Vuetify</title>
 		<circle cx={200.025} cy={199.975} fill="white" r={186.895} />
 		<path
@@ -32,9 +23,6 @@ export const VuetifyIcon = (
 			d="M235.651 116.253C263.203 206.922 200 368.773 200 368.773L144.963 273.389L235.651 116.253Z"
 			fill="#1867C0"
 		/>
-		<path
-			d="M207.668 116.253C91.586 116.253 130.955 249.153 130.955 249.153L207.668 116.253Z"
-			fill="#7BC6FF"
-		/>
+		<path d="M207.668 116.253C91.586 116.253 130.955 249.153 130.955 249.153L207.668 116.253Z" fill="#7BC6FF" />
 	</svg>
 );

@@ -7,12 +7,7 @@ import type React from 'react';
 import { useCallback } from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import {
-	Drawer,
-	DrawerContent,
-	DrawerHeader,
-	DrawerTrigger,
-} from '@/components/ui/Drawer';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTrigger } from '@/components/ui/Drawer';
 import { cn } from '@/lib/utils';
 
 interface TagsFilterProps {
@@ -25,40 +20,22 @@ type TagFilterListProps = TagsFilterProps & {
 	onTagClick: (tag: string) => void;
 };
 
-const DesktopTagFilter = ({
-	tags,
-	selectedTag,
-	tagCounts,
-	onTagClick,
-}: TagFilterListProps): React.JSX.Element => (
+const DesktopTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilterListProps): React.JSX.Element => (
 	<div className="screen-line-after hidden flex-wrap gap-x-4 px-3 py-1.5 md:flex">
 		{tags.map((tag: string) => {
-			const isActive =
-				tag === 'Tout'
-					? selectedTag === 'Tout'
-					: selectedTag === tag.toLowerCase();
+			const isActive = tag === 'Tout' ? selectedTag === 'Tout' : selectedTag === tag.toLowerCase();
 
 			return (
 				<div className="flex items-center gap-x-1.5" key={tag}>
 					<Button
-						className={cn(
-							'px-0',
-							isActive
-								? 'text-theme underline underline-offset-4'
-								: 'text-foreground'
-						)}
+						className={cn('px-0', isActive ? 'text-theme underline underline-offset-4' : 'text-foreground')}
 						onClick={() => onTagClick(tag)}
 						variant="link"
 					>
 						{tag}
 					</Button>
 					{tagCounts?.[tag] && (
-						<sup
-							className={cn(
-								'font-medium text-[10px]',
-								isActive ? 'text-theme' : 'text-foreground'
-							)}
-						>
+						<sup className={cn('font-medium text-[10px]', isActive ? 'text-theme' : 'text-foreground')}>
 							{tagCounts[tag]}
 						</sup>
 					)}
@@ -68,17 +45,10 @@ const DesktopTagFilter = ({
 	</div>
 );
 
-const MobileTagFilter = ({
-	tags,
-	selectedTag,
-	tagCounts,
-	onTagClick,
-}: TagFilterListProps) => (
+const MobileTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilterListProps) => (
 	<Drawer>
 		<DrawerTrigger className="screen-line-after flex size-full items-center justify-between p-3 md:hidden">
-			<span className="font-medium text-sm">
-				Catégorie: {capitalize(selectedTag)}
-			</span>
+			<span className="font-medium text-sm">Catégorie: {capitalize(selectedTag)}</span>
 			<CaretDownIcon className="size-4" />
 		</DrawerTrigger>
 
@@ -89,19 +59,14 @@ const MobileTagFilter = ({
 
 			<div className="space-y-3">
 				{tags.map((tag: string) => {
-					const isActive =
-						tag === 'Tout'
-							? selectedTag === 'Tout'
-							: selectedTag === tag.toLowerCase();
+					const isActive = tag === 'Tout' ? selectedTag === 'Tout' : selectedTag === tag.toLowerCase();
 
 					return (
 						<div className="flex items-center justify-between" key={tag}>
 							<Button
 								className={cn(
 									'px-0 font-medium text-base',
-									isActive
-										? 'text-theme underline underline-offset-4'
-										: 'text-foreground'
+									isActive ? 'text-theme underline underline-offset-4' : 'text-foreground'
 								)}
 								onClick={() => onTagClick(tag)}
 								variant="link"
@@ -112,9 +77,7 @@ const MobileTagFilter = ({
 								<Badge
 									className={cn(
 										'aspect-square border',
-										isActive
-											? 'border-theme text-theme'
-											: 'border-input text-foreground'
+										isActive ? 'border-theme text-theme' : 'border-input text-foreground'
 									)}
 								>
 									{tagCounts[tag]}
@@ -128,19 +91,13 @@ const MobileTagFilter = ({
 	</Drawer>
 );
 
-export const TagsFilter = ({
-	tags,
-	selectedTag,
-	tagCounts,
-}: TagsFilterProps) => {
+export const TagsFilter = ({ tags, selectedTag, tagCounts }: TagsFilterProps) => {
 	const router = useRouter();
 	const pathname = usePathname();
 
 	const handleTagClick = useCallback(
 		(tag: string) => {
-			const params: URLSearchParams = new URLSearchParams(
-				window.location.search
-			);
+			const params: URLSearchParams = new URLSearchParams(window.location.search);
 
 			if (tag === 'Tout') {
 				params.delete('tag');

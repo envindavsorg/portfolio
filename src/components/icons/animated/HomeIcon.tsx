@@ -3,13 +3,7 @@
 import type { Transition, Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
-import {
-	forwardRef,
-	type HTMLAttributes,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type HTMLAttributes, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface HomeIconHandle {
@@ -74,10 +68,7 @@ export const HomeIcon = forwardRef<HomeIconHandle, HomeIconProps>(
 		);
 		return (
 			<div
-				className={cn(
-					'relative shrink-0 after:absolute after:-inset-2',
-					className
-				)}
+				className={cn('relative shrink-0 after:absolute after:-inset-2', className)}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				{...props}

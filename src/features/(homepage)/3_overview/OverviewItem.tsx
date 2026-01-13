@@ -12,12 +12,7 @@ interface OverviewItemProps {
 	className?: string;
 }
 
-const OverviewItem = ({
-	icon: Icon,
-	content,
-	id,
-	className,
-}: OverviewItemProps): React.JSX.Element => {
+const OverviewItem = ({ icon: Icon, content, id, className }: OverviewItemProps): React.JSX.Element => {
 	const isClient = useIsClient();
 
 	const displayContent = useMemo(() => {

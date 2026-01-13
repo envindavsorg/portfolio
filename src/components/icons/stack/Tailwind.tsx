@@ -1,9 +1,7 @@
 import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const TailwindIcon = (
-	props: SVGProps<SVGSVGElement>
-): React.JSX.Element => (
+export const TailwindIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
 	<svg
 		height="1em"
 		preserveAspectRatio="xMidYMid"
@@ -14,13 +12,7 @@ export const TailwindIcon = (
 	>
 		<title>Tailwind CSS</title>
 		<defs>
-			<linearGradient
-				id="gradient"
-				x1="-2.778%"
-				x2="100%"
-				y1="32%"
-				y2="67.556%"
-			>
+			<linearGradient id="gradient" x1="-2.778%" x2="100%" y1="32%" y2="67.556%">
 				<stop offset="0%" stopColor="#2298BD" />
 				<stop offset="100%" stopColor="#0ED7B5" />
 			</linearGradient>

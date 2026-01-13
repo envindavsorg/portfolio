@@ -5,10 +5,7 @@ import type React from 'react';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Label = ({
-	className,
-	...props
-}: ComponentProps<typeof Primitive.Root>): React.JSX.Element => (
+export const Label = ({ className, ...props }: ComponentProps<typeof Primitive.Root>): React.JSX.Element => (
 	<Primitive.Root
 		className={cn(
 			'flex items-center gap-2',
