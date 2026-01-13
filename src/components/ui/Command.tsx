@@ -3,10 +3,7 @@
 import { Command as CommandPrimitive } from 'cmdk';
 import type React from 'react';
 import { useRef } from 'react';
-import {
-	SearchIcon,
-	type SearchIconHandle,
-} from '@/components/icons/SearchIcon';
+import { SearchIcon, type SearchIconHandle } from '@/components/icons/animated/SearchIcon';
 import { cn } from '@/lib/utils';
 
 export const Command = ({
@@ -14,10 +11,7 @@ export const Command = ({
 	...props
 }: React.ComponentProps<typeof CommandPrimitive>): React.JSX.Element => (
 	<CommandPrimitive
-		className={cn(
-			'flex h-full w-full flex-col overflow-hidden text-foreground',
-			className
-		)}
+		className={cn('flex h-full w-full flex-col overflow-hidden text-foreground', className)}
 		data-slot="command"
 		{...props}
 	/>
@@ -53,10 +47,7 @@ export const CommandList = ({
 	...props
 }: React.ComponentProps<typeof CommandPrimitive.List>): React.JSX.Element => (
 	<CommandPrimitive.List
-		className={cn(
-			'max-h-80 scroll-py-0 overflow-y-auto overflow-x-hidden',
-			className
-		)}
+		className={cn('max-h-80 scroll-py-0 overflow-y-auto overflow-x-hidden', className)}
 		data-slot="command-list"
 		{...props}
 	/>
@@ -92,9 +83,7 @@ export const CommandGroup = ({
 export const CommandSeparator = ({
 	className,
 	...props
-}: React.ComponentProps<
-	typeof CommandPrimitive.Separator
->): React.JSX.Element => (
+}: React.ComponentProps<typeof CommandPrimitive.Separator>): React.JSX.Element => (
 	<CommandPrimitive.Separator
 		className={cn('h-px bg-input', className)}
 		data-slot="command-separator"

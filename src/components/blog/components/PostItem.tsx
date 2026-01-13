@@ -10,7 +10,7 @@ import { dayjs } from '@/lib/dayjs';
 import { cn } from '@/lib/utils';
 
 const ReactIcon = lazy(() =>
-	import('@/components/icons/content/React').then((m) => ({
+	import('@/components/icons/stack/React').then((m) => ({
 		default: m.ReactIcon,
 	}))
 );

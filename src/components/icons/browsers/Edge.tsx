@@ -1,13 +1,7 @@
 import type { SVGProps } from 'react';
 
-const EdgeIcon = (props: SVGProps<SVGSVGElement>) => (
-	<svg
-		height="1em"
-		viewBox="0 0 256 256"
-		width="1em"
-		xmlns="http://www.w3.org/2000/svg"
-		{...props}
-	>
+export const EdgeIcon = (props: SVGProps<SVGSVGElement>) => (
+	<svg height="1em" viewBox="0 0 256 256" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<defs>
 			<radialGradient
 				cx={161.8}
@@ -125,5 +119,3 @@ const EdgeIcon = (props: SVGProps<SVGSVGElement>) => (
 		/>
 	</svg>
 );
-
-export { EdgeIcon };

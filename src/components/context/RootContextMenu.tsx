@@ -5,11 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import type React from 'react';
 import { useCallback, useRef } from 'react';
-import {
-	ArrowLeftIcon,
-	type ArrowLeftIconHandle,
-} from '@/components/icons/ArrowLeftIcon';
-import { RefreshIcon } from '@/components/icons/RefreshIcon';
+import { ArrowLeftIcon, type ArrowLeftIconHandle } from '@/components/icons/animated/ArrowLeftIcon';
+import { RefreshIcon } from '@/components/icons/animated/RefreshIcon';
 import {
 	ContextMenu,
 	ContextMenuContent,
@@ -24,9 +21,7 @@ interface RootContextMenuProps {
 	children: React.ReactNode;
 }
 
-export const RootContextMenu = ({
-	children,
-}: RootContextMenuProps): React.JSX.Element => {
+export const RootContextMenu = ({ children }: RootContextMenuProps): React.JSX.Element => {
 	const router = useRouter();
 	const { resolvedTheme, setTheme } = useTheme();
 	const { setMetaColor } = useMetaColor();
@@ -42,11 +37,7 @@ export const RootContextMenu = ({
 	const handleTheme = useCallback(() => {
 		soundManager.playThemeSound();
 		setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
-		setMetaColor(
-			resolvedTheme === 'dark'
-				? META_THEME_COLORS.light
-				: META_THEME_COLORS.dark
-		);
+		setMetaColor(resolvedTheme === 'dark' ? META_THEME_COLORS.light : META_THEME_COLORS.dark);
 	}, [resolvedTheme, setTheme, setMetaColor]);
 
 	const arrowIconRef = useRef<ArrowLeftIconHandle>(null);

@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-const ArcIcon = (props: SVGProps<SVGSVGElement>) => (
+export const ArcIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
 		height="1em"
 		preserveAspectRatio="xMidYMid"
@@ -39,5 +39,3 @@ const ArcIcon = (props: SVGProps<SVGSVGElement>) => (
 		/>
 	</svg>
 );
-
-export { ArcIcon };

@@ -4,7 +4,7 @@ import { lazy } from 'react';
 import { Button } from '@/components/ui/Button';
 
 const V0Icon = lazy(() =>
-	import('@/components/icons/content/V0').then((m) => ({
+	import('@/components/icons/stack/V0').then((m) => ({
 		default: m.V0Icon,
 	}))
 );
@@ -14,12 +14,7 @@ interface OpenInV0Props {
 }
 
 export const OpenInV0 = ({ url }: OpenInV0Props): React.JSX.Element => (
-	<Button
-		asChild
-		className="not-prose gap-1 font-sans"
-		size="sm"
-		variant="secondary"
-	>
+	<Button asChild className="not-prose gap-1 font-sans" size="sm" variant="secondary">
 		<Link
 			aria-label="Ouvrir dans v0"
 			href={`https://v0.app/chat/api/open?url=${url}`}

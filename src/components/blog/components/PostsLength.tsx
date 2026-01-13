@@ -1,6 +1,6 @@
 import type React from 'react';
-import type { Certification } from '@/components/features/(homepage)/certifications/data/certifications';
-import type { Project } from '@/components/features/(homepage)/projects/data/projects';
+import type { Certification } from '@/features/(homepage)/certifications/data/certifications';
+import type { Project } from '@/features/(homepage)/projects/data/projects';
 
 interface PostsLengthProps {
 	items: Post[] | Certification[] | Project[];

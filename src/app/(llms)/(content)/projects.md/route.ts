@@ -1,4 +1,4 @@
-import { PROJECTS } from '@/components/features/(homepage)/projects/data/projects';
+import { PROJECTS } from '@/features/(homepage)/projects/data/projects';
 
 const content = `# Projects
 

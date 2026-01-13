@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resend } from 'resend';
-import { CurriculumVitaeTemplate } from '@/components/features/(homepage)/cv/CurriculumVitaeTemplate';
+import { CurriculumVitaeTemplate } from '@/features/(homepage)/cv/CurriculumVitaeTemplate';
 import { USER } from '@/lib/user';
 import { decodeEmail } from '@/lib/utils/string';
 import emailSchema from '@/schemas/email.schema';

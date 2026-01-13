@@ -9,25 +9,25 @@ import useConfig from '@/hooks/use-config';
 import { CopyButton } from './CopyButton';
 
 const PNPMIcon = lazy(() =>
-	import('@/components/icons/content/PNPM').then((m) => ({
+	import('@/components/icons/stack/PNPM').then((m) => ({
 		default: m.PNPMIcon,
 	}))
 );
 
 const YarnIcon = lazy(() =>
-	import('@/components/icons/content/Yarn').then((m) => ({
+	import('@/components/icons/stack/Yarn').then((m) => ({
 		default: m.YarnIcon,
 	}))
 );
 
 const NPMIcon = lazy(() =>
-	import('@/components/icons/content/NPM').then((m) => ({
+	import('@/components/icons/stack/NPM').then((m) => ({
 		default: m.NPMIcon,
 	}))
 );
 
 const BunIcon = lazy(() =>
-	import('@/components/icons/content/Bun').then((m) => ({
+	import('@/components/icons/stack/Bun').then((m) => ({
 		default: m.BunIcon,
 	}))
 );
@@ -115,10 +115,7 @@ export const CodeBlockCommand = ({
 				))}
 			</Tabs>
 
-			<CopyButton
-				className="absolute top-2 right-2"
-				value={tabs[packageManager] || ''}
-			/>
+			<CopyButton className="absolute top-2 right-2" value={tabs[packageManager] || ''} />
 		</div>
 	);
 };

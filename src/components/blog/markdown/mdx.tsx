@@ -38,37 +38,37 @@ import { remarkCodeImport } from '@/lib/remark-code-import';
 import { cn } from '@/lib/utils';
 
 const JSONIcon = lazy(() =>
-	import('@/components/icons/content/JSON').then((m) => ({
+	import('@/components/icons/stack/JSON').then((m) => ({
 		default: m.JSONIcon,
 	}))
 );
 
 const CSSIcon = lazy(() =>
-	import('@/components/icons/content/CSS').then((m) => ({
+	import('@/components/icons/stack/CSS').then((m) => ({
 		default: m.CSSIcon,
 	}))
 );
 
 const JavaScriptIcon = lazy(() =>
-	import('@/components/icons/content/JavaScript').then((m) => ({
+	import('@/components/icons/stack/JavaScript').then((m) => ({
 		default: m.JavaScriptIcon,
 	}))
 );
 
 const TypeScriptIcon = lazy(() =>
-	import('@/components/icons/content/TypeScript').then((m) => ({
+	import('@/components/icons/stack/TypeScript').then((m) => ({
 		default: m.TypeScriptIcon,
 	}))
 );
 
 const ReactIcon = lazy(() =>
-	import('@/components/icons/content/React').then((m) => ({
+	import('@/components/icons/stack/React').then((m) => ({
 		default: m.ReactIcon,
 	}))
 );
 
 const ShadcnIcon = lazy(() =>
-	import('@/components/icons/content/Shadcn').then((m) => ({
+	import('@/components/icons/stack/Shadcn').then((m) => ({
 		default: m.ShadcnIcon,
 	}))
 );
@@ -108,12 +108,7 @@ const components: MDXRemoteProps['components'] = {
 	figure({ className, ...props }: React.ComponentProps<'figure'>) {
 		const hasPrettyCode = 'data-rehype-pretty-code-figure' in props;
 
-		return (
-			<figure
-				className={cn(hasPrettyCode && 'not-prose', className)}
-				{...props}
-			/>
-		);
+		return <figure className={cn(hasPrettyCode && 'not-prose', className)} {...props} />;
 	},
 	figcaption: ({ children, ...props }: React.ComponentProps<'figcaption'>) => {
 		const iconExtension =
@@ -162,12 +157,7 @@ const components: MDXRemoteProps['components'] = {
 			<>
 				<pre {...props} />
 
-				{__rawString__ && (
-					<CopyButton
-						className="absolute top-2 right-2"
-						value={__rawString__}
-					/>
-				)}
+				{__rawString__ && <CopyButton className="absolute top-2 right-2" value={__rawString__} />}
 			</>
 		);
 	},
@@ -177,10 +167,7 @@ const components: MDXRemoteProps['components'] = {
 	CodeCollapsibleWrapper,
 	CodeTabs,
 	Steps: (props) => (
-		<div
-			className="prose-h3:text-wrap md:ml-3.5 md:border-l md:pl-7.5"
-			{...props}
-		/>
+		<div className="prose-h3:text-wrap md:ml-3.5 md:border-l md:pl-7.5" {...props} />
 	),
 	Step: ({ className, ...props }: React.ComponentProps<'h3'>) => (
 		<h3 className={cn('step', className)} {...props} />
@@ -215,10 +202,7 @@ const options: MDXRemoteProps['options'] = {
 	mdxOptions: {
 		remarkPlugins: [remarkGfm, remarkCodeImport],
 		rehypePlugins: [
-			[
-				rehypeExternalLinks,
-				{ target: '_blank', rel: 'nofollow noopener noreferrer' },
-			],
+			[rehypeExternalLinks, { target: '_blank', rel: 'nofollow noopener noreferrer' }],
 			rehypeSlug,
 			rehypeComponent,
 			() => (tree) => {
@@ -260,8 +244,7 @@ const options: MDXRemoteProps['options'] = {
 							return;
 						}
 
-						preElement.properties.__withMeta__ =
-							node.children.at(0).tagName === 'figcaption';
+						preElement.properties.__withMeta__ = node.children.at(0).tagName === 'figcaption';
 						preElement.properties.__rawString__ = node.__rawString__;
 					}
 				});

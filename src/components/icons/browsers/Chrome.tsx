@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-const ChromeIcon = (props: SVGProps<SVGSVGElement>) => (
+export const ChromeIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
 		height="1em"
 		preserveAspectRatio="xMidYMid"
@@ -31,5 +31,3 @@ const ChromeIcon = (props: SVGProps<SVGSVGElement>) => (
 		/>
 	</svg>
 );
-
-export { ChromeIcon };

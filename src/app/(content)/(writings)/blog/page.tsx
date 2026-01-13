@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { PostItem } from '@/components/blog/components/PostItem';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
-import { WritingsHeading } from '@/components/features/writings/Heading';
 import { Divider } from '@/components/ui/Divider';
+import { WritingsHeading } from '@/features/(writings)/Heading';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';

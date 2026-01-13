@@ -70,6 +70,12 @@ declare global {
 		};
 	}
 
+	// types for LinkedIn followers
+	interface LinkedInData {
+		count: number;
+		updatedAt: string;
+	}
+
 	// types for theme switcher (using next-themes)
 	type ThemeType = 'light' | 'dark' | 'system';
 

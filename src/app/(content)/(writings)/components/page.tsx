@@ -1,13 +1,14 @@
+import { CheckIcon, InfoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
+import { AnimatedSpan, Terminal, TypingAnimation } from '@/components/animations/Terminal';
 import { PostItem } from '@/components/blog/components/PostItem';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
-import { WritingsHeading } from '@/components/features/writings/Heading';
-import { WritingsTerminal } from '@/components/features/writings/Terminal';
-import { ReactIcon } from '@/components/icons/content/React';
-import { TailwindIcon } from '@/components/icons/content/Tailwind';
-import { TypeScriptIcon } from '@/components/icons/content/TypeScript';
+import { ReactIcon } from '@/components/icons/stack/React';
+import { TailwindIcon } from '@/components/icons/stack/Tailwind';
+import { TypeScriptIcon } from '@/components/icons/stack/TypeScript';
 import { Badge } from '@/components/ui/Badge';
 import { Divider } from '@/components/ui/Divider';
+import { WritingsHeading } from '@/features/(writings)/Heading';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
@@ -33,8 +34,8 @@ const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) =
 	const { tag } = await searchParams;
 	const selectedTag = tag?.toLowerCase() || 'Tout';
 
-	const allComponents: PostItem[] = getPostsByCategory('components').sort(
-		(a: PostItem, b: PostItem) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+	const allComponents: Post[] = getPostsByCategory('components').sort((a: Post, b: Post) =>
+		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
 	const tagCounts: Record<string, number> = {};
@@ -54,13 +55,35 @@ const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) =
 	const components =
 		selectedTag === 'Tout'
 			? allComponents
-			: allComponents.filter((article: PostItem) =>
+			: allComponents.filter((article: Post) =>
 					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
 				);
 
 	return (
 		<div className="min-h-svh">
-			<WritingsTerminal />
+			<Terminal className="screen-line-before">
+				<TypingAnimation className="text-xs sm:text-sm">
+					&gt; pnpm dlx shadcn@latest add @envindavsorg/composant
+				</TypingAnimation>
+				<AnimatedSpan className="mt-2 flex items-center gap-x-2 text-xs sm:text-sm">
+					<CheckIcon className="size-3 text-green-500" weight="bold" />
+					<span>Vérification du registre ...</span>
+				</AnimatedSpan>
+				<AnimatedSpan className="mt-2 flex items-center gap-x-2 text-xs sm:text-sm">
+					<CheckIcon className="size-3 text-green-500" weight="bold" />
+					<span>Installation de votre composant ...</span>
+				</AnimatedSpan>
+				<AnimatedSpan className="mt-2 flex flex-col gap-y-1 text-xs sm:text-sm">
+					<div className="flex items-center gap-x-2 text-blue-500">
+						<InfoIcon className="size-3" weight="bold" />
+						<span>1 fichier crée :</span>
+					</div>
+					<span className="pl-4 text-muted-foreground">- components/votre-composant.tsx</span>
+				</AnimatedSpan>
+				<TypingAnimation className="mt-4 font-semibold text-green-500 text-xs sm:text-sm">
+					Utilisez mes composants dans votre projet !
+				</TypingAnimation>
+			</Terminal>
 
 			<WritingsHeading
 				description="Accélérez vos développements avec une collection complète de
@@ -103,7 +126,7 @@ const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) =
 					{components
 						.slice()
 						.sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
-						.map((post: PostItem, idx: number) => (
+						.map((post: Post, idx: number) => (
 							<PostItem key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
 						))}
 				</div>

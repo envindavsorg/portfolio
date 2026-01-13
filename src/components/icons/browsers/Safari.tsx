@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-const SafariIcon = (props: SVGProps<SVGSVGElement>) => (
+export const SafariIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
 		height="1em"
 		viewBox="0 0 66.165833 65.803795"
@@ -108,11 +108,6 @@ const SafariIcon = (props: SVGProps<SVGSVGElement>) => (
 			fill="#f1f1f1"
 			paintOrder="markers stroke fill"
 		/>
-		<path
-			d="m12.96732 50.59006 23.41607-15.75201 16.81513-22.66472z"
-			opacity={0.243}
-		/>
+		<path d="m12.96732 50.59006 23.41607-15.75201 16.81513-22.66472z" opacity={0.243} />
 	</svg>
 );
-
-export { SafariIcon };
