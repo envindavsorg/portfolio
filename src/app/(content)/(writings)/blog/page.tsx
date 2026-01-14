@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { PostItem } from '@/components/blog/components/PostItem';
 import { TagsFilter } from '@/components/blog/components/TagsFilter';
 import { Divider } from '@/components/ui/Divider';
-import { WritingsHeading } from '@/features/(writings)/Heading';
+import { TextAnimate } from '@/components/ui/TextAnimate';
+import { ArticleItem } from '@/features/(homepage)/9_articles/ArticleItem';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
@@ -53,30 +53,48 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
 				);
 
+	const keyExtractorAction = (item: Post) => item.slug;
+	const getKey = (item: Post, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
+
 	return (
 		<div className="min-h-svh">
-			<WritingsHeading
-				description="Retrouvez tous mes articles de blog où je partage mon expérience en développement web. J'y aborde les bonnes pratiques, les patterns modernes, les solutions aux problèmes techniques du quotidien, et mes découvertes sur l'écosystème JavaScript. Chaque article est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise. Mon objectif : documenter mon apprentissage et aider d'autres développeurs qui rencontrent les mêmes défis."
-				title="Mes articles de blog"
-			/>
+			<div className="screen-line-before screen-line-after px-3">
+				<h1 className="font-semibold text-3xl sm:text-4xl">
+					<TextAnimate animation="slideLeft" by="character" delay={0.2}>
+						Mes articles de blog
+					</TextAnimate>
+				</h1>
+			</div>
+			<div className="screen-line-after p-3">
+				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
+					Retrouvez tous mes articles de blog où je partage mon expérience en développement web. J'y aborde les bonnes
+					pratiques, les patterns modernes, les solutions aux problèmes techniques du quotidien, et mes découvertes sur
+					l'écosystème JavaScript.
+				</TextAnimate>
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.4}>
+					Chaque article est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise.
+				</TextAnimate>
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.6} themed>
+					Mon objectif : documenter mon apprentissage et aider d'autres développeurs qui rencontrent les mêmes défis.
+				</TextAnimate>
+			</div>
 
 			<TagsFilter selectedTag={selectedTag} tagCounts={finalTagCounts} tags={allTags} />
 
 			<Divider />
 
-			<div className="relative">
-				<div className="absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
+			<div className="screen-line-before screen-line-after relative py-4">
+				<div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
 					<div className="border-edge border-r" />
 					<div className="border-edge border-l" />
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					{articles
-						.slice()
-						.sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
-						.map((post: Post, idx: number) => (
-							<PostItem key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
-						))}
+					{articles.map((post: Post, idx: number) => (
+						<ArticleItem article={post} key={getKey(post, idx)} />
+					))}
 				</div>
 			</div>
 

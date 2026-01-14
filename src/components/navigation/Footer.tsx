@@ -107,7 +107,7 @@ export const Footer = ({ branch, hash, updated }: FooterProps): React.JSX.Elemen
 			</Panel>
 
 			<div className="mx-auto md:max-w-3xl">
-				<Divider border className="h-4 before:h-4" />
+				<Divider border />
 			</div>
 
 			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-between border-edge border-x p-2 md:max-w-3xl">
@@ -125,7 +125,7 @@ export const Footer = ({ branch, hash, updated }: FooterProps): React.JSX.Elemen
 			</div>
 
 			<div className="mx-auto md:max-w-3xl">
-				<Divider border className="h-4 before:h-4" />
+				<Divider border />
 			</div>
 
 			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 md:max-w-3xl">
