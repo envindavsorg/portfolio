@@ -1,0 +1,32 @@
+import type React from 'react';
+import { CopyButton } from '@/components/CopyButton';
+
+const BRANDING_COLORS = {
+	primary: '#F3B993',
+	secondary: '#FAD7C1',
+};
+
+const BrandingColors = (): React.JSX.Element => (
+	<div className="screen-line-after flex items-center justify-evenly px-8 after:z-1">
+		<div className="flex items-center gap-x-6">
+			<div className="aspect-square size-12 rounded-md bg-[#F3B993]" />
+			<div className="flex flex-col gap-y-1">
+				<p className="text-muted-foreground text-xs leading-snug">Couleur principale</p>
+				<p className="font-medium text-sm">{BRANDING_COLORS.primary}</p>
+			</div>
+			<CopyButton className="ms-3" value={BRANDING_COLORS.primary} />
+		</div>
+		<div className="flex items-center gap-x-6">
+			<div className="aspect-square size-12 rounded-md bg-[#FAD7C1]" />
+			<div className="flex flex-col gap-y-1">
+				<p className="text-muted-foreground text-xs leading-snug">Couleur secondaire</p>
+				<p className="font-medium text-sm">{BRANDING_COLORS.secondary}</p>
+			</div>
+			<CopyButton className="ms-3" value={BRANDING_COLORS.secondary} />
+		</div>
+	</div>
+);
+
+BrandingColors.displayName = 'BrandingColors';
+
+export { BrandingColors };

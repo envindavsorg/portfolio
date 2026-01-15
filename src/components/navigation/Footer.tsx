@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { Button } from '@/components/Button';
 import { HeartIcon } from '@/components/icons/animated/HeartIcon';
-import { Button } from '@/components/ui/Button';
 import { Divider } from '@/components/ui/Divider';
 import { Panel } from '@/components/ui/Panel';
 import useBrowser from '@/hooks/use-browser';

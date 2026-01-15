@@ -5,7 +5,7 @@ import Link from 'next/link';
 import posthog from 'posthog-js';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/Button';
 import { DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/Dialog';
 import { DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/Drawer';
 import { PanelFooter } from '@/components/ui/Panel';

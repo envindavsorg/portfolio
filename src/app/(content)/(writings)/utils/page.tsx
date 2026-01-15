@@ -1,11 +1,16 @@
 import type { Metadata } from 'next';
-import { TagsFilter } from '@/components/blog/components/TagsFilter';
+import { cache } from 'react';
 import { Divider } from '@/components/ui/Divider';
+import { TextAnimate } from '@/components/ui/TextAnimate';
 import { ToolItem } from '@/features/(homepage)/11_tools/ToolItem';
-import { WritingsHeading } from '@/features/(writings)/Heading';
+import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+
+const getCachedPosts = cache(() =>
+	getPostsByCategory('utils').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+);
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
@@ -26,48 +31,63 @@ type UtilsPageProps = Readonly<{
 
 const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 	const { tag } = await searchParams;
-	const selectedTag = tag?.toLowerCase() || 'Tout';
+	const selectedTag = tag?.toLowerCase();
 
-	const allPosts: Post[] = getPostsByCategory('utils').sort((a: Post, b: Post) =>
-		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-	);
+	const allUtils = getCachedPosts();
 
-	const tagCounts: Record<string, number> = {};
-	for (const post of allPosts) {
+	const tagCounts: Record<string, number> = {
+		Tout: allUtils.length,
+	};
+
+	for (const post of allUtils) {
 		for (const tagName of post.metadata.tags || []) {
 			tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
 		}
 	}
 
-	const sortedTags = Object.keys(tagCounts).sort();
-	const allTags = ['Tout', ...sortedTags];
-	const finalTagCounts = {
-		Tout: allPosts.length,
-		...tagCounts,
-	};
+	const allTags = [
+		'Tout',
+		...Object.keys(tagCounts)
+			.filter((k) => k !== 'Tout')
+			.sort(),
+	];
 
 	const utils =
-		selectedTag === 'Tout'
-			? allPosts
-			: allPosts.filter((article: Post) =>
-					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
-				);
+		!selectedTag || selectedTag === 'tout'
+			? allUtils
+			: allUtils.filter((article) => article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag));
 
 	return (
-		<>
-			<WritingsHeading
-				description="Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs."
-				title="Outils pour développeurs"
-			/>
+		<div className="min-h-svh">
+			<div className="screen-line-before screen-line-after px-3">
+				<h1 className="font-semibold text-3xl sm:text-4xl">
+					<TextAnimate animation="slideLeft" by="character" delay={0.2}>
+						Mes articles de blog
+					</TextAnimate>
+				</h1>
+			</div>
 
-			<TagsFilter selectedTag={selectedTag} tagCounts={finalTagCounts} tags={allTags} />
+			<div className="screen-line-after p-3">
+				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
+					Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.
+				</TextAnimate>
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.5} themed>
+					Tous les outils sont open source et conçus pour vous aider à gagner du temps et à améliorer votre
+					productivité.
+				</TextAnimate>
+			</div>
+
+			<TagsFilter selectedTag={selectedTag || 'Tout'} tagCounts={tagCounts} tags={allTags} />
 
 			<Divider className="screen-line-after" />
 
-			{utils.map((post: Post) => (
-				<ToolItem key={post.slug} post={post} />
+			{utils.map((util: Post) => (
+				<ToolItem key={util.slug} post={util} />
 			))}
-		</>
+
+			<div className="h-8" />
+		</div>
 	);
 };
 

@@ -1,7 +1,7 @@
 import { memo, useCallback, useRef } from 'react';
+import { Button } from '@/components/Button';
 import { ChevronDownIcon, type ChevronDownIconHandle } from '@/components/icons/animated/ChevronDownIcon';
 import { ChevronUpIcon, type ChevronUpIconHandle } from '@/components/icons/animated/ChevronUpIcon';
-import { Button } from '@/components/ui/Button';
 import { PanelFooter } from '@/components/ui/Panel';
 
 interface AboutFooterProps {

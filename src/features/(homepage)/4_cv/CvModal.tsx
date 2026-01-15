@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/Button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/Dialog';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/Drawer';
 

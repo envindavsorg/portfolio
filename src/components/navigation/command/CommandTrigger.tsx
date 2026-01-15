@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/Button';
 import { Kbd } from '@/components/ui/Kbd';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
 import { SearchIcon } from '../../icons/animated/SearchIcon';

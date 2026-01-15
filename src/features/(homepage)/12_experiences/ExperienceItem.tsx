@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type React from 'react';
-import { AnimatedDot } from '@/components/animations/AnimatedDot';
 import { LinkIcon } from '@/components/icons/animated/LinkIcon';
 import {
 	CollapsibleChevronsIcon,
@@ -32,7 +31,13 @@ const ExperienceItem = ({ experience }: ExperienceItemProps): React.JSX.Element 
 				>
 					<div className="flex flex-1 flex-col gap-y-1">
 						<div className="flex items-center gap-x-3">
-							{experience.isCurrentEmployer && <AnimatedDot label="Poste actuellement occupé" />}
+							{experience.isCurrentEmployer && (
+								<span className="relative flex items-center justify-center">
+									<span className="absolute inline-flex size-3 animate-ping rounded-full bg-theme opacity-50" />
+									<span className="relative inline-flex size-2 rounded-full bg-theme" />
+									<span className="sr-only">Poste actuellement occupé</span>
+								</span>
+							)}
 							<div className="flex items-baseline gap-x-1.5">
 								<h2 className="text-balance font-semibold text-base">{experience.company}</h2>
 								{experience.type && <span className="font-normal text-theme text-xs">({experience.type})</span>}

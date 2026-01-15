@@ -3,7 +3,6 @@ import { GaugeIcon, PaletteIcon, TableIcon, TextTIcon, VaultIcon } from '@phosph
 import Link from 'next/link';
 import type React from 'react';
 import { memo } from 'react';
-import { AnimatedDot } from '@/components/animations/AnimatedDot';
 
 const TOOLS_ICONS = {
 	Base64: VaultIcon,
@@ -43,7 +42,13 @@ export const ToolItem = memo(({ post }: ToolsItemProps): React.JSX.Element => {
 				<div className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge border-l p-3 text-left">
 					<div className="flex flex-1 flex-col gap-y-1">
 						<div className="flex items-center gap-x-3">
-							{isNew && <AnimatedDot label="Poste actuellement occupé" />}
+							{isNew && (
+								<span className="relative flex items-center justify-center">
+									<span className="absolute inline-flex size-3 animate-ping rounded-full bg-theme opacity-50" />
+									<span className="relative inline-flex size-2 rounded-full bg-theme" />
+									<span className="sr-only">Poste actuellement occupé</span>
+								</span>
+							)}
 							<h2 className="text-balance font-semibold text-base">{title}</h2>
 						</div>
 

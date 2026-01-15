@@ -1,6 +1,6 @@
 import { ConsentManagerDialog, ConsentManagerProvider, CookieBanner } from '@c15t/nextjs';
 import type React from 'react';
-import { variants } from '@/components/ui/Button';
+import { variants } from '@/components/Button';
 import { cn } from '@/lib/utils';
 import { ConsentManagerClient } from './ConsentManagerClient';
 

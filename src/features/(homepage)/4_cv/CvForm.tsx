@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/Button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 import { Spinner } from '@/components/ui/Spinner';

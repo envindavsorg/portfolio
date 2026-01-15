@@ -1,17 +1,22 @@
 import { CheckIcon, InfoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
+import { cache } from 'react';
 import { AnimatedSpan, Terminal, TypingAnimation } from '@/components/animations/Terminal';
-import { PostItem } from '@/components/blog/components/PostItem';
-import { TagsFilter } from '@/components/blog/components/TagsFilter';
 import { ReactIcon } from '@/components/icons/stack/React';
 import { TailwindIcon } from '@/components/icons/stack/Tailwind';
 import { TypeScriptIcon } from '@/components/icons/stack/TypeScript';
 import { Badge } from '@/components/ui/Badge';
 import { Divider } from '@/components/ui/Divider';
-import { WritingsHeading } from '@/features/(writings)/Heading';
+import { TextAnimate } from '@/components/ui/TextAnimate';
+import { ArticleItem } from '@/features/(homepage)/9_articles/ArticleItem';
+import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+
+const getCachedPosts = cache(() =>
+	getPostsByCategory('components').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+);
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
@@ -32,36 +37,43 @@ type ComponentsPageProps = Readonly<{
 
 const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) => {
 	const { tag } = await searchParams;
-	const selectedTag = tag?.toLowerCase() || 'Tout';
+	const selectedTag = tag?.toLowerCase();
 
-	const allComponents: Post[] = getPostsByCategory('components').sort((a: Post, b: Post) =>
-		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-	);
+	const allComponents = getCachedPosts();
 
-	const tagCounts: Record<string, number> = {};
+	const tagCounts: Record<string, number> = {
+		Tout: allComponents.length,
+	};
+
 	for (const post of allComponents) {
 		for (const tagName of post.metadata.tags || []) {
 			tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
 		}
 	}
 
-	const sortedTags = Object.keys(tagCounts).sort();
-	const allTags = ['Tout', ...sortedTags];
-	const finalTagCounts = {
-		Tout: allComponents.length,
-		...tagCounts,
-	};
+	const allTags = [
+		'Tout',
+		...Object.keys(tagCounts)
+			.filter((k) => k !== 'Tout')
+			.sort(),
+	];
 
 	const components =
-		selectedTag === 'Tout'
+		!selectedTag || selectedTag === 'tout'
 			? allComponents
-			: allComponents.filter((article: Post) =>
-					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
-				);
+			: allComponents.filter((article) => article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag));
 
 	return (
 		<div className="min-h-svh">
-			<Terminal className="screen-line-before">
+			<div className="screen-line-before screen-line-after px-3">
+				<h1 className="font-semibold text-3xl sm:text-4xl">
+					<TextAnimate animation="slideLeft" by="character" delay={0.2}>
+						Composants React réutilisables
+					</TextAnimate>
+				</h1>
+			</div>
+
+			<Terminal className="screen-line-before screen-line-after">
 				<TypingAnimation className="text-xs sm:text-sm">
 					&gt; pnpm dlx shadcn@latest add @envindavsorg/composant
 				</TypingAnimation>
@@ -80,20 +92,23 @@ const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) =
 					</div>
 					<span className="pl-4 text-muted-foreground">- components/votre-composant.tsx</span>
 				</AnimatedSpan>
-				<TypingAnimation className="mt-4 font-semibold text-green-500 text-xs sm:text-sm">
-					Utilisez mes composants dans votre projet !
-				</TypingAnimation>
 			</Terminal>
 
-			<WritingsHeading
-				description="Accélérez vos développements avec une collection complète de
-					composants et hooks React optimisés, conçus pour des
-					applications modernes et performantes. Compatibles App
-					Router, Server Components et Server Actions. Intégration
-					transparente avec les dernières fonctionnalités de Next.js
-					16."
-				title="Composants React"
-			/>
+			<div className="screen-line-after p-3">
+				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
+					Accélérez vos développements avec une collection complète de composants et hooks React optimisés, conçus pour
+					des applications modernes et performantes.
+				</TextAnimate>
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.4}>
+					Chaque article est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise.
+				</TextAnimate>
+
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.5} themed>
+					Compatibles App Router, Server Components et Server Actions. Intégration transparente avec les dernières
+					fonctionnalités de Next.js 16.
+				</TextAnimate>
+			</div>
 
 			<div className="screen-line-after px-3 py-2">
 				<div className="flex flex-wrap items-center gap-3">
@@ -112,27 +127,24 @@ const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) =
 				</div>
 			</div>
 
-			<TagsFilter selectedTag={selectedTag} tagCounts={finalTagCounts} tags={allTags} />
+			<TagsFilter selectedTag={selectedTag || 'Tout'} tagCounts={tagCounts} tags={allTags} />
 
 			<Divider />
 
-			<div className="relative">
-				<div className="absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
+			<div className="screen-line-before screen-line-after relative py-4">
+				<div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
 					<div className="border-edge border-r" />
 					<div className="border-edge border-l" />
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					{components
-						.slice()
-						.sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
-						.map((post: Post, idx: number) => (
-							<PostItem key={post.slug} post={post} shouldPreloadImage={idx <= 4} />
-						))}
+					{components.map((component: Post) => (
+						<ArticleItem article={component} key={component.slug} />
+					))}
 				</div>
 			</div>
 
-			<Divider />
+			<div className="h-8" />
 		</div>
 	);
 };

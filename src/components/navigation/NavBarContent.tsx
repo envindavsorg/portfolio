@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type React from 'react';
 import { memo, useCallback, useState } from 'react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/Button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
 import { cn, isRouteActive } from '@/lib/utils';
 import { NavBarMenuIcon } from './NavBarMenuIcon';

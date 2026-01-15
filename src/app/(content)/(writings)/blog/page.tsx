@@ -1,11 +1,16 @@
 import type { Metadata } from 'next';
-import { TagsFilter } from '@/components/blog/components/TagsFilter';
+import { cache } from 'react';
 import { Divider } from '@/components/ui/Divider';
 import { TextAnimate } from '@/components/ui/TextAnimate';
 import { ArticleItem } from '@/features/(homepage)/9_articles/ArticleItem';
+import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+
+const getCachedPosts = cache(() =>
+	getPostsByCategory('article').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+);
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
@@ -26,35 +31,31 @@ type BlogPageProps = Readonly<{
 
 const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 	const { tag } = await searchParams;
-	const selectedTag = tag?.toLowerCase() || 'Tout';
+	const selectedTag = tag?.toLowerCase();
 
-	const allArticles: Post[] = getPostsByCategory('article').sort((a: Post, b: Post) =>
-		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-	);
+	const allArticles = getCachedPosts();
 
-	const tagCounts: Record<string, number> = {};
+	const tagCounts: Record<string, number> = {
+		Tout: allArticles.length,
+	};
+
 	for (const post of allArticles) {
 		for (const tagName of post.metadata.tags || []) {
 			tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
 		}
 	}
 
-	const sortedTags = Object.keys(tagCounts).sort();
-	const allTags = ['Tout', ...sortedTags];
-	const finalTagCounts = {
-		Tout: allArticles.length,
-		...tagCounts,
-	};
+	const allTags = [
+		'Tout',
+		...Object.keys(tagCounts)
+			.filter((k) => k !== 'Tout')
+			.sort(),
+	];
 
 	const articles =
-		selectedTag === 'Tout'
+		!selectedTag || selectedTag === 'tout'
 			? allArticles
-			: allArticles.filter((article: Post) =>
-					article.metadata.tags?.some((tagName) => tagName.toLowerCase() === selectedTag)
-				);
-
-	const keyExtractorAction = (item: Post) => item.slug;
-	const getKey = (item: Post, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
+			: allArticles.filter((article) => article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag));
 
 	return (
 		<div className="min-h-svh">
@@ -65,6 +66,7 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 					</TextAnimate>
 				</h1>
 			</div>
+
 			<div className="screen-line-after p-3">
 				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
 					Retrouvez tous mes articles de blog où je partage mon expérience en développement web. J'y aborde les bonnes
@@ -72,7 +74,7 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 					l'écosystème JavaScript.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.4}>
+				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.5}>
 					Chaque article est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise.
 				</TextAnimate>
 
@@ -81,7 +83,7 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 				</TextAnimate>
 			</div>
 
-			<TagsFilter selectedTag={selectedTag} tagCounts={finalTagCounts} tags={allTags} />
+			<TagsFilter selectedTag={selectedTag || 'Tout'} tagCounts={tagCounts} tags={allTags} />
 
 			<Divider />
 
@@ -92,8 +94,8 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					{articles.map((post: Post, idx: number) => (
-						<ArticleItem article={post} key={getKey(post, idx)} />
+					{articles.map((post: Post) => (
+						<ArticleItem article={post} key={post.slug} />
 					))}
 				</div>
 			</div>

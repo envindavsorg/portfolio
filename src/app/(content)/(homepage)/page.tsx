@@ -15,6 +15,7 @@ import { Certifications } from '@/features/(homepage)/10_certifications/Certific
 import { Tools } from '@/features/(homepage)/11_tools/Tools';
 import { Experiences } from '@/features/(homepage)/12_experiences/Experiences';
 import { Projects } from '@/features/(homepage)/13_projects/Projects';
+import { Branding } from '@/features/(homepage)/14_branding/Branding';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
 import { USER } from '@/lib/user';
@@ -77,6 +78,8 @@ const Page = (): React.JSX.Element => (
 			<Experiences />
 			<Divider border />
 			<Projects />
+			<Divider border />
+			<Branding />
 			<Divider border />
 			<Cv />
 			<Divider border />
