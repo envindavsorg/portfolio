@@ -3,12 +3,11 @@
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/Button';
-import { CheckIcon, type CheckIconHandle } from '@/components/icons/animated/CheckIcon';
-import { CopyIcon, type CopyIconHandle } from '@/components/icons/animated/CopyIcon';
-import { XIcon, type XIconHandle } from '@/components/icons/animated/XIcon';
+import { CheckIcon } from '@/components/icons/CheckIcon';
+import { CopyIcon } from '@/components/icons/CopyIcon';
+import { XIcon } from '@/components/icons/XIcon';
 
 type CopyState = 'idle' | 'success' | 'fail';
-type IconHandle = CopyIconHandle | CheckIconHandle | XIconHandle;
 
 const ICONS = {
 	idle: CopyIcon,
@@ -30,7 +29,7 @@ const CopyButton = ({
 	timeout = 2000,
 }: CopyButtonProps): React.JSX.Element => {
 	const [state, setState] = useState<CopyState>('idle');
-	const iconRef = useRef<IconHandle>(null);
+	const iconRef = useRef<AnimatedIconHandle>(null);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	useEffect(() => {
@@ -68,7 +67,7 @@ const CopyButton = ({
 			onMouseEnter={() => iconRef.current?.startAnimation()}
 			onMouseLeave={() => iconRef.current?.stopAnimation()}
 			size="icon"
-			variant="copy"
+			variant="outline"
 		>
 			<Icon ref={iconRef} />
 			<span className="sr-only">{label}</span>

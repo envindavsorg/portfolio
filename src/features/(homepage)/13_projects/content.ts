@@ -1,6 +1,6 @@
 import type React from 'react';
-import { NextJSIcon } from '@/components/icons/stack/Next';
-import { NPMIcon } from '@/components/icons/stack/NPM';
+import { NextJSIcon } from '@/components/stack/Next';
+import { NPMIcon } from '@/components/stack/NPM';
 
 export interface Project {
 	id: string;

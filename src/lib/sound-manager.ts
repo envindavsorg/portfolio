@@ -16,24 +16,36 @@ class SoundManager {
 		return audio;
 	};
 
-	playAudio = (url: string): void => {
-		if (!this.isClient) {
-			return;
-		}
+	playAudio = (url: string): Promise<void> => {
+		return new Promise((resolve) => {
+			if (!this.isClient) {
+				resolve();
+				return;
+			}
 
-		const audio = this.getAudio(url);
-		audio.currentTime = 0;
+			const audio = this.getAudio(url);
+			audio.currentTime = 0;
 
-		audio.play().catch((err) => {
-			logger.warn(`Audio play failed for ${url}:`, err);
+			const handleEnded = () => {
+				audio.removeEventListener('ended', handleEnded);
+				resolve();
+			};
+
+			audio.addEventListener('ended', handleEnded);
+
+			audio.play().catch((error) => {
+				audio.removeEventListener('ended', handleEnded);
+				logger.warn(`Audio play failed for ${url}:`, error);
+				resolve();
+			});
 		});
 	};
 
-	playThemeSound = (): void => this.playAudio('/audio/click.wav');
+	playThemeSound = async () => await this.playAudio('/audio/click.wav');
 
-	playToastSound = (): void => this.playAudio('/audio/notification.wav');
+	playToastSound = async () => await this.playAudio('/audio/notification.wav');
 
-	preload = (urls: string[]): void => {
+	preload = (urls: string[]) => {
 		if (!this.isClient) {
 			return;
 		}
@@ -43,11 +55,12 @@ class SoundManager {
 		}
 	};
 
-	dispose = (): void => {
+	dispose = () => {
 		for (const audio of this.audioCache.values()) {
 			audio.pause();
 			audio.src = '';
 		}
+
 		this.audioCache.clear();
 	};
 }

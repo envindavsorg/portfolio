@@ -29,10 +29,7 @@ const TableRow = ({ className, ...props }: React.ComponentProps<'tr'>): React.JS
 
 const TableHead = ({ className, ...props }: React.ComponentProps<'th'>): React.JSX.Element => (
 	<th
-		className={cn(
-			'h-10 whitespace-nowrap px-2 text-left align-middle font-medium font-sans text-muted-foreground',
-			className
-		)}
+		className={cn('h-10 whitespace-nowrap px-2 text-left align-middle font-medium text-muted-foreground', className)}
 		data-slot="table-head"
 		{...props}
 	/>

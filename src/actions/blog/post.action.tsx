@@ -6,7 +6,7 @@ import posthog from 'posthog-js';
 import type React from 'react';
 import { lazy, useCallback, useMemo, useOptimistic, useTransition } from 'react';
 import { toast } from 'sonner';
-import { variants } from '@/components/Button';
+import { buttonVariants } from '@/components/Button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import { cn } from '@/lib/utils';
@@ -86,25 +86,25 @@ export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
 };
 
 const MarkdownIcon = lazy(() =>
-	import('@/components/icons/stack/Markdown').then((m) => ({
+	import('@/components/stack/Markdown').then((m) => ({
 		default: m.MarkdownIcon,
 	}))
 );
 
 const V0Icon = lazy(() =>
-	import('@/components/icons/stack/V0').then((m) => ({
+	import('@/components/stack/V0').then((m) => ({
 		default: m.V0Icon,
 	}))
 );
 
 const ChatGPTIcon = lazy(() =>
-	import('@/components/icons/stack/ChatGPT').then((m) => ({
+	import('@/components/stack/ChatGPT').then((m) => ({
 		default: m.ChatGPTIcon,
 	}))
 );
 
 const ClaudeIcon = lazy(() =>
-	import('@/components/icons/stack/Claude').then((m) => ({
+	import('@/components/stack/Claude').then((m) => ({
 		default: m.ClaudeIcon,
 	}))
 );
@@ -225,10 +225,10 @@ export const LLMCopyButtonWithViewOptions = ({
 }: LLMCopyButtonWithViewOptionsProps) => (
 	<div
 		className={cn(
-			variants({
-				size: 'sm',
-				variant: 'secondary',
-				className: 'gap-0 divide-x px-0 font-sans dark:divide-white/10',
+			buttonVariants({
+				size: 'default',
+				variant: 'outline',
+				className: 'gap-0 divide-x px-0 dark:divide-white/10',
 			})
 		)}
 	>

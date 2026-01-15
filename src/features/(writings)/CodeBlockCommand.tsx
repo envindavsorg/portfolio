@@ -3,31 +3,31 @@
 import { TerminalWindowIcon } from '@phosphor-icons/react';
 import type React from 'react';
 import { lazy, useMemo } from 'react';
+import { CopyButton } from '@/components/CopyButton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import type { PackageManager } from '@/hooks/use-config';
 import useConfig from '@/hooks/use-config';
-import { CopyButton } from '../../components/CopyButton';
 
 const PNPMIcon = lazy(() =>
-	import('@/components/icons/stack/PNPM').then((m) => ({
+	import('@/components/stack/PNPM').then((m) => ({
 		default: m.PNPMIcon,
 	}))
 );
 
 const YarnIcon = lazy(() =>
-	import('@/components/icons/stack/Yarn').then((m) => ({
+	import('@/components/stack/Yarn').then((m) => ({
 		default: m.YarnIcon,
 	}))
 );
 
 const NPMIcon = lazy(() =>
-	import('@/components/icons/stack/NPM').then((m) => ({
+	import('@/components/stack/NPM').then((m) => ({
 		default: m.NPMIcon,
 	}))
 );
 
 const BunIcon = lazy(() =>
-	import('@/components/icons/stack/Bun').then((m) => ({
+	import('@/components/stack/Bun').then((m) => ({
 		default: m.BunIcon,
 	}))
 );
@@ -90,7 +90,7 @@ export const CodeBlockCommand = ({
 
 						{Object.entries(tabs).map(([key]) => (
 							<TabsTrigger
-								className="h-10 rounded-none border-transparent border-b p-0 font-mono data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:inset-shadow-none dark:data-[state=active]:bg-transparent"
+								className="h-10 rounded-none border-transparent border-b p-0 data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:inset-shadow-none dark:data-[state=active]:bg-transparent"
 								key={key}
 								value={key}
 							>
@@ -103,11 +103,7 @@ export const CodeBlockCommand = ({
 				{Object.entries(tabs).map(([key, value]) => (
 					<TabsContent key={key} value={key}>
 						<pre>
-							<code
-								className="font-mono text-code-foreground text-sm leading-none"
-								data-language="bash"
-								data-slot="code-block"
-							>
+							<code className="text-code-foreground text-sm leading-none" data-language="bash" data-slot="code-block">
 								{value}
 							</code>
 						</pre>

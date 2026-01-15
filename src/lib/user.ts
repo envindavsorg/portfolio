@@ -18,6 +18,16 @@ export const USER: User = {
 	bio: 'Crée, code, innove. Les petits détails comptent.',
 	phoneNumber: 'MDYgNTggMDUgODYgNjU=',
 	emailAddress: 'Y29udGFjdEBjdXplYWNmbG9yaW4uZnI=',
+	sentences: [
+		'Imagine, code, crée, inspire.',
+		'Chaque petit pixel compte !',
+		'Du concept au déploiement !',
+		'Chaque petit détail compte !',
+	],
+	social: {
+		github: 'https://github.com/envindavsorg',
+		linkedin: 'https://fr.linkedin.com/in/cuzeacflorin',
+	},
 	overview: [
 		{
 			id: 'job-title',

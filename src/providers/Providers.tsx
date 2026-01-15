@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import type React from 'react';
 import { FaviconSwitcher } from '@/components/favicon/FaviconSwitcher';
 import { Analytics } from '@/providers/analytics/Analytics';
+import { PostHogProvider } from '@/providers/analytics/PostHogProvider';
 import ProgressProvider from '@/providers/modules/ProgressProvider';
 import ThemeProvider from '@/providers/modules/ThemeProvider';
 import { Compose, type Provider } from '@/providers/utils/Compose';
@@ -19,9 +20,11 @@ interface ProvidersProps {
 
 export const Providers = ({ children }: ProvidersProps): React.JSX.Element => (
 	<AppProviders>
-		<FaviconSwitcher />
-		{children}
-		<Toaster position="bottom-right" />
-		<Analytics />
+		<PostHogProvider>
+			<FaviconSwitcher />
+			{children}
+			<Toaster position="bottom-right" />
+			<Analytics />
+		</PostHogProvider>
 	</AppProviders>
 );

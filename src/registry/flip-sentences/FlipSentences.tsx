@@ -55,7 +55,7 @@ export const FlipSentences = ({
 	if (disableAnimation) {
 		return (
 			<div className={cn('relative', className)}>
-				<p className="text-balance font-mono text-muted-foreground text-sm">{sentences[0]}</p>
+				<p className="text-balance text-foreground text-sm">{sentences[0]}</p>
 			</div>
 		);
 	}
@@ -65,7 +65,7 @@ export const FlipSentences = ({
 			<AnimatePresence mode="wait">
 				<motion.p
 					animate={{ y: 0, opacity: 1 }}
-					className="text-balance font-mono text-muted-foreground text-sm"
+					className="text-balance text-foreground text-sm"
 					exit={{ y: -10, opacity: 0 }}
 					initial={{ y: 10, opacity: 0 }}
 					key={sentences[currentIndex]}

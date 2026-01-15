@@ -1,13 +1,13 @@
-import { BookIcon } from '@/components/icons/animated/BookIcon';
-import { CodeIcon } from '@/components/icons/animated/CodeIcon';
-import { CogIcon } from '@/components/icons/animated/CogIcon';
-import { CpuIcon } from '@/components/icons/animated/CpuIcon';
-import { FileIcon } from '@/components/icons/animated/FileIcon';
-import { FlaskIcon } from '@/components/icons/animated/FlaskIcon';
-import { HomeIcon } from '@/components/icons/animated/HomeIcon';
-import { IdCardIcon } from '@/components/icons/animated/IdCardIcon';
-import { LayersIcon } from '@/components/icons/animated/LayersIcon';
-import { UserIcon } from '@/components/icons/animated/UserIcon';
+import { BookIcon } from '@/components/icons/BookIcon';
+import { CodeIcon } from '@/components/icons/CodeIcon';
+import { CogIcon } from '@/components/icons/CogIcon';
+import { CpuIcon } from '@/components/icons/CpuIcon';
+import { FileIcon } from '@/components/icons/FileIcon';
+import { FlaskIcon } from '@/components/icons/FlaskIcon';
+import { HomeIcon } from '@/components/icons/HomeIcon';
+import { IdCardIcon } from '@/components/icons/IdCardIcon';
+import { LayersIcon } from '@/components/icons/LayersIcon';
+import { UserIcon } from '@/components/icons/UserIcon';
 import { USER } from '@/lib/user';
 
 export const MENU_LINKS: CommandLinkItem[] = [

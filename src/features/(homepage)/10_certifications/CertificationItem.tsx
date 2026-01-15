@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type React from 'react';
-import { LinkIcon } from '@/components/icons/animated/LinkIcon';
-import { NextJSIcon } from '@/components/icons/stack/Next';
-import { ReactIcon } from '@/components/icons/stack/React';
+import { LinkIcon } from '@/components/icons/LinkIcon';
+import { NextJSIcon } from '@/components/stack/Next';
+import { ReactIcon } from '@/components/stack/React';
 import {
 	CollapsibleChevronsIcon,
 	CollapsibleContent,

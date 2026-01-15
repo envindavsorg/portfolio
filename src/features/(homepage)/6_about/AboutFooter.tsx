@@ -1,7 +1,7 @@
 import { memo, useCallback, useRef } from 'react';
 import { Button } from '@/components/Button';
-import { ChevronDownIcon, type ChevronDownIconHandle } from '@/components/icons/animated/ChevronDownIcon';
-import { ChevronUpIcon, type ChevronUpIconHandle } from '@/components/icons/animated/ChevronUpIcon';
+import { ChevronDownIcon } from '@/components/icons/ChevronDownIcon';
+import { ChevronUpIcon } from '@/components/icons/ChevronUpIcon';
 import { PanelFooter } from '@/components/ui/Panel';
 
 interface AboutFooterProps {
@@ -10,8 +10,8 @@ interface AboutFooterProps {
 }
 
 const AboutFooter = memo(({ expanded, onToggle }: AboutFooterProps) => {
-	const downRef = useRef<ChevronDownIconHandle>(null);
-	const upRef = useRef<ChevronUpIconHandle>(null);
+	const downRef = useRef<AnimatedIconHandle>(null);
+	const upRef = useRef<AnimatedIconHandle>(null);
 
 	const handleMouseEnter = useCallback(() => {
 		downRef.current?.startAnimation();

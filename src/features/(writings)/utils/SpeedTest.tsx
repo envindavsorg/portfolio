@@ -117,7 +117,7 @@ const SpeedTestItem = memo(
 					<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
 					<PulsatingCircle isFinished={status === 'finished'} isRunning={status === 'running'} />
 				</ItemContent>
-				<ItemActions className="items-baseline gap-x-1 font-bold font-mono text-xl tabular-nums leading-none sm:text-2xl">
+				<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
 					{displayValue}
 					<span className="font-normal text-muted-foreground text-xs sm:text-sm">{measure}</span>
 				</ItemActions>

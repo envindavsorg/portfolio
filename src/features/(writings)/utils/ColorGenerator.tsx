@@ -208,13 +208,11 @@ export const ColorGenerator = (): React.JSX.Element => {
 						<div className="flex items-center justify-between" key={key}>
 							<span className="text-muted-foreground text-xs">{key}</span>
 							<Button
-								className="font-mono"
 								onClick={() => {
 									navigator.clipboard.writeText(`--${key}: ${value};`);
 									setCopiedColor(key);
 									setTimeout(() => setCopiedColor(null), 2000);
 								}}
-								size="sm"
 								style={{
 									backgroundColor: `hsl(${value})`,
 									color: `hsl(${getContrastColor(value)})`,

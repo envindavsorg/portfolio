@@ -145,6 +145,11 @@ declare global {
 		bio: string;
 		phoneNumber: string;
 		emailAddress: string;
+		sentences: string[];
+		social: {
+			github: string;
+			linkedin: string;
+		};
 		overview: {
 			id: string;
 			content: string;
@@ -175,13 +180,6 @@ declare global {
 		};
 		keywords: string[];
 		dateCreated: string;
-	}
-
-	// types for navigation bar
-	interface NavigationItem {
-		title: string;
-		description: string;
-		href: string;
 	}
 
 	// types for navbar command menu

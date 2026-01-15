@@ -3,7 +3,7 @@
 import { Command as CommandPrimitive } from 'cmdk';
 import type React from 'react';
 import { useRef } from 'react';
-import { SearchIcon, type SearchIconHandle } from '@/components/icons/animated/SearchIcon';
+import { SearchIcon } from '@/components/icons/SearchIcon';
 import { cn } from '@/lib/utils';
 
 export const Command = ({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>): React.JSX.Element => (
@@ -15,7 +15,7 @@ export const Command = ({ className, ...props }: React.ComponentProps<typeof Com
 );
 
 export const CommandInput = ({ ...props }: React.ComponentProps<typeof CommandPrimitive.Input>): React.JSX.Element => {
-	const iconRef = useRef<SearchIconHandle>(null);
+	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	return (
 		<div
@@ -27,7 +27,7 @@ export const CommandInput = ({ ...props }: React.ComponentProps<typeof CommandPr
 			<SearchIcon ref={iconRef} size={16} />
 			<CommandPrimitive.Input
 				className={cn(
-					'flex h-10 w-full rounded-md bg-transparent py-3 font-mono text-sm',
+					'flex h-10 w-full rounded-md bg-transparent py-3 text-sm',
 					'outline-hidden placeholder:text-foreground disabled:cursor-not-allowed disabled:opacity-50'
 				)}
 				data-slot="command-input"
@@ -49,7 +49,7 @@ export const CommandList = ({
 );
 
 export const CommandEmpty = ({ ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>): React.JSX.Element => (
-	<CommandPrimitive.Empty className="py-8 text-center font-mono text-sm" data-slot="command-empty" {...props} />
+	<CommandPrimitive.Empty className="py-8 text-center text-sm" data-slot="command-empty" {...props} />
 );
 
 export const CommandGroup = ({

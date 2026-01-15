@@ -31,37 +31,37 @@ import { remarkCodeImport } from '@/lib/remark-code-import';
 import { cn } from '@/lib/utils';
 
 const JSONIcon = lazy(() =>
-	import('@/components/icons/stack/JSON').then((m) => ({
+	import('@/components/stack/JSON').then((m) => ({
 		default: m.JSONIcon,
 	}))
 );
 
 const CSSIcon = lazy(() =>
-	import('@/components/icons/stack/CSS').then((m) => ({
+	import('@/components/stack/CSS').then((m) => ({
 		default: m.CSSIcon,
 	}))
 );
 
 const JavaScriptIcon = lazy(() =>
-	import('@/components/icons/stack/JavaScript').then((m) => ({
+	import('@/components/stack/JavaScript').then((m) => ({
 		default: m.JavaScriptIcon,
 	}))
 );
 
 const TypeScriptIcon = lazy(() =>
-	import('@/components/icons/stack/TypeScript').then((m) => ({
+	import('@/components/stack/TypeScript').then((m) => ({
 		default: m.TypeScriptIcon,
 	}))
 );
 
 const ReactIcon = lazy(() =>
-	import('@/components/icons/stack/React').then((m) => ({
+	import('@/components/stack/React').then((m) => ({
 		default: m.ReactIcon,
 	}))
 );
 
 const ShadcnIcon = lazy(() =>
-	import('@/components/icons/stack/Shadcn').then((m) => ({
+	import('@/components/stack/Shadcn').then((m) => ({
 		default: m.ShadcnIcon,
 	}))
 );

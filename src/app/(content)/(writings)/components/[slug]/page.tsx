@@ -105,7 +105,7 @@ const Page = async ({ params }: Props) => {
 			<KeyboardShortcuts basePath="/components" next={next} previous={previous} />
 
 			<div className="screen-line-before flex items-center justify-between px-3 py-2">
-				<Button asChild className="h-7 gap-2 rounded-lg px-0 font-mono text-muted-foreground" variant="link">
+				<Button asChild className="h-7 gap-2 rounded-lg px-0 text-muted-foreground" variant="link">
 					<Link href="/components">
 						<ArrowLeftIcon className="size-4" />
 						Tous les composants
@@ -118,7 +118,7 @@ const Page = async ({ params }: Props) => {
 					<ShareMenu url={`/components/${post.slug}`} />
 
 					{previous && (
-						<Button asChild size="icon:sm" variant="secondary">
+						<Button asChild size="icon" variant="outline">
 							<Link href={`/components/${previous.slug}`}>
 								<ArrowLeftIcon className="size-4" />
 								<span className="sr-only">Précédent</span>
@@ -127,7 +127,7 @@ const Page = async ({ params }: Props) => {
 					)}
 
 					{next && (
-						<Button asChild size="icon:sm" variant="secondary">
+						<Button asChild size="icon" variant="outline">
 							<Link href={`/components/${next.slug}`}>
 								<span className="sr-only">Suivant</span>
 								<ArrowRightIcon className="size-4" />

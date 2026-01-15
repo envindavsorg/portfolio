@@ -1,6 +1,6 @@
 import { ConsentManagerDialog, ConsentManagerProvider, CookieBanner } from '@c15t/nextjs';
 import type React from 'react';
-import { variants } from '@/components/Button';
+import { buttonVariants } from '@/components/Button';
 import { cn } from '@/lib/utils';
 import { ConsentManagerClient } from './ConsentManagerClient';
 
@@ -76,15 +76,15 @@ const ConsentManager = ({ children }: ConsentManagerProps): React.JSX.Element =>
 				},
 				'banner.footer.reject-button': {
 					noStyle: true,
-					className: variants({ variant: 'secondary' }),
+					className: buttonVariants({ variant: 'default' }),
 				},
 				'banner.footer.accept-button': {
 					noStyle: true,
-					className: variants({ variant: 'secondary' }),
+					className: buttonVariants({ variant: 'default' }),
 				},
 				'banner.footer.customize-button': {
 					noStyle: true,
-					className: variants({ variant: 'default' }),
+					className: buttonVariants({ variant: 'default' }),
 				},
 			}}
 		/>
@@ -166,15 +166,15 @@ const ConsentManager = ({ children }: ConsentManagerProps): React.JSX.Element =>
 				},
 				'widget.footer.reject-button': {
 					noStyle: true,
-					className: variants({ variant: 'secondary' }),
+					className: buttonVariants({ variant: 'default' }),
 				},
 				'widget.footer.accept-button': {
 					noStyle: true,
-					className: variants({ variant: 'secondary' }),
+					className: buttonVariants({ variant: 'default' }),
 				},
 				'widget.footer.save-button': {
 					noStyle: true,
-					className: variants({ variant: 'default' }),
+					className: buttonVariants({ variant: 'default' }),
 				},
 			}}
 			trapFocus={true}

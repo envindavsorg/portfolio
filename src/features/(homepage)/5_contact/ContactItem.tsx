@@ -5,8 +5,8 @@ import Link from 'next/link';
 import posthog from 'posthog-js';
 import type React from 'react';
 import { useRef } from 'react';
-import { GitHubIcon, type GitHubIconHandle } from '@/components/icons/animated/GitHubIcon';
-import { LinkedinIcon, type LinkedinIconHandle } from '@/components/icons/animated/LinkedInIcon';
+import { GitHubIcon } from '@/components/icons/GitHubIcon';
+import { LinkedinIcon } from '@/components/icons/LinkedInIcon';
 import { Counter } from '@/components/ui/Counter';
 import { cn } from '@/lib/utils';
 import { FOLLOWERS_CONFIG, type SocialLinksProps } from './content';
@@ -19,14 +19,12 @@ interface SocialLinkItemProps {
 	content: SocialLinksProps;
 }
 
-type IconHandle = GitHubIconHandle | LinkedinIconHandle;
-
 const isCapture = process.env.ENV_TYPE === 'capture';
 
 const ContactItem = ({ followers, content }: SocialLinkItemProps): React.JSX.Element => {
 	const config = FOLLOWERS_CONFIG[content.name as keyof typeof FOLLOWERS_CONFIG];
 	const currentCount = config ? (followers[config.key] ?? 0) : 0;
-	const iconRef = useRef<IconHandle>(null);
+	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	return (
 		<Link

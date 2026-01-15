@@ -7,112 +7,112 @@ export interface Stack {
 }
 
 const BunIcon = lazy(() =>
-	import('@/components/icons/stack/Bun').then((m) => ({
+	import('@/components/stack/Bun').then((m) => ({
 		default: m.BunIcon,
 	}))
 );
 const CSSIcon = lazy(() =>
-	import('@/components/icons/stack/CSS').then((m) => ({
+	import('@/components/stack/CSS').then((m) => ({
 		default: m.CSSIcon,
 	}))
 );
 const ExpressIcon = lazy(() =>
-	import('@/components/icons/stack/Express').then((m) => ({
+	import('@/components/stack/Express').then((m) => ({
 		default: m.ExpressIcon,
 	}))
 );
 const FastifyIcon = lazy(() =>
-	import('@/components/icons/stack/Fastify').then((m) => ({
+	import('@/components/stack/Fastify').then((m) => ({
 		default: m.FastifyIcon,
 	}))
 );
 const FigmaIcon = lazy(() =>
-	import('@/components/icons/stack/Figma').then((m) => ({
+	import('@/components/stack/Figma').then((m) => ({
 		default: m.FigmaIcon,
 	}))
 );
 const MotionIcon = lazy(() =>
-	import('@/components/icons/stack/Motion').then((m) => ({
+	import('@/components/stack/Motion').then((m) => ({
 		default: m.MotionIcon,
 	}))
 );
 const GitIcon = lazy(() =>
-	import('@/components/icons/stack/Git').then((m) => ({
+	import('@/components/stack/Git').then((m) => ({
 		default: m.GitIcon,
 	}))
 );
 const HTML5Icon = lazy(() =>
-	import('@/components/icons/stack/HTML').then((m) => ({
+	import('@/components/stack/HTML').then((m) => ({
 		default: m.HTML5Icon,
 	}))
 );
 const JavaScriptIcon = lazy(() =>
-	import('@/components/icons/stack/JavaScript').then((m) => ({
+	import('@/components/stack/JavaScript').then((m) => ({
 		default: m.JavaScriptIcon,
 	}))
 );
 const MarkdownIcon = lazy(() =>
-	import('@/components/icons/stack/Markdown').then((m) => ({
+	import('@/components/stack/Markdown').then((m) => ({
 		default: m.MarkdownIcon,
 	}))
 );
 const MongoDBIcon = lazy(() =>
-	import('@/components/icons/stack/MongoDB').then((m) => ({
+	import('@/components/stack/MongoDB').then((m) => ({
 		default: m.MongoDBIcon,
 	}))
 );
 const NextJSIcon = lazy(() =>
-	import('@/components/icons/stack/Next').then((m) => ({
+	import('@/components/stack/Next').then((m) => ({
 		default: m.NextJSIcon,
 	}))
 );
 const NodejsIcon = lazy(() =>
-	import('@/components/icons/stack/Node').then((m) => ({
+	import('@/components/stack/Node').then((m) => ({
 		default: m.NodejsIcon,
 	}))
 );
 const NPMIcon = lazy(() =>
-	import('@/components/icons/stack/NPM').then((m) => ({
+	import('@/components/stack/NPM').then((m) => ({
 		default: m.NPMIcon,
 	}))
 );
 const PNPMIcon = lazy(() =>
-	import('@/components/icons/stack/PNPM').then((m) => ({
+	import('@/components/stack/PNPM').then((m) => ({
 		default: m.PNPMIcon,
 	}))
 );
 const PostgreIcon = lazy(() =>
-	import('@/components/icons/stack/Postgre').then((m) => ({
+	import('@/components/stack/Postgre').then((m) => ({
 		default: m.PostgreIcon,
 	}))
 );
 const PugIcon = lazy(() =>
-	import('@/components/icons/stack/Pug').then((m) => ({
+	import('@/components/stack/Pug').then((m) => ({
 		default: m.PugIcon,
 	}))
 );
 const ReactIcon = lazy(() =>
-	import('@/components/icons/stack/React').then((m) => ({
+	import('@/components/stack/React').then((m) => ({
 		default: m.ReactIcon,
 	}))
 );
 const SassIcon = lazy(() =>
-	import('@/components/icons/stack/Sass').then((m) => ({
+	import('@/components/stack/Sass').then((m) => ({
 		default: m.SassIcon,
 	}))
 );
 const TailwindIcon = lazy(() =>
-	import('@/components/icons/stack/Tailwind').then((m) => ({
+	import('@/components/stack/Tailwind').then((m) => ({
 		default: m.TailwindIcon,
 	}))
 );
 const TypeScriptIcon = lazy(() =>
-	import('@/components/icons/stack/TypeScript').then((m) => ({
+	import('@/components/stack/TypeScript').then((m) => ({
 		default: m.TypeScriptIcon,
 	}))
 );
 const VueIcon = lazy(() =>
-	import('@/components/icons/stack/Vue').then((m) => ({
+	import('@/components/stack/Vue').then((m) => ({
 		default: m.VueIcon,
 	}))
 );

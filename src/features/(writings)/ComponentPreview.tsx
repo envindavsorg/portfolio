@@ -80,7 +80,7 @@ export const ComponentPreview = ({
 						)}
 
 						<div
-							className="flex min-h-80 items-center justify-center font-sans"
+							className="flex min-h-80 items-center justify-center"
 							data-screenshot-anchor-target-for-capture
 							key={replay}
 						>

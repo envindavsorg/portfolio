@@ -1,44 +1,34 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import type React from 'react';
 import type { ComponentProps } from 'react';
-import { cn } from '@/lib/utils';
 
-export const variants = cva(
+export const buttonVariants = cva(
 	[
-		'inline-flex items-center justify-center gap-2',
-		'cursor-pointer select-none whitespace-nowrap',
-		'rounded-full font-medium text-sm outline-none',
-		'focus-visible:border-ring focus-visible:ring-0 focus-visible:ring-ring/50',
-		'transition-all active:scale-[0.98]',
-		'disabled:pointer-events-none disabled:opacity-50',
-		'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
+		'inline-flex items-center justify-center gap-2 rounded-full font-medium text-sm',
+		'cursor-pointer select-none whitespace-nowrap outline-none focus-visible:ring-0',
 		"[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 	],
 	{
 		variants: {
 			variant: {
 				default: [
-					'bg-linear-to-b from-zinc-700 to-zinc-800 dark:from-zinc-600 dark:to-zinc-700',
-					'text-shadow-xs text-white hover:to-zinc-700 dark:hover:to-zinc-600',
+					'bg-linear-to-b',
+					'text-shadow-xs text-white',
+					'from-zinc-700 dark:from-zinc-600',
+					'to-zinc-800 dark:to-zinc-700',
+					'hover:to-zinc-700 dark:hover:to-zinc-600',
 					'dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/20',
 				],
-				secondary: [
-					'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+				outline: [
+					'border border-input hover:text-accent-foreground',
+					'bg-background hover:bg-accent',
 					'dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15',
 				],
-				copy: [
-					'z-10 rounded-md bg-secondary text-secondary-foreground hover:bg-secondary/80',
-					'dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15',
-				],
-				outline: ['bg-background hover:bg-accent', 'border border-input hover:text-accent-foreground'],
 				ghost: 'hover:bg-accent hover:text-accent-foreground',
 				link: 'text-foreground underline-offset-4 hover:underline',
 			},
 			size: {
-				sm: "h-7 gap-1.5 px-3 [&_svg:not([class*='size-'])]:size-3.5",
 				default: 'h-8 px-4',
-				lg: 'h-10 px-6',
 				icon: 'size-8',
 			},
 		},
@@ -50,29 +40,12 @@ export const variants = cva(
 );
 
 type ButtonProps = ComponentProps<'button'> &
-	VariantProps<typeof variants> & {
+	VariantProps<typeof buttonVariants> & {
 		asChild?: boolean;
-		shadow?: boolean;
 	};
 
-export const Button = ({
-	className,
-	variant,
-	size,
-	asChild = false,
-	shadow = false,
-	...props
-}: ButtonProps): React.JSX.Element => {
+export const Button = ({ className, variant, size, asChild = false, ...props }: ButtonProps) => {
 	const Comp = asChild ? Slot : 'button';
 
-	return (
-		<Comp
-			className={cn(
-				variants({ variant, size, className }),
-				shadow && 'border dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15 dark:border-0'
-			)}
-			data-slot="button"
-			{...props}
-		/>
-	);
+	return <Comp className={buttonVariants({ variant, size, className })} data-slot="button" {...props} />;
 };

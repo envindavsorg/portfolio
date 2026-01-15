@@ -26,7 +26,7 @@ export const InlineToc = ({
 	}
 
 	return (
-		<CollapsibleWithContext className={cn('not-prose rounded-lg bg-code font-sans', className)} {...props}>
+		<CollapsibleWithContext className={cn('not-prose rounded-lg bg-code', className)} {...props}>
 			<CollapsibleTrigger className="group/toc inline-flex w-full cursor-pointer items-center gap-2 p-3 pl-4 font-medium text-sm [&_svg]:size-4">
 				<TextAaIcon className="size-4" />
 				{children ?? 'Points importants sur cette page'}

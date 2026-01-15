@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type React from 'react';
-import { LinkIcon } from '@/components/icons/animated/LinkIcon';
+import { LinkIcon } from '@/components/icons/LinkIcon';
 import {
 	CollapsibleChevronsIcon,
 	CollapsibleContent,
@@ -103,7 +103,7 @@ const ExperienceItem = ({ experience }: ExperienceItemProps): React.JSX.Element 
 										{i + 1}
 									</span>
 									<div className="z-10 flex items-center gap-2">
-										<span className="flex h-6 items-center justify-center rounded-full bg-primary/10 px-2.5 font-bold font-mono text-[10px] text-primary">
+										<span className="flex h-6 items-center justify-center rounded-full bg-primary/10 px-2.5 font-bold text-[10px] text-primary">
 											{(i + 1).toString().padStart(2, '0')}
 										</span>
 										<div className="h-px w-8 bg-border" />

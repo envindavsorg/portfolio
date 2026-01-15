@@ -25,6 +25,6 @@ const CvModal = ({ children, open, setOpen, isDesktop }: CvModalProps): React.JS
 	);
 };
 
-CvModal.displayName = 'CurriulumVitaeModal';
+CvModal.displayName = 'CurriculumVitaeModal';
 
 export { CvModal };

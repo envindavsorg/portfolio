@@ -24,7 +24,7 @@ export const TabsTrigger = ({ className, ...props }: ComponentProps<typeof Primi
 	<Primitive.Trigger
 		className={cn(
 			'inline-flex flex-1 cursor-pointer items-center justify-center gap-2',
-			'whitespace-nowrap rounded-md px-3 py-1 font-medium font-sans text-sm',
+			'whitespace-nowrap rounded-md px-3 py-1 font-medium text-sm',
 			'data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-700',
 			'data-[state=active]:text-foreground data-[state=active]:shadow-sm',
 			"[&_svg:not([class*='size-'])]:size-5 [&_svg]:pointer-events-none [&_svg]:shrink-0",
