@@ -61,7 +61,7 @@ export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
 				setState('failed');
 			}
 
-			soundManager.playToastSound();
+			await soundManager.playToastSound();
 			toast.success('Contenu copié dans le presse-papier !');
 
 			posthog.capture('llm_content_copied', {
