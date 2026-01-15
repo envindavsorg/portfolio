@@ -2,9 +2,9 @@ import { ArrowElbowDownLeftIcon } from '@phosphor-icons/react';
 import { useCommandState } from 'cmdk';
 import type React from 'react';
 import { useMemo } from 'react';
-import { DOCUMENTS_LINKS, MAIN_LINKS } from '@/components/navigation/command/content';
 import { Kbd } from '@/components/ui/Kbd';
 import { Separator } from '@/components/ui/Separator';
+import { DOCUMENTS_LINKS, MAIN_LINKS } from '@/features/(navigation)/navbar/command/content';
 
 const ENTER_ACTION_LABELS: Record<CommandKind, string> = {
 	command: 'Lancer la commande',

@@ -1,26 +1,16 @@
-'use client';
-
-import dynamic from 'next/dynamic';
 import type React from 'react';
-import { memo } from 'react';
-import type { NavigationItem } from '@/lib/navigation';
+import { getAllPosts } from '@/lib/blog/posts';
+import { NAVIGATION_DATA } from '@/lib/navigation';
 import { cn } from '@/lib/utils';
+import { CommandContent } from './command/CommandContent';
 import { NavBarContent } from './NavBarContent';
 import { NavBarMark } from './NavBarMark';
 import { NavBarWrapper } from './NavBarWrapper';
 import { NavBarLinksGitHub, NavBarLinksLLM, NavBarLinksRSS, NavBarLinksTheme } from './NavbarLinks';
 
-const CommandContent = dynamic(
-	() => import('@/components/navigation/command/CommandContent').then((mod) => mod.CommandContent),
-	{ ssr: false }
-);
+export const NavBar = (): React.JSX.Element => {
+	const posts: Post[] = getAllPosts();
 
-interface NavBarProps {
-	content: NavigationItem[];
-	posts: Post[];
-}
-
-export const NavBar = memo(({ content, posts }: NavBarProps): React.JSX.Element => {
 	return (
 		<NavBarWrapper>
 			<div
@@ -31,7 +21,7 @@ export const NavBar = memo(({ content, posts }: NavBarProps): React.JSX.Element 
 			>
 				<NavBarMark />
 
-				<NavBarContent links={content} variant="desktop" />
+				<NavBarContent links={NAVIGATION_DATA} variant="desktop" />
 
 				<div className="flex items-center gap-x-2 sm:border-edge sm:border-l sm:pl-4">
 					<CommandContent posts={posts} />
@@ -41,9 +31,9 @@ export const NavBar = memo(({ content, posts }: NavBarProps): React.JSX.Element 
 					<NavBarLinksRSS />
 					<NavBarLinksLLM />
 
-					<NavBarContent links={content} variant="mobile" />
+					<NavBarContent links={NAVIGATION_DATA} variant="mobile" />
 				</div>
 			</div>
 		</NavBarWrapper>
 	);
-});
+};

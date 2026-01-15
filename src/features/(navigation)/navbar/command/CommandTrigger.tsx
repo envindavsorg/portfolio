@@ -2,7 +2,7 @@ import type React from 'react';
 import { Button } from '@/components/Button';
 import { Kbd } from '@/components/ui/Kbd';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
-import { SearchIcon } from '../../icons/SearchIcon';
+import { SearchIcon } from '../../../../components/icons/SearchIcon';
 
 interface CommandTriggerProps {
 	setOpenAction: (open: boolean) => void;
