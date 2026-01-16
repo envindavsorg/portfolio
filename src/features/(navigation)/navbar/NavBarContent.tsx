@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type React from 'react';
 import { memo, useCallback, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { MenuIcon } from '@/components/icons/MenuIcon';
@@ -32,7 +31,7 @@ interface NavBarLinkProps {
 	className?: string;
 }
 
-const NavBarLink = memo(({ href, label, pathname, onClick, className }: NavBarLinkProps): React.JSX.Element => {
+const NavBarLink = memo(({ href, label, pathname, onClick, className }: NavBarLinkProps) => {
 	const active = isRouteActive(href, pathname);
 
 	return (
@@ -56,7 +55,7 @@ interface NavBarContentProps {
 	variant: 'desktop' | 'mobile';
 }
 
-export const NavBarContent = memo(({ links, variant }: Readonly<NavBarContentProps>): React.JSX.Element => {
+export const NavBarContent = memo(({ links, variant }: Readonly<NavBarContentProps>) => {
 	const pathname = usePathname();
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 

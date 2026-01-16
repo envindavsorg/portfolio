@@ -2,7 +2,7 @@
 
 import type { Label as LabelPrimitive } from 'radix-ui';
 import { Slot as SlotPrimitive } from 'radix-ui';
-import React, { type ComponentProps, createContext, useContext, useId } from 'react';
+import { type ComponentProps, createContext, useContext, useId } from 'react';
 import {
 	Controller,
 	type ControllerProps,
@@ -68,7 +68,7 @@ interface FormItemContextValue {
 
 const FormItemContext = createContext<FormItemContextValue>({} as FormItemContextValue);
 
-const FormItem = ({ className, ...props }: ComponentProps<'div'>): React.JSX.Element => {
+const FormItem = ({ className, ...props }: ComponentProps<'div'>) => {
 	const id = useId();
 
 	return (
@@ -78,7 +78,7 @@ const FormItem = ({ className, ...props }: ComponentProps<'div'>): React.JSX.Ele
 	);
 };
 
-const FormLabel = ({ className, ...props }: ComponentProps<typeof LabelPrimitive.Root>): React.JSX.Element => {
+const FormLabel = ({ className, ...props }: ComponentProps<typeof LabelPrimitive.Root>) => {
 	const { error, formItemId } = useFormField();
 
 	return (
@@ -92,7 +92,7 @@ const FormLabel = ({ className, ...props }: ComponentProps<typeof LabelPrimitive
 	);
 };
 
-const FormControl = ({ ...props }: ComponentProps<typeof Slot>): React.JSX.Element => {
+const FormControl = ({ ...props }: ComponentProps<typeof Slot>) => {
 	const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
 	return (
@@ -106,7 +106,7 @@ const FormControl = ({ ...props }: ComponentProps<typeof Slot>): React.JSX.Eleme
 	);
 };
 
-const FormDescription = ({ className, ...props }: ComponentProps<'p'>): React.JSX.Element => {
+const FormDescription = ({ className, ...props }: ComponentProps<'p'>) => {
 	const { formDescriptionId } = useFormField();
 
 	return (
@@ -119,7 +119,7 @@ const FormDescription = ({ className, ...props }: ComponentProps<'p'>): React.JS
 	);
 };
 
-const FormMessage = ({ className, ...props }: ComponentProps<'p'>): React.JSX.Element | null => {
+const FormMessage = ({ className, ...props }: ComponentProps<'p'>) => {
 	const { error, formMessageId } = useFormField();
 	const body = error ? String(error?.message ?? '') : props.children;
 

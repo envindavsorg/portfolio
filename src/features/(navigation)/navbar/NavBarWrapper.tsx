@@ -5,7 +5,7 @@ import type React from 'react';
 import { useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export const NavBarWrapper = (props: React.ComponentProps<'header'>): React.JSX.Element => {
+export const NavBarWrapper = (props: React.ComponentProps<'header'>) => {
 	const { scrollY } = useScroll();
 
 	const headerRef = useRef<HTMLHeadElement>(null);

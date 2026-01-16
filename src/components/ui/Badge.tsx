@@ -1,6 +1,5 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import type React from 'react';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -29,7 +28,7 @@ type BadgeProps = ComponentProps<'span'> &
 		asChild?: boolean;
 	};
 
-export const Badge = ({ className, variant, asChild = false, ...props }: BadgeProps): React.JSX.Element => {
+export const Badge = ({ className, variant, asChild = false, ...props }: BadgeProps) => {
 	const Comp = asChild ? Slot : 'span';
 
 	return <Comp className={cn(variants({ variant }), className)} data-slot="badge" {...props} />;

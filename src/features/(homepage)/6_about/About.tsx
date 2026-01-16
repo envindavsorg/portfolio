@@ -1,13 +1,12 @@
 'use client';
 
-import type React from 'react';
 import { useCallback, useState } from 'react';
 import { Panel } from '@/components/ui/Panel';
 import { AboutContent } from './AboutContent';
 import { AboutFooter } from './AboutFooter';
 import { AboutTitle } from './AboutTitle';
 
-const About = (): React.JSX.Element => {
+const About = () => {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const toggleExpanded = useCallback(() => setIsExpanded((prev) => !prev), []);
 

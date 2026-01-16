@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const VuetifyIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const VuetifyIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg fill="none" height="1em" viewBox="0 0 400 400" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>Vuetify</title>
 		<circle cx={200.025} cy={199.975} fill="white" r={186.895} />

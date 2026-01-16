@@ -6,7 +6,7 @@ import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export const HeartIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
-	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref): React.JSX.Element => {
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const controls = useAnimation();
 		const isControlledRef = useRef(false);
 

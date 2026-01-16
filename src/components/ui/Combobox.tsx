@@ -1,7 +1,6 @@
 'use client';
 
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
-import type React from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/Command';
@@ -20,7 +19,7 @@ interface ComboboxProps {
 	className?: string;
 }
 
-export const Combobox = (props: ComboboxProps): React.JSX.Element => {
+export const Combobox = (props: ComboboxProps) => {
 	const [open, setOpen] = useState(false);
 	const selectedItem = props.data.find((item) => item.value === props.value);
 

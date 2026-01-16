@@ -1,4 +1,3 @@
-import type React from 'react';
 import { cn } from '@/lib/utils';
 
 interface DividerProps {
@@ -6,7 +5,7 @@ interface DividerProps {
 	border?: boolean;
 }
 
-export const Divider = ({ className, border = false }: DividerProps): React.JSX.Element => (
+export const Divider = ({ className, border = false }: DividerProps) => (
 	<div
 		className={cn(
 			'h-8',

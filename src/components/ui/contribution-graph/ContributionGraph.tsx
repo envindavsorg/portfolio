@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, type HTMLAttributes, type ReactNode, useContext, useMemo } from 'react';
+import { createContext, type HTMLAttributes, type ReactNode, useContext, useMemo } from 'react';
 import { groupByWeeks } from '@/lib/github';
 import { cn, dayjs } from '@/lib/utils';
 
@@ -34,7 +34,7 @@ export type ContributionGraphProps = HTMLAttributes<HTMLDivElement> & {
 	children: ReactNode;
 };
 
-const ContributionGraph = ({ data, className, children, ...props }: ContributionGraphProps): React.JSX.Element => {
+const ContributionGraph = ({ data, className, children, ...props }: ContributionGraphProps) => {
 	const { weeks, year, totalCount, width, height } = useMemo(() => {
 		const weeks = groupByWeeks(data, WEEK_START);
 		const year = data.length > 0 ? dayjs(data[0].date).year() : dayjs().year();

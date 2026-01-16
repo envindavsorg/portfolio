@@ -3,7 +3,6 @@ import { join } from 'node:path';
 import { Resend } from 'resend';
 import GLOBAL_DATA from '@/content/data/global';
 import { CvTemplate } from '@/features/(homepage)/4_cv/CvTemplate';
-import { decodeEmail } from '@/lib/utils';
 import emailSchema from '@/schemas/email.schema';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -36,7 +35,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		const content = buffer.toString('base64');
 
 		const { error } = await resend.emails.send({
-			from: `${GLOBAL_DATA.USER.fullName} <${decodeEmail(GLOBAL_DATA.USER.emailAddress)}>`,
+			from: `${GLOBAL_DATA.USER.fullName} <${GLOBAL_DATA.USER.emailAddress}>`,
 			to: [recipientEmail],
 			subject: `CV - ${GLOBAL_DATA.USER.fullName} | ${GLOBAL_DATA.SOCIAL.portfolio}`,
 			react: CvTemplate({ firstName, recipientEmail }),

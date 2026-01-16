@@ -1,4 +1,3 @@
-import type React from 'react';
 import { CopyButton } from '@/components/buttons/CopyButton';
 
 const BRANDING_COLORS = {
@@ -6,7 +5,7 @@ const BRANDING_COLORS = {
 	secondary: '#FAD7C1',
 };
 
-const BrandingColors = (): React.JSX.Element => (
+const BrandingColors = () => (
 	<div className="screen-line-after flex items-center justify-evenly px-8 after:z-1">
 		<div className="flex items-center gap-x-6">
 			<div className="aspect-square size-12 rounded-md bg-[#F3B993]" />

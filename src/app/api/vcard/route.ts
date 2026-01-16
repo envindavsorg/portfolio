@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import VCard from 'vcard-creator';
 import GLOBAL_DATA from '@/content/data/global';
-import { decodeEmail, decodePhoneNumber } from '@/lib/utils';
 import { convertImageToJpeg } from '@/lib/utils.server';
 
 export const dynamic = 'force-static';
@@ -41,9 +40,9 @@ export const GET = async (): Promise<Response> => {
 
 	card
 		.addName(GLOBAL_DATA.USER.fullName)
-		.addPhoneNumber(decodePhoneNumber(GLOBAL_DATA.USER.phoneNumber))
+		.addPhoneNumber(GLOBAL_DATA.USER.phoneNumber)
 		.addAddress(GLOBAL_DATA.USER.location.city)
-		.addEmail(decodeEmail(GLOBAL_DATA.USER.emailAddress))
+		.addEmail(GLOBAL_DATA.USER.emailAddress)
 		.addURL(GLOBAL_DATA.SOCIAL.portfolio);
 
 	const photo = await getVCardPhoto(GLOBAL_DATA.USER.avatar);

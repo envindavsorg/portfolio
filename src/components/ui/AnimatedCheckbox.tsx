@@ -7,11 +7,7 @@ import { cn } from '@/lib/utils';
 
 type AnimatedCheckboxProps = React.ComponentProps<typeof Root> & HTMLMotionProps<'button'>;
 
-export const AnimatedCheckbox = ({
-	className,
-	onCheckedChange,
-	...props
-}: AnimatedCheckboxProps): React.JSX.Element => {
+export const AnimatedCheckbox = ({ className, onCheckedChange, ...props }: AnimatedCheckboxProps) => {
 	const [isChecked, setIsChecked] = React.useState(props?.checked ?? props?.defaultChecked ?? false);
 
 	useEffect(() => {

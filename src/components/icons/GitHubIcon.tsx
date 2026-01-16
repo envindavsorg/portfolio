@@ -52,7 +52,7 @@ const TAIL_VARIANTS: Variants = {
 };
 
 export const GitHubIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
-	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref): React.JSX.Element => {
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const bodyControls = useAnimation();
 		const tailControls = useAnimation();
 		const isControlledRef = useRef(false);

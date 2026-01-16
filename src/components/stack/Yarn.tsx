@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const YarnIcon = ({ ...props }: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const YarnIcon = ({ ...props }: SVGProps<SVGSVGElement>) => (
 	<svg viewBox="0 0 518 518" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>Yarn</title>
 		<path d="M259 0c143 0 259 116 259 259S402 518 259 518 0 402 0 259 116 0 259 0z" fill="#2c8ebb" />

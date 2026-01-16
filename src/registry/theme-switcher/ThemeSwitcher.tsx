@@ -32,7 +32,7 @@ const ThemeOption = ({
 	value: string;
 	isActive?: boolean;
 	onClick: (value: string) => void;
-}): React.JSX.Element => (
+}) => (
 	<button
 		aria-label={value}
 		className={cn(

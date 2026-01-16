@@ -2,7 +2,6 @@
 
 import SpeedTestEngine from '@cloudflare/speedtest';
 import { DownloadIcon, GaugeIcon, type Icon, SpeedometerIcon, UploadIcon } from '@phosphor-icons/react';
-import type React from 'react';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from '@/components/ui/Item';
@@ -39,26 +38,24 @@ interface PulsatingCircleProps {
 	isFinished: boolean;
 }
 
-const PulsatingCircle = memo(
-	(props: PulsatingCircleProps): React.JSX.Element => (
-		<span className="relative flex items-center justify-center">
-			<span
-				className={cn(
-					'absolute inline-flex size-3 animate-ping rounded-full opacity-50',
-					props.isRunning && 'bg-blue-600 dark:bg-blue-300',
-					props.isFinished && 'bg-green-600 dark:bg-green-300'
-				)}
-			/>
-			<span
-				className={cn(
-					'relative inline-flex size-2 rounded-full',
-					props.isRunning && 'bg-blue-600 dark:bg-blue-300',
-					props.isFinished && 'bg-green-600 dark:bg-green-300'
-				)}
-			/>
-		</span>
-	)
-);
+const PulsatingCircle = memo((props: PulsatingCircleProps) => (
+	<span className="relative flex items-center justify-center">
+		<span
+			className={cn(
+				'absolute inline-flex size-3 animate-ping rounded-full opacity-50',
+				props.isRunning && 'bg-blue-600 dark:bg-blue-300',
+				props.isFinished && 'bg-green-600 dark:bg-green-300'
+			)}
+		/>
+		<span
+			className={cn(
+				'relative inline-flex size-2 rounded-full',
+				props.isRunning && 'bg-blue-600 dark:bg-blue-300',
+				props.isFinished && 'bg-green-600 dark:bg-green-300'
+			)}
+		/>
+	</span>
+));
 
 const getButtonLabel = (status: TestState['status']) => {
 	switch (status) {
@@ -95,38 +92,36 @@ interface SpeedTestProps {
 	icon: Icon;
 }
 
-const SpeedTestItem = memo(
-	({ status, label, value, measure, icon: SpeedTestItemIcon }: SpeedTestProps): React.JSX.Element => {
-		const displayValue = useMemo(() => formatValue(value, measure), [value, measure]);
+const SpeedTestItem = memo(({ status, label, value, measure, icon: SpeedTestItemIcon }: SpeedTestProps) => {
+	const displayValue = useMemo(() => formatValue(value, measure), [value, measure]);
 
-		const borderClassName = useMemo(
-			() =>
-				cn(
-					status === 'running' && 'border-blue-600 dark:border-blue-300',
-					status === 'finished' && 'border-green-600 dark:border-green-300'
-				),
-			[status]
-		);
+	const borderClassName = useMemo(
+		() =>
+			cn(
+				status === 'running' && 'border-blue-600 dark:border-blue-300',
+				status === 'finished' && 'border-green-600 dark:border-green-300'
+			),
+		[status]
+	);
 
-		return (
-			<Item className={borderClassName} size="sm" variant="outline">
-				<ItemMedia>
-					<SpeedTestItemIcon className="size-5 sm:size-6" />
-				</ItemMedia>
-				<ItemContent className="flex flex-row items-center gap-x-3">
-					<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
-					<PulsatingCircle isFinished={status === 'finished'} isRunning={status === 'running'} />
-				</ItemContent>
-				<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
-					{displayValue}
-					<span className="font-normal text-muted-foreground text-xs sm:text-sm">{measure}</span>
-				</ItemActions>
-			</Item>
-		);
-	}
-);
+	return (
+		<Item className={borderClassName} size="sm" variant="outline">
+			<ItemMedia>
+				<SpeedTestItemIcon className="size-5 sm:size-6" />
+			</ItemMedia>
+			<ItemContent className="flex flex-row items-center gap-x-3">
+				<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
+				<PulsatingCircle isFinished={status === 'finished'} isRunning={status === 'running'} />
+			</ItemContent>
+			<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
+				{displayValue}
+				<span className="font-normal text-muted-foreground text-xs sm:text-sm">{measure}</span>
+			</ItemActions>
+		</Item>
+	);
+});
 
-export const SpeedTest = (): React.JSX.Element => {
+export const SpeedTest = () => {
 	const [testState, setTestState] = useState<TestState>({
 		status: 'idle',
 		result: INITIAL_RESULT,

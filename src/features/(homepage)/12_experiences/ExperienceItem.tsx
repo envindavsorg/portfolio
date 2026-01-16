@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import type React from 'react';
 import { LinkIcon } from '@/components/icons/LinkIcon';
 import {
 	CollapsibleChevronsIcon,
@@ -15,7 +14,7 @@ interface ExperienceItemProps {
 	experience: Experience;
 }
 
-const ExperienceItem = ({ experience }: ExperienceItemProps): React.JSX.Element => {
+const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 	const { start, end } = experience.period;
 	const isOngoing = !end;
 

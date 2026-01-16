@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowsClockwiseIcon, CheckIcon, CopyIcon } from '@phosphor-icons/react';
-import React, { type ChangeEvent, useCallback, useState } from 'react';
+import { type ChangeEvent, useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
 import { DirectionAwareTabs } from '@/components/ui/DirectionAwareTabs';
@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
 import { cn } from '@/lib/utils';
 
-export const Base64 = (): React.JSX.Element => {
+export const Base64 = () => {
 	const [encodeInputText, setEncodeInputText] = useState('');
 	const [encodeOutputText, setEncodeOutputText] = useState('');
 	const [decodeInputText, setDecodeInputText] = useState('');

@@ -1,6 +1,5 @@
 import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
-import type React from 'react';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
@@ -12,7 +11,7 @@ interface ToolsContentProps {
 	content: Post[];
 }
 
-const ToolsContent = ({ content }: ToolsContentProps): React.JSX.Element => {
+const ToolsContent = ({ content }: ToolsContentProps) => {
 	const { visibleContent, hiddenContent } = useMemo(
 		() => ({
 			visibleContent: content.slice(0, 3),

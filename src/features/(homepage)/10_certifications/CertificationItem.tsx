@@ -31,7 +31,7 @@ interface CertItemProps {
 	certification: Certification;
 }
 
-const CertificationItem = ({ certification }: CertItemProps): React.JSX.Element => {
+const CertificationItem = ({ certification }: CertItemProps) => {
 	const { credentialURL, issuerIconName, title, issuer, issueDate, coverImageURL } = certification;
 
 	return (

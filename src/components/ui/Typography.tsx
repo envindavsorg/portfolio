@@ -10,7 +10,7 @@ const Prose = ({
 	...props
 }: React.ComponentProps<'div'> & {
 	asChild?: boolean;
-}): React.JSX.Element => {
+}) => {
 	const Comp = asChild ? Slot : 'div';
 
 	return (
@@ -29,7 +29,7 @@ const Prose = ({
 	);
 };
 
-const Code = ({ className, ...props }: React.ComponentProps<'code'>): React.JSX.Element => {
+const Code = ({ className, ...props }: React.ComponentProps<'code'>) => {
 	const isCodeBlock = 'data-language' in props;
 
 	return (

@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
 import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 
-export const JSONFormatter = (): React.JSX.Element => {
+export const JSONFormatter = () => {
 	const [input, setInput] = useState('');
 	const [output, setOutput] = useState('');
 	const { buttonText, handleCopy } = useCopyToClipboard();

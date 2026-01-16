@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import type React from 'react';
 import { Prose } from '@/components/ui/Typography';
 import { cn, dayjs } from '@/lib/utils';
 
@@ -8,7 +7,7 @@ interface ArticleItemProps {
 	article: Post;
 }
 
-const ArticleItem = ({ article }: ArticleItemProps): React.JSX.Element => {
+const ArticleItem = ({ article }: ArticleItemProps) => {
 	const { slug, metadata } = article;
 
 	return (

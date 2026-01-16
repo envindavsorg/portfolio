@@ -1,17 +1,16 @@
 'use client';
 
-import type React from 'react';
-import { Panel, PanelContent } from '@/components/ui/Panel';
-import GLOBAL_DATA from '@/content/data/global';
-import { OverviewItem } from './OverviewItem';
+import { Panel } from '@/components/ui/Panel';
+import { OverviewContent } from './OverviewContent';
 
-const Overview = (): React.JSX.Element => (
-	<Panel>
-		<PanelContent className="grid grid-cols-6 gap-3 sm:gap-4">
-			{GLOBAL_DATA.OVERVIEW.content.map((item) => (
-				<OverviewItem key={item.id} {...item} />
-			))}
-		</PanelContent>
+const Overview = () => (
+	<Panel className="relative py-4">
+		<div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
+			<div className="border-edge border-r" />
+			<div className="border-edge border-l" />
+		</div>
+
+		<OverviewContent />
 	</Panel>
 );
 

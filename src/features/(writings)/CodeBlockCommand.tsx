@@ -1,7 +1,6 @@
 'use client';
 
 import { TerminalWindowIcon } from '@phosphor-icons/react';
-import type React from 'react';
 import { lazy, useMemo } from 'react';
 import { CopyButton } from '@/components/buttons/CopyButton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
@@ -57,7 +56,7 @@ export const CodeBlockCommand = ({
 	__yarn__?: string;
 	__npm__?: string;
 	__bun__?: string;
-}): React.JSX.Element => {
+}) => {
 	const [config, setConfig] = useConfig();
 
 	const packageManager = config.packageManager || 'pnpm';

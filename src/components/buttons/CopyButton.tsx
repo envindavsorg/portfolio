@@ -1,6 +1,5 @@
 'use client';
 
-import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { CheckIcon } from '@/components/icons/CheckIcon';
@@ -27,7 +26,7 @@ const CopyButton = ({
 	className,
 	label = 'Copier le texte dans le presse-papier',
 	timeout = 2000,
-}: CopyButtonProps): React.JSX.Element => {
+}: CopyButtonProps) => {
 	const [state, setState] = useState<CopyState>('idle');
 	const iconRef = useRef<AnimatedIconHandle>(null);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);

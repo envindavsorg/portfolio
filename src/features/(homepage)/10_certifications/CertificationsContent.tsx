@@ -1,5 +1,4 @@
 import { CaretDownIcon } from '@phosphor-icons/react/ssr';
-import type React from 'react';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
@@ -12,7 +11,7 @@ interface CertificationsContentProps {
 	content: Certification[];
 }
 
-const CertificationsContent = ({ content }: CertificationsContentProps): React.JSX.Element => {
+const CertificationsContent = ({ content }: CertificationsContentProps) => {
 	const { visibleContent, hiddenContent } = useMemo(
 		() => ({
 			visibleContent: content.slice(0, 4),

@@ -1,5 +1,3 @@
-import type { ElementType } from 'react';
-
 declare global {
 	interface USER {
 		firstName: string;
@@ -22,12 +20,6 @@ declare global {
 
 	interface OVERVIEW {
 		sentences: string[];
-		content: {
-			id: string;
-			content: string;
-			icon: ElementType;
-			className: string;
-		}[];
 	}
 
 	interface SOCIAL {
@@ -38,6 +30,7 @@ declare global {
 
 	interface WORK {
 		title: string;
+		experience: string;
 		jobs: {
 			title: string;
 			company: string;
@@ -50,3 +43,5 @@ declare global {
 		name: string;
 	}
 }
+
+export {};

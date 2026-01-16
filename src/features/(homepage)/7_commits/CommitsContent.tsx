@@ -1,6 +1,5 @@
 'use client';
 
-import type React from 'react';
 import { ContributionGraph } from '@/components/ui/contribution-graph/ContributionGraph';
 import { ContributionGraphBlock } from '@/components/ui/contribution-graph/ContributionGraphBlock';
 import { ContributionGraphCalendar } from '@/components/ui/contribution-graph/ContributionGraphCalendar';
@@ -13,7 +12,7 @@ interface CommitsContentProps {
 	contributions: CommitActivity[];
 }
 
-const CommitsContent = ({ contributions }: CommitsContentProps): React.JSX.Element => (
+const CommitsContent = ({ contributions }: CommitsContentProps) => (
 	<>
 		<PanelContent>
 			<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>

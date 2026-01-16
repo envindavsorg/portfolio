@@ -40,7 +40,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 			...props
 		},
 		ref
-	): React.JSX.Element => {
+	) => {
 		const [value, setValue] = useState<number | undefined>(controlledValue ?? defaultValue);
 
 		const handleIncrement = useCallback(() => {

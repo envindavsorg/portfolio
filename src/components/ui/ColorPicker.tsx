@@ -15,7 +15,7 @@ interface ColorPickerProps {
 	onChangeAction: (color: string) => void;
 }
 
-export const ColorPicker = ({ color, onChangeAction }: ColorPickerProps): React.JSX.Element => {
+export const ColorPicker = ({ color, onChangeAction }: ColorPickerProps) => {
 	const [hsl, setHsl] = useState<[number, number, number]>([0, 0, 0]);
 	const [colorInput, setColorInput] = useState(color);
 	const [isOpen, setIsOpen] = useState(false);

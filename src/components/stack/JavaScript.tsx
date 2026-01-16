@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const JavaScriptIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const JavaScriptIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg height="1em" viewBox="0 0 1052 1052" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>JavaScript</title>
 		<path className="fill-yellow-300" d="M0 0h1052v1052H0z" />

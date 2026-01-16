@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const GitIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const GitIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
 		height="1em"
 		preserveAspectRatio="xMidYMid"

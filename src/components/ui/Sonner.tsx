@@ -2,11 +2,10 @@
 
 import { CheckCircleIcon, CircleNotchIcon, InfoIcon, WarningIcon, XSquareIcon } from '@phosphor-icons/react';
 import { useTheme } from 'next-themes';
-import type React from 'react';
 import type { CSSProperties } from 'react';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
-export const Toaster = ({ ...props }: ToasterProps): React.JSX.Element => {
+export const Toaster = ({ ...props }: ToasterProps) => {
 	const { theme = 'system' } = useTheme();
 
 	return (

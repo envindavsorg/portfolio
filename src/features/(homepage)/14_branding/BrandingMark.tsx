@@ -1,10 +1,8 @@
-import type React from 'react';
-
 interface MarkProps {
 	className: string;
 }
 
-const Mark = ({ className }: MarkProps): React.JSX.Element => (
+const Mark = ({ className }: MarkProps) => (
 	<svg fill="none" height="36" viewBox="0 0 39 26" width="49" xmlns="http://www.w3.org/2000/svg">
 		<path
 			className="stroke-foreground"
@@ -43,7 +41,7 @@ const Mark = ({ className }: MarkProps): React.JSX.Element => (
 	</svg>
 );
 
-const BrandingMark = (): React.JSX.Element => (
+const BrandingMark = () => (
 	<div className="screen-line-after flex items-center justify-evenly px-8 after:z-1">
 		<div className="flex flex-col items-center justify-center gap-y-2">
 			<Mark className="stroke-[#F3B993]" />

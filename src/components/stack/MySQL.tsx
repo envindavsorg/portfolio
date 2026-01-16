@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const MySQLIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const MySQLIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
 		height="1em"
 		preserveAspectRatio="xMidYMid"

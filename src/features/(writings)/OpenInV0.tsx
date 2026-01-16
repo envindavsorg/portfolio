@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import type React from 'react';
 import { lazy } from 'react';
 import { Button } from '@/components/buttons/Button';
 
@@ -13,7 +12,7 @@ interface OpenInV0Props {
 	url: string;
 }
 
-export const OpenInV0 = ({ url }: OpenInV0Props): React.JSX.Element => (
+export const OpenInV0 = ({ url }: OpenInV0Props) => (
 	<Button asChild className="not-prose gap-1" variant="outline">
 		<Link
 			aria-label="Ouvrir dans v0"

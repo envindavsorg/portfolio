@@ -26,7 +26,7 @@ export const ComponentPreview = ({
 	canReplay?: boolean;
 	notProse?: boolean;
 	codeCollapsible?: boolean;
-}): React.JSX.Element => {
+}) => {
 	const [replay, setReplay] = useState(0);
 
 	const Codes = React.Children.toArray(children) as React.ReactElement[];

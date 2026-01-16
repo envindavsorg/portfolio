@@ -1,6 +1,5 @@
-import type React from 'react';
 import { ThemeSwitcher } from '@/registry/theme-switcher';
 
-const ThemeSwitcherDemo = (): React.JSX.Element => <ThemeSwitcher />;
+const ThemeSwitcherDemo = () => <ThemeSwitcher />;
 
 export default ThemeSwitcherDemo;

@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const ShellIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const ShellIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg
 		height="1em"
 		viewBox="-16 0 256 256"

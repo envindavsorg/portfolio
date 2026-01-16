@@ -4,7 +4,6 @@ import { twMerge } from 'tailwind-merge';
 import 'dayjs/locale/fr';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
-import { formatIncompletePhoneNumber } from './libphonenumber';
 import { logger } from './logger';
 
 dayjsLib.extend(relativeTime);
@@ -70,30 +69,6 @@ Please analyze the content. I will be asking specific questions about its implem
 `.trim();
 	}
 };
-
-const safeDecode = (str: string): string => {
-	if (!str) {
-		return '';
-	}
-
-	try {
-		if (typeof Buffer !== 'undefined') {
-			return Buffer.from(str, 'base64').toString('utf-8');
-		}
-
-		return atob(str);
-	} catch (error) {
-		logger.error(`Failed to decode: ${str}`, error);
-
-		return str;
-	}
-};
-
-export const decodeEmail = (email: string): string => safeDecode(email);
-
-export const decodePhoneNumber = (phone: string): string => safeDecode(phone);
-
-export { formatIncompletePhoneNumber as formatPhoneNumber };
 
 const PROTOCOL_REGEX = /^(?:\w+:)?\/\//;
 

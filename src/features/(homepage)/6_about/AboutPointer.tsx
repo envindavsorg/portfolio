@@ -1,8 +1,7 @@
 import { motion } from 'motion/react';
-import type React from 'react';
 import { Pointer } from '@/components/ui/Pointer';
 
-const AboutPointer = (): React.JSX.Element => (
+const AboutPointer = () => (
 	<Pointer>
 		<motion.div
 			animate={{

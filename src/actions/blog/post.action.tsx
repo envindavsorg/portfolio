@@ -2,9 +2,8 @@
 
 import { CaretDownIcon, CaretUpIcon, CheckIcon, CopyIcon, TriangleDashedIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
-import posthog from 'posthog-js';
 import type React from 'react';
-import { lazy, useCallback, useMemo, useOptimistic, useTransition } from 'react';
+import { lazy, useMemo, useOptimistic, useTransition } from 'react';
 import { toast } from 'sonner';
 import { buttonVariants } from '@/components/buttons/Button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
@@ -63,10 +62,6 @@ export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
 			await soundManager.playToastSound();
 			toast.success('Contenu copié dans le presse-papier !');
 
-			posthog.capture('llm_content_copied', {
-				markdown_url: markdownUrl,
-			});
-
 			await delay(2000);
 		});
 	};
@@ -122,17 +117,6 @@ interface ViewOptionsProps {
 }
 
 export const ViewOptions = ({ markdownUrl, isComponent = false }: ViewOptionsProps) => {
-	const handleExternalToolClick = useCallback(
-		(toolName: string) => {
-			posthog.capture('external_tool_opened', {
-				tool: toolName,
-				markdown_url: markdownUrl,
-				is_component: isComponent,
-			});
-		},
-		[markdownUrl, isComponent]
-	);
-
 	const items = useMemo(() => {
 		const fullMarkdownUrl =
 			typeof window === 'undefined' ? markdownUrl : new URL(markdownUrl, window.location.origin).toString();
@@ -200,9 +184,9 @@ export const ViewOptions = ({ markdownUrl, isComponent = false }: ViewOptionsPro
 				onCloseAutoFocus={(event: Event) => event.preventDefault()}
 				sideOffset={8}
 			>
-				{items.map(({ title, href, icon: Icon, tool }) => (
+				{items.map(({ title, href, icon: Icon }) => (
 					<DropdownMenuItem asChild className="font-medium" key={href}>
-						<Link href={href} onClick={() => handleExternalToolClick(tool)} rel="noreferrer noopener" target="_blank">
+						<Link href={href} rel="noreferrer noopener" target="_blank">
 							<Icon className="size-4" />
 							{title}
 						</Link>

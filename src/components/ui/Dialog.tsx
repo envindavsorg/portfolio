@@ -4,23 +4,23 @@ import { Dialog as DialogPrimitive } from 'radix-ui';
 import type React from 'react';
 import { cn } from '@/lib/utils';
 
-const Dialog = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>): React.JSX.Element => (
+const Dialog = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) => (
 	<DialogPrimitive.Root data-slot="dialog" {...props} />
 );
 
-const DialogTrigger = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>): React.JSX.Element => (
+const DialogTrigger = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>) => (
 	<DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 );
 
-const DialogPortal = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Portal>): React.JSX.Element => (
+const DialogPortal = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Portal>) => (
 	<DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
 );
 
-const DialogClose = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>): React.JSX.Element => (
+const DialogClose = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>) => (
 	<DialogPrimitive.Close data-slot="dialog-close" {...props} />
 );
 
-const DialogOverlay = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Overlay>): React.JSX.Element => (
+const DialogOverlay = ({ ...props }: React.ComponentProps<typeof DialogPrimitive.Overlay>) => (
 	<DialogPrimitive.Overlay
 		className={cn(
 			'pointer-events-none fixed inset-0 z-50 select-none',
@@ -40,7 +40,7 @@ const DialogContent = ({
 	...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
 	overlay?: boolean;
-}): React.JSX.Element => (
+}) => (
 	<DialogPortal data-slot="dialog-portal">
 		{overlay && <DialogOverlay />}
 		<DialogPrimitive.Content
@@ -60,11 +60,11 @@ const DialogContent = ({
 	</DialogPortal>
 );
 
-const DialogHeader = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
+const DialogHeader = ({ className, ...props }: React.ComponentProps<'div'>) => (
 	<div className={cn('mb-4 flex flex-col gap-2 text-left', className)} data-slot="dialog-header" {...props} />
 );
 
-const DialogFooter = ({ className, ...props }: React.ComponentProps<'div'>): React.JSX.Element => (
+const DialogFooter = ({ className, ...props }: React.ComponentProps<'div'>) => (
 	<div
 		className={cn('mt-6 flex flex-row items-center justify-between', className)}
 		data-slot="dialog-footer"
@@ -72,10 +72,7 @@ const DialogFooter = ({ className, ...props }: React.ComponentProps<'div'>): Rea
 	/>
 );
 
-const DialogTitle = ({
-	className,
-	...props
-}: React.ComponentProps<typeof DialogPrimitive.Title>): React.JSX.Element => (
+const DialogTitle = ({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) => (
 	<DialogPrimitive.Title
 		className={cn('font-semibold text-lg text-theme leading-normal', className)}
 		data-slot="dialog-title"
@@ -83,10 +80,7 @@ const DialogTitle = ({
 	/>
 );
 
-const DialogDescription = ({
-	className,
-	...props
-}: React.ComponentProps<typeof DialogPrimitive.Description>): React.JSX.Element => (
+const DialogDescription = ({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) => (
 	<DialogPrimitive.Description
 		className={cn('text-muted-foreground text-sm', className)}
 		data-slot="dialog-description"

@@ -73,7 +73,7 @@ const CIRCLE_VARIANTS: Variants = {
 };
 
 const LinkedinIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
-	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref): React.JSX.Element => {
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const pathControls = useAnimation();
 		const rectControls = useAnimation();
 		const circleControls = useAnimation();

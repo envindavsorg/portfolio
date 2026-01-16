@@ -1,11 +1,10 @@
 'use client';
 
 import { AnimatePresence, type HTMLMotionProps, motion, useMotionValue } from 'motion/react';
-import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Pointer = ({ className, style, children, ...props }: HTMLMotionProps<'div'>): React.JSX.Element => {
+export const Pointer = ({ className, style, children, ...props }: HTMLMotionProps<'div'>) => {
 	const x = useMotionValue(0);
 	const y = useMotionValue(0);
 	const [isActive, setIsActive] = useState<boolean>(false);

@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const FigmaIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const FigmaIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg height="1em" viewBox="0 0 200 300" width="1em" xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" {...props}>
 		<title>Figma</title>
 		<path d="M50 300c27.6 0 50-22.4 50-50v-50H50c-27.6 0-50 22.4-50 50s22.4 50 50 50z" fill="#0acf83" id="path0_fill" />

@@ -1,10 +1,9 @@
-import type React from 'react';
 import { Panel } from '@/components/ui/Panel';
 import { BrandingColors } from './BrandingColors';
 import { BrandingMark } from './BrandingMark';
 import { BrandingTitle } from './BrandingTitle';
 
-const Branding = (): React.JSX.Element => (
+const Branding = () => (
 	<Panel>
 		<BrandingTitle />
 

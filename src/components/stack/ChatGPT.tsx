@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const ChatGPTIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const ChatGPTIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg {...props} preserveAspectRatio="xMidYMid" viewBox="0 0 256 260">
 		<title>ChatGPT</title>
 		<path

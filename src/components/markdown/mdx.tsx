@@ -237,6 +237,6 @@ const options: MDXRemoteProps['options'] = {
 	},
 };
 
-export const MDX = ({ code }: { code: string }): React.JSX.Element => (
+export const MDX = ({ code }: { code: string }) => (
 	<MDXRemote components={components} options={options} source={code} />
 );

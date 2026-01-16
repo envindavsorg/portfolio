@@ -10,7 +10,6 @@ import {
 } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { Poline, positionFunctions } from 'poline';
-import type React from 'react';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
@@ -22,7 +21,7 @@ interface ColorScheme {
 	[key: string]: string;
 }
 
-export const ColorGenerator = (): React.JSX.Element => {
+export const ColorGenerator = () => {
 	const [colorScheme, setColorScheme] = useState<ColorScheme>({
 		background: '0 0% 100%',
 		foreground: '240 10% 3.9%',

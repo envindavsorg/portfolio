@@ -1,4 +1,3 @@
-import type React from 'react';
 import { Button } from '@/components/buttons/Button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
@@ -13,7 +12,7 @@ interface CvForm {
 	onCancel: () => void;
 }
 
-const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm): React.JSX.Element => (
+const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm) => (
 	<Form {...form}>
 		<form onSubmit={form.handleSubmit(onSubmit)}>
 			<FormField

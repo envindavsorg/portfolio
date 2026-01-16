@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import type React from 'react';
 import { LinkIcon } from '@/components/icons/LinkIcon';
 import {
 	CollapsibleChevronsIcon,
@@ -15,7 +14,7 @@ interface ProjectItemProps {
 	project: Project;
 }
 
-const ProjectItem = ({ project }: ProjectItemProps): React.JSX.Element => {
+const ProjectItem = ({ project }: ProjectItemProps) => {
 	const Icon = project.icon;
 
 	return (

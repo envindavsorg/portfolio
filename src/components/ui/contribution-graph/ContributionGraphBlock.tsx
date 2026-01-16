@@ -1,4 +1,3 @@
-import type React from 'react';
 import type { HTMLAttributes } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
 import { cn, dayjs } from '@/lib/utils';
@@ -16,7 +15,7 @@ const ContributionGraphBlock = ({
 	weekIndex,
 	className,
 	...props
-}: ContributionGraphBlockProps): React.JSX.Element => (
+}: ContributionGraphBlockProps) => (
 	<Tooltip>
 		<TooltipTrigger asChild>
 			<g>

@@ -1,4 +1,3 @@
-import type React from 'react';
 import { Fragment, type HTMLAttributes, type ReactNode, useMemo } from 'react';
 import { getMonthLabels } from '@/lib/github';
 import { BLOCK_MARGIN, BLOCK_SIZE, useContributionGraph } from './ContributionGraph';
@@ -7,11 +6,7 @@ type ContributionGraphCalendarProps = Omit<HTMLAttributes<HTMLDivElement>, 'chil
 	children: (props: { activity: CommitActivity; dayIndex: number; weekIndex: number }) => ReactNode;
 };
 
-const ContributionGraphCalendar = ({
-	className,
-	children,
-	...props
-}: ContributionGraphCalendarProps): React.JSX.Element => {
+const ContributionGraphCalendar = ({ className, children, ...props }: ContributionGraphCalendarProps) => {
 	const { weeks, width, height } = useContributionGraph();
 
 	const monthLabels = useMemo(() => getMonthLabels(weeks), [weeks]);

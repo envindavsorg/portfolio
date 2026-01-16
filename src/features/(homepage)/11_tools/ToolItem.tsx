@@ -25,7 +25,7 @@ interface ToolsItemProps {
 	post: Post;
 }
 
-export const ToolItem = memo(({ post }: ToolsItemProps): React.JSX.Element => {
+export const ToolItem = memo(({ post }: ToolsItemProps) => {
 	const { metadata, slug } = post;
 	const { title, tags, new: isNew, description } = metadata;
 

@@ -3,7 +3,6 @@
 import { DownloadIcon } from '@phosphor-icons/react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useTheme } from 'next-themes';
-import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import {
 	ContextMenu,
@@ -23,7 +22,7 @@ interface CoverProps {
 	loop?: boolean;
 }
 
-export const Cover = ({ loop = true }: CoverProps): React.JSX.Element => {
+export const Cover = ({ loop = true }: CoverProps) => {
 	const { resolvedTheme } = useTheme();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [shouldAdvance, setShouldAdvance] = useState(false);

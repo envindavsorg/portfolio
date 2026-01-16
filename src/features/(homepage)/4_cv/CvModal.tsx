@@ -10,7 +10,7 @@ interface CvModalProps {
 	isDesktop: boolean;
 }
 
-const CvModal = ({ children, open, setOpen, isDesktop }: CvModalProps): React.JSX.Element => {
+const CvModal = ({ children, open, setOpen, isDesktop }: CvModalProps) => {
 	const Container = isDesktop ? Dialog : Drawer;
 	const Content = isDesktop ? DialogContent : DrawerContent;
 	const Trigger = isDesktop ? DialogTrigger : DrawerTrigger;

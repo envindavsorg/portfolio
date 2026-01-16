@@ -6,7 +6,7 @@ interface YouTubeEmbedProps {
 	title: string;
 }
 
-export const YouTubeEmbed = ({ videoId, title }: YouTubeEmbedProps): React.JSX.Element => (
+export const YouTubeEmbed = ({ videoId, title }: YouTubeEmbedProps) => (
 	<div className="relative">
 		<iframe
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -21,7 +21,7 @@ export const YouTubeEmbed = ({ videoId, title }: YouTubeEmbedProps): React.JSX.E
 	</div>
 );
 
-export const FramedImage = ({ ...props }: React.ComponentProps<typeof Image>): React.JSX.Element => (
+export const FramedImage = ({ ...props }: React.ComponentProps<typeof Image>) => (
 	<figure className="relative [&_img]:rounded-lg">
 		<Image {...props} alt="Frame" />
 		<div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />

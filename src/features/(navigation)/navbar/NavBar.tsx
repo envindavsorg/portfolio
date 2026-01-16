@@ -1,4 +1,3 @@
-import type React from 'react';
 import { NAVIGATION_DATA } from '@/content/data/navigation';
 import { getAllPosts } from '@/lib/blog/posts';
 import { cn } from '@/lib/utils';
@@ -7,7 +6,7 @@ import { NavBarMark } from './NavBarMark';
 import { NavBarWrapper } from './NavBarWrapper';
 import { NavBarLinksCommand, NavBarLinksGitHub, NavBarLinksLLM, NavBarLinksRSS, NavBarLinksTheme } from './NavbarLinks';
 
-export const NavBar = (): React.JSX.Element => {
+export const NavBar = () => {
 	const posts: Post[] = getAllPosts();
 
 	return (

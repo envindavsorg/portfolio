@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import type React from 'react';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
 import { Divider } from '@/components/ui/Divider';
 import GLOBAL_DATA from '@/content/data/global';
@@ -44,7 +43,7 @@ const getPageJsonLd = (): WithContext<PageSchema> => ({
 	},
 });
 
-const Page = (): React.JSX.Element => (
+const Page = () => (
 	<>
 		<script
 			dangerouslySetInnerHTML={{

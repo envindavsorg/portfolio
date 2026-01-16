@@ -1,8 +1,7 @@
 import Image from 'next/image';
-import type React from 'react';
 import GLOBAL_DATA from '@/content/data/global';
 
-const HeaderImage = (): React.JSX.Element => (
+const HeaderImage = () => (
 	<div className="shrink-0 border-edge border-r">
 		<div className="mx-1 my-1.25">
 			<Image

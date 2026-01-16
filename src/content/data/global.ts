@@ -1,14 +1,3 @@
-import {
-	BriefcaseIcon,
-	CatIcon,
-	EnvelopeIcon,
-	FlaskIcon,
-	GenderMaleIcon,
-	GithubLogoIcon,
-	NavigationArrowIcon,
-	PhoneIcon,
-} from '@phosphor-icons/react/dist/ssr';
-
 const USER = {
 	firstName: 'Florin',
 	lastName: 'Cuzeac',
@@ -17,8 +6,8 @@ const USER = {
 	gender: 'homme',
 	pronouns: 'il/lui',
 	bio: 'Crée, code, innove. Les petits détails comptent.',
-	phoneNumber: 'MDYgNTggMDUgODYgNjU=',
-	emailAddress: 'Y29udGFjdEBjdXplYWNmbG9yaW4uZnI=',
+	phoneNumber: '06 58 05 86 65',
+	emailAddress: 'contact@cuzeacflorin.fr',
 	location: {
 		city: 'Paris, France',
 	},
@@ -35,56 +24,6 @@ const OVERVIEW = {
 		'Du concept au déploiement !',
 		'Chaque petit détail compte !',
 	],
-	content: [
-		{
-			id: 'job-title',
-			content: 'Développeur Front-End Senior',
-			icon: BriefcaseIcon,
-			className: 'col-span-full sm:col-span-3',
-		},
-		{
-			id: 'experience-level',
-			content: "7 ans d'expérience",
-			icon: FlaskIcon,
-			className: 'col-span-3',
-		},
-		{
-			id: 'location-city',
-			content: 'Paris, France',
-			icon: NavigationArrowIcon,
-			className: 'col-span-3 lg:col-span-2 lg:row-start-2',
-		},
-		{
-			id: 'github-username',
-			content: '@envindavsorg',
-			icon: GithubLogoIcon,
-			className: 'col-span-3 lg:col-span-2 lg:col-start-3 lg:row-start-2',
-		},
-		{
-			id: 'cat-person',
-			content: "J'adore les chats !",
-			icon: CatIcon,
-			className: 'col-span-3 lg:col-span-2 lg:col-start-5 lg:row-start-2',
-		},
-		{
-			id: 'phone-number',
-			content: 'MDYgNTggMDUgODYgNjU=',
-			icon: PhoneIcon,
-			className: 'col-span-full sm:col-span-3 lg:col-span-2 lg:col-start-1 lg:row-start-3',
-		},
-		{
-			id: 'email-address',
-			content: 'Y29udGFjdEBjdXplYWNmbG9yaW4uZnI=',
-			icon: EnvelopeIcon,
-			className: 'col-span-full sm:col-span-3 lg:col-span-2 lg:col-start-3 lg:row-start-3',
-		},
-		{
-			id: 'pronouns-info',
-			content: 'il/lui',
-			icon: GenderMaleIcon,
-			className: 'col-span-full sm:col-span-3 lg:col-span-2 lg:col-start-5 lg:row-start-3',
-		},
-	],
 } satisfies OVERVIEW;
 
 const SOCIAL = {
@@ -95,6 +34,7 @@ const SOCIAL = {
 
 const WORK = {
 	title: 'Développeur Full-Stack',
+	experience: "7 ans d'expérience",
 	jobs: [
 		{
 			title: 'Développeur Front-End Senior',

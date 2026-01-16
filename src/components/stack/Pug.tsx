@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const PugIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const PugIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg height="1em" viewBox="0 0 32 32" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>Pug</title>
 		<path

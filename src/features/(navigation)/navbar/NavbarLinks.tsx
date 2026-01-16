@@ -338,7 +338,7 @@ NavBarLinksCommand.displayName = 'NavBarLinksCommand';
 
 export { NavBarLinksCommand };
 
-const NavBarLinksGitHub = (): React.JSX.Element => {
+const NavBarLinksGitHub = () => {
 	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	return (
@@ -361,7 +361,7 @@ NavBarLinksGitHub.displayName = 'NavBarLinksGitHub';
 
 export { NavBarLinksGitHub };
 
-const NavBarLinksRSS = (): React.JSX.Element => {
+const NavBarLinksRSS = () => {
 	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	return (
@@ -384,7 +384,7 @@ NavBarLinksRSS.displayName = 'NavBarLinksRSS';
 
 export { NavBarLinksRSS };
 
-const NavBarLinksLLM = (): React.JSX.Element => {
+const NavBarLinksLLM = () => {
 	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	return (
@@ -407,7 +407,7 @@ NavBarLinksLLM.displayName = 'NavBarLinksLLM';
 
 export { NavBarLinksLLM };
 
-const NavBarLinksTheme = (): React.JSX.Element => {
+const NavBarLinksTheme = () => {
 	const { resolvedTheme, setTheme } = useTheme();
 	const { setMetaColor } = useMetaColor();
 

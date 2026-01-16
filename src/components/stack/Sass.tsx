@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const SassIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const SassIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg height="1em" viewBox="0 0 512 384" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>Sass</title>
 		<path

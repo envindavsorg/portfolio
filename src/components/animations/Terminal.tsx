@@ -25,13 +25,7 @@ interface AnimatedSpanProps extends MotionProps {
 	startOnView?: boolean;
 }
 
-export const AnimatedSpan = ({
-	children,
-	delay = 0,
-	className,
-	startOnView = false,
-	...props
-}: AnimatedSpanProps): React.JSX.Element => {
+export const AnimatedSpan = ({ children, delay = 0, className, startOnView = false, ...props }: AnimatedSpanProps) => {
 	const elementRef = useRef<HTMLDivElement | null>(null);
 	const isInView = useInView(elementRef as React.RefObject<Element>, {
 		amount: 0.3,
@@ -98,7 +92,7 @@ export const TypingAnimation = ({
 	as: Component = 'span',
 	startOnView = true,
 	...props
-}: TypingAnimationProps): React.JSX.Element => {
+}: TypingAnimationProps) => {
 	if (typeof children !== 'string') {
 		throw new Error('TypingAnimation: children must be a string. Received:');
 	}
@@ -186,12 +180,7 @@ interface TerminalProps {
 	startOnView?: boolean;
 }
 
-export const Terminal = ({
-	children,
-	className,
-	sequence = true,
-	startOnView = true,
-}: TerminalProps): React.JSX.Element => {
+export const Terminal = ({ children, className, sequence = true, startOnView = true }: TerminalProps) => {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const isInView = useInView(containerRef as React.RefObject<Element>, {
 		amount: 0.3,

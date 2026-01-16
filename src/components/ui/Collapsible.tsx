@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react';
 import { Collapsible as Primitive } from 'radix-ui';
-import React, { type ComponentProps, createContext, forwardRef, useContext, useState } from 'react';
+import { type ComponentProps, createContext, forwardRef, useContext, useState } from 'react';
 import { ChevronsDownUpIcon } from '@/components/icons/ChevronsDownUpIcon';
 import { ChevronsUpDownIcon } from '@/components/icons/ChevronsUpDownIcon';
 
@@ -11,7 +11,7 @@ export const Collapsible = Primitive.Root;
 export const CollapsibleTrigger = Primitive.CollapsibleTrigger;
 
 export const CollapsibleContent = forwardRef<HTMLDivElement, ComponentProps<typeof Primitive.CollapsibleContent>>(
-	({ children, className, ...props }, ref): React.JSX.Element => (
+	({ children, className, ...props }, ref) => (
 		<Primitive.CollapsibleContent asChild className={className} ref={ref} {...props}>
 			<motion.div
 				animate="open"
@@ -54,10 +54,7 @@ const useCollapsible = () => {
 	return context;
 };
 
-export const CollapsibleWithContext = ({
-	defaultOpen,
-	...props
-}: ComponentProps<typeof Collapsible>): React.JSX.Element => {
+export const CollapsibleWithContext = ({ defaultOpen, ...props }: ComponentProps<typeof Collapsible>) => {
 	const [open, setOpen] = useState(defaultOpen ?? false);
 
 	return (
@@ -67,7 +64,7 @@ export const CollapsibleWithContext = ({
 	);
 };
 
-export const CollapsibleChevronsIcon = (): React.JSX.Element => {
+export const CollapsibleChevronsIcon = () => {
 	const { open } = useCollapsible();
 
 	const Icon = open ? ChevronsDownUpIcon : ChevronsUpDownIcon;

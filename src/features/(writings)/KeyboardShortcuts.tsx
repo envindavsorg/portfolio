@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import type React from 'react';
 import { useCallback, useEffect } from 'react';
 
 interface Post {
@@ -14,7 +13,7 @@ interface KeyboardShortcutsProps {
 	next: Post | null;
 }
 
-export const KeyboardShortcuts = ({ basePath, previous, next }: KeyboardShortcutsProps): React.JSX.Element | null => {
+export const KeyboardShortcuts = ({ basePath, previous, next }: KeyboardShortcutsProps) => {
 	const router = useRouter();
 
 	const navigate = useCallback(

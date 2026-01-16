@@ -1,6 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
-import type React from 'react';
 import { Button } from '@/components/buttons/Button';
 import { KeyboardShortcuts } from '@/features/(writings)/KeyboardShortcuts';
 import { ShareMenu } from '@/features/(writings)/ShareMenu';
@@ -14,7 +13,7 @@ interface TopBarProps {
 	title: string;
 }
 
-export const TopBar = ({ type, slug, baseUrl, postSlug, title }: TopBarProps): React.JSX.Element => {
+export const TopBar = ({ type, slug, baseUrl, postSlug, title }: TopBarProps) => {
 	const allPosts: Post[] = getPostsByCategory(type);
 	const { previous, next } = findNeighbour(allPosts, slug);
 

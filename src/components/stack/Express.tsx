@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const ExpressIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const ExpressIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg height="1em" viewBox="0 0 32 32" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>Express</title>
 		<path

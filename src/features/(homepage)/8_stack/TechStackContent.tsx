@@ -1,4 +1,3 @@
-import type React from 'react';
 import { Marquee, MarqueeContent, MarqueeFade, MarqueeItem } from '@/components/ui/Marquee';
 import { PanelContent } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';
@@ -8,7 +7,7 @@ interface TechStackContentProps {
 	content: Stack[];
 }
 
-const TechStackContent = ({ content }: TechStackContentProps): React.JSX.Element => {
+const TechStackContent = ({ content }: TechStackContentProps) => {
 	const keyExtractorAction = (item: Stack) => item.title;
 	const getKey = (item: Stack, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 
@@ -36,7 +35,7 @@ const TechStackContent = ({ content }: TechStackContentProps): React.JSX.Element
 					<MarqueeFade side="left" />
 					<MarqueeFade side="right" />
 					<MarqueeContent direction="left">
-						{content.map((item: Stack, idx: number): React.JSX.Element => {
+						{content.map((item: Stack, idx: number) => {
 							const Icon = item.icon;
 							return (
 								<MarqueeItem key={getKey(item, idx)}>
@@ -56,7 +55,7 @@ const TechStackContent = ({ content }: TechStackContentProps): React.JSX.Element
 					<MarqueeFade side="left" />
 					<MarqueeFade side="right" />
 					<MarqueeContent direction="right">
-						{content.map((item: Stack, idx: number): React.JSX.Element => {
+						{content.map((item: Stack, idx: number) => {
 							const Icon = item.icon;
 							return (
 								<MarqueeItem key={getKey(item, idx)}>

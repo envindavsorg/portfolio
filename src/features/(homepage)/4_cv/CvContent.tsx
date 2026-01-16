@@ -1,8 +1,7 @@
-import type React from 'react';
 import { PanelContent } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';
 
-const CvContent = (): React.JSX.Element => (
+const CvContent = () => (
 	<PanelContent>
 		<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
 			Découvrez mon parcours professionnel à travers mon CV détaillé, qui retrace mes expériences, compétences

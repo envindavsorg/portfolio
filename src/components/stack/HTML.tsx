@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const HTML5Icon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const HTML5Icon = (props: SVGProps<SVGSVGElement>) => (
 	<svg height="1em" viewBox="0 0 452 520" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>HTML5</title>
 		<path d="M41 460L0 0h451l-41 460-185 52" fill="#E34F26" />

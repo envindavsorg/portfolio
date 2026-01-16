@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import type React from 'react';
 import { Button } from '@/components/buttons/Button';
 import { PanelContent, PanelFooter } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';
@@ -9,7 +8,7 @@ interface ArticlesContentProps {
 	content: Post[];
 }
 
-const ArticlesContent = ({ content }: ArticlesContentProps): React.JSX.Element => {
+const ArticlesContent = ({ content }: ArticlesContentProps) => {
 	const keyExtractorAction = (item: Post) => item.slug;
 	const getKey = (item: Post, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
 

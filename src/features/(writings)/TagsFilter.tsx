@@ -3,7 +3,6 @@
 import { CaretDownIcon } from '@phosphor-icons/react';
 import { capitalize } from 'es-toolkit/string';
 import { usePathname, useRouter } from 'next/navigation';
-import type React from 'react';
 import { useCallback } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -20,7 +19,7 @@ type TagFilterListProps = TagsFilterProps & {
 	onTagClick: (tag: string) => void;
 };
 
-const DesktopTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilterListProps): React.JSX.Element => (
+const DesktopTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilterListProps) => (
 	<div className="screen-line-after hidden flex-wrap gap-x-4 px-3 py-1.5 md:flex">
 		{tags.map((tag: string) => {
 			const isActive = tag === 'Tout' ? selectedTag === 'Tout' : selectedTag === tag.toLowerCase();

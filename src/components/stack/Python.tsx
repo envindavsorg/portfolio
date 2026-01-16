@@ -1,7 +1,6 @@
-import type React from 'react';
 import type { SVGProps } from 'react';
 
-export const PythonIcon = (props: SVGProps<SVGSVGElement>): React.JSX.Element => (
+export const PythonIcon = (props: SVGProps<SVGSVGElement>) => (
 	<svg fill="none" height="1em" viewBox="16 16 32 32" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>Python</title>
 		<path

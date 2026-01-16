@@ -1,4 +1,3 @@
-import type React from 'react';
 import { Meteors } from '@/components/animations/Meteors';
 import { Panel, PanelContent } from '@/components/ui/Panel';
 import GLOBAL_DATA from '@/content/data/global';
@@ -8,7 +7,7 @@ import { HeaderPronounceName } from './HeaderPronounceName';
 
 const isCapture = process.env.ENV_TYPE === 'capture';
 
-const Header = (): React.JSX.Element => (
+const Header = () => (
 	<Panel className="flex select-none before:bg-transparent">
 		<HeaderImage />
 

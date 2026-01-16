@@ -12,7 +12,7 @@ const DEFAULT_TRANSITION: Transition = {
 };
 
 const ChevronDownIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
-	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref): React.JSX.Element => {
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const controls = useAnimation();
 		const isControlledRef = useRef(false);
 

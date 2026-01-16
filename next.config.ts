@@ -1,4 +1,3 @@
-import { withPostHogConfig } from '@posthog/nextjs-config';
 import consola from 'consola';
 import type { NextConfig } from 'next';
 import { z } from 'zod';
@@ -58,8 +57,6 @@ const nextConfig: NextConfig = {
 		dangerouslyAllowSVG: true,
 		contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 	},
-	// This is required to support PostHog trailing slash API requests
-	skipTrailingSlashRedirect: true,
 	async rewrites() {
 		return [
 			{
@@ -69,15 +66,6 @@ const nextConfig: NextConfig = {
 			{
 				source: '/components/:slug.mdx',
 				destination: '/blog.mdx/:slug',
-			},
-			// PostHog reverse proxy rewrites
-			{
-				source: '/ingest/static/:path*',
-				destination: 'https://eu-assets.i.posthog.com/static/:path*',
-			},
-			{
-				source: '/ingest/:path*',
-				destination: 'https://eu.i.posthog.com/:path*',
 			},
 		];
 	},
@@ -108,14 +96,4 @@ const nextConfig: NextConfig = {
 	},
 };
 
-export default withPostHogConfig(nextConfig, {
-	personalApiKey: process.env.NEXT_PUBLIC_POSTHOG_SOURCE_MAPS_UPLOAD_KEY ?? '',
-	envId: process.env.NEXT_PUBLIC_POSTHOG_ENV_ID ?? '',
-	host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? '',
-	sourcemaps: {
-		enabled: true,
-		project: 'cuzeacflorin.fr',
-		version: '2.0.2',
-		deleteAfterUpload: true,
-	},
-});
+export default nextConfig;

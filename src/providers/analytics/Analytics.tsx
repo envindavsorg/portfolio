@@ -1,4 +1,3 @@
-import type React from 'react';
 import { lazy, Suspense } from 'react';
 
 const AnalyticsReact = lazy(() =>
@@ -13,7 +12,7 @@ const SpeedInsights = lazy(() =>
 	}))
 );
 
-export const Analytics = (): React.JSX.Element => (
+export const Analytics = () => (
 	<Suspense fallback={null}>
 		<AnalyticsReact debug={true} mode="auto" />
 		<SpeedInsights debug={process.env.NODE_ENV === 'development'} />

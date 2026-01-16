@@ -1,7 +1,6 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-import type React from 'react';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -17,7 +16,7 @@ export const FlipSentences = ({
 	sentences,
 	interval = 4000,
 	disableAnimation = false,
-}: FlipSentencesProps): React.JSX.Element => {
+}: FlipSentencesProps) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {

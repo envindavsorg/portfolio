@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, type MotionProps, motion, type Variants } from 'motion/react';
-import React, { type ElementType, memo } from 'react';
+import { type ElementType, memo } from 'react';
 import { cn } from '@/lib/utils';
 
 type AnimationType = 'text' | 'word' | 'character' | 'line';
@@ -278,7 +278,7 @@ const TextAnimateBase = ({
 	accessible = true,
 	themed = false,
 	...props
-}: TextAnimateProps): React.JSX.Element => {
+}: TextAnimateProps) => {
 	const MotionComponent = motion.create(Component);
 
 	let segments: string[] = [];

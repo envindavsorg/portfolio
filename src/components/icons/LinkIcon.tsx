@@ -24,7 +24,7 @@ const PATH_VARIANTS: Variants = {
 };
 
 export const LinkIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
-	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref): React.JSX.Element => {
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const controls = useAnimation();
 		const isControlledRef = useRef(false);
 

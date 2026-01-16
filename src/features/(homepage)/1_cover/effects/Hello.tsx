@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'motion/react';
-import type React from 'react';
 import { animateProps, initialProps } from '../constants/constants';
 import type { EffectProps } from '../types/types';
 
@@ -12,7 +11,7 @@ export const HelloEffect = ({
 	onAnimationComplete,
 	capture = false,
 	...props
-}: EffectProps): React.JSX.Element => {
+}: EffectProps) => {
 	const calc = (x: number) => x * speed;
 
 	return (

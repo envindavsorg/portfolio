@@ -2,8 +2,6 @@
 
 import { ArrowUpRightIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
-import posthog from 'posthog-js';
-import type React from 'react';
 import { useRef } from 'react';
 import { GitHubIcon } from '@/components/icons/GitHubIcon';
 import { LinkedinIcon } from '@/components/icons/LinkedInIcon';
@@ -21,7 +19,7 @@ interface SocialLinkItemProps {
 
 const isCapture = process.env.ENV_TYPE === 'capture';
 
-const ContactItem = ({ followers, content }: SocialLinkItemProps): React.JSX.Element => {
+const ContactItem = ({ followers, content }: SocialLinkItemProps) => {
 	const config = FOLLOWERS_CONFIG[content.name as keyof typeof FOLLOWERS_CONFIG];
 	const currentCount = config ? (followers[config.key] ?? 0) : 0;
 	const iconRef = useRef<AnimatedIconHandle>(null);
@@ -34,13 +32,6 @@ const ContactItem = ({ followers, content }: SocialLinkItemProps): React.JSX.Ele
 				'max-sm:screen-line-before max-sm:screen-line-after sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after'
 			)}
 			href={content.link}
-			onClick={() => {
-				posthog.capture('social_link_clicked', {
-					platform: content.name.toLowerCase(),
-					handle: content.username,
-					url: content.link,
-				});
-			}}
 			onMouseEnter={() => iconRef.current?.startAnimation()}
 			onMouseLeave={() => iconRef.current?.stopAnimation()}
 			rel="noopener noreferrer"

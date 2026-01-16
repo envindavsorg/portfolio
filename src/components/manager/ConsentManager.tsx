@@ -8,7 +8,7 @@ interface ConsentManagerProps {
 	children: React.ReactNode;
 }
 
-const ConsentManager = ({ children }: ConsentManagerProps): React.JSX.Element => (
+const ConsentManager = ({ children }: ConsentManagerProps) => (
 	<ConsentManagerProvider
 		options={{
 			translations: {

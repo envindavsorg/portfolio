@@ -1,9 +1,9 @@
 'use server';
 
 import { unstable_cache } from 'next/cache';
+import { logger } from '@/lib/logger';
 import { octokit } from '@/lib/octokit';
 import { COMMIT_QUERY } from '@/queries/github/commit.query';
-import {logger} from "@/lib/logger";
 
 const CACHE_TAG = 'github-commit';
 const CACHE_REVALIDATE = 3600;

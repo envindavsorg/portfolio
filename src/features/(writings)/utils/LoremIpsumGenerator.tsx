@@ -1,7 +1,6 @@
 'use client';
 
 import { CopyIcon } from '@phosphor-icons/react';
-import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { AnimatedCheckbox } from '@/components/ui/AnimatedCheckbox';
@@ -29,7 +28,7 @@ const generationOptions = [
 
 declare type GenerationUnit = 'words' | 'sentences' | 'paragraphs';
 
-export const LoremIpsumGenerator = (): React.JSX.Element => {
+export const LoremIpsumGenerator = () => {
 	const [inputAmount, setInputAmount] = useState(2);
 	const [textAreaRows, setTextAreaRows] = useState(9);
 	const [output, setOutput] = useState('');

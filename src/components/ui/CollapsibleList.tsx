@@ -23,7 +23,7 @@ export const CollapsibleList = <T,>({
 	keyExtractorAction,
 	className,
 	labels = { showMore: 'Afficher plus', showLess: 'Afficher moins' },
-}: CollapsibleListProps<T>): React.JSX.Element | null => {
+}: CollapsibleListProps<T>) => {
 	const { visibleItems, hiddenItems } = useMemo(
 		() => ({
 			visibleItems: items.slice(0, max),

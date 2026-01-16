@@ -20,7 +20,7 @@ export const InlineToc = ({
 	className,
 	children,
 	...props
-}: React.ComponentProps<typeof Collapsible> & InlineTocProps): React.JSX.Element | null => {
+}: React.ComponentProps<typeof Collapsible> & InlineTocProps) => {
 	if (!items.length) {
 		return null;
 	}

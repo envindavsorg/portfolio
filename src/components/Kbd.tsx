@@ -1,8 +1,7 @@
-import type React from 'react';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
-const Kbd = ({ className, ...props }: ComponentProps<'kbd'>): React.JSX.Element => (
+const Kbd = ({ className, ...props }: ComponentProps<'kbd'>) => (
 	<kbd
 		className={cn(
 			'inline-flex items-center justify-center gap-1',
@@ -20,7 +19,7 @@ const Kbd = ({ className, ...props }: ComponentProps<'kbd'>): React.JSX.Element 
 
 Kbd.displayName = 'Kbd';
 
-const KbdGroup = ({ className, ...props }: ComponentProps<'div'>): React.JSX.Element => (
+const KbdGroup = ({ className, ...props }: ComponentProps<'div'>) => (
 	<kbd className={cn('inline-flex items-center gap-x-2', className)} data-slot="kbd-group" {...props} />
 );
 

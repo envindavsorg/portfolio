@@ -10,11 +10,7 @@ import {
 import { Separator } from '@/components/ui/Separator';
 import { cn } from '@/lib/utils';
 
-export const CodeCollapsibleWrapper = ({
-	className,
-	children,
-	...props
-}: React.ComponentProps<typeof Collapsible>): React.JSX.Element => (
+export const CodeCollapsibleWrapper = ({ className, children, ...props }: React.ComponentProps<typeof Collapsible>) => (
 	<CollapsibleWithContext className={cn('group/collapsible not-prose relative my-6', className)} {...props}>
 		<CollapsibleTrigger asChild>
 			<div className="absolute top-2 right-10 z-10 flex items-center gap-2">

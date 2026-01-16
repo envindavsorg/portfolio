@@ -1,13 +1,12 @@
 'use client';
 
 import { motion } from 'motion/react';
-import type React from 'react';
 import { useRef } from 'react';
 import { AudioLinesIcon } from '@/components/icons/AudioLinesIcon';
 import GLOBAL_DATA from '@/content/data/global';
 import { soundManager } from '@/lib/sound-manager';
 
-const HeaderPronounceName = (): React.JSX.Element => {
+const HeaderPronounceName = () => {
 	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	return (

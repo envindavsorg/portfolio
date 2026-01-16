@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
-import React, { type ReactNode, useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import useMeasure from 'react-use-measure';
 import { cn } from '@/lib/utils';
 
@@ -16,7 +16,7 @@ interface OgImageSectionProps {
 	onChangeAction?: () => void;
 }
 
-export const DirectionAwareTabs = ({ tabs, onChangeAction }: OgImageSectionProps): React.JSX.Element => {
+export const DirectionAwareTabs = ({ tabs, onChangeAction }: OgImageSectionProps) => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [direction, setDirection] = useState(0);
 	const [isAnimating, setIsAnimating] = useState(false);

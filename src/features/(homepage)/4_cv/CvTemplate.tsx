@@ -1,12 +1,11 @@
 import { Body, Container, Head, Heading, Hr, Html, Img, Link, Preview, Text } from '@react-email/components';
-import type React from 'react';
 
 interface CvTemplateProps {
 	firstName: string;
 	recipientEmail: string;
 }
 
-const CvTemplate = ({ firstName }: CvTemplateProps): React.JSX.Element => (
+const CvTemplate = ({ firstName }: CvTemplateProps) => (
 	<Html>
 		<Head />
 
