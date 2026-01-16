@@ -2,7 +2,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { ComponentProps } from 'react';
 
-export const buttonVariants = cva(
+const buttonVariants = cva(
 	[
 		'inline-flex items-center justify-center gap-2 rounded-full font-medium text-sm',
 		'cursor-pointer select-none whitespace-nowrap outline-none focus-visible:ring-0',
@@ -44,8 +44,12 @@ type ButtonProps = ComponentProps<'button'> &
 		asChild?: boolean;
 	};
 
-export const Button = ({ className, variant, size, asChild = false, ...props }: ButtonProps) => {
+const Button = ({ className, variant, size, asChild = false, ...props }: ButtonProps) => {
 	const Comp = asChild ? Slot : 'button';
 
 	return <Comp className={buttonVariants({ variant, size, className })} data-slot="button" {...props} />;
 };
+
+Button.displayName = 'Button';
+
+export { Button, buttonVariants };

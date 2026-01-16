@@ -11,7 +11,7 @@ const Tools = (): React.JSX.Element => {
 	);
 
 	return (
-		<Panel id="utils">
+		<Panel>
 			<ToolsTitle />
 			<ToolsContent content={utils} />
 		</Panel>

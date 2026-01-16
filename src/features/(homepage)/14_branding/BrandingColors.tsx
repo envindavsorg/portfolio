@@ -1,5 +1,5 @@
 import type React from 'react';
-import { CopyButton } from '@/components/CopyButton';
+import { CopyButton } from '@/components/buttons/CopyButton';
 
 const BRANDING_COLORS = {
 	primary: '#F3B993',

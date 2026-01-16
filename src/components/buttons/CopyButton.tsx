@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { CheckIcon } from '@/components/icons/CheckIcon';
 import { CopyIcon } from '@/components/icons/CopyIcon';
 import { XIcon } from '@/components/icons/XIcon';

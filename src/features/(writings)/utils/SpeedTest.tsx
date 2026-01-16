@@ -4,7 +4,7 @@ import SpeedTestEngine from '@cloudflare/speedtest';
 import { DownloadIcon, GaugeIcon, type Icon, SpeedometerIcon, UploadIcon } from '@phosphor-icons/react';
 import type React from 'react';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from '@/components/ui/Item';
 import { cn } from '@/lib/utils';
 

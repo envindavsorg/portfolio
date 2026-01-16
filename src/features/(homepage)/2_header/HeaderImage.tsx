@@ -10,8 +10,8 @@ const HeaderImage = (): React.JSX.Element => (
 			<Image
 				alt={`${firstName} ${lastName}`}
 				className="aspect-square size-26 rounded-full object-cover object-top ring-1 ring-theme ring-offset-3 ring-offset-background sm:size-32 lg:size-40"
-				fetchPriority="high"
 				height={1404}
+				priority
 				sizes="(max-width: 640px) 104px, (max-width: 1024px) 128px, 160px"
 				src={photo}
 				width={1190}

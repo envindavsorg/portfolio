@@ -9,7 +9,7 @@ const Commits = async (): Promise<React.JSX.Element> => {
 	const { stars, followers, following, contributions } = await getGitHubData();
 
 	return (
-		<Panel id="github-graph">
+		<Panel>
 			<CommitsTitle />
 			<CommitsContent contributions={contributions} />
 

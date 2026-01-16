@@ -49,9 +49,9 @@ export const MenuIcon = ({ isOpen, className, size = 28, ...props }: NavBarMenuI
 				width={size}
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<motion.line animate={controls} custom={1} variants={LINE_VARIANTS} x1="4" x2="20" y1="6" y2="6" />
-				<motion.line animate={controls} custom={2} variants={LINE_VARIANTS} x1="4" x2="20" y1="12" y2="12" />
-				<motion.line animate={controls} custom={3} variants={LINE_VARIANTS} x1="4" x2="20" y1="18" y2="18" />
+				<motion.line animate={controls} custom={1} initial="normal" variants={LINE_VARIANTS} x1="4" x2="20" y1="6" y2="6" />
+				<motion.line animate={controls} custom={2} initial="normal" variants={LINE_VARIANTS} x1="4" x2="20" y1="12" y2="12" />
+				<motion.line animate={controls} custom={3} initial="normal" variants={LINE_VARIANTS} x1="4" x2="20" y1="18" y2="18" />
 			</svg>
 		</div>
 	);

@@ -11,7 +11,7 @@ const Articles = (): React.JSX.Element => {
 	);
 
 	return (
-		<Panel id="articles">
+		<Panel>
 			<ArticlesTitle />
 			<ArticlesContent content={articles} />
 		</Panel>

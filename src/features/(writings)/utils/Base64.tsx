@@ -3,7 +3,7 @@
 import { ArrowsClockwiseIcon, CheckIcon, CopyIcon } from '@phosphor-icons/react';
 import React, { type ChangeEvent, useCallback, useState } from 'react';
 import { toast } from 'sonner';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { DirectionAwareTabs } from '@/components/ui/DirectionAwareTabs';
 import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';

@@ -6,7 +6,7 @@ import posthog from 'posthog-js';
 import type React from 'react';
 import { lazy, useCallback, useMemo, useOptimistic, useTransition } from 'react';
 import { toast } from 'sonner';
-import { buttonVariants } from '@/components/Button';
+import { buttonVariants } from '@/components/buttons/Button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import { cn } from '@/lib/utils';

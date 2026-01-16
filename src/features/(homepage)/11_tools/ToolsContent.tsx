@@ -2,7 +2,7 @@ import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 import type React from 'react';
 import { useMemo } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
 import { PanelContent, PanelFooter } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';

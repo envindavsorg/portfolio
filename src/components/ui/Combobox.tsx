@@ -3,8 +3,8 @@
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import type React from 'react';
 import { useState } from 'react';
-import { Button } from '@/components/Button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/Command';
+import { Button } from '@/components/buttons/Button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/Command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 import { cn } from '@/lib/utils';
 

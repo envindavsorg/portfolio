@@ -2,11 +2,10 @@ import type React from 'react';
 import { getAllPosts } from '@/lib/blog/posts';
 import { NAVIGATION_DATA } from '@/lib/navigation';
 import { cn } from '@/lib/utils';
-import { CommandContent } from './command/CommandContent';
 import { NavBarContent } from './NavBarContent';
 import { NavBarMark } from './NavBarMark';
 import { NavBarWrapper } from './NavBarWrapper';
-import { NavBarLinksGitHub, NavBarLinksLLM, NavBarLinksRSS, NavBarLinksTheme } from './NavbarLinks';
+import { NavBarLinksCommand, NavBarLinksGitHub, NavBarLinksLLM, NavBarLinksRSS, NavBarLinksTheme } from './NavbarLinks';
 
 export const NavBar = (): React.JSX.Element => {
 	const posts: Post[] = getAllPosts();
@@ -24,8 +23,7 @@ export const NavBar = (): React.JSX.Element => {
 				<NavBarContent links={NAVIGATION_DATA} variant="desktop" />
 
 				<div className="flex items-center gap-x-2 sm:border-edge sm:border-l sm:pl-4">
-					<CommandContent posts={posts} />
-
+					<NavBarLinksCommand posts={posts} />
 					<NavBarLinksGitHub />
 					<NavBarLinksTheme />
 					<NavBarLinksRSS />

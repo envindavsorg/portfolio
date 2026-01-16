@@ -3,7 +3,7 @@
 import { CopyIcon } from '@phosphor-icons/react';
 import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { AnimatedCheckbox } from '@/components/ui/AnimatedCheckbox';
 import { Combobox } from '@/components/ui/Combobox';
 import { Label } from '@/components/ui/Label';

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
 import { LLMCopyButtonWithViewOptions } from '@/actions/blog/post.action';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { MDX } from '@/components/markdown/mdx';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';

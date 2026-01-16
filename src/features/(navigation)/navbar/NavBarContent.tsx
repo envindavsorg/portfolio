@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type React from 'react';
 import { memo, useCallback, useState } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { MenuIcon } from '@/components/icons/MenuIcon';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
 import type { NavigationItem } from '@/lib/navigation';

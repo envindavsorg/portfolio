@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 import type React from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { KeyboardShortcuts } from '@/features/(writings)/KeyboardShortcuts';
 import { ShareMenu } from '@/features/(writings)/ShareMenu';
 import { findNeighbour, getPostsByCategory } from '@/lib/blog/posts';

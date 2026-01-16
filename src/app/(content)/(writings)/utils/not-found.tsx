@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { Divider } from '@/components/ui/Divider';
 import { Panel, PanelContent, PanelFooter, PanelHeader, PanelTitle } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';

@@ -5,7 +5,7 @@ import { ExperiencesContent } from './ExperiencesContent';
 import { ExperiencesTitle } from './ExperiencesTitle';
 
 const Experiences = (): React.JSX.Element => (
-	<Panel id="experience">
+	<Panel id="my-experiences">
 		<ExperiencesTitle />
 		<ExperiencesContent content={EXPERIENCES} />
 	</Panel>

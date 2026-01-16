@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type React from 'react';
 import { lazy } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 
 const V0Icon = lazy(() =>
 	import('@/components/stack/V0').then((m) => ({

@@ -182,19 +182,6 @@ declare global {
 		dateCreated: string;
 	}
 
-	// types for navbar command menu
-	interface CommandLinkItem {
-		title: string;
-		url: string;
-		icon?: ElementType;
-		keywords?: string[];
-		openInNewTab?: boolean;
-	}
-
-	type CommandKind = 'command' | 'page' | 'link' | 'utils' | 'article' | 'components' | 'section' | 'download';
-
-	type CommandMetaMap = Map<string, { commandKind: CommandKind }>;
-
 	// types for browser hook
 	type Browser = 'Arc Browser' | 'Mozilla Firefox' | 'Google Chrome' | 'Apple Safari' | 'Microsoft Edge';
 

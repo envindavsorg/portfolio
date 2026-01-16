@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import type { Collapsible } from '@/components/ui/Collapsible';
 import {
 	CollapsibleChevronsIcon,

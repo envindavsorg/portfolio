@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type React from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { PanelContent, PanelFooter } from '@/components/ui/Panel';
 import { TextAnimate } from '@/components/ui/TextAnimate';
 import { ArticleItem } from './ArticleItem';

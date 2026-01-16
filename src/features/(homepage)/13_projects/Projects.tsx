@@ -5,7 +5,7 @@ import { ProjectsContent } from './ProjectsContent';
 import { ProjectsTitle } from './ProjectsTitle';
 
 const Projects = (): React.JSX.Element => (
-	<Panel id="projects">
+	<Panel id="my-projects">
 		<ProjectsTitle />
 		<ProjectsContent content={PROJECTS} />
 	</Panel>

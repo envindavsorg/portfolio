@@ -5,7 +5,7 @@ import { capitalize } from 'es-toolkit/string';
 import { usePathname, useRouter } from 'next/navigation';
 import type React from 'react';
 import { useCallback } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTrigger } from '@/components/ui/Drawer';
 import { cn } from '@/lib/utils';

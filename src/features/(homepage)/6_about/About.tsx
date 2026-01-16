@@ -12,7 +12,7 @@ const About = (): React.JSX.Element => {
 	const toggleExpanded = useCallback(() => setIsExpanded((prev) => !prev), []);
 
 	return (
-		<Panel>
+		<Panel id="about-me">
 			<AboutTitle />
 			<AboutContent expanded={isExpanded} />
 			<AboutFooter expanded={isExpanded} onToggle={toggleExpanded} />

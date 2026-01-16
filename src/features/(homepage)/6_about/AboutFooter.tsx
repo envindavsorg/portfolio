@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/buttons/Button';
 import { ChevronDownIcon } from '@/components/icons/ChevronDownIcon';
 import { ChevronUpIcon } from '@/components/icons/ChevronUpIcon';
 import { PanelFooter } from '@/components/ui/Panel';
