@@ -9,10 +9,10 @@ import { Button } from '@/components/buttons/Button';
 import { DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/Dialog';
 import { DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/Drawer';
 import { PanelFooter } from '@/components/ui/Panel';
+import GLOBAL_DATA from '@/content/data/global';
 import type { EmailFormData } from '@/hooks/use-email-form';
 import useEmailForm from '@/hooks/use-email-form';
 import useMediaQuery from '@/hooks/use-media-query';
-import { USER } from '@/lib/user';
 import { CvError } from './CvError';
 import { CvForm } from './CvForm';
 import { CvModal } from './CvModal';
@@ -101,10 +101,11 @@ const CvFooter = (): React.JSX.Element => {
 		<PanelFooter>
 			<Button asChild variant="outline">
 				<Link
-					href={USER.documents.cv.url}
+					aria-label={GLOBAL_DATA.CV.name}
+					href={GLOBAL_DATA.CV.url}
 					onClick={() => {
 						posthog.capture('cv_download_clicked', {
-							cv_url: USER.documents.cv.url,
+							cv_url: GLOBAL_DATA.CV.url,
 						});
 					}}
 					rel="noopener noreferrer"

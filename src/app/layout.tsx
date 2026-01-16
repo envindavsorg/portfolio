@@ -2,20 +2,33 @@ import '@/styles/globals.css';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import type React from 'react';
-import type { WebSite, WithContext } from 'schema-dts';
 import ConsentManager from '@/components/manager/ConsentManager';
+import GLOBAL_DATA from '@/content/data/global';
 import { mono, sans } from '@/lib/fonts';
 import { META_THEME_COLORS } from '@/lib/theme';
-import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 import { Providers } from '@/providers/Providers';
 
-const getWebSiteJsonLd = (): WithContext<WebSite> => ({
+const getJsonLd = () => ({
 	'@context': 'https://schema.org',
-	'@type': 'WebSite',
-	name: USER.firstName,
-	url: 'https://cuzeacflorin.fr',
-	alternateName: [USER.username],
+	'@graph': [
+		{
+			'@type': 'WebSite',
+			name: GLOBAL_DATA.USER.fullName,
+			url: GLOBAL_DATA.SOCIAL.portfolio,
+			description: GLOBAL_DATA.USER.bio,
+			inLanguage: 'fr-FR',
+			alternateName: [GLOBAL_DATA.USER.username],
+		},
+		{
+			'@type': 'Person',
+			name: GLOBAL_DATA.USER.fullName,
+			url: GLOBAL_DATA.SOCIAL.portfolio,
+			jobTitle: GLOBAL_DATA.WORK.title,
+			sameAs: [GLOBAL_DATA.SOCIAL.github, GLOBAL_DATA.SOCIAL.linkedin].filter(Boolean),
+			knowsAbout: ['React', 'Next.js', 'TypeScript'],
+		},
+	],
 });
 
 const darkModeScript = `
@@ -46,11 +59,11 @@ export const metadata: Metadata = {
 		canonical: '/',
 	},
 	title: {
-		template: `%s – ${USER.firstName} ${USER.lastName}`,
-		default: `${USER.firstName} – ${USER.jobTitle}`,
+		template: '%s – Portfolio personnel',
+		default: GLOBAL_DATA.USER.fullName,
 	},
-	description: USER.bio,
-	keywords: USER.keywords,
+	description: GLOBAL_DATA.USER.bio,
+	keywords: GLOBAL_DATA.keywords,
 	authors: [
 		{
 			name: 'envindavsorg',
@@ -59,19 +72,19 @@ export const metadata: Metadata = {
 	],
 	creator: 'envindavsorg',
 	openGraph: {
-		siteName: `${USER.firstName} ${USER.lastName}`,
+		siteName: GLOBAL_DATA.USER.fullName,
 		url: '/',
 		type: 'profile',
-		firstName: USER.firstName,
-		lastName: USER.lastName,
-		username: USER.username,
-		gender: USER.gender,
+		firstName: GLOBAL_DATA.USER.firstName,
+		lastName: GLOBAL_DATA.USER.lastName,
+		username: GLOBAL_DATA.USER.username,
+		gender: GLOBAL_DATA.USER.gender,
 		images: [
 			{
-				url: USER.ogImage,
+				url: GLOBAL_DATA.USER.og,
 				width: 1200,
 				height: 630,
-				alt: `${USER.firstName} ${USER.lastName}`,
+				alt: GLOBAL_DATA.USER.fullName,
 			},
 		],
 	},
@@ -115,9 +128,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 			<script dangerouslySetInnerHTML={{ __html: darkModeScript }} type="text/javascript" />
 			<Script src={`data:text/javascript;base64,${btoa(darkModeScript)}`} />
 			<script
-				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(getWebSiteJsonLd()).replace(/</g, '\\u003c'),
-				}}
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(getJsonLd()).replace(/</g, '\\u003c') }}
 				type="application/ld+json"
 			/>
 		</head>

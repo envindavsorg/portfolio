@@ -2,13 +2,13 @@
 
 import type React from 'react';
 import { Panel, PanelContent } from '@/components/ui/Panel';
-import { USER } from '@/lib/user';
+import GLOBAL_DATA from '@/content/data/global';
 import { OverviewItem } from './OverviewItem';
 
 const Overview = (): React.JSX.Element => (
 	<Panel>
 		<PanelContent className="grid grid-cols-6 gap-3 sm:gap-4">
-			{USER.overview.map((item) => (
+			{GLOBAL_DATA.OVERVIEW.content.map((item) => (
 				<OverviewItem key={item.id} {...item} />
 			))}
 		</PanelContent>

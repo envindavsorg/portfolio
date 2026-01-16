@@ -1,8 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resend } from 'resend';
+import GLOBAL_DATA from '@/content/data/global';
 import { CvTemplate } from '@/features/(homepage)/4_cv/CvTemplate';
-import { USER } from '@/lib/user';
 import { decodeEmail } from '@/lib/utils/string';
 import emailSchema from '@/schemas/email.schema';
 
@@ -32,13 +32,13 @@ export const POST = async (request: Request): Promise<Response> => {
 
 		const path = join(process.cwd(), 'public', 'documents', 'resume.pdf');
 		const buffer: Buffer = await readFile(path);
-		const filename = USER.documents.cv.name;
+		const filename = GLOBAL_DATA.CV.name;
 		const content = buffer.toString('base64');
 
 		const { error } = await resend.emails.send({
-			from: `${USER.firstName} ${USER.lastName} <${decodeEmail(USER.emailAddress)}>`,
+			from: `${GLOBAL_DATA.USER.fullName} <${decodeEmail(GLOBAL_DATA.USER.emailAddress)}>`,
 			to: [recipientEmail],
-			subject: `CV - ${USER.firstName} ${USER.lastName} | ${USER.website}`,
+			subject: `CV - ${GLOBAL_DATA.USER.fullName} | ${GLOBAL_DATA.SOCIAL.portfolio}`,
 			react: CvTemplate({ firstName, recipientEmail }),
 			attachments: [{ filename, content }],
 		});

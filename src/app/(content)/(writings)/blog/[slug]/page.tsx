@@ -9,13 +9,13 @@ import { Button } from '@/components/buttons/Button';
 import { MDX } from '@/components/markdown/mdx';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
+import GLOBAL_DATA from '@/content/data/global';
 import { InlineToc } from '@/features/(writings)/InlineToc';
 import { KeyboardShortcuts } from '@/features/(writings)/KeyboardShortcuts';
 import { ShareMenu } from '@/features/(writings)/ShareMenu';
 import { findNeighbour, getAllPosts, getPostBySlug } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
-import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -74,9 +74,9 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
 	author: {
 		'@type': 'Person',
-		name: USER.firstName,
-		identifier: USER.username,
-		image: USER.avatar,
+		name: GLOBAL_DATA.USER.firstName,
+		identifier: GLOBAL_DATA.USER.username,
+		image: GLOBAL_DATA.USER.avatar,
 	},
 });
 

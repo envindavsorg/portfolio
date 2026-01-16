@@ -1,10 +1,10 @@
 import type { MetadataRoute } from 'next';
-import { USER } from '@/lib/user';
+import GLOBAL_DATA from '@/content/data/global';
 
 const manifest = (): MetadataRoute.Manifest => ({
-	short_name: USER.firstName,
-	name: USER.firstName,
-	description: USER.bio,
+	short_name: GLOBAL_DATA.USER.firstName,
+	name: GLOBAL_DATA.USER.fullName,
+	description: GLOBAL_DATA.USER.bio,
 	icons: [
 		{
 			src: '/icon-192x192.png',

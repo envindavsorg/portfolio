@@ -4,12 +4,12 @@ import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
 import { MDX } from '@/components/markdown/mdx';
 import { Divider } from '@/components/ui/Divider';
 import { Prose } from '@/components/ui/Typography';
+import GLOBAL_DATA from '@/content/data/global';
 import { IsNew } from '@/features/(writings)/IsNew';
 import { TopBar } from '@/features/(writings)/TopBar';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
-import { USER } from '@/lib/user';
 
 interface Props {
 	params: Promise<{
@@ -58,9 +58,9 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
 	author: {
 		'@type': 'Person',
-		name: USER.firstName,
-		identifier: USER.username,
-		image: USER.avatar,
+		name: GLOBAL_DATA.USER.firstName,
+		identifier: GLOBAL_DATA.USER.username,
+		image: GLOBAL_DATA.USER.avatar,
 	},
 });
 

@@ -1,6 +1,6 @@
+import GLOBAL_DATA from '@/content/data/global';
 import { SOCIAL_LINKS } from '@/features/(homepage)/5_contact/content';
 import { TECH_STACK } from '@/features/(homepage)/8_stack/content';
-import { USER } from '@/lib/user';
 
 const content = `
 # À propos de moi
@@ -15,11 +15,11 @@ Aujourd'hui, je maîtrise cette stack (Next.js/TS/Tailwind) pour déployer rapid
 
 ## Informations personnelles
 
-- Prénom: ${USER.firstName}
-- Nom: ${USER.lastName}
-- Nom d'affichage: ${USER.firstName}
-- Ville: ${USER.location.city}
-- Site internet: ${USER.website}
+- Prénom: ${GLOBAL_DATA.USER.firstName}
+- Nom: ${GLOBAL_DATA.USER.lastName}
+- Nom d'affichage: ${GLOBAL_DATA.USER.firstName}
+- Ville: ${GLOBAL_DATA.USER.location.city}
+- Site internet: ${GLOBAL_DATA.SOCIAL.portfolio}
 
 ## Réseaux sociaux
 

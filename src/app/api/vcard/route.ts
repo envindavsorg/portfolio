@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import VCard from 'vcard-creator';
-import { USER } from '@/lib/user';
+import GLOBAL_DATA from '@/content/data/global';
 import convertImageToJpeg from '@/lib/utils/image';
 import { decodeEmail, decodePhoneNumber } from '@/lib/utils/string';
 
@@ -40,19 +40,19 @@ export const GET = async (): Promise<Response> => {
 	const card = new VCard();
 
 	card
-		.addName(USER.lastName, USER.firstName)
-		.addPhoneNumber(decodePhoneNumber(USER.phoneNumber))
-		.addAddress(USER.location.city)
-		.addEmail(decodeEmail(USER.emailAddress))
-		.addURL(USER.website);
+		.addName(GLOBAL_DATA.USER.fullName)
+		.addPhoneNumber(decodePhoneNumber(GLOBAL_DATA.USER.phoneNumber))
+		.addAddress(GLOBAL_DATA.USER.location.city)
+		.addEmail(decodeEmail(GLOBAL_DATA.USER.emailAddress))
+		.addURL(GLOBAL_DATA.SOCIAL.portfolio);
 
-	const photo = await getVCardPhoto(USER.avatar);
+	const photo = await getVCardPhoto(GLOBAL_DATA.USER.avatar);
 	if (photo) {
 		card.addPhoto(photo.image, photo.mine);
 	}
 
-	if (USER.jobs.length > 0) {
-		const company = USER.jobs[0];
+	if (GLOBAL_DATA.WORK.jobs.length > 0) {
+		const company = GLOBAL_DATA.WORK.jobs[0];
 		card.addCompany(company.company).addJobtitle(company.title);
 	}
 
@@ -60,7 +60,7 @@ export const GET = async (): Promise<Response> => {
 		status: 200,
 		headers: {
 			'Content-Type': 'text/x-vcard',
-			'Content-Disposition': `attachment; filename=${USER.username}-vcard.vcf`,
+			'Content-Disposition': `attachment; filename=${GLOBAL_DATA.USER.firstName}-vcard.vcf`,
 		},
 	});
 };

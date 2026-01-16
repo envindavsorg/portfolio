@@ -39,11 +39,11 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/compone
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@/components/ui/Drawer';
 import { Separator } from '@/components/ui/Separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
+import GLOBAL_DATA from '@/content/data/global';
 import useMediaQuery from '@/hooks/use-media-query';
 import useMetaColor from '@/hooks/use-meta-color';
 import { soundManager } from '@/lib/sound-manager';
 import { META_THEME_COLORS } from '@/lib/theme';
-import { USER } from '@/lib/user';
 import { cn } from '@/lib/utils';
 
 type CommandKind = 'command' | 'page' | 'utils' | 'article' | 'components' | 'section' | 'download';
@@ -85,7 +85,7 @@ const COMMAND_GROUPS: CommandGroupProps[] = [
 		heading: 'Documents à télécharger :',
 		items: [
 			{ title: 'Ma carte de visite', url: '/api/vcard', icon: IdCardIcon, kind: 'download' },
-			{ title: 'Télécharger mon CV', url: USER.documents.cv.url, icon: FileIcon, kind: 'download' },
+			{ title: 'Télécharger mon CV', url: GLOBAL_DATA.CV.url, icon: FileIcon, kind: 'download' },
 		],
 	},
 ];
@@ -349,7 +349,7 @@ const NavBarLinksGitHub = (): React.JSX.Element => {
 			size="icon"
 			variant="outline"
 		>
-			<Link aria-label="Mon profil GitHub" href={USER.social.github} rel="noopener" target="_blank">
+			<Link aria-label="Mon profil GitHub" href={GLOBAL_DATA.SOCIAL.github} rel="noopener" target="_blank">
 				<GitHubIcon ref={iconRef} />
 				<span className="sr-only">Mon profil GitHub</span>
 			</Link>

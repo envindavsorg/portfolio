@@ -1,7 +1,7 @@
 import { useIsClient } from '@uidotdev/usehooks';
 import type React from 'react';
 import { useMemo } from 'react';
-import { USER } from '@/lib/user';
+import GLOBAL_DATA from '@/content/data/global';
 import { cn } from '@/lib/utils';
 import { decodeEmail, decodePhoneNumber, formatPhoneNumber } from '@/lib/utils/string';
 
@@ -17,11 +17,11 @@ const OverviewItem = ({ icon: Icon, content, id, className }: OverviewItemProps)
 
 	const displayContent = useMemo(() => {
 		if (id === 'phone-number') {
-			return isClient ? formatPhoneNumber(decodePhoneNumber(USER.phoneNumber)) : '••••••••••';
+			return isClient ? formatPhoneNumber(decodePhoneNumber(GLOBAL_DATA.USER.phoneNumber)) : '••••••••••';
 		}
 
 		if (id === 'email-address') {
-			return isClient ? decodeEmail(USER.emailAddress) : '•••••••@••••••••••••.••';
+			return isClient ? decodeEmail(GLOBAL_DATA.USER.emailAddress) : '•••••••@••••••••••••.••';
 		}
 
 		return content;

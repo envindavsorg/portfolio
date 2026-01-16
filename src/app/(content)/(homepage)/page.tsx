@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type React from 'react';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
 import { Divider } from '@/components/ui/Divider';
+import GLOBAL_DATA from '@/content/data/global';
 import { Cover } from '@/features/(homepage)/1_cover/Cover';
 import { Header } from '@/features/(homepage)/2_header/Header';
 import { Overview } from '@/features/(homepage)/3_overview/Overview';
@@ -18,29 +19,28 @@ import { Projects } from '@/features/(homepage)/13_projects/Projects';
 import { Branding } from '@/features/(homepage)/14_branding/Branding';
 import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
-import { USER } from '@/lib/user';
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
-		title: `${USER.firstName} ${USER.lastName}`,
-		description: USER.bio,
+		title: GLOBAL_DATA.USER.fullName,
+		description: GLOBAL_DATA.USER.bio,
 		ogImageParams: {
 			type: 'homepage',
-			title: `${USER.firstName} ${USER.lastName}`,
-			description: USER.bio,
+			title: GLOBAL_DATA.USER.fullName,
+			description: GLOBAL_DATA.USER.bio,
 		},
 	});
 
 const getPageJsonLd = (): WithContext<PageSchema> => ({
 	'@context': 'https://schema.org',
 	'@type': 'ProfilePage',
-	dateCreated: dayjs(USER.dateCreated).toISOString(),
+	dateCreated: dayjs('2025-09-01').toISOString(),
 	dateModified: dayjs().toISOString(),
 	mainEntity: {
 		'@type': 'Person',
-		name: USER.firstName,
-		identifier: USER.username,
-		image: USER.avatar,
+		name: GLOBAL_DATA.USER.firstName,
+		identifier: GLOBAL_DATA.USER.username,
+		image: GLOBAL_DATA.USER.avatar,
 	},
 });
 

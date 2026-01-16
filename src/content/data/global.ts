@@ -7,28 +7,35 @@ import {
 	GithubLogoIcon,
 	NavigationArrowIcon,
 	PhoneIcon,
-} from '@phosphor-icons/react/ssr';
+} from '@phosphor-icons/react/dist/ssr';
 
-export const USER: User = {
+const USER = {
 	firstName: 'Florin',
 	lastName: 'Cuzeac',
+	fullName: 'Florin Cuzeac',
 	username: 'envindavsorg',
 	gender: 'homme',
 	pronouns: 'il/lui',
 	bio: 'Crée, code, innove. Les petits détails comptent.',
 	phoneNumber: 'MDYgNTggMDUgODYgNjU=',
 	emailAddress: 'Y29udGFjdEBjdXplYWNmbG9yaW4uZnI=',
+	location: {
+		city: 'Paris, France',
+	},
+	photo: '/images/photo.webp',
+	avatar: '/images/avatar.webp',
+	og: '/images/og-image-dark.png?t=1755355653',
+	pronunciation: '/audio/florin.mp3',
+} satisfies USER;
+
+const OVERVIEW = {
 	sentences: [
 		'Imagine, code, crée, inspire.',
 		'Chaque petit pixel compte !',
 		'Du concept au déploiement !',
 		'Chaque petit détail compte !',
 	],
-	social: {
-		github: 'https://github.com/envindavsorg',
-		linkedin: 'https://fr.linkedin.com/in/cuzeacflorin',
-	},
-	overview: [
+	content: [
 		{
 			id: 'job-title',
 			content: 'Développeur Front-End Senior',
@@ -78,77 +85,65 @@ export const USER: User = {
 			className: 'col-span-full sm:col-span-3 lg:col-span-2 lg:col-start-5 lg:row-start-3',
 		},
 	],
-	location: {
-		city: 'Paris, France',
-	},
-	website: 'cuzeacflorin.fr',
-	jobTitle: 'Développeur et designer web',
-	photo: '/images/photo.webp',
-	avatar: '/images/avatar.webp',
-	ogImage: '/images/og-image-dark.png?t=1755355653',
-	namePronunciationUrl: '/audio/florin.mp3',
-	documents: {
-		cv: {
-			content: `
-Découvrez mon parcours professionnel à travers mon CV détaillé, qui retrace mes expériences,
-compétences techniques et réalisations dans le développement web full-stack.
-Vous y trouverez un aperçu complet de mon expertise et de ma progression dans le domaine.
+} satisfies OVERVIEW;
 
-Pour recevoir une copie actualisée directement dans votre boîte e-mail, cliquez sur le bouton ci-dessous.
-Je serai ravi d'échanger avec vous sur d'éventuelles opportunités de collaboration.
-`,
-			url: 'https://cfhi75vpdo.ufs.sh/f/tIhJKzZYPGQBq3bQllCjGzmQByFvYMdbDwUilx4TH8AX3eZ5',
-			name: 'cv_florin_cuzeac.pdf',
-			title: 'Voir ou télécharger mon CV',
-		},
-	},
+const SOCIAL = {
+	github: 'https://github.com/envindavsorg/',
+	linkedin: 'https://fr.linkedin.com/in/cuzeacflorin/',
+	portfolio: 'https://cuzeacflorin.fr/',
+} satisfies SOCIAL;
+
+const WORK = {
+	title: 'Développeur Full-Stack',
 	jobs: [
 		{
 			title: 'Développeur Front-End Senior',
 			company: 'WeFix by Fnac',
-			website: 'https://wefix.net',
+			website: 'https://wefix.net/',
+		},
+		{
+			title: 'Développeur web & Designer UI/UX',
+			company: 'SpinalCom',
+			website: 'https://www.spinalcom.com/en/',
+		},
+		{
+			title: 'Développeur Multi-plateformes',
+			company: 'Économat des Armées',
+			website: 'https://www.economat-armees.com/',
 		},
 	],
+} satisfies WORK;
+
+const CV = {
+	url: 'https://cfhi75vpdo.ufs.sh/f/tIhJKzZYPGQBq3bQllCjGzmQByFvYMdbDwUilx4TH8AX3eZ5',
+	name: 'cv_florin_cuzeac.pdf',
+} satisfies CV;
+
+const GLOBAL_DATA = {
+	USER,
+	OVERVIEW,
+	SOCIAL,
+	WORK,
+	CV,
+
+	// other
 	keywords: [
-		'florin',
-		'cuzeac',
-		'cuzeac florin',
-		'florin cuzeac',
-		'envindavsorg',
-		'dev',
-		'developer',
 		'web developer',
 		'web designer',
 		'front-end developer',
 		'front-end designer',
-		'freelance',
-		'freelance developer',
-		'freelance web developer',
-		'freelance web designer',
-		'freelance front-end developer',
-		'freelance front-end designer',
-		'paris',
-		'france',
 		'html',
 		'css',
-		'sass',
 		'javascript',
 		'typescript',
 		'react',
 		'nextjs',
 		'tailwindcss',
 		'nodejs',
-		'npm',
 		'pnpm',
-		'postgresql',
-		'pug',
-		'vue',
 		'git',
-		'bun',
-		'express',
-		'fastify',
 		'markdown',
-		'mongodb',
 	],
-	dateCreated: '2025-09-01',
 };
+
+export default GLOBAL_DATA;

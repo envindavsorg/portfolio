@@ -40,7 +40,7 @@ const getMDXData = (dir: string) => {
 };
 
 export const getAllPosts = () =>
-	getMDXData(join(process.cwd(), 'src/content')).sort(
+	getMDXData(join(process.cwd(), 'src/content/articles')).sort(
 		(a, b) => new Date(b.metadata.createdAt).getTime() - new Date(a.metadata.createdAt).getTime()
 	);
 

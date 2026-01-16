@@ -2,8 +2,8 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
+import GLOBAL_DATA from '@/content/data/global';
 import { logger } from '@/lib/logger';
-import { USER } from '@/lib/user';
 
 export const runtime = 'nodejs';
 
@@ -14,8 +14,8 @@ export const GET = async (req: NextRequest) => {
 		const { searchParams } = req.nextUrl;
 
 		const type = (searchParams.get('type') as PageType) || 'homepage';
-		const title = searchParams.get('title') || `${USER.firstName} ${USER.lastName}`;
-		const description = searchParams.get('description') || USER.bio;
+		const title = searchParams.get('title') || `${GLOBAL_DATA.USER.fullName}`;
+		const description = searchParams.get('description') || GLOBAL_DATA.USER.bio;
 
 		const getTypeStyles = (pageType: PageType) => {
 			const baseStyles = {
@@ -23,22 +23,22 @@ export const GET = async (req: NextRequest) => {
 					badge: "Page d'accueil",
 				},
 				blog: {
-					badge: `Portfolio | ${USER.firstName} ${USER.lastName} | Blog`,
+					badge: `Portfolio | ${GLOBAL_DATA.USER.fullName} | Blog`,
 				},
 				blogArticle: {
-					badge: `Portfolio | ${USER.firstName} ${USER.lastName} | Article de blog`,
+					badge: `Portfolio | ${GLOBAL_DATA.USER.fullName} | Article de blog`,
 				},
 				components: {
-					badge: `Portfolio | ${USER.firstName} ${USER.lastName} | Composants`,
+					badge: `Portfolio | ${GLOBAL_DATA.USER.fullName} | Composants`,
 				},
 				componentsArticle: {
-					badge: `Portfolio | ${USER.firstName} ${USER.lastName} | Composant`,
+					badge: `Portfolio | ${GLOBAL_DATA.USER.fullName} | Composant`,
 				},
 				utils: {
-					badge: `Portfolio | ${USER.firstName} ${USER.lastName} | Outils`,
+					badge: `Portfolio | ${GLOBAL_DATA.USER.fullName} | Outils`,
 				},
 				utilsArticle: {
-					badge: `Portfolio | ${USER.firstName} ${USER.lastName} | Outil`,
+					badge: `Portfolio | ${GLOBAL_DATA.USER.fullName} | Outil`,
 				},
 			};
 			return baseStyles[pageType] || baseStyles.homepage;
@@ -140,14 +140,14 @@ export const GET = async (req: NextRequest) => {
 							marginRight: '12px',
 						}}
 					/>
-					{USER.website} -{' '}
+					{GLOBAL_DATA.SOCIAL.portfolio} -{' '}
 					<span
 						style={{
 							color: '#71717B',
 							marginLeft: '12px',
 						}}
 					>
-						{USER.jobTitle}
+						{GLOBAL_DATA.WORK.title}
 					</span>
 				</div>
 			</div>,
