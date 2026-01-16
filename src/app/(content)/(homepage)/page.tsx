@@ -17,8 +17,8 @@ import { Tools } from '@/features/(homepage)/11_tools/Tools';
 import { Experiences } from '@/features/(homepage)/12_experiences/Experiences';
 import { Projects } from '@/features/(homepage)/13_projects/Projects';
 import { Branding } from '@/features/(homepage)/14_branding/Branding';
-import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+import { dayjs } from '@/lib/utils';
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({

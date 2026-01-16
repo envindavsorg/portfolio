@@ -8,8 +8,8 @@ import GLOBAL_DATA from '@/content/data/global';
 import { IsNew } from '@/features/(writings)/IsNew';
 import { TopBar } from '@/features/(writings)/TopBar';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
-import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+import { dayjs } from '@/lib/utils';
 
 interface Props {
 	params: Promise<{

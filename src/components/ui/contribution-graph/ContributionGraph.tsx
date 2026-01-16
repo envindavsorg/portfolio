@@ -1,16 +1,15 @@
 'use client';
 
 import React, { createContext, type HTMLAttributes, type ReactNode, useContext, useMemo } from 'react';
-import { dayjs } from '@/lib/dayjs';
 import { groupByWeeks } from '@/lib/github';
-import { cn } from '@/lib/utils';
+import { cn, dayjs } from '@/lib/utils';
 
 export const BLOCK_SIZE = 12;
 export const BLOCK_MARGIN = 4;
 export const BLOCK_RADIUS = 2;
 export const LABEL_HEIGHT = 24;
 export const MAX_LEVEL = 4;
-export const WEEK_START = 0; // Sunday
+export const WEEK_START = 0;
 
 interface ContributionGraphContextType {
 	weeks: Week[];

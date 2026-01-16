@@ -1,6 +1,6 @@
 import { useTheme } from 'next-themes';
 import React from 'react';
-import { META_THEME_COLORS } from '@/lib/theme';
+import { META_THEME_COLORS } from '@/content/data/theme';
 
 const useMetaColor = () => {
 	const { resolvedTheme } = useTheme();

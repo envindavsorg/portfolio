@@ -11,8 +11,8 @@ import { TextAnimate } from '@/components/ui/TextAnimate';
 import { ArticleItem } from '@/features/(homepage)/9_articles/ArticleItem';
 import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
-import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
+import { dayjs } from '@/lib/utils';
 
 const getCachedPosts = cache(() =>
 	getPostsByCategory('components').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))

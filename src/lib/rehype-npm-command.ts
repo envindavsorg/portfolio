@@ -30,7 +30,6 @@ export const rehypeNpmCommand = () => (tree: UnistTree) => {
 			node.properties.__bun__ = npmCommand.replace('npm create', 'bun create');
 		}
 
-		// npx
 		if (
 			node.properties?.__rawString__?.startsWith('npx') &&
 			!node.properties?.__rawString__?.startsWith('npx create-')

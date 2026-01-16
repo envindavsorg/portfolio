@@ -1,6 +1,6 @@
 import type React from 'react';
+import { NAVIGATION_DATA } from '@/content/data/navigation';
 import { getAllPosts } from '@/lib/blog/posts';
-import { NAVIGATION_DATA } from '@/lib/navigation';
 import { cn } from '@/lib/utils';
 import { NavBarContent } from './NavBarContent';
 import { NavBarMark } from './NavBarMark';

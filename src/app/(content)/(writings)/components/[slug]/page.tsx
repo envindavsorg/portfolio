@@ -14,9 +14,8 @@ import { InlineToc } from '@/features/(writings)/InlineToc';
 import { KeyboardShortcuts } from '@/features/(writings)/KeyboardShortcuts';
 import { ShareMenu } from '@/features/(writings)/ShareMenu';
 import { findNeighbour, getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
-import { dayjs } from '@/lib/dayjs';
 import { openGraphImage } from '@/lib/open-graph';
-import { cn } from '@/lib/utils';
+import { cn, dayjs } from '@/lib/utils';
 
 interface Props {
 	params: Promise<{

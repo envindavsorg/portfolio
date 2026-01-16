@@ -1,8 +1,7 @@
 import type React from 'react';
 import type { HTMLAttributes } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
-import { dayjs } from '@/lib/dayjs';
-import { cn } from '@/lib/utils';
+import { cn, dayjs } from '@/lib/utils';
 import { BLOCK_MARGIN, BLOCK_RADIUS, BLOCK_SIZE, LABEL_HEIGHT } from './ContributionGraph';
 
 type ContributionGraphBlockProps = HTMLAttributes<SVGRectElement> & {

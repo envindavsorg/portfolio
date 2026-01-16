@@ -2,8 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type React from 'react';
 import { Prose } from '@/components/ui/Typography';
-import { dayjs } from '@/lib/dayjs';
-import { cn } from '@/lib/utils';
+import { cn, dayjs } from '@/lib/utils';
 
 interface ArticleItemProps {
 	article: Post;

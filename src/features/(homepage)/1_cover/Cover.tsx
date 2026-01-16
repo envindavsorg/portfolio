@@ -13,8 +13,7 @@ import {
 	ContextMenuTrigger,
 } from '@/components/ui/ContextMenu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { cn } from '@/lib/utils';
-import { downloadFile } from '@/lib/utils/download';
+import { cn, downloadFile } from '@/lib/utils';
 import { GREETINGS, GREETINGS_CONFIG, GREETINGS_FILE_TYPES, GREETINGS_MAP, variants } from './constants/constants';
 import type { Greeting, GreetingId } from './types/types';
 

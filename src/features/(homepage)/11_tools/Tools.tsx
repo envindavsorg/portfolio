@@ -1,7 +1,7 @@
 import type React from 'react';
 import { Panel } from '@/components/ui/Panel';
 import { getPostsByCategory } from '@/lib/blog/posts';
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '@/lib/utils';
 import { ToolsContent } from './ToolsContent';
 import { ToolsTitle } from './ToolsTitle';
 

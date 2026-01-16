@@ -1,5 +1,5 @@
 import { visit } from 'unist-util-visit';
-import { addQueryParams } from '@/lib/utils/url';
+import { addQueryParams } from '@/lib/utils';
 
 export const rehypeAddQueryParams = (params: Record<string, string>) => (tree: UnistTree) => {
 	visit(tree, (node: UnistNode) => {

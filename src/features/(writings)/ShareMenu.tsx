@@ -9,8 +9,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
-import copyText from '@/lib/utils/copy';
-import { getAbsoluteUrl } from '@/lib/utils/url';
+import { copyText, getAbsoluteUrl } from '@/lib/utils';
 
 interface ShareMenuProps {
 	url: string;

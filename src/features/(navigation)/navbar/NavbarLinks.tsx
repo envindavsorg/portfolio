@@ -40,10 +40,10 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@/compone
 import { Separator } from '@/components/ui/Separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
 import GLOBAL_DATA from '@/content/data/global';
+import { META_THEME_COLORS } from '@/content/data/theme';
 import useMediaQuery from '@/hooks/use-media-query';
 import useMetaColor from '@/hooks/use-meta-color';
 import { soundManager } from '@/lib/sound-manager';
-import { META_THEME_COLORS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
 type CommandKind = 'command' | 'page' | 'utils' | 'article' | 'components' | 'section' | 'download';

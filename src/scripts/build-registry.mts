@@ -100,7 +100,7 @@ try {
 	const result = registrySchema.safeParse(registry);
 
 	if (!result.success) {
-		console.error(result.error);
+		consola.error(result.error);
 		process.exit(1);
 	}
 

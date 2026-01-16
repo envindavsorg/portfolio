@@ -9,8 +9,7 @@ import { toast } from 'sonner';
 import { buttonVariants } from '@/components/buttons/Button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
-import { cn } from '@/lib/utils';
-import getPrompt from '@/lib/utils/llm';
+import { cn, getPrompt } from '@/lib/utils';
 
 const cache = new Map<string, string>();
 

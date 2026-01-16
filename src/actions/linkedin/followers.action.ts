@@ -2,6 +2,7 @@
 
 import { list } from '@vercel/blob';
 import { unstable_cache } from 'next/cache';
+import { logger } from '@/lib/logger';
 
 const CACHE_TAG = 'linkedin-followers';
 const CACHE_REVALIDATE = 3600;
@@ -23,7 +24,7 @@ const fetchFollowersData = async (): Promise<LinkedInData> => {
 	const response = await fetch(blobs[0].url);
 
 	if (!response.ok) {
-		console.error('Failed to fetch LinkedIn data:', response.statusText);
+		logger.error('Failed to fetch LinkedIn data:', response.statusText);
 		throw new Error(`Failed to fetch LinkedIn data: ${response.status}`);
 	}
 

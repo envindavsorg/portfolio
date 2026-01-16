@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useMemo } from 'react';
 import { Panel } from '@/components/ui/Panel';
 import useBrowser from '@/hooks/use-browser';
-import { dayjs } from '@/lib/dayjs';
+import { dayjs } from '@/lib/utils';
 
 interface FooterMetadataProps {
 	branch?: string;

@@ -3,6 +3,7 @@
 import { unstable_cache } from 'next/cache';
 import { octokit } from '@/lib/octokit';
 import { COMMIT_QUERY } from '@/queries/github/commit.query';
+import {logger} from "@/lib/logger";
 
 const CACHE_TAG = 'github-commit';
 const CACHE_REVALIDATE = 3600;
@@ -22,7 +23,7 @@ const fetchCommitData = async (): Promise<CommitData> => {
 			updated: ref?.target.committedDate,
 		};
 	} catch (error) {
-		console.error('Failed to fetch GitHub commit data:', error);
+		logger.error('Failed to fetch GitHub commit data:', error);
 		return {};
 	}
 };

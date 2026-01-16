@@ -7,8 +7,22 @@ import { memo, useCallback, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { MenuIcon } from '@/components/icons/MenuIcon';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
-import type { NavigationItem } from '@/lib/navigation';
-import { cn, isRouteActive } from '@/lib/utils';
+import type { NavigationItem } from '@/content/data/navigation';
+import { cn } from '@/lib/utils';
+
+const isRouteActive = (href: string, pathname: string | null): boolean => {
+	const path = pathname ?? '';
+
+	if (path === href) {
+		return true;
+	}
+
+	if (href === '/') {
+		return false;
+	}
+
+	return path.startsWith(`${href}/`);
+};
 
 interface NavBarLinkProps {
 	href: string;
@@ -73,7 +87,7 @@ export const NavBarContent = memo(({ links, variant }: Readonly<NavBarContentPro
 
 			<DropdownMenuContent
 				align="center"
-				className="mr-[9px] flex w-65 flex-col gap-y-4 rounded-none rounded-bl-md border-edge border-b border-l p-4 ring-0"
+				className="mr-2.25 flex w-65 flex-col gap-y-4 rounded-none rounded-bl-md border-edge border-b border-l p-4 ring-0"
 				sideOffset={8}
 			>
 				{links.map(({ href, description }) => (

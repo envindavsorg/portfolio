@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { Resend } from 'resend';
 import GLOBAL_DATA from '@/content/data/global';
 import { CvTemplate } from '@/features/(homepage)/4_cv/CvTemplate';
-import { decodeEmail } from '@/lib/utils/string';
+import { decodeEmail } from '@/lib/utils';
 import emailSchema from '@/schemas/email.schema';
 
 const resend = new Resend(process.env.RESEND_API_KEY);

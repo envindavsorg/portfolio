@@ -2,8 +2,7 @@ import { useIsClient } from '@uidotdev/usehooks';
 import type React from 'react';
 import { useMemo } from 'react';
 import GLOBAL_DATA from '@/content/data/global';
-import { cn } from '@/lib/utils';
-import { decodeEmail, decodePhoneNumber, formatPhoneNumber } from '@/lib/utils/string';
+import { cn, decodeEmail, decodePhoneNumber, formatPhoneNumber } from '@/lib/utils';
 
 interface OverviewItemProps {
 	icon: React.ElementType;

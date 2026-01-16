@@ -10,8 +10,7 @@ import {
 	CollapsibleTrigger,
 	CollapsibleWithContext,
 } from '@/components/ui/Collapsible';
-import { dayjs } from '@/lib/dayjs';
-import { cn } from '@/lib/utils';
+import { cn, dayjs } from '@/lib/utils';
 import type { Certification } from './content';
 
 const Icons = {

@@ -1,21 +1,40 @@
 import type { MetadataJson } from 'libphonenumber-js/core';
 import { formatIncompletePhoneNumber as _formatIncompletePhoneNumber } from 'libphonenumber-js/core';
-import metadataJson from '@/assets/libphonenumber.metadata.json' with { type: 'json' };
 
-const metadata = metadataJson as MetadataJson;
+const metadata = {
+	version: 4,
+	country_calling_codes: { '33': ['FR'] },
+	countries: {
+		FR: [
+			'33',
+			'00',
+			'[1-9]\\d{8}',
+			[9],
+			[
+				['(\\d{3})(\\d{2})(\\d{2})(\\d{2})', '$1 $2 $3 $4', ['8'], '0 $1'],
+				['(\\d)(\\d{2})(\\d{2})(\\d{2})(\\d{2})', '$1 $2 $3 $4 $5', ['[1-79]'], '0$1'],
+			],
+			'0',
+			0,
+			0,
+			0,
+			0,
+			0,
+			[
+				['(?:26[013-9]|59[1-35-9])\\d{6}|(?:[13]\\d|2[0-57-9]|4[1-9]|5[0-8])\\d{7}'],
+				['(?:6(?:[0-24-8]\\d|3[0-8]|9[589])|7[3-9]\\d)\\d{6}'],
+				['80[0-5]\\d{6}'],
+				['836(?:0[0-36-9]|[1-9]\\d)\\d{4}|8(?:1[2-9]|2[2-47-9]|3[0-57-9]|[569]\\d|8[0-35-9])\\d{6}'],
+				0,
+				0,
+				['80[6-9]\\d{6}'],
+				0,
+				['9\\d{8}'],
+				['8(?:1[01]|2[0156]|4[024]|84)\\d{6}'],
+			],
+		],
+	},
+	nonGeographic: {},
+} as MetadataJson;
 
-/**
- * Formats an incomplete phone number string according to the metadata provided (currently only for Vietnam).
- *
- * Uses `libphonenumber-js`'s `formatIncompletePhoneNumber` function with custom metadata.
- *
- * @param phone - The phone number string to format (maybe incomplete).
- * @returns The formatted phone number string.
- *
- * @remarks
- * - Only Vietnam (VN) metadata is included by default. To add more countries, update and run the `generate-libphonenumber-metadata` script in `package.json`.
- * - This function is useful for formatting user input as they type a phone number.
- *
- * @see https://www.npmjs.com/package/libphonenumber-js#customizing-metadata
- */
 export const formatIncompletePhoneNumber = (phone: string) => _formatIncompletePhoneNumber(phone, metadata);

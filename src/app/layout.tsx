@@ -1,11 +1,11 @@
 import '@/styles/globals.css';
 import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import type React from 'react';
 import ConsentManager from '@/components/manager/ConsentManager';
 import GLOBAL_DATA from '@/content/data/global';
-import { mono, sans } from '@/lib/fonts';
-import { META_THEME_COLORS } from '@/lib/theme';
+import { META_THEME_COLORS } from '@/content/data/theme';
 import { cn } from '@/lib/utils';
 import { Providers } from '@/providers/Providers';
 
@@ -29,6 +29,22 @@ const getJsonLd = () => ({
 			knowsAbout: ['React', 'Next.js', 'TypeScript'],
 		},
 	],
+});
+
+const sans = Geist({
+	variable: '--font-geist-sans',
+	subsets: ['latin'],
+	display: 'swap',
+	preload: true,
+	fallback: ['system-ui', '-apple-system', 'sans-serif'],
+});
+
+const mono = Geist_Mono({
+	variable: '--font-geist-mono',
+	subsets: ['latin'],
+	display: 'swap',
+	preload: true,
+	fallback: ['Consolas', 'Monaco', 'monospace'],
 });
 
 const darkModeScript = `
