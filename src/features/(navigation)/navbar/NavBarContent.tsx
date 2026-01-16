@@ -80,7 +80,7 @@ export const NavBarContent = memo(({ links, variant }: Readonly<NavBarContentPro
 					size="icon"
 					variant="outline"
 				>
-					<MenuIcon className="relative after:absolute after:-inset-2" isOpen={isDropdownOpen} />
+					<MenuIcon isOpen={isDropdownOpen} />
 				</Button>
 			</DropdownMenuTrigger>
 

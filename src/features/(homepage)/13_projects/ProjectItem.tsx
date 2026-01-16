@@ -33,7 +33,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
 					</div>
 
 					<Link aria-label={project.name} className="z-20" href={project.link} rel="noopener" target="_blank">
-						<LinkIcon className="relative after:absolute after:-inset-2" size={20} />
+						<LinkIcon size={20} />
 					</Link>
 
 					<CollapsibleChevronsIcon />

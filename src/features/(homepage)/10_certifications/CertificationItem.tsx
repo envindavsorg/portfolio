@@ -68,7 +68,7 @@ const CertificationItem = ({ certification }: CertItemProps) => {
 					</div>
 
 					<Link aria-label={title} className="z-20" href={credentialURL} rel="noopener" target="_blank">
-						<LinkIcon className="relative after:absolute after:-inset-2" size={20} />
+						<LinkIcon size={20} />
 					</Link>
 
 					<CollapsibleChevronsIcon />

@@ -1,12 +1,10 @@
 'use client';
 
-import { ArrowUpRightIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { GitHubIcon } from '@/components/icons/GitHubIcon';
 import { LinkedinIcon } from '@/components/icons/LinkedInIcon';
 import { Counter } from '@/components/ui/Counter';
-import { cn } from '@/lib/utils';
 import { FOLLOWERS_CONFIG, type SocialLinksProps } from './content';
 
 interface SocialLinkItemProps {
@@ -27,23 +25,18 @@ const ContactItem = ({ followers, content }: SocialLinkItemProps) => {
 	return (
 		<Link
 			aria-label={content.name}
-			className={cn(
-				'group/link flex cursor-pointer select-none items-center gap-x-3 rounded-2xl p-4 transition-colors',
-				'max-sm:screen-line-before max-sm:screen-line-after sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after'
-			)}
+			className="flex items-center"
 			href={content.link}
 			onMouseEnter={() => iconRef.current?.startAnimation()}
 			onMouseLeave={() => iconRef.current?.stopAnimation()}
 			rel="noopener noreferrer"
 			target="_blank"
 		>
-			{content.icon === 'GitHub' ? (
-				<GitHubIcon className="relative after:absolute after:-inset-2" ref={iconRef} />
-			) : (
-				<LinkedinIcon className="relative after:absolute after:-inset-2" ref={iconRef} />
-			)}
+			<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
+				{content.icon === 'GitHub' ? <GitHubIcon ref={iconRef} size={26} /> : <LinkedinIcon ref={iconRef} size={26} />}
+			</div>
 
-			<div className="flex flex-col gap-y-0.5">
+			<div className="w-full flex-1 border-edge border-l px-3 py-4 text-left">
 				<span className="text-muted-foreground text-xs">{content.name}</span>
 				<p className="flex items-baseline gap-x-1 font-semibold text-base text-foreground">
 					{content.username}
@@ -54,11 +47,6 @@ const ContactItem = ({ followers, content }: SocialLinkItemProps) => {
 					)}
 				</p>
 			</div>
-
-			<ArrowUpRightIcon
-				className="ms-auto size-5 transition-transform duration-300 group-hover/link:rotate-45 group-hover/link:text-theme"
-				weight="duotone"
-			/>
 		</Link>
 	);
 };

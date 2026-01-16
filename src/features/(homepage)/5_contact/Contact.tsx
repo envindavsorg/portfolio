@@ -18,7 +18,7 @@ const Contact = async (): Promise<React.JSX.Element> => {
 				<div className="border-edge border-l" />
 			</div>
 
-			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+			<div className="screen-line-before screen-line-after grid grid-cols-1 gap-4 sm:grid-cols-2">
 				{SOCIAL_LINKS.map((item) => (
 					<div key={item.link}>
 						<ContactItem content={item} followers={{ github, linkedin }} />
