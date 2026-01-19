@@ -1,4 +1,4 @@
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { CertificationsContent } from './CertificationsContent';
 import { CertificationsTitle } from './CertificationsTitle';
 import { CERTIFICATIONS } from './content';

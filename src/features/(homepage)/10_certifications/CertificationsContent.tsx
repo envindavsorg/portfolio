@@ -1,9 +1,13 @@
 import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
-import { PanelContent } from '@/components/ui/Panel';
-import { TextAnimate } from '@/components/ui/TextAnimate';
+import { PanelContent } from '@/components/Panel';
+import { TextAnimate } from '@/components/text/TextAnimate';
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from '@/components/ui/Collapsible';
 import { CertificationItem } from './CertificationItem';
 import type { Certification } from './content';
 
@@ -21,7 +25,8 @@ const CertificationsContent = ({ content }: CertificationsContentProps) => {
 	);
 
 	const keyExtractorAction = (item: Certification) => item.credentialID;
-	const getKey = (item: Certification, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
+	const getKey = (item: Certification, index: number) =>
+		keyExtractorAction ? keyExtractorAction(item) : index;
 
 	return (
 		<>
@@ -30,9 +35,17 @@ const CertificationsContent = ({ content }: CertificationsContentProps) => {
 					La technologie évolue rapidement, et rester à jour est essentiel.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.6} themed>
-					Ces certifications valident mes compétences techniques et démontrent mon engagement envers l'excellence et
-					l'apprentissage continu dans le développement web moderne.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="mt-3"
+					delay={0.6}
+					themed
+				>
+					Ces certifications valident mes compétences techniques et démontrent
+					mon engagement envers l'excellence et l'apprentissage continu dans le
+					développement web moderne.
 				</TextAnimate>
 			</PanelContent>
 
@@ -57,8 +70,12 @@ const CertificationsContent = ({ content }: CertificationsContentProps) => {
 					<div className="flex justify-center py-2 md:justify-end md:pr-4">
 						<CollapsibleTrigger asChild>
 							<Button className="group flex items-center gap-2">
-								<span className="group-data-[state=open]:hidden">Afficher plus</span>
-								<span className="hidden group-data-[state=open]:inline">Afficher moins</span>
+								<span className="group-data-[state=open]:hidden">
+									Afficher plus
+								</span>
+								<span className="hidden group-data-[state=open]:inline">
+									Afficher moins
+								</span>
 								<CaretDownIcon
 									aria-hidden="true"
 									className="size-4 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180"

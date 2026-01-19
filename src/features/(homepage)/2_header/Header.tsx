@@ -1,38 +1,33 @@
-import { Meteors } from '@/components/animations/Meteors';
-import { Panel, PanelContent } from '@/components/ui/Panel';
+import { Panel, PanelContent } from '@/components/Panel';
 import GLOBAL_DATA from '@/content/data/global';
-import { HeaderImage } from '@/features/(homepage)/2_header/HeaderImage';
 import { FlipSentences } from '@/registry/flip-sentences';
-import { HeaderPronounceName } from './HeaderPronounceName';
+import { HeaderImage } from './HeaderImage';
+import { HeaderText } from './HeaderText';
+import { HeaderTitle } from './HeaderTitle';
 
-const isCapture = process.env.ENV_TYPE === 'capture';
-
-const Header = () => (
+export const Header = () => (
 	<Panel className="flex select-none before:bg-transparent">
-		<HeaderImage />
+		<HeaderImage
+			name={GLOBAL_DATA.USER.fullName}
+			photo={GLOBAL_DATA.USER.photo}
+		/>
 
 		<PanelContent className="flex flex-1 flex-col p-0">
-			<div className="relative flex grow items-end overflow-hidden px-4 pb-2">
-				<p className="line-clamp-1 text-xs text-zinc-300 dark:text-zinc-800">
-					Bienvenue sur mon portfolio personnel. Bonne visite !
-				</p>
+			<HeaderText message={GLOBAL_DATA.USER.welcome} />
 
-				<Meteors number={50} />
-			</div>
+			<HeaderTitle
+				capture={process.env.ENV_TYPE === 'capture'}
+				name={GLOBAL_DATA.USER.fullName}
+				pronunciation={GLOBAL_DATA.USER.pronunciation}
+			/>
 
-			<div className="flex w-full items-center justify-between gap-x-3 border-edge border-t px-4 py-1">
-				<h1 className="text-balance font-extrabold text-3xl sm:text-4xl">{GLOBAL_DATA.USER.fullName}</h1>
-
-				{!isCapture && <HeaderPronounceName />}
-			</div>
-
-			<div className="min-h-8 border-edge border-t px-4 py-1">
-				<FlipSentences disableAnimation={isCapture} sentences={GLOBAL_DATA.OVERVIEW.sentences} />
+			<div className="flex min-h-8 items-center border-edge border-t px-2 py-1 sm:px-4">
+				<FlipSentences
+					className="text-muted-foreground text-xs sm:text-sm"
+					disableAnimation={process.env.ENV_TYPE === 'capture'}
+					sentences={GLOBAL_DATA.OVERVIEW.sentences}
+				/>
 			</div>
 		</PanelContent>
 	</Panel>
 );
-
-Header.displayName = 'Header';
-
-export { Header };

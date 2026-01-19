@@ -1,7 +1,7 @@
 import type React from 'react';
 import { getGitHubData } from '@/actions/github/data.action';
 import { getFollowersData } from '@/actions/linkedin/followers.action';
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { ContactItem } from './ContactItem';
 import { SOCIAL_LINKS } from './content';
 

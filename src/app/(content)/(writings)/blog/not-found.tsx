@@ -1,8 +1,14 @@
 import Link from 'next/link';
 import { Button } from '@/components/buttons/Button';
+import {
+	Panel,
+	PanelContent,
+	PanelFooter,
+	PanelHeader,
+	PanelTitle,
+} from '@/components/Panel';
+import { TextAnimate } from '@/components/text/TextAnimate';
 import { Divider } from '@/components/ui/Divider';
-import { Panel, PanelContent, PanelFooter, PanelHeader, PanelTitle } from '@/components/ui/Panel';
-import { TextAnimate } from '@/components/ui/TextAnimate';
 import { Cover } from '@/features/(homepage)/1_cover/Cover';
 
 const NotFound = () => (
@@ -26,11 +32,20 @@ const NotFound = () => (
 
 			<PanelContent>
 				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Peut-être avez-vous cliqué sur un ancien lien ou avez-vous fait une faute de frappe ...
+					Peut-être avez-vous cliqué sur un ancien lien ou avez-vous fait une
+					faute de frappe ...
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="my-3" delay={0.6} themed>
-					Veuillez vérifier l'URL ou revenir à la page d'accueil pour continuer votre navigation.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="my-3"
+					delay={0.6}
+					themed
+				>
+					Veuillez vérifier l'URL ou revenir à la page d'accueil pour continuer
+					votre navigation.
 				</TextAnimate>
 			</PanelContent>
 

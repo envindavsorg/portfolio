@@ -1,6 +1,6 @@
 import type React from 'react';
 import { getGitHubData } from '@/actions/github/data.action';
-import { Panel, PanelContent } from '@/components/ui/Panel';
+import { Panel, PanelContent } from '@/components/Panel';
 import { Tag } from '@/components/ui/Tag';
 import { CommitsContent } from './CommitsContent';
 import { CommitsTitle } from './CommitsTitle';

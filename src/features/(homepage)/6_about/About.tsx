@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { AboutContent } from './AboutContent';
 import { AboutFooter } from './AboutFooter';
 import { AboutTitle } from './AboutTitle';

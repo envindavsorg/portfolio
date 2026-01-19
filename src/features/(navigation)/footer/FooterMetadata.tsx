@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useMemo } from 'react';
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import useBrowser from '@/hooks/use-browser';
 import { dayjs } from '@/lib/utils';
 
@@ -49,13 +49,21 @@ const FooterMetadata = ({ branch, hash, updated }: FooterMetadataProps) => {
 						key={label}
 					>
 						{image && (
-							<Image alt={label} className="size-12 shrink-0 object-contain" height={96} src={image} width={96} />
+							<Image
+								alt={label}
+								className="size-12 shrink-0 object-contain"
+								height={96}
+								src={image}
+								width={96}
+							/>
 						)}
 						<div className="flex flex-col gap-y-1">
 							<span className="text-muted-foreground text-xs">{label}</span>
 							<p className="font-semibold text-xs">
 								{value ?? 'Chargement en cours ...'}{' '}
-								{comment && <span className="font-light text-theme">({comment})</span>}
+								{comment && (
+									<span className="font-light text-theme">({comment})</span>
+								)}
 							</p>
 						</div>
 					</div>

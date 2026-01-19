@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
+import { TextAnimate } from '@/components/text/TextAnimate';
 import { Divider } from '@/components/ui/Divider';
-import { TextAnimate } from '@/components/ui/TextAnimate';
 import { ArticleItem } from '@/features/(homepage)/9_articles/ArticleItem';
 import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
@@ -9,17 +9,21 @@ import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
 const getCachedPosts = cache(() =>
-	getPostsByCategory('article').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+	getPostsByCategory('article').sort((a, b) =>
+		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+	)
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
 		title: 'Mes articles de blog',
-		description: 'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
+		description:
+			'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		ogImageParams: {
 			type: 'blog',
 			title: 'Mes articles de blog',
-			description: 'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
+			description:
+				'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		},
 	});
 
@@ -55,7 +59,9 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 	const articles =
 		!selectedTag || selectedTag === 'tout'
 			? allArticles
-			: allArticles.filter((article) => article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag));
+			: allArticles.filter((article) =>
+					article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag)
+				);
 
 	return (
 		<div className="min-h-svh">
@@ -69,21 +75,41 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 
 			<div className="screen-line-after p-3">
 				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Retrouvez tous mes articles de blog où je partage mon expérience en développement web. J'y aborde les bonnes
-					pratiques, les patterns modernes, les solutions aux problèmes techniques du quotidien, et mes découvertes sur
-					l'écosystème JavaScript.
+					Retrouvez tous mes articles de blog où je partage mon expérience en
+					développement web. J'y aborde les bonnes pratiques, les patterns
+					modernes, les solutions aux problèmes techniques du quotidien, et mes
+					découvertes sur l'écosystème JavaScript.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.5}>
-					Chaque article est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="mt-3"
+					delay={0.5}
+				>
+					Chaque article est le fruit d'une expérience concrète, d'un bug résolu
+					ou d'une technique apprise.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.6} themed>
-					Mon objectif : documenter mon apprentissage et aider d'autres développeurs qui rencontrent les mêmes défis.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="mt-3"
+					delay={0.6}
+					themed
+				>
+					Mon objectif : documenter mon apprentissage et aider d'autres
+					développeurs qui rencontrent les mêmes défis.
 				</TextAnimate>
 			</div>
 
-			<TagsFilter selectedTag={selectedTag || 'Tout'} tagCounts={tagCounts} tags={allTags} />
+			<TagsFilter
+				selectedTag={selectedTag || 'Tout'}
+				tagCounts={tagCounts}
+				tags={allTags}
+			/>
 
 			<Divider />
 

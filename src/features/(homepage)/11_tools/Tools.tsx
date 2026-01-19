@@ -1,4 +1,4 @@
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/utils';
 import { ToolsContent } from './ToolsContent';

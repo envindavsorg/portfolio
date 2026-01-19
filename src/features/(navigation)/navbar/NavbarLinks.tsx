@@ -35,10 +35,20 @@ import { SearchIcon } from '@/components/icons/SearchIcon';
 import { SunIcon } from '@/components/icons/SunIcon';
 import { UserIcon } from '@/components/icons/UserIcon';
 import { Kbd, KbdGroup } from '@/components/Kbd';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/Dialog';
-import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@/components/ui/Drawer';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/Tooltip';
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogTitle,
+} from '@/components/ui/Dialog';
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerTitle,
+} from '@/components/ui/Drawer';
 import { Separator } from '@/components/ui/Separator';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
 import GLOBAL_DATA from '@/content/data/global';
 import { META_THEME_COLORS } from '@/content/data/theme';
 import useMediaQuery from '@/hooks/use-media-query';
@@ -46,7 +56,14 @@ import useMetaColor from '@/hooks/use-meta-color';
 import { soundManager } from '@/lib/sound-manager';
 import { cn } from '@/lib/utils';
 
-type CommandKind = 'command' | 'page' | 'utils' | 'article' | 'components' | 'section' | 'download';
+type CommandKind =
+	| 'command'
+	| 'page'
+	| 'utils'
+	| 'article'
+	| 'components'
+	| 'section'
+	| 'download';
 
 interface CommandLinkItem {
 	title: string;
@@ -66,26 +83,76 @@ const COMMAND_GROUPS: CommandGroupProps[] = [
 	{
 		heading: 'Menu principal :',
 		items: [
-			{ title: "Retourner à l'accueil", url: '/', icon: HomeIcon, kind: 'page' },
-			{ title: 'Mes articles de blog', url: '/blog', icon: BookIcon, kind: 'page' },
-			{ title: 'Composants réutilisables', url: '/components', icon: CodeIcon, kind: 'page' },
-			{ title: 'Outils pour développeurs', url: '/utils', icon: CogIcon, kind: 'page' },
+			{
+				title: "Retourner à l'accueil",
+				url: '/',
+				icon: HomeIcon,
+				kind: 'page',
+			},
+			{
+				title: 'Mes articles de blog',
+				url: '/blog',
+				icon: BookIcon,
+				kind: 'page',
+			},
+			{
+				title: 'Composants réutilisables',
+				url: '/components',
+				icon: CodeIcon,
+				kind: 'page',
+			},
+			{
+				title: 'Outils pour développeurs',
+				url: '/utils',
+				icon: CogIcon,
+				kind: 'page',
+			},
 		],
 	},
 	{
 		heading: 'Contenu de mon portfolio :',
 		items: [
-			{ title: 'À propos de moi', url: '/#about-me', icon: UserIcon, kind: 'section' },
-			{ title: 'Ma stack technique', url: '/#my-stack', icon: LayersIcon, kind: 'section' },
-			{ title: 'Mes expériences', url: '/#my-experiences', icon: FlaskIcon, kind: 'section' },
-			{ title: 'Mes projets', url: '/#my-projects', icon: CpuIcon, kind: 'section' },
+			{
+				title: 'À propos de moi',
+				url: '/#about-me',
+				icon: UserIcon,
+				kind: 'section',
+			},
+			{
+				title: 'Ma stack technique',
+				url: '/#my-stack',
+				icon: LayersIcon,
+				kind: 'section',
+			},
+			{
+				title: 'Mes expériences',
+				url: '/#my-experiences',
+				icon: FlaskIcon,
+				kind: 'section',
+			},
+			{
+				title: 'Mes projets',
+				url: '/#my-projects',
+				icon: CpuIcon,
+				kind: 'section',
+			},
 		],
 	},
 	{
 		heading: 'Documents à télécharger :',
 		items: [
-			{ title: 'Ma carte de visite', url: '/api/vcard', icon: IdCardIcon, kind: 'download' },
-			{ title: 'Télécharger mon CV', url: GLOBAL_DATA.CV.url, icon: FileIcon, kind: 'download' },
+			{
+				title: 'Ma carte de visite',
+				url: '/api/vcard',
+				icon: IdCardIcon,
+				kind: 'download',
+			},
+			{
+				title: 'Télécharger mon CV',
+				url: GLOBAL_DATA.CV.url,
+				icon: FileIcon,
+				kind: 'download',
+			},
 		],
 	},
 ];
@@ -100,9 +167,20 @@ const KIND_LABELS: Record<CommandKind, string> = {
 	download: 'Télécharger le fichier',
 };
 
-const CATEGORY_CONFIG: Record<string, { route: string; heading: string; kind: CommandKind }> = {
-	article: { route: 'blog', heading: 'Derniers articles de blog :', kind: 'article' },
-	components: { route: 'components', heading: 'Derniers snippets de code :', kind: 'components' },
+const CATEGORY_CONFIG: Record<
+	string,
+	{ route: string; heading: string; kind: CommandKind }
+> = {
+	article: {
+		route: 'blog',
+		heading: 'Derniers articles de blog :',
+		kind: 'article',
+	},
+	components: {
+		route: 'components',
+		heading: 'Derniers snippets de code :',
+		kind: 'components',
+	},
 	utils: { route: 'utils', heading: 'Derniers outils :', kind: 'utils' },
 };
 
@@ -122,7 +200,10 @@ const Footer = memo(({ kindMap }: FooterProps) => {
 					<span className="text-foreground text-xs">{KIND_LABELS[kind]}</span>
 					<Kbd>↵</Kbd>
 				</KbdGroup>
-				<Separator className="data-[orientation=vertical]:h-4" orientation="vertical" />
+				<Separator
+					className="data-[orientation=vertical]:h-4"
+					orientation="vertical"
+				/>
 				<KbdGroup>
 					<span className="text-destructive text-xs">Fermer</span>
 					<Kbd>␛</Kbd>
@@ -183,11 +264,17 @@ const NavBarLinksCommand = ({ posts = [] }: NavBarLinksCommandProps) => {
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
 			const target = event.target as HTMLElement;
-			if (target.isContentEditable || target.matches('input, textarea, select')) {
+			if (
+				target.isContentEditable ||
+				target.matches('input, textarea, select')
+			) {
 				return;
 			}
 
-			if ((event.key === 'k' && (event.metaKey || event.ctrlKey)) || event.key === '/') {
+			if (
+				(event.key === 'k' && (event.metaKey || event.ctrlKey)) ||
+				event.key === '/'
+			) {
 				event.preventDefault();
 				setOpen((prev) => !prev);
 			}
@@ -198,7 +285,11 @@ const NavBarLinksCommand = ({ posts = [] }: NavBarLinksCommandProps) => {
 	}, []);
 
 	const { postGroups, kindMap } = useMemo(() => {
-		const grouped: Record<string, CommandLinkItem[]> = { article: [], components: [], utils: [] };
+		const grouped: Record<string, CommandLinkItem[]> = {
+			article: [],
+			components: [],
+			utils: [],
+		};
 		const map = new Map<string, CommandKind>();
 
 		for (const group of COMMAND_GROUPS) {
@@ -233,7 +324,9 @@ const NavBarLinksCommand = ({ posts = [] }: NavBarLinksCommandProps) => {
 	const filteredGroups = useMemo(() => {
 		if (pathname === '/') {
 			return COMMAND_GROUPS.map((group, idx) =>
-				idx === 0 ? { ...group, items: group.items.filter((item) => item.url !== '/') } : group
+				idx === 0
+					? { ...group, items: group.items.filter((item) => item.url !== '/') }
+					: group
 			);
 		}
 		return COMMAND_GROUPS;
@@ -274,7 +367,11 @@ const NavBarLinksCommand = ({ posts = [] }: NavBarLinksCommandProps) => {
 				{filteredGroups.map((group, idx) => (
 					<div key={group.heading}>
 						{idx > 0 && <CommandSeparator className="my-2" />}
-						<LinkGroup heading={group.heading} items={group.items} onSelect={handleSelect} />
+						<LinkGroup
+							heading={group.heading}
+							items={group.items}
+							onSelect={handleSelect}
+						/>
 					</div>
 				))}
 
@@ -283,7 +380,11 @@ const NavBarLinksCommand = ({ posts = [] }: NavBarLinksCommandProps) => {
 						postGroups[category]?.length > 0 && (
 							<div key={category}>
 								<CommandSeparator className="my-2" />
-								<LinkGroup heading={config.heading} items={postGroups[category]} onSelect={handleSelect} />
+								<LinkGroup
+									heading={config.heading}
+									items={postGroups[category]}
+									onSelect={handleSelect}
+								/>
 							</div>
 						)
 				)}
@@ -320,7 +421,10 @@ const NavBarLinksCommand = ({ posts = [] }: NavBarLinksCommandProps) => {
 						'overflow-hidden bg-popover p-0 backdrop-blur-lg supports-backdrop-filter:bg-popover/90',
 						isDesktop && 'max-sm:top-16 max-sm:translate-y-0'
 					)}
-					{...(isDesktop && { overlay: true, 'data-slot': 'command-dialog-content' })}
+					{...(isDesktop && {
+						overlay: true,
+						'data-slot': 'command-dialog-content',
+					})}
 				>
 					<VisuallyHidden>
 						<Title>Palette de commandes</Title>
@@ -349,7 +453,12 @@ const NavBarLinksGitHub = () => {
 			size="icon"
 			variant="outline"
 		>
-			<Link aria-label="Mon profil GitHub" href={GLOBAL_DATA.SOCIAL.github} rel="noopener" target="_blank">
+			<Link
+				aria-label="Mon profil GitHub"
+				href={GLOBAL_DATA.SOCIAL.github}
+				rel="noopener"
+				target="_blank"
+			>
 				<GitHubIcon ref={iconRef} />
 				<span className="sr-only">Mon profil GitHub</span>
 			</Link>
@@ -372,7 +481,12 @@ const NavBarLinksRSS = () => {
 			size="icon"
 			variant="outline"
 		>
-			<Link aria-label="Flux RSS" href="/api/rss" rel="noopener noreferrer" target="_blank">
+			<Link
+				aria-label="Flux RSS"
+				href="/api/rss"
+				rel="noopener noreferrer"
+				target="_blank"
+			>
 				<RssIcon ref={iconRef} />
 				<span className="sr-only">Flux RSS</span>
 			</Link>
@@ -395,7 +509,12 @@ const NavBarLinksLLM = () => {
 			size="icon"
 			variant="outline"
 		>
-			<Link aria-label="Contexte essentiel" href="/llms.txt" rel="noopener noreferrer" target="_blank">
+			<Link
+				aria-label="Contexte essentiel"
+				href="/llms.txt"
+				rel="noopener noreferrer"
+				target="_blank"
+			>
 				<LlmIcon ref={iconRef} />
 				<span className="sr-only">Contexte essentiel</span>
 			</Link>
@@ -418,7 +537,11 @@ const NavBarLinksTheme = () => {
 		const newTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
 		soundManager.playThemeSound();
 		setTheme(newTheme);
-		setMetaColor(resolvedTheme === 'dark' ? META_THEME_COLORS.light : META_THEME_COLORS.dark);
+		setMetaColor(
+			resolvedTheme === 'dark'
+				? META_THEME_COLORS.light
+				: META_THEME_COLORS.dark
+		);
 	}, [resolvedTheme, setTheme, setMetaColor]);
 
 	const viewTransition = useCallback(() => {

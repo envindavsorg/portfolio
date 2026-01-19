@@ -16,6 +16,7 @@ declare global {
 		avatar: string;
 		og: string;
 		pronunciation: string;
+		welcome: string;
 	}
 
 	interface OVERVIEW {

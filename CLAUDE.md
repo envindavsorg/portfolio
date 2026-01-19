@@ -60,7 +60,7 @@ src/
 ├── components/       # Reusable components
 │   ├── ui/           # shadcn UI components
 │   ├── icons/        # Icon components (including flag icons)
-│   ├── text/         # Text components
+│   ├── text/         # TextAnimate components
 │   └── animations/   # Animation components
 ├── registry/         # Custom shadcn registry
 │   ├── apple-hello-effect/

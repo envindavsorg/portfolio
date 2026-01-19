@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface FlipSentencesProps {
@@ -11,6 +11,17 @@ interface FlipSentencesProps {
 	disableAnimation?: boolean;
 }
 
+const sentenceVariants = {
+	initial: { y: 10, opacity: 0 },
+	animate: { y: 0, opacity: 1 },
+	exit: { y: -10, opacity: 0 },
+} as const;
+
+const sentenceTransition = {
+	duration: 0.25,
+	ease: 'easeOut',
+} as const;
+
 export const FlipSentences = ({
 	className,
 	sentences,
@@ -19,63 +30,59 @@ export const FlipSentences = ({
 }: FlipSentencesProps) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 
+	const longestSentence = useMemo(
+		() => sentences.reduce((a, b) => (b.length > a.length ? b : a), ''),
+		[sentences]
+	);
+
 	useEffect(() => {
 		if (disableAnimation) {
 			setCurrentIndex(0);
 			return;
 		}
 
-		let timer: NodeJS.Timeout;
+		const advance = () =>
+			setCurrentIndex((prev) => (prev + 1) % sentences.length);
 
-		const startTimer = () => {
-			timer = setInterval(() => {
-				setCurrentIndex((prev) => (prev + 1) % sentences.length);
-			}, interval);
-		};
+		let timer = setInterval(advance, interval);
 
 		const handleVisibility = () => {
-			if (document.hidden) {
-				clearInterval(timer);
-			} else {
-				setCurrentIndex((prev) => (prev + 1) % sentences.length);
-				startTimer();
+			clearInterval(timer);
+			if (!document.hidden) {
+				advance();
+				timer = setInterval(advance, interval);
 			}
 		};
 
-		startTimer();
 		document.addEventListener('visibilitychange', handleVisibility);
 
 		return () => {
 			clearInterval(timer);
 			document.removeEventListener('visibilitychange', handleVisibility);
 		};
-	}, [sentences.length, interval, disableAnimation]);
+	}, [sentences, interval, disableAnimation]);
 
 	if (disableAnimation) {
-		return (
-			<div className={cn('relative', className)}>
-				<p className="text-balance text-foreground text-sm">{sentences[0]}</p>
-			</div>
-		);
+		return <p className={className}>{sentences[0]}</p>;
 	}
 
 	return (
 		<div className={cn('relative overflow-hidden', className)}>
 			<AnimatePresence mode="wait">
 				<motion.p
-					animate={{ y: 0, opacity: 1 }}
-					className="text-balance text-foreground text-sm"
-					exit={{ y: -10, opacity: 0 }}
-					initial={{ y: 10, opacity: 0 }}
-					key={sentences[currentIndex]}
-					transition={{ duration: 0.25, ease: 'easeOut' }}
+					animate="animate"
+					exit="exit"
+					initial="initial"
+					key={currentIndex}
+					transition={sentenceTransition}
+					variants={sentenceVariants}
 				>
 					{sentences[currentIndex]}
 				</motion.p>
 			</AnimatePresence>
 
 			<span aria-hidden="true" className="invisible block h-0">
-				{[...sentences].sort((a, b) => b.length - a.length)[0]}
+				{longestSentence}
 			</span>
 		</div>
 	);

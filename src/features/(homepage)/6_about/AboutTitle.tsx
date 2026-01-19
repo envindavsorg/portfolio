@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { PanelHeader, PanelTitle } from '@/components/ui/Panel';
-import { TextAnimate } from '@/components/ui/TextAnimate';
+import { PanelHeader, PanelTitle } from '@/components/Panel';
+import { TextAnimate } from '@/components/text/TextAnimate';
 
 const AboutTitle = memo(() => (
 	<PanelHeader>

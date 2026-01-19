@@ -1,4 +1,4 @@
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { EXPERIENCES } from './content';
 import { ExperiencesContent } from './ExperiencesContent';
 import { ExperiencesTitle } from './ExperiencesTitle';

@@ -1,4 +1,4 @@
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { CvContent } from './CvContent';
 import { CvFooter } from './CvFooter';
 import { CvTitle } from './CvTitle';

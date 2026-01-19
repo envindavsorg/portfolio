@@ -1,4 +1,4 @@
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { PROJECTS } from './content';
 import { ProjectsContent } from './ProjectsContent';
 import { ProjectsTitle } from './ProjectsTitle';

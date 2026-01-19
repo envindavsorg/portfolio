@@ -4,8 +4,8 @@ import { CodeIcon, EyeIcon, RepeatIcon } from '@phosphor-icons/react';
 import React, { useMemo, useState } from 'react';
 import { Index } from '@/__registry__';
 import { Button } from '@/components/buttons/Button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/Tooltip';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
 import { Code as CodeInline } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 import { CodeCollapsibleWrapper } from './CodeCollapsibleWrapper';
@@ -38,7 +38,8 @@ export const ComponentPreview = ({
 		if (!Component) {
 			return (
 				<p className="text-muted-foreground text-sm">
-					Le composant <CodeInline className="font-semibold">{name}</CodeInline> n'existe pas dans le registre.
+					Le composant <CodeInline className="font-semibold">{name}</CodeInline>{' '}
+					n'existe pas dans le registre.
 				</p>
 			);
 		}
@@ -67,7 +68,11 @@ export const ComponentPreview = ({
 								{canReplay && (
 									<Tooltip>
 										<TooltipTrigger asChild>
-											<Button onClick={() => setReplay((v) => v + 1)} size="icon" variant="outline">
+											<Button
+												onClick={() => setReplay((v) => v + 1)}
+												size="icon"
+												variant="outline"
+											>
 												<RepeatIcon className="size-4" />
 											</Button>
 										</TooltipTrigger>
@@ -98,7 +103,13 @@ export const ComponentPreview = ({
 				</TabsContent>
 
 				<TabsContent className="[&>figure]:m-0" value="code">
-					{codeCollapsible ? <CodeCollapsibleWrapper className="my-0">{Code}</CodeCollapsibleWrapper> : Code}
+					{codeCollapsible ? (
+						<CodeCollapsibleWrapper className="my-0">
+							{Code}
+						</CodeCollapsibleWrapper>
+					) : (
+						Code
+					)}
 				</TabsContent>
 			</Tabs>
 		</div>

@@ -2,9 +2,13 @@ import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible';
-import { PanelContent, PanelFooter } from '@/components/ui/Panel';
-import { TextAnimate } from '@/components/ui/TextAnimate';
+import { PanelContent, PanelFooter } from '@/components/Panel';
+import { TextAnimate } from '@/components/text/TextAnimate';
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from '@/components/ui/Collapsible';
 import { ToolItem } from './ToolItem';
 
 interface ToolsContentProps {
@@ -21,24 +25,40 @@ const ToolsContent = ({ content }: ToolsContentProps) => {
 	);
 
 	const keyExtractorAction = (item: Post) => item.slug;
-	const getKey = (item: Post, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
+	const getKey = (item: Post, index: number) =>
+		keyExtractorAction ? keyExtractorAction(item) : index;
 
 	return (
 		<>
 			<PanelContent className="screen-line-after">
 				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Découvrez une suite d'outils web entièrement gratuits, spécialement conçue pour simplifier le quotidien des
-					développeurs et accélérer vos projets.
+					Découvrez une suite d'outils web entièrement gratuits, spécialement
+					conçue pour simplifier le quotidien des développeurs et accélérer vos
+					projets.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.6} themed>
-					En regroupant ces utilitaires essentiels au même endroit, cette collection vous permet d'optimiser votre
-					workflow en réduisant considérablement le temps passé sur des tâches répétitives.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="mt-3"
+					delay={0.6}
+					themed
+				>
+					En regroupant ces utilitaires essentiels au même endroit, cette
+					collection vous permet d'optimiser votre workflow en réduisant
+					considérablement le temps passé sur des tâches répétitives.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.8}>
-					Explorez dès maintenant cette boîte à outils numérique pour booster votre productivité sans la moindre
-					contrainte technique.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="mt-3"
+					delay={0.8}
+				>
+					Explorez dès maintenant cette boîte à outils numérique pour booster
+					votre productivité sans la moindre contrainte technique.
 				</TextAnimate>
 			</PanelContent>
 
@@ -62,9 +82,16 @@ const ToolsContent = ({ content }: ToolsContentProps) => {
 				<PanelFooter className="before:bg-transparent">
 					{hiddenContent.length > 0 && (
 						<CollapsibleTrigger asChild>
-							<Button className="group flex items-center gap-2" variant="outline">
-								<span className="group-data-[state=open]:hidden">Afficher plus</span>
-								<span className="hidden group-data-[state=open]:inline">Afficher moins</span>
+							<Button
+								className="group flex items-center gap-2"
+								variant="outline"
+							>
+								<span className="group-data-[state=open]:hidden">
+									Afficher plus
+								</span>
+								<span className="hidden group-data-[state=open]:inline">
+									Afficher moins
+								</span>
 								<CaretDownIcon
 									aria-hidden="true"
 									className="size-4 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180"

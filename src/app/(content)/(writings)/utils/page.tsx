@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
+import { TextAnimate } from '@/components/text/TextAnimate';
 import { Divider } from '@/components/ui/Divider';
-import { TextAnimate } from '@/components/ui/TextAnimate';
 import { ToolItem } from '@/features/(homepage)/11_tools/ToolItem';
 import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
@@ -9,17 +9,21 @@ import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
 const getCachedPosts = cache(() =>
-	getPostsByCategory('utils').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+	getPostsByCategory('utils').sort((a, b) =>
+		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+	)
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
 		title: 'Outils pour développeurs',
-		description: "Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
+		description:
+			"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
 		ogImageParams: {
 			type: 'utils',
 			title: 'Outils pour développeurs',
-			description: "Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
+			description:
+				"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
 		},
 	});
 
@@ -55,7 +59,9 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 	const utils =
 		!selectedTag || selectedTag === 'tout'
 			? allUtils
-			: allUtils.filter((article) => article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag));
+			: allUtils.filter((article) =>
+					article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag)
+				);
 
 	return (
 		<div className="min-h-svh">
@@ -69,16 +75,28 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 
 			<div className="screen-line-after p-3">
 				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.
+					Optimisez votre workflow avec cette suite d'outils web gratuits pour
+					développeurs.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.5} themed>
-					Tous les outils sont open source et conçus pour vous aider à gagner du temps et à améliorer votre
-					productivité.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="mt-3"
+					delay={0.5}
+					themed
+				>
+					Tous les outils sont open source et conçus pour vous aider à gagner du
+					temps et à améliorer votre productivité.
 				</TextAnimate>
 			</div>
 
-			<TagsFilter selectedTag={selectedTag || 'Tout'} tagCounts={tagCounts} tags={allTags} />
+			<TagsFilter
+				selectedTag={selectedTag || 'Tout'}
+				tagCounts={tagCounts}
+				tags={allTags}
+			/>
 
 			<Divider className="screen-line-after" />
 

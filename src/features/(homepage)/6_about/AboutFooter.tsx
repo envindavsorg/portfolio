@@ -2,7 +2,7 @@ import { memo, useCallback, useRef } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { ChevronDownIcon } from '@/components/icons/ChevronDownIcon';
 import { ChevronUpIcon } from '@/components/icons/ChevronUpIcon';
-import { PanelFooter } from '@/components/ui/Panel';
+import { PanelFooter } from '@/components/Panel';
 
 interface AboutFooterProps {
 	expanded: boolean;
@@ -34,7 +34,11 @@ const AboutFooter = memo(({ expanded, onToggle }: AboutFooterProps) => {
 				onMouseLeave={handleMouseLeave}
 			>
 				{expanded ? 'Fermer le détail' : 'En savoir plus'}
-				{expanded ? <ChevronUpIcon ref={upRef} /> : <ChevronDownIcon ref={downRef} />}
+				{expanded ? (
+					<ChevronUpIcon ref={upRef} />
+				) : (
+					<ChevronDownIcon ref={downRef} />
+				)}
 			</Button>
 		</PanelFooter>
 	);

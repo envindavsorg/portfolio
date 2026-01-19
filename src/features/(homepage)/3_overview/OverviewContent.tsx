@@ -1,5 +1,10 @@
-import { BriefcaseIcon, EnvelopeIcon, FlaskIcon, PhoneIcon } from '@phosphor-icons/react/dist/ssr';
-import { TextAnimate } from '@/components/ui/TextAnimate';
+import {
+	BriefcaseIcon,
+	EnvelopeIcon,
+	FlaskIcon,
+	PhoneIcon,
+} from '@phosphor-icons/react/dist/ssr';
+import { TextAnimate } from '@/components/text/TextAnimate';
 import GLOBAL_DATA from '@/content/data/global';
 
 interface WavyMotionProps {
@@ -66,7 +71,10 @@ const OverviewContent = () => (
 		<div className="screen-line-after screen-line-before grid grid-cols-1 sm:grid-cols-2 sm:gap-4">
 			<div className="max-sm:screen-line-after flex items-center">
 				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-					<BriefcaseIcon className="size-6 text-theme sm:size-7" weight="duotone" />
+					<BriefcaseIcon
+						className="size-6 text-theme sm:size-7"
+						weight="duotone"
+					/>
 				</div>
 				<div className="w-full flex-1 border-edge border-l px-3 py-4 text-left">
 					<WavyMotion delay={0.15} label={GLOBAL_DATA.WORK.title} />
@@ -93,7 +101,10 @@ const OverviewContent = () => (
 			</div>
 			<div className="flex items-center">
 				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-					<EnvelopeIcon className="size-6 text-theme sm:size-7" weight="duotone" />
+					<EnvelopeIcon
+						className="size-6 text-theme sm:size-7"
+						weight="duotone"
+					/>
 				</div>
 				<div className="w-full flex-1 border-edge border-l px-3 py-4 text-left">
 					<WavyMotion delay={0.45} label={GLOBAL_DATA.USER.emailAddress} />

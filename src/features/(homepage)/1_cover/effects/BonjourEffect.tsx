@@ -1,22 +1,37 @@
 'use client';
 
-import { motion } from 'motion/react';
-import { animateProps, initialProps } from '../constants/constants';
-import type { EffectProps } from '../types/types';
+import { motion, type TargetAndTransition } from 'motion/react';
+import type { ComponentProps } from 'react';
+
+const initialProps: TargetAndTransition = {
+	pathLength: 0,
+	opacity: 0,
+};
+
+const animateProps: TargetAndTransition = {
+	pathLength: 1,
+	opacity: 1,
+};
+
+type BonjourEffectProps = ComponentProps<typeof motion.svg> & {
+	speed?: number;
+	strokeWidth?: number;
+	onAnimationComplete?: () => void;
+	capture?: boolean;
+};
 
 export const BonjourEffect = ({
-	className,
 	speed = 1,
 	strokeWidth = 15,
 	onAnimationComplete,
 	capture = false,
 	...props
-}: EffectProps) => {
+}: BonjourEffectProps) => {
 	const calc = (x: number) => x * speed;
 
 	return (
 		<motion.svg
-			className={className}
+			className="h-20 sm:h-30"
 			exit={{ opacity: 0 }}
 			fill="none"
 			initial={capture ? false : { opacity: 1 }}

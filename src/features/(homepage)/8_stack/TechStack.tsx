@@ -1,4 +1,4 @@
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { TECH_STACK } from './content';
 import { TechStackContent } from './TechStackContent';
 import { TechStackTitle } from './TechStackTitle';

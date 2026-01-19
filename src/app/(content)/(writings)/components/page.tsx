@@ -1,13 +1,17 @@
 import { CheckIcon, InfoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { cache } from 'react';
-import { AnimatedSpan, Terminal, TypingAnimation } from '@/components/animations/Terminal';
+import {
+	AnimatedSpan,
+	Terminal,
+	TypingAnimation,
+} from '@/components/animations/Terminal';
 import { ReactIcon } from '@/components/stack/React';
 import { TailwindIcon } from '@/components/stack/Tailwind';
 import { TypeScriptIcon } from '@/components/stack/TypeScript';
+import { TextAnimate } from '@/components/text/TextAnimate';
 import { Badge } from '@/components/ui/Badge';
 import { Divider } from '@/components/ui/Divider';
-import { TextAnimate } from '@/components/ui/TextAnimate';
 import { ArticleItem } from '@/features/(homepage)/9_articles/ArticleItem';
 import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
@@ -15,17 +19,21 @@ import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
 const getCachedPosts = cache(() =>
-	getPostsByCategory('components').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+	getPostsByCategory('components').sort((a, b) =>
+		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+	)
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
 		title: 'Composants React',
-		description: 'Ma collection de snippets React réutilisables dans tous vos projets.',
+		description:
+			'Ma collection de snippets React réutilisables dans tous vos projets.',
 		ogImageParams: {
 			type: 'components',
 			title: 'Composants React',
-			description: 'Ma collection de snippets React réutilisables dans tous vos projets.',
+			description:
+				'Ma collection de snippets React réutilisables dans tous vos projets.',
 		},
 	});
 
@@ -35,7 +43,9 @@ type ComponentsPageProps = Readonly<{
 	}>;
 }>;
 
-const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) => {
+const ComponentsPage = async ({
+	searchParams,
+}: Readonly<ComponentsPageProps>) => {
 	const { tag } = await searchParams;
 	const selectedTag = tag?.toLowerCase();
 
@@ -61,7 +71,9 @@ const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) =
 	const components =
 		!selectedTag || selectedTag === 'tout'
 			? allComponents
-			: allComponents.filter((article) => article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag));
+			: allComponents.filter((article) =>
+					article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag)
+				);
 
 	return (
 		<div className="min-h-svh">
@@ -90,23 +102,41 @@ const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) =
 						<InfoIcon className="size-3" weight="bold" />
 						<span>1 fichier crée :</span>
 					</div>
-					<span className="pl-4 text-muted-foreground">- components/votre-composant.tsx</span>
+					<span className="pl-4 text-muted-foreground">
+						- components/votre-composant.tsx
+					</span>
 				</AnimatedSpan>
 			</Terminal>
 
 			<div className="screen-line-after p-3">
 				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Accélérez vos développements avec une collection complète de composants et hooks React optimisés, conçus pour
-					des applications modernes et performantes.
+					Accélérez vos développements avec une collection complète de
+					composants et hooks React optimisés, conçus pour des applications
+					modernes et performantes.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.4}>
-					Chaque article est le fruit d'une expérience concrète, d'un bug résolu ou d'une technique apprise.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="mt-3"
+					delay={0.4}
+				>
+					Chaque article est le fruit d'une expérience concrète, d'un bug résolu
+					ou d'une technique apprise.
 				</TextAnimate>
 
-				<TextAnimate animation="slideUp" as="p" by="word" className="mt-3" delay={0.5} themed>
-					Compatibles App Router, Server Components et Server Actions. Intégration transparente avec les dernières
-					fonctionnalités de Next.js 16.
+				<TextAnimate
+					animation="slideUp"
+					as="p"
+					by="word"
+					className="mt-3"
+					delay={0.5}
+					themed
+				>
+					Compatibles App Router, Server Components et Server Actions.
+					Intégration transparente avec les dernières fonctionnalités de Next.js
+					16.
 				</TextAnimate>
 			</div>
 
@@ -127,7 +157,11 @@ const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) =
 				</div>
 			</div>
 
-			<TagsFilter selectedTag={selectedTag || 'Tout'} tagCounts={tagCounts} tags={allTags} />
+			<TagsFilter
+				selectedTag={selectedTag || 'Tout'}
+				tagCounts={tagCounts}
+				tags={allTags}
+			/>
 
 			<Divider />
 

@@ -4,7 +4,7 @@ import { Divider } from '@/components/ui/Divider';
 import GLOBAL_DATA from '@/content/data/global';
 import { Cover } from '@/features/(homepage)/1_cover/Cover';
 import { Header } from '@/features/(homepage)/2_header/Header';
-import { Overview } from '@/features/(homepage)/3_overview/Overview';
+/*import { Overview } from '@/features/(homepage)/3_overview/Overview';
 import { Cv } from '@/features/(homepage)/4_cv/Cv';
 import { Contact } from '@/features/(homepage)/5_contact/Contact';
 import { About } from '@/features/(homepage)/6_about/About';
@@ -15,7 +15,7 @@ import { Certifications } from '@/features/(homepage)/10_certifications/Certific
 import { Tools } from '@/features/(homepage)/11_tools/Tools';
 import { Experiences } from '@/features/(homepage)/12_experiences/Experiences';
 import { Projects } from '@/features/(homepage)/13_projects/Projects';
-import { Branding } from '@/features/(homepage)/14_branding/Branding';
+import { Branding } from '@/features/(homepage)/14_branding/Branding';*/
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
@@ -56,7 +56,7 @@ const Page = () => (
 			<Cover />
 			<Header />
 			<Divider border />
-			<Overview />
+			{/*<Overview />
 			<Divider border />
 			<Cv />
 			<Divider border />
@@ -81,7 +81,7 @@ const Page = () => (
 			<Branding />
 			<Divider border />
 			<Cv />
-			<Divider border />
+			<Divider border />*/}
 		</div>
 	</>
 );

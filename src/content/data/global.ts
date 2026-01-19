@@ -15,6 +15,7 @@ const USER = {
 	avatar: '/images/avatar.webp',
 	og: '/images/og-image-dark.png?t=1755355653',
 	pronunciation: '/audio/florin.mp3',
+	welcome: 'Bienvenue sur mon portfolio. Bonne visite !',
 } satisfies USER;
 
 const OVERVIEW = {

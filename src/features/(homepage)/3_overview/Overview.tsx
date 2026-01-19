@@ -1,6 +1,6 @@
 'use client';
 
-import { Panel } from '@/components/ui/Panel';
+import { Panel } from '@/components/Panel';
 import { OverviewContent } from './OverviewContent';
 
 const Overview = () => (

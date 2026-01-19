@@ -1,7 +1,12 @@
 import type { HTMLAttributes } from 'react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/Tooltip';
 import { cn, dayjs } from '@/lib/utils';
-import { BLOCK_MARGIN, BLOCK_RADIUS, BLOCK_SIZE, LABEL_HEIGHT } from './ContributionGraph';
+import {
+	BLOCK_MARGIN,
+	BLOCK_RADIUS,
+	BLOCK_SIZE,
+	LABEL_HEIGHT,
+} from './ContributionGraph';
 
 type ContributionGraphBlockProps = HTMLAttributes<SVGRectElement> & {
 	activity: CommitActivity;
@@ -42,8 +47,14 @@ const ContributionGraphBlock = ({
 			</g>
 		</TooltipTrigger>
 
-		<TooltipContent className="px-2 py-1 font-medium text-xs" side="left" sideOffset={0}>
-			{activity.count === 0 ? 'Aucune contribution' : `${activity.count} contribution${activity.count > 1 ? 's' : ''}`}{' '}
+		<TooltipContent
+			className="px-2 py-1 font-medium text-xs"
+			side="left"
+			sideOffset={0}
+		>
+			{activity.count === 0
+				? 'Aucune contribution'
+				: `${activity.count} contribution${activity.count > 1 ? 's' : ''}`}{' '}
 			le {dayjs(activity.date).format('ddd DD MMM')}
 		</TooltipContent>
 	</Tooltip>
