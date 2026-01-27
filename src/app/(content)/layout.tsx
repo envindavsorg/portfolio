@@ -1,22 +1,22 @@
-import type React from 'react';
-import { Particles } from '@/components/animations/Particles';
-import { Footer } from '@/features/(navigation)/footer/Footer';
-import { NavBar } from '@/features/(navigation)/navbar/NavBar';
+import type React from "react";
+import { Particles } from "@/components/animations/Particles";
+import { Footer } from "@/features/(navigation)/footer/Footer";
+import { NavBar } from "@/features/(navigation)/navbar/NavBar";
 
 interface AppLayoutProps {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const AppLayout = ({ children }: Readonly<AppLayoutProps>) => (
-	<>
-		<NavBar />
+  <>
+    <NavBar />
 
-		<main className="max-w-screen overflow-x-hidden px-2">{children}</main>
+    <main className="max-w-screen overflow-x-hidden px-2">{children}</main>
 
-		<Footer />
+    <Footer />
 
-		<Particles density={150} />
-	</>
+    <Particles density={150} />
+  </>
 );
 
 export default AppLayout;
