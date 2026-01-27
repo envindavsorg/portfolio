@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   title: {
-    template: "%s – Portfolio personnel",
+    template: "%s - Développeur Full-Stack – Portfolio personnel",
     default: GLOBAL_DATA.USER.fullName,
   },
   description: GLOBAL_DATA.USER.bio,
