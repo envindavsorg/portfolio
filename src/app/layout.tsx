@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     template: "%s - Développeur Full-Stack – Portfolio personnel",
     default: GLOBAL_DATA.USER.fullName,
   },
-  description: GLOBAL_DATA.USER.bio,
+  description: GLOBAL_DATA.USER.description,
   keywords: GLOBAL_DATA.keywords,
   authors: [
     {
