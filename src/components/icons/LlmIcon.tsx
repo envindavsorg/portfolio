@@ -75,9 +75,9 @@ export const LlmIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<motion.rect animate={controls} custom={0} height="8" rx="2" variants={VARIANTS} width="8" x="3" y="3" />
-					<motion.path animate={controls} custom={3} d="M7 11v4a2 2 0 0 0 2 2h4" variants={VARIANTS} />
-					<motion.rect animate={controls} custom={0} height="8" rx="2" variants={VARIANTS} width="8" x="13" y="13" />
+					<motion.rect animate={controls} custom={0} height="8" initial="normal" rx="2" variants={VARIANTS} width="8" x="3" y="3" />
+					<motion.path animate={controls} custom={3} d="M7 11v4a2 2 0 0 0 2 2h4" initial="normal" variants={VARIANTS} />
+					<motion.rect animate={controls} custom={0} height="8" initial="normal" rx="2" variants={VARIANTS} width="8" x="13" y="13" />
 				</svg>
 			</div>
 		);

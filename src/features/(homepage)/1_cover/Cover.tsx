@@ -6,7 +6,6 @@ import { CarouselContent } from "@/components/carousel/CarouselContent";
 import { CarouselItem } from "@/components/carousel/CarouselItem";
 import { CarouselNext } from "@/components/carousel/CarouselNext";
 import { CarouselPrevious } from "@/components/carousel/CarouselPrevious";
-import { cn } from "@/lib/utils";
 import { BonjourEffect } from "./effects/BonjourEffect";
 import { HelloEffect } from "./effects/HelloEffect";
 import { HolaEffect } from "./effects/HolaEffect";
@@ -73,38 +72,25 @@ export const Cover = ({ loop = true }: CoverProps) => {
   }, [api, loop, currentIndex]);
 
   return (
-    <div className={cn()}>
-      <Carousel
-        className={cn(
-          "screen-line-before screen-line-after relative flex size-full select-none flex-col items-center justify-center",
-          "aspect-2/1 border-edge border-x text-foreground before:-top-px after:-bottom-px sm:aspect-3/1",
-          "bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)]",
-          "bg-black/0.75 bg-center bg-size-[10px_10px] dark:bg-white/0.75",
-          "[--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5",
-        )}
-        opts={{ loop, watchDrag: false }}
-        orientation="horizontal"
-        setApi={setApi}
-      >
-        <CarouselContent>
-          {GREETINGS.map(({ key, Component }, idx: number) => (
-            <CarouselItem
-              className="flex items-center justify-center"
-              key={`${key}-${animationKey}`}
-            >
-              {idx === currentIndex && (
-                <Component
-                  capture={process.env.ENV_TYPE === "capture"}
-                  onAnimationComplete={handleAnimationComplete}
-                />
-              )}
-            </CarouselItem>
-          ))}
-        </CarouselContent>
+    <Carousel opts={{ loop, watchDrag: false }} setApi={setApi}>
+      <CarouselContent>
+        {GREETINGS.map(({ key, Component }, idx: number) => (
+          <CarouselItem
+            className="flex items-center justify-center"
+            key={`${key}-${animationKey}`}
+          >
+            {idx === currentIndex && (
+              <Component
+                capture={process.env.ENV_TYPE === "capture"}
+                onAnimationComplete={handleAnimationComplete}
+              />
+            )}
+          </CarouselItem>
+        ))}
+      </CarouselContent>
 
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
-    </div>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
   );
 };
