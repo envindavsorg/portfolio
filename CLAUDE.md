@@ -33,6 +33,7 @@ pnpm registry:build  # Build registry for distribution
 ## Project Architecture
 
 ### Tech Stack
+
 - **Framework**: Next.js 15 with App Router and Turbopack
 - **Styling**: Tailwind CSS v4
 - **UI Components**: shadcn/ui with custom registry
@@ -92,12 +93,14 @@ src/
 **Dynamic Imports**: Heavy components like context menus and scroll-to-top are dynamically imported in layouts to optimize initial bundle size.
 
 **Custom Registry System**: The project includes a custom shadcn registry at `src/registry/` for distributing reusable components. Components can be added to other projects via:
+
 ```bash
 npx shadcn@latest add @envindavsorg/theme-switcher
 npx shadcn@latest add @envindavsorg/apple-hello-effect
 ```
 
 **MDX Processing Pipeline**: Blog posts use a custom MDX pipeline with:
+
 - `rehype-component.ts` - Component injection into MDX
 - `rehype-npm-command.ts` - Package manager command blocks
 - `remark-code-import.js` - Code import from files

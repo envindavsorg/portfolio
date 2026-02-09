@@ -9,13 +9,13 @@
     "isolatedModules": false,
     "allowImportingTsExtensions": true,
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+    },
   },
   "include": [
     "./src/scripts/**/*.{ts,mts}",
     "./src/config/**/*.ts",
-    "./src/registry/**/*.ts"
+    "./src/registry/**/*.ts",
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }
