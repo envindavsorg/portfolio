@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ProfilePage as PageSchema, WithContext } from "schema-dts";
+import { Divider } from "@/components/ui/Divider";
 import GLOBAL_DATA from "@/content/data/global";
 import { Cover } from "@/features/(homepage)/1_cover/Cover";
 /*
@@ -54,6 +55,7 @@ const Page = () => (
 
     <div className="mx-auto md:max-w-3xl">
       <Cover />
+      <Divider />
 
       {/*
       		<Header />

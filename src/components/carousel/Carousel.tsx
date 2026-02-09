@@ -14,6 +14,7 @@ import {
   useState,
 } from "react";
 import { cn } from "@/lib/utils";
+import { DotPattern } from "../ui/DotPattern";
 
 export type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -53,15 +54,7 @@ export const Carousel = forwardRef<
   HTMLAttributes<HTMLDivElement> & CarouselProps
 >(
   (
-    {
-      orientation = "horizontal",
-      opts,
-      setApi,
-      plugins,
-      className,
-      children,
-      ...props
-    },
+    { orientation = "horizontal", opts, setApi, plugins, children, ...props },
     ref,
   ) => {
     const [carouselRef, api] = useEmblaCarousel(
@@ -144,15 +137,12 @@ export const Carousel = forwardRef<
           className={cn(
             "relative flex size-full select-none flex-col items-center justify-center",
             "aspect-2/1 border-edge border-x text-foreground before:-top-px after:-bottom-px sm:aspect-3/1",
-            "bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)]",
-            "bg-black/0.75 bg-center bg-size-[10px_10px] dark:bg-white/0.75",
-            "[--pattern-foreground:var(--color-zinc-950)]/5 dark:[--pattern-foreground:var(--color-white)]/5",
-            className,
           )}
           onKeyDownCapture={handleKeyDown}
           ref={ref}
           {...props}
         >
+          <DotPattern className="mask-[radial-gradient(300px_circle_at_center,white,transparent)]" />
           {children}
         </div>
       </CarouselContext.Provider>
