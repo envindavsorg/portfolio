@@ -142,7 +142,7 @@ export const Carousel = forwardRef<
       >
         <div
           className={cn(
-            "screen-line-before screen-line-after relative flex size-full select-none flex-col items-center justify-center",
+            "relative flex size-full select-none flex-col items-center justify-center",
             "aspect-2/1 border-edge border-x text-foreground before:-top-px after:-bottom-px sm:aspect-3/1",
             "bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)]",
             "bg-black/0.75 bg-center bg-size-[10px_10px] dark:bg-white/0.75",

@@ -72,25 +72,24 @@ export const Cover = ({ loop = true }: CoverProps) => {
   }, [api, loop, currentIndex]);
 
   return (
-    <Carousel opts={{ loop, watchDrag: false }} setApi={setApi}>
-      <CarouselContent>
-        {GREETINGS.map(({ key, Component }, idx: number) => (
-          <CarouselItem
-            className="flex items-center justify-center"
-            key={`${key}-${animationKey}`}
-          >
-            {idx === currentIndex && (
-              <Component
-                capture={process.env.ENV_TYPE === "capture"}
-                onAnimationComplete={handleAnimationComplete}
-              />
-            )}
-          </CarouselItem>
-        ))}
-      </CarouselContent>
+    <div className="screen-line-after">
+      <Carousel opts={{ loop, watchDrag: false }} setApi={setApi}>
+        <CarouselContent>
+          {GREETINGS.map(({ key, Component }, idx: number) => (
+            <CarouselItem key={`${key}-${animationKey}`}>
+              {idx === currentIndex && (
+                <Component
+                  capture={process.env.ENV_TYPE === "capture"}
+                  onAnimationComplete={handleAnimationComplete}
+                />
+              )}
+            </CarouselItem>
+          ))}
+        </CarouselContent>
 
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </div>
   );
 };

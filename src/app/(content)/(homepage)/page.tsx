@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import type { ProfilePage as PageSchema, WithContext } from "schema-dts";
-import { Divider } from "@/components/ui/Divider";
 import GLOBAL_DATA from "@/content/data/global";
 import { Cover } from "@/features/(homepage)/1_cover/Cover";
+/*
 import { Header } from "@/features/(homepage)/2_header/Header";
-/*import { Overview } from '@/features/(homepage)/3_overview/Overview';
+import { Overview } from '@/features/(homepage)/3_overview/Overview';
 import { Cv } from '@/features/(homepage)/4_cv/Cv';
 import { Contact } from '@/features/(homepage)/5_contact/Contact';
 import { About } from '@/features/(homepage)/6_about/About';
@@ -54,12 +54,12 @@ const Page = () => (
 
     <div className="mx-auto md:max-w-3xl">
       <Cover />
-      <Header />
-      <Divider border />
 
       {/*
+      		<Header />
+        	<Divider border />
     		<Overview />
-      <Divider border />
+      		<Divider border />
 			<Cv />
 			<Divider border />
 			<Contact />
