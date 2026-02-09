@@ -57,6 +57,8 @@ const Page = () => (
       <Cover />
       <Divider />
 
+      <div className="h-900" />
+
       {/*
       		<Header />
         	<Divider border />

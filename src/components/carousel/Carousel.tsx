@@ -142,7 +142,7 @@ export const Carousel = forwardRef<
           ref={ref}
           {...props}
         >
-          <DotPattern className="mask-[radial-gradient(300px_circle_at_center,white,transparent)]" />
+          <DotPattern className="mask-[radial-gradient(100px_circle_at_center,white,transparent)] sm:mask-[radial-gradient(300px_circle_at_center,white,transparent)]" />
           {children}
         </div>
       </CarouselContext.Provider>
