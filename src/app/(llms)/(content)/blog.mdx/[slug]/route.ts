@@ -11,7 +11,10 @@ interface ParamsProps {
 	params: Promise<{ slug: string }>;
 }
 
-export const GET = async (_request: Request, { params }: ParamsProps): Promise<Response> => {
+export const GET = async (
+	_request: Request,
+	{ params }: ParamsProps
+): Promise<Response> => {
 	const { slug } = await params;
 
 	const allPosts: Post[] = getAllPosts();

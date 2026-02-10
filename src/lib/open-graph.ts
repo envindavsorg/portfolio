@@ -4,7 +4,11 @@ interface OpenGraphImageParams {
 	description: string;
 }
 
-const openGraphImageUrl = ({ type = 'homepage', title, description }: OpenGraphImageParams): string => {
+const openGraphImageUrl = ({
+	type = 'homepage',
+	title,
+	description,
+}: OpenGraphImageParams): string => {
 	const baseUrl = 'https://cuzeacflorin.fr';
 	const endpoint = `${baseUrl}/api/og`;
 
@@ -26,7 +30,11 @@ interface OpenGraphImageProps {
 	ogImageParams: OpenGraphImageParams;
 }
 
-export const openGraphImage = ({ title, description, ogImageParams }: OpenGraphImageProps) => ({
+export const openGraphImage = ({
+	title,
+	description,
+	ogImageParams,
+}: OpenGraphImageProps) => ({
 	title,
 	description,
 	openGraph: {

@@ -11,7 +11,13 @@ export const TailwindIcon = (props: SVGProps<SVGSVGElement>) => (
 	>
 		<title>Tailwind CSS</title>
 		<defs>
-			<linearGradient id="gradient" x1="-2.778%" x2="100%" y1="32%" y2="67.556%">
+			<linearGradient
+				id="gradient"
+				x1="-2.778%"
+				x2="100%"
+				y1="32%"
+				y2="67.556%"
+			>
 				<stop offset="0%" stopColor="#2298BD" />
 				<stop offset="100%" stopColor="#0ED7B5" />
 			</linearGradient>

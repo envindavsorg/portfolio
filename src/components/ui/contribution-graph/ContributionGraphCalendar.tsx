@@ -1,19 +1,42 @@
 import { Fragment, type HTMLAttributes, type ReactNode, useMemo } from 'react';
 import { getMonthLabels } from '@/lib/github';
-import { BLOCK_MARGIN, BLOCK_SIZE, useContributionGraph } from './ContributionGraph';
+import {
+	BLOCK_MARGIN,
+	BLOCK_SIZE,
+	useContributionGraph,
+} from './ContributionGraph';
 
-type ContributionGraphCalendarProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
-	children: (props: { activity: CommitActivity; dayIndex: number; weekIndex: number }) => ReactNode;
+type ContributionGraphCalendarProps = Omit<
+	HTMLAttributes<HTMLDivElement>,
+	'children'
+> & {
+	children: (props: {
+		activity: CommitActivity;
+		dayIndex: number;
+		weekIndex: number;
+	}) => ReactNode;
 };
 
-const ContributionGraphCalendar = ({ className, children, ...props }: ContributionGraphCalendarProps) => {
+const ContributionGraphCalendar = ({
+	className,
+	children,
+	...props
+}: ContributionGraphCalendarProps) => {
 	const { weeks, width, height } = useContributionGraph();
 
 	const monthLabels = useMemo(() => getMonthLabels(weeks), [weeks]);
 
 	return (
-		<div className="no-scrollbar max-w-full overflow-x-auto overflow-y-hidden" {...props}>
-			<svg className="block overflow-visible" height={height} viewBox={`0 0 ${width} ${height}`} width={width}>
+		<div
+			className="no-scrollbar max-w-full overflow-x-auto overflow-y-hidden"
+			{...props}
+		>
+			<svg
+				className="block overflow-visible"
+				height={height}
+				viewBox={`0 0 ${width} ${height}`}
+				width={width}
+			>
 				<g className="fill-current selection:fill-selection-foreground">
 					{monthLabels.map(({ weekIndex, label }) => (
 						<text
@@ -33,7 +56,11 @@ const ContributionGraphCalendar = ({ className, children, ...props }: Contributi
 							return null;
 						}
 
-						return <Fragment key={`${weekIndex}-${dayIndex}`}>{children({ activity, dayIndex, weekIndex })}</Fragment>;
+						return (
+							<Fragment key={`${weekIndex}-${dayIndex}`}>
+								{children({ activity, dayIndex, weekIndex })}
+							</Fragment>
+						);
 					})
 				)}
 			</svg>

@@ -1,5 +1,11 @@
 import type { IconProps } from '@phosphor-icons/react';
-import { GaugeIcon, PaletteIcon, TableIcon, TextTIcon, VaultIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+	GaugeIcon,
+	PaletteIcon,
+	TableIcon,
+	TextTIcon,
+	VaultIcon,
+} from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link';
 import type React from 'react';
 import { memo } from 'react';
@@ -12,7 +18,9 @@ const TOOLS_ICONS = {
 	Json: TableIcon,
 } as const;
 
-const getIconForUtilsTags = (tags?: string[]): React.ComponentType<IconProps> | null => {
+const getIconForUtilsTags = (
+	tags?: string[]
+): React.ComponentType<IconProps> | null => {
 	const tag = tags?.find((t: string) => t in TOOLS_ICONS);
 	return tag ? TOOLS_ICONS[tag as keyof typeof TOOLS_ICONS] : null;
 };
@@ -52,7 +60,9 @@ export const ToolItem = memo(({ post }: ToolsItemProps) => {
 							<h2 className="text-balance font-semibold text-base">{title}</h2>
 						</div>
 
-						<p className="text-muted-foreground text-xs max-sm:hidden">{shortDescription}</p>
+						<p className="text-muted-foreground text-xs max-sm:hidden">
+							{shortDescription}
+						</p>
 					</div>
 				</div>
 			</article>

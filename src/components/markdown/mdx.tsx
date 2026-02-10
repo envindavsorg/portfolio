@@ -10,7 +10,14 @@ import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import { CopyButton } from '@/components/buttons/CopyButton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/Table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Code, Heading } from '@/components/ui/Typography';
 import { CodeBlockCommand } from '@/features/(writings)/CodeBlockCommand';
@@ -101,7 +108,12 @@ const components: MDXRemoteProps['components'] = {
 	figure({ className, ...props }: React.ComponentProps<'figure'>) {
 		const hasPrettyCode = 'data-rehype-pretty-code-figure' in props;
 
-		return <figure className={cn(hasPrettyCode && 'not-prose', className)} {...props} />;
+		return (
+			<figure
+				className={cn(hasPrettyCode && 'not-prose', className)}
+				{...props}
+			/>
+		);
 	},
 	figcaption: ({ children, ...props }: React.ComponentProps<'figcaption'>) => {
 		const iconExtension =
@@ -136,14 +148,26 @@ const components: MDXRemoteProps['components'] = {
 		const isNpmCommand = __pnpm__ && __yarn__ && __npm__ && __bun__;
 
 		if (isNpmCommand) {
-			return <CodeBlockCommand __bun__={__bun__} __npm__={__npm__} __pnpm__={__pnpm__} __yarn__={__yarn__} />;
+			return (
+				<CodeBlockCommand
+					__bun__={__bun__}
+					__npm__={__npm__}
+					__pnpm__={__pnpm__}
+					__yarn__={__yarn__}
+				/>
+			);
 		}
 
 		return (
 			<>
 				<pre {...props} />
 
-				{__rawString__ && <CopyButton className="absolute top-2 right-2" value={__rawString__} />}
+				{__rawString__ && (
+					<CopyButton
+						className="absolute top-2 right-2"
+						value={__rawString__}
+					/>
+				)}
 			</>
 		);
 	},
@@ -152,8 +176,15 @@ const components: MDXRemoteProps['components'] = {
 	ComponentSource,
 	CodeCollapsibleWrapper,
 	CodeTabs,
-	Steps: (props) => <div className="prose-h3:text-wrap md:ml-3.5 md:border-l md:pl-7.5" {...props} />,
-	Step: ({ className, ...props }: React.ComponentProps<'h3'>) => <h3 className={cn('step', className)} {...props} />,
+	Steps: (props) => (
+		<div
+			className="prose-h3:text-wrap md:ml-3.5 md:border-l md:pl-7.5"
+			{...props}
+		/>
+	),
+	Step: ({ className, ...props }: React.ComponentProps<'h3'>) => (
+		<h3 className={cn('step', className)} {...props} />
+	),
 	Tabs,
 	TabsList,
 	TabsTrigger,
@@ -184,7 +215,10 @@ const options: MDXRemoteProps['options'] = {
 	mdxOptions: {
 		remarkPlugins: [remarkGfm, remarkCodeImport],
 		rehypePlugins: [
-			[rehypeExternalLinks, { target: '_blank', rel: 'nofollow noopener noreferrer' }],
+			[
+				rehypeExternalLinks,
+				{ target: '_blank', rel: 'nofollow noopener noreferrer' },
+			],
 			rehypeSlug,
 			rehypeComponent,
 			() => (tree) => {
@@ -226,7 +260,8 @@ const options: MDXRemoteProps['options'] = {
 							return;
 						}
 
-						preElement.properties.__withMeta__ = node.children.at(0).tagName === 'figcaption';
+						preElement.properties.__withMeta__ =
+							node.children.at(0).tagName === 'figcaption';
 						preElement.properties.__rawString__ = node.__rawString__;
 					}
 				});

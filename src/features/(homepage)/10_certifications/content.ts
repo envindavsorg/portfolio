@@ -17,7 +17,8 @@ export const CERTIFICATIONS: Certification[] = [
 		credentialID: 'pages-router-99069-1759826128639',
 		credentialURL:
 			'https://nextjs.org/learn/certificate?course=pages-router&user=99069&certId=pages-router-99069-1759826128639',
-		coverImageURL: '/assets/images/certifications/nextjs-pages-router-fundamentals.webp',
+		coverImageURL:
+			'/assets/images/certifications/nextjs-pages-router-fundamentals.webp',
 	},
 	{
 		title: 'Next.js App Router Fundamentals',
@@ -27,7 +28,8 @@ export const CERTIFICATIONS: Certification[] = [
 		credentialID: 'dashboard-app-99069-1759757715131',
 		credentialURL:
 			'https://nextjs.org/learn/certificate?course=dashboard-app&user=99069&certId=dashboard-app-99069-1759757715131',
-		coverImageURL: '/assets/images/certifications/nextjs-app-router-fundamentals.webp',
+		coverImageURL:
+			'/assets/images/certifications/nextjs-app-router-fundamentals.webp',
 	},
 	{
 		title: 'Next.js SEO Fundamentals',
@@ -35,7 +37,8 @@ export const CERTIFICATIONS: Certification[] = [
 		issuerIconName: 'nextjs',
 		issueDate: '2025-10-03',
 		credentialID: 'seo-99069-1759756935192',
-		credentialURL: 'https://nextjs.org/learn/certificate?course=seo&user=99069&certId=seo-99069-1759756935192',
+		credentialURL:
+			'https://nextjs.org/learn/certificate?course=seo&user=99069&certId=seo-99069-1759756935192',
 		coverImageURL: '/assets/images/certifications/nextjs-seo-fundamentals.webp',
 	},
 	{
@@ -46,6 +49,7 @@ export const CERTIFICATIONS: Certification[] = [
 		credentialID: 'react-foundations-99069-1759825479876',
 		credentialURL:
 			'https://nextjs.org/learn/certificate?course=react-foundations&user=99069&certId=react-foundations-99069-1759825479876',
-		coverImageURL: '/assets/images/certifications/react-foundations-for-nextjs.webp',
+		coverImageURL:
+			'/assets/images/certifications/react-foundations-for-nextjs.webp',
 	},
 ];

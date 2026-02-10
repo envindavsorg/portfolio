@@ -20,8 +20,18 @@ export const PROJECTS: Project[] = [
 		icon: NPMIcon,
 		type: 'librairie',
 		link: 'https://www.npmjs.com/package/ts-safe-path',
-		skills: ['Open Source', 'TypeScript', 'Node.js', 'ESM', 'Vite', 'Rollup', 'Vitest', 'Playwright'],
-		title: 'Un utilitaire TypeScript léger pour manipuler des objets de manière type-safe.',
+		skills: [
+			'Open Source',
+			'TypeScript',
+			'Node.js',
+			'ESM',
+			'Vite',
+			'Rollup',
+			'Vitest',
+			'Playwright',
+		],
+		title:
+			'Un utilitaire TypeScript léger pour manipuler des objets de manière type-safe.',
 		description: [
 			'Autocomplétion complète pour tous les chemins imbriqués',
 			'Tree-shakeable',
@@ -50,7 +60,8 @@ export const PROJECTS: Project[] = [
 			'Component Registry',
 			'Vercel',
 		],
-		title: 'Un portfolio minimaliste, avec un registre de composants et un blog.',
+		title:
+			'Un portfolio minimaliste, avec un registre de composants et un blog.',
 		description: [
 			'Support des thèmes clair et sombre',
 			'Design épuré et moderne',

@@ -69,12 +69,17 @@ const standardSentence: string =
 
 declare type GenerationUnit = 'words' | 'sentences' | 'paragraphs';
 
-const capitalizeFirstLetter = (sentence: string): string => sentence.charAt(0).toUpperCase() + sentence.slice(1);
+const capitalizeFirstLetter = (sentence: string): string =>
+	sentence.charAt(0).toUpperCase() + sentence.slice(1);
 
-const getRandomBetween = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min;
+const getRandomBetween = (min: number, max: number): number =>
+	Math.floor(Math.random() * (max - min + 1)) + min;
 
 const getRandomWords = (amount: number): string =>
-	Array.from({ length: amount }, () => words[getRandomBetween(0, words.length - 1)]).join(' ');
+	Array.from(
+		{ length: amount },
+		() => words[getRandomBetween(0, words.length - 1)]
+	).join(' ');
 
 const generateSentence = (startWithStandard: boolean): string => {
 	if (startWithStandard) {
@@ -83,8 +88,13 @@ const generateSentence = (startWithStandard: boolean): string => {
 	return capitalizeFirstLetter(getRandomWords(getRandomBetween(7, 14)));
 };
 
-const generateSentences = (amount: number, startWithStandard: boolean): string => {
-	const sentences = Array.from({ length: amount }, () => generateSentence(false));
+const generateSentences = (
+	amount: number,
+	startWithStandard: boolean
+): string => {
+	const sentences = Array.from({ length: amount }, () =>
+		generateSentence(false)
+	);
 
 	if (startWithStandard) {
 		sentences[0] = standardSentence;
@@ -93,9 +103,16 @@ const generateSentences = (amount: number, startWithStandard: boolean): string =
 	return `${sentences.join('. ')}.`;
 };
 
-const generateParagraphs = (amount: number, startWithStandard: boolean, asHTML: boolean): string =>
+const generateParagraphs = (
+	amount: number,
+	startWithStandard: boolean,
+	asHTML: boolean
+): string =>
 	Array.from({ length: amount }, () => {
-		const paragraph = generateSentences(getRandomBetween(3, 6), startWithStandard);
+		const paragraph = generateSentences(
+			getRandomBetween(3, 6),
+			startWithStandard
+		);
 		return asHTML ? `<p>${paragraph}</p>` : paragraph;
 	}).join('\n\n');
 
@@ -113,7 +130,8 @@ export const generateLoremIpsum = ({
 	const units: Record<GenerationUnit, () => string> = {
 		words: () => getRandomWords(inputAmount),
 		sentences: () => generateSentences(inputAmount, startWithStandard),
-		paragraphs: () => generateParagraphs(inputAmount, startWithStandard, asHTML),
+		paragraphs: () =>
+			generateParagraphs(inputAmount, startWithStandard, asHTML),
 	};
 
 	const text =

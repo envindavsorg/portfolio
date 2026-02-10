@@ -12,77 +12,83 @@ const DEFAULT_TRANSITION: Transition = {
 	damping: 25,
 };
 
-export const ChevronsDownUpIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
-	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
-		const controls = useAnimation();
-		const isControlledRef = useRef(false);
+export const ChevronsDownUpIcon = forwardRef<
+	AnimatedIconHandle,
+	AnimatedIconProps
+>(({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
+	const controls = useAnimation();
+	const isControlledRef = useRef(false);
 
-		useImperativeHandle(ref, () => {
-			isControlledRef.current = true;
+	useImperativeHandle(ref, () => {
+		isControlledRef.current = true;
 
-			return {
-				startAnimation: () => controls.start('animate'),
-				stopAnimation: () => controls.start('normal'),
-			};
-		});
+		return {
+			startAnimation: () => controls.start('animate'),
+			stopAnimation: () => controls.start('normal'),
+		};
+	});
 
-		const handleMouseEnter = useCallback(
-			(event: React.MouseEvent<HTMLDivElement>) => {
-				if (isControlledRef.current) {
-					onMouseEnter?.(event);
-				} else {
-					controls.start('animate');
-				}
-			},
-			[controls, onMouseEnter]
-		);
+	const handleMouseEnter = useCallback(
+		(event: React.MouseEvent<HTMLDivElement>) => {
+			if (isControlledRef.current) {
+				onMouseEnter?.(event);
+			} else {
+				controls.start('animate');
+			}
+		},
+		[controls, onMouseEnter]
+	);
 
-		const handleMouseLeave = useCallback(
-			(event: React.MouseEvent<HTMLDivElement>) => {
-				if (isControlledRef.current) {
-					onMouseLeave?.(event);
-				} else {
-					controls.start('normal');
-				}
-			},
-			[controls, onMouseLeave]
-		);
+	const handleMouseLeave = useCallback(
+		(event: React.MouseEvent<HTMLDivElement>) => {
+			if (isControlledRef.current) {
+				onMouseLeave?.(event);
+			} else {
+				controls.start('normal');
+			}
+		},
+		[controls, onMouseLeave]
+	);
 
-		return (
-			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
-				<svg
-					fill="none"
-					height={size}
-					stroke="currentColor"
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					strokeWidth="2"
-					viewBox="0 0 24 24"
-					width={size}
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<motion.path
-						animate={controls}
-						d="m7 20 5-5 5 5"
-						initial="normal"
-						transition={DEFAULT_TRANSITION}
-						variants={{
-							normal: { translateY: '0%' },
-							animate: { translateY: '-2px' },
-						}}
-					/>
-					<motion.path
-						animate={controls}
-						d="m7 4 5 5 5-5"
-						initial="normal"
-						transition={DEFAULT_TRANSITION}
-						variants={{
-							normal: { translateY: '0%' },
-							animate: { translateY: '2px' },
-						}}
-					/>
-				</svg>
-			</div>
-		);
-	}
-);
+	return (
+		<div
+			className={cn(className)}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+			{...props}
+		>
+			<svg
+				fill="none"
+				height={size}
+				stroke="currentColor"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="2"
+				viewBox="0 0 24 24"
+				width={size}
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<motion.path
+					animate={controls}
+					d="m7 20 5-5 5 5"
+					initial="normal"
+					transition={DEFAULT_TRANSITION}
+					variants={{
+						normal: { translateY: '0%' },
+						animate: { translateY: '-2px' },
+					}}
+				/>
+				<motion.path
+					animate={controls}
+					d="m7 4 5 5 5-5"
+					initial="normal"
+					transition={DEFAULT_TRANSITION}
+					variants={{
+						normal: { translateY: '0%' },
+						animate: { translateY: '2px' },
+					}}
+				/>
+			</svg>
+		</div>
+	);
+});

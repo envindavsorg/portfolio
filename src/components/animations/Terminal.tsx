@@ -2,7 +2,15 @@
 
 import { type MotionProps, motion, useInView } from 'motion/react';
 import type React from 'react';
-import { Children, createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+	Children,
+	createContext,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { cn } from '@/lib/utils';
 
 interface SequenceContextValue {
@@ -25,7 +33,13 @@ interface AnimatedSpanProps extends MotionProps {
 	startOnView?: boolean;
 }
 
-export const AnimatedSpan = ({ children, delay = 0, className, startOnView = false, ...props }: AnimatedSpanProps) => {
+export const AnimatedSpan = ({
+	children,
+	delay = 0,
+	className,
+	startOnView = false,
+	...props
+}: AnimatedSpanProps) => {
 	const elementRef = useRef<HTMLDivElement | null>(null);
 	const isInView = useInView(elementRef as React.RefObject<Element>, {
 		amount: 0.3,
@@ -141,7 +155,15 @@ export const TypingAnimation = ({
 
 		const startTimeout = setTimeout(() => setStarted(true), delay);
 		return () => clearTimeout(startTimeout);
-	}, [delay, startOnView, isInView, started, sequence?.activeIndex, sequence?.sequenceStarted, itemIndex]);
+	}, [
+		delay,
+		startOnView,
+		isInView,
+		started,
+		sequence?.activeIndex,
+		sequence?.sequenceStarted,
+		itemIndex,
+	]);
 
 	useEffect(() => {
 		if (!started) {
@@ -167,7 +189,11 @@ export const TypingAnimation = ({
 	}, [children, duration, started]);
 
 	return (
-		<MotionComponent className={cn('font-normal text-sm tracking-tight', className)} ref={elementRef} {...props}>
+		<MotionComponent
+			className={cn('font-normal text-sm tracking-tight', className)}
+			ref={elementRef}
+			{...props}
+		>
 			{displayedText}
 		</MotionComponent>
 	);
@@ -180,7 +206,12 @@ interface TerminalProps {
 	startOnView?: boolean;
 }
 
-export const Terminal = ({ children, className, sequence = true, startOnView = true }: TerminalProps) => {
+export const Terminal = ({
+	children,
+	className,
+	sequence = true,
+	startOnView = true,
+}: TerminalProps) => {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const isInView = useInView(containerRef as React.RefObject<Element>, {
 		amount: 0.3,
@@ -197,7 +228,9 @@ export const Terminal = ({ children, className, sequence = true, startOnView = t
 
 		return {
 			completeItem: (index: number) => {
-				setActiveIndex((current) => (index === current ? current + 1 : current));
+				setActiveIndex((current) =>
+					index === current ? current + 1 : current
+				);
 			},
 			activeIndex,
 			sequenceStarted: sequenceHasStarted,
@@ -210,14 +243,21 @@ export const Terminal = ({ children, className, sequence = true, startOnView = t
 		}
 
 		return Children.map(children, (child, index) => (
-			<ItemIndexContext.Provider value={index}>{child}</ItemIndexContext.Provider>
+			<ItemIndexContext.Provider value={index}>
+				{child}
+			</ItemIndexContext.Provider>
 		));
 	}, [children, sequence]);
 
 	const content = (
-		<div className={cn('z-0 h-full max-h-[400px] w-full bg-background', className)} ref={containerRef}>
+		<div
+			className={cn('z-0 h-full max-h-[400px] w-full bg-background', className)}
+			ref={containerRef}
+		>
 			<pre className="no-scrollbar p-4">
-				<code className="no-scrollbar grid gap-y-1 overflow-auto">{wrappedChildren}</code>
+				<code className="no-scrollbar grid gap-y-1 overflow-auto">
+					{wrappedChildren}
+				</code>
 			</pre>
 		</div>
 	);
@@ -226,5 +266,9 @@ export const Terminal = ({ children, className, sequence = true, startOnView = t
 		return content;
 	}
 
-	return <SequenceContext.Provider value={contextValue}>{content}</SequenceContext.Provider>;
+	return (
+		<SequenceContext.Provider value={contextValue}>
+			{content}
+		</SequenceContext.Provider>
+	);
 };

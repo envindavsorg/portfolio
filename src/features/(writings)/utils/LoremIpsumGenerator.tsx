@@ -32,7 +32,8 @@ export const LoremIpsumGenerator = () => {
 	const [inputAmount, setInputAmount] = useState(2);
 	const [textAreaRows, setTextAreaRows] = useState(9);
 	const [output, setOutput] = useState('');
-	const [generationUnit, setGenerationUnit] = useState<GenerationUnit>('paragraphs');
+	const [generationUnit, setGenerationUnit] =
+		useState<GenerationUnit>('paragraphs');
 	const [asHTML, setAsHTML] = useState(false);
 	const [startWithStandard, setStartWithStandard] = useState(false);
 	const { buttonText, handleCopy } = useCopyToClipboard();
@@ -62,7 +63,10 @@ export const LoremIpsumGenerator = () => {
 	return (
 		<>
 			<div className="screen-line-after flex flex-col gap-y-2 py-3">
-				<Label className="text-muted-foreground text-xs" htmlFor="howManyParagraphs">
+				<Label
+					className="text-muted-foreground text-xs"
+					htmlFor="howManyParagraphs"
+				>
 					Combien de paragraphes ?
 				</Label>
 				<div className="flex items-center gap-3">
@@ -102,7 +106,11 @@ export const LoremIpsumGenerator = () => {
 				</div>
 
 				<div className="flex items-center gap-x-1">
-					<AnimatedCheckbox checked={asHTML} id="asHtml" onCheckedChange={() => setAsHTML(!asHTML)} />
+					<AnimatedCheckbox
+						checked={asHTML}
+						id="asHtml"
+						onCheckedChange={() => setAsHTML(!asHTML)}
+					/>
 					<Label className="cursor-pointer" htmlFor="asHtml">
 						Format HTML
 					</Label>
@@ -110,10 +118,18 @@ export const LoremIpsumGenerator = () => {
 			</div>
 
 			<div className="screen-line-after flex flex-col gap-y-2 py-3">
-				<Label className="text-muted-foreground text-xs" htmlFor="generatedText">
+				<Label
+					className="text-muted-foreground text-xs"
+					htmlFor="generatedText"
+				>
 					Texte généré
 				</Label>
-				<Textarea id="generatedText" readOnly rows={textAreaRows} value={output} />
+				<Textarea
+					id="generatedText"
+					readOnly
+					rows={textAreaRows}
+					value={output}
+				/>
 			</div>
 
 			<div className="flex justify-between py-1.5">

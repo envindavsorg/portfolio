@@ -10,15 +10,25 @@ import {
 import { Separator } from '@/components/ui/Separator';
 import { cn } from '@/lib/utils';
 
-export const CodeCollapsibleWrapper = ({ className, children, ...props }: React.ComponentProps<typeof Collapsible>) => (
-	<CollapsibleWithContext className={cn('group/collapsible not-prose relative my-6', className)} {...props}>
+export const CodeCollapsibleWrapper = ({
+	className,
+	children,
+	...props
+}: React.ComponentProps<typeof Collapsible>) => (
+	<CollapsibleWithContext
+		className={cn('group/collapsible not-prose relative my-6', className)}
+		{...props}
+	>
 		<CollapsibleTrigger asChild>
 			<div className="absolute top-2 right-10 z-10 flex items-center gap-2">
 				<Button className="size-6 rounded-md" size="icon" variant="outline">
 					<CollapsibleChevronsIcon />
 				</Button>
 
-				<Separator className="data-[orientation=vertical]:h-4" orientation="vertical" />
+				<Separator
+					className="data-[orientation=vertical]:h-4"
+					orientation="vertical"
+				/>
 			</div>
 		</CollapsibleTrigger>
 

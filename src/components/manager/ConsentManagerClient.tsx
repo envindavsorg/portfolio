@@ -7,6 +7,8 @@ interface ConsentManagerClientProps {
 	children: React.ReactNode;
 }
 
-export const ConsentManagerClient = ({ children }: ConsentManagerClientProps) => (
+export const ConsentManagerClient = ({
+	children,
+}: ConsentManagerClientProps) => (
 	<ClientSideOptionsProvider>{children}</ClientSideOptionsProvider>
 );

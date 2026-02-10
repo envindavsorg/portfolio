@@ -9,7 +9,9 @@ import { logger } from './logger';
  * DO NOT import this file from Client Components!
  */
 
-export const convertImageToJpeg = async (imageBuffer: Buffer): Promise<Buffer> => {
+export const convertImageToJpeg = async (
+	imageBuffer: Buffer
+): Promise<Buffer> => {
 	try {
 		return await sharp(imageBuffer)
 			.rotate()

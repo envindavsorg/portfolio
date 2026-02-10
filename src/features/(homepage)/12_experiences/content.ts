@@ -92,7 +92,17 @@ export const EXPERIENCES: Experience[] = [
 			start: '2017',
 			end: '2019',
 		},
-		skills: ['JavaScript', 'HTML5', 'CSS3', 'Git', 'Figma', 'Python', 'Django', 'Flask', 'APIs'],
+		skills: [
+			'JavaScript',
+			'HTML5',
+			'CSS3',
+			'Git',
+			'Figma',
+			'Python',
+			'Django',
+			'Flask',
+			'APIs',
+		],
 		description: [
 			"Développé un site intranet sécurisé pour le ministère des Armées avec authentification SSO et gestion granulaire des droits d'accès, facilitant la collaboration entre les différents services de l'Économat.",
 			"Conçu et implémenté un annuaire interne permettant la recherche avancée de personnel avec filtres multi-critères, améliorant significativement l'accessibilité aux informations et réduisant le temps de recherche de contacts.",

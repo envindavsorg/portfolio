@@ -55,15 +55,21 @@ const ArticleItem = ({ article }: ArticleItemProps) => {
 			)}
 
 			<div className="flex flex-1 flex-col gap-y-1">
-				<h2 className="text-balance font-semibold text-base">{metadata.title}</h2>
-				<Prose className="text-muted-foreground text-xs">{metadata.description}</Prose>
+				<h2 className="text-balance font-semibold text-base">
+					{metadata.title}
+				</h2>
+				<Prose className="text-muted-foreground text-xs">
+					{metadata.description}
+				</Prose>
 
 				<div className="mt-2 flex items-center gap-x-3">
 					<dl className="font-medium text-foreground text-xs">
 						<dt className="sr-only">Date de création de l'article</dt>
 						<dd>
 							<p>
-								<time dateTime={dayjs(article.metadata.createdAt).toISOString()}>
+								<time
+									dateTime={dayjs(article.metadata.createdAt).toISOString()}
+								>
 									{dayjs(article.metadata.createdAt).format('ddd DD MMM')}
 								</time>
 							</p>

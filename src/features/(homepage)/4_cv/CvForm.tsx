@@ -1,5 +1,12 @@
 import { Button } from '@/components/buttons/Button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 import { Spinner } from '@/components/ui/Spinner';
 import type useEmailForm from '@/hooks/use-email-form';
@@ -36,7 +43,12 @@ const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm) => (
 					<FormItem>
 						<FormLabel className="text-xs">Votre adresse e-mail :</FormLabel>
 						<FormControl>
-							<Input disabled={isLoading} placeholder="..." type="email" {...field} />
+							<Input
+								disabled={isLoading}
+								placeholder="..."
+								type="email"
+								{...field}
+							/>
 						</FormControl>
 						<FormMessage />
 					</FormItem>

@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/buttons/Button";
-import { MenuIcon } from "@/components/icons/MenuIcon";
-import { useNavBar } from "./NavBarContext";
+import { Button } from '@/components/buttons/Button';
+import { MenuIcon } from '@/components/icons/MenuIcon';
+import { useNavBar } from './NavBarContext';
 
 export const NavBarMenuToggle = () => {
-  const { isSecondaryMenuOpen, toggleSecondaryMenu } = useNavBar();
+	const { isSecondaryMenuOpen, toggleSecondaryMenu } = useNavBar();
 
-  return (
-    <Button
-      aria-label="Menu principal"
-      aria-expanded={isSecondaryMenuOpen}
-      className="sm:hidden"
-      size="icon"
-      variant="outline"
-      onClick={toggleSecondaryMenu}
-    >
-      <MenuIcon isOpen={isSecondaryMenuOpen} />
-    </Button>
-  );
+	return (
+		<Button
+			aria-expanded={isSecondaryMenuOpen}
+			aria-label="Menu principal"
+			className="sm:hidden"
+			onClick={toggleSecondaryMenu}
+			size="icon"
+			variant="outline"
+		>
+			<MenuIcon isOpen={isSecondaryMenuOpen} />
+		</Button>
+	);
 };

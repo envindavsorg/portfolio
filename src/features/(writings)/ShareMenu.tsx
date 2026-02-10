@@ -1,11 +1,22 @@
 'use client';
 
-import { ExportIcon, LinkedinLogoIcon, LinkIcon, XIcon, XLogoIcon } from '@phosphor-icons/react';
+import {
+	ExportIcon,
+	LinkedinLogoIcon,
+	LinkIcon,
+	XIcon,
+	XLogoIcon,
+} from '@phosphor-icons/react';
 import Link from 'next/link';
 import { memo, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import { copyText, getAbsoluteUrl } from '@/lib/utils';
 

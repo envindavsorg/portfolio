@@ -20,7 +20,11 @@ const Kbd = ({ className, ...props }: ComponentProps<'kbd'>) => (
 Kbd.displayName = 'Kbd';
 
 const KbdGroup = ({ className, ...props }: ComponentProps<'div'>) => (
-	<kbd className={cn('inline-flex items-center gap-x-2', className)} data-slot="kbd-group" {...props} />
+	<kbd
+		className={cn('inline-flex items-center gap-x-2', className)}
+		data-slot="kbd-group"
+		{...props}
+	/>
 );
 
 KbdGroup.displayName = 'KbdGroup';

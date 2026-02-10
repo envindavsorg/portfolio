@@ -59,7 +59,12 @@ const PlayIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 			[controls, onMouseLeave]
 		);
 		return (
-			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
+			<div
+				className={cn(className)}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+				{...props}
+			>
 				<motion.svg
 					fill="none"
 					height={size}
@@ -71,7 +76,11 @@ const PlayIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<motion.polygon animate={controls} points="6 3 20 12 6 21 6 3" variants={PATH_VARIANTS} />
+					<motion.polygon
+						animate={controls}
+						points="6 3 20 12 6 21 6 3"
+						variants={PATH_VARIANTS}
+					/>
 				</motion.svg>
 			</div>
 		);

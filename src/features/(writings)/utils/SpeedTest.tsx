@@ -1,13 +1,27 @@
 'use client';
 
 import SpeedTestEngine from '@cloudflare/speedtest';
-import { DownloadIcon, GaugeIcon, type Icon, SpeedometerIcon, UploadIcon } from '@phosphor-icons/react';
+import {
+	DownloadIcon,
+	GaugeIcon,
+	type Icon,
+	SpeedometerIcon,
+	UploadIcon,
+} from '@phosphor-icons/react';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
-import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from '@/components/ui/Item';
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemMedia,
+	ItemTitle,
+} from '@/components/ui/Item';
 import { cn } from '@/lib/utils';
 
-type SpeedResult = ReturnType<typeof SpeedTestEngine.prototype.results.getSummary>;
+type SpeedResult = ReturnType<
+	typeof SpeedTestEngine.prototype.results.getSummary
+>;
 
 interface TestState {
 	status: 'idle' | 'running' | 'finished';
@@ -71,7 +85,9 @@ const getButtonLabel = (status: TestState['status']) => {
 };
 
 const cleanSummary = (summary: SpeedResult): Partial<SpeedResult> =>
-	Object.fromEntries(Object.entries(summary).filter(([, value]) => value !== undefined)) as Partial<SpeedResult>;
+	Object.fromEntries(
+		Object.entries(summary).filter(([, value]) => value !== undefined)
+	) as Partial<SpeedResult>;
 
 const formatValue = (val: number | undefined, unit: string): string => {
 	const num = val ?? 0;
@@ -92,34 +108,50 @@ interface SpeedTestProps {
 	icon: Icon;
 }
 
-const SpeedTestItem = memo(({ status, label, value, measure, icon: SpeedTestItemIcon }: SpeedTestProps) => {
-	const displayValue = useMemo(() => formatValue(value, measure), [value, measure]);
+const SpeedTestItem = memo(
+	({
+		status,
+		label,
+		value,
+		measure,
+		icon: SpeedTestItemIcon,
+	}: SpeedTestProps) => {
+		const displayValue = useMemo(
+			() => formatValue(value, measure),
+			[value, measure]
+		);
 
-	const borderClassName = useMemo(
-		() =>
-			cn(
-				status === 'running' && 'border-blue-600 dark:border-blue-300',
-				status === 'finished' && 'border-green-600 dark:border-green-300'
-			),
-		[status]
-	);
+		const borderClassName = useMemo(
+			() =>
+				cn(
+					status === 'running' && 'border-blue-600 dark:border-blue-300',
+					status === 'finished' && 'border-green-600 dark:border-green-300'
+				),
+			[status]
+		);
 
-	return (
-		<Item className={borderClassName} size="sm" variant="outline">
-			<ItemMedia>
-				<SpeedTestItemIcon className="size-5 sm:size-6" />
-			</ItemMedia>
-			<ItemContent className="flex flex-row items-center gap-x-3">
-				<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
-				<PulsatingCircle isFinished={status === 'finished'} isRunning={status === 'running'} />
-			</ItemContent>
-			<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
-				{displayValue}
-				<span className="font-normal text-muted-foreground text-xs sm:text-sm">{measure}</span>
-			</ItemActions>
-		</Item>
-	);
-});
+		return (
+			<Item className={borderClassName} size="sm" variant="outline">
+				<ItemMedia>
+					<SpeedTestItemIcon className="size-5 sm:size-6" />
+				</ItemMedia>
+				<ItemContent className="flex flex-row items-center gap-x-3">
+					<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
+					<PulsatingCircle
+						isFinished={status === 'finished'}
+						isRunning={status === 'running'}
+					/>
+				</ItemContent>
+				<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
+					{displayValue}
+					<span className="font-normal text-muted-foreground text-xs sm:text-sm">
+						{measure}
+					</span>
+				</ItemActions>
+			</Item>
+		);
+	}
+);
 
 export const SpeedTest = () => {
 	const [testState, setTestState] = useState<TestState>({

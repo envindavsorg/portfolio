@@ -20,7 +20,12 @@ const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 
 	return (
 		<CollapsibleWithContext>
-			<div className={cn('flex items-center', experience.link && 'hover:bg-accent2')}>
+			<div
+				className={cn(
+					'flex items-center',
+					experience.link && 'hover:bg-accent2'
+				)}
+			>
 				<CollapsibleTrigger
 					className={cn(
 						'flex flex-1 items-center gap-4',
@@ -38,8 +43,14 @@ const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 								</span>
 							)}
 							<div className="flex items-baseline gap-x-1.5">
-								<h2 className="text-balance font-semibold text-base">{experience.company}</h2>
-								{experience.type && <span className="font-normal text-theme text-xs">({experience.type})</span>}
+								<h2 className="text-balance font-semibold text-base">
+									{experience.company}
+								</h2>
+								{experience.type && (
+									<span className="font-normal text-theme text-xs">
+										({experience.type})
+									</span>
+								)}
 							</div>
 						</div>
 
@@ -76,7 +87,9 @@ const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 						</Link>
 					)}
 
-					{experience.description && experience.skills && <CollapsibleChevronsIcon />}
+					{experience.description && experience.skills && (
+						<CollapsibleChevronsIcon />
+					)}
 				</CollapsibleTrigger>
 			</div>
 

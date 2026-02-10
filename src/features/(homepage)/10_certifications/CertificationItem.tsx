@@ -32,7 +32,14 @@ interface CertItemProps {
 }
 
 const CertificationItem = ({ certification }: CertItemProps) => {
-	const { credentialURL, issuerIconName, title, issuer, issueDate, coverImageURL } = certification;
+	const {
+		credentialURL,
+		issuerIconName,
+		title,
+		issuer,
+		issueDate,
+		coverImageURL,
+	} = certification;
 
 	return (
 		<CollapsibleWithContext>
@@ -46,7 +53,9 @@ const CertificationItem = ({ certification }: CertItemProps) => {
 						<h2 className="text-balance font-semibold text-base">{title}</h2>
 						<div className="flex items-center gap-x-3">
 							<dl className="font-medium text-muted-foreground text-xs">
-								<dt className="sr-only">Organisme ayant délivré la certification</dt>
+								<dt className="sr-only">
+									Organisme ayant délivré la certification
+								</dt>
 								<dd>
 									<p className="text-theme">{issuer}</p>
 								</dd>
@@ -67,7 +76,13 @@ const CertificationItem = ({ certification }: CertItemProps) => {
 						</div>
 					</div>
 
-					<Link aria-label={title} className="z-20" href={credentialURL} rel="noopener" target="_blank">
+					<Link
+						aria-label={title}
+						className="z-20"
+						href={credentialURL}
+						rel="noopener"
+						target="_blank"
+					>
 						<LinkIcon size={20} />
 					</Link>
 

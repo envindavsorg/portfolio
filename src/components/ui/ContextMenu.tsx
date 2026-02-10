@@ -10,15 +10,22 @@ export const ContextMenu = ({ ...props }: ContextMenuProps) => (
 	<ContextMenuPrimitive.Root data-slot="context-menu" {...props} />
 );
 
-type ContextMenuTriggerProps = React.ComponentProps<typeof ContextMenuPrimitive.Trigger>;
+type ContextMenuTriggerProps = React.ComponentProps<
+	typeof ContextMenuPrimitive.Trigger
+>;
 
 export const ContextMenuTrigger = ({ ...props }: ContextMenuTriggerProps) => (
 	<ContextMenuPrimitive.Trigger data-slot="context-menu-trigger" {...props} />
 );
 
-type ContextMenuContentProps = React.ComponentProps<typeof ContextMenuPrimitive.Content>;
+type ContextMenuContentProps = React.ComponentProps<
+	typeof ContextMenuPrimitive.Content
+>;
 
-export const ContextMenuContent = ({ className, ...props }: ContextMenuContentProps) => (
+export const ContextMenuContent = ({
+	className,
+	...props
+}: ContextMenuContentProps) => (
 	<ContextMenuPrimitive.Portal>
 		<ContextMenuPrimitive.Content
 			className={cn(
@@ -38,9 +45,14 @@ export const ContextMenuContent = ({ className, ...props }: ContextMenuContentPr
 	</ContextMenuPrimitive.Portal>
 );
 
-type ContextMenuItemProps = React.ComponentProps<typeof ContextMenuPrimitive.Item>;
+type ContextMenuItemProps = React.ComponentProps<
+	typeof ContextMenuPrimitive.Item
+>;
 
-export const ContextMenuItem = ({ className, ...props }: ContextMenuItemProps) => (
+export const ContextMenuItem = ({
+	className,
+	...props
+}: ContextMenuItemProps) => (
 	<ContextMenuPrimitive.Item
 		className={cn(
 			'relative flex items-center gap-x-3',
@@ -55,9 +67,14 @@ export const ContextMenuItem = ({ className, ...props }: ContextMenuItemProps) =
 	/>
 );
 
-type ContextMenuSeparatorProps = React.ComponentProps<typeof ContextMenuPrimitive.Separator>;
+type ContextMenuSeparatorProps = React.ComponentProps<
+	typeof ContextMenuPrimitive.Separator
+>;
 
-export const ContextMenuSeparator = ({ className, ...props }: ContextMenuSeparatorProps) => (
+export const ContextMenuSeparator = ({
+	className,
+	...props
+}: ContextMenuSeparatorProps) => (
 	<ContextMenuPrimitive.Separator
 		className={cn('-mx-1 my-1 h-px bg-border', className)}
 		data-slot="context-menu-separator"

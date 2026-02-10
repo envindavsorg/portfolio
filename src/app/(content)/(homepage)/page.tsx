@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
-import type { ProfilePage as PageSchema, WithContext } from "schema-dts";
-import { Divider } from "@/components/ui/Divider";
-import GLOBAL_DATA from "@/content/data/global";
-import { Cover } from "@/features/(homepage)/1_cover/Cover";
+import type { Metadata } from 'next';
+import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
+import { Divider } from '@/components/ui/Divider';
+import GLOBAL_DATA from '@/content/data/global';
+import { Cover } from '@/features/(homepage)/1_cover/Cover';
 /*
 import { Header } from "@/features/(homepage)/2_header/Header";
 import { Overview } from '@/features/(homepage)/3_overview/Overview';
@@ -17,49 +17,49 @@ import { Tools } from '@/features/(homepage)/11_tools/Tools';
 import { Experiences } from '@/features/(homepage)/12_experiences/Experiences';
 import { Projects } from '@/features/(homepage)/13_projects/Projects';
 import { Branding } from '@/features/(homepage)/14_branding/Branding';*/
-import { openGraphImage } from "@/lib/open-graph";
-import { dayjs } from "@/lib/utils";
+import { openGraphImage } from '@/lib/open-graph';
+import { dayjs } from '@/lib/utils';
 
 export const generateMetadata = async (): Promise<Metadata> =>
-  openGraphImage({
-    title: GLOBAL_DATA.USER.fullName,
-    description: GLOBAL_DATA.USER.bio,
-    ogImageParams: {
-      type: "homepage",
-      title: GLOBAL_DATA.USER.fullName,
-      description: GLOBAL_DATA.USER.bio,
-    },
-  });
+	openGraphImage({
+		title: GLOBAL_DATA.USER.fullName,
+		description: GLOBAL_DATA.USER.bio,
+		ogImageParams: {
+			type: 'homepage',
+			title: GLOBAL_DATA.USER.fullName,
+			description: GLOBAL_DATA.USER.bio,
+		},
+	});
 
 const getPageJsonLd = (): WithContext<PageSchema> => ({
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  dateCreated: dayjs("2025-09-01").toISOString(),
-  dateModified: dayjs().toISOString(),
-  mainEntity: {
-    "@type": "Person",
-    name: GLOBAL_DATA.USER.firstName,
-    identifier: GLOBAL_DATA.USER.username,
-    image: GLOBAL_DATA.USER.avatar,
-  },
+	'@context': 'https://schema.org',
+	'@type': 'ProfilePage',
+	dateCreated: dayjs('2025-09-01').toISOString(),
+	dateModified: dayjs().toISOString(),
+	mainEntity: {
+		'@type': 'Person',
+		name: GLOBAL_DATA.USER.firstName,
+		identifier: GLOBAL_DATA.USER.username,
+		image: GLOBAL_DATA.USER.avatar,
+	},
 });
 
 const Page = () => (
-  <>
-    <script
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(getPageJsonLd()).replace(/</g, "\\u003c"),
-      }}
-      type="application/ld+json"
-    />
+	<>
+		<script
+			dangerouslySetInnerHTML={{
+				__html: JSON.stringify(getPageJsonLd()).replace(/</g, '\\u003c'),
+			}}
+			type="application/ld+json"
+		/>
 
-    <div className="mx-auto md:max-w-3xl">
-      <Cover />
-      <Divider />
+		<div className="mx-auto md:max-w-3xl">
+			<Cover />
+			<Divider />
 
-      <div className="h-900" />
+			<div className="h-900" />
 
-      {/*
+			{/*
       		<Header />
         	<Divider border />
     		<Overview />
@@ -88,8 +88,8 @@ const Page = () => (
 			<Divider border />
 			<Cv />
 			<Divider border />*/}
-    </div>
-  </>
+		</div>
+	</>
 );
 
 export default Page;

@@ -1,12 +1,23 @@
 'use client';
 
-import { CaretDownIcon, CaretUpIcon, CheckIcon, CopyIcon, TriangleDashedIcon } from '@phosphor-icons/react';
+import {
+	CaretDownIcon,
+	CaretUpIcon,
+	CheckIcon,
+	CopyIcon,
+	TriangleDashedIcon,
+} from '@phosphor-icons/react';
 import Link from 'next/link';
 import type React from 'react';
 import { lazy, useMemo, useOptimistic, useTransition } from 'react';
 import { toast } from 'sonner';
 import { buttonVariants } from '@/components/buttons/Button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/DropdownMenu';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import { cn, getPrompt } from '@/lib/utils';
 
@@ -26,7 +37,9 @@ interface LLMCopyButtonProps {
 }
 
 export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
-	const [state, setState] = useOptimistic<'idle' | 'fetching' | 'copied' | 'failed'>('idle');
+	const [state, setState] = useOptimistic<
+		'idle' | 'fetching' | 'copied' | 'failed'
+	>('idle');
 	const [, startTransition] = useTransition();
 
 	const Icon = useMemo(() => ICONS[state], [state]);
@@ -116,10 +129,15 @@ interface ViewOptionsProps {
 	isComponent?: boolean;
 }
 
-export const ViewOptions = ({ markdownUrl, isComponent = false }: ViewOptionsProps) => {
+export const ViewOptions = ({
+	markdownUrl,
+	isComponent = false,
+}: ViewOptionsProps) => {
 	const items = useMemo(() => {
 		const fullMarkdownUrl =
-			typeof window === 'undefined' ? markdownUrl : new URL(markdownUrl, window.location.origin).toString();
+			typeof window === 'undefined'
+				? markdownUrl
+				: new URL(markdownUrl, window.location.origin).toString();
 
 		const promptType = isComponent ? 'component' : 'general';
 		const q = getPrompt(fullMarkdownUrl, promptType);

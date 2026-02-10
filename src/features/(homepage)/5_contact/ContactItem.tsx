@@ -18,7 +18,8 @@ interface SocialLinkItemProps {
 const isCapture = process.env.ENV_TYPE === 'capture';
 
 const ContactItem = ({ followers, content }: SocialLinkItemProps) => {
-	const config = FOLLOWERS_CONFIG[content.name as keyof typeof FOLLOWERS_CONFIG];
+	const config =
+		FOLLOWERS_CONFIG[content.name as keyof typeof FOLLOWERS_CONFIG];
 	const currentCount = config ? (followers[config.key] ?? 0) : 0;
 	const iconRef = useRef<AnimatedIconHandle>(null);
 
@@ -33,7 +34,11 @@ const ContactItem = ({ followers, content }: SocialLinkItemProps) => {
 			target="_blank"
 		>
 			<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-				{content.icon === 'GitHub' ? <GitHubIcon ref={iconRef} size={26} /> : <LinkedinIcon ref={iconRef} size={26} />}
+				{content.icon === 'GitHub' ? (
+					<GitHubIcon ref={iconRef} size={26} />
+				) : (
+					<LinkedinIcon ref={iconRef} size={26} />
+				)}
 			</div>
 
 			<div className="w-full flex-1 border-edge border-l px-3 py-4 text-left">
@@ -42,7 +47,8 @@ const ContactItem = ({ followers, content }: SocialLinkItemProps) => {
 					{content.username}
 					{config && (
 						<span className="font-light text-theme text-xs">
-							({isCapture ? currentCount : <Counter value={currentCount} />} {config.label})
+							({isCapture ? currentCount : <Counter value={currentCount} />}{' '}
+							{config.label})
 						</span>
 					)}
 				</p>

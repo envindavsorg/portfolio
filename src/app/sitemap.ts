@@ -11,8 +11,12 @@ const CATEGORY_ROUTES: Record<string, string> = {
 const sitemap = (): MetadataRoute.Sitemap => {
 	const allPosts = getAllPosts();
 
-	const articles = allPosts.filter((p) => (p.metadata.category ?? 'article') === 'article');
-	const components = allPosts.filter((p) => p.metadata.category === 'components');
+	const articles = allPosts.filter(
+		(p) => (p.metadata.category ?? 'article') === 'article'
+	);
+	const components = allPosts.filter(
+		(p) => p.metadata.category === 'components'
+	);
 	const utils = allPosts.filter((p) => p.metadata.category === 'utils');
 
 	const getLatestDate = (posts: typeof allPosts) => {
@@ -50,7 +54,10 @@ const sitemap = (): MetadataRoute.Sitemap => {
 		},
 	];
 
-	const mapPostsToSitemap = (posts: typeof allPosts, routeBase: string): MetadataRoute.Sitemap =>
+	const mapPostsToSitemap = (
+		posts: typeof allPosts,
+		routeBase: string
+	): MetadataRoute.Sitemap =>
 		posts.map((post) => ({
 			url: `https://cuzeacflorin.fr/${routeBase}/${post.slug}`,
 			lastModified: dayjs(post.metadata.updatedAt).toISOString(),
@@ -59,7 +66,10 @@ const sitemap = (): MetadataRoute.Sitemap => {
 		}));
 
 	const articleUrls = mapPostsToSitemap(articles, CATEGORY_ROUTES.article);
-	const componentUrls = mapPostsToSitemap(components, CATEGORY_ROUTES.components);
+	const componentUrls = mapPostsToSitemap(
+		components,
+		CATEGORY_ROUTES.components
+	);
 	const utilUrls = mapPostsToSitemap(utils, CATEGORY_ROUTES.utils);
 
 	return [...staticRoutes, ...articleUrls, ...componentUrls, ...utilUrls];

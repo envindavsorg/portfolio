@@ -16,7 +16,10 @@ interface OgImageSectionProps {
 	onChangeAction?: () => void;
 }
 
-export const DirectionAwareTabs = ({ tabs, onChangeAction }: OgImageSectionProps) => {
+export const DirectionAwareTabs = ({
+	tabs,
+	onChangeAction,
+}: OgImageSectionProps) => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [direction, setDirection] = useState(0);
 	const [isAnimating, setIsAnimating] = useState(false);
@@ -62,7 +65,9 @@ export const DirectionAwareTabs = ({ tabs, onChangeAction }: OgImageSectionProps
 						className={cn(
 							'relative flex items-center justify-center gap-x-2 rounded-md border px-3.5 py-2 font-medium text-sm transition focus-visible:outline-none focus-visible:outline-1 focus-visible:ring-1',
 							'cursor-pointer',
-							activeTab === tab.id ? 'text-theme' : 'text-foreground hover:text-muted-foreground'
+							activeTab === tab.id
+								? 'text-theme'
+								: 'text-foreground hover:text-muted-foreground'
 						)}
 						key={tab.id}
 						onClick={() => handleTabClick(tab.id)}
@@ -93,7 +98,11 @@ export const DirectionAwareTabs = ({ tabs, onChangeAction }: OgImageSectionProps
 					initial={false}
 				>
 					<div ref={ref}>
-						<AnimatePresence custom={direction} mode="popLayout" onExitComplete={() => setIsAnimating(false)}>
+						<AnimatePresence
+							custom={direction}
+							mode="popLayout"
+							onExitComplete={() => setIsAnimating(false)}
+						>
 							<motion.div
 								animate="active"
 								custom={direction}

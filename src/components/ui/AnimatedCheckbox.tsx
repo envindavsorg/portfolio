@@ -5,10 +5,17 @@ import { type HTMLMotionProps, motion } from 'motion/react';
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-type AnimatedCheckboxProps = React.ComponentProps<typeof Root> & HTMLMotionProps<'button'>;
+type AnimatedCheckboxProps = React.ComponentProps<typeof Root> &
+	HTMLMotionProps<'button'>;
 
-export const AnimatedCheckbox = ({ className, onCheckedChange, ...props }: AnimatedCheckboxProps) => {
-	const [isChecked, setIsChecked] = React.useState(props?.checked ?? props?.defaultChecked ?? false);
+export const AnimatedCheckbox = ({
+	className,
+	onCheckedChange,
+	...props
+}: AnimatedCheckboxProps) => {
+	const [isChecked, setIsChecked] = React.useState(
+		props?.checked ?? props?.defaultChecked ?? false
+	);
 
 	useEffect(() => {
 		if (props?.checked !== undefined) {

@@ -13,7 +13,13 @@ interface TopBarProps {
 	title: string;
 }
 
-export const TopBar = ({ type, slug, baseUrl, postSlug, title }: TopBarProps) => {
+export const TopBar = ({
+	type,
+	slug,
+	baseUrl,
+	postSlug,
+	title,
+}: TopBarProps) => {
 	const allPosts: Post[] = getPostsByCategory(type);
 	const { previous, next } = findNeighbour(allPosts, slug);
 

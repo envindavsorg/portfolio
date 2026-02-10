@@ -102,7 +102,11 @@ export const CodeBlockCommand = ({
 				{Object.entries(tabs).map(([key, value]) => (
 					<TabsContent key={key} value={key}>
 						<pre>
-							<code className="text-code-foreground text-sm leading-none" data-language="bash" data-slot="code-block">
+							<code
+								className="text-code-foreground text-sm leading-none"
+								data-language="bash"
+								data-slot="code-block"
+							>
 								{value}
 							</code>
 						</pre>
@@ -110,7 +114,10 @@ export const CodeBlockCommand = ({
 				))}
 			</Tabs>
 
-			<CopyButton className="absolute top-2 right-2" value={tabs[packageManager] || ''} />
+			<CopyButton
+				className="absolute top-2 right-2"
+				value={tabs[packageManager] || ''}
+			/>
 		</div>
 	);
 };

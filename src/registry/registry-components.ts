@@ -21,7 +21,8 @@ export const components: Registry['items'] = [
 	{
 		name: 'apple-hello-effect',
 		type: 'registry:component',
-		description: "Créez un effet d'écriture Bonjour, Hello et Hola inspiré d'Apple en utilisant motion/react.",
+		description:
+			"Créez un effet d'écriture Bonjour, Hello et Hola inspiré d'Apple en utilisant motion/react.",
 		title: 'Apple Hello Effect',
 		author: 'envindavsorg <contact@cuzeacflorin.fr>',
 		dependencies: ['motion'],

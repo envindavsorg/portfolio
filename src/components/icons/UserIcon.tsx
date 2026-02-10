@@ -64,7 +64,12 @@ export const UserIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 			[controls, onMouseLeave]
 		);
 		return (
-			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
+			<div
+				className={cn(className)}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+				{...props}
+			>
 				<svg
 					fill="none"
 					height={size}
@@ -76,7 +81,13 @@ export const UserIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<motion.circle animate={controls} cx="12" cy="8" r="5" variants={CIRCLE_VARIANT} />
+					<motion.circle
+						animate={controls}
+						cx="12"
+						cy="8"
+						r="5"
+						variants={CIRCLE_VARIANT}
+					/>
 
 					<motion.path
 						animate={controls}

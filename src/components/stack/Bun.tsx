@@ -1,7 +1,13 @@
 import type { SVGProps } from 'react';
 
 export const BunIcon = (props: SVGProps<SVGSVGElement>) => (
-	<svg height="1em" viewBox="0 0 80 70" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
+	<svg
+		height="1em"
+		viewBox="0 0 80 70"
+		width="1em"
+		xmlns="http://www.w3.org/2000/svg"
+		{...props}
+	>
 		<title>Bun</title>
 		<path d="M71.09 20.74c-.16-.17-.33-.34-.5-.5s-.33-.34-.5-.5-.33-.34-.5-.5-.33-.34-.5-.5-.33-.34-.5-.5-.33-.34-.5-.5-.33-.34-.5-.5A26.46 26.46 0 0 1 75.5 35.7c0 16.57-16.82 30.05-37.5 30.05-11.58 0-21.94-4.23-28.83-10.86l.5.5.5.5.5.5.5.5.5.5.5.5.5.5C19.55 65.3 30.14 69.75 42 69.75c20.68 0 37.5-13.48 37.5-30 0-7.06-3.04-13.75-8.41-19.01Z" />
 		<path

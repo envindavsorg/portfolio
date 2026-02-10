@@ -13,25 +13,31 @@ export const JSONFormatter = () => {
 	const [output, setOutput] = useState('');
 	const { buttonText, handleCopy } = useCopyToClipboard();
 
-	const handleChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		const { value } = event.currentTarget;
-		setInput(value);
+	const handleChange = useCallback(
+		(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+			const { value } = event.currentTarget;
+			setInput(value);
 
-		try {
-			const parsedJSON = JSON.parse(value.trim());
-			const formattedJSON = JSON.stringify(parsedJSON, null, 2);
+			try {
+				const parsedJSON = JSON.parse(value.trim());
+				const formattedJSON = JSON.stringify(parsedJSON, null, 2);
 
-			setOutput(formattedJSON);
-		} catch {
-			setOutput('Oups, le JSON est incorrect !');
-		}
-	}, []);
+				setOutput(formattedJSON);
+			} catch {
+				setOutput('Oups, le JSON est incorrect !');
+			}
+		},
+		[]
+	);
 
 	return (
 		<>
 			<div className="screen-line-after flex flex-col gap-y-6 py-3">
 				<div className="flex flex-col gap-y-2">
-					<Label className="text-muted-foreground text-xs" htmlFor="jsonTextArea">
+					<Label
+						className="text-muted-foreground text-xs"
+						htmlFor="jsonTextArea"
+					>
 						JSON
 					</Label>
 					<Textarea
@@ -45,10 +51,19 @@ export const JSONFormatter = () => {
 				</div>
 
 				<div className="flex flex-col gap-y-2">
-					<Label className="text-muted-foreground text-xs" htmlFor="jsonTextAreaOutput">
+					<Label
+						className="text-muted-foreground text-xs"
+						htmlFor="jsonTextAreaOutput"
+					>
 						JSON mis en forme
 					</Label>
-					<Textarea className="outline-0" id="jsonTextAreaOutput" readOnly rows={6} value={output} />
+					<Textarea
+						className="outline-0"
+						id="jsonTextAreaOutput"
+						readOnly
+						rows={6}
+						value={output}
+					/>
 				</div>
 			</div>
 

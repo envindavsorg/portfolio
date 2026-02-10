@@ -8,24 +8,42 @@ export const rehypeNpmCommand = () => (tree: UnistTree) => {
 
 		if (node.properties?.__rawString__?.startsWith('npm install')) {
 			const npmCommand = node.properties?.__rawString__;
-			node.properties.__pnpm__ = npmCommand.replaceAll('npm install', 'pnpm add');
-			node.properties.__yarn__ = npmCommand.replaceAll('npm install', 'yarn add');
+			node.properties.__pnpm__ = npmCommand.replaceAll(
+				'npm install',
+				'pnpm add'
+			);
+			node.properties.__yarn__ = npmCommand.replaceAll(
+				'npm install',
+				'yarn add'
+			);
 			node.properties.__npm__ = npmCommand;
 			node.properties.__bun__ = npmCommand.replaceAll('npm install', 'bun add');
 		}
 
 		if (node.properties?.__rawString__?.startsWith('npx create-')) {
 			const npmCommand = node.properties?.__rawString__;
-			node.properties.__pnpm__ = npmCommand.replace('npx create-', 'pnpm create ');
-			node.properties.__yarn__ = npmCommand.replace('npx create-', 'yarn create ');
+			node.properties.__pnpm__ = npmCommand.replace(
+				'npx create-',
+				'pnpm create '
+			);
+			node.properties.__yarn__ = npmCommand.replace(
+				'npx create-',
+				'yarn create '
+			);
 			node.properties.__npm__ = npmCommand;
 			node.properties.__bun__ = npmCommand.replace('npx', 'bunx --bun');
 		}
 
 		if (node.properties?.__rawString__?.startsWith('npm create')) {
 			const npmCommand = node.properties?.__rawString__;
-			node.properties.__pnpm__ = npmCommand.replace('npm create', 'pnpm create');
-			node.properties.__yarn__ = npmCommand.replace('npm create', 'yarn create');
+			node.properties.__pnpm__ = npmCommand.replace(
+				'npm create',
+				'pnpm create'
+			);
+			node.properties.__yarn__ = npmCommand.replace(
+				'npm create',
+				'yarn create'
+			);
 			node.properties.__npm__ = npmCommand;
 			node.properties.__bun__ = npmCommand.replace('npm create', 'bun create');
 		}

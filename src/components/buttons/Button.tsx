@@ -44,10 +44,22 @@ type ButtonProps = ComponentProps<'button'> &
 		asChild?: boolean;
 	};
 
-const Button = ({ className, variant, size, asChild = false, ...props }: ButtonProps) => {
+const Button = ({
+	className,
+	variant,
+	size,
+	asChild = false,
+	...props
+}: ButtonProps) => {
 	const Comp = asChild ? Slot : 'button';
 
-	return <Comp className={buttonVariants({ variant, size, className })} data-slot="button" {...props} />;
+	return (
+		<Comp
+			className={buttonVariants({ variant, size, className })}
+			data-slot="button"
+			{...props}
+		/>
+	);
 };
 
 Button.displayName = 'Button';

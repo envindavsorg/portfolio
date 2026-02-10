@@ -35,7 +35,8 @@ const Code = ({ className, ...props }: React.ComponentProps<'code'>) => {
 	return (
 		<code
 			className={cn(
-				!isCodeBlock && 'not-prose rounded-md border bg-muted/50 px-[0.3rem] py-[0.2rem] text-sm',
+				!isCodeBlock &&
+					'not-prose rounded-md border bg-muted/50 px-[0.3rem] py-[0.2rem] text-sm',
 				className
 			)}
 			data-slot={isCodeBlock ? 'code-block' : 'code-inline'}
@@ -49,7 +50,11 @@ type HeadingProps<T extends HeadingTypes> = React.ComponentProps<T> & {
 	as?: T;
 };
 
-const Heading = <T extends HeadingTypes = 'h1'>({ as, className, ...props }: HeadingProps<T>): React.ReactElement => {
+const Heading = <T extends HeadingTypes = 'h1'>({
+	as,
+	className,
+	...props
+}: HeadingProps<T>): React.ReactElement => {
 	const Comp = as ?? 'h1';
 
 	if (!props.id) {

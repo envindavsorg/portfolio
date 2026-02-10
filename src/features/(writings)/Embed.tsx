@@ -21,7 +21,9 @@ export const YouTubeEmbed = ({ videoId, title }: YouTubeEmbedProps) => (
 	</div>
 );
 
-export const FramedImage = ({ ...props }: React.ComponentProps<typeof Image>) => (
+export const FramedImage = ({
+	...props
+}: React.ComponentProps<typeof Image>) => (
 	<figure className="relative [&_img]:rounded-lg">
 		<Image {...props} alt="Frame" />
 		<div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />

@@ -1,6 +1,10 @@
 'use client';
 
-import { ArrowsClockwiseIcon, CheckIcon, CopyIcon } from '@phosphor-icons/react';
+import {
+	ArrowsClockwiseIcon,
+	CheckIcon,
+	CopyIcon,
+} from '@phosphor-icons/react';
 import { type ChangeEvent, useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
@@ -20,7 +24,9 @@ export const Base64 = () => {
 	const encodeToBase64 = useCallback((text: string) => {
 		try {
 			const uint8Array = new TextEncoder().encode(text);
-			const binaryString = Array.from(uint8Array, (byte) => String.fromCodePoint(byte)).join('');
+			const binaryString = Array.from(uint8Array, (byte) =>
+				String.fromCodePoint(byte)
+			).join('');
 			const encoded = btoa(binaryString);
 			setEncodeOutputText(encoded);
 			setError(null);
@@ -36,18 +42,27 @@ export const Base64 = () => {
 			const cleanText = text.trim();
 
 			if (!base64Regex.test(cleanText)) {
-				setError('Format Base64 invalide. Utilisez uniquement A-Z, a-z, 0-9, +, / et =');
+				setError(
+					'Format Base64 invalide. Utilisez uniquement A-Z, a-z, 0-9, +, / et ='
+				);
 				setDecodeOutputText('');
 				return;
 			}
 
 			const urlDecoded = decodeURIComponent(cleanText);
 			const binaryString = atob(urlDecoded);
-			const uint8Array = Uint8Array.from(binaryString, (char) => char.codePointAt(0) ?? 0);
-			const decoded = new TextDecoder('utf-8', { fatal: true }).decode(uint8Array);
+			const uint8Array = Uint8Array.from(
+				binaryString,
+				(char) => char.codePointAt(0) ?? 0
+			);
+			const decoded = new TextDecoder('utf-8', { fatal: true }).decode(
+				uint8Array
+			);
 
 			if (decoded.includes('\uFFFD')) {
-				setError('Le texte décodé contient des caractères invalides. Vérifiez le Base64.');
+				setError(
+					'Le texte décodé contient des caractères invalides. Vérifiez le Base64.'
+				);
 				setDecodeOutputText('');
 				return;
 			}
@@ -55,7 +70,9 @@ export const Base64 = () => {
 			setDecodeOutputText(decoded);
 			setError(null);
 		} catch (_err) {
-			setError('Erreur lors du décodage. Vérifiez que le texte est un Base64 valide.');
+			setError(
+				'Erreur lors du décodage. Vérifiez que le texte est un Base64 valide.'
+			);
 			setDecodeOutputText('');
 		}
 	}, []);
@@ -112,7 +129,10 @@ export const Base64 = () => {
 								Texte à encoder
 							</Label>
 							{encodeInputText && (
-								<Button onClick={() => handleCopy(encodeInputText, 'encode-input')} variant="outline">
+								<Button
+									onClick={() => handleCopy(encodeInputText, 'encode-input')}
+									variant="outline"
+								>
 									{copiedField === 'encode-input' ? (
 										<>
 											<CheckIcon /> Copié !
@@ -128,7 +148,9 @@ export const Base64 = () => {
 						<Textarea
 							className="outline-0"
 							id="encodeText"
-							onChange={(event: ChangeEvent<HTMLTextAreaElement>) => handleEncodeInputChange(event.target.value)}
+							onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+								handleEncodeInputChange(event.target.value)
+							}
 							placeholder="Entrez votre texte ici..."
 							rows={4}
 							value={encodeInputText}
@@ -141,7 +163,10 @@ export const Base64 = () => {
 								Base64
 							</Label>
 							{encodeOutputText && (
-								<Button onClick={() => handleCopy(encodeOutputText, 'encode-output')} variant="outline">
+								<Button
+									onClick={() => handleCopy(encodeOutputText, 'encode-output')}
+									variant="outline"
+								>
 									{copiedField === 'encode-output' ? (
 										<>
 											<CheckIcon /> Copié !
@@ -154,7 +179,7 @@ export const Base64 = () => {
 								</Button>
 							)}
 						</div>
-						<div className="min-h-[100px] w-full overflow-auto rounded-md bg-accent px-3 py-2 text-sm">
+						<div className="min-h-25 w-full overflow-auto rounded-md bg-accent px-3 py-2 text-sm">
 							{encodeOutputText}
 						</div>
 					</div>
@@ -172,7 +197,10 @@ export const Base64 = () => {
 								Base64
 							</Label>
 							{decodeInputText && (
-								<Button onClick={() => handleCopy(decodeInputText, 'decode-input')} variant="outline">
+								<Button
+									onClick={() => handleCopy(decodeInputText, 'decode-input')}
+									variant="outline"
+								>
 									{copiedField === 'decode-input' ? (
 										<>
 											<CheckIcon /> Copié !
@@ -188,7 +216,9 @@ export const Base64 = () => {
 						<Textarea
 							className="outline-0"
 							id="encodedText"
-							onChange={(event: ChangeEvent<HTMLTextAreaElement>) => handleDecodeInputChange(event.target.value)}
+							onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+								handleDecodeInputChange(event.target.value)
+							}
 							placeholder="Collez du Base64 ici pour le décoder..."
 							value={decodeInputText}
 						/>
@@ -200,7 +230,10 @@ export const Base64 = () => {
 								Texte décodé
 							</Label>
 							{decodeOutputText && (
-								<Button onClick={() => handleCopy(decodeOutputText, 'decode-output')} variant="outline">
+								<Button
+									onClick={() => handleCopy(decodeOutputText, 'decode-output')}
+									variant="outline"
+								>
 									{copiedField === 'decode-output' ? (
 										<>
 											<CheckIcon /> Copié !
@@ -215,7 +248,7 @@ export const Base64 = () => {
 						</div>
 						<div
 							className={cn(
-								'min-h-[100px] w-full overflow-auto rounded-md bg-accent px-3 py-2 text-sm',
+								'min-h-25 w-full overflow-auto rounded-md bg-accent px-3 py-2 text-sm',
 								error && 'text-destructive'
 							)}
 						>

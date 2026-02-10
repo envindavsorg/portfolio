@@ -2,7 +2,9 @@ import type { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 import { BLOCK_RADIUS, BLOCK_SIZE, MAX_LEVEL } from './ContributionGraph';
 
-const ContributionGraphLegend = ({ ...props }: HTMLAttributes<HTMLDivElement>) => (
+const ContributionGraphLegend = ({
+	...props
+}: HTMLAttributes<HTMLDivElement>) => (
 	<div className="flex items-center gap-x-2" {...props}>
 		<span className="font-medium">Moins</span>
 

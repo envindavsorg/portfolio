@@ -9,7 +9,10 @@ export const Markdown = (props: React.ComponentProps<typeof MarkdownAsync>) => (
 	<MarkdownAsync
 		rehypePlugins={[
 			rehypeRaw,
-			[rehypeExternalLinks, { target: '_blank', rel: 'nofollow noopener noreferrer' }],
+			[
+				rehypeExternalLinks,
+				{ target: '_blank', rel: 'nofollow noopener noreferrer' },
+			],
 			[rehypeAddQueryParams],
 		]}
 		remarkPlugins={[remarkGfm]}

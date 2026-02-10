@@ -21,7 +21,9 @@ const CvSuccess = memo(({ children }: CvSuccessProps) => (
 			wind={0.01}
 		/>
 
-		<h3 className="font-semibold text-lg leading-normal">Le mail est en route !</h3>
+		<h3 className="font-semibold text-lg leading-normal">
+			Le mail est en route !
+		</h3>
 		<Prose>Vous devriez le recevoir dans quelques instants.</Prose>
 
 		{children}

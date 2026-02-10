@@ -1,4 +1,8 @@
-import { ConsentManagerDialog, ConsentManagerProvider, CookieBanner } from '@c15t/nextjs';
+import {
+	ConsentManagerDialog,
+	ConsentManagerProvider,
+	CookieBanner,
+} from '@c15t/nextjs';
 import type React from 'react';
 import { buttonVariants } from '@/components/buttons/Button';
 import { cn } from '@/lib/utils';
@@ -102,10 +106,12 @@ const ConsentManager = ({ children }: ConsentManagerProps) => (
 						'--dialog-border-color-dark': 'var(--border)',
 					},
 					noStyle: true,
-					className: 'rounded-2xl border-none bg-background shadow-popover ring ring-popover-border',
+					className:
+						'rounded-2xl border-none bg-background shadow-popover ring ring-popover-border',
 				},
 				'dialog.overlay': {
-					className: '[--dialog-overlay-background-color-dark:var(--color-black)]/50',
+					className:
+						'[--dialog-overlay-background-color-dark:var(--color-black)]/50',
 				},
 				'dialog.title': {
 					noStyle: true,

@@ -12,7 +12,8 @@ const parseFrontmatter = (fileContent: string) => {
 	};
 };
 
-const getMDXFiles = (dir: string) => readdirSync(dir).filter((file) => extname(file) === '.mdx');
+const getMDXFiles = (dir: string) =>
+	readdirSync(dir).filter((file) => extname(file) === '.mdx');
 
 const readMDXFile = (filePath: string) => {
 	const rawContent = readFileSync(filePath, 'utf-8');
@@ -41,10 +42,13 @@ const getMDXData = (dir: string) => {
 
 export const getAllPosts = () =>
 	getMDXData(join(process.cwd(), 'src/content/articles')).sort(
-		(a, b) => new Date(b.metadata.createdAt).getTime() - new Date(a.metadata.createdAt).getTime()
+		(a, b) =>
+			new Date(b.metadata.createdAt).getTime() -
+			new Date(a.metadata.createdAt).getTime()
 	);
 
-export const getPostBySlug = (slug: string) => getAllPosts().find((post) => post.slug === slug);
+export const getPostBySlug = (slug: string) =>
+	getAllPosts().find((post) => post.slug === slug);
 
 type PageType = 'article' | 'utils' | 'components';
 export const getPostsByCategory = (category: PageType) =>

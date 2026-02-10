@@ -1,7 +1,15 @@
 import type React from 'react';
 import { Button } from '@/components/buttons/Button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/Dialog';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/Drawer';
+import {
+	Dialog,
+	DialogContent,
+	DialogTrigger,
+} from '@/components/overlays/Dialog';
+import {
+	Drawer,
+	DrawerContent,
+	DrawerTrigger,
+} from '@/components/overlays/Drawer';
 
 interface CvModalProps {
 	children: React.ReactNode;
@@ -20,7 +28,9 @@ const CvModal = ({ children, open, setOpen, isDesktop }: CvModalProps) => {
 			<Trigger asChild>
 				<Button>Recevoir par mail</Button>
 			</Trigger>
-			<Content onInteractOutside={(event) => event.preventDefault()}>{children}</Content>
+			<Content onInteractOutside={(event) => event.preventDefault()}>
+				{children}
+			</Content>
 		</Container>
 	);
 };

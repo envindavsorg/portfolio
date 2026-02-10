@@ -4,17 +4,17 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
-import { PanelFooter } from '@/components/Panel';
 import {
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from '@/components/ui/Dialog';
+} from '@/components/overlays/Dialog';
 import {
 	DrawerDescription,
 	DrawerHeader,
 	DrawerTitle,
-} from '@/components/ui/Drawer';
+} from '@/components/overlays/Drawer';
+import { PanelFooter } from '@/components/Panel';
 import GLOBAL_DATA from '@/content/data/global';
 import type { EmailFormData } from '@/hooks/use-email-form';
 import useEmailForm from '@/hooks/use-email-form';
