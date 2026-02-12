@@ -1,11 +1,11 @@
 'use client';
 
+import { AnimatePresence, motion } from 'motion/react';
+import { useCallback, useRef, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { AudioLinesIcon } from '@/components/icons/AudioLinesIcon';
 import { PlayIcon } from '@/components/icons/PlayIcon';
 import { soundManager } from '@/lib/sound-manager';
-import { AnimatePresence, motion } from 'motion/react';
-import { useCallback, useRef, useState } from 'react';
 
 const MotionButton = motion.create(Button);
 
@@ -30,7 +30,9 @@ export const HeaderPronounce = ({
 	const playingIconRef = useRef<AnimatedIconHandle>(null);
 
 	const handlePlay = useCallback(async () => {
-		if (isPlayingRef.current) return;
+		if (isPlayingRef.current) {
+			return;
+		}
 
 		try {
 			isPlayingRef.current = true;
@@ -46,13 +48,19 @@ export const HeaderPronounce = ({
 
 	return (
 		<MotionButton
+			aria-label="Pronunciation de mon prénom. Cliquez pour écouter la prononciation audio."
+			aria-labelledby="pronunciation-label"
+			className={className}
 			onClick={handlePlay}
 			onMouseEnter={() => playIconRef.current?.startAnimation?.()}
 			onMouseLeave={() => playIconRef.current?.stopAnimation?.()}
 			size="icon"
 			variant="outline"
-			className={className}
 		>
+			<div className="sr-only" id="pronunciation-label">
+				Pronunciation de mon prénom
+			</div>
+
 			<AnimatePresence initial={false} mode="wait">
 				<motion.div
 					animate="animate"

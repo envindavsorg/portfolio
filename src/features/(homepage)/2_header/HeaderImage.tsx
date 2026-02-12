@@ -34,8 +34,8 @@ export const HeaderImage = ({
 
 		{!capture && (
 			<HeaderPronounce
+				className="absolute right-1 bottom-1 sm:hidden"
 				pronunciation={pronunciation}
-				className="absolute bottom-1 right-1 sm:hidden"
 			/>
 		)}
 	</div>
