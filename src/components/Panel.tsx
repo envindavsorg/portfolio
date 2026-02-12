@@ -3,10 +3,7 @@ import { cn } from '@/lib/utils';
 
 const Panel = ({ className, ...props }: ComponentProps<'section'>) => (
 	<section
-		className={cn(
-			'screen-line-before screen-line-after border-edge border-x',
-			className
-		)}
+		className={cn(' border-edge border-x', className)}
 		data-slot="panel"
 		{...props}
 	/>

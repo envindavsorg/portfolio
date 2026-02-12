@@ -13,7 +13,8 @@
       "lineWidth": 120
     },
     "parser": {
-      "tailwindDirectives": true
+      "tailwindDirectives": true,
+      "cssModules": false
     }
   },
   "assist": {

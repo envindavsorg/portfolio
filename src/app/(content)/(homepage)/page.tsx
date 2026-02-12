@@ -19,6 +19,7 @@ import { Projects } from '@/features/(homepage)/13_projects/Projects';
 import { Branding } from '@/features/(homepage)/14_branding/Branding';*/
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
+import { Header } from '@/features/(homepage)/2_header/Header';
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
@@ -56,11 +57,10 @@ const Page = () => (
 		<div className="mx-auto md:max-w-3xl">
 			<Cover />
 			<Divider />
-
-			<div className="h-900" />
+			<Header />
+			<Divider />
 
 			{/*
-      		<Header />
         	<Divider border />
     		<Overview />
       		<Divider border />

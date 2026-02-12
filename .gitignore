@@ -40,3 +40,4 @@ envindavsorg
 
 # webstorm
 .idea
+.env*.local

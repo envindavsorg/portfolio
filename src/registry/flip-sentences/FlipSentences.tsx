@@ -29,6 +29,7 @@ export const FlipSentences = ({
 	disableAnimation = false,
 }: FlipSentencesProps) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const sentenceCount = sentences.length;
 
 	const longestSentence = useMemo(
 		() => sentences.reduce((a, b) => (b.length > a.length ? b : a), ''),
@@ -41,8 +42,7 @@ export const FlipSentences = ({
 			return;
 		}
 
-		const advance = () =>
-			setCurrentIndex((prev) => (prev + 1) % sentences.length);
+		const advance = () => setCurrentIndex((prev) => (prev + 1) % sentenceCount);
 
 		let timer = setInterval(advance, interval);
 
@@ -60,16 +60,19 @@ export const FlipSentences = ({
 			clearInterval(timer);
 			document.removeEventListener('visibilitychange', handleVisibility);
 		};
-	}, [sentences, interval, disableAnimation]);
+	}, [sentenceCount, interval, disableAnimation]);
 
 	if (disableAnimation) {
-		return <p className={className}>{sentences[0]}</p>;
+		return (
+			<p className={cn('font-medium text-theme', className)}>{sentences[0]}</p>
+		);
 	}
 
 	return (
 		<div className={cn('relative overflow-hidden', className)}>
 			<AnimatePresence mode="wait">
 				<motion.p
+					className="font-medium text-theme"
 					animate="animate"
 					exit="exit"
 					initial="initial"
