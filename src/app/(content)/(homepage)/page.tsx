@@ -3,6 +3,9 @@ import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
 import { Divider } from '@/components/ui/Divider';
 import GLOBAL_DATA from '@/content/data/global';
 import { Cover } from '@/features/(homepage)/1_cover/Cover';
+import { Header } from '@/features/(homepage)/2_header/Header';
+import { Overview } from '@/features/(homepage)/3_overview/Overview';
+import { Cv } from '@/features/(homepage)/4_cv/Cv';
 /*
 import { Header } from "@/features/(homepage)/2_header/Header";
 import { Overview } from '@/features/(homepage)/3_overview/Overview';
@@ -19,7 +22,6 @@ import { Projects } from '@/features/(homepage)/13_projects/Projects';
 import { Branding } from '@/features/(homepage)/14_branding/Branding';*/
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
-import { Header } from '@/features/(homepage)/2_header/Header';
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
@@ -59,12 +61,13 @@ const Page = () => (
 			<Divider />
 			<Header />
 			<Divider />
+			<Overview />
+			<Divider />
+			<Cv />
+			<Divider />
 
 			{/*
-        	<Divider border />
-    		<Overview />
-      		<Divider border />
-			<Cv />
+
 			<Divider border />
 			<Contact />
 			<Divider border />

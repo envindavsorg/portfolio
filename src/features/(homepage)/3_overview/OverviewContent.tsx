@@ -15,7 +15,7 @@ interface WavyMotionProps {
 const WavyMotion = ({ label, delay }: WavyMotionProps) => (
 	<TextAnimate
 		by="character"
-		className="text-balance font-medium font-sans text-sm text-theme sm:text-base"
+		className="text-balance font-medium font-sans text-sm"
 		delay={delay}
 		variants={{
 			hidden: {
@@ -66,25 +66,23 @@ const WavyMotion = ({ label, delay }: WavyMotionProps) => (
 	</TextAnimate>
 );
 
-const OverviewContent = () => (
+export const OverviewContent = () => (
 	<>
-		<div className="screen-line-after screen-line-before grid grid-cols-1 sm:grid-cols-2 sm:gap-4">
+		<div className="screen-line-after screen-line-before relative grid grid-cols-1 sm:grid-cols-2 sm:gap-4">
 			<div className="max-sm:screen-line-after flex items-center">
-				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-					<BriefcaseIcon
-						className="size-6 text-theme sm:size-7"
-						weight="duotone"
-					/>
+				<div className="m-2 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
+					<BriefcaseIcon className="size-6" weight="duotone" />
 				</div>
-				<div className="w-full flex-1 border-edge border-l px-3 py-4 text-left">
+				<div className="w-full flex-1 border-edge border-l p-3 text-left">
 					<WavyMotion delay={0.15} label={GLOBAL_DATA.WORK.title} />
 				</div>
 			</div>
+
 			<div className="flex items-center">
-				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-					<FlaskIcon className="size-6 text-theme sm:size-7" weight="duotone" />
+				<div className="m-2 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
+					<FlaskIcon className="size-6" weight="duotone" />
 				</div>
-				<div className="w-full flex-1 border-edge border-l px-3 py-4 text-left">
+				<div className="w-full flex-1 border-edge border-l p-3 text-left">
 					<WavyMotion delay={0.25} label={GLOBAL_DATA.WORK.experience} />
 				</div>
 			</div>
@@ -92,28 +90,21 @@ const OverviewContent = () => (
 
 		<div className="screen-line-after grid grid-cols-1 sm:grid-cols-2 sm:gap-4">
 			<div className="max-sm:screen-line-after flex items-center">
-				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-					<PhoneIcon className="size-6 text-theme sm:size-7" weight="duotone" />
+				<div className="m-2 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
+					<PhoneIcon className="size-6" weight="duotone" />
 				</div>
-				<div className="w-full flex-1 border-edge border-l px-3 py-4 text-left">
+				<div className="w-full flex-1 border-edge border-l p-3 text-left">
 					<WavyMotion delay={0.35} label={GLOBAL_DATA.USER.phoneNumber} />
 				</div>
 			</div>
 			<div className="flex items-center">
-				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-					<EnvelopeIcon
-						className="size-6 text-theme sm:size-7"
-						weight="duotone"
-					/>
+				<div className="m-2 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
+					<EnvelopeIcon className="size-6" weight="duotone" />
 				</div>
-				<div className="w-full flex-1 border-edge border-l px-3 py-4 text-left">
+				<div className="w-full flex-1 border-edge border-l p-3 text-left">
 					<WavyMotion delay={0.45} label={GLOBAL_DATA.USER.emailAddress} />
 				</div>
 			</div>
 		</div>
 	</>
 );
-
-OverviewContent.displayName = 'OverviewContent';
-
-export { OverviewContent };

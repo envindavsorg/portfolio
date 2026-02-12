@@ -1,14 +1,14 @@
 const USER = {
-	firstName: 'Florin',
-	lastName: 'Cuzeac',
-	fullName: 'Florin Cuzeac',
+	firstName: 'florin',
+	lastName: 'cuzeac',
+	fullName: 'florin cuzeac',
 	username: 'envindavsorg',
 	gender: 'homme',
 	pronouns: 'il/lui',
-	bio: 'Crée, code, innove. Les petits détails comptent.',
+	bio: 'crée, code, innove. les petits détails comptent.',
 	description:
-		"En tant que développeur front-end spécialisé dans l'écosystème moderne, je conçois des applications web performantes. J'utilise Next.js et React.js pour la structure, couplés à Tailwind CSS pour un design responsive et élégant. Mon workflow inclut Git pour le versioning et Node.js pour gérer l'environnement serveur, garantissant un code propre et optimisé pour le SEO.",
-	phoneNumber: '06 58 05 86 65',
+		"en tant que développeur front-end spécialisé dans l'écosystème moderne, je conçois des applications web performantes. j'utilise Next.js et React.js pour la structure, couplés à Tailwind CSS pour un design responsive et élégant. Mon workflow inclut Git pour le versioning et Node.js pour gérer l'environnement serveur, garantissant un code propre et optimisé pour le SEO.",
+	phoneNumber: '+33 6 58 05 86 65',
 	emailAddress: 'contact@cuzeacflorin.fr',
 	location: {
 		city: 'Paris, France',
@@ -17,15 +17,15 @@ const USER = {
 	avatar: '/images/avatar.webp',
 	og: '/images/og-image-dark.png?t=1755355653',
 	pronunciation: '/audio/florin.mp3',
-	welcome: 'Bienvenue sur mon portfolio. Bonne visite !',
+	welcome: 'bienvenue sur mon portfolio. bonne visite !',
 } satisfies USER;
 
 const OVERVIEW = {
 	sentences: [
-		'Imagine, code, crée, inspire.',
-		'Chaque petit pixel compte !',
-		'Du concept au déploiement !',
-		'Chaque petit détail compte !',
+		'imagine, code, crée, inspire',
+		'chaque petit pixel compte',
+		'du concept au déploiement',
+		'chaque petit détail compte',
 	],
 } satisfies OVERVIEW;
 
@@ -36,8 +36,8 @@ const SOCIAL = {
 } satisfies SOCIAL;
 
 const WORK = {
-	title: 'Développeur Full-Stack',
-	experience: "7 ans d'expérience",
+	title: 'développeur Full-Stack Senior',
+	experience: "avec 7 ans d'expérience",
 	jobs: [
 		{
 			title: 'Développeur Front-End Senior',

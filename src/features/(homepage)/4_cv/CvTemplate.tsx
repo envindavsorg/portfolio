@@ -16,7 +16,7 @@ interface CvTemplateProps {
 	recipientEmail: string;
 }
 
-const CvTemplate = ({ firstName }: CvTemplateProps) => (
+export const CvTemplate = ({ firstName }: CvTemplateProps) => (
 	<Html>
 		<Head />
 
@@ -93,7 +93,3 @@ const reportLink = {
 	fontSize: '14px',
 	color: '#b4becc',
 };
-
-CvTemplate.displayName = 'CurriculumVitaeTemplate';
-
-export { CvTemplate };

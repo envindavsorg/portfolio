@@ -18,7 +18,12 @@ interface CvModalProps {
 	isDesktop: boolean;
 }
 
-const CvModal = ({ children, open, setOpen, isDesktop }: CvModalProps) => {
+export const CvModal = ({
+	children,
+	open,
+	setOpen,
+	isDesktop,
+}: CvModalProps) => {
 	const Container = isDesktop ? Dialog : Drawer;
 	const Content = isDesktop ? DialogContent : DrawerContent;
 	const Trigger = isDesktop ? DialogTrigger : DrawerTrigger;
@@ -26,15 +31,15 @@ const CvModal = ({ children, open, setOpen, isDesktop }: CvModalProps) => {
 	return (
 		<Container onOpenChange={setOpen} open={open}>
 			<Trigger asChild>
-				<Button>Recevoir par mail</Button>
+				<Button>recevoir par mail</Button>
 			</Trigger>
-			<Content onInteractOutside={(event) => event.preventDefault()}>
+			<Content
+				aria-describedby="cv-modal-description"
+				className="bg-background p-0"
+				onInteractOutside={(event) => event.preventDefault()}
+			>
 				{children}
 			</Content>
 		</Container>
 	);
 };
-
-CvModal.displayName = 'CurriculumVitaeModal';
-
-export { CvModal };

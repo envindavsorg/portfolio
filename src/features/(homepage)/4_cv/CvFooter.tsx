@@ -64,9 +64,9 @@ const CvFooter = () => {
 			const isSuccess = formState === 'success';
 			const FeedbackComponent = isSuccess ? CvSuccess : CvError;
 			const title = isSuccess
-				? 'Le mail est en route !'
-				: 'Une erreur est survenue !';
-			const buttonText = isSuccess ? "D'accord !" : 'Je comprends !';
+				? 'le mail est en route !'
+				: 'une erreur est survenue !';
+			const buttonText = isSuccess ? "d'accord !" : 'je comprends !';
 			const HeaderComp = isDesktop ? DialogTitle : DrawerTitle;
 
 			return (
@@ -75,7 +75,7 @@ const CvFooter = () => {
 						<HeaderComp>{title}</HeaderComp>
 					</VisuallyHidden>
 
-					<FeedbackComponent>
+					<FeedbackComponent dateCreated={new Date().toISOString()}>
 						<Button className="mt-4" onClick={handleClose}>
 							{buttonText}
 						</Button>
@@ -89,11 +89,13 @@ const CvFooter = () => {
 		const Description = isDesktop ? DialogDescription : DrawerDescription;
 
 		return (
-			<>
-				<Header>
-					<Title>Recevez maintenant mon CV !</Title>
-					<Description>
-						Entrez votre prénom et votre adresse e-mail pour recevoir
+			<div className="p-5">
+				<Header className="mb-6">
+					<Title className="font-semibold text-lg text-theme leading-normal sm:text-xl">
+						recevez maintenant mon CV !
+					</Title>
+					<Description className="text-foreground text-sm leading-normal">
+						entrez votre prénom et votre adresse e-mail pour recevoir
 						immédiatement mon CV.
 					</Description>
 				</Header>
@@ -104,7 +106,7 @@ const CvFooter = () => {
 					onCancel={handleClose}
 					onSubmit={handleSubmit}
 				/>
-			</>
+			</div>
 		);
 	};
 
@@ -117,7 +119,7 @@ const CvFooter = () => {
 					rel="noopener noreferrer"
 					target="_blank"
 				>
-					Voir et télécharger
+					voir et télécharger
 				</Link>
 			</Button>
 

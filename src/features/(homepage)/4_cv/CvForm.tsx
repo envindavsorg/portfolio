@@ -19,15 +19,17 @@ interface CvForm {
 	onCancel: () => void;
 }
 
-const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm) => (
+export const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm) => (
 	<Form {...form}>
-		<form onSubmit={form.handleSubmit(onSubmit)}>
+		<form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
 			<FormField
 				control={form.control}
 				name="firstName"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Votre prénom :</FormLabel>
+						<FormLabel className="text-muted-foreground">
+							votre prénom :
+						</FormLabel>
 						<FormControl>
 							<Input disabled={isLoading} placeholder="..." {...field} />
 						</FormControl>
@@ -41,7 +43,9 @@ const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm) => (
 				name="recipientEmail"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel className="text-xs">Votre adresse e-mail :</FormLabel>
+						<FormLabel className="text-muted-foreground">
+							votre adresse e-mail :
+						</FormLabel>
 						<FormControl>
 							<Input
 								disabled={isLoading}
@@ -57,16 +61,12 @@ const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm) => (
 
 			<div className="flex flex-row justify-between">
 				<Button onClick={onCancel} type="button" variant="outline">
-					Fermer
+					fermer
 				</Button>
 				<Button disabled={isLoading} type="submit">
-					{isLoading ? <Spinner /> : 'Recevoir mon CV'}
+					{isLoading ? <Spinner /> : 'recevoir mon CV'}
 				</Button>
 			</div>
 		</form>
 	</Form>
 );
-
-CvForm.displayName = 'CurriculumVitaeForm';
-
-export { CvForm };
