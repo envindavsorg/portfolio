@@ -69,7 +69,7 @@ export const AboutContent = memo(({ expanded }: AboutContentProps) => (
 	<PanelContent>
 		<AboutPointer />
 
-		<Prose>
+		<Prose className="max-sm:text-xs!">
 			Tout a commencé lorsqu'un ami m'a initié aux bases du <span>HTML</span> et
 			du <span>CSS</span>. Ce qui n'était au départ qu'une expérimentation
 			ludique est vite devenu une <span>passion</span> dévorante.
@@ -85,7 +85,7 @@ export const AboutContent = memo(({ expanded }: AboutContentProps) => (
 					key="about-expanded"
 					transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
 				>
-					<Prose>
+					<Prose className="max-sm:text-xs!">
 						J'ai appris <span>"à la dure"</span>, en passant de sites statiques
 						bruts à la complexité de <span>JavaScript</span>. J'ai passé des
 						semaines à décortiquer la logique des <span>Promises</span> et de
@@ -98,8 +98,7 @@ export const AboutContent = memo(({ expanded }: AboutContentProps) => (
 						. C'est cette gratification de voir une idée abstraite devenir une
 						réalité interactive qui me motive chaque jour.
 					</Prose>
-
-					<Prose>
+					<Prose className="max-sm:text-xs!">
 						La transition vers l'écosystème moderne a marqué un véritable
 						tournant. D'abord sceptique, j'ai rapidement adopté la logique
 						modulaire de <span>React</span> et la robustesse de{' '}
@@ -148,7 +147,7 @@ export const AboutContent = memo(({ expanded }: AboutContentProps) => (
 						</Marquee>
 					</div>
 
-					<Prose>
+					<Prose className="max-sm:text-xs!">
 						Aujourd'hui, je maîtrise cette stack{' '}
 						<span className="text-theme">(Next.js/TS/Tailwind)</span> pour
 						déployer rapidement des applications performantes et propres, animé

@@ -12,10 +12,10 @@ interface CommitsContentProps {
 	contributions: CommitActivity[];
 }
 
-const CommitsContent = ({ contributions }: CommitsContentProps) => (
+export const CommitsContent = ({ contributions }: CommitsContentProps) => (
 	<>
 		<PanelContent>
-			<Prose>
+			<Prose className="max-sm:text-xs!">
 				retrouvez ici <span>l'historique complet</span> de mes contributions
 				open source sur GitHub. chaque commit représente une étape de mon
 				parcours en tant que développeur.
@@ -54,7 +54,3 @@ const CommitsContent = ({ contributions }: CommitsContentProps) => (
 		</div>
 	</>
 );
-
-CommitsContent.displayName = 'CommitsContent';
-
-export { CommitsContent };

@@ -63,20 +63,22 @@ const Mark = ({ className }: MarkProps) => (
 	</svg>
 );
 
-const BrandingMark = () => (
-	<div className="screen-line-after flex items-center justify-evenly px-8 after:z-1">
+export const BrandingMark = () => (
+	<div className="screen-line-after flex items-center justify-evenly px-8 after:z-1 max-sm:flex-col max-sm:gap-y-8 max-sm:py-4">
 		<div className="flex flex-col items-center justify-center gap-y-2">
 			<Mark className="stroke-[#F3B993]" />
 			<p className="text-muted-foreground text-xs leading-snug">
 				Logo principal
 			</p>
 		</div>
+
 		<div className="flex flex-col items-center justify-center gap-y-2">
 			<Mark className="stroke-[#FAD7C1]" />
 			<p className="text-muted-foreground text-xs leading-snug">
 				Logo secondaire
 			</p>
 		</div>
+
 		<div className="flex flex-col gap-y-1">
 			<p className="text-muted-foreground text-xs leading-snug">Polices :</p>
 			<span className="font-medium font-sans text-sm leading-snug">
@@ -88,7 +90,3 @@ const BrandingMark = () => (
 		</div>
 	</div>
 );
-
-BrandingMark.displayName = 'BrandingMark';
-
-export { BrandingMark };

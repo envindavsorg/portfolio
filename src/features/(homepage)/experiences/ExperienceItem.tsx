@@ -7,6 +7,7 @@ import {
 	CollapsibleWithContext,
 } from '@/components/ui/Collapsible';
 import { Tag } from '@/components/ui/Tag';
+import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 import type { Experience } from './content';
 
@@ -14,7 +15,7 @@ interface ExperienceItemProps {
 	experience: Experience;
 }
 
-const ExperienceItem = ({ experience }: ExperienceItemProps) => {
+export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 	const { start, end } = experience.period;
 	const isOngoing = !end;
 
@@ -39,35 +40,38 @@ const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 								<span className="relative flex items-center justify-center">
 									<span className="absolute inline-flex size-3 animate-ping rounded-full bg-theme opacity-50" />
 									<span className="relative inline-flex size-2 rounded-full bg-theme" />
-									<span className="sr-only">Poste actuellement occupé</span>
 								</span>
 							)}
+
 							<div className="flex items-baseline gap-x-1.5">
-								<h2 className="text-balance font-semibold text-base">
+								<h2 className="w-full text-balance font-semibold text-lg lowercase max-sm:max-w-50 sm:text-xl">
 									{experience.company}
 								</h2>
+
 								{experience.type && (
-									<span className="font-normal text-theme text-xs">
+									<span className="font-normal text-theme text-xs uppercase max-sm:hidden">
 										({experience.type})
 									</span>
 								)}
 							</div>
 						</div>
 
-						<div className="flex items-center gap-x-3">
-							<dl className="font-medium text-muted-foreground text-xs">
+						<div className="flex gap-x-3 max-sm:mt-2 max-sm:flex-col max-sm:gap-y-1 sm:items-center">
+							<dl>
 								<dt className="sr-only">Poste occupé dans l'entreprise</dt>
 								<dd>
-									<p>{experience.title}</p>
+									<p className="text-theme text-xs sm:text-sm">
+										{experience.title}
+									</p>
 								</dd>
 							</dl>
 
-							<span className="size-1 rounded-full bg-muted-foreground" />
+							<span className="size-1 rounded-full bg-theme max-sm:hidden" />
 
-							<dl className="font-medium text-muted-foreground text-xs">
+							<dl>
 								<dt className="sr-only">Durée dans l'entreprise</dt>
 								<dd>
-									<p>
+									<p className="text-theme text-xs sm:text-sm">
 										{start} - {isOngoing ? "aujourd'hui" : end}
 									</p>
 								</dd>
@@ -95,7 +99,7 @@ const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 
 			{experience.description && experience.skills && (
 				<CollapsibleContent className="group overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-					<div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in min-sm:hidden">
+					<div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in sm:hidden">
 						<p className="text-muted-foreground text-xs">{experience.title}</p>
 					</div>
 
@@ -106,24 +110,24 @@ const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 							return (
 								<div
 									className={cn(
-										'group relative flex flex-col justify-between overflow-hidden rounded-xl border bg-background p-4',
+										'group relative flex flex-col justify-between overflow-hidden rounded-xl border border-input bg-background p-4',
 										isWide ? 'md:col-span-2' : 'md:col-span-1'
 									)}
 									key={text}
 								>
-									<span className="absolute -top-2 -right-1 select-none font-bold text-[3rem] text-theme leading-none tracking-tighter opacity-[0.1] transition-opacity duration-300">
+									<span className="absolute -top-2 -right-1 select-none font-bold text-[3rem] text-theme leading-none tracking-tighter opacity-[0.3] transition-opacity duration-300">
 										{i + 1}
 									</span>
+
 									<div className="z-10 flex items-center gap-2">
-										<span className="flex h-6 items-center justify-center rounded-full bg-primary/10 px-2.5 font-bold text-[10px] text-primary">
+										<span className="flex h-6 items-center justify-center rounded-full bg-theme/10 px-2.5 font-bold text-[10px] text-theme">
 											{(i + 1).toString().padStart(2, '0')}
 										</span>
-										<div className="h-px w-8 bg-border" />
+										<div className="h-px w-8 bg-theme" />
 									</div>
-									<p className="z-10 text-balance font-medium text-foreground text-sm leading-snug tracking-tight">
-										{text}
-									</p>
-									<div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+									<Prose className="z-10 max-sm:text-xs!">{text}</Prose>
+									<div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 								</div>
 							);
 						})}
@@ -145,7 +149,3 @@ const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 		</CollapsibleWithContext>
 	);
 };
-
-ExperienceItem.displayName = 'ExperienceItem';
-
-export { ExperienceItem };

@@ -9,6 +9,7 @@ import {
 import Link from 'next/link';
 import type React from 'react';
 import { memo } from 'react';
+import { Prose } from '@/components/ui/Typography';
 
 const TOOLS_ICONS = {
 	Base64: VaultIcon,
@@ -43,26 +44,33 @@ export const ToolItem = memo(({ post }: ToolsItemProps) => {
 	return (
 		<Link aria-label={title} href={`/utils/${slug}`} prefetch={false}>
 			<article className="screen-line-after flex items-center hover:bg-accent2">
-				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-					{Icon && <Icon className="pointer-events-none size-7" />}
+				<div className="m-4 hidden aspect-square size-8 shrink-0 cursor-default items-center justify-center sm:flex">
+					{Icon && (
+						<Icon
+							className="pointer-events-none size-8 text-theme"
+							weight="duotone"
+						/>
+					)}
 				</div>
 
-				<div className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge border-l p-3 text-left">
+				<div className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge p-3 text-left sm:border-l">
 					<div className="flex flex-1 flex-col gap-y-1">
 						<div className="flex items-center gap-x-3">
 							{isNew && (
 								<span className="relative flex items-center justify-center">
 									<span className="absolute inline-flex size-3 animate-ping rounded-full bg-theme opacity-50" />
 									<span className="relative inline-flex size-2 rounded-full bg-theme" />
-									<span className="sr-only">Poste actuellement occupé</span>
 								</span>
 							)}
-							<h2 className="text-balance font-semibold text-base">{title}</h2>
+
+							<h2 className="text-balance font-semibold text-lg lowercase sm:text-xl">
+								{title}
+							</h2>
 						</div>
 
-						<p className="text-muted-foreground text-xs max-sm:hidden">
-							{shortDescription}
-						</p>
+						<Prose className="lowercase sm:max-w-xl">
+							-- {shortDescription} --
+						</Prose>
 					</div>
 				</div>
 			</article>

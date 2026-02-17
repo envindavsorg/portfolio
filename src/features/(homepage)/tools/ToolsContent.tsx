@@ -3,19 +3,19 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { PanelContent, PanelFooter } from '@/components/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from '@/components/ui/Collapsible';
+import { Prose } from '@/components/ui/Typography';
 import { ToolItem } from './ToolItem';
 
 interface ToolsContentProps {
 	content: Post[];
 }
 
-const ToolsContent = ({ content }: ToolsContentProps) => {
+export const ToolsContent = ({ content }: ToolsContentProps) => {
 	const { visibleContent, hiddenContent } = useMemo(
 		() => ({
 			visibleContent: content.slice(0, 3),
@@ -30,36 +30,21 @@ const ToolsContent = ({ content }: ToolsContentProps) => {
 
 	return (
 		<>
-			<PanelContent className="screen-line-after">
-				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Découvrez une suite d'outils web entièrement gratuits, spécialement
-					conçue pour simplifier le quotidien des développeurs et accélérer vos
-					projets.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="slideUp"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.6}
-					themed
-				>
-					En regroupant ces utilitaires essentiels au même endroit, cette
-					collection vous permet d'optimiser votre workflow en réduisant
+			<PanelContent className="screen-line-after space-y-3">
+				<Prose className="max-sm:text-xs!">
+					Découvrez une suite <span>d'outils web</span> entièrement gratuits,
+					spécialement conçue pour simplifier le quotidien des développeurs et
+					accélérer vos projets.
+				</Prose>
+				<Prose className="max-sm:text-xs!">
+					En regroupant ces <span>utilitaires essentiels</span> au même endroit,
+					cette collection vous permet d'optimiser votre workflow en réduisant
 					considérablement le temps passé sur des tâches répétitives.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="slideUp"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.8}
-				>
+				</Prose>
+				<Prose className="max-sm:text-xs!">
 					Explorez dès maintenant cette boîte à outils numérique pour booster
 					votre productivité sans la moindre contrainte technique.
-				</TextAnimate>
+				</Prose>
 			</PanelContent>
 
 			<Collapsible>
@@ -79,7 +64,7 @@ const ToolsContent = ({ content }: ToolsContentProps) => {
 					</CollapsibleContent>
 				)}
 
-				<PanelFooter className="before:bg-transparent">
+				<PanelFooter className="flex max-sm:flex-col max-sm:gap-y-2">
 					{hiddenContent.length > 0 && (
 						<CollapsibleTrigger asChild>
 							<Button
@@ -87,10 +72,10 @@ const ToolsContent = ({ content }: ToolsContentProps) => {
 								variant="outline"
 							>
 								<span className="group-data-[state=open]:hidden">
-									Afficher plus
+									afficher plus
 								</span>
 								<span className="hidden group-data-[state=open]:inline">
-									Afficher moins
+									afficher moins
 								</span>
 								<CaretDownIcon
 									aria-hidden="true"
@@ -102,7 +87,7 @@ const ToolsContent = ({ content }: ToolsContentProps) => {
 
 					<Button asChild>
 						<Link aria-label="Voir tous les outils" href="/utils">
-							Voir tous les outils
+							voir tous les outils
 						</Link>
 					</Button>
 				</PanelFooter>
@@ -110,7 +95,3 @@ const ToolsContent = ({ content }: ToolsContentProps) => {
 		</>
 	);
 };
-
-ToolsContent.displayName = 'ToolsContent';
-
-export { ToolsContent };

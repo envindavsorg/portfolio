@@ -19,12 +19,12 @@ export const Cv = () => (
 		</PanelHeader>
 
 		<PanelContent className="space-y-3">
-			<Prose>
+			<Prose className="max-sm:text-xs!">
 				découvrez mon parcours professionnel à travers mon CV détaillé, qui
 				retrace mes expériences, compétences techniques et réalisations dans le
 				développement web full-stack.
 			</Prose>
-			<Prose>
+			<Prose className="max-sm:text-xs!">
 				pour recevoir une <span>copie actualisée</span> directement dans votre
 				boîte e-mail, cliquez sur le bouton ci-dessous. Je serai ravi d'échanger
 				avec vous sur d'éventuelles <span>opportunités</span> de collaboration.

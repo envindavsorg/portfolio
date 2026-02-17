@@ -1,14 +1,20 @@
-import { Panel } from '@/components/Panel';
+import { Panel, PanelHeader, PanelTitle } from '@/components/Panel';
+import { TextAnimate } from '@/components/text/TextAnimate';
 import { BrandingColors } from './BrandingColors';
 import { BrandingMark } from './BrandingMark';
-import { BrandingTitle } from './BrandingTitle';
 
 const Branding = () => (
 	<Panel>
-		<BrandingTitle />
+		<PanelHeader>
+			<PanelTitle>
+				<TextAnimate animation="slideLeft" by="character" delay={0.2}>
+					mon branding
+				</TextAnimate>
+			</PanelTitle>
+		</PanelHeader>
 
 		<div className="grid grid-cols-[2rem_1fr]">
-			<div className="flex h-26 items-center justify-center border-edge border-r bg-background">
+			<div className="flex items-center justify-center border-edge border-r bg-background sm:h-26">
 				<span className="rotate-270 select-none text-muted-foreground text-sm">
 					Assets
 				</span>
@@ -16,7 +22,7 @@ const Branding = () => (
 
 			<BrandingMark />
 
-			<div className="flex h-26 items-center justify-center border-edge border-r bg-background">
+			<div className="flex items-center justify-center border-edge border-r bg-background sm:h-26">
 				<span className="rotate-270 select-none text-muted-foreground text-sm">
 					Couleurs
 				</span>

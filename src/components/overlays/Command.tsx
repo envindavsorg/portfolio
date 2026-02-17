@@ -34,7 +34,7 @@ const CommandInput = ({
 			<CommandPrimitive.Input
 				className="flex-1 outline-hidden placeholder:text-foreground placeholder:text-sm"
 				data-slot="command-input"
-				placeholder="Tapez une commande ..."
+				placeholder="tapez une commande ..."
 				{...props}
 			/>
 		</div>

@@ -2,12 +2,12 @@ import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { PanelContent } from '@/components/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from '@/components/ui/Collapsible';
+import { Prose } from '@/components/ui/Typography';
 import { CertificationItem } from './CertificationItem';
 import type { Certification } from './content';
 
@@ -15,7 +15,9 @@ interface CertificationsContentProps {
 	content: Certification[];
 }
 
-const CertificationsContent = ({ content }: CertificationsContentProps) => {
+export const CertificationsContent = ({
+	content,
+}: CertificationsContentProps) => {
 	const { visibleContent, hiddenContent } = useMemo(
 		() => ({
 			visibleContent: content.slice(0, 4),
@@ -30,23 +32,15 @@ const CertificationsContent = ({ content }: CertificationsContentProps) => {
 
 	return (
 		<>
-			<PanelContent className="screen-line-after">
-				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					La technologie évolue rapidement, et rester à jour est essentiel.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="slideUp"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.6}
-					themed
-				>
-					Ces certifications valident mes compétences techniques et démontrent
-					mon engagement envers l'excellence et l'apprentissage continu dans le
-					développement web moderne.
-				</TextAnimate>
+			<PanelContent className="screen-line-after space-y-3">
+				<Prose className="max-sm:text-xs!">
+					les technologies évoluent rapidement, et rester à jour est essentiel.
+				</Prose>
+				<Prose className="max-sm:text-xs!">
+					ces <span>certifications</span> valident mes compétences techniques et
+					démontrent mon engagement envers l'excellence et l'apprentissage
+					continu dans le développement web moderne.
+				</Prose>
 			</PanelContent>
 
 			<Collapsible>
@@ -88,7 +82,3 @@ const CertificationsContent = ({ content }: CertificationsContentProps) => {
 		</>
 	);
 };
-
-CertificationsContent.displayName = 'CertificationsContent';
-
-export { CertificationsContent };

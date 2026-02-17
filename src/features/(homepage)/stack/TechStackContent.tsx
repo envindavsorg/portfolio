@@ -12,7 +12,7 @@ interface TechStackContentProps {
 	content: Stack[];
 }
 
-const TechStackContent = ({ content }: TechStackContentProps) => {
+export const TechStackContent = ({ content }: TechStackContentProps) => {
 	const keyExtractorAction = (item: Stack) => item.title;
 	const getKey = (item: Stack, index: number) =>
 		keyExtractorAction ? keyExtractorAction(item) : index;
@@ -20,15 +20,14 @@ const TechStackContent = ({ content }: TechStackContentProps) => {
 	return (
 		<>
 			<PanelContent className="space-y-3">
-				<Prose>
+				<Prose className="max-sm:text-xs!">
 					mon expertise se concentre sur l'écosystème <span>JavaScript</span>{' '}
 					moderne. au quotidien, je développe avec <span>React</span>,{' '}
 					<span>Next.js</span> et <span>TypeScript</span>, en utilisant{' '}
 					<span>Tailwind CSS</span> pour le styling et <span>Motion</span> pour
 					les animations.
 				</Prose>
-
-				<Prose>
+				<Prose className="max-sm:text-xs!">
 					côté back-end, je travaille avec <span>Node.js</span> et des
 					frameworks comme <span>Express</span> ou <span>Fastify</span>,
 					connectés à <span>MongoDB</span> ou <span>PostgreSQL</span>. je
@@ -80,7 +79,3 @@ const TechStackContent = ({ content }: TechStackContentProps) => {
 		</>
 	);
 };
-
-TechStackContent.displayName = 'TechStackContent';
-
-export { TechStackContent };

@@ -2,12 +2,12 @@ import { CaretDownIcon } from '@phosphor-icons/react/dist/ssr';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { PanelContent, PanelFooter } from '@/components/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from '@/components/ui/Collapsible';
+import { Prose } from '@/components/ui/Typography';
 import type { Project } from './content';
 import { ProjectItem } from './ProjectItem';
 
@@ -15,7 +15,7 @@ interface ProjectsContentProps {
 	content: Project[];
 }
 
-const ProjectsContent = ({ content }: ProjectsContentProps) => {
+export const ProjectsContent = ({ content }: ProjectsContentProps) => {
 	const { visibleContent, hiddenContent } = useMemo(
 		() => ({
 			visibleContent: content.slice(0, 2),
@@ -30,35 +30,22 @@ const ProjectsContent = ({ content }: ProjectsContentProps) => {
 
 	return (
 		<>
-			<PanelContent>
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
+			<PanelContent className="space-y-3">
+				<Prose className="max-sm:text-xs!">
 					Une sélection de projets qui illustrent mon parcours et mes
 					compétences.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.6}
-					themed
-				>
-					Du développement d'applications web modernes aux expérimentations
-					techniques, chaque projet représente un défi relevé et des compétences
-					acquises.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.8}
-				>
+				</Prose>
+				<Prose className="max-sm:text-xs!">
+					<span>
+						Du développement d'applications web modernes aux expérimentations
+						techniques, chaque projet représente un défi relevé et des
+						compétences acquises.
+					</span>
+				</Prose>
+				<Prose className="max-sm:text-xs!">
 					Certains sont en production, d'autres sont des side-projects qui me
 					permettent d'explorer de nouvelles technologies.
-				</TextAnimate>
+				</Prose>
 			</PanelContent>
 
 			<Collapsible className="screen-line-before">
@@ -81,13 +68,17 @@ const ProjectsContent = ({ content }: ProjectsContentProps) => {
 				{hiddenContent.length > 0 && (
 					<PanelFooter className="before:bg-transparent">
 						<CollapsibleTrigger asChild>
-							<Button className="group flex items-center gap-2">
+							<Button
+								className="group flex items-center gap-2"
+								variant="outline"
+							>
 								<span className="group-data-[state=open]:hidden">
-									Afficher plus
+									afficher plus
 								</span>
 								<span className="hidden group-data-[state=open]:inline">
-									Afficher moins
+									afficher moins
 								</span>
+
 								<CaretDownIcon
 									aria-hidden="true"
 									className="size-4 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180"
@@ -100,7 +91,3 @@ const ProjectsContent = ({ content }: ProjectsContentProps) => {
 		</>
 	);
 };
-
-ProjectsContent.displayName = 'ProjectsContent';
-
-export { ProjectsContent };

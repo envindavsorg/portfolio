@@ -23,7 +23,7 @@ export const getIcon = (name: string | undefined) => {
 		return null;
 	}
 	const Icon = Icons[name as keyof typeof Icons];
-	return <Icon className="pointer-events-none size-7" />;
+	return <Icon className="pointer-events-none size-8" />;
 };
 
 interface CertItemProps {
@@ -44,32 +44,33 @@ const CertificationItem = ({ certification }: CertItemProps) => {
 	return (
 		<CollapsibleWithContext>
 			<div className="flex items-center hover:bg-accent2">
-				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
+				<div className="m-4 hidden aspect-square size-10 shrink-0 cursor-default items-center justify-center sm:flex">
 					{getIcon(issuerIconName)}
 				</div>
 
-				<CollapsibleTrigger className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge border-l p-3 text-left">
+				<CollapsibleTrigger className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge p-3 text-left min-sm:border-l">
 					<div className="flex flex-1 flex-col gap-y-1">
-						<h2 className="text-balance font-semibold text-base">{title}</h2>
+						<h2 className="w-full text-balance font-semibold text-lg lowercase max-sm:max-w-50 sm:text-xl">
+							{title}
+						</h2>
+
 						<div className="flex items-center gap-x-3">
-							<dl className="font-medium text-muted-foreground text-xs">
+							<dl>
 								<dt className="sr-only">
 									Organisme ayant délivré la certification
 								</dt>
 								<dd>
-									<p className="text-theme">{issuer}</p>
+									<p className="text-theme text-xs sm:text-sm">{issuer}</p>
 								</dd>
 							</dl>
 
-							<span className="size-1 rounded-full bg-muted-foreground" />
+							<span className="size-1 rounded-full bg-theme" />
 
-							<dl className="font-medium text-muted-foreground text-xs">
+							<dl>
 								<dt className="sr-only">Date d'émission de la certification</dt>
 								<dd>
-									<p>
-										<time dateTime={dayjs(issueDate).toISOString()}>
-											{dayjs(issueDate).format('dddd, DD MMMM YYYY')}
-										</time>
+									<p className="text-theme text-xs sm:text-sm">
+										{dayjs(issueDate).format('dddd, DD MMMM YYYY')}
 									</p>
 								</dd>
 							</dl>

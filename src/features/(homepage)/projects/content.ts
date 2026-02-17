@@ -33,7 +33,7 @@ export const PROJECTS: Project[] = [
 		title:
 			'Un utilitaire TypeScript léger pour manipuler des objets de manière type-safe.',
 		description: [
-			'Autocomplétion complète pour tous les chemins imbriqués',
+			'Autocomplétion complète pour les chemins imbriqués',
 			'Tree-shakeable',
 			'Zéro dépendances',
 			"Création automatique d'objets intermédiaires",
@@ -68,9 +68,9 @@ export const PROJECTS: Project[] = [
 			'Intégration vCard',
 			'Optimisation SEO : schéma JSON-LD, sitemap, robots',
 			'Compatible IA /llms.txt',
-			'Email protégé contre le spam',
+			'Protection contre le spam',
 			'PWA installable',
-			'Animations subtiles pour une meilleure expérience utilisateur',
+			'Animations subtiles pour une meilleure UX',
 		],
 	},
 ];

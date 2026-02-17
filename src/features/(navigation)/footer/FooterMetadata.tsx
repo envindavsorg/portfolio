@@ -12,7 +12,11 @@ interface FooterMetadataProps {
 	updated?: string;
 }
 
-const FooterMetadata = ({ branch, hash, updated }: FooterMetadataProps) => {
+export const FooterMetadata = ({
+	branch,
+	hash,
+	updated,
+}: FooterMetadataProps) => {
 	const browser = useBrowser();
 
 	const items = useMemo(() => {
@@ -27,7 +31,7 @@ const FooterMetadata = ({ branch, hash, updated }: FooterMetadataProps) => {
 				image: '/assets/images/github.webp',
 				label: 'Dernier commit sur ce projet :',
 				value: `${hash} - ${branch}`,
-				comment: updated ? dayjs(updated).format('ddd DD MMM YYYY') : null,
+				comment: updated ? dayjs(updated).format('ddd DD MMM') : null,
 			},
 		] as FooterMeta[];
 	}, [browser?.comment, browser?.image, browser?.name, hash, updated]);
@@ -45,7 +49,7 @@ const FooterMetadata = ({ branch, hash, updated }: FooterMetadataProps) => {
 			<div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-4">
 				{items.map(({ comment, image, label, value }: FooterMeta) => (
 					<div
-						className="group/link [&:nth-child(2)]:screen-line-before flex select-none items-center gap-x-4 p-3"
+						className="group/link nth-2:screen-line-before flex select-none items-center gap-x-4 p-3"
 						key={label}
 					>
 						{image && (
@@ -57,12 +61,15 @@ const FooterMetadata = ({ branch, hash, updated }: FooterMetadataProps) => {
 								width={96}
 							/>
 						)}
-						<div className="flex flex-col gap-y-1">
+
+						<div className="flex flex-col items-baseline gap-y-1">
 							<span className="text-muted-foreground text-xs">{label}</span>
-							<p className="font-semibold text-xs">
-								{value ?? 'Chargement en cours ...'}{' '}
+							<p className="font-bold text-sm sm:text-base">
+								{value ?? 'chargement en cours ...'}{' '}
 								{comment && (
-									<span className="font-light text-theme">({comment})</span>
+									<span className="font-light text-theme text-xs">
+										({comment})
+									</span>
 								)}
 							</p>
 						</div>
@@ -72,7 +79,3 @@ const FooterMetadata = ({ branch, hash, updated }: FooterMetadataProps) => {
 		</Panel>
 	);
 };
-
-FooterMetadata.displayName = 'FooterMetadata';
-
-export { FooterMetadata };

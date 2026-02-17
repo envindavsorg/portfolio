@@ -57,7 +57,7 @@ export const Combobox = (props: ComboboxProps) => {
 			<PopoverContent className={cn('h-auto p-0', props.className)}>
 				<Command>
 					{props.search && (
-						<CommandInput placeholder="Tapez une commande ou recherchez ..." />
+						<CommandInput placeholder="tapez une commande ou recherchez ..." />
 					)}
 					<CommandList className="h-auto">
 						<CommandEmpty>Aucun résultat ...</CommandEmpty>

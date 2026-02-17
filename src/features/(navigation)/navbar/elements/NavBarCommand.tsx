@@ -63,7 +63,7 @@ const CommandFooter = memo(({ kindMap }: CommandFooterProps) => {
 			/>
 
 			<KbdGroup>
-				<span className="font-medium text-xs">Fermer</span>
+				<span className="font-medium text-xs">fermer</span>
 				<Kbd>␛</Kbd>
 			</KbdGroup>
 		</div>
@@ -93,7 +93,7 @@ const CommandRow = memo(({ item, index, onSelect }: CommandRowProps) => {
 			) : (
 				<span>{index + 1}.</span>
 			)}
-			<p>{item.title}</p>
+			<p className="lowercase">{item.title}</p>
 		</CommandItem>
 	);
 });
@@ -193,7 +193,7 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
 		setOpen(true);
 		toast.info('', {
 			id: 'command-hint',
-			description: 'Glissez vers le bas ou appuyez en dehors pour fermer.',
+			description: 'glissez vers le bas ou appuyez en dehors pour fermer.',
 			duration: Number.POSITIVE_INFINITY,
 		});
 	}, []);
@@ -209,7 +209,7 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
 		<>
 			<Button onClick={handleOpen} size="icon" variant="outline">
 				<SearchIcon />
-				<span className="sr-only">Rechercher</span>
+				<span className="sr-only">rechercher</span>
 			</Button>
 
 			<Wrapper onOpenChange={handleOpenChange} open={open}>
@@ -224,9 +224,9 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
 					})}
 				>
 					<VisuallyHidden>
-						<Title>Palette de commandes</Title>
+						<Title>palette de commandes</Title>
 						<Description>
-							Utilisez la barre de recherche pour naviguer rapidement vers
+							utilisez la barre de recherche pour naviguer rapidement vers
 							différentes sections du site ou pour accéder à des fonctionnalités
 							spécifiques.
 						</Description>

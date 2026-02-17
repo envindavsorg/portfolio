@@ -12,39 +12,39 @@ import GLOBAL_DATA from '@/content/data/global';
 import type { CommandGroupDef, CommandKind } from './types';
 
 export const LABELS: Record<CommandKind, string> = {
-	command: 'Lancer la commande',
-	page: 'Aller à la page',
-	utils: 'Utiliser cet outil',
-	article: "Lire l'article",
-	components: 'Voir le composant',
-	section: 'Aller à la section',
-	download: 'Télécharger le fichier',
+	command: 'lancer la commande',
+	page: 'aller à la page',
+	utils: 'utiliser cet outil',
+	article: "lire l'article",
+	components: 'voir le composant',
+	section: 'aller à la section',
+	download: 'télécharger le fichier',
 };
 
 export const COMMANDS: CommandGroupDef[] = [
 	{
-		heading: 'Menu principal :',
+		heading: 'menu principal :',
 		items: [
 			{
-				title: "Retourner à l'accueil",
+				title: "retourner à l'accueil",
 				url: '/',
 				icon: HomeIcon,
 				kind: 'page',
 			},
 			{
-				title: 'Mes articles de blog',
+				title: 'mes articles de blog',
 				url: '/blog',
 				icon: BookIcon,
 				kind: 'page',
 			},
 			{
-				title: 'Composants réutilisables',
+				title: 'composants réutilisables',
 				url: '/components',
 				icon: CodeIcon,
 				kind: 'page',
 			},
 			{
-				title: 'Outils pour développeurs',
+				title: 'outils pour développeurs',
 				url: '/utils',
 				icon: CogIcon,
 				kind: 'page',
@@ -52,28 +52,28 @@ export const COMMANDS: CommandGroupDef[] = [
 		],
 	},
 	{
-		heading: 'Contenu de mon portfolio :',
+		heading: 'contenu de mon portfolio :',
 		items: [
 			{
-				title: 'À propos de moi',
+				title: 'à propos de moi',
 				url: '/#about-me',
 				icon: UserIcon,
 				kind: 'section',
 			},
 			{
-				title: 'Ma stack technique',
+				title: 'ma stack technique',
 				url: '/#my-stack',
 				icon: LayersIcon,
 				kind: 'section',
 			},
 			{
-				title: 'Mes expériences',
+				title: 'mes expériences',
 				url: '/#my-experiences',
 				icon: FlaskIcon,
 				kind: 'section',
 			},
 			{
-				title: 'Mes projets',
+				title: 'mes projets',
 				url: '/#my-projects',
 				icon: CpuIcon,
 				kind: 'section',
@@ -81,16 +81,16 @@ export const COMMANDS: CommandGroupDef[] = [
 		],
 	},
 	{
-		heading: 'Documents à télécharger :',
+		heading: 'documents à télécharger :',
 		items: [
 			{
-				title: 'Ma carte de visite',
+				title: 'ma carte de visite',
 				url: '/api/vcard',
 				icon: IdCardIcon,
 				kind: 'download',
 			},
 			{
-				title: 'Télécharger mon CV',
+				title: 'télécharger mon CV',
 				url: GLOBAL_DATA.CV.url,
 				icon: FileIcon,
 				kind: 'download',
@@ -105,17 +105,17 @@ export const CATEGORY: Record<
 > = {
 	article: {
 		route: 'blog',
-		heading: 'Derniers articles de blog :',
+		heading: 'derniers articles de blog :',
 		kind: 'article',
 	},
 	components: {
 		route: 'components',
-		heading: 'Derniers snippets de code :',
+		heading: 'derniers snippets de code :',
 		kind: 'components',
 	},
 	utils: {
 		route: 'utils',
-		heading: 'Derniers outils :',
+		heading: 'derniers outils :',
 		kind: 'utils',
 	},
 };

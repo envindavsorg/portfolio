@@ -1,6 +1,7 @@
 import { getCommitData } from '@/actions/github/commit.action';
 import { HeartIcon } from '@/components/icons/HeartIcon';
 import { Divider } from '@/components/ui/Divider';
+import { Prose } from '@/components/ui/Typography';
 import { FooterMetadata } from '@/features/(navigation)/footer/FooterMetadata';
 import { FooterClock } from './FooterClock';
 import { FooterDate } from './FooterDate';
@@ -23,14 +24,12 @@ export const Footer = async () => {
 			</div>
 
 			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 md:max-w-3xl">
-				<p className="text-balance text-muted-foreground text-xs">
-					Développé avec beaucoup d'
-				</p>
+				<Prose>développé avec beaucoup d'</Prose>
 				<HeartIcon
 					className="relative me-1 text-destructive after:absolute after:-inset-2"
-					size={12}
+					size={14}
 				/>
-				<p className="text-balance text-muted-foreground text-xs">à Paris.</p>
+				<Prose>à Paris.</Prose>
 			</div>
 
 			<FooterDate />

@@ -2,12 +2,12 @@ import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { PanelContent, PanelFooter } from '@/components/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from '@/components/ui/Collapsible';
+import { Prose } from '@/components/ui/Typography';
 import type { Experience } from './content';
 import { ExperienceItem } from './ExperienceItem';
 
@@ -15,7 +15,7 @@ interface ExperiencesContentProps {
 	content: Experience[];
 }
 
-const ExperiencesContent = ({ content }: ExperiencesContentProps) => {
+export const ExperiencesContent = ({ content }: ExperiencesContentProps) => {
 	const { visibleContent, hiddenContent } = useMemo(
 		() => ({
 			visibleContent: content.slice(0, 3),
@@ -30,37 +30,23 @@ const ExperiencesContent = ({ content }: ExperiencesContentProps) => {
 
 	return (
 		<>
-			<PanelContent>
-				<TextAnimate animation="fadeIn" as="p" by="word" delay={0.4}>
-					Retour sur mon parcours professionnel et les expériences qui m'ont
-					permis de grandir en tant que développeur Front-End, puis Full-Stack.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.6}
-					themed
-				>
-					Ensemble, ces expériences constituent le socle de mes compétences
-					actuelles et reflètent ma passion pour la création de solutions web
-					innovantes et performantes.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="fadeIn"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.8}
-				>
-					De la refonte d'applications à grande échelle à l'intégration de
-					fonctionnalités complexes, chaque poste a été une opportunité
-					d'apprendre, de relever des défis techniques et de collaborer avec des
-					équipes talentueuses.
-				</TextAnimate>
+			<PanelContent className="space-y-3">
+				<Prose className="max-sm:text-xs!">
+					Retour sur <span>mon parcours professionnel</span> et les expériences
+					qui m'ont permis de grandir en tant que développeur Front-End, puis
+					Full-Stack.
+				</Prose>
+				<Prose className="max-sm:text-xs!">
+					Ensemble, ces <span>expériences</span> constituent le socle de mes
+					compétences actuelles et reflètent ma passion pour la création de
+					solutions web innovantes et performantes.
+				</Prose>
+				<Prose className="max-sm:text-xs!">
+					De la <span>refonte d'applications</span> à grande échelle à
+					l'intégration de fonctionnalités complexes, chaque poste a été une
+					opportunité d'apprendre, de relever des <span>défis techniques</span>{' '}
+					et de collaborer avec des équipes talentueuses.
+				</Prose>
 			</PanelContent>
 
 			<Collapsible className="screen-line-before">
@@ -81,15 +67,19 @@ const ExperiencesContent = ({ content }: ExperiencesContentProps) => {
 				)}
 
 				{hiddenContent.length > 0 && (
-					<PanelFooter className="before:bg-transparent">
+					<PanelFooter className="flex max-sm:flex-col">
 						<CollapsibleTrigger asChild>
-							<Button className="group flex items-center gap-2">
+							<Button
+								className="group flex items-center gap-2"
+								variant="outline"
+							>
 								<span className="group-data-[state=open]:hidden">
-									Afficher plus
+									afficher plus
 								</span>
 								<span className="hidden group-data-[state=open]:inline">
-									Afficher moins
+									afficher moins
 								</span>
+
 								<CaretDownIcon
 									aria-hidden="true"
 									className="size-4 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180"
@@ -102,7 +92,3 @@ const ExperiencesContent = ({ content }: ExperiencesContentProps) => {
 		</>
 	);
 };
-
-ExperiencesContent.displayName = 'ExperiencesContent';
-
-export { ExperiencesContent };

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { cache } from 'react';
 import { TextAnimate } from '@/components/text/TextAnimate';
 import { Divider } from '@/components/ui/Divider';
-import { ToolItem } from '@/features/(homepage)/11_tools/ToolItem';
+import { ToolItem } from '@/features/(homepage)/tools/ToolItem';
 import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';

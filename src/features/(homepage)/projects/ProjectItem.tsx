@@ -7,6 +7,7 @@ import {
 	CollapsibleWithContext,
 } from '@/components/ui/Collapsible';
 import { Tag } from '@/components/ui/Tag';
+import { Prose } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 import type { Project } from './content';
 
@@ -14,27 +15,27 @@ interface ProjectItemProps {
 	project: Project;
 }
 
-const ProjectItem = ({ project }: ProjectItemProps) => {
+export const ProjectItem = ({ project }: ProjectItemProps) => {
 	const Icon = project.icon;
 
 	return (
 		<CollapsibleWithContext>
 			<div className="flex items-center hover:bg-accent2">
-				<div className="m-3 flex aspect-square size-8 shrink-0 cursor-default items-center justify-center">
-					<Icon className="pointer-events-none size-7" />
+				<div className="m-4 hidden aspect-square size-10 shrink-0 cursor-default items-center justify-center sm:flex">
+					<Icon className="pointer-events-none size-8" />
 				</div>
 
 				<CollapsibleTrigger className="flex w-full flex-1 cursor-pointer select-none items-center gap-4 border-edge border-l p-3 text-left">
 					<div className="flex flex-1 flex-col gap-y-1">
-						<h2 className="text-balance font-semibold text-base">
+						<h2 className="w-full text-balance font-semibold text-lg lowercase max-sm:max-w-50 sm:text-xl">
 							{project.name}{' '}
 							<span className="font-normal text-theme text-xs">
 								({project.type})
 							</span>
 						</h2>
-						<p className="text-muted-foreground text-xs max-sm:hidden">
-							{project.title}
-						</p>
+						<Prose className="lowercase sm:max-w-lg">
+							-- {project.title} --
+						</Prose>
 					</div>
 
 					<Link
@@ -63,24 +64,24 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
 						return (
 							<div
 								className={cn(
-									'group relative flex flex-col justify-between overflow-hidden rounded-xl border bg-background p-4',
+									'group relative flex flex-col justify-between overflow-hidden rounded-xl border border-input bg-background p-4',
 									isWide ? 'md:col-span-2' : 'md:col-span-1'
 								)}
 								key={text}
 							>
-								<span className="absolute -top-2 -right-1 select-none font-bold text-[3rem] text-theme leading-none tracking-tighter opacity-[0.1] transition-opacity duration-300">
+								<span className="absolute -top-2 -right-1 select-none font-bold text-[3rem] text-theme leading-none tracking-tighter opacity-[0.3] transition-opacity duration-300">
 									{i + 1}
 								</span>
+
 								<div className="z-10 flex items-center gap-2">
-									<span className="flex h-6 items-center justify-center rounded-full bg-primary/10 px-2.5 font-bold text-[10px] text-primary">
+									<span className="flex h-6 items-center justify-center rounded-full bg-theme/10 px-2.5 font-bold text-[10px] text-theme">
 										{(i + 1).toString().padStart(2, '0')}
 									</span>
-									<div className="h-px w-8 bg-border" />
+									<div className="h-px w-8 bg-theme" />
 								</div>
-								<p className="z-10 text-balance font-medium text-foreground text-sm leading-snug tracking-tight">
-									{text}
-								</p>
-								<div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+								<Prose className="z-10 max-sm:text-xs!">{text}</Prose>
+								<div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 							</div>
 						);
 					})}
@@ -101,7 +102,3 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
 		</CollapsibleWithContext>
 	);
 };
-
-ProjectItem.displayName = 'ProjectsItem';
-
-export { ProjectItem };

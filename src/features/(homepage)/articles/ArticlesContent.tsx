@@ -16,7 +16,7 @@ export const ArticlesContent = ({ content }: ArticlesContentProps) => {
 	return (
 		<>
 			<PanelContent className="space-y-3">
-				<Prose>
+				<Prose className="max-sm:text-xs!">
 					retrouvez tous mes articles de blog où je partage mon expérience en{' '}
 					<span>développement web</span>. j'y aborde les{' '}
 					<span>bonnes pratiques</span>, les <span>patterns modernes</span>, les
@@ -24,7 +24,7 @@ export const ArticlesContent = ({ content }: ArticlesContentProps) => {
 					sur l'écosystème <span>JavaScript</span>. chaque article est le fruit
 					d'une expérience concrète, d'un bug résolu ou d'une technique apprise.
 				</Prose>
-				<Prose>
+				<Prose className="max-sm:text-xs!">
 					mon objectif :{' '}
 					<span>
 						documenter mon apprentissage et aider d'autres développeurs qui

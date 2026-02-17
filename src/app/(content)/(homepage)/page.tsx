@@ -4,13 +4,18 @@ import { Divider } from '@/components/ui/Divider';
 import GLOBAL_DATA from '@/content/data/global';
 import { About } from '@/features/(homepage)/about/About';
 import { Articles } from '@/features/(homepage)/articles/Articles';
+import { Branding } from '@/features/(homepage)/branding/Branding';
+import { Certifications } from '@/features/(homepage)/certifications/Certifications';
 import { Commits } from '@/features/(homepage)/commits/Commits';
 import { Contact } from '@/features/(homepage)/contact/Contact';
 import { Cover } from '@/features/(homepage)/cover/Cover';
 import { Cv } from '@/features/(homepage)/cv/Cv';
+import { Experiences } from '@/features/(homepage)/experiences/Experiences';
 import { Header } from '@/features/(homepage)/header/Header';
 import { Overview } from '@/features/(homepage)/overview/Overview';
+import { Projects } from '@/features/(homepage)/projects/Projects';
 import { TechStack } from '@/features/(homepage)/stack/TechStack';
+import { Tools } from '@/features/(homepage)/tools/Tools';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
@@ -66,22 +71,18 @@ const Page = () => (
 			<Divider />
 			<Articles />
 			<Divider />
-
-			{/*
-
-			<Divider border />
 			<Certifications />
-			<Divider border />
+			<Divider />
 			<Tools />
-			<Divider border />
+			<Divider />
 			<Experiences />
-			<Divider border />
+			<Divider />
 			<Projects />
-			<Divider border />
+			<Divider />
 			<Branding />
-			<Divider border />
+			<Divider />
 			<Cv />
-			<Divider border />*/}
+			<Divider />
 		</div>
 	</>
 );
