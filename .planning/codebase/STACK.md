@@ -1,219 +1,230 @@
 # Technology Stack
 
-**Analysis Date:** 2026-02-16
+**Analysis Date:** 2026-02-17
 
 ## Languages
 
 **Primary:**
-- TypeScript 5.9.3 - Full codebase with strict type checking enabled
-- JavaScript (JSX/TSX) - React components and scripts
+- TypeScript 5.9.3 - All application code in `src/`, strict mode enabled
+- TSX - React components throughout `src/`
 
 **Secondary:**
-- Markdown/MDX - Blog content and documentation
-- CSS - Styling via Tailwind CSS directives
+- MDX - Blog and component documentation content
+- JavaScript (`.mjs`) - PostCSS config `postcss.config.mjs`, minor scripts
+- CSS - Tailwind CSS directives in `src/styles/`
 
 ## Runtime
 
 **Environment:**
-- Node.js v25.6.0 (specified in `.nvmrc`)
-- Compatible with v20 or v22+ as noted in CLAUDE.md
+- Node.js v25.6.0 (pinned via `.nvmrc`)
+- Also compatible with v20 or v22+ per project docs
 
 **Package Manager:**
-- pnpm v10.29.3
+- pnpm 10.29.3 (pinned with SHA hash in `package.json`)
 - Lockfile: `pnpm-lock.yaml` present
 
 ## Frameworks
 
 **Core:**
-- Next.js 16.1.6 - App Router with Turbopack support
-  - Runs on port 1408 for development
-  - Transpiles `next-mdx-remote` package
-- React 19.2.4 - UI rendering with latest features
+- Next.js 16.1.6 - App Router, SSR/SSG, Server Actions, API routes
+  - Config: `next.config.ts`
+  - Dev port: 1408 (`next dev -p 1408`)
+  - Turbopack: enabled by default in Next.js 15+
+  - Page extensions: `mdx`, `ts`, `tsx`
+  - React strict mode: enabled
+
+**UI Components:**
+- React 19.2.4 - UI rendering with latest concurrent features
 - React DOM 19.2.4 - DOM rendering companion
+- shadcn/ui (CLI: 3.8.5) - Component scaffold and registry integration
+  - Components live in `src/components/ui/`
+  - Custom distribution registry at `src/registry/`
 
 **Styling:**
-- Tailwind CSS v4 - PostCSS-based (via `@tailwindcss/postcss`)
-- Tailwind Typography v0.5.19 - Rich text styling for blog/MDX
-- `@tailwindcss/oxide` - Rust-based CSS engine (trusted dependency)
+- Tailwind CSS 4.1.18 - PostCSS-based (v4 new oxide architecture)
+  - PostCSS plugin: `@tailwindcss/postcss` via `postcss.config.mjs`
+  - Typography: `@tailwindcss/typography` 0.5.19 for blog/MDX prose
+  - Animation addon: `tw-animate-css` 1.4.0
+  - `@tailwindcss/oxide` - Rust-based CSS engine (trusted dependency)
+- `tailwind-merge` 3.4.1 - Class merging via `cn()` in `src/lib/utils.ts`
+- `class-variance-authority` 0.7.1 - Variant-based component classes (CVA)
+- `clsx` 2.1.1 - Conditional class joining
 
-**UI Components & Libraries:**
-- shadcn/ui - Reusable component registry at `src/registry/`
-- Radix UI v1.4.3 - Headless component primitives
-- `@radix-ui/react-checkbox` v1.3.3
-- `@radix-ui/react-icons` v1.3.2
-- `@radix-ui/react-popover` v1.1.15
-- `@radix-ui/react-select` v2.2.6
-- `@radix-ui/react-slot` v1.2.4
-- `@radix-ui/react-visually-hidden` v1.2.4
-
-**Content & MDX:**
-- `next-mdx-remote` v5.0.0 - Remote MDX rendering
-- `remark` v15.0.1 - Markdown AST processor
-- `remark-gfm` v4.0.1 - GitHub Flavored Markdown support
-- `remark-mdx` v3.1.1 - MDX in remark
-- `rehype-raw` v7.0.0 - Parse HTML in markdown
-- `rehype-slug` v6.0.0 - Add slugs to headings
-- `rehype-pretty-code` v0.14.1 - Syntax highlighting
-- `rehype-external-links` v3.0.0 - Rewrite external links
-- `shiki` 3.22.0 - Syntax highlighter engine
-
-**Animation & Interaction:**
-- `motion` v12.34.0 - Framer Motion for animations
-- `react-confetti` v6.4.0 - Celebration animation
-- `react-fast-marquee` v1.6.5 - Scrolling marquee component
-- `rough-notation` v0.5.1 - Rough hand-drawn annotations
-- `embla-carousel-react` v8.6.0 - Carousel component
-
-**Forms & Validation:**
-- `react-hook-form` v7.71.1 - React form library
-- `@hookform/resolvers` v5.2.2 - Form validation adapters
-- `zod` v4.3.6 - TypeScript-first schema validation
-- `react-number-format` v5.4.4 - Number input formatting
+**Animation:**
+- Motion 12.34.0 (`motion`) - Framer Motion v12, primary animation library
 
 **State Management:**
-- `jotai` v2.17.1 - Primitive atom-based state
-- `zustand` (mentioned in keywords) - Lightweight store option
+- Jotai 2.17.1 - Atomic state management for client state
 
-**UI Utilities:**
-- `class-variance-authority` v0.7.1 - CVA for component variants
-- `clsx` v2.1.1 - Conditional class names
-- `tailwind-merge` v3.4.0 - Merge Tailwind CSS classes
-- `cmdk` v1.1.1 - Command menu component
-- `sonner` v2.0.7 - Toast notifications
-- `vaul` v1.1.2 - Drawer component
-- `embla-carousel-react` v8.6.0 - Carousel
+**Forms & Validation:**
+- React Hook Form 7.71.1 - Form state and submission handling
+- Zod 4.3.6 - Schema validation (also used for env var validation in `next.config.ts`)
+- `@hookform/resolvers` 5.2.2 - Zod/RHF bridge
 
-**Particle Effects:**
-- `@tsparticles/engine` v3.9.1 - Particle engine (trusted dependency)
-- `@tsparticles/react` v3.0.0 - React integration
-- `@tsparticles/slim` v3.9.1 - Slim bundle
+**Content Processing:**
+- `next-mdx-remote` 6.0.0 - MDX rendering for blog/component docs
+- `fumadocs-core` 16.6.2 - MDX/docs processing utilities
+- `gray-matter` 4.0.3 (dev) - Frontmatter parsing for blog post metadata
+- `remark` 15.0.1 - Markdown AST processor
+- `remark-gfm` 4.0.1 - GitHub Flavored Markdown
+- `remark-mdx` 3.1.1 - MDX support in remark
+- `rehype-pretty-code` 0.14.1 - Syntax highlighting integration
+- `shiki` 3.22.0 - Syntax highlighter engine (code blocks)
+- `rehype-slug` 6.0.0 - Add IDs to headings
+- `rehype-external-links` 3.0.0 - Open external links in new tab
+- `rehype-raw` 7.0.0 - Parse raw HTML in markdown
+- Custom rehype plugins: `src/lib/rehype-component.ts`, `src/lib/rehype-npm-command.ts`
+- `unist-builder` 4.0.0 + `unist-util-visit` 5.1.0 - AST manipulation for plugins
 
-**Icons & Assets:**
-- `@phosphor-icons/react` v2.1.10 - Phosphor icon set
-- Flag icons - Included in `/public/assets/`
+**Email:**
+- `@react-email/components` 1.0.7 + `@react-email/render` 2.0.4 - React email templates
+- `resend` 6.9.2 - Transactional email sending API
 
-**Other Utilities:**
-- `dayjs` v1.11.19 - Date manipulation
-- `es-toolkit` v1.44.0 - ES utility collection
-- `consola` v3.4.2 - Logging utility
-- `tslog` v4.10.2 - Structured logging
-- `schema-dts` v1.1.5 - Schema.org type definitions
-- `poline` v0.13.0 - Polyline simplification
-- `react-use-measure` v2.1.7 - Measure DOM elements
-- `react-hotkeys-hook` v5.2.4 - Keyboard shortcuts
-- `@uidotdev/usehooks` v2.4.1 - Custom React hooks
-- `@number-flow/react` v0.5.11 - Animated number display
-- `vcard-creator` v0.7.2 - vCard generation
-- `react-markdown` v10.1.0 - Markdown renderer
-- `gray-matter` v4.0.3 - YAML frontmatter parsing
-- `fumadocs-core` v16.5.2 - Documentation utilities
+**Theming:**
+- `next-themes` 0.4.6 - Dark/light/system mode switching
+
+**UX & Navigation:**
+- `@bprogress/next` 3.2.12 - Page transition progress bar
+- `sonner` 2.0.7 - Toast notifications
+- `vaul` 1.1.2 - Drawer/sheet component
+- `cmdk` 1.1.1 - Command palette
+
+## Key Dependencies
+
+**Critical Integrations:**
+- `octokit` 5.0.5 - GitHub GraphQL/REST API client
+  - Configured in `src/lib/octokit.ts`
+  - Requires `GITHUB_API_TOKEN` env var
+- `resend` 6.9.2 - Email sending
+  - Requires `RESEND_API_KEY` env var
+- `@vercel/blob` 2.2.0 - File/asset storage on Vercel Blob
+  - Requires `BLOB_READ_WRITE_TOKEN` env var
+- `@vercel/analytics` 1.6.1 - Web analytics
+- `@vercel/speed-insights` 1.3.1 - Core Web Vitals monitoring
+
+**UI & Interactive:**
+- `@phosphor-icons/react` 2.1.10 - Primary icon library
+- `@radix-ui/react-checkbox` 1.3.3 - Accessible checkbox primitive
+- `@radix-ui/react-icons` 1.3.2 - Radix icon set
+- `@radix-ui/react-popover` 1.1.15 - Popover primitive
+- `@radix-ui/react-select` 2.2.6 - Select/dropdown primitive
+- `@radix-ui/react-slot` 1.2.4 - Slot/composition primitive
+- `@radix-ui/react-tooltip` 1.2.8 - Tooltip primitive
+- `@radix-ui/react-visually-hidden` 1.2.4 - Accessibility helper
+- `radix-ui` 1.4.3 - Radix umbrella package
+- `embla-carousel-react` 8.6.0 - Carousel component
+- `react-fast-marquee` 1.6.5 - Scrolling marquee/ticker
+- `@tsparticles/react` 3.0.0 + `@tsparticles/engine` 3.9.1 + `@tsparticles/slim` 3.9.1 - Particle effects
+- `@number-flow/react` 0.5.12 - Animated number transitions
+- `react-confetti` 6.4.0 - Confetti celebration effect
+- `rough-notation` 0.5.1 - Rough sketch-style annotations
+- `react-number-format` 5.4.4 - Formatted number inputs
+
+**Utilities:**
+- `dayjs` 1.11.19 - Date formatting and manipulation
+- `es-toolkit` 1.44.0 - Modern utility library (lodash alternative)
+- `consola` 3.4.2 - Structured logging (used in `src/lib/logger.ts`, `next.config.ts`)
+- `tslog` 4.10.2 - TypeScript logger
+- `sharp` 0.34.5 - Server-side image processing (OG images, capture scripts)
+- `geist` 1.7.0 - Vercel Geist font family
+- `@uidotdev/usehooks` 2.4.1 - Utility React hooks
+- `react-hotkeys-hook` 5.2.4 - Keyboard shortcut bindings
+- `react-use-measure` 2.1.7 - DOM element size measurement
+- `react-markdown` 10.1.0 - Simple Markdown renderer
+- `vcard-creator` 0.7.2 - vCard file generation
+- `poline` 0.13.0 - Color palette/polyline utilities
+- `@cloudflare/speedtest` 1.7.0 - Network speed testing widget
+- `schema-dts` 1.1.5 - JSON-LD / Schema.org TypeScript types
+- `@c15t/nextjs` 1.8.3 - Cookie consent management (GDPR)
 
 ## Testing & Quality
 
+**No automated tests detected** - No jest, vitest, playwright, or cypress config/files found.
+
 **Linting & Formatting:**
-- Biome.js v2.3.14 - Unified linter and formatter
-  - Config: `biome.json` extends `ultracite` config
-  - Formatter: Tabs for indentation, 80-char line width, single quotes, always semicolons
-  - Linter: ESM-based rules with custom overrides
+- Biome.js 2.4.2 - Unified linter and formatter
+  - Config: `biome.json` extends `ultracite/core` preset
+  - Indentation: tabs, line width: 80 chars (CSS: 120)
+  - Quotes: single, semicolons: always
+  - Auto-sorts Tailwind classes in `className`, `classList`, `clsx`, `cva`, `cn`
+  - Pre-commit: `lint-staged` 16.2.7 runs `biome check --write --unsafe`
 
 **Type Checking:**
-- TypeScript 5.9.3 - Strict mode with `noEmit` option
-- Config: `tsconfig.json` with `@/*` path alias
+- TypeScript 5.9.3 strict mode
+- Config: `tsconfig.json` with strictNullChecks, noEmit
+- Command: `pnpm types` (runs `tsc --noEmit --pretty`)
 
-**Utilities:**
-- `prettier` v3.8.1 - Fallback formatter
-- `eslint` - Not directly used (Biome replaces it)
+**Additional:**
+- `prettier` 3.8.1 - Available as fallback formatter
 
 ## Build & Dev Tools
 
 **Build System:**
-- Next.js 16.1.6 with Turbopack
-- `tsup` v8.5.1 - TypeScript bundler for libraries
-- `tsx` v4.21.0 - TypeScript executor (used for scripts)
+- Next.js 16.1.6 with Turbopack (default for `next dev`)
+- `tsup` 8.5.1 - TypeScript bundler for registry component distribution
+- `tsx` 4.21.0 - Run TypeScript scripts directly (registry build scripts)
+- `tsconfig.scripts.json` - Separate TS config for `src/scripts/`
 
-**Development Tools:**
-- `lint-staged` v16.2.7 - Run linters on staged files
-- `rimraf` v6.1.2 - Cross-platform rm -rf
-- `taze` v19.9.2 - Check dependency updates
-- `shadcn` v3.8.4 - Component registry CLI
-- `unist-builder` v4.0.0 - AST builder
-- `unist-util-visit` v5.1.0 - AST visitor
-- `strip-indent` v4.1.1 - Remove indentation
-- `pngjs` v7.0.0 - PNG image processing
-- `puppeteer-core` v24.37.2 - Headless browser (for screenshots)
-- `@skyra/gifenc` v1.0.1 - GIF encoder for captures
-- `sharp` v0.34.5 - Image processing library
-- `colorette` v2.0.20 - Terminal colors
-- `depcheck` - Dependency checker (via `pnpm deps`)
+**Registry Build:**
+- `src/scripts/build-registry.mts` - Generates `src/__registry__/registry.autogenerated.json`
+- `shadcn build` - Builds distributable registry from generated JSON
+- Command: `pnpm registry:build`
 
-## Key Dependencies
+**Capture Pipeline:**
+- `puppeteer-core` 24.37.3 - Headless Chrome for component screenshots
+- `@skyra/gifenc` 1.0.1 - GIF encoding
+- `pngjs` 7.0.0 - PNG image processing
+- Scripts: `src/scripts/capture.ts`, `src/scripts/capture-components.ts`
+- Separate dev server at port 1409 with `ENV_TYPE=capture`
 
-**Critical for Integration:**
-- `octokit` v5.0.5 - GitHub GraphQL API client
-  - Configured in `src/lib/octokit.ts`
-  - Requires `GITHUB_API_TOKEN` environment variable
-- `resend` v6.9.1 - Transactional email service
-  - Requires `RESEND_API_KEY` environment variable
-  - Used in `src/app/api/send/route.ts`
-- `@vercel/blob` v2.2.0 - File storage
-  - Requires `BLOB_READ_WRITE_TOKEN` environment variable
-  - Used in `src/actions/linkedin/followers.action.ts`
-- `@vercel/analytics` v1.6.1 - Analytics tracking
-  - Dynamically imported in `src/providers/analytics/Analytics.tsx`
-- `@vercel/speed-insights` v1.3.1 - Performance monitoring
-  - Dynamically imported in `src/providers/analytics/Analytics.tsx`
-
-**Performance & Monitoring:**
-- `@bprogress/next` v3.2.12 - Page progress bar
-- `@c15t/nextjs` v1.8.3 - Consent manager (GDPR/tracking)
-- `@cloudflare/speedtest` v1.7.0 - Speed test engine
-- `@react-email/components` v1.0.7 - Email templating
-- `@react-email/render` v2.0.4 - Email rendering
+**Dev Utilities:**
+- `lint-staged` 16.2.7 - Pre-commit hook linting
+- `rimraf` 6.1.3 - Cross-platform file deletion
+- `taze` 19.9.2 - Dependency update checker (`npx taze`)
+- `colorette` 2.0.20 - Terminal color output for scripts
 
 ## Configuration
 
 **Environment:**
-- Configuration via `.env.local` (present, not committed)
-- Environment validation in `next.config.ts` using Zod schema
-- Required variables:
-  - `GITHUB_API_TOKEN` - GitHub API authentication
-  - `GITHUB_USERNAME` - GitHub username for data queries
-  - `GITHUB_REPO_NAME` - Repository name for contribution data
-- Optional variables:
-  - `RESEND_API_KEY` - Email service
-  - `BLOB_READ_WRITE_TOKEN` - Vercel Blob storage
-  - `API_TOKEN` - Generic API token
-  - `TURBO_TOKEN` - Turbo Cache authentication
-  - `TURBO_TEAM` - Turbo Cache team
-  - `NEXT_PUBLIC_APP_URL` - Public app URL
-  - `ENV_TYPE` - Environment type (e.g., "capture" for screenshots)
+- Validated at Next.js startup via Zod schema in `next.config.ts`
+- Required: `GITHUB_API_TOKEN`
+- Optional: `GITHUB_USERNAME`, `GITHUB_REPO_NAME`, `TURBO_TOKEN`, `TURBO_TEAM`, `BLOB_READ_WRITE_TOKEN`, `API_TOKEN`, `RESEND_API_KEY`
+- Local dev: `.env.local` (not committed)
+- `ENV_TYPE=capture` for screenshot capture mode
 
-**Build:**
-- `next.config.ts` - Next.js configuration
-  - Image remote patterns: `avatars.githubusercontent.com`, `cuzeacflorin.fr`
-  - URL rewrites for blog/components routes
-  - Security headers (X-Frame-Options, X-Content-Type-Options, CSP)
-- `tsconfig.json` - TypeScript strict mode, ES2017 target
-- `postcss.config.mjs` - PostCSS with Tailwind CSS v4
-- `tsconfig.scripts.json` - Separate config for build scripts
+**Build Config Files:**
+- `next.config.ts` - Image optimization, security headers, URL redirects/rewrites
+- `tsconfig.json` - Strict TypeScript, `@/*` path alias → `src/*`
+- `tsconfig.scripts.json` - TypeScript config for build scripts
+- `biome.json` - Linting/formatting (extends `ultracite/core`)
+- `postcss.config.mjs` - PostCSS with `@tailwindcss/postcss`
+- `.nvmrc` - Node v25.6.0
+
+**Security Headers (set in `next.config.ts`):**
+- `X-Frame-Options: DENY`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+
+**Image Configuration:**
+- Remote patterns: `avatars.githubusercontent.com`, `cuzeacflorin.fr`
+- Formats: AVIF, WebP
+- Cache TTL: 30 days
+- SVG allowed with sandboxed CSP
 
 ## Platform Requirements
 
 **Development:**
-- Node.js v25.6.0 (or v20/v22+)
-- pnpm v10.29.3 or compatible
-- Minimum 2GB RAM for Turbopack compilation
+- Node.js v25.6.0 (from `.nvmrc`)
+- pnpm v10.29.3 as package manager
+- `GITHUB_API_TOKEN` env var required (build fails without it)
+- `.env.local` with required variables
 
 **Production:**
-- Deployment target: Vercel (inferred from Vercel integrations)
-- Edge runtime support in select routes (e.g., `/api/health`)
-- Environment variables required at deployment time
-
-**Browser Support:**
-- Modern browsers (ES2017 target)
-- CSS Grid, Flexbox, CSS Custom Properties
-- CSS Scroll Snap for carousels
+- Deployment target: Vercel (inferred from `@vercel/*` packages, `TURBO_TEAM`/`TURBO_TOKEN`)
+- Image formats: AVIF and WebP served automatically
+- Environment variables required at deploy time
 
 ---
 
-*Stack analysis: 2026-02-16*
+*Stack analysis: 2026-02-17*

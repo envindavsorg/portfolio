@@ -1,204 +1,214 @@
 # Architecture
 
-**Analysis Date:** 2026-02-16
+**Analysis Date:** 2026-02-17
 
 ## Pattern Overview
 
-**Overall:** Feature-Based Layered Architecture with Server Components and Client Interactivity
+**Overall:** Feature-based Next.js App Router with Server Components, Server Actions, and static MDX content
 
 **Key Characteristics:**
-- Feature-first organization by domain (homepage sections, navigation, writings, LLM routes)
-- Next.js 15 App Router with Server and Client Components mixed strategically
-- Server Actions for data fetching (GitHub API, blog posts)
-- Jotai for client-side state management (theme, config)
-- Dynamic imports for performance optimization
-- Content-driven with MDX/Markdown processing pipeline
+- Route groups (`(content)`, `(llms)`, `(other)`) organize pages by concern without affecting URL structure
+- Feature modules under `src/features/` mirror route group naming (`(homepage)`, `(navigation)`, `(writings)`)
+- Static content (portfolio data, MDX articles) lives in `src/content/` and is consumed at build/request time by Server Components
+- External data (GitHub API) is fetched in Server Actions with `unstable_cache` for 1-hour ISR
+- Client Components (`'use client'`) are used only where interactivity is required; all data-fetching components are async Server Components
+- Dynamic imports (`next/dynamic`, React `lazy`) for heavy client components deferred from initial bundle
 
 ## Layers
 
-**Presentation Layer (Components & Features):**
-- Purpose: UI rendering and user interaction
-- Location: `src/components/`, `src/features/`
-- Contains: React components (TSX), UI elements (buttons, icons, animations), feature-specific layouts
-- Depends on: Lib utilities, hooks, providers
-- Used by: Pages, layouts
+**Route Layer:**
+- Purpose: URL mapping, metadata generation, JSON-LD structured data injection
+- Location: `src/app/`
+- Contains: `page.tsx`, `layout.tsx`, `route.ts` API handlers, `sitemap.ts`, `robots.ts`, `manifest.ts`
+- Depends on: Feature layer, lib layer, content layer
+- Used by: Next.js router
 
-**Feature Layer (Domain Organization):**
-- Purpose: Encapsulate feature-specific code (homepage sections, navigation, blog, LLMs)
-- Location: `src/features/(homepage)/`, `src/features/(navigation)/`, `src/features/(writings)/`
-- Contains: Feature components, content files (TS), effect components (animations)
-- Depends on: Components, utilities, server actions
-- Used by: App pages and layouts
+**Feature Layer:**
+- Purpose: Domain-specific UI sections; each feature is a self-contained section of a page
+- Location: `src/features/`
+- Contains: Named export React components, co-located `content.ts` static data files, sub-components
+- Sub-groups: `src/features/(homepage)/` (14 sections), `src/features/(navigation)/` (navbar, footer), `src/features/(writings)/` (blog UI components)
+- Depends on: Component layer, lib layer, actions layer, content layer
+- Used by: Route layer (imported directly into `page.tsx`)
 
-**Server Actions & Data Fetching:**
-- Purpose: Server-side logic and external API integration
-- Location: `src/actions/github/`, `src/actions/blog/`, `src/actions/linkedin/`
-- Contains: Server Functions marked with `'use server'`, caching logic
-- Depends on: Octokit client, blog utilities, Next.js caching
-- Used by: Client components via async calls
+**Actions Layer:**
+- Purpose: Server-side data fetching with caching, marked `'use server'`
+- Location: `src/actions/`
+- Contains: `src/actions/github/data.action.ts`, `src/actions/github/commit.action.ts`, `src/actions/github/followers.action.ts`, `src/actions/linkedin/`, `src/actions/blog/post.action.tsx`
+- Depends on: `src/lib/octokit.ts`, `src/queries/`, `src/lib/github.ts`
+- Used by: Feature layer Server Components
 
-**Routing Layer (App Router):**
-- Purpose: Define application routes and page rendering
-- Location: `src/app/`, `src/app/(content)/`, `src/app/(llms)/`, `src/app/(other)/`
-- Contains: Page components, layouts, API routes, metadata generation
-- Depends on: Features, server actions, components
-- Used by: Next.js runtime for serving pages
+**Component Layer:**
+- Purpose: Reusable, generic UI primitives and compositions
+- Location: `src/components/`
+- Contains: shadcn/ui components in `src/components/ui/`, buttons, icons, animations, markdown renderer (`src/components/markdown/mdx.tsx`), overlays, carousel
+- Depends on: `src/lib/utils.ts` for `cn()`, Tailwind CSS v4
+- Used by: Feature layer, route layer
 
-**Library & Utilities Layer:**
-- Purpose: Reusable functions and integrations
-- Location: `src/lib/`, `src/hooks/`, `src/utils/`
-- Contains: GitHub integration, blog processing, logging, UI utilities, custom hooks
+**Content Layer:**
+- Purpose: Static site data and MDX blog articles
+- Location: `src/content/`
+- Contains: `src/content/data/global.ts` (user/work/social data as `GLOBAL_DATA`), `src/content/articles/` (MDX files)
+- Depends on: Nothing (pure data)
+- Used by: Feature layer, route layer, lib layer (blog post parsing)
+
+**Lib Layer:**
+- Purpose: Utilities, external client wrappers, MDX processing pipeline
+- Location: `src/lib/`
+- Contains: `octokit.ts` (GitHub GraphQL client), `open-graph.ts`, `logger.ts`, `utils.ts`, `utils.server.ts`, `blog/posts.ts`, `blog/read.ts`, `blog/llm.ts`, MDX plugins (`rehype-component.ts`, `rehype-npm-command.ts`, `rehype-add-query-params.ts`, `remark-code-import.js`, `remark-component.ts`)
 - Depends on: External packages (octokit, tslog, dayjs, gray-matter)
-- Used by: All higher layers
+- Used by: Actions layer, feature layer, route layer
 
-**Provider & State Layer:**
-- Purpose: Application-wide configuration and state management
+**Queries Layer:**
+- Purpose: GraphQL query strings for GitHub API
+- Location: `src/queries/github/`
+- Contains: `data.query.ts`, `commit.query.ts`
+- Depends on: Nothing
+- Used by: Actions layer
+
+**Providers Layer:**
+- Purpose: React context and global state setup for client-side concerns
 - Location: `src/providers/`
-- Contains: Theme provider, progress provider, analytics, Jotai Providers
-- Depends on: Third-party providers (Next.js, Jotai)
-- Used by: Root layout via Providers wrapper
+- Contains: `Providers.tsx` (root composition via `Compose` utility), `modules/ThemeProvider.tsx`, `modules/ProgressProvider.tsx`, `analytics/Analytics.tsx`, `utils/Compose.tsx`
+- Depends on: Jotai, next-themes, `@vercel/analytics`, `@vercel/speed-insights`
+- Used by: Root layout `src/app/layout.tsx`
 
-**Configuration & Data Layer:**
-- Purpose: Static configuration and type definitions
-- Location: `src/content/data/`, `src/schemas/`, `src/types/`
-- Contains: Global data (user info, social links), TypeScript interfaces, validation schemas
-- Depends on: None
-- Used by: All layers for consistent data structure
+**Schemas Layer:**
+- Purpose: Runtime validation for API inputs
+- Location: `src/schemas/`
+- Contains: `email.schema.ts` (Zod schema for CV send endpoint)
+- Used by: `src/app/api/send/route.ts`
 
 ## Data Flow
 
-**Page Load Flow (Server → Client):**
+**GitHub Stats (Commits, Stars, Followers):**
 
-1. Root layout (`src/app/layout.tsx`) initializes Providers (theme, analytics, state)
-2. Page layout (`src/app/(content)/layout.tsx`) renders NavBar and Particles
-3. Feature components render, triggering Server Actions if needed
-4. Server Actions fetch GitHub data (cached via `unstable_cache`)
-5. Data transforms through lib functions (`fillHoles`, `groupByWeeks`, `contributionLevelToNumber`)
-6. Client components hydrate with state from Jotai atoms
-7. Animations trigger (Cover carousel, TextAnimate, Particles)
+1. Server Component (e.g., `src/features/(homepage)/commits/Commits.tsx`) calls `await getGitHubData()`
+2. `getGitHubData` in `src/actions/github/data.action.ts` is wrapped in `unstable_cache` (1h TTL, tag `github-user-data`)
+3. Cache miss triggers `octokit` GraphQL query (`src/queries/github/data.query.ts`) against GitHub API using `GITHUB_API_TOKEN`
+4. Transformed data returned to Server Component and rendered directly as HTML
 
-**Blog/Article Load Flow:**
+**Blog Post Rendering:**
 
-1. Route handler (`src/app/(content)/(writings)/blog/[slug]/page.tsx`) calls `getPostBySlug`
-2. `getPostBySlug` reads MDX from `src/content/articles/[slug].mdx`
-3. `readMDXFile` parses frontmatter via gray-matter
-4. Content passes through MDX processing pipeline:
-   - `rehype-component.ts` - injects custom components
-   - `rehype-npm-command.ts` - formats package manager commands
-   - `remark-component.ts` - processes Remark plugins
-5. Metadata extracted and returned to component
-6. Page renders with LLM action buttons (ViewOptions, LLMCopyButton)
+1. Route `src/app/(content)/(writings)/blog/[slug]/page.tsx` calls `getPostBySlug(slug)` from `src/lib/blog/posts.ts`
+2. `src/lib/blog/posts.ts` reads `.mdx` files from `src/content/articles/` using Node.js `fs` at request/build time
+3. `gray-matter` parses frontmatter; `readingTime` from `src/lib/blog/read.ts` calculates reading stats
+4. MDX content rendered by `src/components/markdown/mdx.tsx` using Fumadocs core with Shiki syntax highlighting
+5. `generateStaticParams` pre-builds all blog post routes at build time via `getAllPosts()`
 
-**State Management Flow:**
+**CV Email Send:**
 
-1. User sets theme via FaviconSwitcher or ThemeProvider
-2. Theme stored in Jotai atom (`useConfig` hook)
-3. localStorage persists state via `atomWithStorage`
-4. Theme changes trigger favicon and meta-color updates
-5. Dark mode script in root layout runs before hydration to prevent flashing
+1. User triggers contact form → POST to `src/app/api/send/route.ts`
+2. Route validates body with `src/schemas/email.schema` (Zod)
+3. Reads `public/documents/resume.pdf` from filesystem
+4. Sends email with PDF attachment via Resend SDK (`RESEND_API_KEY`)
 
-**GitHub Integration Flow:**
+**OG Image Generation:**
 
-1. Server Action `getGitHubData` runs on server
-2. Octokit sends GraphQL query (DATA_QUERY from `src/queries/github/data.query.ts`)
-3. Response cached for 3600s via `unstable_cache` with tag 'github-user-data'
-4. Contribution data flattened and transformed
-5. Component receives contribution calendar and commit graph data
+1. Any page calls `openGraphImage()` from `src/lib/open-graph.ts` in `generateMetadata`
+2. Constructs a URL pointing to `/api/og` with type, title, and description params
+3. `src/app/api/og/route.tsx` uses `next/og` `ImageResponse` with cached Geist fonts from `src/assets/fonts/`
+
+**State Management:**
+- Jotai atoms for client-side UI state (theme, config preferences)
+- `next-themes` via `src/providers/modules/ThemeProvider.tsx` for system/dark/light theme
+- No server state management library; server data fetched per-request or cached via `unstable_cache`
+- Dark mode inline script in `src/app/layout.tsx` runs before hydration to prevent FOUC
 
 ## Key Abstractions
 
-**Server Action Pattern:**
-- Purpose: Encapsulate server-side logic callable from client components
-- Examples: `src/actions/github/data.action.ts`, `src/actions/blog/post.action.tsx`, `src/actions/linkedin/followers.action.ts`
-- Pattern: Functions marked with `'use server'`, use `unstable_cache` for revalidation, return typed data structures
+**`GLOBAL_DATA` (Content Store):**
+- Purpose: Single source of truth for all personal/professional portfolio data
+- Examples: `src/content/data/global.ts`
+- Pattern: Plain TypeScript object with `satisfies` type guards exported as default; imported directly by any component needing user data
 
-**Feature Module:**
-- Purpose: Self-contained domain logic with components and utilities
-- Examples: `src/features/(homepage)/1_cover/`, `src/features/(navigation)/navbar/`
-- Pattern: Directory per feature containing feature component + subcomponents + content files + effects
+**`unstable_cache` Wrapped Server Actions:**
+- Purpose: ISR-style caching for external API calls with cache tag invalidation
+- Examples: `src/actions/github/data.action.ts`, `src/actions/github/commit.action.ts`
+- Pattern: Inner `fetch*` async function wrapped with `unstable_cache(fn, [tag], { revalidate: 3600, tags: [tag] })`
 
-**MDX Content Pipeline:**
-- Purpose: Transform Markdown content into interactive React components
-- Examples: Blog posts at `src/content/articles/`, processed via `src/lib/rehype-*.ts`
-- Pattern: Files define metadata (frontmatter) + content; rehype plugins inject interactive elements
+**Async Server Component Feature Section:**
+- Purpose: Each homepage section fetches its own data or uses co-located `content.ts` static data
+- Examples: `src/features/(homepage)/commits/Commits.tsx` (async, fetches GitHub), `src/features/(homepage)/projects/Projects.tsx` (sync, uses `content.ts`)
+- Pattern: `export const FeatureName = async () => { const data = await getAction(); return <Panel>...</Panel>; }`
 
-**Custom Hook for State:**
-- Purpose: Encapsulate state logic with Jotai
-- Example: `src/hooks/use-config.ts` manages package manager and installation type preferences
-- Pattern: `useAtom` wrapping `atomWithStorage` for localStorage persistence
+**`Panel` Composition:**
+- Purpose: Structural wrapper for all homepage sections providing consistent layout and border styling
+- Examples: `src/components/Panel.tsx`
+- Pattern: Composed via `Panel`, `PanelHeader`, `PanelTitle`, `PanelContent` named sub-components
 
-**Carousel Component System:**
-- Purpose: Reusable carousel with Embla integration
-- Examples: Cover carousel at `src/features/(homepage)/1_cover/Cover.tsx`, carousel controls at `src/components/carousel/`
-- Pattern: Carousel wrapper with content and navigation items; API state management
+**`Compose` Provider Utility:**
+- Purpose: Reduces React context provider nesting using `reduceRight`
+- Examples: `src/providers/utils/Compose.tsx`, used in `src/providers/Providers.tsx`
+- Pattern: `const AppProviders = Compose(JotaiProvider, ThemeProvider, ProgressProvider)` produces single nested component
+
+**LLM-Optimized Routes:**
+- Purpose: Machine-readable content for AI assistants following the `llms.txt` convention
+- Examples: `src/app/(llms)/llms.txt/route.ts`, `src/app/(llms)/(content)/` with `.md`/`.mdx` files
+- Pattern: MDX/Markdown files served as raw text via dedicated route handlers; blog posts served at `[slug].mdx` URL
 
 ## Entry Points
 
 **Root Layout:**
 - Location: `src/app/layout.tsx`
-- Triggers: Initial page load
-- Responsibilities: Set up global styles, fonts, JSON-LD schema, Providers, dark mode script, ConsentManager
+- Triggers: All page requests
+- Responsibilities: HTML shell, Geist font CSS variables, JSON-LD WebSite/Person schema, dark mode FOUC prevention script, `<Providers>` wrapping, `ConsentManager`, `TooltipProvider`
 
 **Content Layout:**
 - Location: `src/app/(content)/layout.tsx`
-- Triggers: Routes under (content) group
-- Responsibilities: Render NavBar, particles animation, main content wrapper
+- Triggers: All content page requests (homepage, blog, components, utils)
+- Responsibilities: `NavBar`, `Footer`, background `Particles` animation
 
 **Homepage:**
 - Location: `src/app/(content)/(homepage)/page.tsx`
-- Triggers: Route to `/`
-- Responsibilities: Compose feature sections (Cover, Header, Overview, CV, etc.), generate metadata, set up schema
+- Triggers: GET `/`
+- Responsibilities: Imports and sequences 14 homepage feature sections (Cover, Header, Overview, Contact, Cv, About, Commits, TechStack, Articles, Certifications, Tools, Experiences, Projects, Branding), generates metadata, injects JSON-LD ProfilePage schema
 
-**Blog Page:**
+**Blog Index:**
 - Location: `src/app/(content)/(writings)/blog/page.tsx`
-- Triggers: Route to `/blog`
-- Responsibilities: List all blog posts, filter by category, generate metadata
+- Triggers: GET `/blog`
+- Responsibilities: Reads and sorts all posts via `getPostsByCategory('article')`, tag-based filtering via URL `?tag=` search param
 
-**Blog Post Dynamic Page:**
+**Blog Post:**
 - Location: `src/app/(content)/(writings)/blog/[slug]/page.tsx`
-- Triggers: Route to `/blog/[slug]`
-- Responsibilities: Fetch post by slug, render MDX, inject LLM action buttons, generate OG image
+- Triggers: GET `/blog/:slug`
+- Responsibilities: Static param generation, MDX rendering, table of contents via Fumadocs, keyboard navigation, LLM copy/share actions
 
 **API Routes:**
-- Health Check: `src/app/api/health/route.ts` - Service availability
-- RSS Feed: `src/app/api/rss/route.ts` - Blog feed generation
-- OG Image: `src/app/api/og/route.tsx` - Dynamic Open Graph image generation
-- VCard: `src/app/api/vcard/route.ts` - Contact information export
-- Email: `src/app/api/send/route.ts` - Contact form submission
-
-**LLM Routes:**
-- Location: `src/app/(llms)/(content)/` with dynamic routes for about.md, experience.md, etc.
-- Triggers: LLM-specific endpoints for structured content
-- Responsibilities: Serve profile data in markdown format for LLM context
+- `src/app/api/og/route.tsx` — Dynamic OG image generation via `next/og`
+- `src/app/api/send/route.ts` — CV email sending via Resend SDK
+- `src/app/api/rss/route.ts` — RSS feed generation from blog posts
+- `src/app/api/vcard/route.ts` — vCard contact download
+- `src/app/api/health/route.ts` — Health check endpoint
 
 ## Error Handling
 
-**Strategy:** Defensive error handling with try-catch, fallbacks, and user-friendly messages via toast notifications
+**Strategy:** Fail-safe with graceful degradation; errors logged server-side, never exposed to end users
 
 **Patterns:**
-
-- Server Actions wrap API calls in try-catch, return typed responses with error states
-- Client components use `useOptimistic` with state transitions for loading/error states (e.g., `LLMCopyButton`)
-- Clipboard API has fallback warning via logger when not supported
-- Sound manager wraps audio playback with try-catch
-- Copy-to-clipboard includes error toast: `toast.error()` on failure, success on completion
-- Not found handler renders custom 404 page with navigation back to home (`src/app/not-found.tsx`)
-- Graph requests log failures via `logger.error()` with context
+- GitHub API Server Actions catch errors and return empty/default data: `src/actions/github/commit.action.ts` returns `{}` on failure
+- API routes return structured `Response.json({ error: '...' }, { status: 4xx/5xx })` on validation or runtime failure
+- OG image route (`src/app/api/og/route.tsx`) falls back to a generic gradient image if generation throws
+- Next.js `notFound()` called in page components when MDX post slug is missing
+- `src/lib/logger.ts` uses `tslog` — all log levels in development, warn/error only in production (`minLevel: 3`)
+- Client-side clipboard errors caught in `src/actions/blog/post.action.tsx` with `useOptimistic` state transitions (idle → fetching → copied/failed)
 
 ## Cross-Cutting Concerns
 
-**Logging:** Logger singleton in `src/lib/logger.ts` using tslog library. Environment-aware minLevel (production: 3, dev: 0). Used for errors, warnings, and debugging.
+**Logging:** `tslog` via `src/lib/logger.ts` — structured pretty-print logs; production-safe level filtering (minLevel 3 in production)
 
-**Validation:** Zod schemas for environment variables (next.config.ts), email forms (src/schemas/email.schema.ts). Gray-matter for frontmatter validation in MDX files.
+**Validation:** Zod schema in `src/schemas/email.schema.ts` for `/api/send` request body; gray-matter frontmatter parsing for MDX posts
 
-**Authentication:** None required for public portfolio. GitHub token stored as environment variable for API access only.
+**Authentication:** Not applicable — public read-only portfolio; GitHub API access uses `GITHUB_API_TOKEN` env var only
 
-**Caching:** Next.js `unstable_cache` for GitHub data queries (3600s revalidate). Static generation for blog posts at build time. Image optimization with multiple formats and device sizes.
+**Analytics:** Vercel Analytics and Speed Insights, lazily loaded in `src/providers/analytics/Analytics.tsx` using React `lazy` + `Suspense`
 
-**Styling:** Tailwind CSS v4 with custom utilities via `cn()` helper. Theme variables managed via CSS custom properties. Dark mode toggle persists in Jotai atom and localStorage.
+**Consent:** GDPR consent manager at `src/components/manager/ConsentManager.tsx` wraps the entire app body
 
-**Performance:** Dynamic imports for heavy components (Toaster, Analytics, context menus). Lazy loading of icons (lazy import within ViewOptions). Image optimization with next/image and multiple formats.
+**SEO:** Every page generates `Metadata` with `openGraphImage()` helper from `src/lib/open-graph.ts`; JSON-LD structured data injected as inline `<script type="application/ld+json">` in each page component; `src/app/sitemap.ts` auto-generates sitemap from all MDX posts
+
+**MDX Pipeline:** Custom rehype/remark plugins in `src/lib/` process MDX for component injection (`rehype-component.ts`), package manager command formatting (`rehype-npm-command.ts`), query param handling (`rehype-add-query-params.ts`), and code file imports (`remark-code-import.js`)
 
 ---
 
-*Architecture analysis: 2026-02-16*
+*Architecture analysis: 2026-02-17*

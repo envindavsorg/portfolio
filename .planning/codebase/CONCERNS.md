@@ -1,199 +1,161 @@
 # Codebase Concerns
 
-**Analysis Date:** 2026-02-16
-
-## Error Handling
-
-**Catch blocks without logging in critical API routes:**
-- Issue: Several API routes catch errors and return generic messages without logging them for debugging
-- Files: `src/app/api/send/route.ts` (line 55), `src/app/api/vcard/route.ts`
-- Impact: Silent failures make debugging difficult; email sending errors are not logged, making it hard to diagnose why emails fail
-- Fix approach: Add `logger.error()` calls in catch blocks. Example from `src/app/api/og/route.tsx` (line 177) shows the correct pattern.
-
-**Silent error swallowing in copy-to-clipboard:**
-- Issue: `src/actions/blog/post.action.tsx` (lines 71-73) catches errors but sets state to 'failed' without logging
-- Files: `src/actions/blog/post.action.tsx` (line 71)
-- Impact: Network errors during markdown fetch are not logged, making it impossible to diagnose clipboard API failures or network issues
-- Fix approach: Add error logging before setState: `logger.error('Failed to copy markdown:', error)`
-
-## Unvalidated External Data
-
-**LinkedIn API response parsing:**
-- Issue: `src/actions/linkedin/followers.action.ts` parses JSON response without validation; missing status code checks before parsing
-- Files: `src/actions/linkedin/followers.action.ts`
-- Impact: Malformed LinkedIn API responses could cause runtime errors; no fallback if API returns unexpected format
-- Fix approach: Use Zod schemas (like in `src/app/api/send/route.ts`) to validate LinkedIn response before parsing
-
-**GitHub GraphQL response not validated:**
-- Issue: `src/actions/github/data.action.ts` (lines 24-30) directly accesses deeply nested GraphQL response without null checks
-- Files: `src/actions/github/data.action.ts` (line 24: `user.contributionsCollection.contributionCalendar.weeks`)
-- Impact: Missing data in GraphQL response could cause runtime errors; no type checking on nested objects
-- Fix approach: Add optional chaining and validation before accessing nested properties
-
-## Large Component Files
-
-**TextAnimate component exceeds recommended size:**
-- Issue: `src/components/text/TextAnimate.tsx` is 390 lines; contains complex animation logic that could be extracted
-- Files: `src/components/text/TextAnimate.tsx`
-- Impact: Harder to maintain and test; variant objects (defaultItemAnimationVariants) could be a separate module
-- Fix approach: Extract animation variant definitions to `src/lib/animations/text-variants.ts` (~200 lines)
-
-**NavBarCommand component is 278 lines:**
-- Issue: Complex command palette with mixed navigation, search, and event handling logic
-- Files: `src/features/(navigation)/navbar/elements/NavBarCommand.tsx`
-- Impact: Single responsibility violated; multiple concerns mixed (routing, filtering, rendering)
-- Fix approach: Extract search/filter logic to custom hook; separate list rendering to child component
-
-**Terminal animation component is 274 lines:**
-- Issue: Contains multiple animation sequences and state management in one file
-- Files: `src/components/animations/Terminal.tsx`
-- Impact: Difficult to modify individual animation sequences; testing individual features is complex
-- Fix approach: Extract sequence context and animation logic to separate modules
-
-## State Management Issues
-
-**Optimistic state without proper rollback:**
-- Issue: `src/actions/blog/post.action.tsx` (lines 40-42) uses `useOptimistic` but doesn't specify a failure action
-- Files: `src/actions/blog/post.action.tsx` (line 40)
-- Impact: If copying fails, UI shows 'failed' state but may not roll back correctly to previous state
-- Fix approach: Implement explicit rollback handler in useOptimistic when fetch fails
-
-**Cache not invalidated on mutations:**
-- Issue: Email sending (`src/app/api/send/route.ts`) doesn't trigger cache revalidation
-- Files: `src/app/api/send/route.ts`
-- Impact: If user data changes after email is sent, cached GitHub data won't reflect updates
-- Fix approach: Add `revalidateTag()` call after successful email send if needed
-
-## Performance Concerns
-
-**Lazy-loaded icons with inline promise handling:**
-- Issue: `src/actions/blog/post.action.tsx` (lines 95-124) uses lazy() with manual Promise.then() instead of dynamic() wrapper
-- Files: `src/actions/blog/post.action.tsx` (lines 95-117)
-- Impact: Verbose pattern; doesn't leverage Next.js code splitting optimizations
-- Fix approach: Use dynamic() with ssr: false for optional client-side icons
-
-**Fetch without timeout in LLM copy button:**
-- Issue: `src/actions/blog/post.action.tsx` (line 61) fetch() call has no timeout
-- Files: `src/actions/blog/post.action.tsx` (line 61)
-- Impact: If markdown endpoint hangs, user UI appears frozen indefinitely
-- Fix approach: Add AbortController with 5-10 second timeout
-
-**Local in-memory cache without bounds:**
-- Issue: `src/actions/blog/post.action.tsx` (line 24) uses unbounded Map for caching markdown
-- Files: `src/actions/blog/post.action.tsx` (line 24)
-- Impact: Memory leak if user copies many different markdown files in same session
-- Fix approach: Implement LRU cache with max 20-50 entries; use Map with WeakMap or manual cleanup
-
-## Type Safety Issues
-
-**Generic catch block hides error types:**
-- Issue: Several routes use `catch` without typing the error
-- Files: `src/app/api/send/route.ts` (line 55), `src/app/api/vcard/route.ts`
-- Impact: Error handling can't distinguish between validation errors, file system errors, and API errors
-- Fix approach: Type error as `unknown` and use discriminated unions or `instanceof` checks
-
-**Weak satisfies pattern in send route:**
-- Issue: `src/app/api/send/route.ts` (line 17) uses `satisfies BodyData` but validation still happens
-- Files: `src/app/api/send/route.ts` (line 17)
-- Impact: Redundant validation; satisfies doesn't provide runtime safety, schema validation alone is sufficient
-- Fix approach: Use Zod parse directly without satisfies pattern
-
-## Data Fetching Race Conditions
-
-**Missing loading states in GitHub data fetch:**
-- Issue: `src/actions/github/data.action.ts` caches with unstable_cache but no skeleton/loading UI
-- Files: `src/actions/github/data.action.ts`
-- Impact: If cache is stale and revalidating, user sees old data without indication of refresh
-- Fix approach: Add React Suspense boundary with loading skeleton in consuming component
-
-**Concurrent API calls without deduplication:**
-- Issue: Multiple components may call `getGitHubData()` or `getFollowersData()` in parallel
-- Files: `src/actions/github/data.action.ts`, `src/actions/linkedin/followers.action.ts`
-- Impact: If multiple page renders happen, same API request may be duplicated
-- Fix approach: Already using unstable_cache which deduplicates, but verify cache tags prevent cache bypass
-
-## Missing Error Boundaries
-
-**No error boundary for analytics provider:**
-- Issue: `src/providers/analytics/Analytics.tsx` lazy loads Vercel Analytics without error fallback
-- Files: `src/providers/analytics/Analytics.tsx` (line 10)
-- Impact: If analytics CDN is blocked or fails to load, entire app provider chain may be affected
-- Fix approach: Wrap lazy analytics components in Error Boundary with console-only fallback
-
-## Security Considerations
-
-**Consent manager in development mode disabled:**
-- Issue: `src/components/manager/ConsentManager.tsx` (line 55) disables geo-location in development
-- Files: `src/components/manager/ConsentManager.tsx` (line 55)
-- Impact: Consent tracking is disabled in dev but enabled in prod; could miss testing of consent flows
-- Fix approach: Add separate test/staging environment that runs with geo-location enabled
-
-**Environment variable leakage risk:**
-- Issue: Multiple public URLs built with `process.env.NEXT_PUBLIC_APP_URL` and `process.env.VERCEL_URL`
-- Files: `src/lib/utils.ts` (line 71)
-- Impact: If VERCEL_URL is exposed in build, could reveal internal deployment structure
-- Fix approach: Explicitly define allowed domains in env variables; validate against allowlist
-
-**Missing CSRF protection on email endpoint:**
-- Issue: `src/app/api/send/route.ts` is POST endpoint with no CSRF token validation
-- Files: `src/app/api/send/route.ts` (line 15)
-- Impact: Malicious sites could trigger email sends from victim's browser
-- Fix approach: Add SameSite cookie attribute; validate Origin header; optionally use CSRF token
-
-## Fragile Dependencies
-
-**Vulnerable to breaking changes in Octokit:**
-- Issue: GraphQL query structure in `src/queries/github/data.query` is tightly coupled to Octokit v5.0.5
-- Files: `src/lib/octokit.ts`, `src/actions/github/data.action.ts` (line 17)
-- Impact: Minor Octokit version bump could break GraphQL query execution
-- Fix approach: Version pin to exact version; add integration tests for GraphQL queries
-
-**Next.js unstable API usage:**
-- Issue: `unstable_cache` from `next/cache` used in multiple Server Actions
-- Files: `src/actions/github/data.action.ts` (line 46), `src/actions/github/commit.action.ts`, `src/actions/linkedin/followers.action.ts`
-- Impact: API marked as unstable; behavior could change in Next.js major versions
-- Fix approach: Monitor Next.js changelog; have fallback caching strategy ready
-
-**Resend dependency without rate limiting:**
-- Issue: `src/app/api/send/route.ts` directly calls Resend without rate limiting or request deduplication
-- Files: `src/app/api/send/route.ts` (line 37)
-- Impact: User could spam email endpoint and exhaust Resend quota
-- Fix approach: Add rate limiter (Redis/Upstash) or API key limiting on Resend side
-
-## Test Coverage Gaps
-
-**No tests for email sending flow:**
-- Issue: `src/app/api/send/route.ts` has no unit/integration tests
-- Files: `src/app/api/send/route.ts`
-- Risk: Email template rendering, file attachment, Resend integration could break unnoticed
-- Priority: High - critical user-facing feature
-
-**Missing tests for GitHub data transformation:**
-- Issue: `src/actions/github/data.action.ts` complex data transformation (lines 24-43) has no tests
-- Files: `src/actions/github/data.action.ts`
-- Risk: Contribution calculation logic could be incorrect without visibility
-- Priority: Medium - affects data accuracy
-
-**No tests for copy-to-clipboard mechanics:**
-- Issue: `src/actions/blog/post.action.tsx` Clipboard API and network fetch tested manually only
-- Files: `src/actions/blog/post.action.tsx` (lines 47-79)
-- Risk: Browser-specific clipboard behavior could break in certain environments
-- Priority: Medium - user-facing feature
-
-## Documentation Gaps
-
-**LinkedIn API integration undocumented:**
-- Issue: `src/actions/linkedin/followers.action.ts` has no inline comments explaining endpoint expectations
-- Files: `src/actions/linkedin/followers.action.ts`
-- Risk: Future maintainers unaware of LinkedIn API rate limits or auth requirements
-- Fix approach: Add JSDoc with example response and error handling expectations
-
-**OG image generation algorithm complex:**
-- Issue: `src/app/api/og/route.tsx` uses advanced ImageResponse JSX with no explanation
-- Files: `src/app/api/og/route.tsx` (lines 61-150)
-- Risk: Hard to modify without understanding Next.js OG image runtime constraints
-- Fix approach: Add comments explaining image dimensions, font loading, positioning logic
+**Analysis Date:** 2026-02-17
 
 ---
 
-*Concerns audit: 2026-02-16*
+## Tech Debt
+
+**Duplicate `darkModeScript` injection in root layout:**
+- Issue: The inline script for dark mode detection is injected twice — once via `dangerouslySetInnerHTML` and once via `<Script src={...base64...}>`.
+- Files: `src/app/layout.tsx` (lines 148–152)
+- Impact: Redundant execution of the dark mode detection script on every page load; minor but unnecessary work and adds confusion.
+- Fix approach: Remove the duplicate `<Script>` tag; the `dangerouslySetInnerHTML` version handles the synchronous execution required to prevent flash-of-unstyled-content.
+
+**Catch-all redirect in `next.config.ts` overrides all routes:**
+- Issue: `redirects()` contains `{ source: '/:path+', destination: '/', permanent: false }`. This redirect matches all paths and works only because Next.js evaluates page routes before redirects. The intent is unclear and the behavior is fragile.
+- Files: `next.config.ts` (lines 62–69)
+- Impact: Any path not served by a page file silently redirects to `/` instead of returning a 404. Debugging routing issues becomes extremely difficult.
+- Fix approach: Remove the catch-all redirect. Use `src/app/not-found.tsx` (already present) to handle unknown routes, or add explicit redirects only for known legacy paths.
+
+**Autogenerated `__registry__/index.tsx` disables all TypeScript checks:**
+- Issue: The autogenerated file starts with `// @ts-nocheck` and two `eslint-disable` directives because the build script produces untyped `Record<string, any>`.
+- Files: `src/__registry__/index.tsx`, `src/scripts/build-registry.mts`
+- Impact: No type safety for component registry lookups. Errors when accessing a missing registry entry fail silently at runtime rather than compile time.
+- Fix approach: Generate typed registry entries using discriminated unions or `satisfies` checks in the build script; remove `@ts-nocheck`.
+
+**`remark-code-import.js` is untyped plain JavaScript:**
+- Issue: The file is a `.js` file with no TypeScript types, while the rest of the codebase is fully typed TypeScript.
+- Files: `src/lib/remark-code-import.js`
+- Impact: No type checking on AST transformations. A change to the MDX tree structure could introduce silent runtime errors.
+- Fix approach: Rename to `.ts` and add types for function parameters, or add `// @ts-check` with JSDoc annotations.
+
+**`getAllPosts()` re-reads filesystem on every call without caching:**
+- Issue: `getAllPosts()` calls `readdirSync` and `readFileSync` in a loop on every invocation. Multiple call sites invoke it independently (`sitemap.ts`, `rss/route.ts`, blog page, `generateStaticParams`, etc.).
+- Files: `src/lib/blog/posts.ts`, `src/app/sitemap.ts`, `src/app/api/rss/route.ts`, `src/app/(content)/(writings)/blog/[slug]/page.tsx`
+- Impact: Repeated synchronous filesystem reads for the same 10 MDX posts across multiple build consumers. Will degrade as content grows.
+- Fix approach: Wrap `getMDXData` with React's `cache()` (already used in `src/lib/blog/read.ts`) or memoize at module level to share across the build pass.
+
+**`PostMetadata.category` is stringly typed:**
+- Issue: `PostMetadata.category` is typed as `string | undefined` but is only valid as `'article' | 'utils' | 'components'` at every usage site.
+- Files: `src/types/default.d.ts` (line 123), `src/lib/blog/posts.ts` (line 53)
+- Impact: No compile-time error if a typo appears in a category value; filtering returns zero results silently.
+- Fix approach: Change `category?: string` to `category?: 'article' | 'utils' | 'components'` in the `PostMetadata` interface.
+
+**Near-identical duplicate logic in `rehype-component.ts` and `remark-component.ts`:**
+- Issue: Both files implement identical `ComponentSource` and `ComponentPreview` node handling. A fix in one must be manually mirrored in the other.
+- Files: `src/lib/rehype-component.ts`, `src/lib/remark-component.ts`
+- Impact: Maintenance burden; risk of divergence between the two plugins.
+- Fix approach: Extract shared node-processing logic to a single helper function in `src/lib/component-processor.ts` and call it from both plugins.
+
+---
+
+## Security Considerations
+
+**No rate limiting on email send endpoint:**
+- Risk: The `/api/send` endpoint sends an email with a PDF attachment via Resend on every POST request. There is no request throttling, bot detection, or CAPTCHA.
+- Files: `src/app/api/send/route.ts`
+- Current mitigation: Zod validation on request body. Resend's own sending limits apply.
+- Recommendations: Add IP-based rate limiting (e.g., Vercel Edge Middleware or `@vercel/kv` counters), or add a honeypot field/CAPTCHA at the form layer before calling the API.
+
+**No CSRF protection on email endpoint:**
+- Risk: The `/api/send` POST endpoint has no CSRF token validation. A malicious site could trigger email sends from a victim's browser if they are on the same origin session.
+- Files: `src/app/api/send/route.ts` (line 15)
+- Current mitigation: None explicit. SameSite cookie defaults in modern browsers provide partial protection.
+- Recommendations: Validate the `Origin` header server-side, or add a CSRF token to the form submission.
+
+**OG image endpoint accepts unsanitized query parameters:**
+- Risk: `title` and `description` from query parameters are rendered directly into the OG image JSX with no length limits.
+- Files: `src/app/api/og/route.tsx` (lines 52–54)
+- Current mitigation: Satori/ImageResponse does not execute scripts, so XSS is not possible. Layout overflow from long strings is the only risk.
+- Recommendations: Truncate `title` to 80 characters and `description` to 160 characters before rendering.
+
+**`GITHUB_USERNAME` and `GITHUB_REPO_NAME` are optional in env schema but used without null guards:**
+- Risk: Both variables are `z.string().optional()` in `next.config.ts` but passed directly to the GitHub GraphQL client without null checks.
+- Files: `src/actions/github/data.action.ts` (lines 18–19), `src/actions/github/commit.action.ts` (lines 14–15), `next.config.ts` (lines 11–12)
+- Impact: If either variable is absent, GitHub API calls will throw with an unhelpful error.
+- Fix approach: Mark them `z.string().min(1)` in the env schema, or add null guards in the action functions.
+
+---
+
+## Performance Bottlenecks
+
+**OG font cache is module-level and does not persist across serverless cold starts:**
+- Problem: The `fontsCache` variable in the OG route is a module-level `let`. Each serverless cold start re-reads fonts from disk.
+- Files: `src/app/api/og/route.tsx` (lines 24–38)
+- Cause: Serverless function instances do not share module memory.
+- Improvement path: Pre-read fonts at build time and embed as base64 strings, or accept the cold-start cost given the OG image is typically generated once per URL at deploy time.
+
+**MDX pipeline runs file reads on every page render in development:**
+- Problem: `rehypeComponent` reads source files with `fs.readFileSync` on each MDX render invocation. In development with Fast Refresh this can fire repeatedly.
+- Files: `src/lib/rehype-component.ts`, `src/lib/remark-component.ts`, `src/components/markdown/mdx.tsx`
+- Cause: No memoization in the MDX plugin pipeline.
+- Improvement path: Pages are statically generated at build time so production is unaffected. No action required for production; dev-only concern.
+
+---
+
+## Fragile Areas
+
+**`getMonthLabels` in `src/lib/github.ts` throws on unexpected data:**
+- Files: `src/lib/github.ts` (lines 143, 150)
+- Why fragile: Throws `new Error(...)` if a week is empty or a month label index is out of bounds. An unexpected GitHub API response shape crashes the contribution calendar at render time.
+- Safe modification: Add React error boundaries around the contribution graph; replace `throw` with a logged warning and returning an empty label array.
+- Test coverage: No tests.
+
+**`remark-code-import.js` uses `file.dirname` which may be undefined:**
+- Files: `src/lib/remark-code-import.js` (line 81)
+- Why fragile: `file.dirname` is part of the VFile spec but is `undefined` if MDX source is passed as a string rather than from a file path. `path.resolve(undefined, ...)` silently produces an incorrect path.
+- Safe modification: Add `if (!file.dirname) return;` before the path resolution block.
+- Test coverage: No tests.
+
+**`/api/vcard` marked `force-static` but fetches relative avatar URL at build time:**
+- Files: `src/app/api/vcard/route.ts` (lines 6, 48)
+- Why fragile: `export const dynamic = 'force-static'` causes Next.js to generate the vCard at build time. `GLOBAL_DATA.USER.avatar` is `/images/avatar.webp` (relative path). Fetching a relative URL during static generation will fail because no server is running.
+- Safe modification: Change `avatar` in `src/content/data/global.ts` to an absolute URL (`https://cuzeacflorin.fr/images/avatar.webp`), or remove `force-static` to allow dynamic generation.
+
+**Module-level `cache` Map in `post.action.tsx` has no eviction:**
+- Files: `src/actions/blog/post.action.tsx` (line 24)
+- Why fragile: The `cache` Map grows unboundedly in a long-running dev server session. Stale markdown content is served from memory without re-fetching.
+- Safe modification: Cap the map at a maximum size (e.g., 50 entries) or use `sessionStorage` which clears on tab close.
+
+---
+
+## Scaling Limits
+
+**GitHub GraphQL query fetches all repositories (first: 100):**
+- Current capacity: Fetches up to 100 repositories to sum star counts.
+- Limit: If the account ever exceeds 100 repos, the star count will be silently under-counted.
+- Files: `src/queries/github/data.query.ts` (line 13)
+- Scaling path: Add pagination or use a different GitHub API endpoint that returns aggregate stats directly.
+
+---
+
+## Dependencies at Risk
+
+**`next` is on version `16.1.6` (non-standard version number):**
+- Risk: Next.js stable versions as of early 2026 are in the `15.x` range. Version `16.1.6` may be a pre-release or canary build.
+- Impact: Potential instability; some APIs may change before the stable release.
+- Migration plan: Verify this is the intended version; pin to a stable release if a canary was installed accidentally.
+
+**`unstable_cache` from `next/cache` used in three Server Actions:**
+- Risk: The `unstable_` prefix signals the API is not finalized and could change in a Next.js major version upgrade.
+- Files: `src/actions/github/data.action.ts` (line 46), `src/actions/github/commit.action.ts` (line 31), `src/actions/linkedin/followers.action.ts` (line 34)
+- Migration plan: Monitor Next.js changelog; prepare fallback using `React.cache` + ISR segment config if the API is changed.
+
+---
+
+## Test Coverage Gaps
+
+**No tests exist anywhere in the codebase:**
+- What is not tested: All business logic, MDX pipeline, GitHub data transformations, email endpoint, and contribution graph calculations.
+- Key files without coverage:
+  - `src/lib/github.ts` — pure utility functions (`fillHoles`, `groupByWeeks`, `getMonthLabels`) that throw on edge cases
+  - `src/lib/blog/posts.ts` — filesystem reading and post parsing
+  - `src/app/api/send/route.ts` — security-sensitive email sending with attachment
+  - `src/lib/rehype-component.ts` and `src/lib/remark-component.ts` — MDX pipeline plugins
+- Risk: Regressions in data transformations go undetected. The MDX pipeline processes all blog content; a silent breakage shows no errors until render.
+- Priority: High for `src/lib/github.ts` utility functions (pure functions, trivially unit-testable); High for `src/app/api/send/route.ts` (security-sensitive); Medium for blog post reading utilities.
+
+---
+
+*Concerns audit: 2026-02-17*
