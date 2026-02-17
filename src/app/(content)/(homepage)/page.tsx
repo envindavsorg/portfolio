@@ -59,11 +59,6 @@ const Page = () => (
 			<Divider />
 
 			{/*
-
-			<Divider border />
-
-			<About />
-			<Divider border />
 			<Commits />
 			<Divider border />
 			<TechStack />

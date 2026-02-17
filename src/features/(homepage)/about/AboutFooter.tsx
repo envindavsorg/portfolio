@@ -16,7 +16,7 @@ export const AboutFooter = memo(({ expanded, onToggle }: AboutFooterProps) => {
 	const handleMouseLeave = () => iconRef.current?.stopAnimation();
 
 	return (
-		<PanelFooter>
+		<PanelFooter className="flex max-sm:flex-col">
 			<Button
 				aria-controls="about-content-expanded"
 				aria-expanded={expanded}
