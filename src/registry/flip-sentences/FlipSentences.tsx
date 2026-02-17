@@ -72,8 +72,8 @@ export const FlipSentences = ({
 		<div className={cn('relative overflow-hidden', className)}>
 			<AnimatePresence mode="wait">
 				<motion.p
-					className="font-medium text-theme"
 					animate="animate"
+					className="font-medium text-theme"
 					exit="exit"
 					initial="initial"
 					key={currentIndex}

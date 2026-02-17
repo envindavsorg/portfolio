@@ -24,7 +24,7 @@ import { CvForm } from './CvForm';
 import { CvModal } from './CvModal';
 import { CvSuccess } from './CvSuccess';
 
-const CvFooter = () => {
+export const CvFooter = () => {
 	const isDesktop = useMediaQuery('(min-width: 768px)');
 	const [open, setOpen] = useState(false);
 	const [formState, setFormState] = useState<'form' | 'success' | 'error'>(
@@ -111,7 +111,7 @@ const CvFooter = () => {
 	};
 
 	return (
-		<PanelFooter>
+		<PanelFooter className="flex max-sm:flex-col max-sm:gap-y-2">
 			<Button asChild variant="outline">
 				<Link
 					aria-label={GLOBAL_DATA.CV.name}
@@ -129,7 +129,3 @@ const CvFooter = () => {
 		</PanelFooter>
 	);
 };
-
-CvFooter.displayName = 'CVFooter';
-
-export { CvFooter };

@@ -1,6 +1,6 @@
 import { FlickeringGrid } from '@/components/animations/FlickeringGrid';
 import { Panel, PanelContent } from '@/components/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
+import { PixelHeading } from '@/components/text/PixelHeading';
 import GLOBAL_DATA from '@/content/data/global';
 import { FlipSentences } from '@/registry/flip-sentences';
 import { HeaderImage } from './HeaderImage';
@@ -34,15 +34,14 @@ export const Header = () => (
 
 				<div className="flex w-full items-center justify-between gap-x-3 border-edge border-t px-2 sm:px-3 sm:py-1">
 					<h1 className="sr-only">{GLOBAL_DATA.USER.fullName}</h1>
-					<TextAnimate
-						animation="blurInUp"
-						by="character"
+
+					<PixelHeading
+						autoPlay
 						className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
-						delay={0.75}
-						once
+						mode="multi"
 					>
 						{GLOBAL_DATA.USER.fullName}
-					</TextAnimate>
+					</PixelHeading>
 
 					{!capture && (
 						<HeaderPronounce

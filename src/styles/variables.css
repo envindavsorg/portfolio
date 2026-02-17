@@ -34,6 +34,11 @@
 
 	--font-sans: var(--font-geist-sans);
 	--font-mono: var(--font-geist-mono);
+	--font-pixel-square: var(--font-geist-pixel-square);
+	--font-pixel-grid: var(--font-geist-pixel-grid);
+	--font-pixel-circle: var(--font-geist-pixel-circle);
+	--font-pixel-triangle: var(--font-geist-pixel-triangle);
+	--font-pixel-line: var(--font-geist-pixel-line);
 
 	--animate-fade-in: fade-in var(--tw-duration, 200ms) ease-out;
 	--animate-fade-out: fade-out var(--tw-duration, 200ms) ease-out;

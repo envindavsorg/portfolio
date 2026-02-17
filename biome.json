@@ -75,17 +75,11 @@
       },
       "suspicious": {
         "noArrayIndexKey": "off",
-        "useAwait": "off"
+        "useAwait": "off",
+        "noBitwiseOperators": "off"
       },
       "nursery": {
         "noLeakedRender": "off",
-        "noUnusedExpressions": "off",
-        "useMaxParams": {
-          "options": {
-            "max": 6
-          },
-          "level": "warn"
-        },
         "useSortedClasses": {
           "fix": "safe",
           "options": {

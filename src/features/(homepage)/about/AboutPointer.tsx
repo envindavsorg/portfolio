@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { Pointer } from '@/components/ui/Pointer';
 
-const AboutPointer = () => (
+export const AboutPointer = () => (
 	<Pointer>
 		<motion.div
 			animate={{
@@ -15,10 +15,10 @@ const AboutPointer = () => (
 			}}
 		>
 			<svg
-				className="text-destructive"
+				className="text-theme"
 				fill="none"
 				height="40"
-				viewBox="0 0 40 40"
+				viewBox="0 0 24 24"
 				width="40"
 				xmlns="http://www.w3.org/2000/svg"
 			>
@@ -36,7 +36,3 @@ const AboutPointer = () => (
 		</motion.div>
 	</Pointer>
 );
-
-AboutPointer.displayName = 'AboutPointer';
-
-export { AboutPointer };

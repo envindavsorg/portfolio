@@ -9,7 +9,7 @@ import {
 } from '@/components/Panel';
 import { TextAnimate } from '@/components/text/TextAnimate';
 import { Divider } from '@/components/ui/Divider';
-import { Cover } from '@/features/(homepage)/1_cover/Cover';
+import { Cover } from '@/features/(homepage)/cover/Cover';
 
 const NotFound = () => (
 	<div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl">

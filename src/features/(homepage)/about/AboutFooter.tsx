@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { ChevronDownIcon } from '@/components/icons/ChevronDownIcon';
 import { ChevronUpIcon } from '@/components/icons/ChevronUpIcon';
@@ -9,41 +9,28 @@ interface AboutFooterProps {
 	onToggle: () => void;
 }
 
-const AboutFooter = memo(({ expanded, onToggle }: AboutFooterProps) => {
-	const downRef = useRef<AnimatedIconHandle>(null);
-	const upRef = useRef<AnimatedIconHandle>(null);
+export const AboutFooter = memo(({ expanded, onToggle }: AboutFooterProps) => {
+	const iconRef = useRef<AnimatedIconHandle>(null);
 
-	const handleMouseEnter = useCallback(() => {
-		downRef.current?.startAnimation();
-		upRef.current?.startAnimation();
-	}, []);
-
-	const handleMouseLeave = useCallback(() => {
-		downRef.current?.stopAnimation();
-		upRef.current?.stopAnimation();
-	}, []);
+	const handleMouseEnter = () => iconRef.current?.startAnimation();
+	const handleMouseLeave = () => iconRef.current?.stopAnimation();
 
 	return (
 		<PanelFooter>
 			<Button
 				aria-controls="about-content-expanded"
 				aria-expanded={expanded}
-				id="about-content-expanded"
 				onClick={onToggle}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 			>
 				{expanded ? 'Fermer le détail' : 'En savoir plus'}
 				{expanded ? (
-					<ChevronUpIcon ref={upRef} />
+					<ChevronUpIcon ref={iconRef} />
 				) : (
-					<ChevronDownIcon ref={downRef} />
+					<ChevronDownIcon ref={iconRef} />
 				)}
 			</Button>
 		</PanelFooter>
 	);
 });
-
-AboutFooter.displayName = 'AboutFooter';
-
-export { AboutFooter };

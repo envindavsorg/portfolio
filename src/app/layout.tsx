@@ -1,6 +1,14 @@
 import '@/styles/globals.css';
+import { GeistMono } from 'geist/font/mono';
+import {
+	GeistPixelCircle,
+	GeistPixelGrid,
+	GeistPixelLine,
+	GeistPixelSquare,
+	GeistPixelTriangle,
+} from 'geist/font/pixel';
+import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import type React from 'react';
 import ConsentManager from '@/components/manager/ConsentManager';
@@ -31,22 +39,6 @@ const getJsonLd = () => ({
 			knowsAbout: ['React', 'Next.js', 'TypeScript'],
 		},
 	],
-});
-
-const sans = Geist({
-	variable: '--font-geist-sans',
-	subsets: ['latin'],
-	display: 'swap',
-	preload: false,
-	fallback: ['system-ui', '-apple-system', 'sans-serif'],
-});
-
-const mono = Geist_Mono({
-	variable: '--font-geist-mono',
-	subsets: ['latin'],
-	display: 'swap',
-	preload: false,
-	fallback: ['Consolas', 'Monaco', 'monospace'],
 });
 
 const darkModeScript = `
@@ -140,8 +132,13 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 	<html
 		className={cn(
 			'no-scrollbar h-full antialiased',
-			sans.variable,
-			mono.variable
+			GeistSans.variable,
+			GeistMono.variable,
+			GeistPixelSquare.variable,
+			GeistPixelGrid.variable,
+			GeistPixelCircle.variable,
+			GeistPixelTriangle.variable,
+			GeistPixelLine.variable
 		)}
 		lang="en"
 		suppressHydrationWarning
