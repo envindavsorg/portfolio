@@ -49,7 +49,8 @@
       "a11y": {
         "noStaticElementInteractions": "off",
         "noNoninteractiveElementInteractions": "off",
-        "noSvgWithoutTitle": "off"
+        "noSvgWithoutTitle": "off",
+        "useKeyWithMouseEvents": "off"
       },
       "complexity": {
         "noImportantStyles": "off",

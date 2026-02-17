@@ -66,7 +66,7 @@ interface AboutContentProps {
 }
 
 export const AboutContent = memo(({ expanded }: AboutContentProps) => (
-	<PanelContent className="space-y-3">
+	<PanelContent>
 		<AboutPointer />
 
 		<Prose>

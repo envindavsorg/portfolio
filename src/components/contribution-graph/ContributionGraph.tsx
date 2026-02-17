@@ -41,7 +41,7 @@ export type ContributionGraphProps = HTMLAttributes<HTMLDivElement> & {
 	children: ReactNode;
 };
 
-const ContributionGraph = ({
+export const ContributionGraph = ({
 	data,
 	className,
 	children,
@@ -72,7 +72,3 @@ const ContributionGraph = ({
 		</ContributionGraphContext.Provider>
 	);
 };
-
-ContributionGraph.displayName = 'ContributionGraph';
-
-export { ContributionGraph };

@@ -1,16 +1,27 @@
-import type React from 'react';
 import { getGitHubData } from '@/actions/github/data.action';
-import { Panel, PanelContent } from '@/components/Panel';
+import {
+	Panel,
+	PanelContent,
+	PanelHeader,
+	PanelTitle,
+} from '@/components/Panel';
+import { TextAnimate } from '@/components/text/TextAnimate';
 import { Tag } from '@/components/ui/Tag';
 import { CommitsContent } from './CommitsContent';
-import { CommitsTitle } from './CommitsTitle';
 
-const Commits = async (): Promise<React.JSX.Element> => {
+export const Commits = async () => {
 	const { stars, followers, following, contributions } = await getGitHubData();
 
 	return (
 		<Panel>
-			<CommitsTitle />
+			<PanelHeader>
+				<PanelTitle>
+					<TextAnimate animation="slideLeft" by="character" delay={0.2}>
+						mes statistiques sur GitHub
+					</TextAnimate>
+				</PanelTitle>
+			</PanelHeader>
+
 			<CommitsContent contributions={contributions} />
 
 			<PanelContent className="screen-line-before hidden">
@@ -29,7 +40,3 @@ const Commits = async (): Promise<React.JSX.Element> => {
 		</Panel>
 	);
 };
-
-Commits.displayName = 'Commits';
-
-export { Commits };

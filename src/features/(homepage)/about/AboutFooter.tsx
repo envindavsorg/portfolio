@@ -23,8 +23,9 @@ export const AboutFooter = memo(({ expanded, onToggle }: AboutFooterProps) => {
 				onClick={onToggle}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
+				variant="outline"
 			>
-				{expanded ? 'Fermer le détail' : 'En savoir plus'}
+				{expanded ? 'réduire le texte' : 'en savoir plus'}
 				{expanded ? (
 					<ChevronUpIcon ref={iconRef} />
 				) : (

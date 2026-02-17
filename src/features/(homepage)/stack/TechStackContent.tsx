@@ -1,11 +1,11 @@
 import { PanelContent } from '@/components/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
 import {
 	Marquee,
 	MarqueeContent,
 	MarqueeFade,
 	MarqueeItem,
 } from '@/components/ui/Marquee';
+import { Prose } from '@/components/ui/Typography';
 import type { Stack } from './content';
 
 interface TechStackContentProps {
@@ -19,35 +19,23 @@ const TechStackContent = ({ content }: TechStackContentProps) => {
 
 	return (
 		<>
-			<PanelContent>
-				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Mon expertise se concentre sur l'écosystème JavaScript moderne. Au
-					quotidien, je développe avec React, Next.js et TypeScript, en
-					utilisant Tailwind CSS pour le styling et Motion pour les animations.
-				</TextAnimate>
+			<PanelContent className="space-y-3">
+				<Prose>
+					mon expertise se concentre sur l'écosystème <span>JavaScript</span>{' '}
+					moderne. au quotidien, je développe avec <span>React</span>,{' '}
+					<span>Next.js</span> et <span>TypeScript</span>, en utilisant{' '}
+					<span>Tailwind CSS</span> pour le styling et <span>Motion</span> pour
+					les animations.
+				</Prose>
 
-				<TextAnimate
-					animation="slideUp"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.6}
-				>
-					Côté back-end, je travaille avec Node.js et des frameworks comme
-					Express ou Fastify, connectés à MongoDB ou PostgreSQL.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="slideUp"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.8}
-					themed
-				>
-					Je maîtrise l'ensemble de la chaîne de développement, de la conception
-					sur Figma au déploiement, en passant par Git pour le versioning.
-				</TextAnimate>
+				<Prose>
+					côté back-end, je travaille avec <span>Node.js</span> et des
+					frameworks comme <span>Express</span> ou <span>Fastify</span>,
+					connectés à <span>MongoDB</span> ou <span>PostgreSQL</span>. je
+					maîtrise l'ensemble de la chaîne de développement, de la conception
+					sur <span>Figma</span> au déploiement, en passant par <span>Git</span>{' '}
+					pour le versioning.
+				</Prose>
 			</PanelContent>
 
 			<PanelContent className="screen-line-before">

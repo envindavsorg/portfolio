@@ -119,8 +119,7 @@ declare global {
 	interface PostMetadata {
 		title: string;
 		description: string;
-		imageDark?: string;
-		imageLight?: string;
+		image?: string;
 		category?: string;
 		createdAt: string;
 		updatedAt: string;

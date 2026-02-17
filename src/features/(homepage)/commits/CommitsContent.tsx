@@ -1,12 +1,12 @@
 'use client';
 
+import { ContributionGraph } from '@/components/contribution-graph/ContributionGraph';
+import { ContributionGraphBlock } from '@/components/contribution-graph/ContributionGraphBlock';
+import { ContributionGraphCalendar } from '@/components/contribution-graph/ContributionGraphCalendar';
+import { ContributionGraphLegend } from '@/components/contribution-graph/ContributionGraphLegend';
+import { ContributionGraphTotalCount } from '@/components/contribution-graph/ContributionGraphTotalCount';
 import { PanelContent } from '@/components/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
-import { ContributionGraph } from '@/components/ui/contribution-graph/ContributionGraph';
-import { ContributionGraphBlock } from '@/components/ui/contribution-graph/ContributionGraphBlock';
-import { ContributionGraphCalendar } from '@/components/ui/contribution-graph/ContributionGraphCalendar';
-import { ContributionGraphLegend } from '@/components/ui/contribution-graph/ContributionGraphLegend';
-import { ContributionGraphTotalCount } from '@/components/ui/contribution-graph/ContributionGraphTotalCount';
+import { Prose } from '@/components/ui/Typography';
 
 interface CommitsContentProps {
 	contributions: CommitActivity[];
@@ -15,22 +15,11 @@ interface CommitsContentProps {
 const CommitsContent = ({ contributions }: CommitsContentProps) => (
 	<>
 		<PanelContent>
-			<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-				Retrouvez ici l'historique complet de mes contributions open source sur
-				GitHub.
-			</TextAnimate>
-
-			<TextAnimate
-				animation="slideUp"
-				as="p"
-				by="word"
-				className="mt-3"
-				delay={0.6}
-				themed
-			>
-				Chaque commit représente une étape de mon parcours en tant que
-				développeur.
-			</TextAnimate>
+			<Prose>
+				retrouvez ici <span>l'historique complet</span> de mes contributions
+				open source sur GitHub. chaque commit représente une étape de mon
+				parcours en tant que développeur.
+			</Prose>
 		</PanelContent>
 
 		<div className="screen-line-before">

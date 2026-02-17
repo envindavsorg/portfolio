@@ -12,6 +12,7 @@ import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import type React from 'react';
 import ConsentManager from '@/components/manager/ConsentManager';
+import { TooltipProvider } from '@/components/overlays/Tooltip';
 import GLOBAL_DATA from '@/content/data/global';
 import { META_THEME_COLORS } from '@/content/data/theme';
 import { cn } from '@/lib/utils';
@@ -159,7 +160,9 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 
 		<body>
 			<Providers>
-				<ConsentManager>{children}</ConsentManager>
+				<ConsentManager>
+					<TooltipProvider>{children}</TooltipProvider>
+				</ConsentManager>
 			</Providers>
 		</body>
 	</html>

@@ -3,11 +3,14 @@ import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
 import { Divider } from '@/components/ui/Divider';
 import GLOBAL_DATA from '@/content/data/global';
 import { About } from '@/features/(homepage)/about/About';
+import { Articles } from '@/features/(homepage)/articles/Articles';
+import { Commits } from '@/features/(homepage)/commits/Commits';
 import { Contact } from '@/features/(homepage)/contact/Contact';
 import { Cover } from '@/features/(homepage)/cover/Cover';
 import { Cv } from '@/features/(homepage)/cv/Cv';
 import { Header } from '@/features/(homepage)/header/Header';
 import { Overview } from '@/features/(homepage)/overview/Overview';
+import { TechStack } from '@/features/(homepage)/stack/TechStack';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
@@ -57,13 +60,15 @@ const Page = () => (
 			<Divider />
 			<About />
 			<Divider />
+			<Commits />
+			<Divider />
+			<TechStack />
+			<Divider />
+			<Articles />
+			<Divider />
 
 			{/*
-			<Commits />
-			<Divider border />
-			<TechStack />
-			<Divider border />
-			<Articles />
+
 			<Divider border />
 			<Certifications />
 			<Divider border />
