@@ -1,5 +1,4 @@
 import GLOBAL_DATA from '@/content/data/global';
-import { SOCIAL_LINKS } from '@/features/(homepage)/5_contact/content';
 import { TECH_STACK } from '@/features/(homepage)/8_stack/content';
 
 const content = `
@@ -20,10 +19,6 @@ Aujourd'hui, je maîtrise cette stack (Next.js/TS/Tailwind) pour déployer rapid
 - Nom d'affichage: ${GLOBAL_DATA.USER.firstName}
 - Ville: ${GLOBAL_DATA.USER.location.city}
 - Site internet: ${GLOBAL_DATA.SOCIAL.portfolio}
-
-## Réseaux sociaux
-
-${SOCIAL_LINKS.map((item) => `- [${item.name}](${item.link})`).join('\n')}
 
 ## Stack technique
 
