@@ -109,12 +109,19 @@
 		color: var(--muted-foreground) !important;
 	}
 
-	.prose ul li::marker {
-		color: var(--color-theme) !important;
+	.prose,
+	.prose span,
+	.prose i {
+		font-weight: var(--font-weight-medium);
+		font-family: var(--font-geist-pixel-square);
 	}
 
 	.prose span {
-		font-weight: var(--font-weight-medium);
-		color: var(--foreground);
+		color: var(--color-foreground);
+	}
+
+	.prose i,
+	.prose ul li::marker {
+		color: var(--color-theme) !important;
 	}
 }

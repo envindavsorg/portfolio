@@ -52,7 +52,7 @@ const Page = () => (
 			type="application/ld+json"
 		/>
 
-		<div className="mx-auto md:max-w-3xl">
+		<div className="relative mx-auto md:max-w-3xl">
 			<Cover />
 			<Divider />
 			<Header />

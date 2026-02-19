@@ -5,15 +5,15 @@ import { cn } from '@/lib/utils';
 
 const variants = cva(
 	[
-		'inline-flex items-center justify-center gap-1.5 align-middle',
-		'w-fit shrink-0 overflow-hidden rounded-lg border px-2 py-1.5',
-		'whitespace-nowrap font-medium text-xs transition-[color,box-shadow]',
+		'inline-flex items-center justify-center gap-x-1 align-middle',
+		'w-fit shrink-0 overflow-hidden rounded-full border border-input px-2 py-1',
+		'whitespace-nowrap font-pixel-square text-[10px] transition-[color,box-shadow] sm:text-xs',
 		'[&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:shrink-0',
 	],
 	{
 		variants: {
 			variant: {
-				default: 'bg-background text-foreground',
+				default: 'bg-background text-muted-foreground',
 				secondary: 'bg-zinc-50 text-muted-foreground dark:bg-zinc-900',
 			},
 		},
