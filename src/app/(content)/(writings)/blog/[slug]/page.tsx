@@ -70,7 +70,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	headline: post.metadata.title,
 	description: post.metadata.description,
 	image:
-		post.metadata.imageLight ||
+		post.metadata.image ||
 		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
 	url: `https://cuzeacflorin.fr${getPostUrl(post)}`,
 	datePublished: dayjs(post.metadata.createdAt).toISOString(),

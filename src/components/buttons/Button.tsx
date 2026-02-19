@@ -25,7 +25,7 @@ const buttonVariants = cva(
 					'dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15',
 				],
 				ghost: 'hover:bg-accent hover:text-accent-foreground',
-				link: 'text-foreground underline-offset-4 hover:underline',
+				link: 'text-foreground underline-offset-2 transition-colors hover:bg-transparent hover:text-theme hover:underline',
 			},
 			size: {
 				default: 'h-8 px-4',

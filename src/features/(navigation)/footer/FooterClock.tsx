@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 
 export const FooterClock = () => {
-	const [is24Hour, setIs24Hour] = useState<boolean>(true);
 	const [time, setTime] = useState<Date | null>(null);
+	const [is24Hour, setIs24Hour] = useState<boolean>(true);
+	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
 	useEffect(() => {
 		const savedPreference = localStorage.getItem('clock-format');
@@ -13,18 +15,42 @@ export const FooterClock = () => {
 			setIs24Hour(savedPreference === '24h');
 		}
 
-		setTime(new Date());
-		const interval = setInterval(() => {
-			setTime(new Date());
-		}, 1000);
+		const tick = () => setTime(new Date());
+		tick();
 
-		return () => clearInterval(interval);
+		const msUntilNextSecond = 1000 - (Date.now() % 1000);
+		timeoutRef.current = setTimeout(() => {
+			tick();
+			intervalRef.current = setInterval(tick, 1000);
+		}, msUntilNextSecond);
+
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+			if (intervalRef.current) {
+				clearInterval(intervalRef.current);
+			}
+		};
 	}, []);
 
-	const handleFormatChange = (use24h: boolean) => {
+	const handleFormatChange = useCallback((use24h: boolean) => {
 		setIs24Hour(use24h);
 		localStorage.setItem('clock-format', use24h ? '24h' : '12h');
-	};
+	}, []);
+
+	const formattedDate = useMemo(() => {
+		if (!time) {
+			return '';
+		}
+
+		return time.toLocaleDateString('fr-FR', {
+			weekday: 'short',
+			day: 'numeric',
+			month: 'short',
+			year: 'numeric',
+		});
+	}, [time?.getDate(), time?.getMonth(), time?.getFullYear()]);
 
 	if (!time) {
 		return (
@@ -41,32 +67,31 @@ export const FooterClock = () => {
 	const seconds = time.getSeconds().toString().padStart(2, '0');
 	const amPm = is24Hour ? '' : time.getHours() >= 12 ? ' PM' : ' AM';
 
-	const date = time.toLocaleDateString('fr-FR', {
-		weekday: 'short',
-		day: 'numeric',
-		month: 'short',
-		year: 'numeric',
-	});
-
 	return (
 		<div className="screen-line-before screen-line-after mx-auto flex items-center justify-between border-edge border-x p-2 max-sm:flex-col max-sm:gap-y-3 md:max-w-3xl">
-			<div className="text-balance font-medium text-sm tracking-tight">
+			<time
+				className="text-balance font-medium text-sm tracking-tight"
+				dateTime={time.toISOString()}
+			>
 				{hours}:{minutes}:{seconds}
-				{amPm}, {date}
-			</div>
+				{amPm}, {formattedDate}
+			</time>
 
-			<div className="flex items-center gap-x-3 *:h-6 *:w-4 *:underline-offset-2 *:transition-colors *:hover:bg-transparent *:hover:text-theme *:hover:underline">
+			<div className="flex items-center">
 				<Button
+					aria-pressed={is24Hour}
 					className={is24Hour ? 'text-theme underline' : ''}
 					onClick={() => handleFormatChange(true)}
-					variant="ghost"
+					variant="link"
 				>
 					24h
 				</Button>
+
 				<Button
+					aria-pressed={!is24Hour}
 					className={is24Hour ? '' : 'text-theme underline'}
 					onClick={() => handleFormatChange(false)}
-					variant="ghost"
+					variant="link"
 				>
 					12h
 				</Button>

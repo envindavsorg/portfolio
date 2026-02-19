@@ -24,11 +24,10 @@ export const ArticleItem = ({ article }: ArticleItemProps) => {
 				<Image
 					alt={metadata.title}
 					className={cn(
-						'aspect-video h-full select-none rounded-md object-cover object-center max-sm:h-40',
+						'aspect-video w-full select-none rounded-md object-cover object-center',
 						'ring-1 ring-border ring-offset-3 ring-offset-background'
 					)}
 					height={630}
-					priority
 					quality={100}
 					src={metadata.image}
 					unoptimized

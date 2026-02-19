@@ -162,8 +162,8 @@ declare global {
 	interface FooterMeta {
 		image: string | undefined;
 		label: string;
-		value: Browser | undefined;
-		comment: string | undefined;
+		value: string | undefined;
+		comment: string | null;
 	}
 
 	// types for GitHub contribution graph

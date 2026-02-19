@@ -29,6 +29,7 @@ export const Providers = ({ children }: ProvidersProps) => (
 		<FaviconSwitcher />
 		{children}
 		<Toaster />
-		<Analytics />
+
+		{process.env.NODE_ENV === 'production' && <Analytics />}
 	</AppProviders>
 );
