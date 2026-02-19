@@ -50,13 +50,13 @@ export const Footer = async () => {
 			</Panel>
 
 			<div className="mx-auto md:max-w-3xl">
-				<Divider />
+				<Divider type="half" />
 			</div>
 
 			<FooterClock />
 
 			<div className="mx-auto md:max-w-3xl">
-				<Divider />
+				<Divider type="half" />
 			</div>
 
 			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 md:max-w-3xl">

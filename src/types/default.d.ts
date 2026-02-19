@@ -125,7 +125,7 @@ declare global {
 		updatedAt: string;
 		tags?: string[];
 		author?: string;
-		new?: boolean;
+		isNew?: boolean;
 	}
 
 	interface Post {

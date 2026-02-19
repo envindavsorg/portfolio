@@ -5,7 +5,7 @@ import { dayjs } from '@/lib/utils';
 import { ToolsContent } from './ToolsContent';
 
 export const Tools = () => {
-	const utils: Post[] = getPostsByCategory('utils').sort((a: Post, b: Post) =>
+	const tools = getPostsByCategory('utils').sort((a, b) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 
@@ -19,7 +19,7 @@ export const Tools = () => {
 				</PanelTitle>
 			</PanelHeader>
 
-			<ToolsContent content={utils} />
+			<ToolsContent tools={tools} />
 		</Panel>
 	);
 };

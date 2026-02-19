@@ -369,6 +369,7 @@ const TextAnimateBase = ({
 					<motion.span
 						aria-hidden={accessible ? true : undefined}
 						className={cn(
+							'font-pixel-square',
 							by === 'word' && 'text-balance text-foreground text-sm',
 							themed && 'text-theme',
 							by === 'line' ? 'block' : 'inline-block whitespace-pre',

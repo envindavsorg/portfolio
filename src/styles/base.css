@@ -11,23 +11,10 @@
 		@apply bg-selection text-selection-foreground;
 	}
 
-	html {
-		@apply motion-safe:scroll-smooth;
-	}
-
 	body {
 		@apply bg-background font-mono text-foreground antialiased;
 		font-synthesis-weight: none;
 		text-rendering: optimizeLegibility;
-	}
-
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		@apply font-sans;
 	}
 
 	p,

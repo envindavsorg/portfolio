@@ -58,7 +58,7 @@ const Page = () => (
 			<Header />
 			<Divider />
 			<Overview />
-			<Divider />
+			<Divider type="half" />
 			<Contact />
 			<Divider />
 			<Cv />
