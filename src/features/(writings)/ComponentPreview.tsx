@@ -4,7 +4,11 @@ import { CodeIcon, EyeIcon, RepeatIcon } from '@phosphor-icons/react';
 import React, { useMemo, useState } from 'react';
 import { Index } from '@/__registry__';
 import { Button } from '@/components/buttons/Button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/Tooltip';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@/components/overlays/Tooltip';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Code as CodeInline } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';

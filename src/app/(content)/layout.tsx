@@ -10,7 +10,7 @@ interface AppLayoutProps {
 const AppLayout = ({ children }: Readonly<AppLayoutProps>) => (
 	<>
 		<NavBar />
-		<main className="max-w-screen overflow-x-hidden px-2">{children}</main>
+		<main className="max-w-screen overflow-x-clip px-2">{children}</main>
 		<Footer />
 		<Particles density={150} />
 	</>

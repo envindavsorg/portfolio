@@ -1,33 +1,17 @@
-import type { IconProps } from '@phosphor-icons/react';
-import {
-	GaugeIcon,
-	PaletteIcon,
-	SlidersIcon,
-	TextTIcon,
-	VaultIcon,
-} from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link';
-import type React from 'react';
 import { memo } from 'react';
 import { PulsatingCircle } from '@/components/animations/PulsatingCircle';
 import { Badge } from '@/components/ui/Badge';
 import { DotPattern } from '@/components/ui/DotPattern';
 import { cn, dayjs } from '@/lib/utils';
-
-const TOOLS_ICONS: Record<string, React.ComponentType<IconProps>> = {
-	Base64: VaultIcon,
-	Couleurs: PaletteIcon,
-	Texte: TextTIcon,
-	Internet: GaugeIcon,
-	Json: SlidersIcon,
-};
+import { TOOLS_ICONS } from './content';
 
 interface ToolsItemProps {
 	tool: Post;
 	isLast?: boolean;
 }
 
-export const ToolItem = memo(({ tool, isLast = false }: ToolsItemProps) => {
+export const ToolsItem = memo(({ tool, isLast = false }: ToolsItemProps) => {
 	const { metadata, slug } = tool;
 	const Icon = metadata.tags?.find((tag) => tag in TOOLS_ICONS)
 		? TOOLS_ICONS[metadata.tags.find((tag) => tag in TOOLS_ICONS) as string]
@@ -54,21 +38,24 @@ export const ToolItem = memo(({ tool, isLast = false }: ToolsItemProps) => {
 				</div>
 			</article>
 
-			<div className="screen-line-before flex flex-wrap items-center justify-end gap-2 px-2 py-2 sm:gap-4 sm:px-4">
-				{metadata.tags && (
-					<Badge className="lowercase max-sm:hidden">
-						catégorie: {metadata.tags[0]}
+			<div className="screen-line-before flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
+				<span className="text-theme">---</span>
+				<div className="flex items-center gap-2 sm:gap-4">
+					{metadata.tags && (
+						<Badge className="lowercase max-sm:hidden">
+							catégorie: {metadata.tags[0]}
+						</Badge>
+					)}
+					<Badge className="lowercase">
+						auteur: <span className="text-theme">{metadata.author}</span>
 					</Badge>
-				)}
-				<Badge className="lowercase">
-					auteur: <span className="text-theme">{metadata.author}</span>
-				</Badge>
-				<Badge className="lowercase max-sm:hidden">
-					créé: {dayjs(metadata.createdAt).format('DD MMM YYYY')}
-				</Badge>
-				<Badge className="lowercase">
-					mis à jour: {dayjs(metadata.updatedAt).format('DD MMM YYYY')}
-				</Badge>
+					<Badge className="lowercase max-sm:hidden">
+						créé: {dayjs(metadata.createdAt).format('DD MMM YYYY')}
+					</Badge>
+					<Badge className="lowercase">
+						mis à jour: {dayjs(metadata.updatedAt).format('DD MMM YYYY')}
+					</Badge>
+				</div>
 			</div>
 
 			{!isLast && (

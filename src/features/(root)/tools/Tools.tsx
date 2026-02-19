@@ -5,13 +5,11 @@ import {
 	PanelContent,
 	PanelFooter,
 	PanelHeader,
-	PanelTitle,
 } from '@/components/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
 import { Prose } from '@/components/ui/Typography';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/utils';
-import { ToolItem } from './ToolItem';
+import { ToolsItem } from './ToolsItem';
 
 export const Tools = () => {
 	const tools = getPostsByCategory('utils')
@@ -22,15 +20,9 @@ export const Tools = () => {
 
 	return (
 		<Panel>
-			<PanelHeader className="sticky top-0 z-10 bg-background">
-				<PanelTitle>
-					<TextAnimate animation="slideLeft" by="character" delay={0.2}>
-						outils pour développeurs
-					</TextAnimate>
-				</PanelTitle>
-			</PanelHeader>
+			<PanelHeader sticky title="outils pour développeurs" />
 
-			<PanelContent className="space-y-1.5">
+			<PanelContent>
 				<Prose>
 					-- une suite <span>d'outils web</span> gratuits pour simplifier votre
 					quotidien de développeur --
@@ -46,14 +38,14 @@ export const Tools = () => {
 			</PanelContent>
 
 			{tools.map((tool, idx: number) => (
-				<ToolItem
+				<ToolsItem
 					isLast={idx === tools.length - 1}
 					key={tool.slug}
 					tool={tool}
 				/>
 			))}
 
-			<PanelFooter className="flex max-sm:flex-col">
+			<PanelFooter>
 				<Button asChild variant="outline">
 					<Link aria-label="Voir tous les outils" href="/utils">
 						voir tous les outils
