@@ -13,8 +13,8 @@ import { Poline, positionFunctions } from 'poline';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
-import { ColorPicker } from '@/components/ui/ColorPicker';
-import { Prose } from '@/components/ui/Typography';
+import { ColorPicker } from '@/components/elements/ColorPicker';
+import { Prose } from '@/components/text/Typography';
 import { soundManager } from '@/lib/sound-manager';
 
 interface ColorScheme {

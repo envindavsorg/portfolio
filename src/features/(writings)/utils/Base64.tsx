@@ -8,8 +8,8 @@ import {
 import { type ChangeEvent, useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
-import { DirectionAwareTabs } from '@/components/ui/DirectionAwareTabs';
-import { Label } from '@/components/ui/Label';
+import { Label } from '@/components/form/Label';
+import { DirectionAwareTabs } from '@/components/primitives/DirectionAwareTabs';
 import { Textarea } from '@/components/ui/Textarea';
 import { cn } from '@/lib/utils';
 

@@ -19,11 +19,12 @@ export const NavBarSecondaryMenu = () => {
 	}
 
 	return (
-		<nav className="relative border-edge border-x border-b bg-background">
+		<nav className="relative border-edge border-x border-b backdrop-blur-lg">
 			<div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
 				<div className="border-edge border-r" />
 				<div className="border-edge border-l" />
 			</div>
+
 			<div className="grid grid-cols-4 divide-x divide-edge">
 				{NAVIGATION_DATA.map(({ title, link }, idx) => {
 					const active = isRouteActive(link, pathname);

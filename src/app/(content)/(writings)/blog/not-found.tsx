@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { Button } from '@/components/buttons/Button';
+import { Divider } from '@/components/primitives/Divider';
 import {
 	Panel,
 	PanelContent,
 	PanelFooter,
 	PanelHeader,
 	PanelTitle,
-} from '@/components/Panel';
+} from '@/components/primitives/Panel';
 import { TextAnimate } from '@/components/text/TextAnimate';
-import { Divider } from '@/components/ui/Divider';
 import { Cover } from '@/features/(homepage)/cover/Cover';
 
 const NotFound = () => (

@@ -1,6 +1,6 @@
 'use client';
 
-import { Panel } from '@/components/Panel';
+import { Panel } from '@/components/primitives/Panel';
 import { OverviewContent } from './OverviewContent';
 
 export const Overview = () => (

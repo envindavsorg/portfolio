@@ -15,7 +15,7 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@/components/ui/Popover';
+} from '@/components/overlays/Popover';
 import { cn } from '@/lib/utils';
 
 interface ComboboxProps {

@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { lazy, memo } from 'react';
-import { PanelContent } from '@/components/Panel';
 import {
 	Marquee,
 	MarqueeContent,
 	MarqueeFade,
 	MarqueeItem,
-} from '@/components/ui/Marquee';
-import { Prose } from '@/components/ui/Typography';
+} from '@/components/animations/Marquee';
+import { PanelContent } from '@/components/primitives/Panel';
+import { Prose } from '@/components/text/Typography';
 import { AboutPointer } from '@/features/(homepage)/about/AboutPointer';
 
 export interface Stack {

@@ -1,6 +1,6 @@
 import { getGitHubData } from '@/actions/github/data.action';
 import { getFollowersData } from '@/actions/linkedin/followers.action';
-import { Panel } from '@/components/Panel';
+import { Panel } from '@/components/primitives/Panel';
 import { ContactContent } from './ContactContent';
 
 export const Contact = async () => {

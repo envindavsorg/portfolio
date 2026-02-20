@@ -2,11 +2,11 @@
 
 import { CopyIcon } from '@phosphor-icons/react';
 import { useCallback, useEffect, useState } from 'react';
+import { AnimatedCheckbox } from '@/components/animations/AnimatedCheckbox';
 import { Button } from '@/components/buttons/Button';
-import { AnimatedCheckbox } from '@/components/ui/AnimatedCheckbox';
-import { Combobox } from '@/components/ui/Combobox';
-import { Label } from '@/components/ui/Label';
-import { NumberInput } from '@/components/ui/NumberInput';
+import { Combobox } from '@/components/elements/Combobox';
+import { Label } from '@/components/form/Label';
+import { NumberInput } from '@/components/form/NumberInput';
 import { Textarea } from '@/components/ui/Textarea';
 import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 import { generateLoremIpsum } from '@/lib/lorem-ipsum';

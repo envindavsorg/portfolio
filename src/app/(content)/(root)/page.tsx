@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
-import { Divider } from '@/components/ui/Divider';
+import { Divider } from '@/components/primitives/Divider';
 import GLOBAL_DATA from '@/content/data/global';
 import { About } from '@/features/(homepage)/about/About';
-import { Articles } from '@/features/(homepage)/articles/Articles';
 import { Branding } from '@/features/(homepage)/branding/Branding';
 import { Commits } from '@/features/(homepage)/commits/Commits';
 import { Contact } from '@/features/(homepage)/contact/Contact';
@@ -13,8 +12,9 @@ import { Experiences } from '@/features/(homepage)/experiences/Experiences';
 import { Header } from '@/features/(homepage)/header/Header';
 import { Overview } from '@/features/(homepage)/overview/Overview';
 import { Projects } from '@/features/(homepage)/projects/Projects';
-import { TechStack } from '@/features/(homepage)/stack/TechStack';
-import { Certifications } from '@/features/(root)/certifications/Certifications';
+import { Articles } from '@/features/(root)/articles/Articles';
+import { Certs } from '@/features/(root)/certs/Certs';
+import { TechStack } from '@/features/(root)/stack/Stack';
 import { Tools } from '@/features/(root)/tools/Tools';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
@@ -71,7 +71,7 @@ const Page = () => (
 			<Divider />
 			<Articles />
 			<Divider />
-			<Certifications />
+			<Certs />
 			<Divider />
 			<Tools />
 			<Divider />

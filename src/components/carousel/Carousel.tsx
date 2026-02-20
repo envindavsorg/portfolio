@@ -14,7 +14,7 @@ import {
 	useState,
 } from 'react';
 import { cn } from '@/lib/utils';
-import { DotPattern } from '../ui/DotPattern';
+import { DotPattern } from '../elements/DotPattern';
 
 export type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;

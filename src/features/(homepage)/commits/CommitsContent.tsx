@@ -5,8 +5,8 @@ import { ContributionGraphBlock } from '@/components/contribution-graph/Contribu
 import { ContributionGraphCalendar } from '@/components/contribution-graph/ContributionGraphCalendar';
 import { ContributionGraphLegend } from '@/components/contribution-graph/ContributionGraphLegend';
 import { ContributionGraphTotalCount } from '@/components/contribution-graph/ContributionGraphTotalCount';
-import { PanelContent } from '@/components/Panel';
-import { Prose } from '@/components/ui/Typography';
+import { PanelContent } from '@/components/primitives/Panel';
+import { Prose } from '@/components/text/Typography';
 
 interface CommitsContentProps {
 	contributions: CommitActivity[];

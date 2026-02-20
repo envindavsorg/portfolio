@@ -9,8 +9,13 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/overlays/Tooltip';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { Code as CodeInline } from '@/components/ui/Typography';
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@/components/primitives/Tabs';
+import { Code as CodeInline } from '@/components/text/Typography';
 import { cn } from '@/lib/utils';
 import { CodeCollapsibleWrapper } from './CodeCollapsibleWrapper';
 import { OpenInV0 } from './OpenInV0';

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRef } from 'react';
 import { GitHubIcon } from '@/components/icons/GitHubIcon';
 import { LinkedinIcon } from '@/components/icons/LinkedInIcon';
-import { Counter } from '@/components/ui/Counter';
+import { Counter } from '@/components/text/Counter';
 
 interface ContactContentProps {
 	githubFollowers: number;

@@ -2,7 +2,7 @@ import { memo, useRef } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { ChevronDownIcon } from '@/components/icons/ChevronDownIcon';
 import { ChevronUpIcon } from '@/components/icons/ChevronUpIcon';
-import { PanelFooter } from '@/components/Panel';
+import { PanelFooter } from '@/components/primitives/Panel';
 
 interface AboutFooterProps {
 	expanded: boolean;

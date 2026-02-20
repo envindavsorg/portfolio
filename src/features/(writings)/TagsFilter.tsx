@@ -11,7 +11,7 @@ import {
 	DrawerHeader,
 	DrawerTrigger,
 } from '@/components/overlays/Drawer';
-import { Badge } from '@/components/ui/Badge';
+import { Badge } from '@/components/primitives/Badge';
 import { cn } from '@/lib/utils';
 
 interface TagsFilterProps {

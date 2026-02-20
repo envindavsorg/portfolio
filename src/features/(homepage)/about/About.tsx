@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Panel, PanelHeader, PanelTitle } from '@/components/Panel';
+import { Panel, PanelHeader, PanelTitle } from '@/components/primitives/Panel';
 import { TextAnimate } from '@/components/text/TextAnimate';
 import { AboutContent } from './AboutContent';
 import { AboutFooter } from './AboutFooter';

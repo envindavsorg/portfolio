@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Divider } from '@/components/ui/Divider';
+import { Divider } from '@/components/primitives/Divider';
 
 type DocsLayoutProps = Readonly<{
 	children: React.ReactNode;

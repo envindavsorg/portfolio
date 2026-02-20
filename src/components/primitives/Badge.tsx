@@ -7,7 +7,8 @@ const variants = cva(
 	[
 		'inline-flex items-center justify-center gap-x-1 align-middle',
 		'w-fit shrink-0 overflow-hidden rounded-full border border-input px-2 py-1',
-		'whitespace-nowrap font-pixel-square text-[10px] transition-[color,box-shadow] sm:text-xs',
+		'whitespace-nowrap text-[10px] transition-[color,box-shadow] sm:text-xs',
+		'font-pixel-square [&>span]:font-pixel-square [&>span]:text-theme',
 		'[&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:shrink-0',
 	],
 	{

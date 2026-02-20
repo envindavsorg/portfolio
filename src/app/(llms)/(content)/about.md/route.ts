@@ -1,5 +1,5 @@
 import GLOBAL_DATA from '@/content/data/global';
-import { TECH_STACK } from '@/features/(homepage)/stack/content';
+import { TECH_STACK } from '@/features/(root)/stack/content';
 
 const content = `
 # À propos de moi

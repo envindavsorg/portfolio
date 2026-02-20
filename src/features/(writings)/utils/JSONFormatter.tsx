@@ -4,7 +4,7 @@ import { CopyIcon } from '@phosphor-icons/react';
 import type React from 'react';
 import { useCallback, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
-import { Label } from '@/components/ui/Label';
+import { Label } from '@/components/form/Label';
 import { Textarea } from '@/components/ui/Textarea';
 import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 

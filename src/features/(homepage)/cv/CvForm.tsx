@@ -1,3 +1,4 @@
+import { Spinner } from '@/components/animations/Spinner';
 import { Button } from '@/components/buttons/Button';
 import {
 	Form,
@@ -6,9 +7,8 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/Form';
-import { Input } from '@/components/ui/Input';
-import { Spinner } from '@/components/ui/Spinner';
+} from '@/components/form/Form';
+import { Input } from '@/components/form/Input';
 import type useEmailForm from '@/hooks/use-email-form';
 import type { EmailFormData } from '@/hooks/use-email-form';
 

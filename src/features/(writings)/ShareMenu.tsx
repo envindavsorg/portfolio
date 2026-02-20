@@ -16,7 +16,7 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
+} from '@/components/overlays/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import { copyText, getAbsoluteUrl } from '@/lib/utils';
 

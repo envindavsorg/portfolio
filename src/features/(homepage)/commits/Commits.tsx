@@ -4,9 +4,9 @@ import {
 	PanelContent,
 	PanelHeader,
 	PanelTitle,
-} from '@/components/Panel';
+} from '@/components/primitives/Panel';
+import { Tag } from '@/components/primitives/Tag';
 import { TextAnimate } from '@/components/text/TextAnimate';
-import { Tag } from '@/components/ui/Tag';
 import { CommitsContent } from './CommitsContent';
 
 export const Commits = async () => {

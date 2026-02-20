@@ -3,9 +3,9 @@ import {
 	PanelContent,
 	PanelHeader,
 	PanelTitle,
-} from '@/components/Panel';
+} from '@/components/primitives/Panel';
 import { TextAnimate } from '@/components/text/TextAnimate';
-import { Prose } from '@/components/ui/Typography';
+import { Prose } from '@/components/text/Typography';
 import { CvFooter } from './CvFooter';
 
 export const Cv = () => (

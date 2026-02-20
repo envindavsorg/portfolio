@@ -1,5 +1,5 @@
 import { FlickeringGrid } from '@/components/animations/FlickeringGrid';
-import { Panel, PanelContent } from '@/components/Panel';
+import { Panel, PanelContent } from '@/components/primitives/Panel';
 import { PixelHeading } from '@/components/text/PixelHeading';
 import GLOBAL_DATA from '@/content/data/global';
 import { FlipSentences } from '@/registry/flip-sentences';

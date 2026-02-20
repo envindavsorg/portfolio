@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { Tabs } from '@/components/ui/Tabs';
+import { Tabs } from '@/components/primitives/Tabs';
 import type { InstallationType } from '@/hooks/use-config';
 import useConfig from '@/hooks/use-config';
 

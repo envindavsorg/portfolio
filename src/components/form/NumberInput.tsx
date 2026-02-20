@@ -5,7 +5,7 @@ import type React from 'react';
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { NumericFormat, type NumericFormatProps } from 'react-number-format';
 import { Button } from '@/components/buttons/Button';
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/form/Input';
 
 export interface NumberInputProps
 	extends Omit<NumericFormatProps, 'value' | 'onValueChange'> {

@@ -1,4 +1,4 @@
-import { Divider } from '@/components/ui/Divider';
+import { Divider } from '@/components/primitives/Divider';
 import { Header } from '@/features/(homepage)/header/Header';
 import { Overview } from '@/features/(homepage)/overview/Overview';
 

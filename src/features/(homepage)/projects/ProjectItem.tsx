@@ -5,9 +5,9 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 	CollapsibleWithContext,
-} from '@/components/ui/Collapsible';
-import { Tag } from '@/components/ui/Tag';
-import { Prose } from '@/components/ui/Typography';
+} from '@/components/primitives/Collapsible';
+import { Tag } from '@/components/primitives/Tag';
+import { Prose } from '@/components/text/Typography';
 import { cn } from '@/lib/utils';
 import type { Project } from './content';
 
@@ -53,7 +53,7 @@ export const ProjectItem = ({ project }: ProjectItemProps) => {
 			</div>
 
 			<CollapsibleContent className="group overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-				<div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in min-sm:hidden">
+				<div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in sm:hidden">
 					<p className="text-muted-foreground text-xs">{project.title}</p>
 				</div>
 

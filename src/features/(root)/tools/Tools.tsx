@@ -5,11 +5,11 @@ import {
 	PanelContent,
 	PanelFooter,
 	PanelHeader,
-} from '@/components/Panel';
-import { Prose } from '@/components/ui/Typography';
+} from '@/components/primitives/Panel';
+import { Prose } from '@/components/text/Typography';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { dayjs } from '@/lib/utils';
-import { ToolsItem } from './ToolsItem';
+import { ToolItem } from './ToolItem';
 
 export const Tools = () => {
 	const tools = getPostsByCategory('utils')
@@ -37,11 +37,11 @@ export const Tools = () => {
 				</Prose>
 			</PanelContent>
 
-			{tools.map((tool, idx: number) => (
-				<ToolsItem
+			{tools.map((item, idx) => (
+				<ToolItem
 					isLast={idx === tools.length - 1}
-					key={tool.slug}
-					tool={tool}
+					key={item.slug}
+					tool={item}
 				/>
 			))}
 

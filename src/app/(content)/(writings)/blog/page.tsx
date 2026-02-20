@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
+import { Divider } from '@/components/primitives/Divider';
 import { TextAnimate } from '@/components/text/TextAnimate';
-import { Divider } from '@/components/ui/Divider';
-import { ArticleItem } from '@/features/(homepage)/articles/ArticleItem';
+import { ArticleItem } from '@/features/(root)/articles/ArticleItem';
 import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';

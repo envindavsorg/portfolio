@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Pointer } from '@/components/ui/Pointer';
+import { Pointer } from '@/components/animations/Pointer';
 
 export const AboutPointer = () => (
 	<Pointer>

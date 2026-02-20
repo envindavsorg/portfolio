@@ -1,4 +1,4 @@
-import { Panel, PanelHeader, PanelTitle } from '@/components/Panel';
+import { Panel, PanelHeader, PanelTitle } from '@/components/primitives/Panel';
 import { TextAnimate } from '@/components/text/TextAnimate';
 import { BrandingColors } from './BrandingColors';
 import { BrandingMark } from './BrandingMark';

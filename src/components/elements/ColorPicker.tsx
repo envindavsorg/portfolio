@@ -5,13 +5,13 @@ import { AnimatePresence, motion } from 'motion/react';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
-import { Input } from '@/components/ui/Input';
-import { Label } from '@/components/ui/Label';
+import { Input } from '@/components/form/Input';
+import { Label } from '@/components/form/Label';
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@/components/ui/Popover';
+} from '@/components/overlays/Popover';
 import { hexToHsl, normalizeColor, trimColorString } from '@/lib/palette';
 
 interface ColorPickerProps {

@@ -251,7 +251,7 @@ export const Terminal = ({
 
 	const content = (
 		<div
-			className={cn('z-0 h-full max-h-[400px] w-full bg-background', className)}
+			className={cn('z-0 h-full max-h-100 w-full bg-background', className)}
 			ref={containerRef}
 		>
 			<pre className="no-scrollbar p-4">

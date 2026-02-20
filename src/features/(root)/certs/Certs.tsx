@@ -1,9 +1,13 @@
-import { Panel, PanelContent, PanelHeader } from '@/components/Panel';
-import { Prose } from '@/components/ui/Typography';
-import { CertificationItem } from './CertificationItem';
-import { CERTIFICATIONS, type Certification } from './content';
+import {
+	Panel,
+	PanelContent,
+	PanelHeader,
+} from '@/components/primitives/Panel';
+import { Prose } from '@/components/text/Typography';
+import { CertItem } from './CertItem';
+import { CERTS } from './content';
 
-export const Certifications = () => (
+export const Certs = () => (
 	<Panel>
 		<PanelHeader sticky title="mes certifications" />
 
@@ -20,11 +24,11 @@ export const Certifications = () => (
 			</Prose>
 		</PanelContent>
 
-		{CERTIFICATIONS.map((item: Certification, idx: number) => (
-			<CertificationItem
-				certification={item}
-				isLast={idx === CERTIFICATIONS.length - 1}
-				key={item.credentialURL}
+		{CERTS.map((item, idx) => (
+			<CertItem
+				cert={item}
+				isLast={idx === CERTS.length - 1}
+				key={item.credentialID}
 			/>
 		))}
 	</Panel>

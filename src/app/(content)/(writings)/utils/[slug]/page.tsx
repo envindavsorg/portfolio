@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
 import { MDX } from '@/components/markdown/mdx';
-import { Divider } from '@/components/ui/Divider';
-import { Prose } from '@/components/ui/Typography';
+import { Divider } from '@/components/primitives/Divider';
+import { Prose } from '@/components/text/Typography';
 import GLOBAL_DATA from '@/content/data/global';
 import { IsNew } from '@/features/(writings)/IsNew';
 import { TopBar } from '@/features/(writings)/TopBar';
@@ -104,7 +104,7 @@ const Page = async ({ params }: Props) => {
 				<h1 className="font-semibold text-2xl sm:text-3xl">
 					{post.metadata.title}
 				</h1>
-				{post.metadata.new && <IsNew />}
+				{post.metadata.isNew && <IsNew />}
 			</div>
 
 			<div className="px-3 py-1.5">

@@ -15,7 +15,6 @@ import {
 import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
 import { SearchIcon } from '@/components/icons/SearchIcon';
-import { Kbd, KbdGroup } from '@/components/Kbd';
 import {
 	Command,
 	CommandEmpty,
@@ -36,7 +35,8 @@ import {
 	DrawerDescription,
 	DrawerTitle,
 } from '@/components/overlays/Drawer';
-import { Separator } from '@/components/ui/Separator';
+import { Kbd, KbdGroup } from '@/components/primitives/Kbd';
+import { Separator } from '@/components/primitives/Separator';
 import useMediaQuery from '@/hooks/use-media-query';
 import { cn } from '@/lib/utils';
 import { CATEGORY, LABELS } from './content';

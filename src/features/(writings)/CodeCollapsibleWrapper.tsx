@@ -1,13 +1,13 @@
 import type React from 'react';
 import { Button } from '@/components/buttons/Button';
-import type { Collapsible } from '@/components/ui/Collapsible';
+import type { Collapsible } from '@/components/primitives/Collapsible';
 import {
 	CollapsibleChevronsIcon,
 	CollapsibleContent,
 	CollapsibleTrigger,
 	CollapsibleWithContext,
-} from '@/components/ui/Collapsible';
-import { Separator } from '@/components/ui/Separator';
+} from '@/components/primitives/Collapsible';
+import { Separator } from '@/components/primitives/Separator';
 import { cn } from '@/lib/utils';
 
 export const CodeCollapsibleWrapper = ({

@@ -3,7 +3,12 @@
 import { TerminalWindowIcon } from '@phosphor-icons/react';
 import { lazy, useMemo } from 'react';
 import { CopyButton } from '@/components/buttons/CopyButton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@/components/primitives/Tabs';
 import type { PackageManager } from '@/hooks/use-config';
 import useConfig from '@/hooks/use-config';
 

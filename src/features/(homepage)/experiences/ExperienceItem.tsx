@@ -5,9 +5,9 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 	CollapsibleWithContext,
-} from '@/components/ui/Collapsible';
-import { Tag } from '@/components/ui/Tag';
-import { Prose } from '@/components/ui/Typography';
+} from '@/components/primitives/Collapsible';
+import { Tag } from '@/components/primitives/Tag';
+import { Prose } from '@/components/text/Typography';
 import { cn } from '@/lib/utils';
 import type { Experience } from './content';
 

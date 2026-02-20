@@ -14,7 +14,7 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from '@/components/overlays/Drawer';
-import { PanelFooter } from '@/components/Panel';
+import { PanelFooter } from '@/components/primitives/Panel';
 import GLOBAL_DATA from '@/content/data/global';
 import type { EmailFormData } from '@/hooks/use-email-form';
 import useEmailForm from '@/hooks/use-email-form';

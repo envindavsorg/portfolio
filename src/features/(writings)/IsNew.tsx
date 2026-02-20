@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Prose } from '@/components/ui/Typography';
+import { Prose } from '@/components/text/Typography';
 import { cn } from '@/lib/utils';
 
 interface IsNewProps {

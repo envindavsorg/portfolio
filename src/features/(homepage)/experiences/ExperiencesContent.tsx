@@ -1,13 +1,13 @@
 import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import { useMemo } from 'react';
 import { Button } from '@/components/buttons/Button';
-import { PanelContent, PanelFooter } from '@/components/Panel';
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
-} from '@/components/ui/Collapsible';
-import { Prose } from '@/components/ui/Typography';
+} from '@/components/primitives/Collapsible';
+import { PanelContent, PanelFooter } from '@/components/primitives/Panel';
+import { Prose } from '@/components/text/Typography';
 import type { Experience } from './content';
 import { ExperienceItem } from './ExperienceItem';
 

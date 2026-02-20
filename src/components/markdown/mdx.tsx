@@ -17,9 +17,14 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@/components/ui/Table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { Code, Heading } from '@/components/ui/Typography';
+} from '@/components/primitives/Table';
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@/components/primitives/Tabs';
+import { Code, Heading } from '@/components/text/Typography';
 import { CodeBlockCommand } from '@/features/(writings)/CodeBlockCommand';
 import { CodeCollapsibleWrapper } from '@/features/(writings)/CodeCollapsibleWrapper';
 import { CodeTabs } from '@/features/(writings)/CodeTabs';

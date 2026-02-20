@@ -1,4 +1,4 @@
-import { Prose } from '@/components/ui/Typography';
+import { Prose } from '@/components/text/Typography';
 import GLOBAL_DATA from '@/content/data/global';
 
 export const FooterDate = () => (

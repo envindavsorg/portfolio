@@ -1,6 +1,6 @@
 import type React from 'react';
 import { memo } from 'react';
-import { Prose } from '@/components/ui/Typography';
+import { Prose } from '@/components/text/Typography';
 
 interface CvErrorProps {
 	children?: React.ReactNode;

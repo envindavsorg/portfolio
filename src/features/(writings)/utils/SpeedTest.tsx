@@ -16,7 +16,7 @@ import {
 	ItemContent,
 	ItemMedia,
 	ItemTitle,
-} from '@/components/ui/Item';
+} from '@/components/primitives/Item';
 import { cn } from '@/lib/utils';
 
 type SpeedResult = ReturnType<
