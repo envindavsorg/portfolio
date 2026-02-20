@@ -5,33 +5,26 @@ import {
 	BLOCK_RADIUS,
 	BLOCK_SIZE,
 	LABEL_HEIGHT,
-} from './ContributionGraph';
+	LEVEL_FILLS,
+} from './config';
 
-type ContributionGraphBlockProps = HTMLAttributes<SVGRectElement> & {
+type GraphBlockProps = HTMLAttributes<SVGRectElement> & {
 	activity: CommitActivity;
 	dayIndex: number;
 	weekIndex: number;
 };
 
-export const ContributionGraphBlock = ({
+export const GraphBlock = ({
 	activity,
 	dayIndex,
 	weekIndex,
 	className,
 	...props
-}: ContributionGraphBlockProps) => (
+}: GraphBlockProps) => (
 	<rect
-		className={cn(
-			'data-[level="0"]:fill-theme/5',
-			'data-[level="1"]:fill-theme/20',
-			'data-[level="2"]:fill-theme/40',
-			'data-[level="3"]:fill-theme/60',
-			'data-[level="4"]:fill-theme/80',
-			className
-		)}
+		className={cn(LEVEL_FILLS[activity.level], className)}
 		data-count={activity.count}
 		data-date={activity.date}
-		data-level={activity.level}
 		height={BLOCK_SIZE}
 		rx={BLOCK_RADIUS}
 		ry={BLOCK_RADIUS}

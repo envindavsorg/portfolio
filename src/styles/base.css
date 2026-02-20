@@ -22,7 +22,7 @@
 	span,
 	a,
 	div {
-		@apply font-mono;
+		@apply font-pixel-square;
 	}
 
 	::-webkit-scrollbar {
