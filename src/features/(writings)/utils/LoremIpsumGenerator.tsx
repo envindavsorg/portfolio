@@ -7,7 +7,7 @@ import { Button } from '@/components/buttons/Button';
 import { Combobox } from '@/components/elements/Combobox';
 import { Label } from '@/components/form/Label';
 import { NumberInput } from '@/components/form/NumberInput';
-import { Textarea } from '@/components/ui/Textarea';
+import { Textarea } from '@/components/form/Textarea';
 import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 import { generateLoremIpsum } from '@/lib/lorem-ipsum';
 

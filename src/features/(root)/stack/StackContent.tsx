@@ -5,8 +5,8 @@ import {
 	MarqueeFade,
 	MarqueeItem,
 } from '@/components/animations/Marquee';
-import { PanelContent } from '@/components/primitives/Panel';
 import { Divider } from '@/components/primitives/Divider';
+import { PanelContent } from '@/components/primitives/Panel';
 import type { Stack } from './content';
 
 interface StackContentProps {

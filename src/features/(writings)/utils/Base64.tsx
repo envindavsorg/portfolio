@@ -9,8 +9,8 @@ import { type ChangeEvent, useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/buttons/Button';
 import { Label } from '@/components/form/Label';
+import { Textarea } from '@/components/form/Textarea';
 import { DirectionAwareTabs } from '@/components/primitives/DirectionAwareTabs';
-import { Textarea } from '@/components/ui/Textarea';
 import { cn } from '@/lib/utils';
 
 export const Base64 = () => {

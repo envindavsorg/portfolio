@@ -5,7 +5,7 @@ import type React from 'react';
 import { useCallback, useState } from 'react';
 import { Button } from '@/components/buttons/Button';
 import { Label } from '@/components/form/Label';
-import { Textarea } from '@/components/ui/Textarea';
+import { Textarea } from '@/components/form/Textarea';
 import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 
 export const JSONFormatter = () => {

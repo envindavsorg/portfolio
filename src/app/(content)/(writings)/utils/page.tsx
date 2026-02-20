@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
-import { TextAnimate } from '@/components/text/TextAnimate';
 import { Divider } from '@/components/primitives/Divider';
-import { ToolItem } from '@/features/(navigation)/tools/ToolsItem';
+import { TextAnimate } from '@/components/text/TextAnimate';
+import { ToolItem } from '@/features/(root)/tools/ToolItem';
 import { TagsFilter } from '@/features/(writings)/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
@@ -101,7 +101,7 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 			<Divider />
 
 			{utils.map((util: Post) => (
-				<ToolItem key={util.slug} post={util} />
+				<ToolItem key={util.slug} tool={util} />
 			))}
 
 			<div className="h-8" />

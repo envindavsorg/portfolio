@@ -5,131 +5,129 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ```bash
-# Install dependencies
-pnpm i
-
-# Development server (runs on http://localhost:1408)
-pnpm dev
-
-# Production build
-pnpm build
-
-# Preview production build
-pnpm preview
-
-# Type checking
-pnpm check-types
-
-# Linting and formatting (uses Biome.js)
-pnpm lint
-pnpm lint:fix
-pnpm format:check
-pnpm format:write
-
-# Component Registry
-pnpm registry:build  # Build registry for distribution
+pnpm i                    # Install dependencies
+pnpm dev                  # Dev server on http://localhost:1408
+pnpm build                # Production build
+pnpm preview              # Build + serve on port 1408
+pnpm types                # Type checking (tsc --noEmit)
+pnpm lint                 # Biome check
+pnpm lint:fix             # Biome check --fix
+pnpm format               # Biome format check
+pnpm format:fix           # Biome format --fix
+pnpm check                # Biome check --fix --unsafe (full auto-fix)
+pnpm registry:build       # Build component registry for distribution
 ```
 
-## Project Architecture
+## Tech Stack
 
-### Tech Stack
-
-- **Framework**: Next.js 15 with App Router and Turbopack
+- **Framework**: Next.js 16 with App Router and Turbopack
 - **Styling**: Tailwind CSS v4
 - **UI Components**: shadcn/ui with custom registry
 - **Linting**: Biome.js (extends ultracite config)
-- **Content**: MDX/Markdown for blog posts
-- **Package Manager**: pnpm (v9+)
-- **Node**: v20 or v22+
+- **Content**: MDX via `next-mdx-remote` + `fumadocs-core` for TOC
+- **State**: Jotai for atoms, React Hook Form + Zod for forms
+- **Animation**: Motion (Framer Motion v12+)
+- **Package Manager**: pnpm (v10+)
+- **React**: 19
 
-### Directory Structure
+## Project Architecture
+
+### Route Structure
 
 ```
-src/
-├── app/              # Next.js App Router
-│   ├── (app)/        # Main app route group
-│   ├── (llms)/       # LLM-specific routes
-│   ├── api/          # API routes
-│   ├── og/           # OG image generation
-│   └── rss/          # RSS feed
-├── features/         # Feature-based organization
-│   ├── blog/         # Blog functionality
-│   ├── context/      # Context menu features
-│   ├── navigation/   # TopBar components (NavBar, Footer)
-│   ├── profile/      # User profile data and components
-│   └── root/         # Root-level features
-├── components/       # Reusable components
-│   ├── ui/           # shadcn UI components
-│   ├── icons/        # Icon components (including flag icons)
-│   ├── text/         # TextAnimate components
-│   └── animations/   # Animation components
-├── registry/         # Custom shadcn registry
-│   ├── apple-hello-effect/
-│   ├── flip-sentences/
-│   ├── theme-switcher/
-│   └── wheel-picker/
-├── lib/              # Utility libraries
-│   ├── octokit.ts    # GitHub API client
-│   ├── fonts.ts      # Font configuration
-│   ├── logger.ts     # Logging utility
-│   ├── utils.ts      # General utilities (cn, etc.)
-│   └── rehype-*.ts   # MDX processing plugins
-├── actions/          # Server Actions
-│   └── data.action.ts
-├── config/           # Configuration
-│   ├── theme.ts       # Site metadata and navigation
-│   └── registry.ts   # Registry configuration
-├── hooks/            # Custom React hooks
-├── utils/            # Utility functions
-└── styles/           # Global styles
+src/app/
+├── (content)/                    # Main visible site
+│   ├── (root)/page.tsx           # Homepage (/) - one-pager assembling feature sections
+│   └── (writings)/               # Content routes: /blog, /components, /utils
+│       ├── blog/[slug]/
+│       ├── components/[slug]/
+│       └── utils/[slug]/
+├── (llms)/                       # Plain-text mirror of all content for AI ingestion
+│   ├── llms.txt/route.ts         # /llms.txt - markdown index
+│   ├── about.md/route.ts         # /about.md, /experience.md, etc.
+│   └── blog.mdx/[slug]/route.ts  # /blog/:slug.mdx (raw MDX)
+├── api/
+│   ├── og/route.tsx              # Dynamic OG image generation (ImageResponse)
+│   ├── send/route.ts             # CV email delivery via Resend
+│   ├── rss/route.ts              # RSS feed
+│   ├── vcard/route.ts            # VCard download
+│   └── health/route.ts
+└── (other)/og/page.tsx           # Dev preview page for OG images
 ```
 
-### Key Architectural Patterns
+### Feature Organization
 
-**Feature-Based Organization**: Code is organized by feature domain (blog, navigation, profile) rather than technical type. Each feature contains its own components, hooks, and logic.
+Features live in `src/features/` grouped by route context:
 
-**Server Actions**: GitHub data fetching uses Server Actions (see `src/actions/data.action.ts`). These are async functions that run on the server and can be called from Client Components.
+- `(homepage)/` - Homepage sections: about, branding, commits, contact, cover, cv, experiences, header, overview, projects
+- `(navigation)/` - NavBar + Footer (site-wide chrome)
+- `(root)/` - Shared sections: articles, certs, stack, tools
+- `(writings)/` - Blog reading UI: CodeBlockCommand, ComponentPreview, TagsFilter, KeyboardShortcuts, inline utils (Base64, ColorGenerator, JSONFormatter, SpeedTest, etc.)
 
-**Dynamic Imports**: Heavy components like context menus and scroll-to-top are dynamically imported in layouts to optimize initial bundle size.
+**RSC boundary pattern**: Each feature uses a `Feature.tsx` (async RSC shell that fetches data) + `FeatureContent.tsx` (`'use client'` component receiving data as props).
 
-**Custom Registry System**: The project includes a custom shadcn registry at `src/registry/` for distributing reusable components. Components can be added to other projects via:
+**Static data co-location**: Typed arrays for projects, experiences, tools, certs, stack live in `content.ts` files alongside their feature components.
 
-```bash
-npx shadcn@latest add @envindavsorg/theme-switcher
-npx shadcn@latest add @envindavsorg/apple-hello-effect
-```
+### Content System
 
-**MDX Processing Pipeline**: Blog posts use a custom MDX pipeline with:
+Blog posts are MDX files in `src/content/articles/`. Frontmatter includes a `category` field that routes to the correct section:
 
-- `rehype-component.ts` - Component injection into MDX
-- `rehype-npm-command.ts` - Package manager command blocks
-- `remark-code-import.js` - Code import from files
-- Syntax highlighting via `shiki`
+- `article` → `/blog/[slug]`
+- `components` → `/components/[slug]`
+- `utils` → `/utils/[slug]`
 
-**GitHub Integration**: The project integrates with GitHub API using Octokit (configured in `src/lib/octokit.ts`) to fetch user data and repository information.
+Posts are read from the filesystem (no database). MDX processing uses custom rehype plugins in `src/lib/`: `rehype-component.ts` (component injection), `rehype-npm-command.ts` (package manager blocks), `remark-code-import.js` (code imports). Syntax highlighting via `shiki`.
+
+### Global Data
+
+`src/content/data/global.ts` exports `GLOBAL_DATA` - the single source of truth for all personal data (name, bio, social links, work history, CV info). Never hardcode personal data elsewhere.
+
+### Server Actions
+
+Actions are split by domain in `src/actions/`:
+
+- `github/data.action.ts` - Contributions, stars, followers (GraphQL via Octokit)
+- `github/commit.action.ts` - Latest commit data
+- `linkedin/followers.action.ts` - Reads follower count from Vercel Blob
+
+All use `unstable_cache` with 1-hour revalidation. GitHub queries live in `src/queries/github/`.
+
+### LLM Content Mirror
+
+The `(llms)/` route group is a first-class feature: every piece of content has a parallel `.md`/`.mdx` route serving raw text for AI tools. The "Copy Markdown" button on articles fetches from this mirror.
+
+### Custom Registry
+
+Distributable components at `src/registry/` (theme-switcher, apple-hello-effect, flip-sentences). After modifying, run `pnpm registry:build` which generates `src/__registry__/` files and `public/r/registry.json`.
 
 ## Code Style
 
-- **Formatting**: Tabs for indentation, 80 character line width
-- **Quotes**: Single quotes for JavaScript/TypeScript
-- **Semicolons**: Always use semicolons
-- **Import Aliases**: Use `@/*` for imports from `src/`
-- **Class Names**: Use `cn()` utility from `@/lib/utils` for merging Tailwind classes
-- **Component Naming**: PascalCase for components, features use named exports
+- **Formatting**: Tabs, 80 char width (120 for CSS)
+- **Quotes**: Single quotes, always semicolons
+- **Imports**: Use `@/*` alias for `src/`, Biome auto-organizes imports
+- **Class Names**: Use `cn()` from `@/lib/utils` for merging Tailwind classes
+- **Tailwind**: Biome enforces sorted classes via `useSortedClasses` rule
+- **Components**: PascalCase, named exports
 
-## Configuration Files
+## Environment Variables
 
-- **Biome**: `biome.json` - Linting and formatting rules (extends ultracite)
-- **TypeScript**: `tsconfig.json` - Strict mode enabled, `@/*` path alias
-- **Site Config**: `src/config/theme.ts` - TopBar, metadata, GitHub repo info
-- **Registry Config**: `src/config/registry.ts` - Component registry configuration
-- **Environment**: `.env.local` - Required for GitHub token and app URL
+Required in `.env.local` (no `.env.example` exists):
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `GITHUB_API_TOKEN` | Yes | GitHub PAT for Octokit GraphQL |
+| `GITHUB_USERNAME` | No | GitHub username |
+| `GITHUB_REPO_NAME` | No | Repo for commit widget |
+| `BLOB_READ_WRITE_TOKEN` | No | Vercel Blob (LinkedIn followers) |
+| `RESEND_API_KEY` | No | Email delivery for CV |
+| `API_TOKEN` | No | Internal API auth |
+
+Env validation runs at startup via Zod schema in `next.config.ts`. Only `GITHUB_API_TOKEN` is strictly required.
 
 ## Important Notes
 
-- **Port**: Development server runs on port 1408 (not default 3000)
-- **Registry Build**: Run `pnpm registry:build` after modifying components in `src/registry/`
-- **Tailwind v4**: Uses the new Tailwind CSS v4 (PostCSS-based)
-- **React 19**: Project uses React 19 (ensure compatibility)
-- **Font Loading**: Custom fonts configured in `src/lib/fonts.ts`
-- **Greeting System**: Multi-language greeting effects in `/public/assets/` (hello, bonjour, hola)
+- **Port**: Dev server on 1408 (not 3000)
+- **OG Images**: Dynamic via `GET /api/og?type=blog&title=...`, helper at `src/lib/open-graph.ts`
+- **Sound**: `src/lib/sound-manager.ts` plays sounds on certain interactions
+- **CV delivery**: PDF at `public/documents/resume.pdf`, emailed via Resend with React Email template
+- **Dynamic imports**: Heavy components (context menus, scroll-to-top) are lazy-loaded in layouts

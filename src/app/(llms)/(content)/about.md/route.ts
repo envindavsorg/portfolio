@@ -1,5 +1,5 @@
 import GLOBAL_DATA from '@/content/data/global';
-import { TECH_STACK } from '@/features/(root)/stack/content';
+import { STACK_ICONS } from '@/features/(root)/stack/content';
 
 const content = `
 # À propos de moi
@@ -22,7 +22,7 @@ Aujourd'hui, je maîtrise cette stack (Next.js/TS/Tailwind) pour déployer rapid
 
 ## Stack technique
 
-${TECH_STACK.map((item) => `- [${item.title}]`).join('\n')}\n`;
+${STACK_ICONS.map((item) => `- [${item.title}]`).join('\n')}\n`;
 
 export const dynamic = 'force-static';
 

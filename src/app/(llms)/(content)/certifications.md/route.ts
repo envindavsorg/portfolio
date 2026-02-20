@@ -1,9 +1,9 @@
-import { CERTIFICATIONS } from '@/features/(homepage)/certifications/content';
+import { CERTS } from '@/features/(root)/certs/content';
 
 const content = `
 # Mes certifications
 
-${CERTIFICATIONS.map((item) => `- [${item.title}](${item.credentialURL})`).join('\n')}
+${CERTS.map((item) => `- [${item.title}](${item.credentialURL})`).join('\n')}
 `;
 
 export const dynamic = 'force-static';

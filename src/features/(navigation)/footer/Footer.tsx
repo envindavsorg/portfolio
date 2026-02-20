@@ -1,8 +1,8 @@
 import { GitBranchIcon, GitDiffIcon } from '@phosphor-icons/react/dist/ssr';
 import { getCommitData } from '@/actions/github/commit.action';
 import { HeartIcon } from '@/components/icons/HeartIcon';
-import { Panel } from '@/components/primitives/Panel';
 import { Divider } from '@/components/primitives/Divider';
+import { Panel } from '@/components/primitives/Panel';
 import { Prose } from '@/components/text/Typography';
 import { dayjs } from '@/lib/utils';
 import { FooterClock } from './FooterClock';
