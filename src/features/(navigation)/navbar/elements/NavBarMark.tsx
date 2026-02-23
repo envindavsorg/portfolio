@@ -129,7 +129,7 @@ export const NavBarMark = () => {
 			{pathname === '/' ? (
 				<MotionMark />
 			) : (
-				<Link aria-label="Retour à l'accueil" href="/public">
+				<Link aria-label="Retour à l'accueil" href="/">
 					<StaticMark />
 				</Link>
 			)}
