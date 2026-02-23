@@ -120,6 +120,8 @@ declare global {
 		title: string;
 		description: string;
 		image?: string;
+		bannerLight?: string;
+		bannerDark?: string;
 		category?: string;
 		createdAt: string;
 		updatedAt: string;

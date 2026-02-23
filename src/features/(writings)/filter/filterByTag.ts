@@ -1,6 +1,3 @@
-// features/(writings)/filterByTag.ts
-import type { Post } from '@/lib/blog/posts';
-
 interface TagFilterResult {
 	tags: string[];
 	tagCounts: Record<string, number>;

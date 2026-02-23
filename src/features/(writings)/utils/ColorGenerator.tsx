@@ -140,7 +140,7 @@ export const ColorGenerator = () => {
 		setCopiedColor('all');
 
 		soundManager.playToastSound();
-		toast.success('CSS copié dans le presse-papier !');
+		toast.success('css copié dans le presse-papier !');
 
 		setTimeout(() => setCopiedColor(null), 2000);
 	}, [colorScheme]);
@@ -160,11 +160,11 @@ export const ColorGenerator = () => {
 			<div className="screen-line-before flex items-center justify-between py-3">
 				<Button onClick={resetColors} variant="outline">
 					<ArrowsClockwiseIcon />
-					Réinitialiser
+					réinitialiser
 				</Button>
 				<Button onClick={genColors}>
 					<SwatchesIcon />
-					Générer
+					générer
 				</Button>
 			</div>
 
@@ -203,9 +203,12 @@ export const ColorGenerator = () => {
 
 			<div className="screen-line-before py-1.5">
 				<Prose>
-					Explorez une palette de couleurs harmonieuses générée pour vos projets
-					web. Chaque couleur est soigneusement sélectionnée pour assurer une
-					esthétique cohérente et attrayante.
+					-- explorez une palette de couleurs harmonieuses générée pour vos
+					projets web --
+				</Prose>
+				<Prose>
+					-- chaque couleur est soigneusement sélectionnée pour assurer une
+					esthétique cohérente et attrayante --
 				</Prose>
 			</div>
 
@@ -247,7 +250,7 @@ export const ColorGenerator = () => {
 			<div className="screen-line-before flex justify-end py-1.5">
 				<Button onClick={copyColorScheme} variant="outline">
 					<CopyIcon />
-					Copier les couleurs
+					copier les couleurs
 				</Button>
 			</div>
 		</>

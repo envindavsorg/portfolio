@@ -67,7 +67,7 @@ export const LoremIpsumGenerator = () => {
 					className="text-muted-foreground text-xs"
 					htmlFor="howManyParagraphs"
 				>
-					Combien de paragraphes ?
+					combien de paragraphes ?
 				</Label>
 				<div className="flex items-center gap-3">
 					<div className="flex-1">
@@ -78,7 +78,7 @@ export const LoremIpsumGenerator = () => {
 							min={1}
 							onFocus={(event) => event.target.select()}
 							onValueChange={handleChange}
-							placeholder="Entrez le nombre de paragraphes ..."
+							placeholder="entrez le nombre de paragraphes ..."
 							value={inputAmount}
 						/>
 					</div>
@@ -101,7 +101,7 @@ export const LoremIpsumGenerator = () => {
 						onCheckedChange={() => setStartWithStandard(!startWithStandard)}
 					/>
 					<Label className="cursor-pointer" htmlFor="standardSentence">
-						Lorem Ipsum en premier
+						lorem Ipsum en premier
 					</Label>
 				</div>
 
@@ -112,7 +112,7 @@ export const LoremIpsumGenerator = () => {
 						onCheckedChange={() => setAsHTML(!asHTML)}
 					/>
 					<Label className="cursor-pointer" htmlFor="asHtml">
-						Format HTML
+						format HTML
 					</Label>
 				</div>
 			</div>
@@ -122,7 +122,7 @@ export const LoremIpsumGenerator = () => {
 					className="text-muted-foreground text-xs"
 					htmlFor="generatedText"
 				>
-					Texte généré
+					texte généré
 				</Label>
 				<Textarea
 					id="generatedText"
@@ -137,7 +137,7 @@ export const LoremIpsumGenerator = () => {
 					<CopyIcon />
 					{buttonText}
 				</Button>
-				<Button onClick={() => generateText()}>Générer</Button>
+				<Button onClick={() => generateText()}>générer</Button>
 			</div>
 		</>
 	);

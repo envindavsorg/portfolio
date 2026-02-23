@@ -20,7 +20,7 @@ import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
 const getCachedArticles = cache(() =>
-	getPostsByCategory('article').sort((a, b) =>
+	getPostsByCategory('articles').sort((a, b) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	)
 );
@@ -67,6 +67,8 @@ const ArticlesPage = async ({ searchParams }: BlogPageProps) => {
 					</BreadcrumbList>
 				</Breadcrumb>
 			</div>
+
+			<Divider before={false} border={false} type="half" />
 
 			<div className="flex w-full items-center justify-between gap-x-3 px-3">
 				<PixelHeading

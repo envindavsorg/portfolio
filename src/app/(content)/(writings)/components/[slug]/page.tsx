@@ -1,25 +1,18 @@
-import { ArrowLeftIcon, ArrowRightIcon } from '@phosphor-icons/react/ssr';
 import { getTableOfContents } from 'fumadocs-core/content/toc';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
-import { LLMCopyButtonWithViewOptions } from '@/actions/blog/post.action';
-import { Button } from '@/components/buttons/Button';
 import { MDX } from '@/components/markdown/mdx';
+import { Badge } from '@/components/primitives/Badge';
 import { Divider } from '@/components/primitives/Divider';
+import { PixelHeading } from '@/components/text/PixelHeading';
 import { Prose } from '@/components/text/Typography';
 import GLOBAL_DATA from '@/content/data/global';
 import { InlineToc } from '@/features/(writings)/InlineToc';
-import { KeyboardShortcuts } from '@/features/(writings)/KeyboardShortcuts';
-import { ShareMenu } from '@/features/(writings)/ShareMenu';
-import {
-	findNeighbour,
-	getPostBySlug,
-	getPostsByCategory,
-} from '@/lib/blog/posts';
+import { TopNav } from '@/features/(writings)/TopNav';
+import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
-import { cn, dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/utils';
 
 interface Props {
 	params: Promise<{
@@ -86,101 +79,72 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 
 const Page = async ({ params }: Props) => {
 	const slug = (await params).slug;
-	const post = getPostBySlug(slug);
+	const component = getPostBySlug(slug);
 
-	if (!post) {
+	if (!component) {
 		notFound();
 	}
 
-	if (post.metadata.category !== 'components') {
-		notFound();
-	}
-
-	const toc = getTableOfContents(post.content);
-	const allPosts = getPostsByCategory('components');
-	const { previous, next } = findNeighbour(allPosts, slug);
+	const toc = getTableOfContents(component.content);
+	const components = getPostsByCategory('components');
 
 	return (
 		<>
 			<script
 				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(getPageJsonLd(post)).replace(/</g, '\\u003c'),
+					__html: JSON.stringify(getPageJsonLd(component)).replace(
+						/</g,
+						'\\u003c'
+					),
 				}}
 				type="application/ld+json"
 			/>
 
-			<KeyboardShortcuts
-				basePath="/components"
-				next={next}
-				previous={previous}
+			<TopNav
+				description="tous les composants"
+				item={component}
+				items={components}
+				slug={slug}
 			/>
 
-			<div className="screen-line-before flex items-center justify-between px-3 py-2">
-				<Button
-					asChild
-					className="h-7 gap-2 rounded-lg px-0 text-muted-foreground"
-					variant="link"
+			<div className="screen-line-after flex w-full items-center justify-between gap-x-3 px-2 sm:px-4">
+				<PixelHeading
+					autoPlay
+					className="text-balance font-extrabold text-[28px] lowercase leading-snug sm:text-4xl"
+					mode="multi"
 				>
-					<Link href="/components">
-						<ArrowLeftIcon className="size-4" />
-						Tous les composants
-					</Link>
-				</Button>
+					{component.metadata.title}
+				</PixelHeading>
+			</div>
 
-				<div className="flex items-center gap-2">
-					<LLMCopyButtonWithViewOptions
-						isComponent
-						markdownUrl={`/components/${post.slug}.mdx`}
-					/>
-
-					<ShareMenu url={`/components/${post.slug}`} />
-
-					{previous && (
-						<Button asChild size="icon" variant="outline">
-							<Link href={`/components/${previous.slug}`}>
-								<ArrowLeftIcon className="size-4" />
-								<span className="sr-only">Précédent</span>
-							</Link>
-						</Button>
-					)}
-
-					{next && (
-						<Button asChild size="icon" variant="outline">
-							<Link href={`/components/${next.slug}`}>
-								<span className="sr-only">Suivant</span>
-								<ArrowRightIcon className="size-4" />
-							</Link>
-						</Button>
+			<div className="screen-line-after flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
+				<span className="text-theme">---</span>
+				<div className="flex items-center gap-2 sm:gap-4">
+					<Badge className="lowercase">{component.metadata.author}</Badge>
+					<Badge className="lowercase max-sm:hidden">
+						{dayjs(component.metadata.createdAt).format('dddd, DD MMM YYYY')}
+					</Badge>
+					{component.metadata.tags && (
+						<Badge className="lowercase">{component.metadata.tags[0]}</Badge>
 					)}
 				</div>
 			</div>
 
-			<div className="screen-line-before screen-line-after">
-				<div
-					className={cn(
-						'h-8',
-						'before:absolute before:-left-[100vw] before:-z-1 before:h-full before:w-[200vw]',
-						'before:bg-[repeating-linear-gradient(315deg,var(--pattern-foreground)_0,var(--pattern-foreground)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px] before:[--pattern-foreground:var(--color-edge)]/56'
-					)}
-				/>
+			<div className="screen-line-after px-2 py-2 sm:px-4">
+				<Prose className="lowercase">
+					-- {component.metadata.description} --
+				</Prose>
 			</div>
 
-			<Prose className="px-4">
-				<h1 className="screen-line-after mb-6 font-semibold">
-					{post.metadata.title}
-				</h1>
-
-				<p className="lead my-6">{post.metadata.description}</p>
-
+			<div className="screen-line-after px-2 py-2 sm:px-4">
 				<InlineToc items={toc} />
+			</div>
 
-				<div>
-					<MDX code={post.content} />
-				</div>
+			<Prose className="p-4 px-2 lowercase sm:px-4">
+				<MDX code={component.content} />
 			</Prose>
 
-			<div className="screen-line-before w-full" />
-			<Divider />
+			<Divider border={false} />
 		</>
 	);
 };

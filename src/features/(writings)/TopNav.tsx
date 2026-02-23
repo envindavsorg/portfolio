@@ -18,26 +18,14 @@ import { Divider } from '@/components/primitives/Divider';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { ShareMenu } from './ShareMenu';
 
-const getPostUrl = (post: Post) => {
-	const isComponent = post.metadata.category === 'components';
-	return isComponent ? `/components/${post.slug}` : `/blog/${post.slug}`;
-};
-
 interface TopNavProps {
 	items: Post[];
 	item: Post;
-	path: string;
 	slug: string;
 	description: string;
 }
 
-export const TopNav = ({
-	items,
-	item,
-	path,
-	slug,
-	description,
-}: TopNavProps) => {
+export const TopNav = ({ items, item, slug, description }: TopNavProps) => {
 	const currentIndex = items.findIndex((i) => i.slug === slug);
 	const previous = currentIndex > 0 ? items[currentIndex - 1] : null;
 	const next = currentIndex < items.length - 1 ? items[currentIndex + 1] : null;
@@ -47,13 +35,20 @@ export const TopNav = ({
 
 	return (
 		<>
-			<KeyboardShortcuts basePath={path} next={next} previous={previous} />
+			<KeyboardShortcuts
+				basePath={`/${item.metadata.category}`}
+				next={next}
+				previous={previous}
+			/>
 
 			<div className="screen-line-after px-2 py-0.5 sm:px-4">
 				<Breadcrumb>
 					<BreadcrumbList>
 						<BreadcrumbItem>
-							<BreadcrumbLink aria-label={description} href={path}>
+							<BreadcrumbLink
+								aria-label={description}
+								href={`/${item.metadata.category}`}
+							>
 								{description}
 							</BreadcrumbLink>
 						</BreadcrumbItem>
@@ -65,6 +60,8 @@ export const TopNav = ({
 				</Breadcrumb>
 			</div>
 
+			<Divider before={false} border={false} type="half" />
+
 			<div className="flex items-center px-2 py-2 sm:justify-between sm:px-4">
 				<Button
 					asChild
@@ -73,7 +70,7 @@ export const TopNav = ({
 					onMouseLeave={() => iconArrowLeftRef.current?.stopAnimation()}
 					variant="link"
 				>
-					<Link aria-label={description} href={path}>
+					<Link aria-label={description} href={`/${item.metadata.category}`}>
 						<ArrowLeftIcon ref={iconArrowLeftRef} />
 						{description}
 					</Link>
@@ -83,10 +80,10 @@ export const TopNav = ({
 					<LLMCopyButtonWithViewOptions
 						className="max-sm:me-auto"
 						isComponent={item.metadata.category === 'components'}
-						markdownUrl={`${getPostUrl(item)}.mdx`}
+						markdownUrl={`/${item.metadata.category}/${item.slug}.mdx`}
 					/>
 
-					<ShareMenu url={getPostUrl(item)} />
+					<ShareMenu url={`/${item.metadata.category}/${item.slug}`} />
 
 					{previous && (
 						<Button
@@ -96,7 +93,10 @@ export const TopNav = ({
 							size="icon"
 							variant="outline"
 						>
-							<Link aria-label={description} href={`${path}/${previous.slug}`}>
+							<Link
+								aria-label={description}
+								href={`/${item.metadata.category}/${previous.slug}`}
+							>
 								<ArrowLeftIcon ref={iconArrowLeftRef} />
 								<span className="sr-only">Précédent</span>
 							</Link>
@@ -111,7 +111,10 @@ export const TopNav = ({
 							size="icon"
 							variant="outline"
 						>
-							<Link aria-label={description} href={`${path}/${next.slug}`}>
+							<Link
+								aria-label={description}
+								href={`/${item.metadata.category}/${next.slug}`}
+							>
 								<ArrowRightIcon ref={iconArrowRightRef} />
 								<span className="sr-only">Suivant</span>
 							</Link>

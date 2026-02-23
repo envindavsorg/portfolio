@@ -5,7 +5,7 @@ interface NavigationData {
 
 export const NAVIGATION_DATA: NavigationData[] = [
 	{ title: 'accueil', link: '/' },
-	{ title: 'articles', link: '/blog' },
+	{ title: 'articles', link: '/articles' },
 	{ title: 'composants', link: '/components' },
 	{ title: 'outils', link: '/utils' },
 ];

@@ -254,7 +254,7 @@ export const Terminal = ({
 			className={cn('z-0 h-full max-h-100 w-full bg-background', className)}
 			ref={containerRef}
 		>
-			<pre className="no-scrollbar p-4">
+			<pre className="no-scrollbar px-2 py-2 sm:px-4">
 				<code className="no-scrollbar grid gap-y-1 overflow-auto">
 					{wrappedChildren}
 				</code>

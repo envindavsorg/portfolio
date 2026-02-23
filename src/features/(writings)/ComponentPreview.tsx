@@ -47,8 +47,9 @@ export const ComponentPreview = ({
 		if (!Component) {
 			return (
 				<p className="text-muted-foreground text-sm">
-					Le composant <CodeInline className="font-semibold">{name}</CodeInline>{' '}
-					n'existe pas dans le registre.
+					-- le composant{' '}
+					<CodeInline className="font-semibold">{name}</CodeInline> n'existe pas
+					dans le registre --
 				</p>
 			);
 		}
@@ -62,11 +63,11 @@ export const ComponentPreview = ({
 				<TabsList>
 					<TabsTrigger className="cursor-pointer" value="preview">
 						<EyeIcon className="size-4" />
-						Aperçu
+						aperçu
 					</TabsTrigger>
 					<TabsTrigger className="cursor-pointer" value="code">
 						<CodeIcon className="size-4" />
-						Code
+						code
 					</TabsTrigger>
 				</TabsList>
 
@@ -85,7 +86,7 @@ export const ComponentPreview = ({
 												<RepeatIcon className="size-4" />
 											</Button>
 										</TooltipTrigger>
-										<TooltipContent>Revoir</TooltipContent>
+										<TooltipContent>revoir</TooltipContent>
 									</Tooltip>
 								)}
 
@@ -101,7 +102,7 @@ export const ComponentPreview = ({
 							<React.Suspense
 								fallback={
 									<div className="flex items-center justify-center text-muted-foreground text-sm">
-										Chargement en cours ...
+										chargement en cours ...
 									</div>
 								}
 							>

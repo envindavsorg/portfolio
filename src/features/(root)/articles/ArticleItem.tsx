@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
 import { Badge } from '@/components/primitives/Badge';
 import { Prose } from '@/components/text/Typography';
 import { cn, dayjs } from '@/lib/utils';
@@ -11,6 +10,7 @@ interface ArticleItemProps {
 
 export const ArticleItem = ({ article }: ArticleItemProps) => {
 	const { slug, metadata, reading } = article;
+	console.log(metadata.category);
 
 	return (
 		<Link
@@ -20,7 +20,7 @@ export const ArticleItem = ({ article }: ArticleItemProps) => {
 				'max-sm:screen-line-before max-sm:screen-line-after',
 				'sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after'
 			)}
-			href={`/blog/${slug}`}
+			href={`${metadata.category?.toLowerCase()}/${slug}`}
 		>
 			{metadata.image && (
 				<Image
@@ -33,6 +33,38 @@ export const ArticleItem = ({ article }: ArticleItemProps) => {
 					quality={75}
 					sizes="(max-width: 640px) 100vw, 50vw"
 					src={metadata.image}
+					width={1200}
+				/>
+			)}
+
+			{metadata.bannerLight && (
+				<Image
+					alt={metadata.title}
+					className={cn(
+						'hidden [html.light_&]:block',
+						'w-full rounded-md object-cover object-center sm:aspect-video',
+						'ring-1 ring-border ring-offset-3 ring-offset-background'
+					)}
+					height={630}
+					quality={75}
+					sizes="(max-width: 640px) 100vw, 50vw"
+					src={metadata.bannerLight}
+					width={1200}
+				/>
+			)}
+
+			{metadata.bannerDark && (
+				<Image
+					alt={metadata.title}
+					className={cn(
+						'hidden [html.dark_&]:block',
+						'w-full rounded-md object-cover object-center sm:aspect-video',
+						'ring-1 ring-border ring-offset-3 ring-offset-background'
+					)}
+					height={630}
+					quality={75}
+					sizes="(max-width: 640px) 100vw, 50vw"
+					src={metadata.bannerDark}
 					width={1200}
 				/>
 			)}

@@ -40,7 +40,7 @@ export const CodeCollapsibleWrapper = ({
 		</CollapsibleContent>
 
 		<CollapsibleTrigger className="absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-lg bg-linear-to-t from-25% from-code to-transparent pb-4 font-medium text-muted-foreground text-sm group-data-[state=open]/collapsible:hidden">
-			Voir tout le code
+			voir tout le code
 		</CollapsibleTrigger>
 	</CollapsibleWithContext>
 );

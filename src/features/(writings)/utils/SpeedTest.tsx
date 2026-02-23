@@ -74,13 +74,13 @@ const PulsatingCircle = memo((props: PulsatingCircleProps) => (
 const getButtonLabel = (status: TestState['status']) => {
 	switch (status) {
 		case 'idle':
-			return 'Démarrer le test';
+			return 'démarrer le test';
 		case 'running':
-			return 'Arrêter le test';
+			return 'arrêter le test';
 		case 'finished':
-			return 'Refaire le test';
+			return 'refaire le test';
 		default:
-			return 'Démarrer le test';
+			return 'démarrer le test';
 	}
 };
 
@@ -91,7 +91,7 @@ const cleanSummary = (summary: SpeedResult): Partial<SpeedResult> =>
 
 const formatValue = (val: number | undefined, unit: string): string => {
 	const num = val ?? 0;
-	if (unit === 'Mb/s') {
+	if (unit === 'mb/s') {
 		return (num / 1_000_000).toFixed(2);
 	}
 	if (unit === 'ms') {
@@ -230,28 +230,28 @@ export const SpeedTest = () => {
 			<div className="flex flex-col gap-y-3 py-3">
 				<SpeedTestItem
 					icon={DownloadIcon}
-					label="Téléchargement"
+					label="téléchargement"
 					measure="Mb/s"
 					status={testState.status}
 					value={testState.result.download}
 				/>
 				<SpeedTestItem
 					icon={UploadIcon}
-					label="Téléversement"
+					label="téléversement"
 					measure="Mb/s"
 					status={testState.status}
 					value={testState.result.upload}
 				/>
 				<SpeedTestItem
 					icon={SpeedometerIcon}
-					label="Latence"
+					label="latence"
 					measure="ms"
 					status={testState.status}
 					value={testState.result.latency}
 				/>
 				<SpeedTestItem
 					icon={GaugeIcon}
-					label="Gigue"
+					label="gigue"
 					measure="ms"
 					status={testState.status}
 					value={testState.result.jitter}

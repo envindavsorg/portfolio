@@ -40,8 +40,6 @@ export const generateMetadata = async ({
 	}
 
 	const { title, description } = post.metadata;
-	const postUrl = getPostUrl(post);
-
 	const og = openGraphImage({
 		title,
 		description,
@@ -55,14 +53,9 @@ export const generateMetadata = async ({
 	return {
 		...og,
 		alternates: {
-			canonical: postUrl,
+			canonical: `https://cuzeacflorin.fr/${post.metadata.category}`,
 		},
 	};
-};
-
-const getPostUrl = (post: Post) => {
-	const isComponent = post.metadata.category === 'components';
-	return isComponent ? `/components/${post.slug}` : `/blog/${post.slug}`;
 };
 
 const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
@@ -73,7 +66,7 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 	image:
 		post.metadata.image ||
 		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
-	url: `https://cuzeacflorin.fr${getPostUrl(post)}`,
+	url: `https://cuzeacflorin.fr/${post.metadata.category}`,
 	datePublished: dayjs(post.metadata.createdAt).toISOString(),
 	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
 	author: {
@@ -93,9 +86,7 @@ const Page = async ({ params }: Props) => {
 	}
 
 	const toc = getTableOfContents(article.content);
-	const articles = getPostsByCategory('article').sort((a, b) =>
-		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-	);
+	const articles = getPostsByCategory('articles');
 
 	return (
 		<>
@@ -113,7 +104,6 @@ const Page = async ({ params }: Props) => {
 				description="tous les articles"
 				item={article}
 				items={articles}
-				path="/blog"
 				slug={slug}
 			/>
 

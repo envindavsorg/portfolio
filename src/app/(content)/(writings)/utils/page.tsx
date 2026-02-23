@@ -1,14 +1,25 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from '@/components/navigation/Breadcrumb';
 import { Divider } from '@/components/primitives/Divider';
-import { TextAnimate } from '@/components/text/TextAnimate';
+import { PanelContent } from '@/components/primitives/Panel';
+import { PixelHeading } from '@/components/text/PixelHeading';
+import { Prose } from '@/components/text/Typography';
 import { ToolItem } from '@/features/(root)/tools/ToolItem';
+import { filterByTag } from '@/features/(writings)/filter/filterByTag';
 import { TagsFilter } from '@/features/(writings)/filter/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
-const getCachedPosts = cache(() =>
+const getCachedUtils = cache(() =>
 	getPostsByCategory('utils').sort((a, b) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	)
@@ -35,76 +46,55 @@ type UtilsPageProps = Readonly<{
 
 const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 	const { tag } = await searchParams;
-	const selectedTag = tag?.toLowerCase();
-
-	const allUtils = getCachedPosts();
-
-	const tagCounts: Record<string, number> = {
-		tout: allUtils.length,
-	};
-
-	for (const post of allUtils) {
-		for (const tagName of post.metadata.tags || []) {
-			tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
-		}
-	}
-
-	const allTags = [
-		'tout',
-		...Object.keys(tagCounts)
-			.filter((k) => k !== 'tout')
-			.sort(),
-	];
-
-	const utils =
-		!selectedTag || selectedTag === 'tout'
-			? allUtils
-			: allUtils.filter((article) =>
-					article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag)
-				);
+	const allUtils = getCachedUtils();
+	const { tags, tagCounts, filtered, selectedTag } = filterByTag(allUtils, tag);
 
 	return (
-		<div className="min-h-svh">
-			<div className="screen-line-before screen-line-after px-3">
-				<h1 className="font-semibold text-3xl sm:text-4xl">
-					<TextAnimate animation="slideLeft" by="character" delay={0.2}>
-						Mes articles de blog
-					</TextAnimate>
-				</h1>
+		<div className="screen-line-after min-h-svh">
+			<div className="screen-line-after px-3 py-0.5">
+				<Breadcrumb>
+					<BreadcrumbList>
+						<BreadcrumbItem>
+							<BreadcrumbLink href="/">accueil</BreadcrumbLink>
+						</BreadcrumbItem>
+						<BreadcrumbSeparator />
+						<BreadcrumbItem>
+							<BreadcrumbPage>outils</BreadcrumbPage>
+						</BreadcrumbItem>
+					</BreadcrumbList>
+				</Breadcrumb>
 			</div>
 
-			<div className="screen-line-after p-3">
-				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Optimisez votre workflow avec cette suite d'outils web gratuits pour
-					développeurs.
-				</TextAnimate>
+			<Divider before={false} border={false} type="half" />
 
-				<TextAnimate
-					animation="slideUp"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.5}
-					themed
+			<div className="flex w-full items-center justify-between gap-x-3 px-3">
+				<PixelHeading
+					autoPlay
+					className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
+					mode="multi"
 				>
-					Tous les outils sont open source et conçus pour vous aider à gagner du
-					temps et à améliorer votre productivité.
-				</TextAnimate>
+					suite d'outils web
+				</PixelHeading>
 			</div>
 
-			<TagsFilter
-				selectedTag={selectedTag || 'tout'}
-				tagCounts={tagCounts}
-				tags={allTags}
-			/>
+			<PanelContent className="screen-line-after">
+				<Prose>
+					-- optimisez votre workflow avec cette <i>suite d'outils web</i>{' '}
+					gratuits pour développeurs --
+				</Prose>
+				<Prose>
+					-- tous les outils sont <span>open-source</span> et conçus pour vous
+					aider à gagner du temps et à améliorer votre productivité --
+				</Prose>
+			</PanelContent>
 
-			<Divider />
+			<TagsFilter selectedTag={selectedTag} tagCounts={tagCounts} tags={tags} />
 
-			{utils.map((util: Post) => (
+			<Divider after={false} before={false} border={false} type="half" />
+
+			{filtered.map((util: Post) => (
 				<ToolItem key={util.slug} tool={util} />
 			))}
-
-			<div className="h-8" />
 		</div>
 	);
 };

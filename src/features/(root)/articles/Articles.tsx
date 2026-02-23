@@ -12,7 +12,7 @@ import { dayjs } from '@/lib/utils';
 import { ArticleItem } from './ArticleItem';
 
 export const Articles = () => {
-	const articles = getPostsByCategory('article').sort((a, b) =>
+	const articles = getPostsByCategory('articles').sort((a, b) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	);
 

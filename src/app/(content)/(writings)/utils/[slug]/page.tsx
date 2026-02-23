@@ -3,10 +3,10 @@ import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
 import { MDX } from '@/components/markdown/mdx';
 import { Divider } from '@/components/primitives/Divider';
+import { PixelHeading } from '@/components/text/PixelHeading';
 import { Prose } from '@/components/text/Typography';
 import GLOBAL_DATA from '@/content/data/global';
-import { IsNew } from '@/features/(writings)/IsNew';
-import { TopBar } from '@/features/(writings)/TopBar';
+import { TopNav } from '@/features/(writings)/TopNav';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
@@ -70,50 +70,49 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 
 const Page = async ({ params }: Props) => {
 	const { slug } = await params;
-	const post = getPostBySlug(slug);
+	const util = getPostBySlug(slug);
 
-	if (!post) {
+	if (!util) {
 		notFound();
 	}
 
-	const { category } = post.metadata;
-	if (category !== 'utils') {
-		notFound();
-	}
+	const utils = getPostsByCategory('utils');
 
 	return (
 		<>
 			<script
 				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(getPageJsonLd(post)).replace(/</g, '\\u003c'),
+					__html: JSON.stringify(getPageJsonLd(util)).replace(/</g, '\\u003c'),
 				}}
 				type="application/ld+json"
 			/>
 
-			<TopBar
-				baseUrl="/utils"
-				postSlug={post.slug}
+			<TopNav
+				description="tous les composants"
+				item={util}
+				items={utils}
 				slug={slug}
-				title="Tous les outils"
-				type="utils"
 			/>
 
-			<Divider />
-
-			<div className="screen-line-before screen-line-after flex items-center justify-between px-3">
-				<h1 className="font-semibold text-2xl sm:text-3xl">
-					{post.metadata.title}
-				</h1>
-				{post.metadata.isNew && <IsNew />}
+			<div className="screen-line-after flex w-full items-center justify-between gap-x-3 px-2 sm:px-4">
+				<PixelHeading
+					autoPlay
+					className="text-balance font-extrabold text-[28px] lowercase leading-snug sm:text-4xl"
+					mode="multi"
+				>
+					{util.metadata.title}
+				</PixelHeading>
 			</div>
 
-			<div className="px-3 py-1.5">
-				<Prose>{post.metadata.description}</Prose>
+			<div className="screen-line-after px-2 py-2 sm:px-4">
+				<Prose className="lowercase">-- {util.metadata.description} --</Prose>
 			</div>
 
-			<Prose className="px-3 pb-6">
-				<MDX code={post.content} />
+			<Prose className="p-4 px-2 lowercase sm:px-4">
+				<MDX code={util.content} />
 			</Prose>
+
+			<Divider border={false} />
 		</>
 	);
 };

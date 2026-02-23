@@ -31,7 +31,7 @@ export const Base64 = () => {
 			setEncodeOutputText(encoded);
 			setError(null);
 		} catch (_err) {
-			setError("Erreur lors de l'encodage");
+			setError("erreur lors de l'encodage");
 			setEncodeOutputText('');
 		}
 	}, []);
@@ -43,7 +43,7 @@ export const Base64 = () => {
 
 			if (!base64Regex.test(cleanText)) {
 				setError(
-					'Format Base64 invalide. Utilisez uniquement A-Z, a-z, 0-9, +, / et ='
+					'format Base64 invalide. utilisez uniquement A-Z, a-z, 0-9, +, / et ='
 				);
 				setDecodeOutputText('');
 				return;
@@ -60,9 +60,7 @@ export const Base64 = () => {
 			);
 
 			if (decoded.includes('\uFFFD')) {
-				setError(
-					'Le texte décodé contient des caractères invalides. Vérifiez le Base64.'
-				);
+				setError('le texte décodé contient des caractères invalides.');
 				setDecodeOutputText('');
 				return;
 			}
@@ -71,7 +69,7 @@ export const Base64 = () => {
 			setError(null);
 		} catch (_err) {
 			setError(
-				'Erreur lors du décodage. Vérifiez que le texte est un Base64 valide.'
+				'erreur lors du décodage. vérifiez que le texte est un Base64 valide.'
 			);
 			setDecodeOutputText('');
 		}
@@ -106,7 +104,7 @@ export const Base64 = () => {
 		navigator.clipboard.writeText(text);
 		setCopiedField(field);
 		setTimeout(() => setCopiedField(null), 2000);
-		toast.success('Texte copié dans le presse-papier !');
+		toast.success('texte copié dans le presse-papier !');
 	}, []);
 
 	const handleReset = useCallback(() => {
@@ -120,13 +118,13 @@ export const Base64 = () => {
 	const tabs = [
 		{
 			id: 0,
-			label: 'Encoder la chaîne',
+			label: 'encoder la chaîne',
 			content: (
 				<div className="flex w-full flex-col gap-y-6 overflow-hidden py-3">
 					<div className="flex flex-col gap-y-3">
 						<div className="flex items-center justify-between">
 							<Label className="text-xl sm:text-2xl" htmlFor="encodeText">
-								Texte à encoder
+								texte à encoder
 							</Label>
 							{encodeInputText && (
 								<Button
@@ -135,11 +133,11 @@ export const Base64 = () => {
 								>
 									{copiedField === 'encode-input' ? (
 										<>
-											<CheckIcon /> Copié !
+											<CheckIcon /> copié !
 										</>
 									) : (
 										<>
-											<CopyIcon /> Copier
+											<CopyIcon /> copier
 										</>
 									)}
 								</Button>
@@ -151,7 +149,7 @@ export const Base64 = () => {
 							onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
 								handleEncodeInputChange(event.target.value)
 							}
-							placeholder="Entrez votre texte ici..."
+							placeholder="entrez votre texte ici..."
 							rows={4}
 							value={encodeInputText}
 						/>
@@ -160,7 +158,7 @@ export const Base64 = () => {
 					<div className="flex flex-col gap-y-3">
 						<div className="flex items-center justify-between">
 							<Label className="text-xl sm:text-2xl" htmlFor="decodedText">
-								Base64
+								base64
 							</Label>
 							{encodeOutputText && (
 								<Button
@@ -169,11 +167,11 @@ export const Base64 = () => {
 								>
 									{copiedField === 'encode-output' ? (
 										<>
-											<CheckIcon /> Copié !
+											<CheckIcon /> copié !
 										</>
 									) : (
 										<>
-											<CopyIcon /> Copier
+											<CopyIcon /> copier
 										</>
 									)}
 								</Button>
@@ -194,7 +192,7 @@ export const Base64 = () => {
 					<div className="flex flex-col gap-y-3">
 						<div className="flex items-center justify-between">
 							<Label className="text-xl sm:text-2xl" htmlFor="encodedText">
-								Base64
+								base64
 							</Label>
 							{decodeInputText && (
 								<Button
@@ -203,11 +201,11 @@ export const Base64 = () => {
 								>
 									{copiedField === 'decode-input' ? (
 										<>
-											<CheckIcon /> Copié !
+											<CheckIcon /> copié !
 										</>
 									) : (
 										<>
-											<CopyIcon /> Copier
+											<CopyIcon /> copier
 										</>
 									)}
 								</Button>
@@ -219,7 +217,7 @@ export const Base64 = () => {
 							onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
 								handleDecodeInputChange(event.target.value)
 							}
-							placeholder="Collez du Base64 ici pour le décoder..."
+							placeholder="collez du Base64 ici pour le décoder..."
 							value={decodeInputText}
 						/>
 					</div>
@@ -227,7 +225,7 @@ export const Base64 = () => {
 					<div className="flex flex-col gap-y-3">
 						<div className="flex items-center justify-between">
 							<Label className="text-xl sm:text-2xl" htmlFor="decodesText">
-								Texte décodé
+								texte décodé
 							</Label>
 							{decodeOutputText && (
 								<Button
@@ -236,11 +234,11 @@ export const Base64 = () => {
 								>
 									{copiedField === 'decode-output' ? (
 										<>
-											<CheckIcon /> Copié !
+											<CheckIcon /> copié !
 										</>
 									) : (
 										<>
-											<CopyIcon /> Copier
+											<CopyIcon /> copier
 										</>
 									)}
 								</Button>
@@ -267,7 +265,7 @@ export const Base64 = () => {
 			<div className="screen-line-before flex justify-end py-1.5">
 				<Button onClick={handleReset} variant="outline">
 					<ArrowsClockwiseIcon />
-					Réinitialiser les champs
+					réinitialiser les champs
 				</Button>
 			</div>
 		</>

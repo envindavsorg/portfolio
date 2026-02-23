@@ -24,7 +24,7 @@ export const JSONFormatter = () => {
 
 				setOutput(formattedJSON);
 			} catch {
-				setOutput('Oups, le JSON est incorrect !');
+				setOutput('oups, le JSON est incorrect !');
 			}
 		},
 		[]
@@ -38,7 +38,7 @@ export const JSONFormatter = () => {
 						className="text-muted-foreground text-xs"
 						htmlFor="jsonTextArea"
 					>
-						JSON
+						json
 					</Label>
 					<Textarea
 						className="outline-0"
@@ -55,7 +55,7 @@ export const JSONFormatter = () => {
 						className="text-muted-foreground text-xs"
 						htmlFor="jsonTextAreaOutput"
 					>
-						JSON mis en forme
+						json mis en forme
 					</Label>
 					<Textarea
 						className="outline-0"

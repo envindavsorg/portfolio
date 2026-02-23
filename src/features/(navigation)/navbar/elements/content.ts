@@ -33,7 +33,7 @@ export const COMMANDS: CommandGroupDef[] = [
 			},
 			{
 				title: 'mes articles de blog',
-				url: '/blog',
+				url: '/articles',
 				icon: BookIcon,
 				kind: 'page',
 			},
