@@ -50,7 +50,9 @@
         "noStaticElementInteractions": "off",
         "noNoninteractiveElementInteractions": "off",
         "noSvgWithoutTitle": "off",
-        "useKeyWithMouseEvents": "off"
+        "useKeyWithMouseEvents": "off",
+        "useFocusableInteractive": "off",
+        "useSemanticElements": "off"
       },
       "complexity": {
         "noImportantStyles": "off",

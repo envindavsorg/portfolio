@@ -1,14 +1,25 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from '@/components/navigation/Breadcrumb';
 import { Divider } from '@/components/primitives/Divider';
-import { TextAnimate } from '@/components/text/TextAnimate';
+import { PanelContent } from '@/components/primitives/Panel';
+import { PixelHeading } from '@/components/text/PixelHeading';
+import { Prose } from '@/components/text/Typography';
 import { ArticleItem } from '@/features/(root)/articles/ArticleItem';
-import { TagsFilter } from '@/features/(writings)/TagsFilter';
+import { filterByTag } from '@/features/(writings)/filter/filterByTag';
+import { TagsFilter } from '@/features/(writings)/filter/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
-const getCachedPosts = cache(() =>
+const getCachedArticles = cache(() =>
 	getPostsByCategory('article').sort((a, b) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	)
@@ -33,85 +44,55 @@ type BlogPageProps = Readonly<{
 	}>;
 }>;
 
-const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
+const ArticlesPage = async ({ searchParams }: BlogPageProps) => {
 	const { tag } = await searchParams;
-	const selectedTag = tag?.toLowerCase();
-
-	const allArticles = getCachedPosts();
-
-	const tagCounts: Record<string, number> = {
-		Tout: allArticles.length,
-	};
-
-	for (const post of allArticles) {
-		for (const tagName of post.metadata.tags || []) {
-			tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
-		}
-	}
-
-	const allTags = [
-		'Tout',
-		...Object.keys(tagCounts)
-			.filter((k) => k !== 'Tout')
-			.sort(),
-	];
-
-	const articles =
-		!selectedTag || selectedTag === 'tout'
-			? allArticles
-			: allArticles.filter((article) =>
-					article.metadata.tags?.some((t) => t.toLowerCase() === selectedTag)
-				);
+	const allArticles = getCachedArticles();
+	const { tags, tagCounts, filtered, selectedTag } = filterByTag(
+		allArticles,
+		tag
+	);
 
 	return (
-		<div className="min-h-svh">
-			<div className="screen-line-before screen-line-after px-3">
-				<h1 className="font-semibold text-3xl sm:text-4xl">
-					<TextAnimate animation="slideLeft" by="character" delay={0.2}>
-						Mes articles de blog
-					</TextAnimate>
-				</h1>
+		<div className="screen-line-after min-h-svh">
+			<div className="screen-line-after px-3 py-0.5">
+				<Breadcrumb>
+					<BreadcrumbList>
+						<BreadcrumbItem>
+							<BreadcrumbLink href="/">accueil</BreadcrumbLink>
+						</BreadcrumbItem>
+						<BreadcrumbSeparator />
+						<BreadcrumbItem>
+							<BreadcrumbPage>articles de blog</BreadcrumbPage>
+						</BreadcrumbItem>
+					</BreadcrumbList>
+				</Breadcrumb>
 			</div>
 
-			<div className="screen-line-after p-3">
-				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Retrouvez tous mes articles de blog où je partage mon expérience en
-					développement web. J'y aborde les bonnes pratiques, les patterns
-					modernes, les solutions aux problèmes techniques du quotidien, et mes
-					découvertes sur l'écosystème JavaScript.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="slideUp"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.5}
+			<div className="flex w-full items-center justify-between gap-x-3 px-3">
+				<PixelHeading
+					autoPlay
+					className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
+					mode="multi"
 				>
-					Chaque article est le fruit d'une expérience concrète, d'un bug résolu
-					ou d'une technique apprise.
-				</TextAnimate>
-
-				<TextAnimate
-					animation="slideUp"
-					as="p"
-					by="word"
-					className="mt-3"
-					delay={0.6}
-					themed
-				>
-					Mon objectif : documenter mon apprentissage et aider d'autres
-					développeurs qui rencontrent les mêmes défis.
-				</TextAnimate>
+					mes articles de blog
+				</PixelHeading>
 			</div>
 
-			<TagsFilter
-				selectedTag={selectedTag || 'Tout'}
-				tagCounts={tagCounts}
-				tags={allTags}
-			/>
+			<PanelContent className="screen-line-after screen-line-before">
+				<Prose>
+					-- retrouvez tous mes <span>articles de blog</span> où je partage mon
+					expérience en développement web --
+				</Prose>
+				<Prose>
+					-- j'y aborde les <i>bonnes pratiques</i>, les{' '}
+					<i>patterns modernes</i>, les solutions aux problèmes techniques du
+					quotidien, et mes découvertes sur l'écosystème <i>JavaScript</i> --
+				</Prose>
+			</PanelContent>
 
-			<Divider />
+			<TagsFilter selectedTag={selectedTag} tagCounts={tagCounts} tags={tags} />
+
+			<Divider after={false} before={false} border={false} type="half" />
 
 			<div className="screen-line-before screen-line-after relative py-4">
 				<div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
@@ -120,15 +101,13 @@ const BlogPage = async ({ searchParams }: Readonly<BlogPageProps>) => {
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					{articles.map((post: Post) => (
-						<ArticleItem article={post} key={post.slug} />
+					{filtered.map((item) => (
+						<ArticleItem article={item} key={item.slug} />
 					))}
 				</div>
 			</div>
-
-			<div className="h-8" />
 		</div>
 	);
 };
 
-export default BlogPage;
+export default ArticlesPage;

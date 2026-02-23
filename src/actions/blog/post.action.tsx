@@ -10,7 +10,6 @@ import {
 import Link from 'next/link';
 import type React from 'react';
 import { lazy, useMemo, useOptimistic, useTransition } from 'react';
-import { toast } from 'sonner';
 import { buttonVariants } from '@/components/buttons/Button';
 import {
 	DropdownMenu,
@@ -73,21 +72,19 @@ export const LLMCopyButton = ({ markdownUrl }: LLMCopyButtonProps) => {
 			}
 
 			await soundManager.playToastSound();
-			toast.success('Contenu copié dans le presse-papier !');
-
 			await delay(2000);
 		});
 	};
 
 	return (
 		<button
-			className="flex h-7 cursor-pointer items-center gap-x-1.5 rounded-l-full pr-2 pl-2.5 font-medium text-sm disabled:pointer-events-none disabled:opacity-50"
+			className="flex h-7 cursor-pointer items-center gap-x-1.5 rounded-l-full pr-2 pl-2.5 font-medium text-xs disabled:pointer-events-none disabled:opacity-50 sm:text-sm"
 			disabled={state === 'fetching'}
 			onClick={handleCopy}
 			type="button"
 		>
 			<Icon className="size-4" />
-			Markdown
+			markdown
 		</button>
 	);
 };
@@ -144,13 +141,13 @@ export const ViewOptions = ({
 
 		const _items = [
 			{
-				title: 'Voir en Markdown',
+				title: 'voir en Markdown',
 				href: fullMarkdownUrl,
 				icon: Icons.markdown,
 				tool: 'markdown',
 			},
 			{
-				title: 'Ouvrir dans ChatGPT',
+				title: 'ouvrir dans ChatGPT',
 				href: `https://chatgpt.com/?${new URLSearchParams({
 					hints: 'search',
 					q,
@@ -159,7 +156,7 @@ export const ViewOptions = ({
 				tool: 'chatgpt',
 			},
 			{
-				title: 'Ouvrir dans Claude',
+				title: 'ouvrir dans Claude',
 				href: `https://claude.ai/new?${new URLSearchParams({
 					q,
 				})}`,
@@ -170,7 +167,7 @@ export const ViewOptions = ({
 
 		if (isComponent) {
 			_items.splice(1, 0, {
-				title: 'Ouvrir dans v0',
+				title: 'ouvrir dans v0',
 				href: `https://v0.app/?${new URLSearchParams({
 					q,
 				})}`,
@@ -191,7 +188,7 @@ export const ViewOptions = ({
 				>
 					<CaretDownIcon className="mr-1 size-4 group-data-[state=open]/toggle:hidden" />
 					<CaretUpIcon className="mr-1 size-4 group-data-[state=closed]/toggle:hidden" />
-					<span className="sr-only">Voir les options de visualisation</span>
+					<span className="sr-only">voir les options de visualisation</span>
 				</button>
 			</DropdownMenuTrigger>
 
@@ -218,14 +215,17 @@ export const ViewOptions = ({
 interface LLMCopyButtonWithViewOptionsProps {
 	markdownUrl: string;
 	isComponent?: boolean;
+	className?: string;
 }
 
 export const LLMCopyButtonWithViewOptions = ({
 	markdownUrl,
 	isComponent = false,
+	className,
 }: LLMCopyButtonWithViewOptionsProps) => (
 	<div
 		className={cn(
+			className,
 			buttonVariants({
 				size: 'default',
 				variant: 'outline',

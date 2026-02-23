@@ -8,7 +8,9 @@ import { Button } from '@/components/buttons/Button';
 import {
 	Drawer,
 	DrawerContent,
+	DrawerDescription,
 	DrawerHeader,
+	DrawerTitle,
 	DrawerTrigger,
 } from '@/components/overlays/Drawer';
 import { Badge } from '@/components/primitives/Badge';
@@ -24,6 +26,9 @@ type TagFilterListProps = TagsFilterProps & {
 	onTagClick: (tag: string) => void;
 };
 
+const isTagActive = (tag: string, selectedTag: string) =>
+	tag === 'tout' ? selectedTag === 'tout' : selectedTag === tag.toLowerCase();
+
 const DesktopTagFilter = ({
 	tags,
 	selectedTag,
@@ -31,12 +36,8 @@ const DesktopTagFilter = ({
 	onTagClick,
 }: TagFilterListProps) => (
 	<div className="screen-line-after hidden flex-wrap gap-x-4 px-3 py-1.5 md:flex">
-		{tags.map((tag: string) => {
-			const isActive =
-				tag === 'Tout'
-					? selectedTag === 'Tout'
-					: selectedTag === tag.toLowerCase();
-
+		{tags.map((tag) => {
+			const isActive = isTagActive(tag, selectedTag);
 			return (
 				<div className="flex items-center gap-x-1.5" key={tag}>
 					<Button
@@ -44,7 +45,7 @@ const DesktopTagFilter = ({
 							'px-0',
 							isActive
 								? 'text-theme underline underline-offset-4'
-								: 'text-foreground'
+								: 'text-foreground lowercase'
 						)}
 						onClick={() => onTagClick(tag)}
 						variant="link"
@@ -80,48 +81,49 @@ const MobileTagFilter = ({
 			</span>
 			<CaretDownIcon className="size-4" />
 		</DrawerTrigger>
-
-		<DrawerContent className="md:hidden">
-			<DrawerHeader>
-				<h3 className="font-semibold text-base">Filtrer par catégorie :</h3>
-			</DrawerHeader>
-
-			<div className="space-y-3">
-				{tags.map((tag: string) => {
-					const isActive =
-						tag === 'Tout'
-							? selectedTag === 'Tout'
-							: selectedTag === tag.toLowerCase();
-
-					return (
-						<div className="flex items-center justify-between" key={tag}>
-							<Button
-								className={cn(
-									'px-0 font-medium text-base',
-									isActive
-										? 'text-theme underline underline-offset-4'
-										: 'text-foreground'
-								)}
-								onClick={() => onTagClick(tag)}
-								variant="link"
-							>
-								{tag}
-							</Button>
-							{tagCounts?.[tag] && (
-								<Badge
+		<DrawerContent className="bg-background p-0 md:hidden">
+			<div className="p-5">
+				<DrawerHeader className="mb-6">
+					<DrawerTitle className="font-semibold text-lg text-theme leading-normal sm:text-xl">
+						filtrer les articles
+					</DrawerTitle>
+					<DrawerDescription className="text-foreground text-sm leading-normal">
+						choisissez la catégorie ...
+					</DrawerDescription>
+				</DrawerHeader>
+				<div className="space-y-3">
+					{tags.map((tag) => {
+						const isActive = isTagActive(tag, selectedTag);
+						return (
+							<div className="flex items-center justify-between" key={tag}>
+								<Button
 									className={cn(
-										'aspect-square border',
+										'px-0 font-medium text-sm',
 										isActive
-											? 'border-theme text-theme'
-											: 'border-input text-foreground'
+											? 'text-theme underline underline-offset-4'
+											: 'text-foreground'
 									)}
+									onClick={() => onTagClick(tag)}
+									variant="link"
 								>
-									{tagCounts[tag]}
-								</Badge>
-							)}
-						</div>
-					);
-				})}
+									{tag}
+								</Button>
+								{tagCounts?.[tag] && (
+									<Badge
+										className={cn(
+											'aspect-square border',
+											isActive
+												? 'border-theme text-theme'
+												: 'border-input text-foreground'
+										)}
+									>
+										{tagCounts[tag]}
+									</Badge>
+								)}
+							</div>
+						);
+					})}
+				</div>
 			</div>
 		</DrawerContent>
 	</Drawer>
@@ -137,17 +139,14 @@ export const TagsFilter = ({
 
 	const handleTagClick = useCallback(
 		(tag: string) => {
-			const params: URLSearchParams = new URLSearchParams(
-				window.location.search
-			);
-
-			if (tag === 'Tout') {
+			const params = new URLSearchParams(window.location.search);
+			if (tag === 'tout') {
 				params.delete('tag');
 			} else {
 				params.set('tag', tag.toLowerCase());
 			}
-
-			router.push(`${pathname}?${params.toString()}`, {
+			const query = params.toString();
+			router.push(query ? `${pathname}?${query}` : pathname, {
 				scroll: false,
 			});
 		},
@@ -158,7 +157,7 @@ export const TagsFilter = ({
 		return null;
 	}
 
-	const childProps = {
+	const childProps: TagFilterListProps = {
 		tags,
 		selectedTag,
 		tagCounts,

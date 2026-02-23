@@ -3,7 +3,7 @@ import { cache } from 'react';
 import { Divider } from '@/components/primitives/Divider';
 import { TextAnimate } from '@/components/text/TextAnimate';
 import { ToolItem } from '@/features/(root)/tools/ToolItem';
-import { TagsFilter } from '@/features/(writings)/TagsFilter';
+import { TagsFilter } from '@/features/(writings)/filter/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
@@ -40,7 +40,7 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 	const allUtils = getCachedPosts();
 
 	const tagCounts: Record<string, number> = {
-		Tout: allUtils.length,
+		tout: allUtils.length,
 	};
 
 	for (const post of allUtils) {
@@ -50,9 +50,9 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 	}
 
 	const allTags = [
-		'Tout',
+		'tout',
 		...Object.keys(tagCounts)
-			.filter((k) => k !== 'Tout')
+			.filter((k) => k !== 'tout')
 			.sort(),
 	];
 
@@ -93,7 +93,7 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 			</div>
 
 			<TagsFilter
-				selectedTag={selectedTag || 'Tout'}
+				selectedTag={selectedTag || 'tout'}
 				tagCounts={tagCounts}
 				tags={allTags}
 			/>

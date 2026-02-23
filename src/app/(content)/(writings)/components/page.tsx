@@ -13,7 +13,7 @@ import { TailwindIcon } from '@/components/stack/Tailwind';
 import { TypeScriptIcon } from '@/components/stack/TypeScript';
 import { TextAnimate } from '@/components/text/TextAnimate';
 import { ArticleItem } from '@/features/(root)/articles/ArticleItem';
-import { TagsFilter } from '@/features/(writings)/TagsFilter';
+import { TagsFilter } from '@/features/(writings)/filter/TagsFilter';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
@@ -52,7 +52,7 @@ const ComponentsPage = async ({
 	const allComponents = getCachedPosts();
 
 	const tagCounts: Record<string, number> = {
-		Tout: allComponents.length,
+		tout: allComponents.length,
 	};
 
 	for (const post of allComponents) {
@@ -62,9 +62,9 @@ const ComponentsPage = async ({
 	}
 
 	const allTags = [
-		'Tout',
+		'tout',
 		...Object.keys(tagCounts)
-			.filter((k) => k !== 'Tout')
+			.filter((k) => k !== 'tout')
 			.sort(),
 	];
 
@@ -158,7 +158,7 @@ const ComponentsPage = async ({
 			</div>
 
 			<TagsFilter
-				selectedTag={selectedTag || 'Tout'}
+				selectedTag={selectedTag || 'tout'}
 				tagCounts={tagCounts}
 				tags={allTags}
 			/>

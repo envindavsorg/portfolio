@@ -5,12 +5,12 @@ type DocsLayoutProps = Readonly<{
 	children: React.ReactNode;
 }>;
 
-const DocsLayout = ({ children }: DocsLayoutProps) => (
+const WritingsLayout = ({ children }: DocsLayoutProps) => (
 	<div className="mx-auto min-h-svh border-edge border-x md:max-w-3xl">
-		<Divider />
+		<Divider before={false} border={false} type="half" />
 
 		{children}
 	</div>
 );
 
-export default DocsLayout;
+export default WritingsLayout;
