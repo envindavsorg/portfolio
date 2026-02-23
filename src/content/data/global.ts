@@ -22,10 +22,10 @@ const USER = {
 
 const OVERVIEW = {
 	sentences: [
-		'imagine, code, crée, inspire',
-		'chaque petit pixel compte',
-		'du concept au déploiement',
-		'chaque petit détail compte',
+		'-- imagine, code, crée, inspire --',
+		'-- chaque petit pixel compte --',
+		'-- du concept au déploiement --',
+		'-- chaque petit détail compte --',
 	],
 } satisfies OVERVIEW;
 

@@ -21,10 +21,10 @@ interface CopyButtonProps {
 	timeout?: number;
 }
 
-const CopyButton = ({
+export const CopyButton = ({
 	value,
 	className,
-	label = 'Copier le texte dans le presse-papier',
+	label = 'copier le texte dans le presse-papier',
 	timeout = 2000,
 }: CopyButtonProps) => {
 	const [state, setState] = useState<CopyState>('idle');
@@ -73,7 +73,3 @@ const CopyButton = ({
 		</Button>
 	);
 };
-
-CopyButton.displayName = 'CopyButton';
-
-export { CopyButton };

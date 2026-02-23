@@ -1,11 +1,6 @@
-import type React from 'react';
-import { NextJSIcon } from '@/components/stack/Next';
-import { NPMIcon } from '@/components/stack/NPM';
-
 export interface Project {
 	id: string;
 	name: string;
-	icon: (props: React.SVGProps<SVGSVGElement>) => React.JSX.Element;
 	type: string;
 	link: string;
 	skills: string[];
@@ -17,7 +12,6 @@ export const PROJECTS: Project[] = [
 	{
 		id: 'ts-safe-path',
 		name: 'ts-safe-path',
-		icon: NPMIcon,
 		type: 'librairie',
 		link: 'https://www.npmjs.com/package/ts-safe-path',
 		skills: [
@@ -46,7 +40,6 @@ export const PROJECTS: Project[] = [
 	{
 		id: 'portfolio',
 		name: 'cuzeacflorin.fr',
-		icon: NextJSIcon,
 		type: 'portfolio',
 		link: 'https://github.com/envindavsorg/cuzeacflorin.fr',
 		skills: [

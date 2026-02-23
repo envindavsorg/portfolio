@@ -3,7 +3,6 @@ import { getCommitData } from '@/actions/github/commit.action';
 import { HeartIcon } from '@/components/icons/HeartIcon';
 import { Divider } from '@/components/primitives/Divider';
 import { Panel } from '@/components/primitives/Panel';
-import { Prose } from '@/components/text/Typography';
 import { dayjs } from '@/lib/utils';
 import { FooterClock } from './FooterClock';
 import { FooterDate } from './FooterDate';
@@ -50,22 +49,22 @@ export const Footer = async () => {
 			</Panel>
 
 			<div className="mx-auto md:max-w-3xl">
-				<Divider type="half" />
+				<Divider after={false} type="half" />
 			</div>
 
 			<FooterClock />
 
 			<div className="mx-auto md:max-w-3xl">
-				<Divider type="half" />
+				<Divider after={false} before={false} type="half" />
 			</div>
 
-			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 md:max-w-3xl">
-				<Prose>développé avec beaucoup d'</Prose>
+			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 text-sm sm:text-base md:max-w-3xl">
+				développé avec beaucoup d'
 				<HeartIcon
 					className="relative me-1 text-destructive after:absolute after:-inset-2"
 					size={14}
 				/>
-				<Prose>à Paris.</Prose>
+				à Paris.
 			</div>
 
 			<FooterDate />

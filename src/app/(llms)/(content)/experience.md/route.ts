@@ -1,4 +1,4 @@
-import { EXPERIENCES } from '@/features/(homepage)/experiences/content';
+import { EXPERIENCES } from '@/features/(root)/experiences/content';
 
 const content = `
 # Mes expériences professionnelles

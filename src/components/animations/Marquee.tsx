@@ -49,5 +49,15 @@ export const MarqueeItem = ({
 	className,
 	...props
 }: HTMLAttributes<HTMLDivElement>) => (
-	<div className={cn('mx-2 shrink-0 object-contain', className)} {...props} />
+	<div
+		className={cn(
+			'mx-2 shrink-0 object-contain',
+			'flex size-12 shrink-0 items-center justify-center',
+			'rounded-lg border border-muted-foreground/15 bg-muted',
+			'ring-1 ring-edge ring-offset-1 ring-offset-background',
+			'[&_svg]:size-6 [&_svg]:shrink-0',
+			className
+		)}
+		{...props}
+	/>
 );

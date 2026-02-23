@@ -9,7 +9,7 @@ import {
 	PanelTitle,
 } from '@/components/primitives/Panel';
 import { TextAnimate } from '@/components/text/TextAnimate';
-import { Cover } from '@/features/(homepage)/cover/Cover';
+import { Cover } from '@/features/(root)/cover/Cover';
 
 const NotFound = () => (
 	<div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl">

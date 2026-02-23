@@ -2,18 +2,17 @@ import type { Metadata } from 'next';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
 import { Divider } from '@/components/primitives/Divider';
 import GLOBAL_DATA from '@/content/data/global';
-import { About } from '@/features/(homepage)/about/About';
-import { Branding } from '@/features/(homepage)/branding/Branding';
-import { Contact } from '@/features/(homepage)/contact/Contact';
-import { Cover } from '@/features/(homepage)/cover/Cover';
-import { Cv } from '@/features/(homepage)/cv/Cv';
-import { Experiences } from '@/features/(homepage)/experiences/Experiences';
-import { Header } from '@/features/(homepage)/header/Header';
-import { Overview } from '@/features/(homepage)/overview/Overview';
-import { Projects } from '@/features/(homepage)/projects/Projects';
+import { About } from '@/features/(root)/about/About';
 import { Articles } from '@/features/(root)/articles/Articles';
+import { Branding } from '@/features/(root)/branding/Branding';
 import { Certs } from '@/features/(root)/certs/Certs';
 import { Commits } from '@/features/(root)/commits/Commits';
+import { Cover } from '@/features/(root)/cover/Cover';
+import { Cv } from '@/features/(root)/cv/Cv';
+import { Experiences } from '@/features/(root)/experiences/Experiences';
+import { Header } from '@/features/(root)/header/Header';
+import { Overview } from '@/features/(root)/overview/Overview';
+import { Projects } from '@/features/(root)/projects/Projects';
 import { TechStack } from '@/features/(root)/stack/Stack';
 import { Tools } from '@/features/(root)/tools/Tools';
 import { openGraphImage } from '@/lib/open-graph';
@@ -58,8 +57,6 @@ const Page = () => (
 			<Header />
 			<Divider />
 			<Overview />
-			<Divider type="half" />
-			<Contact />
 			<Divider />
 			<Cv />
 			<Divider />

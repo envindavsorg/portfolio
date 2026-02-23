@@ -1,30 +1,26 @@
-import { Panel, PanelHeader, PanelTitle } from '@/components/primitives/Panel';
-import { TextAnimate } from '@/components/text/TextAnimate';
+import { Divider } from '@/components/primitives/Divider';
+import { Panel, PanelHeader } from '@/components/primitives/Panel';
 import { BrandingColors } from './BrandingColors';
 import { BrandingMark } from './BrandingMark';
 
-const Branding = () => (
+export const Branding = () => (
 	<Panel>
-		<PanelHeader>
-			<PanelTitle>
-				<TextAnimate animation="slideLeft" by="character" delay={0.2}>
-					mon branding
-				</TextAnimate>
-			</PanelTitle>
-		</PanelHeader>
+		<PanelHeader sticky title="mon branding" />
 
 		<div className="grid grid-cols-[2rem_1fr]">
 			<div className="flex items-center justify-center border-edge border-r bg-background sm:h-26">
 				<span className="rotate-270 select-none text-muted-foreground text-sm">
-					Assets
+					assets
 				</span>
 			</div>
 
 			<BrandingMark />
-
+		</div>
+		<Divider border={false} type="half" />
+		<div className="grid grid-cols-[2rem_1fr]">
 			<div className="flex items-center justify-center border-edge border-r bg-background sm:h-26">
 				<span className="rotate-270 select-none text-muted-foreground text-sm">
-					Couleurs
+					couleurs
 				</span>
 			</div>
 
@@ -32,7 +28,3 @@ const Branding = () => (
 		</div>
 	</Panel>
 );
-
-Branding.displayName = 'Branding';
-
-export { Branding };
