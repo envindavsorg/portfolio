@@ -2,8 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
+import { cn } from '@/lib/utils';
 
-export const FooterClock = () => {
+interface FooterClockProps {
+	isActionnable?: boolean;
+}
+
+export const FooterClock = ({ isActionnable = true }: FooterClockProps) => {
 	const [time, setTime] = useState<Date | null>(null);
 	const [is24Hour, setIs24Hour] = useState<boolean>(true);
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -45,16 +50,22 @@ export const FooterClock = () => {
 		}
 
 		return time.toLocaleDateString('fr-FR', {
-			weekday: 'short',
+			weekday: isActionnable ? 'short' : 'long',
 			day: 'numeric',
-			month: 'short',
+			month: isActionnable ? 'short' : 'long',
 			year: 'numeric',
 		});
 	}, [time?.getDate(), time?.getMonth(), time?.getFullYear()]);
 
 	if (!time) {
 		return (
-			<div className="text-balance font-medium text-sm text-transparent tracking-tight">
+			<div
+				className={cn(
+					'text-balance',
+					isActionnable && 'text-sm tracking-tight',
+					!isActionnable && 'text-base'
+				)}
+			>
 				00:00:00, dim. 00 janv. 0000
 			</div>
 		);
@@ -68,34 +79,48 @@ export const FooterClock = () => {
 	const amPm = is24Hour ? '' : time.getHours() >= 12 ? ' PM' : ' AM';
 
 	return (
-		<div className="screen-line-before screen-line-after mx-auto flex items-center justify-between border-edge border-x p-2 max-sm:flex-col max-sm:gap-y-3 md:max-w-3xl">
+		<div
+			className={cn(
+				'screen-line-before screen-line-after',
+				'mx-auto flex items-center max-sm:flex-col max-sm:gap-y-3',
+				!isActionnable && 'justify-center',
+				isActionnable && 'justify-between',
+				'w-full border-edge border-x p-2 md:max-w-3xl'
+			)}
+		>
 			<time
-				className="text-balance font-medium text-sm tracking-tight"
+				className={cn(
+					'text-balance',
+					isActionnable && 'text-sm tracking-tight',
+					!isActionnable && 'text-base'
+				)}
 				dateTime={time.toISOString()}
 			>
 				{hours}:{minutes}:{seconds}
 				{amPm}, {formattedDate}
 			</time>
 
-			<div className="flex items-center">
-				<Button
-					aria-pressed={is24Hour}
-					className={is24Hour ? 'text-theme underline' : ''}
-					onClick={() => handleFormatChange(true)}
-					variant="link"
-				>
-					24h
-				</Button>
+			{isActionnable && (
+				<div className="flex items-center">
+					<Button
+						aria-pressed={is24Hour}
+						className={is24Hour ? 'text-theme underline' : ''}
+						onClick={() => handleFormatChange(true)}
+						variant="link"
+					>
+						24h
+					</Button>
 
-				<Button
-					aria-pressed={!is24Hour}
-					className={is24Hour ? '' : 'text-theme underline'}
-					onClick={() => handleFormatChange(false)}
-					variant="link"
-				>
-					12h
-				</Button>
-			</div>
+					<Button
+						aria-pressed={!is24Hour}
+						className={is24Hour ? '' : 'text-theme underline'}
+						onClick={() => handleFormatChange(false)}
+						variant="link"
+					>
+						12h
+					</Button>
+				</div>
+			)}
 		</div>
 	);
 };

@@ -52,8 +52,7 @@ export const OverviewContent = () => (
 				{row.map(({ icon, children }, itemIndex) => (
 					<div
 						className={cn(
-							itemIndex === 0 &&
-								rowIndex < lastRowIndex &&
+							!(rowIndex === lastRowIndex && itemIndex === row.length - 1) &&
 								'max-sm:screen-line-after'
 						)}
 						key={itemIndex}

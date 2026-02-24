@@ -7,10 +7,15 @@ import { cn } from '@/lib/utils';
 import { FlipSentences } from '@/registry/flip-sentences';
 import { HeaderPronounce } from './HeaderPronounce';
 
-const capture = process.env.ENV_TYPE === 'capture';
 const { USER, OVERVIEW } = GLOBAL_DATA;
 
-export const Header = () => (
+interface HeaderProps {
+	capture?: boolean;
+}
+
+export const Header = ({
+	capture = process.env.ENV_TYPE === 'capture',
+}: HeaderProps) => (
 	<Panel>
 		<div className="flex">
 			<div
