@@ -9,18 +9,19 @@ import {
 } from '@/components/primitives/Collapsible';
 import { Separator } from '@/components/primitives/Separator';
 import { cn } from '@/lib/utils';
+import { ComponentProps } from 'react';
 
 export const CodeCollapsibleWrapper = ({
 	className,
 	children,
 	...props
-}: React.ComponentProps<typeof Collapsible>) => (
+}: ComponentProps<typeof Collapsible>) => (
 	<CollapsibleWithContext
 		className={cn('group/collapsible not-prose relative my-6', className)}
 		{...props}
 	>
 		<CollapsibleTrigger asChild>
-			<div className="absolute top-2 right-10 z-10 flex items-center gap-2">
+			<div className="absolute top-3 right-10 z-10 flex items-center gap-2">
 				<Button className="size-6 rounded-md" size="icon" variant="outline">
 					<CollapsibleChevronsIcon />
 				</Button>
@@ -31,15 +32,13 @@ export const CodeCollapsibleWrapper = ({
 				/>
 			</div>
 		</CollapsibleTrigger>
-
 		<CollapsibleContent
 			className="overflow-hidden data-[state=closed]:max-h-80 data-[state=closed]:rounded-b-lg [&>figure]:my-0"
 			forceMount
 		>
 			{children}
 		</CollapsibleContent>
-
-		<CollapsibleTrigger className="absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-lg bg-linear-to-t from-25% from-code to-transparent pb-4 font-medium text-muted-foreground text-sm group-data-[state=open]/collapsible:hidden">
+		<CollapsibleTrigger className="underline underline-offset-2 cursor-pointer absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-lg bg-linear-to-t from-25% from-code to-transparent pb-4 font-medium text-foreground text-sm group-data-[state=open]/collapsible:hidden">
 			voir tout le code
 		</CollapsibleTrigger>
 	</CollapsibleWithContext>

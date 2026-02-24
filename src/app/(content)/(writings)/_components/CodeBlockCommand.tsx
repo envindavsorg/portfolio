@@ -11,30 +11,10 @@ import {
 } from '@/components/primitives/Tabs';
 import type { PackageManager } from '@/hooks/use-config';
 import useConfig from '@/hooks/use-config';
-
-const PNPMIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/PNPM').then((m) => ({
-		default: m.PNPMIcon,
-	}))
-);
-
-const YarnIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/Yarn').then((m) => ({
-		default: m.YarnIcon,
-	}))
-);
-
-const NPMIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/NPM').then((m) => ({
-		default: m.NPMIcon,
-	}))
-);
-
-const BunIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/Bun').then((m) => ({
-		default: m.BunIcon,
-	}))
-);
+import { PNPMIcon } from '@/components/blocks/icons/stack/PNPM';
+import { YarnIcon } from '@/components/blocks/icons/stack/Yarn';
+import { NPMIcon } from '@/components/blocks/icons/stack/NPM';
+import { BunIcon } from '@/components/blocks/icons/stack/Bun';
 
 const getIconForPackageManager = (manager: string) => {
 	switch (manager) {
@@ -51,21 +31,21 @@ const getIconForPackageManager = (manager: string) => {
 	}
 };
 
+interface CodeBlockCommandProps {
+	__pnpm__?: string;
+	__yarn__?: string;
+	__npm__?: string;
+	__bun__?: string;
+}
+
 export const CodeBlockCommand = ({
 	__pnpm__,
 	__yarn__,
 	__npm__,
 	__bun__,
-}: {
-	__pnpm__?: string;
-	__yarn__?: string;
-	__npm__?: string;
-	__bun__?: string;
-}) => {
+}: CodeBlockCommandProps) => {
 	const [config, setConfig] = useConfig();
-
 	const packageManager = config.packageManager || 'pnpm';
-
 	const tabs = useMemo(
 		() => ({
 			pnpm: __pnpm__,
@@ -88,10 +68,9 @@ export const CodeBlockCommand = ({
 				}}
 				value={packageManager}
 			>
-				<div className="border-b px-4">
+				<div className="border-b border-edge px-4">
 					<TabsList className="h-auto translate-y-px gap-3 rounded-none bg-transparent p-0 dark:bg-transparent [&_svg]:size-4 [&_svg]:text-muted-foreground">
 						{getIconForPackageManager(packageManager)}
-
 						{Object.entries(tabs).map(([key]) => (
 							<TabsTrigger
 								className="h-10 rounded-none border-transparent border-b p-0 data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:inset-shadow-none dark:data-[state=active]:bg-transparent"
@@ -120,7 +99,7 @@ export const CodeBlockCommand = ({
 			</Tabs>
 
 			<CopyButton
-				className="absolute top-2 right-2"
+				className="absolute top-1 right-2"
 				value={tabs[packageManager] || ''}
 			/>
 		</div>

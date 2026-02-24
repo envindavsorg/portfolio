@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
 import { PixelHeading } from '@/components/blocks/PixelHeading';
+import Image from 'next/image';
 import { MDX } from '@/components/markdown/mdx';
 import { Badge } from '@/components/primitives/Badge';
 import { Divider } from '@/components/primitives/Divider';
@@ -15,7 +16,7 @@ import {
 } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
-import { InlineToc } from '../../_components/InlineToc';
+import { TableOfContents } from '../../_components/TableOfContents';
 import { TopNav } from '../../_components/TopNav';
 
 interface Props {
@@ -107,6 +108,22 @@ const Page = async ({ params }: Props) => {
 				slug={slug}
 			/>
 
+			<div className="p-2 sm:p-4 screen-line-after">
+				<figure className="relative [&_img]:rounded-lg">
+					{article.metadata.image && (
+						<Image
+							alt={article.metadata.title}
+							height={630}
+							quality={75}
+							sizes="(max-width: 640px) 100vw, 50vw"
+							src={article.metadata.image}
+							width={1200}
+						/>
+					)}
+					<div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset dark:ring-white/10" />
+				</figure>
+			</div>
+
 			<div className="screen-line-after flex w-full items-center justify-between gap-x-3 px-2 sm:px-4">
 				<PixelHeading
 					autoPlay
@@ -138,7 +155,7 @@ const Page = async ({ params }: Props) => {
 			</div>
 
 			<div className="screen-line-after px-2 py-2 sm:px-4">
-				<InlineToc items={toc} />
+				<TableOfContents items={toc} />
 			</div>
 
 			<Prose className="p-4 px-2 lowercase sm:px-4">

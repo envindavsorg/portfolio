@@ -74,7 +74,9 @@ export const PanelHeader = forwardRef<
 			<div
 				className={cn(
 					'screen-line-after sticky top-14 z-20 px-3 transition-colors duration-300',
-					isStuck ? 'bg-theme text-black' : 'bg-background text-foreground',
+					isStuck
+						? 'bg-background text-theme'
+						: 'bg-background text-foreground',
 					className
 				)}
 				data-slot="panel-header"

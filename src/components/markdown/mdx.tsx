@@ -2,7 +2,7 @@ import { FileIcon, WrenchIcon } from '@phosphor-icons/react/ssr';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import type React from 'react';
-import { lazy } from 'react';
+import { ComponentProps, lazy } from 'react';
 import rehypeExternalLinks from 'rehype-external-links';
 import type { LineElement } from 'rehype-pretty-code';
 import rehypePrettyCode from 'rehype-pretty-code';
@@ -14,10 +14,6 @@ import { CodeCollapsibleWrapper } from '@/app/(content)/(writings)/_components/C
 import { CodeTabs } from '@/app/(content)/(writings)/_components/CodeTabs';
 import { ComponentPreview } from '@/app/(content)/(writings)/_components/ComponentPreview';
 import { ComponentSource } from '@/app/(content)/(writings)/_components/ComponentSource';
-import {
-	FramedImage,
-	YouTubeEmbed,
-} from '@/app/(content)/(writings)/_components/Embed';
 import { Base64 } from '@/app/(content)/(writings)/_components/utils/Base64';
 import { ColorGenerator } from '@/app/(content)/(writings)/_components/utils/ColorGenerator';
 import { JSONFormatter } from '@/app/(content)/(writings)/_components/utils/JSONFormatter';
@@ -44,42 +40,12 @@ import {
 	TableHeader,
 	TableRow,
 } from '../primitives/Table';
-
-const JSONIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/JSON').then((m) => ({
-		default: m.JSONIcon,
-	}))
-);
-
-const CSSIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/CSS').then((m) => ({
-		default: m.CSSIcon,
-	}))
-);
-
-const JavaScriptIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/JavaScript').then((m) => ({
-		default: m.JavaScriptIcon,
-	}))
-);
-
-const TypeScriptIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/TypeScript').then((m) => ({
-		default: m.TypeScriptIcon,
-	}))
-);
-
-const ReactIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/React').then((m) => ({
-		default: m.ReactIcon,
-	}))
-);
-
-const ShadcnIcon = lazy(() =>
-	import('@/components/blocks/icons/stack/Shadcn').then((m) => ({
-		default: m.ShadcnIcon,
-	}))
-);
+import { JSONIcon } from '../blocks/icons/stack/JSON';
+import { CSSIcon } from '../blocks/icons/stack/CSS';
+import { JavaScriptIcon } from '../blocks/icons/stack/JavaScript';
+import { TypeScriptIcon } from '../blocks/icons/stack/TypeScript';
+import { ReactIcon } from '../blocks/icons/stack/React';
+import { ShadcnIcon } from '../blocks/icons/stack/Shadcn';
 
 const getIconForLanguageExtension = (language: string) => {
 	switch (language) {
@@ -186,11 +152,11 @@ const components: MDXRemoteProps['components'] = {
 	CodeTabs,
 	Steps: (props) => (
 		<div
-			className="prose-h3:text-wrap border-edge md:ml-3.5 md:border-l md:pl-7.5"
+			className="prose-h3:text-wrap border-theme md:ml-3.5 md:border-l md:pl-7.5"
 			{...props}
 		/>
 	),
-	Step: ({ className, ...props }: React.ComponentProps<'h3'>) => (
+	Step: ({ className, ...props }: ComponentProps<'h3'>) => (
 		<h3 className={cn('step', className)} {...props} />
 	),
 	Tabs,
@@ -210,8 +176,6 @@ const components: MDXRemoteProps['components'] = {
 			</TabsTrigger>
 		</TabsList>
 	),
-	YouTubeEmbed,
-	FramedImage,
 	Base64Utils: Base64,
 	ColorGeneratorUtils: ColorGenerator,
 	LoremIpsumGeneratorUtils: LoremIpsumGenerator,

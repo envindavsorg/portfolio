@@ -1,11 +1,11 @@
 'use client';
 
-import type React from 'react';
 import { Tabs } from '@/components/primitives/Tabs';
 import type { InstallationType } from '@/hooks/use-config';
 import useConfig from '@/hooks/use-config';
+import { ComponentProps } from 'react';
 
-export const CodeTabs = (props: React.ComponentProps<typeof Tabs>) => {
+export const CodeTabs = (props: ComponentProps<typeof Tabs>) => {
 	const [config, setConfig] = useConfig();
 	const installationType = config.installationType || 'cli';
 

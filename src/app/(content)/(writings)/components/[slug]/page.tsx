@@ -11,7 +11,7 @@ import GLOBAL_DATA from '@/content/data/global';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
-import { InlineToc } from '../../_components/InlineToc';
+import { TableOfContents } from '../../_components/TableOfContents';
 import { TopNav } from '../../_components/TopNav';
 
 interface Props {
@@ -137,7 +137,7 @@ const Page = async ({ params }: Props) => {
 			</div>
 
 			<div className="screen-line-after px-2 py-2 sm:px-4">
-				<InlineToc items={toc} />
+				<TableOfContents items={toc} />
 			</div>
 
 			<Prose className="p-4 px-2 lowercase sm:px-4">

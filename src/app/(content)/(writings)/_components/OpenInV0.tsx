@@ -1,12 +1,6 @@
 import Link from 'next/link';
-import { lazy } from 'react';
 import { Button } from '@/components/primitives/Button';
-
-const V0Icon = lazy(() =>
-	import('@/components/blocks/icons/stack/V0').then((m) => ({
-		default: m.V0Icon,
-	}))
-);
+import { V0Icon } from '@/components/blocks/icons/stack/V0';
 
 interface OpenInV0Props {
 	url: string;

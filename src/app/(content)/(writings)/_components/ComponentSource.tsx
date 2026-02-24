@@ -10,17 +10,12 @@ interface ComponentSourceProps {
 }
 
 export const ComponentSource = ({
-	className,
 	collapsible = true,
 	children,
 }: React.ComponentProps<'div'> & ComponentSourceProps) => {
 	if (!collapsible) {
-		return <div className={className}>{children}</div>;
+		return <div>{children}</div>;
 	}
 
-	return (
-		<CodeCollapsibleWrapper className={className}>
-			{children}
-		</CodeCollapsibleWrapper>
-	);
+	return <CodeCollapsibleWrapper>{children}</CodeCollapsibleWrapper>;
 };

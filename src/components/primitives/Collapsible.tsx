@@ -60,7 +60,7 @@ interface CollapsibleContextType {
 
 const CollapsibleContext = createContext<CollapsibleContextType | null>(null);
 
-const useCollapsible = () => {
+export const useCollapsible = () => {
 	const context = useContext(CollapsibleContext);
 
 	if (!context) {
@@ -77,7 +77,6 @@ export const CollapsibleWithContext = ({
 	...props
 }: ComponentProps<typeof Collapsible>) => {
 	const [open, setOpen] = useState(defaultOpen ?? false);
-
 	return (
 		<CollapsibleContext.Provider value={{ open }}>
 			<Collapsible onOpenChange={setOpen} open={open} {...props} />
@@ -87,7 +86,6 @@ export const CollapsibleWithContext = ({
 
 export const CollapsibleChevronsIcon = () => {
 	const { open } = useCollapsible();
-
 	const Icon = open ? ChevronsDownUpIcon : ChevronsUpDownIcon;
 
 	return (

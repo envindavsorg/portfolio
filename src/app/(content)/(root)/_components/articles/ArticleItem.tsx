@@ -10,7 +10,6 @@ interface ArticleItemProps {
 
 export const ArticleItem = ({ article }: ArticleItemProps) => {
 	const { slug, metadata, reading } = article;
-	console.log(metadata.category);
 
 	return (
 		<Link

@@ -3,10 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 
-interface Post {
-	slug: string;
-}
-
 interface KeyboardShortcutsProps {
 	basePath: string;
 	previous: Post | null;

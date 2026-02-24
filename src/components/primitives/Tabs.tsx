@@ -77,6 +77,7 @@ interface Tab {
 interface TabsAnimatedProps {
 	tabs: Tab[];
 	onChangeAction?: () => void;
+	after?: boolean;
 }
 
 const contentVariants = {
@@ -109,7 +110,11 @@ const springTransition = {
 	bounce: 0.2,
 } as const;
 
-export const TabsAnimated = ({ tabs, onChangeAction }: TabsAnimatedProps) => {
+export const TabsAnimated = ({
+	tabs,
+	onChangeAction,
+	after = true,
+}: TabsAnimatedProps) => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [direction, setDirection] = useState(0);
 	const [isAnimating, setIsAnimating] = useState(false);
@@ -138,7 +143,12 @@ export const TabsAnimated = ({ tabs, onChangeAction }: TabsAnimatedProps) => {
 
 	return (
 		<div className="flex w-full flex-col items-center">
-			<div className="screen-line-after grid w-full cursor-pointer grid-cols-2 gap-x-3 py-3">
+			<div
+				className={cn(
+					'grid w-full cursor-pointer grid-cols-2 gap-x-3 py-3',
+					after && 'screen-line-after'
+				)}
+			>
 				{tabs.map((tab) => {
 					const isActive = activeTab === tab.id;
 
