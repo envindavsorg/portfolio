@@ -1,7 +1,10 @@
 import type React from 'react';
 import { cn } from '@/lib/utils';
 
-const Table = ({ className, ...props }: React.ComponentProps<'table'>) => (
+export const Table = ({
+	className,
+	...props
+}: React.ComponentProps<'table'>) => (
 	<div
 		className="not-prose my-6 w-full overflow-y-auto rounded-lg border"
 		data-slot="table-container"
@@ -17,7 +20,7 @@ const Table = ({ className, ...props }: React.ComponentProps<'table'>) => (
 	</div>
 );
 
-const TableHeader = ({
+export const TableHeader = ({
 	className,
 	...props
 }: React.ComponentProps<'thead'>) => (
@@ -28,7 +31,10 @@ const TableHeader = ({
 	/>
 );
 
-const TableBody = ({ className, ...props }: React.ComponentProps<'tbody'>) => (
+export const TableBody = ({
+	className,
+	...props
+}: React.ComponentProps<'tbody'>) => (
 	<tbody
 		className={cn('[&_tr:last-child]:border-0', className)}
 		data-slot="table-body"
@@ -36,7 +42,10 @@ const TableBody = ({ className, ...props }: React.ComponentProps<'tbody'>) => (
 	/>
 );
 
-const TableRow = ({ className, ...props }: React.ComponentProps<'tr'>) => (
+export const TableRow = ({
+	className,
+	...props
+}: React.ComponentProps<'tr'>) => (
 	<tr
 		className={cn(
 			'border-edge border-b transition-colors hover:bg-muted/50',
@@ -47,7 +56,10 @@ const TableRow = ({ className, ...props }: React.ComponentProps<'tr'>) => (
 	/>
 );
 
-const TableHead = ({ className, ...props }: React.ComponentProps<'th'>) => (
+export const TableHead = ({
+	className,
+	...props
+}: React.ComponentProps<'th'>) => (
 	<th
 		className={cn(
 			'h-10 whitespace-nowrap px-2 text-left align-middle font-medium text-muted-foreground',
@@ -58,12 +70,13 @@ const TableHead = ({ className, ...props }: React.ComponentProps<'th'>) => (
 	/>
 );
 
-const TableCell = ({ className, ...props }: React.ComponentProps<'td'>) => (
+export const TableCell = ({
+	className,
+	...props
+}: React.ComponentProps<'td'>) => (
 	<td
 		className={cn('whitespace-nowrap p-2 align-middle', className)}
 		data-slot="table-cell"
 		{...props}
 	/>
 );
-
-export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow };

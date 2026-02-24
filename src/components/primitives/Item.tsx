@@ -4,7 +4,10 @@ import type React from 'react';
 import { Separator } from '@/components/primitives/Separator';
 import { cn } from '@/lib/utils';
 
-const ItemGroup = ({ className, ...props }: React.ComponentProps<'div'>) => (
+export const ItemGroup = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>) => (
 	<div
 		className={cn('group/item-group flex flex-col', className)}
 		data-slot="item-group"
@@ -12,7 +15,7 @@ const ItemGroup = ({ className, ...props }: React.ComponentProps<'div'>) => (
 	/>
 );
 
-const ItemSeparator = ({
+export const ItemSeparator = ({
 	className,
 	...props
 }: React.ComponentProps<typeof Separator>) => (
@@ -45,7 +48,7 @@ const itemVariants = cva(
 	}
 );
 
-const Item = ({
+export const Item = ({
 	className,
 	variant = 'default',
 	size = 'default',
@@ -84,7 +87,7 @@ const itemMediaVariants = cva(
 	}
 );
 
-const ItemMedia = ({
+export const ItemMedia = ({
 	className,
 	variant = 'default',
 	...props
@@ -97,7 +100,10 @@ const ItemMedia = ({
 	/>
 );
 
-const ItemContent = ({ className, ...props }: React.ComponentProps<'div'>) => (
+export const ItemContent = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>) => (
 	<div
 		className={cn(
 			'flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none',
@@ -108,7 +114,10 @@ const ItemContent = ({ className, ...props }: React.ComponentProps<'div'>) => (
 	/>
 );
 
-const ItemTitle = ({ className, ...props }: React.ComponentProps<'div'>) => (
+export const ItemTitle = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>) => (
 	<div
 		className={cn(
 			'flex w-fit items-center gap-2 font-medium text-sm leading-snug',
@@ -119,7 +128,7 @@ const ItemTitle = ({ className, ...props }: React.ComponentProps<'div'>) => (
 	/>
 );
 
-const ItemDescription = ({
+export const ItemDescription = ({
 	className,
 	...props
 }: React.ComponentProps<'p'>) => (
@@ -134,7 +143,10 @@ const ItemDescription = ({
 	/>
 );
 
-const ItemActions = ({ className, ...props }: React.ComponentProps<'div'>) => (
+export const ItemActions = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>) => (
 	<div
 		className={cn('flex items-center gap-2', className)}
 		data-slot="item-actions"
@@ -142,7 +154,10 @@ const ItemActions = ({ className, ...props }: React.ComponentProps<'div'>) => (
 	/>
 );
 
-const ItemHeader = ({ className, ...props }: React.ComponentProps<'div'>) => (
+export const ItemHeader = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>) => (
 	<div
 		className={cn(
 			'flex basis-full items-center justify-between gap-2',
@@ -153,7 +168,10 @@ const ItemHeader = ({ className, ...props }: React.ComponentProps<'div'>) => (
 	/>
 );
 
-const ItemFooter = ({ className, ...props }: React.ComponentProps<'div'>) => (
+export const ItemFooter = ({
+	className,
+	...props
+}: React.ComponentProps<'div'>) => (
 	<div
 		className={cn(
 			'flex basis-full items-center justify-between gap-2',
@@ -163,16 +181,3 @@ const ItemFooter = ({ className, ...props }: React.ComponentProps<'div'>) => (
 		{...props}
 	/>
 );
-
-export {
-	Item,
-	ItemMedia,
-	ItemContent,
-	ItemActions,
-	ItemGroup,
-	ItemSeparator,
-	ItemTitle,
-	ItemDescription,
-	ItemHeader,
-	ItemFooter,
-};

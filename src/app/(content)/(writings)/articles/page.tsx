@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
+import { ArticleItem } from '@/app/(content)/(root)/_components/articles/ArticleItem';
+import { filterByTag } from '@/app/(content)/(writings)/_components/filter/filterByTag';
+import { TagsFilter } from '@/app/(content)/(writings)/_components/filter/TagsFilter';
+import { PixelHeading } from '@/components/blocks/PixelHeading';
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -7,14 +11,10 @@ import {
 	BreadcrumbList,
 	BreadcrumbPage,
 	BreadcrumbSeparator,
-} from '@/components/navigation/Breadcrumb';
+} from '@/components/primitives/Breadcrumb';
 import { Divider } from '@/components/primitives/Divider';
 import { PanelContent } from '@/components/primitives/Panel';
-import { PixelHeading } from '@/components/text/PixelHeading';
-import { Prose } from '@/components/text/Typography';
-import { ArticleItem } from '@/features/(root)/articles/ArticleItem';
-import { filterByTag } from '@/features/(writings)/filter/filterByTag';
-import { TagsFilter } from '@/features/(writings)/filter/TagsFilter';
+import { Prose } from '@/components/primitives/Typography';
 import { getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';

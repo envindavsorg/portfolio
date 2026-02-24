@@ -64,7 +64,9 @@ export const FlipSentences = ({
 
 	if (disableAnimation) {
 		return (
-			<p className={cn('font-medium text-theme', className)}>{sentences[0]}</p>
+			<p className={cn('font-medium text-theme text-xs sm:text-sm', className)}>
+				{sentences[0]}
+			</p>
 		);
 	}
 
@@ -73,7 +75,7 @@ export const FlipSentences = ({
 			<AnimatePresence mode="wait">
 				<motion.p
 					animate="animate"
-					className="font-medium text-theme"
+					className="font-medium text-theme text-xs sm:text-sm"
 					exit="exit"
 					initial="initial"
 					key={currentIndex}

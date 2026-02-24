@@ -1,6 +1,6 @@
+import { Header } from '@/app/(content)/(root)/_components/header/Header';
+import { Overview } from '@/app/(content)/(root)/_components/overview/Overview';
 import { Divider } from '@/components/primitives/Divider';
-import { Header } from '@/features/(root)/header/Header';
-import { Overview } from '@/features/(root)/overview/Overview';
 
 const Page = () => (
 	<div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl">

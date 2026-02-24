@@ -1,8 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resend } from 'resend';
+import { CvTemplate } from '@/app/(content)/(root)/_components/cv/CvTemplate';
 import GLOBAL_DATA from '@/content/data/global';
-import { CvTemplate } from '@/features/(root)/cv/CvTemplate';
 import emailSchema from '@/schemas/email.schema';
 
 const resend = new Resend(process.env.RESEND_API_KEY);

@@ -12,9 +12,9 @@ import {
 	useMemo,
 	useState,
 } from 'react';
-import { Button } from '@/components/buttons/Button';
-import { ChevronsDownUpIcon } from '@/components/icons/ChevronsDownUpIcon';
-import { ChevronsUpDownIcon } from '@/components/icons/ChevronsUpDownIcon';
+import { ChevronsDownUpIcon } from '@/components/blocks/icons/ChevronsDownUpIcon';
+import { ChevronsUpDownIcon } from '@/components/blocks/icons/ChevronsUpDownIcon';
+import { Button } from '@/components/primitives/Button';
 
 export const Collapsible = Primitive.Root;
 

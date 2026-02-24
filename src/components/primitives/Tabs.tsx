@@ -1,7 +1,15 @@
 'use client';
 
+import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { Tabs as Primitive } from 'radix-ui';
-import type { ComponentProps } from 'react';
+import {
+	type ComponentProps,
+	type ReactNode,
+	useCallback,
+	useMemo,
+	useState,
+} from 'react';
+import useMeasure from 'react-use-measure';
 import { cn } from '@/lib/utils';
 
 export const Tabs = ({
@@ -59,3 +67,135 @@ export const TabsContent = ({
 		{...props}
 	/>
 );
+
+interface Tab {
+	id: number;
+	label: string;
+	content: ReactNode;
+}
+
+interface TabsAnimatedProps {
+	tabs: Tab[];
+	onChangeAction?: () => void;
+}
+
+const contentVariants = {
+	initial: (direction: number) => ({
+		x: 300 * direction,
+		opacity: 0,
+		filter: 'blur(4px)',
+	}),
+	active: {
+		x: 0,
+		opacity: 1,
+		filter: 'blur(0px)',
+	},
+	exit: (direction: number) => ({
+		x: -300 * direction,
+		opacity: 0,
+		filter: 'blur(4px)',
+	}),
+} as const;
+
+const bubbleTransition = {
+	type: 'spring',
+	bounce: 0.19,
+	duration: 0.4,
+} as const;
+
+const springTransition = {
+	duration: 0.4,
+	type: 'spring',
+	bounce: 0.2,
+} as const;
+
+export const TabsAnimated = ({ tabs, onChangeAction }: TabsAnimatedProps) => {
+	const [activeTab, setActiveTab] = useState(0);
+	const [direction, setDirection] = useState(0);
+	const [isAnimating, setIsAnimating] = useState(false);
+	const [ref, bounds] = useMeasure();
+
+	const content = useMemo(
+		() => tabs.find((tab) => tab.id === activeTab)?.content ?? null,
+		[activeTab, tabs]
+	);
+
+	const handleTabClick = useCallback(
+		(newTabId: number) => {
+			if (newTabId === activeTab || isAnimating) {
+				return;
+			}
+
+			setDirection(newTabId > activeTab ? 1 : -1);
+			setActiveTab(newTabId);
+			onChangeAction?.();
+		},
+		[activeTab, isAnimating, onChangeAction]
+	);
+
+	const handleAnimationStart = useCallback(() => setIsAnimating(true), []);
+	const handleAnimationComplete = useCallback(() => setIsAnimating(false), []);
+
+	return (
+		<div className="flex w-full flex-col items-center">
+			<div className="screen-line-after grid w-full cursor-pointer grid-cols-2 gap-x-3 py-3">
+				{tabs.map((tab) => {
+					const isActive = activeTab === tab.id;
+
+					return (
+						<button
+							className={cn(
+								'relative flex items-center justify-center px-3 py-2',
+								'cursor-pointer rounded-md border border-edge font-medium text-sm transition',
+								'focus-visible:outline-none focus-visible:outline-1 focus-visible:ring-1',
+								isActive ? 'text-theme' : 'text-foreground'
+							)}
+							key={tab.id}
+							onClick={() => handleTabClick(tab.id)}
+							style={{ WebkitTapHighlightColor: 'transparent' }}
+							type="button"
+						>
+							{isActive && (
+								<motion.span
+									className="absolute inset-0 z-10 rounded-md border border-theme"
+									layoutId="bubble"
+									transition={bubbleTransition}
+								/>
+							)}
+							{tab.label}
+						</button>
+					);
+				})}
+			</div>
+
+			<MotionConfig transition={springTransition}>
+				<motion.div
+					animate={{ height: bounds.height }}
+					className="relative mx-auto h-full w-full overflow-hidden"
+					initial={false}
+				>
+					<div ref={ref}>
+						<AnimatePresence
+							custom={direction}
+							mode="popLayout"
+							onExitComplete={handleAnimationComplete}
+						>
+							<motion.div
+								animate="active"
+								custom={direction}
+								exit="exit"
+								initial="initial"
+								key={activeTab}
+								onAnimationComplete={handleAnimationComplete}
+								onAnimationStart={handleAnimationStart}
+								variants={contentVariants}
+							>
+								{content}
+							</motion.div>
+						</AnimatePresence>
+					</div>
+				</motion.div>
+			</MotionConfig>
+		</div>
+	);
+};

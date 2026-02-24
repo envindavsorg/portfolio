@@ -11,12 +11,11 @@ import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import type React from 'react';
-import ConsentManager from '@/components/manager/ConsentManager';
-import { TooltipProvider } from '@/components/overlays/Tooltip';
+import { TooltipProvider } from '@/components/primitives/Tooltip';
+import { Providers } from '@/components/providers/Providers';
 import GLOBAL_DATA from '@/content/data/global';
 import { META_THEME_COLORS } from '@/content/data/theme';
 import { cn } from '@/lib/utils';
-import { Providers } from '@/providers/Providers';
 
 const getJsonLd = () => ({
 	'@context': 'https://schema.org',
@@ -160,9 +159,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 
 		<body>
 			<Providers>
-				<ConsentManager>
-					<TooltipProvider>{children}</TooltipProvider>
-				</ConsentManager>
+				<TooltipProvider>{children}</TooltipProvider>
 			</Providers>
 		</body>
 	</html>

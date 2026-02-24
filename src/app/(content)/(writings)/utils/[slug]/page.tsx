@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
+import { PixelHeading } from '@/components/blocks/PixelHeading';
 import { MDX } from '@/components/markdown/mdx';
 import { Divider } from '@/components/primitives/Divider';
-import { PixelHeading } from '@/components/text/PixelHeading';
-import { Prose } from '@/components/text/Typography';
+import { Prose } from '@/components/primitives/Typography';
 import GLOBAL_DATA from '@/content/data/global';
-import { TopNav } from '@/features/(writings)/TopNav';
 import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
+import { TopNav } from '../../_components/TopNav';
 
 interface Props {
 	params: Promise<{

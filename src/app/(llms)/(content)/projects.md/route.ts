@@ -1,4 +1,4 @@
-import { PROJECTS } from '@/features/(root)/projects/content';
+import { PROJECTS } from '@/app/(content)/(root)/_components/projects/content';
 
 const content = `# Projects
 

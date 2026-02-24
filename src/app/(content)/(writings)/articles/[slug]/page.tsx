@@ -2,14 +2,12 @@ import { getTableOfContents } from 'fumadocs-core/content/toc';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
+import { PixelHeading } from '@/components/blocks/PixelHeading';
 import { MDX } from '@/components/markdown/mdx';
 import { Badge } from '@/components/primitives/Badge';
 import { Divider } from '@/components/primitives/Divider';
-import { PixelHeading } from '@/components/text/PixelHeading';
-import { Prose } from '@/components/text/Typography';
+import { Prose } from '@/components/primitives/Typography';
 import GLOBAL_DATA from '@/content/data/global';
-import { InlineToc } from '@/features/(writings)/InlineToc';
-import { TopNav } from '@/features/(writings)/TopNav';
 import {
 	getAllPosts,
 	getPostBySlug,
@@ -17,6 +15,8 @@ import {
 } from '@/lib/blog/posts';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
+import { InlineToc } from '../../_components/InlineToc';
+import { TopNav } from '../../_components/TopNav';
 
 interface Props {
 	params: Promise<{ slug: string }>;

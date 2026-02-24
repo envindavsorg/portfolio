@@ -9,7 +9,33 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
-import { CopyButton } from '@/components/buttons/CopyButton';
+import { CodeBlockCommand } from '@/app/(content)/(writings)/_components/CodeBlockCommand';
+import { CodeCollapsibleWrapper } from '@/app/(content)/(writings)/_components/CodeCollapsibleWrapper';
+import { CodeTabs } from '@/app/(content)/(writings)/_components/CodeTabs';
+import { ComponentPreview } from '@/app/(content)/(writings)/_components/ComponentPreview';
+import { ComponentSource } from '@/app/(content)/(writings)/_components/ComponentSource';
+import {
+	FramedImage,
+	YouTubeEmbed,
+} from '@/app/(content)/(writings)/_components/Embed';
+import { Base64 } from '@/app/(content)/(writings)/_components/utils/Base64';
+import { ColorGenerator } from '@/app/(content)/(writings)/_components/utils/ColorGenerator';
+import { JSONFormatter } from '@/app/(content)/(writings)/_components/utils/JSONFormatter';
+import { LoremIpsumGenerator } from '@/app/(content)/(writings)/_components/utils/LoremIpsumGenerator';
+import { SpeedTest } from '@/app/(content)/(writings)/_components/utils/SpeedTest';
+import { CopyButton } from '@/components/primitives/Button';
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@/components/primitives/Tabs';
+import { Code, Heading } from '@/components/primitives/Typography';
+import { rehypeAddQueryParams } from '@/lib/rehype-add-query-params';
+import { rehypeComponent } from '@/lib/rehype-component';
+import { rehypeNpmCommand } from '@/lib/rehype-npm-command';
+import { remarkCodeImport } from '@/lib/remark-code-import';
+import { cn } from '@/lib/utils';
 import {
 	Table,
 	TableBody,
@@ -17,63 +43,40 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@/components/primitives/Table';
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from '@/components/primitives/Tabs';
-import { Code, Heading } from '@/components/text/Typography';
-import { CodeBlockCommand } from '@/features/(writings)/CodeBlockCommand';
-import { CodeCollapsibleWrapper } from '@/features/(writings)/CodeCollapsibleWrapper';
-import { CodeTabs } from '@/features/(writings)/CodeTabs';
-import { ComponentPreview } from '@/features/(writings)/ComponentPreview';
-import { ComponentSource } from '@/features/(writings)/ComponentSource';
-import { FramedImage, YouTubeEmbed } from '@/features/(writings)/Embed';
-import { Base64 } from '@/features/(writings)/utils/Base64';
-import { ColorGenerator } from '@/features/(writings)/utils/ColorGenerator';
-import { JSONFormatter } from '@/features/(writings)/utils/JSONFormatter';
-import { LoremIpsumGenerator } from '@/features/(writings)/utils/LoremIpsumGenerator';
-import { SpeedTest } from '@/features/(writings)/utils/SpeedTest';
-import { rehypeAddQueryParams } from '@/lib/rehype-add-query-params';
-import { rehypeComponent } from '@/lib/rehype-component';
-import { rehypeNpmCommand } from '@/lib/rehype-npm-command';
-import { remarkCodeImport } from '@/lib/remark-code-import';
-import { cn } from '@/lib/utils';
+} from '../primitives/Table';
 
 const JSONIcon = lazy(() =>
-	import('@/components/stack/JSON').then((m) => ({
+	import('@/components/blocks/icons/stack/JSON').then((m) => ({
 		default: m.JSONIcon,
 	}))
 );
 
 const CSSIcon = lazy(() =>
-	import('@/components/stack/CSS').then((m) => ({
+	import('@/components/blocks/icons/stack/CSS').then((m) => ({
 		default: m.CSSIcon,
 	}))
 );
 
 const JavaScriptIcon = lazy(() =>
-	import('@/components/stack/JavaScript').then((m) => ({
+	import('@/components/blocks/icons/stack/JavaScript').then((m) => ({
 		default: m.JavaScriptIcon,
 	}))
 );
 
 const TypeScriptIcon = lazy(() =>
-	import('@/components/stack/TypeScript').then((m) => ({
+	import('@/components/blocks/icons/stack/TypeScript').then((m) => ({
 		default: m.TypeScriptIcon,
 	}))
 );
 
 const ReactIcon = lazy(() =>
-	import('@/components/stack/React').then((m) => ({
+	import('@/components/blocks/icons/stack/React').then((m) => ({
 		default: m.ReactIcon,
 	}))
 );
 
 const ShadcnIcon = lazy(() =>
-	import('@/components/stack/Shadcn').then((m) => ({
+	import('@/components/blocks/icons/stack/Shadcn').then((m) => ({
 		default: m.ShadcnIcon,
 	}))
 );

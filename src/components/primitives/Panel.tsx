@@ -7,7 +7,7 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { TextAnimate } from '@/components/text/TextAnimate';
+import { TextAnimate } from '@/components/blocks/TextAnimate';
 import { cn } from '@/lib/utils';
 
 export const Panel = ({ className, ...props }: ComponentProps<'section'>) => (

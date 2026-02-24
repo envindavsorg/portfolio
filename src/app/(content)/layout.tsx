@@ -1,7 +1,7 @@
 import type React from 'react';
-import { Particles } from '@/components/animations/Particles';
-import { Footer } from '@/features/(navigation)/footer/Footer';
-import { NavBar } from '@/features/(navigation)/navbar/NavBar';
+import { Particles } from '@/components/blocks/Particles';
+import { Footer } from '@/components/layouts/footer/Footer';
+import { NavBar } from '@/components/layouts/navbar/NavBar';
 
 interface AppLayoutProps {
 	children: React.ReactNode;
