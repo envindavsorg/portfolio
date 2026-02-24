@@ -2,7 +2,7 @@ import { FileIcon, WrenchIcon } from '@phosphor-icons/react/ssr';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import type React from 'react';
-import { ComponentProps, lazy } from 'react';
+import type { ComponentProps } from 'react';
 import rehypeExternalLinks from 'rehype-external-links';
 import type { LineElement } from 'rehype-pretty-code';
 import rehypePrettyCode from 'rehype-pretty-code';
@@ -32,6 +32,12 @@ import { rehypeComponent } from '@/lib/rehype-component';
 import { rehypeNpmCommand } from '@/lib/rehype-npm-command';
 import { remarkCodeImport } from '@/lib/remark-code-import';
 import { cn } from '@/lib/utils';
+import { CSSIcon } from '../blocks/icons/stack/CSS';
+import { JavaScriptIcon } from '../blocks/icons/stack/JavaScript';
+import { JSONIcon } from '../blocks/icons/stack/JSON';
+import { ReactIcon } from '../blocks/icons/stack/React';
+import { ShadcnIcon } from '../blocks/icons/stack/Shadcn';
+import { TypeScriptIcon } from '../blocks/icons/stack/TypeScript';
 import {
 	Table,
 	TableBody,
@@ -40,12 +46,6 @@ import {
 	TableHeader,
 	TableRow,
 } from '../primitives/Table';
-import { JSONIcon } from '../blocks/icons/stack/JSON';
-import { CSSIcon } from '../blocks/icons/stack/CSS';
-import { JavaScriptIcon } from '../blocks/icons/stack/JavaScript';
-import { TypeScriptIcon } from '../blocks/icons/stack/TypeScript';
-import { ReactIcon } from '../blocks/icons/stack/React';
-import { ShadcnIcon } from '../blocks/icons/stack/Shadcn';
 
 const getIconForLanguageExtension = (language: string) => {
 	switch (language) {

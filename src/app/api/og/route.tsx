@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
+import type { JSX } from 'react';
 import GLOBAL_DATA from '@/content/data/global';
 import { logger } from '@/lib/logger';
 
@@ -65,6 +66,7 @@ const renderLayout = (
 		}}
 	>
 		<img
+			alt="Cuzeac Florin"
 			height={300}
 			src="https://cuzeacflorin.fr/images/og-banner.png"
 			style={{
@@ -122,7 +124,7 @@ export const GET = async (req: NextRequest) => {
 		const font = await loadFont();
 		const badge = getBadge(type);
 
-		return new ImageResponse(
+		const response = new ImageResponse(
 			renderLayout(
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<div
@@ -177,6 +179,13 @@ export const GET = async (req: NextRequest) => {
 				],
 			}
 		);
+
+		response.headers.set(
+			'Cache-Control',
+			'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800'
+		);
+
+		return response;
 	} catch (error) {
 		logger.error('Error generating OG image:', error);
 

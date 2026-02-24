@@ -29,6 +29,7 @@ export const ArticleItem = ({ article }: ArticleItemProps) => {
 						'ring-1 ring-border ring-offset-3 ring-offset-background'
 					)}
 					height={630}
+					priority
 					quality={75}
 					sizes="(max-width: 640px) 100vw, 50vw"
 					src={metadata.image}

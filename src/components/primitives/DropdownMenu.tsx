@@ -59,12 +59,12 @@ export const DropdownMenuItem = ({
 	<DropdownMenuPrimitive.Item
 		className={cn(
 			'relative flex items-center gap-2',
-			'cursor-default select-none rounded-md px-3 py-2 text-sm font-medium outline-hidden',
+			'cursor-default select-none rounded-md px-3 py-2 font-medium text-sm outline-hidden',
 			'focus:bg-accent focus:text-accent-foreground',
-			'data-inset:pl-8 data-disabled:opacity-50 data-disabled:pointer-events-none',
+			'data-disabled:pointer-events-none data-inset:pl-8 data-disabled:opacity-50',
 			'data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive!',
 			"[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-foreground",
-			'[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4',
+			'[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
 			className
 		)}
 		data-inset={inset}

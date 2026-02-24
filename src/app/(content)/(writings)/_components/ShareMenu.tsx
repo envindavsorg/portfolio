@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { memo, useCallback, useMemo, useRef, type ReactNode } from 'react';
-import { ShareIcon } from '@/components/blocks/icons/ShareIcon';
-import { XIcon } from '@/components/blocks/icons/XIcon';
-import { LinkIcon } from '@/components/blocks/icons/LinkIcon';
+import { memo, type ReactNode, useCallback, useMemo, useRef } from 'react';
+import { toast } from 'sonner';
 import { LinkedinIcon } from '@/components/blocks/icons/LinkedInIcon';
+import { LinkIcon } from '@/components/blocks/icons/LinkIcon';
+import { ShareIcon } from '@/components/blocks/icons/ShareIcon';
 import { TwitterIcon } from '@/components/blocks/icons/TwitterIcon';
+import { XIcon } from '@/components/blocks/icons/XIcon';
 import { Button } from '@/components/primitives/Button';
 import {
 	DropdownMenu,
@@ -16,12 +17,13 @@ import {
 } from '@/components/primitives/DropdownMenu';
 import { soundManager } from '@/lib/sound-manager';
 import { copyText, getAbsoluteUrl } from '@/lib/utils';
-import { toast } from 'sonner';
 
 const preventAutoFocus = (event: Event) => event.preventDefault();
 
 interface AnimatedMenuItemProps {
-	icon: React.ForwardRefExoticComponent<any>;
+	icon: React.ForwardRefExoticComponent<
+		AnimatedIconProps & React.RefAttributes<AnimatedIconHandle>
+	>;
 	children: ReactNode;
 	href?: string;
 	onClick?: () => void;
@@ -145,10 +147,10 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 				<AnimatedMenuItem icon={LinkIcon} onClick={handleCopy}>
 					copier le lien
 				</AnimatedMenuItem>
-				<AnimatedMenuItem icon={TwitterIcon} href={shareUrls.x}>
+				<AnimatedMenuItem href={shareUrls.x} icon={TwitterIcon}>
 					partager sur X
 				</AnimatedMenuItem>
-				<AnimatedMenuItem icon={LinkedinIcon} href={shareUrls.linkedin}>
+				<AnimatedMenuItem href={shareUrls.linkedin} icon={LinkedinIcon}>
 					partager sur LinkedIn
 				</AnimatedMenuItem>
 			</DropdownMenuContent>

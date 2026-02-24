@@ -2,6 +2,8 @@
 
 import type { TOCItemType } from 'fumadocs-core/toc';
 import Link from 'next/link';
+import { type ComponentProps, useRef } from 'react';
+import { GalleryHorizontalEndIcon } from '@/components/blocks/icons/GalleryHorizontalEnd';
 import type { Collapsible } from '@/components/primitives/Collapsible';
 import {
 	CollapsibleChevronsIcon,
@@ -9,9 +11,7 @@ import {
 	CollapsibleTrigger,
 	CollapsibleWithContext,
 } from '@/components/primitives/Collapsible';
-import { ComponentProps, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { GalleryHorizontalEndIcon } from '@/components/blocks/icons/GalleryHorizontalEnd';
 
 type TableOfContentsProps = ComponentProps<typeof Collapsible> & {
 	items: TOCItemType[];
@@ -27,8 +27,8 @@ export const TableOfContents = ({ items, ...props }: TableOfContentsProps) => {
 		>
 			<CollapsibleTrigger
 				className={cn(
-					'flex items-center justify-between w-full p-3 cursor-pointer data-[state=open]:text-theme',
-					'[&_svg]:size-4 sm:[&_svg]:size-5 [&_svg]:text-foreground data-[state=open]:[&_svg]:text-theme'
+					'flex w-full cursor-pointer items-center justify-between p-3 data-[state=open]:text-theme',
+					'[&_svg]:size-4 [&_svg]:text-foreground data-[state=open]:[&_svg]:text-theme sm:[&_svg]:size-5'
 				)}
 				onMouseEnter={() => iconRef.current?.startAnimation()}
 				onMouseLeave={() => iconRef.current?.stopAnimation()}
@@ -49,7 +49,7 @@ export const TableOfContents = ({ items, ...props }: TableOfContentsProps) => {
 					'data-[state=open]:animate-collapsible-fade-down'
 				)}
 			>
-				<ul className="flex flex-col gap-y-2 px-3 pb-3 pt-1 text-foreground">
+				<ul className="flex flex-col gap-y-2 px-3 pt-1 pb-3 text-foreground">
 					{items.map((item) => (
 						<li key={item.url}>
 							<Link

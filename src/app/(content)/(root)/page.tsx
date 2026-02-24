@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import type { ProfilePage as PageSchema, WithContext } from 'schema-dts';
-import { About } from '@/app/(content)/(root)/_components/about/About';
 import { Articles } from '@/app/(content)/(root)/_components/articles/Articles';
 import { Branding } from '@/app/(content)/(root)/_components/branding/Branding';
 import { Certs } from '@/app/(content)/(root)/_components/certs/Certs';
@@ -17,6 +18,14 @@ import { Divider } from '@/components/primitives/Divider';
 import GLOBAL_DATA from '@/content/data/global';
 import { openGraphImage } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
+
+const About = dynamic(() =>
+	import('@/app/(content)/(root)/_components/about/About').then(
+		(mod) => mod.About
+	)
+);
+
+export const revalidate = 3600;
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	openGraphImage({
@@ -62,7 +71,9 @@ const Page = () => (
 			<Divider />
 			<About />
 			<Divider />
-			<Commits />
+			<Suspense>
+				<Commits />
+			</Suspense>
 			<Divider />
 			<TechStack />
 			<Divider />

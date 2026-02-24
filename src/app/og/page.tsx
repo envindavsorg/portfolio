@@ -4,14 +4,14 @@ import { FooterClock } from '@/components/layouts/footer/FooterClock';
 import { Divider } from '@/components/primitives/Divider';
 
 const Page = () => (
-	<div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl px-2">
+	<div className="mx-auto flex h-screen flex-col justify-center px-2 md:max-w-3xl">
 		<Divider type="half" />
 		<Header capture />
 		<Divider type="half" />
 		<Overview />
-		<Divider type="half" after={false} />
+		<Divider after={false} type="half" />
 		<FooterClock isActionnable={false} />
-		<Divider type="half" before={false} />
+		<Divider before={false} type="half" />
 	</div>
 );
 

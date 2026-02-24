@@ -1,9 +1,9 @@
 import { getTableOfContents } from 'fumadocs-core/content/toc';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
 import { PixelHeading } from '@/components/blocks/PixelHeading';
-import Image from 'next/image';
 import { MDX } from '@/components/markdown/mdx';
 import { Badge } from '@/components/primitives/Badge';
 import { Divider } from '@/components/primitives/Divider';
@@ -54,7 +54,7 @@ export const generateMetadata = async ({
 	return {
 		...og,
 		alternates: {
-			canonical: `https://cuzeacflorin.fr/${post.metadata.category}`,
+			canonical: `https://cuzeacflorin.fr/${post.metadata.category}/${slug}`,
 		},
 	};
 };
@@ -108,7 +108,7 @@ const Page = async ({ params }: Props) => {
 				slug={slug}
 			/>
 
-			<div className="p-2 sm:p-4 screen-line-after">
+			<div className="screen-line-after p-2 sm:p-4">
 				<figure className="relative [&_img]:rounded-lg">
 					{article.metadata.image && (
 						<Image

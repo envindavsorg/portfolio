@@ -1,4 +1,4 @@
-import type React from 'react';
+import type { ComponentProps } from 'react';
 import { Button } from '@/components/primitives/Button';
 import type { Collapsible } from '@/components/primitives/Collapsible';
 import {
@@ -9,7 +9,6 @@ import {
 } from '@/components/primitives/Collapsible';
 import { Separator } from '@/components/primitives/Separator';
 import { cn } from '@/lib/utils';
-import { ComponentProps } from 'react';
 
 export const CodeCollapsibleWrapper = ({
 	className,
@@ -38,7 +37,7 @@ export const CodeCollapsibleWrapper = ({
 		>
 			{children}
 		</CollapsibleContent>
-		<CollapsibleTrigger className="underline underline-offset-2 cursor-pointer absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-lg bg-linear-to-t from-25% from-code to-transparent pb-4 font-medium text-foreground text-sm group-data-[state=open]/collapsible:hidden">
+		<CollapsibleTrigger className="absolute inset-x-0 bottom-0 flex h-24 cursor-pointer items-end justify-center rounded-b-lg bg-linear-to-t from-25% from-code to-transparent pb-4 font-medium text-foreground text-sm underline underline-offset-2 group-data-[state=open]/collapsible:hidden">
 			voir tout le code
 		</CollapsibleTrigger>
 	</CollapsibleWithContext>

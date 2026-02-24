@@ -9,7 +9,6 @@ import {
 } from 'geist/font/pixel';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
 import type React from 'react';
 import { TooltipProvider } from '@/components/primitives/Tooltip';
 import { Providers } from '@/components/providers/Providers';
@@ -140,7 +139,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 			GeistPixelTriangle.variable,
 			GeistPixelLine.variable
 		)}
-		lang="en"
+		lang="fr"
 		suppressHydrationWarning
 	>
 		<head>
@@ -148,7 +147,6 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 				dangerouslySetInnerHTML={{ __html: darkModeScript }}
 				type="text/javascript"
 			/>
-			<Script src={`data:text/javascript;base64,${btoa(darkModeScript)}`} />
 			<script
 				dangerouslySetInnerHTML={{
 					__html: JSON.stringify(getJsonLd()).replace(/</g, '\\u003c'),

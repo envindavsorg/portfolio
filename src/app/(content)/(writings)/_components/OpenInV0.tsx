@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { Button } from '@/components/primitives/Button';
 import { V0Icon } from '@/components/blocks/icons/stack/V0';
+import { Button } from '@/components/primitives/Button';
 
 interface OpenInV0Props {
 	url: string;

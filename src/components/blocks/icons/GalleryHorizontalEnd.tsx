@@ -4,12 +4,11 @@ import type { Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import {
 	forwardRef,
+	type MouseEvent,
 	useCallback,
 	useImperativeHandle,
 	useRef,
-	MouseEvent,
 } from 'react';
-import { cn } from '@/lib/utils';
 
 const PATH_VARIANTS: Variants = {
 	normal: {

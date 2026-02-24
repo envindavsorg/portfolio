@@ -3,8 +3,8 @@
 import type { Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import {
-	MouseEvent,
 	forwardRef,
+	type MouseEvent,
 	useCallback,
 	useImperativeHandle,
 	useRef,

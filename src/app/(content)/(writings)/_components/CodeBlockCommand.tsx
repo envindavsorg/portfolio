@@ -1,7 +1,11 @@
 'use client';
 
 import { TerminalWindowIcon } from '@phosphor-icons/react';
-import { lazy, useMemo } from 'react';
+import { useMemo } from 'react';
+import { BunIcon } from '@/components/blocks/icons/stack/Bun';
+import { NPMIcon } from '@/components/blocks/icons/stack/NPM';
+import { PNPMIcon } from '@/components/blocks/icons/stack/PNPM';
+import { YarnIcon } from '@/components/blocks/icons/stack/Yarn';
 import { CopyButton } from '@/components/primitives/Button';
 import {
 	Tabs,
@@ -11,10 +15,6 @@ import {
 } from '@/components/primitives/Tabs';
 import type { PackageManager } from '@/hooks/use-config';
 import useConfig from '@/hooks/use-config';
-import { PNPMIcon } from '@/components/blocks/icons/stack/PNPM';
-import { YarnIcon } from '@/components/blocks/icons/stack/Yarn';
-import { NPMIcon } from '@/components/blocks/icons/stack/NPM';
-import { BunIcon } from '@/components/blocks/icons/stack/Bun';
 
 const getIconForPackageManager = (manager: string) => {
 	switch (manager) {
@@ -68,7 +68,7 @@ export const CodeBlockCommand = ({
 				}}
 				value={packageManager}
 			>
-				<div className="border-b border-edge px-4">
+				<div className="border-edge border-b px-4">
 					<TabsList className="h-auto translate-y-px gap-3 rounded-none bg-transparent p-0 dark:bg-transparent [&_svg]:size-4 [&_svg]:text-muted-foreground">
 						{getIconForPackageManager(packageManager)}
 						{Object.entries(tabs).map(([key]) => (

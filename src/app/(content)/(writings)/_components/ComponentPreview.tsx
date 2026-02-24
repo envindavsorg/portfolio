@@ -1,16 +1,10 @@
 'use client';
 
-import { CodeIcon, EyeIcon, RepeatIcon } from '@phosphor-icons/react';
+import { RepeatIcon } from '@phosphor-icons/react';
 import React, { Suspense, useMemo, useState } from 'react';
 import { Index } from '@/__registry__';
 import { Button } from '@/components/primitives/Button';
-import {
-	Tabs,
-	TabsAnimated,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from '@/components/primitives/Tabs';
+import { TabsAnimated } from '@/components/primitives/Tabs';
 import {
 	Tooltip,
 	TooltipContent,
@@ -122,7 +116,7 @@ export const ComponentPreview = ({
 			className={cn('screen-line-after pb-6', notProse && 'not-prose')}
 			{...props}
 		>
-			<TabsAnimated tabs={tabs} after={false} />
+			<TabsAnimated after={false} tabs={tabs} />
 		</div>
 	);
 };
