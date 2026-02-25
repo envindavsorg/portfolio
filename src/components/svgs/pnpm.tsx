@@ -3,8 +3,8 @@ import type { SVGProps } from 'react';
 export const Pnpm = (props: SVGProps<SVGSVGElement>) => (
 	<svg
 		{...props}
-		xmlnsXlink="http://www.w3.org/1999/xlink"
 		viewBox="76.58987244897958 44 164.00775510204068 164"
+		xmlnsXlink="http://www.w3.org/1999/xlink"
 	>
 		<defs>
 			<path d="M237.6 95L187.6 95L187.6 45L237.6 45L237.6 95Z" id="arNRoK435" />
@@ -39,28 +39,28 @@ export const Pnpm = (props: SVGProps<SVGSVGElement>) => (
 		</defs>
 		<g>
 			<g>
-				<use xlinkHref="#arNRoK435" fill="#f9ad00" />
+				<use fill="#f9ad00" xlinkHref="#arNRoK435" />
 			</g>
 			<g>
-				<use xlinkHref="#a3H2WU7Px" fill="#f9ad00" />
+				<use fill="#f9ad00" xlinkHref="#a3H2WU7Px" />
 			</g>
 			<g>
-				<use xlinkHref="#b1DInM56vl" fill="#f9ad00" />
+				<use fill="#f9ad00" xlinkHref="#b1DInM56vl" />
 			</g>
 			<g>
-				<use xlinkHref="#a7LFlgQIwu" fill="#f9ad00" />
+				<use fill="#f9ad00" xlinkHref="#a7LFlgQIwu" />
 			</g>
 			<g>
-				<use xlinkHref="#amwLiZcuo" fill="#4e4e4e" />
+				<use fill="#4e4e4e" xlinkHref="#amwLiZcuo" />
 			</g>
 			<g>
-				<use xlinkHref="#f3Peu5RWan" fill="#4e4e4e" />
+				<use fill="#4e4e4e" xlinkHref="#f3Peu5RWan" />
 			</g>
 			<g>
-				<use xlinkHref="#a6DXBfqPa" fill="#4e4e4e" />
+				<use fill="#4e4e4e" xlinkHref="#a6DXBfqPa" />
 			</g>
 			<g>
-				<use xlinkHref="#c1GWSTH1z7" fill="#4e4e4e" />
+				<use fill="#4e4e4e" xlinkHref="#c1GWSTH1z7" />
 			</g>
 		</g>
 	</svg>

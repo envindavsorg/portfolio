@@ -1,28 +1,23 @@
 'use client';
 
-import { RepeatIcon } from '@phosphor-icons/react';
-import React, {
+import Link from 'next/link';
+import type React from 'react';
+import {
 	Children,
-	ComponentProps,
+	type ComponentProps,
 	Suspense,
 	useMemo,
 	useRef,
 	useState,
 } from 'react';
 import { Index } from '@/__registry__';
+import { RefreshIcon } from '@/components/blocks/icons/RefreshIcon';
+import { V0Icon } from '@/components/blocks/icons/stack/V0';
 import { Button } from '@/components/primitives/Button';
 import { TabsAnimated } from '@/components/primitives/Tabs';
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from '@/components/primitives/Tooltip';
 import { Code as CodeInline } from '@/components/primitives/Typography';
 import { cn } from '@/lib/utils';
 import { CodeCollapsibleWrapper } from './CodeCollapsibleWrapper';
-import Link from 'next/link';
-import { V0Icon } from '@/components/blocks/icons/stack/V0';
-import { RefreshIcon } from '@/components/blocks/icons/RefreshIcon';
 
 type ComponentPreviewProps = ComponentProps<'div'> & {
 	name: string;
@@ -116,7 +111,7 @@ export const ComponentPreview = ({
 			id: 1,
 			label: 'code',
 			content: (
-				<div className="[&>figure]:m-0">
+				<div className="[&>figure]:m-0 [&_button.absolute]:top-3 [&_button.absolute]:right-3">
 					{codeCollapsible ? (
 						<CodeCollapsibleWrapper>{Code}</CodeCollapsibleWrapper>
 					) : (
@@ -131,8 +126,8 @@ export const ComponentPreview = ({
 		<div className={cn(notProse && 'not-prose')} {...props}>
 			<TabsAnimated
 				after={false}
+				className="ms-auto max-w-sm pt-0"
 				tabs={tabs}
-				className="max-w-sm ms-auto pt-0"
 			/>
 		</div>
 	);

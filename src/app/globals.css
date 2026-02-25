@@ -316,8 +316,7 @@
 	}
 
 	[data-rehype-pretty-code-title] {
-		@apply flex items-center gap-3 border-b border-edge px-4 py-2.5 text-sm text-muted-foreground;
-		@apply [&_svg]:size-4 [&_svg]:text-muted-foreground;
+		@apply flex items-center gap-x-3 [&_svg]:size-5 px-2 py-1 text-sm sm:text-base h-8 mb-2;
 	}
 
 	[data-line-numbers] {

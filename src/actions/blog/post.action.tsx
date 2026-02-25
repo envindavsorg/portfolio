@@ -17,8 +17,8 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/primitives/DropdownMenu';
-import { soundManager } from '@/lib/sound-manager';
 import { getPrompt } from '@/lib/functions';
+import { soundManager } from '@/lib/sound-manager';
 import { cn } from '@/lib/utils';
 
 const cache = new Map<string, string>();

@@ -27,7 +27,7 @@ export const Prose = ({
 				'prose-p:my-3 prose-p:leading-relaxed',
 				'prose-lead:text-base prose-lead:text-muted-foreground',
 				// lists
-				'prose-ul:my-3 prose-ol:my-3 prose-li:my-1',
+				'prose-li:my-1 prose-ol:my-3 prose-ul:my-3',
 				// blockquote
 				'prose-blockquote:my-4 prose-blockquote:border-theme prose-blockquote:font-normal prose-blockquote:not-italic',
 				// links

@@ -14,7 +14,7 @@ export const ComponentSource = ({
 	children,
 }: React.ComponentProps<'div'> & ComponentSourceProps) => {
 	if (!collapsible || String(collapsible) === 'false') {
-		return <div>{children}</div>;
+		return <div className="mt-6">{children}</div>;
 	}
 
 	return <CodeCollapsibleWrapper>{children}</CodeCollapsibleWrapper>;

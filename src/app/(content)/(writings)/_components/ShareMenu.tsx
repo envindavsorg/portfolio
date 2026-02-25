@@ -15,8 +15,8 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/primitives/DropdownMenu';
-import { soundManager } from '@/lib/sound-manager';
 import { copyText, getAbsoluteUrl } from '@/lib/functions';
+import { soundManager } from '@/lib/sound-manager';
 
 const preventAutoFocus = (event: Event) => event.preventDefault();
 

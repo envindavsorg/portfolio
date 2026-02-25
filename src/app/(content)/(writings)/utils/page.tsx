@@ -16,8 +16,8 @@ import { Divider } from '@/components/primitives/Divider';
 import { PanelContent } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
 import { type Content, getContentByCategory } from '@/lib/content';
-import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/functions';
+import { buildContentMetadata } from '@/lib/open-graph';
 
 const getCachedUtils = cache(() =>
 	getContentByCategory('utils').sort((a, b) =>

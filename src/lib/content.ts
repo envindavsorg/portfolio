@@ -5,8 +5,8 @@ import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 import { z } from 'zod';
-import { remarkComponent } from '@/lib/remark-component';
 import { dayjs } from '@/lib/functions';
+import { remarkComponent } from '@/lib/remark-component';
 
 const contentMetadataSchema = z.object({
 	title: z.string(),

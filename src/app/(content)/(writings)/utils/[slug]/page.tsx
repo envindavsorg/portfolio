@@ -11,8 +11,8 @@ import {
 	getContentByCategory,
 	getContentBySlug,
 } from '@/lib/content';
-import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/functions';
+import { buildContentMetadata } from '@/lib/open-graph';
 import { TopNav } from '../../_components/TopNav';
 
 interface Props {

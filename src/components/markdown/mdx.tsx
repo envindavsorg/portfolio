@@ -87,7 +87,7 @@ const components: MDXRemoteProps['components'] = {
 				: null;
 
 		return (
-			<figcaption {...props}>
+			<figcaption className="flex items-center gap-x-3" {...props}>
 				{iconExtension}
 				{children}
 			</figcaption>
@@ -128,7 +128,7 @@ const components: MDXRemoteProps['components'] = {
 
 				{__rawString__ && (
 					<CopyButton
-						className="absolute top-3 right-3"
+						className="absolute top-1 right-0"
 						value={__rawString__}
 						variant="ghost"
 					/>

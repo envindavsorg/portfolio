@@ -1,10 +1,6 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { Bun } from '@/components/svgs/bun';
-import { Npm } from '@/components/svgs/npm';
-import { Pnpm } from '@/components/svgs/pnpm';
-import { Yarn } from '@/components/svgs/yarn';
 import { CopyButton } from '@/components/primitives/Button';
 import {
 	Tabs,
@@ -12,6 +8,10 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '@/components/primitives/Tabs';
+import { Bun } from '@/components/svgs/bun';
+import { Npm } from '@/components/svgs/npm';
+import { Pnpm } from '@/components/svgs/pnpm';
+import { Yarn } from '@/components/svgs/yarn';
 import type { PackageManager } from '@/hooks/useConfig';
 import useConfig from '@/hooks/useConfig';
 
