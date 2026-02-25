@@ -35,6 +35,16 @@ export const FlickeringGrid = ({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [isInView, setIsInView] = useState(false);
 	const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+	const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+	useEffect(() => {
+		const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+		setPrefersReducedMotion(mql.matches);
+		const handler = (e: MediaQueryListEvent) =>
+			setPrefersReducedMotion(e.matches);
+		mql.addEventListener('change', handler);
+		return () => mql.removeEventListener('change', handler);
+	}, []);
 
 	const memoizedColor = useMemo(() => {
 		const toRGBA = (color: string) => {
@@ -129,7 +139,7 @@ export const FlickeringGrid = ({
 		}
 
 		let animationFrameId: number;
-		let gridParams: ReturnType<typeof setupCanvas>;
+		let gridParams!: ReturnType<typeof setupCanvas>;
 
 		const updateCanvasSize = () => {
 			const newWidth = width || container.clientWidth;
@@ -177,7 +187,17 @@ export const FlickeringGrid = ({
 
 		intersectionObserver.observe(canvas);
 
-		if (isInView) {
+		if (prefersReducedMotion) {
+			drawGrid(
+				ctx,
+				canvas.width,
+				canvas.height,
+				gridParams.cols,
+				gridParams.rows,
+				gridParams.squares,
+				gridParams.dpr
+			);
+		} else if (isInView) {
 			animationFrameId = requestAnimationFrame(animate);
 		}
 
@@ -186,7 +206,7 @@ export const FlickeringGrid = ({
 			resizeObserver.disconnect();
 			intersectionObserver.disconnect();
 		};
-	}, [setupCanvas, updateSquares, drawGrid, width, height, isInView]);
+	}, [setupCanvas, updateSquares, drawGrid, width, height, isInView, prefersReducedMotion]);
 
 	return (
 		<div className="relative flex grow overflow-hidden">

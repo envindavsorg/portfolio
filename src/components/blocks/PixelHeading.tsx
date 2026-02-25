@@ -118,6 +118,16 @@ export const PixelHeading = ({
 	const [isActive, setIsActive] = useState(false);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const prevUniformIndex = useRef(defaultFontIndex);
+	const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+	useEffect(() => {
+		const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+		setPrefersReducedMotion(mql.matches);
+		const handler = (e: MediaQueryListEvent) =>
+			setPrefersReducedMotion(e.matches);
+		mql.addEventListener('change', handler);
+		return () => mql.removeEventListener('change', handler);
+	}, []);
 
 	useEffect(() => {
 		return () => {
@@ -128,7 +138,7 @@ export const PixelHeading = ({
 	}, []);
 
 	useEffect(() => {
-		if (!autoPlay) {
+		if (!autoPlay || prefersReducedMotion) {
 			return;
 		}
 
@@ -144,7 +154,7 @@ export const PixelHeading = ({
 				intervalRef.current = null;
 			}
 		};
-	}, [autoPlay]);
+	}, [autoPlay, prefersReducedMotion]);
 
 	const charFonts = useMemo(() => {
 		const fonts: number[] = [];
@@ -216,6 +226,9 @@ export const PixelHeading = ({
 	}, [mode, charFonts]);
 
 	const startCycling = useCallback(() => {
+		if (prefersReducedMotion) {
+			return;
+		}
 		if (intervalRef.current) {
 			clearInterval(intervalRef.current);
 			intervalRef.current = null;
@@ -225,7 +238,7 @@ export const PixelHeading = ({
 		intervalRef.current = setInterval(() => {
 			setMsElapsed((prev) => prev + TICK_MS);
 		}, TICK_MS);
-	}, []);
+	}, [prefersReducedMotion]);
 
 	const stopCycling = useCallback(() => {
 		if (autoPlay) {

@@ -9,11 +9,20 @@ interface AppLayoutProps {
 
 const AppLayout = ({ children }: Readonly<AppLayoutProps>) => (
 	<>
+		<a
+			className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:ring-2 focus:ring-ring focus:ring-offset-2"
+			href="#main"
+		>
+			aller au contenu principal
+		</a>
+
 		<NavBar />
-		<main className="max-w-screen overflow-x-clip px-2">{children}</main>
+		<main className="max-w-screen overflow-x-clip px-2" id="main">
+			{children}
+		</main>
 		<Footer />
 
-		<Particles density={150} />
+		<Particles density={80} />
 	</>
 );
 

@@ -35,19 +35,19 @@ const manifest = (): MetadataRoute.Manifest => ({
 			form_factor: 'narrow',
 		},
 		{
-			src: '/meta/mobile-light.webp',
+			src: '/images/meta/mobile-light.webp',
 			type: 'image/webp',
 			sizes: '440x956',
 			form_factor: 'narrow',
 		},
 		{
-			src: '/meta/desktop-dark.webp',
+			src: '/images/meta/desktop-dark.webp',
 			type: 'image/webp',
 			sizes: '1920x1080',
 			form_factor: 'wide',
 		},
 		{
-			src: '/meta/desktop-light.webp',
+			src: '/images/meta/desktop-light.webp',
 			type: 'image/webp',
 			sizes: '1920x1080',
 			form_factor: 'wide',

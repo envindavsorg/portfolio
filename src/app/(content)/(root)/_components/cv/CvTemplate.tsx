@@ -27,7 +27,7 @@ export const CvTemplate = ({ firstName }: CvTemplateProps) => (
 				<Img
 					alt="Cuzeac Florin | cuzeacflorin.fr"
 					height="42"
-					src="https://cuzeacflorin.fr/emails/logo.png"
+					src="https://cuzeacflorin.fr/images/github.webp"
 					style={logo}
 					width="42"
 				/>

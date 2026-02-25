@@ -60,6 +60,7 @@ export const CoverEffect = ({
 						initial={pathInitial}
 						key={idx}
 						style={{ strokeLinecap: 'round' }}
+						suppressHydrationWarning
 						transition={{
 							duration: scaledDuration,
 							ease: 'easeInOut',

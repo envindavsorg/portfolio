@@ -20,8 +20,7 @@ export const CERTS: Cert[] = [
 		credentialID: 'pages-router-99069-1759826128639',
 		credentialURL:
 			'https://nextjs.org/learn/certificate?course=pages-router&user=99069&certId=pages-router-99069-1759826128639',
-		coverImageURL:
-			'/assets/images/certifications/nextjs-pages-router-fundamentals.webp',
+		coverImageURL: '/images/certs/nextjs-pages-router-fundamentals.webp',
 		icon: NextJSIcon,
 	},
 	{
@@ -31,8 +30,7 @@ export const CERTS: Cert[] = [
 		credentialID: 'dashboard-app-99069-1759757715131',
 		credentialURL:
 			'https://nextjs.org/learn/certificate?course=dashboard-app&user=99069&certId=dashboard-app-99069-1759757715131',
-		coverImageURL:
-			'/assets/images/certifications/nextjs-app-router-fundamentals.webp',
+		coverImageURL: '/images/certs/nextjs-app-router-fundamentals.webp',
 		icon: NextJSIcon,
 	},
 	{
@@ -42,7 +40,7 @@ export const CERTS: Cert[] = [
 		credentialID: 'seo-99069-1759756935192',
 		credentialURL:
 			'https://nextjs.org/learn/certificate?course=seo&user=99069&certId=seo-99069-1759756935192',
-		coverImageURL: '/assets/images/certifications/nextjs-seo-fundamentals.webp',
+		coverImageURL: '/images/certs/nextjs-seo-fundamentals.webp',
 		icon: NextJSIcon,
 	},
 	{
@@ -52,8 +50,7 @@ export const CERTS: Cert[] = [
 		credentialID: 'react-foundations-99069-1759825479876',
 		credentialURL:
 			'https://nextjs.org/learn/certificate?course=react-foundations&user=99069&certId=react-foundations-99069-1759825479876',
-		coverImageURL:
-			'/assets/images/certifications/react-foundations-for-nextjs.webp',
+		coverImageURL: '/images/certs/react-foundations-for-nextjs.webp',
 		icon: ReactIcon,
 	},
 ];

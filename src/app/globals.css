@@ -1,3 +1,7 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
 @theme inline {
 	--color-theme: var(--theme);
 	--color-background: var(--background);
@@ -32,6 +36,7 @@
 	--color-selection-foreground: var(--selection-foreground);
 	--shadow-popover: var(--shadow-popover);
 
+	/* fonts */
 	--font-sans: var(--font-geist-sans);
 	--font-mono: var(--font-geist-mono);
 	--font-pixel-square: var(--font-geist-pixel-square);
@@ -40,15 +45,7 @@
 	--font-pixel-triangle: var(--font-geist-pixel-triangle);
 	--font-pixel-line: var(--font-geist-pixel-line);
 
-	--animate-fade-in: fade-in var(--tw-duration, 200ms) ease-out;
-	--animate-fade-out: fade-out var(--tw-duration, 200ms) ease-out;
-
-	--animate-collapsible-fade-down:
-		collapsible-down var(--tw-duration, 200ms) ease-out, fade-in var(--tw-duration, 200ms) ease-out;
-
-	--animate-collapsible-fade-up:
-		collapsible-up var(--tw-duration, 200ms) ease-out, fade-out var(--tw-duration, 200ms) ease-out;
-
+	/* animations */
 	@keyframes fade-in {
 		from {
 			opacity: 0;
@@ -58,6 +55,10 @@
 		}
 	}
 
+	--animate-fade-in: fade-in var(--tw-duration, 200ms) ease-out;
+	--animate-collapsible-fade-down:
+		collapsible-down var(--tw-duration, 200ms) ease-out, fade-in var(--tw-duration, 200ms) ease-out;
+
 	@keyframes fade-out {
 		from {
 			opacity: 1;
@@ -66,6 +67,10 @@
 			opacity: 0;
 		}
 	}
+
+	--animate-fade-out: fade-out var(--tw-duration, 200ms) ease-out;
+	--animate-collapsible-fade-up:
+		collapsible-up var(--tw-duration, 200ms) ease-out, fade-out var(--tw-duration, 200ms) ease-out;
 }
 
 :root {
@@ -144,4 +149,199 @@
 
 .light {
 	color-scheme: light;
+}
+
+@utility no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+@utility screen-line-before {
+	@apply relative before:absolute before:top-0 before:-left-[100vw];
+	@apply before:-z-1 before:h-[0.5px] before:w-[200vw] before:bg-edge;
+}
+
+@utility screen-line-after {
+	@apply relative after:absolute after:bottom-0 after:-left-[100vw];
+	@apply after:-z-1 after:h-[0.5px] after:w-[200vw] after:bg-edge;
+}
+
+@utility step {
+	counter-increment: step;
+	&::before {
+		@apply inline-flex items-center justify-center;
+		@apply text-center -indent-px text-sm font-medium text-theme md:absolute md:-mt-0.5 md:-ml-11.5 md:size-8;
+		@apply border border-muted-foreground/15 ring-1 ring-theme ring-offset-1 ring-offset-background;
+		@apply mr-2 size-7 rounded-full bg-background;
+		content: counter(step);
+	}
+}
+
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		@apply border-border outline-ring/50;
+	}
+
+	::selection {
+		@apply bg-selection text-selection-foreground;
+	}
+
+	body {
+		font-synthesis-weight: none;
+		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	::-webkit-scrollbar {
+		width: 5px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: var(--border);
+		border-radius: 5px;
+	}
+
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: var(--border) transparent;
+	}
+
+	form {
+		@apply space-y-4;
+	}
+
+	[id] {
+		@apply scroll-mt-22;
+	}
+
+	::view-transition-group(root) {
+		animation-duration: 0.8s;
+		animation-timing-function: linear(
+			0 0%,
+			0.1684 2.66%,
+			0.3165 5.49%,
+			0.446 8.52%,
+			0.5581 11.78%,
+			0.6535 15.29%,
+			0.7341 19.11%,
+			0.8011 23.3%,
+			0.8557 27.93%,
+			0.8962 32.68%,
+			0.9283 38.01%,
+			0.9529 44.08%,
+			0.9711 51.14%,
+			0.9833 59.06%,
+			0.9915 68.74%,
+			1 100%
+		);
+	}
+
+	::view-transition-new(root) {
+		animation-name: reveal-light;
+	}
+
+	::view-transition-old(root),
+	.dark::view-transition-old(root) {
+		animation: none;
+		z-index: -1;
+	}
+
+	.dark::view-transition-new(root) {
+		animation-name: reveal-dark;
+	}
+
+	@keyframes reveal-dark {
+		from {
+			clip-path: polygon(50% -71%, -50% 71%, -50% 71%, 50% -71%);
+		}
+		to {
+			clip-path: polygon(50% -71%, -50% 71%, 50% 171%, 171% 50%);
+		}
+	}
+
+	@keyframes reveal-light {
+		from {
+			clip-path: polygon(171% 50%, 50% 171%, 50% 171%, 171% 50%);
+		}
+		to {
+			clip-path: polygon(171% 50%, 50% 171%, -50% 71%, 50% -71%);
+		}
+	}
+
+	.prose {
+		color: var(--muted-foreground) !important;
+	}
+
+	.prose,
+	.prose span,
+	.prose i {
+		font-weight: var(--font-weight-medium);
+		font-family: var(--font-geist-pixel-square);
+	}
+
+	.prose span {
+		color: var(--color-foreground);
+	}
+
+	.prose i,
+	.prose ul li::marker {
+		color: var(--color-theme) !important;
+	}
+}
+
+@layer components {
+	[data-rehype-pretty-code-figure] {
+		@apply relative my-6 rounded-lg bg-code text-code-foreground;
+
+		pre {
+			@apply overflow-x-auto px-4 py-4 has-data-line-numbers:px-0;
+		}
+
+		code {
+			@apply font-mono text-sm;
+		}
+	}
+
+	[data-line] {
+		@apply py-0.5;
+	}
+
+	[data-line] span {
+		@apply text-(--shiki-light) dark:text-(--shiki-dark);
+	}
+
+	[data-rehype-pretty-code-title] {
+		@apply flex items-center gap-3 border-b border-edge px-4 py-2.5 text-sm text-muted-foreground;
+		@apply [&_svg]:size-4 [&_svg]:text-muted-foreground;
+	}
+
+	[data-line-numbers] {
+		counter-reset: line;
+	}
+
+	[data-line-numbers] > [data-line]::before {
+		counter-increment: line;
+		content: counter(line);
+		@apply sticky left-0 inline-block w-16 bg-code pr-6 text-right text-sm text-code-number;
+	}
+
+	[data-line-numbers] [data-highlighted-line][data-line]::before {
+		@apply bg-code-highlight;
+	}
+
+	[data-highlighted-line] {
+		@apply bg-code-highlight;
+	}
 }

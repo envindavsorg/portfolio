@@ -129,6 +129,8 @@ export const GET = async (req: NextRequest) => {
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<div
 						style={{
+							display: 'flex',
+							alignSelf: 'flex-start',
 							borderRadius: 10,
 							padding: '8px 16px',
 							fontSize: 20,

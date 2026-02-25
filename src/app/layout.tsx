@@ -1,4 +1,4 @@
-import '@/styles/globals.css';
+import './globals.css';
 import { GeistMono } from 'geist/font/mono';
 import {
 	GeistPixelCircle,
@@ -155,7 +155,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 			/>
 		</head>
 
-		<body>
+		<body className="font-pixel-square">
 			<Providers>
 				<TooltipProvider>{children}</TooltipProvider>
 			</Providers>

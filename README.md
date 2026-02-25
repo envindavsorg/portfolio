@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.cuzeacflorin.fr">
-    <img src="https://www.cuzeacflorin.fr/images/logo/github.png" alt="Cuzeac Florin" height="64">
+    <img src="https://www.cuzeacflorin.fr/images/github.webp" alt="Cuzeac Florin" height="64">
     <h3 align="center">Cuzeac Florin</h3>
   </a>
 </p>
