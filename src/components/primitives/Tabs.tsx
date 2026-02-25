@@ -44,9 +44,8 @@ export const TabsTrigger = ({
 	<Primitive.Trigger
 		className={cn(
 			'inline-flex flex-1 cursor-pointer items-center justify-center gap-2',
-			'whitespace-nowrap rounded-md px-3 py-1 font-medium text-sm',
-			'data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-700',
-			'data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+			'whitespace-nowrap rounded-md px-1.5 py-1 text-sm sm:text-base',
+			'data-[state=active]:text-theme',
 			"[&_svg:not([class*='size-'])]:size-5 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 			'transition-[color] disabled:pointer-events-none disabled:opacity-50',
 			'focus-visible:border-ring focus-visible:outline-1 focus-visible:outline-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',

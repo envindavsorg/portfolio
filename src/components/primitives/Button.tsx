@@ -85,6 +85,7 @@ const ICONS = {
 
 interface CopyButtonProps {
 	value: string;
+	variant?: 'default' | 'outline' | 'link' | 'ghost';
 	className?: string;
 	label?: string;
 	timeout?: number;
@@ -92,6 +93,7 @@ interface CopyButtonProps {
 
 export const CopyButton = ({
 	value,
+	variant = 'outline',
 	className,
 	label = 'copier le texte dans le presse-papier',
 	timeout = 2000,
@@ -136,12 +138,12 @@ export const CopyButton = ({
 	return (
 		<Button
 			aria-label={label}
-			className={className}
+			className={cn(className, variant === 'ghost' && 'hover:bg-background!')}
 			onClick={handleCopy}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			size="icon"
-			variant="outline"
+			variant={variant}
 		>
 			<Icon ref={iconRef} size={22} />
 		</Button>

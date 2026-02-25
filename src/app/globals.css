@@ -169,17 +169,6 @@
 	@apply after:-z-1 after:h-[0.5px] after:w-[200vw] after:bg-edge;
 }
 
-@utility step {
-	counter-increment: step;
-	&::before {
-		@apply inline-flex items-center justify-center;
-		@apply text-center -indent-px text-sm font-medium text-theme md:absolute md:-mt-0.5 md:-ml-11.5 md:size-8;
-		@apply border border-muted-foreground/15 ring-1 ring-theme ring-offset-1 ring-offset-background;
-		@apply mr-2 size-7 rounded-full bg-background;
-		content: counter(step);
-	}
-}
-
 @layer base {
 	*,
 	::after,
@@ -303,14 +292,14 @@
 
 @layer components {
 	[data-rehype-pretty-code-figure] {
-		@apply relative my-6 rounded-lg bg-code text-code-foreground;
+		@apply relative text-code-foreground;
 
 		pre {
 			@apply overflow-x-auto px-4 py-4 has-data-line-numbers:px-0;
 		}
 
 		code {
-			@apply font-mono text-sm;
+			@apply font-mono! text-sm sm:text-base;
 		}
 	}
 

@@ -1,11 +1,10 @@
 'use client';
 
-import { TerminalWindowIcon } from '@phosphor-icons/react';
-import { useMemo } from 'react';
-import { BunIcon } from '@/components/blocks/icons/stack/Bun';
-import { NPMIcon } from '@/components/blocks/icons/stack/NPM';
-import { PNPMIcon } from '@/components/blocks/icons/stack/PNPM';
-import { YarnIcon } from '@/components/blocks/icons/stack/Yarn';
+import type { ReactNode } from 'react';
+import { Bun } from '@/components/svgs/bun';
+import { Npm } from '@/components/svgs/npm';
+import { Pnpm } from '@/components/svgs/pnpm';
+import { Yarn } from '@/components/svgs/yarn';
 import { CopyButton } from '@/components/primitives/Button';
 import {
 	Tabs,
@@ -16,92 +15,69 @@ import {
 import type { PackageManager } from '@/hooks/useConfig';
 import useConfig from '@/hooks/useConfig';
 
-const getIconForPackageManager = (manager: string) => {
-	switch (manager) {
-		case 'pnpm':
-			return <PNPMIcon />;
-		case 'yarn':
-			return <YarnIcon />;
-		case 'npm':
-			return <NPMIcon />;
-		case 'bun':
-			return <BunIcon />;
-		default:
-			return <TerminalWindowIcon />;
-	}
+const PACKAGE_MANAGERS: PackageManager[] = ['npm', 'pnpm', 'yarn', 'bun'];
+
+const PACKAGE_MANAGER_ICONS: Record<PackageManager, ReactNode> = {
+	npm: <Npm />,
+	pnpm: <Pnpm />,
+	yarn: <Yarn />,
+	bun: <Bun />,
 };
 
 interface CodeBlockCommandProps {
+	__npm__?: string;
 	__pnpm__?: string;
 	__yarn__?: string;
-	__npm__?: string;
 	__bun__?: string;
 }
 
-export const CodeBlockCommand = ({
-	__pnpm__,
-	__yarn__,
-	__npm__,
-	__bun__,
-}: CodeBlockCommandProps) => {
+export const CodeBlockCommand = (props: CodeBlockCommandProps) => {
 	const [config, setConfig] = useConfig();
-	const packageManager = config.packageManager || 'pnpm';
-	const tabs = useMemo(
-		() => ({
-			pnpm: __pnpm__,
-			yarn: __yarn__,
-			npm: __npm__,
-			bun: __bun__,
-		}),
-		[__pnpm__, __yarn__, __npm__, __bun__]
-	);
+	const { packageManager } = config;
+
+	const commands: Record<PackageManager, string | undefined> = {
+		npm: props.__npm__,
+		pnpm: props.__pnpm__,
+		yarn: props.__yarn__,
+		bun: props.__bun__,
+	};
 
 	return (
-		<div className="relative overflow-hidden rounded-lg bg-code">
+		<div className="relative mt-6 overflow-hidden">
 			<Tabs
-				className="gap-0"
-				onValueChange={(value) => {
+				onValueChange={(value) =>
 					setConfig((prev) => ({
 						...prev,
 						packageManager: value as PackageManager,
-					}));
-				}}
+					}))
+				}
 				value={packageManager}
 			>
-				<div className="border-edge border-b px-4">
-					<TabsList className="h-auto translate-y-px gap-3 rounded-none bg-transparent p-0 dark:bg-transparent [&_svg]:size-4 [&_svg]:text-muted-foreground">
-						{getIconForPackageManager(packageManager)}
-						{Object.entries(tabs).map(([key]) => (
-							<TabsTrigger
-								className="h-10 rounded-none border-transparent border-b p-0 data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:inset-shadow-none dark:data-[state=active]:bg-transparent"
-								key={key}
-								value={key}
-							>
-								{key}
-							</TabsTrigger>
-						))}
-					</TabsList>
+				<div className="flex w-full items-center justify-between">
+					<div className="flex items-center gap-x-3 [&_svg]:size-5">
+						{PACKAGE_MANAGER_ICONS[packageManager]}
+						<TabsList>
+							{PACKAGE_MANAGERS.map((key) => (
+								<TabsTrigger key={key} value={key}>
+									{key}
+								</TabsTrigger>
+							))}
+						</TabsList>
+					</div>
+					<CopyButton value={commands[packageManager] ?? ''} variant="ghost" />
 				</div>
-
-				{Object.entries(tabs).map(([key, value]) => (
-					<TabsContent key={key} value={key}>
-						<pre>
-							<code
-								className="text-code-foreground text-sm leading-none"
-								data-language="bash"
-								data-slot="code-block"
-							>
-								{value}
-							</code>
-						</pre>
-					</TabsContent>
-				))}
+				<div className="rounded-b-md border border-input">
+					{PACKAGE_MANAGERS.map((key) => (
+						<TabsContent key={key} value={key}>
+							<pre>
+								<code data-language="bash" data-slot="code-block">
+									{commands[key]}
+								</code>
+							</pre>
+						</TabsContent>
+					))}
+				</div>
 			</Tabs>
-
-			<CopyButton
-				className="absolute top-1 right-2"
-				value={tabs[packageManager] || ''}
-			/>
 		</div>
 	);
 };

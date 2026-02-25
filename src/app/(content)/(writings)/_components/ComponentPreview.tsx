@@ -100,9 +100,7 @@ export const ComponentPreview = ({
 			content: (
 				<div className="[&>figure]:m-0">
 					{codeCollapsible ? (
-						<CodeCollapsibleWrapper className="my-0">
-							{Code}
-						</CodeCollapsibleWrapper>
+						<CodeCollapsibleWrapper>{Code}</CodeCollapsibleWrapper>
 					) : (
 						Code
 					)}
