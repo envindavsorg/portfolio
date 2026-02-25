@@ -1,5 +1,5 @@
 import { visit } from 'unist-util-visit';
-import { addQueryParams } from '@/lib/utils';
+import { addQueryParams } from '@/lib/functions';
 import type { UnistNode, UnistTree } from './remark-code-import';
 
 const SKIP_PREFIXES = ['/', 'mailto:', 'tel:', '#'];

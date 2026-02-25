@@ -17,38 +17,32 @@ isNew: true
     canReplay
 />
 
-## Installation
+# 1. Installation avec le CLI de shadcn/ui
 
-<CodeTabs className="gap-0">
-
-<TabsListInstallType />
-
-<TabsContent value="cli" className="[&>figure]:mb-0">
+Copiez la commande ci-dessous dans votre terminal afin d'installer le composant
 
 ```bash
 npx shadcn@latest add @envindavsorg/apple-hello-effect
 ```
 
-</TabsContent>
+# 2. Installation manuelle
 
-<TabsContent value="manual">
-
-### installez les dépendances :
+## (2.1) installez les dépendances :
 
 ```bash
 npm install motion clsx tailwind-merge
 ```
 
-### ajoutez le helper :
+## (2.2) ajoutez le helper **cn** :
 
 <ComponentSource
   src="src/lib/utils.ts"
   title="lib/utils.ts"
   showLineNumbers
-  collapsible={false}
+  noCollapsible
 />
 
-### Copiez et collez le code suivant dans votre projet :
+## (2.3) ajoutez le code suivant :
 
 <ComponentSource
   name="apple-hello-effect"
@@ -56,52 +50,40 @@ npm install motion clsx tailwind-merge
   showLineNumbers
 />
 
-### Mettez à jour les chemins d'import de vos dépendances pour correspondre à la structure de votre projet et ainsi le faire fonctionner correctement.
+## (2.4) petite astuce :
 
-</TabsContent>
+Mettez à jour les chemins d'import de vos dépendances pour correspondre à la structure de votre projet et ainsi le faire fonctionner correctement.
 
-</CodeTabs>
-
-## Utilisation
+# 3. Utilisation
 
 ```tsx
-import {
-    AppleHelloEnglishEffect,
-    AppleHelloFrenchEffect,
-    AppleHelloSpanishEffect
-} from "@/components/apple-hello-effect";
+'use client';
+
+import { AppleHelloEffect } from '@/components/apple-hello-effect';
+
+const AppleHelloEffectDemo = () => (
+	<div className="flex min-h-64 items-center justify-center">
+		<AppleHelloEffect className="text-foreground" speed={0.8} />
+	</div>
+);
+
+export AppleHelloEffectDemo;
 ```
 
-```tsx
-<AppleHelloEnglishEffect
-    speed={1}
-    onAnimationComplete={() => console.log("Animation complete!")}
-/>
-
-<AppleHelloFrenchEffect
-    speed={1}
-    onAnimationComplete={() => console.log("Animation complete!")}
-/>
-<AppleHelloSpanishEffect
-    speed={1}
-    onAnimationComplete={() => console.log("Animation complete!")}
-/>
-```
-
-## Propriétés
+# 4. Propriétés
 
 | Prop                  | Type         | Default     | Description                                                                                               |
 | --------------------- | ------------ | ----------- | --------------------------------------------------------------------------------------------------------- |
 | `speed`               | `number`     | 1           | Un multiplicateur qui affecte la durée de l'animation. Des valeurs plus élevées ralentissent l'animation. |
 | `onAnimationComplete` | `() => void` | `undefined` | Fonction de rappel déclenchée lorsque l'animation se termine.                                             |
 
-## Connaissances supplémentaires
+# 5. Connaissances supplémentaires
 
 - Documentation officielle pour l'effet, avec le SVG extrait de macOS Sonoma au format SVG : https://www.figma.com/community/file/1414773009964314315/official-apple-hello-lettering
 - Une bibliothèque d'animation moderne pour JavaScript et React : https://motion.dev
 - Hébergez votre propre registre de composants : https://ui.shadcn.com/docs/registry
 
-## Références
+# 6. Références
 
 - https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pathLength
 - https://motion.dev/docs/react-motion-component

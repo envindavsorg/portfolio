@@ -10,7 +10,8 @@ import {
 	CollapsibleWithContext,
 } from '@/components/primitives/Collapsible';
 import { Divider } from '@/components/primitives/Divider';
-import { cn, dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
+import { cn } from '@/lib/utils';
 import type { Cert } from './content';
 
 interface CertItemProps {

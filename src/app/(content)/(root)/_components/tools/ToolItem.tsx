@@ -5,7 +5,7 @@ import { Badge } from '@/components/primitives/Badge';
 import { Divider } from '@/components/primitives/Divider';
 import { PulsatingCircle } from '@/components/primitives/PulsatingCircle';
 import type { Content } from '@/lib/content';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 import { TOOLS_ICONS } from './content';
 
 interface ToolItemProps {

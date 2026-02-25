@@ -16,7 +16,7 @@ import {
 	getContentBySlug,
 } from '@/lib/content';
 import { buildContentMetadata } from '@/lib/open-graph';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 import { TableOfContents } from '../../_components/TableOfContents';
 import { TopNav } from '../../_components/TopNav';
 

@@ -6,7 +6,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 import { z } from 'zod';
 import { remarkComponent } from '@/lib/remark-component';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 
 const contentMetadataSchema = z.object({
 	title: z.string(),
@@ -70,7 +70,7 @@ const getMDXData = (dir: string) =>
 let contentCache: Content[] | null = null;
 const CONTENT_PATH = 'src/content';
 export const getAllContent = () => {
-	if (contentCache) {
+	if (contentCache && process.env.NODE_ENV !== 'development') {
 		return contentCache;
 	}
 

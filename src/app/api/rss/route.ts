@@ -1,6 +1,6 @@
 import GLOBAL_DATA from '@/content/data/global';
 import { getAllContent } from '@/lib/content';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 
 export const dynamic = 'force-static';
 

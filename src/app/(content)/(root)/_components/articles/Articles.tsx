@@ -8,7 +8,7 @@ import {
 } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
 import { getContentByCategory } from '@/lib/content';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 import { ArticleItem } from './ArticleItem';
 
 export const Articles = () => {

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getAllContent } from '@/lib/content';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 
 const CATEGORY_ROUTES: Record<string, string> = {
 	article: 'blog',

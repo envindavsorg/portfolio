@@ -17,7 +17,7 @@ import { Tools } from '@/app/(content)/(root)/_components/tools/Tools';
 import { Divider } from '@/components/primitives/Divider';
 import GLOBAL_DATA from '@/content/data/global';
 import { buildContentMetadata } from '@/lib/open-graph';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 
 const About = dynamic(() =>
 	import('@/app/(content)/(root)/_components/about/About').then(

@@ -280,6 +280,10 @@
 		font-family: var(--font-geist-pixel-square);
 	}
 
+	.prose strong {
+		@apply text-theme!;
+	}
+
 	.prose span {
 		color: var(--color-foreground);
 	}

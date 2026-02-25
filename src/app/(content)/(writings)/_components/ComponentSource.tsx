@@ -13,7 +13,7 @@ export const ComponentSource = ({
 	collapsible = true,
 	children,
 }: React.ComponentProps<'div'> & ComponentSourceProps) => {
-	if (!collapsible) {
+	if (!collapsible || String(collapsible) === 'false') {
 		return <div>{children}</div>;
 	}
 

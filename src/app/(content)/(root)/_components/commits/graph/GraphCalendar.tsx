@@ -14,7 +14,7 @@ import {
 	TooltipTrigger,
 } from '@/components/primitives/Tooltip';
 import { getMonthLabels } from '@/lib/commits';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 import { BLOCK_MARGIN, BLOCK_SIZE } from './config';
 import { useContributionGraph } from './Graph';
 

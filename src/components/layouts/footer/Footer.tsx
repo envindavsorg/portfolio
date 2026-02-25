@@ -3,7 +3,7 @@ import { getCommitData } from '@/actions/github/commit.action';
 import { HeartIcon } from '@/components/blocks/icons/HeartIcon';
 import { Divider } from '@/components/primitives/Divider';
 import { Panel } from '@/components/primitives/Panel';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 import { FooterClock } from './FooterClock';
 import { FooterDate } from './FooterDate';
 

@@ -1,8 +1,7 @@
-import { FileIcon, WrenchIcon } from '@phosphor-icons/react/ssr';
+import { FileIcon } from '@phosphor-icons/react/ssr';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import type React from 'react';
-import type { ComponentProps } from 'react';
 import rehypeExternalLinks from 'rehype-external-links';
 import type { LineElement } from 'rehype-pretty-code';
 import rehypePrettyCode from 'rehype-pretty-code';
@@ -11,7 +10,6 @@ import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import { CodeBlockCommand } from '@/app/(content)/(writings)/_components/CodeBlockCommand';
 import { CodeCollapsibleWrapper } from '@/app/(content)/(writings)/_components/CodeCollapsibleWrapper';
-import { CodeTabs } from '@/app/(content)/(writings)/_components/CodeTabs';
 import { ComponentPreview } from '@/app/(content)/(writings)/_components/ComponentPreview';
 import { ComponentSource } from '@/app/(content)/(writings)/_components/ComponentSource';
 import { Base64 } from '@/app/(content)/(writings)/_components/utils/Base64';
@@ -20,12 +18,6 @@ import { JSONFormatter } from '@/app/(content)/(writings)/_components/utils/JSON
 import { LoremIpsumGenerator } from '@/app/(content)/(writings)/_components/utils/LoremIpsumGenerator';
 import { SpeedTest } from '@/app/(content)/(writings)/_components/utils/SpeedTest';
 import { CopyButton } from '@/components/primitives/Button';
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from '@/components/primitives/Tabs';
 import { Code, Heading } from '@/components/primitives/Typography';
 import { rehypeAddQueryParams } from '@/lib/rehype-add-query-params';
 import { rehypeComponent } from '@/lib/rehype-component';
@@ -36,7 +28,6 @@ import { CSSIcon } from '../blocks/icons/stack/CSS';
 import { JavaScriptIcon } from '../blocks/icons/stack/JavaScript';
 import { JSONIcon } from '../blocks/icons/stack/JSON';
 import { ReactIcon } from '../blocks/icons/stack/React';
-import { ShadcnIcon } from '../blocks/icons/stack/Shadcn';
 import { TypeScriptIcon } from '../blocks/icons/stack/TypeScript';
 import {
 	Table,
@@ -120,7 +111,6 @@ const components: MDXRemoteProps['components'] = {
 		__bun__?: string;
 	}) {
 		const isNpmCommand = __pnpm__ && __yarn__ && __npm__ && __bun__;
-
 		if (isNpmCommand) {
 			return (
 				<CodeBlockCommand
@@ -150,24 +140,6 @@ const components: MDXRemoteProps['components'] = {
 	ComponentPreview,
 	ComponentSource,
 	CodeCollapsibleWrapper,
-	CodeTabs,
-	Tabs,
-	TabsList,
-	TabsTrigger,
-	TabsContent,
-	TabsListInstallType: () => (
-		<TabsList>
-			<TabsTrigger value="cli">
-				<ShadcnIcon />
-				avec le CLI shadcn
-			</TabsTrigger>
-
-			<TabsTrigger value="manual">
-				<WrenchIcon />
-				manuellement
-			</TabsTrigger>
-		</TabsList>
-	),
 	Base64Utils: Base64,
 	ColorGeneratorUtils: ColorGenerator,
 	LoremIpsumGeneratorUtils: LoremIpsumGenerator,

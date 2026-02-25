@@ -57,6 +57,7 @@ const handleComponentSource = (node: UnistNode) => {
 	const name = getAttributeValue(node, 'name');
 	const srcPath = getAttributeValue(node, 'src');
 	const fileName = getAttributeValue(node, 'fileName');
+	const noCollapsible = getNodeAttribute(node, 'noCollapsible');
 
 	if (!(name || srcPath)) {
 		return;
@@ -80,6 +81,18 @@ const handleComponentSource = (node: UnistNode) => {
 	]
 		.filter(Boolean)
 		.join(' ');
+
+	// Pass collapsible as a preserved attribute on the node
+	if (noCollapsible) {
+		node.attributes = node.attributes?.filter(
+			(attr) => attr.name !== 'noCollapsible'
+		);
+		node.attributes?.push({
+			name: 'collapsible',
+			value: 'false',
+			type: 'mdxJsxAttribute',
+		});
+	}
 
 	node.children?.push(
 		buildCodeElement(source, extname(filePath).slice(1), meta)

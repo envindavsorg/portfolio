@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { Badge } from '@/components/primitives/Badge';
 import { Prose } from '@/components/primitives/Typography';
 import type { Content } from '@/lib/content';
-import { cn, dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
+import { cn } from '@/lib/utils';
 
 interface ArticleItemProps {
 	article: Content;

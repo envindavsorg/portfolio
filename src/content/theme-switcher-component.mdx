@@ -16,38 +16,32 @@ isNew: true
   openInV0Url="https://cuzeacflorin.fr/r/theme-switcher.json"
 />
 
-## Installation
+# 1. Installation avec le CLI de shadcn/ui
 
-<CodeTabs className="gap-0">
-
-<TabsListInstallType />
-
-<TabsContent value="cli" className="[&>figure]:mb-0">
+Copiez la commande ci-dessous dans votre terminal afin d'installer le composant
 
 ```bash
 npx shadcn@latest add @envindavsorg/theme-switcher
 ```
 
-</TabsContent>
+# 2. Installation manuelle
 
-<TabsContent value="manual">
-
-### installez les dépendances :
+## (2.1) installez les dépendances :
 
 ```bash
-npm install next-themes @phosphor-icons/react motion clsx tailwind-merge
+npm install motion clsx tailwind-merge
 ```
 
-### ajoutez le helper :
+## (2.2) ajoutez le helper **cn** :
 
 <ComponentSource
   src="src/lib/utils.ts"
   title="lib/utils.ts"
   showLineNumbers
-  collapsible={false}
+  noCollapsible
 />
 
-### Copiez et collez le code suivant dans votre projet :
+## (2.3) ajoutez le code suivant :
 
 <ComponentSource
   name="theme-switcher"
@@ -55,23 +49,21 @@ npm install next-themes @phosphor-icons/react motion clsx tailwind-merge
   showLineNumbers
 />
 
-### Mettez à jour les chemins d'import de vos dépendances pour correspondre à la structure de votre projet et ainsi le faire fonctionner correctement.
+## (2.4) petite astuce :
 
-</TabsContent>
+Mettez à jour les chemins d'import de vos dépendances pour correspondre à la structure de votre projet et ainsi le faire fonctionner correctement.
 
-</CodeTabs>
-
-## Utilisation
+# 3. Utilisation
 
 ```tsx
+'use client';
+
 import { ThemeSwitcher } from "@/components/theme-switcher";
-```
 
-```tsx
 <ThemeSwitcher />
 ```
 
-## Références
+# 4. Références
 
 - https://ui.shadcn.com/docs/registry
 - https://ui.shadcn.com/docs/dark-mode/next

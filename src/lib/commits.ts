@@ -1,5 +1,5 @@
 import type { Dayjs } from 'dayjs';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 
 const DEFAULT_MONTH_LABELS = [
 	'jan.',

@@ -8,7 +8,7 @@ import {
 	useMemo,
 } from 'react';
 import { groupByWeeks } from '@/lib/commits';
-import { dayjs } from '@/lib/utils';
+import { dayjs } from '@/lib/functions';
 import { BLOCK_MARGIN, BLOCK_SIZE, LABEL_HEIGHT, WEEK_START } from './config';
 
 interface GraphContextType {
