@@ -24,9 +24,16 @@ interface TopNavProps {
 	item: Content;
 	slug: string;
 	description: string;
+	useLlm?: boolean;
 }
 
-export const TopNav = ({ items, item, slug, description }: TopNavProps) => {
+export const TopNav = ({
+	items,
+	item,
+	slug,
+	description,
+	useLlm = true,
+}: TopNavProps) => {
 	const currentIndex = items.findIndex((i) => i.slug === slug);
 	const previous = currentIndex > 0 ? items[currentIndex - 1] : null;
 	const next = currentIndex < items.length - 1 ? items[currentIndex + 1] : null;
@@ -78,11 +85,13 @@ export const TopNav = ({ items, item, slug, description }: TopNavProps) => {
 				</Button>
 
 				<div className="flex items-center gap-2 max-sm:flex-1 max-sm:justify-end">
-					<LLMCopyButtonWithViewOptions
-						className="max-sm:me-auto"
-						isComponent={item.metadata.category === 'components'}
-						markdownUrl={`/${item.metadata.category}/${item.slug}.mdx`}
-					/>
+					{useLlm && (
+						<LLMCopyButtonWithViewOptions
+							className="max-sm:me-auto"
+							isComponent={item.metadata.category === 'components'}
+							markdownUrl={`/${item.metadata.category}/${item.slug}.mdx`}
+						/>
+					)}
 
 					<ShareMenu url={`/${item.metadata.category}/${item.slug}`} />
 

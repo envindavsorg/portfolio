@@ -1,7 +1,7 @@
 'use client';
 
 import { CopyIcon } from '@phosphor-icons/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
 import { CheckboxAnimated } from '@/components/primitives/Checkbox';
 import { Combobox } from '@/components/primitives/Combobox';
@@ -11,80 +11,69 @@ import { Textarea } from '@/components/primitives/Textarea';
 import useCopyToClipboard from '@/hooks/useCopyToClipboard';
 import { generateLoremIpsum } from '@/lib/lorem-ipsum';
 
-const generationOptions = [
-	{
-		value: 'paragraphs',
-		label: 'Paragraphes',
-	},
-	{
-		value: 'sentences',
-		label: 'Phrases',
-	},
-	{
-		value: 'words',
-		label: 'Mots',
-	},
+type GenerationUnit = 'words' | 'sentences' | 'paragraphs';
+
+const GENERATION_OPTIONS: { value: GenerationUnit; label: string }[] = [
+	{ value: 'paragraphs', label: 'Paragraphes' },
+	{ value: 'sentences', label: 'Phrases' },
+	{ value: 'words', label: 'Mots' },
 ];
 
-declare type GenerationUnit = 'words' | 'sentences' | 'paragraphs';
+const UNIT_LABELS: Record<GenerationUnit, string> = {
+	paragraphs: 'combien de paragraphes ?',
+	sentences: 'combien de phrases ?',
+	words: 'combien de mots ?',
+};
 
 export const LoremIpsumGenerator = () => {
 	const [inputAmount, setInputAmount] = useState(2);
-	const [textAreaRows, setTextAreaRows] = useState(9);
-	const [output, setOutput] = useState('');
 	const [generationUnit, setGenerationUnit] =
 		useState<GenerationUnit>('paragraphs');
 	const [asHTML, setAsHTML] = useState(false);
 	const [startWithStandard, setStartWithStandard] = useState(false);
-	const { buttonText, handleCopy } = useCopyToClipboard();
+	const [seed, setSeed] = useState(0);
+	const { handleCopy } = useCopyToClipboard();
 
-	const handleChange = (value: number | undefined) => {
+	const output = useMemo(
+		() =>
+			generateLoremIpsum({
+				generationUnit,
+				inputAmount,
+				startWithStandard:
+					generationUnit === 'words' ? false : startWithStandard,
+				asHTML,
+			}),
+		[inputAmount, generationUnit, asHTML, startWithStandard, seed]
+	);
+
+	const handleAmountChange = (value: number | undefined) => {
 		if (value && value > 0 && value < 100) {
 			setInputAmount(value);
-			setTextAreaRows(value === 1 ? 4 : 9);
 		}
 	};
-
-	const generateText = useCallback(() => {
-		const text = generateLoremIpsum({
-			generationUnit,
-			inputAmount,
-			startWithStandard,
-			asHTML,
-		});
-
-		setOutput(text);
-	}, [inputAmount, generationUnit, asHTML, startWithStandard]);
-
-	useEffect(() => {
-		generateText();
-	}, [generateText]);
 
 	return (
 		<>
 			<div className="screen-line-after flex flex-col gap-y-2 py-3">
-				<Label
-					className="text-muted-foreground text-xs"
-					htmlFor="howManyParagraphs"
-				>
-					combien de paragraphes ?
+				<Label className="text-muted-foreground text-xs" htmlFor="lorem-amount">
+					{UNIT_LABELS[generationUnit]}
 				</Label>
 				<div className="flex items-center gap-3">
 					<div className="flex-1">
 						<InputNumber
 							defaultValue={2}
-							id="howManyParagraphs"
+							id="lorem-amount"
 							max={25}
 							min={1}
 							onFocus={(event) => event.target.select()}
-							onValueChange={handleChange}
-							placeholder="entrez le nombre de paragraphes ..."
+							onValueChange={handleAmountChange}
+							placeholder="entrez un nombre ..."
 							value={inputAmount}
 						/>
 					</div>
 					<Combobox
 						className="w-42"
-						data={generationOptions}
+						data={GENERATION_OPTIONS}
 						onSelect={(value: GenerationUnit) => setGenerationUnit(value)}
 						search={false}
 						value={generationUnit}
@@ -97,37 +86,35 @@ export const LoremIpsumGenerator = () => {
 					<CheckboxAnimated
 						checked={startWithStandard}
 						disabled={generationUnit === 'words'}
-						id="standardSentence"
-						onCheckedChange={() => setStartWithStandard(!startWithStandard)}
+						id="standard-sentence"
+						onCheckedChange={(checked: boolean) =>
+							setStartWithStandard(checked)
+						}
 					/>
-					<Label className="cursor-pointer" htmlFor="standardSentence">
+					<Label className="cursor-pointer" htmlFor="standard-sentence">
 						lorem Ipsum en premier
 					</Label>
 				</div>
-
 				<div className="flex items-center gap-x-1">
 					<CheckboxAnimated
 						checked={asHTML}
-						id="asHtml"
-						onCheckedChange={() => setAsHTML(!asHTML)}
+						id="as-html"
+						onCheckedChange={(checked: boolean) => setAsHTML(checked)}
 					/>
-					<Label className="cursor-pointer" htmlFor="asHtml">
+					<Label className="cursor-pointer" htmlFor="as-html">
 						format HTML
 					</Label>
 				</div>
 			</div>
 
 			<div className="screen-line-after flex flex-col gap-y-2 py-3">
-				<Label
-					className="text-muted-foreground text-xs"
-					htmlFor="generatedText"
-				>
+				<Label className="text-muted-foreground text-xs" htmlFor="lorem-output">
 					texte généré
 				</Label>
 				<Textarea
-					id="generatedText"
+					id="lorem-output"
 					readOnly
-					rows={textAreaRows}
+					rows={inputAmount <= 1 ? 4 : 8}
 					value={output}
 				/>
 			</div>
@@ -135,9 +122,9 @@ export const LoremIpsumGenerator = () => {
 			<div className="flex justify-between py-1.5">
 				<Button onClick={() => handleCopy(output)} variant="outline">
 					<CopyIcon />
-					{buttonText}
+					copier
 				</Button>
-				<Button onClick={() => generateText()}>générer</Button>
+				<Button onClick={() => setSeed((prev) => prev + 1)}>générer</Button>
 			</div>
 		</>
 	);

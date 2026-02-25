@@ -8,7 +8,7 @@ import {
 	SpeedometerIcon,
 	UploadIcon,
 } from '@phosphor-icons/react';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useRef, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
 import {
 	Item,
@@ -23,8 +23,10 @@ type SpeedResult = ReturnType<
 	typeof SpeedTestEngine.prototype.results.getSummary
 >;
 
+type TestStatus = 'idle' | 'running' | 'finished';
+
 interface TestState {
-	status: 'idle' | 'running' | 'finished';
+	status: TestStatus;
 	result: Partial<SpeedResult>;
 }
 
@@ -34,6 +36,34 @@ const INITIAL_RESULT: Partial<SpeedResult> = {
 	latency: undefined,
 	jitter: undefined,
 };
+
+const BUTTON_LABELS: Record<TestStatus, string> = {
+	idle: 'démarrer le test',
+	running: 'arrêter le test',
+	finished: 'refaire le test',
+};
+
+const STATUS_COLORS: Record<Exclude<TestStatus, 'idle'>, string> = {
+	running: 'border-blue-600 dark:border-blue-300',
+	finished: 'border-green-600 dark:border-green-300',
+};
+
+const PULSE_COLORS: Record<Exclude<TestStatus, 'idle'>, string> = {
+	running: 'bg-blue-600 dark:bg-blue-300',
+	finished: 'bg-green-600 dark:bg-green-300',
+};
+
+const SPEED_METRICS = [
+	{
+		key: 'download',
+		label: 'téléchargement',
+		measure: 'Mb/s',
+		icon: DownloadIcon,
+	},
+	{ key: 'upload', label: 'téléversement', measure: 'Mb/s', icon: UploadIcon },
+	{ key: 'latency', label: 'latence', measure: 'ms', icon: SpeedometerIcon },
+	{ key: 'jitter', label: 'gigue', measure: 'ms', icon: GaugeIcon },
+] as const;
 
 const createSpeedTestEngine = () =>
 	new SpeedTestEngine({
@@ -47,61 +77,41 @@ const createSpeedTestEngine = () =>
 		],
 	});
 
-interface PulsatingCircleProps {
-	isRunning: boolean;
-	isFinished: boolean;
-}
-
-const PulsatingCircle = memo((props: PulsatingCircleProps) => (
-	<span className="relative flex items-center justify-center">
-		<span
-			className={cn(
-				'absolute inline-flex size-3 animate-ping rounded-full opacity-50',
-				props.isRunning && 'bg-blue-600 dark:bg-blue-300',
-				props.isFinished && 'bg-green-600 dark:bg-green-300'
-			)}
-		/>
-		<span
-			className={cn(
-				'relative inline-flex size-2 rounded-full',
-				props.isRunning && 'bg-blue-600 dark:bg-blue-300',
-				props.isFinished && 'bg-green-600 dark:bg-green-300'
-			)}
-		/>
-	</span>
-));
-
-const getButtonLabel = (status: TestState['status']) => {
-	switch (status) {
-		case 'idle':
-			return 'démarrer le test';
-		case 'running':
-			return 'arrêter le test';
-		case 'finished':
-			return 'refaire le test';
-		default:
-			return 'démarrer le test';
-	}
-};
-
 const cleanSummary = (summary: SpeedResult): Partial<SpeedResult> =>
 	Object.fromEntries(
 		Object.entries(summary).filter(([, value]) => value !== undefined)
 	) as Partial<SpeedResult>;
 
-const formatValue = (val: number | undefined, unit: string): string => {
+const formatValue = (val: number | undefined, measure: string): string => {
 	const num = val ?? 0;
-	if (unit === 'mb/s') {
+	if (measure === 'Mb/s') {
 		return (num / 1_000_000).toFixed(2);
 	}
-	if (unit === 'ms') {
-		return num.toFixed(0);
-	}
-	return num.toFixed(2);
+	return num.toFixed(0);
 };
 
-interface SpeedTestProps {
-	status: TestState['status'];
+const PulsatingCircle = memo(({ status }: { status: TestStatus }) => {
+	if (status === 'idle') {
+		return null;
+	}
+
+	const color = PULSE_COLORS[status];
+
+	return (
+		<span className="relative flex items-center justify-center">
+			<span
+				className={cn(
+					'absolute inline-flex size-3 animate-ping rounded-full opacity-50',
+					color
+				)}
+			/>
+			<span className={cn('relative inline-flex size-2 rounded-full', color)} />
+		</span>
+	);
+});
+
+interface SpeedTestItemProps {
+	status: TestStatus;
 	label: string;
 	value: number | undefined;
 	measure: string;
@@ -109,48 +119,27 @@ interface SpeedTestProps {
 }
 
 const SpeedTestItem = memo(
-	({
-		status,
-		label,
-		value,
-		measure,
-		icon: SpeedTestItemIcon,
-	}: SpeedTestProps) => {
-		const displayValue = useMemo(
-			() => formatValue(value, measure),
-			[value, measure]
-		);
-
-		const borderClassName = useMemo(
-			() =>
-				cn(
-					status === 'running' && 'border-blue-600 dark:border-blue-300',
-					status === 'finished' && 'border-green-600 dark:border-green-300'
-				),
-			[status]
-		);
-
-		return (
-			<Item className={borderClassName} size="sm" variant="outline">
-				<ItemMedia>
-					<SpeedTestItemIcon className="size-5 sm:size-6" />
-				</ItemMedia>
-				<ItemContent className="flex flex-row items-center gap-x-3">
-					<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
-					<PulsatingCircle
-						isFinished={status === 'finished'}
-						isRunning={status === 'running'}
-					/>
-				</ItemContent>
-				<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
-					{displayValue}
-					<span className="font-normal text-muted-foreground text-xs sm:text-sm">
-						{measure}
-					</span>
-				</ItemActions>
-			</Item>
-		);
-	}
+	({ status, label, value, measure, icon: ItemIcon }: SpeedTestItemProps) => (
+		<Item
+			className={status !== 'idle' ? STATUS_COLORS[status] : undefined}
+			size="sm"
+			variant="outline"
+		>
+			<ItemMedia>
+				<ItemIcon className="size-5 sm:size-6" />
+			</ItemMedia>
+			<ItemContent className="flex flex-row items-center gap-x-3">
+				<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
+				<PulsatingCircle status={status} />
+			</ItemContent>
+			<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
+				{formatValue(value, measure)}
+				<span className="font-normal text-muted-foreground text-xs sm:text-sm">
+					{measure}
+				</span>
+			</ItemActions>
+		</Item>
+	)
 );
 
 export const SpeedTest = () => {
@@ -160,107 +149,76 @@ export const SpeedTest = () => {
 	});
 
 	const engineRef = useRef<SpeedTestEngine | null>(null);
-	const statusRef = useRef<TestState['status']>('idle');
-
-	statusRef.current = testState.status;
 
 	const toggleTest = useCallback(() => {
-		if (statusRef.current === 'running') {
-			engineRef.current?.pause?.();
+		if (engineRef.current) {
+			engineRef.current.pause?.();
 			engineRef.current = null;
-			setTestState((prev) => ({
-				...prev,
-				status: 'idle',
-			}));
+			setTestState((prev) => ({ ...prev, status: 'idle' }));
 			return;
 		}
 
-		setTestState((prev) => ({
-			...prev,
-			status: 'running',
-		}));
+		setTestState({ status: 'running', result: INITIAL_RESULT });
 
-		const speedTest = createSpeedTestEngine();
-		engineRef.current = speedTest;
+		const engine = createSpeedTestEngine();
+		engineRef.current = engine;
 
-		speedTest.onResultsChange = () => {
-			if (engineRef.current !== speedTest) {
+		engine.onResultsChange = () => {
+			if (engineRef.current !== engine) {
 				return;
 			}
-
-			const newResults = cleanSummary(speedTest.results.getSummary());
 			setTestState((prev) => ({
 				status: prev.status,
 				result: {
 					...prev.result,
-					...newResults,
+					...cleanSummary(engine.results.getSummary()),
 				},
 			}));
 		};
 
-		speedTest.onFinish = () => {
-			if (engineRef.current !== speedTest) {
+		engine.onFinish = () => {
+			if (engineRef.current !== engine) {
 				return;
 			}
-
-			const finalResults = speedTest.results.getSummary();
 			setTestState({
 				status: 'finished',
-				result: { ...INITIAL_RESULT, ...cleanSummary(finalResults) },
+				result: {
+					...INITIAL_RESULT,
+					...cleanSummary(engine.results.getSummary()),
+				},
 			});
 			engineRef.current = null;
 		};
 
-		speedTest.onError = () => {
-			if (engineRef.current !== speedTest) {
+		engine.onError = () => {
+			if (engineRef.current !== engine) {
 				return;
 			}
 			engineRef.current = null;
-			setTestState((prev) => ({
-				...prev,
-				status: 'idle',
-			}));
+			setTestState((prev) => ({ ...prev, status: 'idle' }));
 		};
 
-		speedTest.play();
+		engine.play();
 	}, []);
 
 	return (
 		<>
 			<div className="flex flex-col gap-y-3 py-3">
-				<SpeedTestItem
-					icon={DownloadIcon}
-					label="téléchargement"
-					measure="Mb/s"
-					status={testState.status}
-					value={testState.result.download}
-				/>
-				<SpeedTestItem
-					icon={UploadIcon}
-					label="téléversement"
-					measure="Mb/s"
-					status={testState.status}
-					value={testState.result.upload}
-				/>
-				<SpeedTestItem
-					icon={SpeedometerIcon}
-					label="latence"
-					measure="ms"
-					status={testState.status}
-					value={testState.result.latency}
-				/>
-				<SpeedTestItem
-					icon={GaugeIcon}
-					label="gigue"
-					measure="ms"
-					status={testState.status}
-					value={testState.result.jitter}
-				/>
+				{SPEED_METRICS.map((metric) => (
+					<SpeedTestItem
+						icon={metric.icon}
+						key={metric.key}
+						label={metric.label}
+						measure={metric.measure}
+						status={testState.status}
+						value={testState.result[metric.key]}
+					/>
+				))}
 			</div>
 
 			<div className="screen-line-before flex justify-end py-1.5">
 				<Button onClick={toggleTest} variant="outline">
-					{getButtonLabel(testState.status)}
+					{BUTTON_LABELS[testState.status]}
 				</Button>
 			</div>
 		</>

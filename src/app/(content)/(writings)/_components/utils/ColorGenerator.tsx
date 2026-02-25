@@ -2,7 +2,6 @@
 
 import {
 	ArrowsClockwiseIcon,
-	CheckIcon,
 	CopyIcon,
 	LockKeyIcon,
 	LockSimpleOpenIcon,
@@ -11,50 +10,81 @@ import {
 import { motion } from 'motion/react';
 import { Poline, positionFunctions } from 'poline';
 import { useCallback, useState } from 'react';
-import { toast } from 'sonner';
 import { ColorPicker } from '@/components/blocks/ColorPicker';
 import { Button } from '@/components/primitives/Button';
 import { Prose } from '@/components/primitives/Typography';
-import { soundManager } from '@/lib/sound-manager';
+import useCopyToClipboard from '@/hooks/useCopyToClipboard';
 
-interface ColorScheme {
-	[key: string]: string;
-}
+type ColorScheme = Record<string, string>;
+
+const DEFAULT_COLOR_SCHEME: ColorScheme = {
+	background: '0 0% 100%',
+	foreground: '240 10% 3.9%',
+	card: '0 0% 100%',
+	'card-foreground': '240 10% 3.9%',
+	popover: '0 0% 100%',
+	'popover-foreground': '240 10% 3.9%',
+	primary: '240 5.9% 10%',
+	'primary-foreground': '0 0% 98%',
+	secondary: '240 4.8% 95.9%',
+	'secondary-foreground': '240 5.9% 10%',
+	muted: '240 4.8% 95.9%',
+	'muted-foreground': '240 3.8% 46.1%',
+	accent: '240 4.8% 95.9%',
+	'accent-foreground': '240 5.9% 10%',
+	destructive: '0 84.2% 60.2%',
+	'destructive-foreground': '0 0% 98%',
+	border: '240 5.9% 90%',
+	input: '240 5.9% 90%',
+	ring: '240 5.9% 10%',
+};
+
+const parseHSL = (hsl: string): [number, number, number] => {
+	const parts = hsl.match(/[\d.]+/g)?.map(Number) ?? [0, 0, 0];
+	return [parts[0], parts[1], parts[2]];
+};
+
+const formatHSL = (h: number, s: number, l: number): string =>
+	`${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`;
+
+const getContrastColor = (hsl: string): string => {
+	const [, , l] = parseHSL(hsl);
+	return l > 50 ? '0 0% 0%' : '0 0% 100%';
+};
+
+const adjustLightness = (key: string, l: number): number => {
+	if (key.includes('foreground')) {
+		return Math.min(l - 30, 20);
+	}
+	if (key === 'background') {
+		return Math.max(l + 30, 90);
+	}
+	if (key === 'border' || key === 'input') {
+		return Math.min(Math.max(l, 70), 90);
+	}
+	return l;
+};
+
+const buildCSSOutput = (scheme: ColorScheme): string => {
+	const variables = Object.entries(scheme)
+		.map(([key, value]) => `    --${key}: ${value};`)
+		.join('\n');
+
+	return `@layer base {\n  :root {\n${variables}\n  }\n}`;
+};
 
 export const ColorGenerator = () => {
-	const [colorScheme, setColorScheme] = useState<ColorScheme>({
-		background: '0 0% 100%',
-		foreground: '240 10% 3.9%',
-		card: '0 0% 100%',
-		'card-foreground': '240 10% 3.9%',
-		popover: '0 0% 100%',
-		'popover-foreground': '240 10% 3.9%',
-		primary: '240 5.9% 10%',
-		'primary-foreground': '0 0% 98%',
-		secondary: '240 4.8% 95.9%',
-		'secondary-foreground': '240 5.9% 10%',
-		muted: '240 4.8% 95.9%',
-		'muted-foreground': '240 3.8% 46.1%',
-		accent: '240 4.8% 95.9%',
-		'accent-foreground': '240 5.9% 10%',
-		destructive: '0 84.2% 60.2%',
-		'destructive-foreground': '0 0% 98%',
-		border: '240 5.9% 90%',
-		input: '240 5.9% 90%',
-		ring: '240 5.9% 10%',
-	});
-
+	const [colorScheme, setColorScheme] =
+		useState<ColorScheme>(DEFAULT_COLOR_SCHEME);
 	const [lockedColor, setLockedColor] = useState<string | null>(null);
-	const [copiedColor, setCopiedColor] = useState<string | null>(null);
+	const { handleCopy } = useCopyToClipboard();
 
-	const genColors = useCallback(() => {
-		setColorScheme((prevScheme) => {
+	const generateColors = useCallback(() => {
+		setColorScheme((prev) => {
 			const anchorColors: [number, number, number][] = [];
 
-			if (lockedColor) {
-				const [h, s, l] = prevScheme[lockedColor]
-					.split(' ')
-					.map(Number.parseFloat);
+			if (lockedColor && prev[lockedColor]) {
+				const [h, s, l] = parseHSL(prev[lockedColor]);
 				anchorColors.push([h, s / 100, l / 100]);
 			}
 
@@ -70,90 +100,33 @@ export const ColorGenerator = () => {
 				positionFunctionZ: positionFunctions.linearPosition,
 			});
 
-			const newColorScheme = { ...prevScheme };
 			const colors = poline.colorsCSS;
+			const next = { ...prev };
 
-			Object.keys(newColorScheme).forEach((key, index) => {
-				if (key !== lockedColor) {
-					const color = colors[index % colors.length];
-					const [h, s, l] = color.match(/\d+(\.\d+)?/g)?.map(Number) || [
-						0, 0, 0,
-					];
-
-					let adjustedLightness = l;
-
-					if (key.includes('foreground')) {
-						adjustedLightness = Math.min(l - 30, 20);
-					} else if (key === 'background') {
-						adjustedLightness = Math.max(l + 30, 90);
-					} else if (key === 'border' || key === 'input') {
-						adjustedLightness = Math.min(Math.max(l, 70), 90);
-					}
-
-					newColorScheme[key] =
-						`${h.toFixed(1)} ${s.toFixed(1)}% ${adjustedLightness.toFixed(1)}%`;
+			for (const [index, key] of Object.keys(next).entries()) {
+				if (key === lockedColor) {
+					continue;
 				}
-			});
 
-			return newColorScheme;
+				const [h, s, l] = parseHSL(colors[index % colors.length]);
+				next[key] = formatHSL(h, s, adjustLightness(key, l));
+			}
+
+			return next;
 		});
 	}, [lockedColor]);
 
 	const resetColors = useCallback(() => {
-		setColorScheme({
-			background: '0 0% 100%',
-			foreground: '240 10% 3.9%',
-			card: '0 0% 100%',
-			'card-foreground': '240 10% 3.9%',
-			popover: '0 0% 100%',
-			'popover-foreground': '240 10% 3.9%',
-			primary: '240 5.9% 10%',
-			'primary-foreground': '0 0% 98%',
-			secondary: '240 4.8% 95.9%',
-			'secondary-foreground': '240 5.9% 10%',
-			muted: '240 4.8% 95.9%',
-			'muted-foreground': '240 3.8% 46.1%',
-			accent: '240 4.8% 95.9%',
-			'accent-foreground': '240 5.9% 10%',
-			destructive: '0 84.2% 60.2%',
-			'destructive-foreground': '0 0% 98%',
-			border: '240 5.9% 90%',
-			input: '240 5.9% 90%',
-			ring: '240 5.9% 10%',
-		});
-
+		setColorScheme(DEFAULT_COLOR_SCHEME);
 		setLockedColor(null);
 	}, []);
 
-	const copyColorScheme = useCallback(() => {
-		const cssVariables = Object.entries(colorScheme)
-			.map(([key, value]) => `--${key}: ${value};`)
-			.join('\n    ');
-
-		const fullCss = `
-@layer base {
-  :root {
-    ${cssVariables}
-  }
-}`;
-		navigator.clipboard.writeText(fullCss);
-		setCopiedColor('all');
-
-		soundManager.playToastSound();
-		toast.success('css copié dans le presse-papier !');
-
-		setTimeout(() => setCopiedColor(null), 2000);
-	}, [colorScheme]);
-
-	const getContrastColor = useCallback((color: string) => {
-		const [, , lightness] = color.split(' ').map(Number.parseFloat);
-
-		return lightness > 50 ? '0 0% 0%' : '0 0% 100%';
+	const updateColor = useCallback((key: string, newColor: string) => {
+		const [h, s, l] = parseHSL(newColor);
+		setColorScheme((prev) => ({ ...prev, [key]: formatHSL(h, s, l) }));
 	}, []);
 
-	const toggleLock = useCallback((key: string) => {
-		setLockedColor((prev) => (prev === key ? null : key));
-	}, []);
+	const colorEntries = Object.entries(colorScheme);
 
 	return (
 		<>
@@ -162,39 +135,32 @@ export const ColorGenerator = () => {
 					<ArrowsClockwiseIcon />
 					réinitialiser
 				</Button>
-				<Button onClick={genColors}>
+				<Button onClick={generateColors}>
 					<SwatchesIcon />
 					générer
 				</Button>
 			</div>
 
 			<div className="screen-line-before grid grid-cols-1 gap-3 py-3 sm:grid-cols-2">
-				{Object.entries(colorScheme).map(([key, value]) => (
+				{colorEntries.map(([key, value]) => (
 					<div className="relative" key={key}>
 						<div className="flex items-center justify-between">
 							<span className="text-muted-foreground text-xs">{key}</span>
 							<Button
 								className="mr-6"
-								onClick={() => toggleLock(key)}
+								onClick={() =>
+									setLockedColor((prev) => (prev === key ? null : key))
+								}
 								size="icon"
 								variant="ghost"
 							>
 								{lockedColor === key ? <LockKeyIcon /> : <LockSimpleOpenIcon />}
 							</Button>
 						</div>
-
 						<div className="mt-2 flex items-center">
 							<ColorPicker
 								color={`hsl(${value})`}
-								onChangeAction={(newColor) => {
-									const [h, s, l] = newColor
-										.match(/\d+(\.\d+)?/g)
-										?.map(Number) || [0, 0, 0];
-									setColorScheme({
-										...colorScheme,
-										[key]: `${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`,
-									});
-								}}
+								onChangeAction={(color) => updateColor(key, color)}
 							/>
 						</div>
 					</div>
@@ -219,15 +185,11 @@ export const ColorGenerator = () => {
 					initial={{ opacity: 0, y: 20 }}
 					transition={{ duration: 0.5 }}
 				>
-					{Object.entries(colorScheme).map(([key, value]) => (
+					{colorEntries.map(([key, value]) => (
 						<div className="flex items-center justify-between" key={key}>
 							<span className="text-muted-foreground text-xs">{key}</span>
 							<Button
-								onClick={() => {
-									navigator.clipboard.writeText(`--${key}: ${value};`);
-									setCopiedColor(key);
-									setTimeout(() => setCopiedColor(null), 2000);
-								}}
+								onClick={() => handleCopy(`--${key}: ${value};`)}
 								style={{
 									backgroundColor: `hsl(${value})`,
 									color: `hsl(${getContrastColor(value)})`,
@@ -236,11 +198,7 @@ export const ColorGenerator = () => {
 								variant="outline"
 							>
 								{value}
-								{copiedColor === key ? (
-									<CheckIcon className="ml-2 size-4" />
-								) : (
-									<CopyIcon className="ml-2 size-4" />
-								)}
+								<CopyIcon className="ml-2 size-4" />
 							</Button>
 						</div>
 					))}
@@ -248,7 +206,10 @@ export const ColorGenerator = () => {
 			</div>
 
 			<div className="screen-line-before flex justify-end py-1.5">
-				<Button onClick={copyColorScheme} variant="outline">
+				<Button
+					onClick={() => handleCopy(buildCSSOutput(colorScheme))}
+					variant="outline"
+				>
 					<CopyIcon />
 					copier les couleurs
 				</Button>

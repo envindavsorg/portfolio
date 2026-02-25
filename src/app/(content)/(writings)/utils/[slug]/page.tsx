@@ -96,6 +96,7 @@ const Page = async ({ params }: Props) => {
 				item={util}
 				items={utils}
 				slug={slug}
+				useLlm={false}
 			/>
 
 			<div className="screen-line-after flex w-full items-center justify-between gap-x-3 px-2 sm:px-4">

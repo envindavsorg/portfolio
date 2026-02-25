@@ -81,12 +81,9 @@ export const ArticleItem = ({ article }: ArticleItemProps) => {
 
 				<div className="mt-2 flex items-center justify-end gap-2 sm:gap-4">
 					<Badge className="lowercase">
-						création:{' '}
-						<span>{dayjs(metadata.createdAt).format('ddd DD MMM')}</span>
+						{dayjs(metadata.createdAt).format('ddd DD MMM')}
 					</Badge>
-					<Badge className="lowercase">
-						lecture: <span>{reading?.time}.</span>
-					</Badge>
+					<Badge className="lowercase">{reading?.time}</Badge>
 					<Badge className="lowercase">{reading?.words} mots</Badge>
 				</div>
 			</div>
