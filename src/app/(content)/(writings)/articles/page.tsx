@@ -15,18 +15,18 @@ import {
 import { Divider } from '@/components/primitives/Divider';
 import { PanelContent } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
-import { getPostsByCategory } from '@/lib/blog/posts';
-import { openGraphImage } from '@/lib/open-graph';
+import { getContentByCategory } from '@/lib/content';
+import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
 const getCachedArticles = cache(() =>
-	getPostsByCategory('articles').sort((a, b) =>
+	getContentByCategory('articles').sort((a, b) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	)
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
-	openGraphImage({
+	buildContentMetadata({
 		title: 'Mes articles de blog',
 		description:
 			'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',

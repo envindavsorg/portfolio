@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { getAllPosts } from '@/lib/blog/posts';
+import { getAllContent } from '@/lib/content';
 import { dayjs } from '@/lib/utils';
 
 const CATEGORY_ROUTES: Record<string, string> = {
@@ -9,7 +9,7 @@ const CATEGORY_ROUTES: Record<string, string> = {
 };
 
 const sitemap = (): MetadataRoute.Sitemap => {
-	const allPosts = getAllPosts();
+	const allPosts = getAllContent();
 
 	const articles = allPosts.filter(
 		(p) => (p.metadata.category ?? 'article') === 'article'

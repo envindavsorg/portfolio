@@ -1,5 +1,5 @@
 import GLOBAL_DATA from '@/content/data/global';
-import { getAllPosts } from '@/lib/blog/posts';
+import { getAllContent } from '@/lib/content';
 import { dayjs } from '@/lib/utils';
 
 export const dynamic = 'force-static';
@@ -13,7 +13,7 @@ const escapeXml = (unsafe: string): string =>
 		.replace(/'/g, '&apos;');
 
 export const GET = () => {
-	const allPosts = getAllPosts();
+	const allPosts = getAllContent();
 
 	const itemsXml = allPosts
 		.map(

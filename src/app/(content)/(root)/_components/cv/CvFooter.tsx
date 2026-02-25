@@ -16,9 +16,9 @@ import {
 } from '@/components/primitives/Drawer';
 import { PanelFooter } from '@/components/primitives/Panel';
 import GLOBAL_DATA from '@/content/data/global';
-import type { EmailFormData } from '@/hooks/use-email-form';
-import useEmailForm from '@/hooks/use-email-form';
-import useMediaQuery from '@/hooks/use-media-query';
+import type { EmailFormData } from '@/hooks/useEmailForm';
+import useEmailForm from '@/hooks/useEmailForm';
+import useMediaQuery from '@/hooks/useMediaQuery';
 import { CvError } from './CvError';
 import { CvForm } from './CvForm';
 import { CvModal } from './CvModal';

@@ -206,7 +206,15 @@ export const FlickeringGrid = ({
 			resizeObserver.disconnect();
 			intersectionObserver.disconnect();
 		};
-	}, [setupCanvas, updateSquares, drawGrid, width, height, isInView, prefersReducedMotion]);
+	}, [
+		setupCanvas,
+		updateSquares,
+		drawGrid,
+		width,
+		height,
+		isInView,
+		prefersReducedMotion,
+	]);
 
 	return (
 		<div className="relative flex grow overflow-hidden">

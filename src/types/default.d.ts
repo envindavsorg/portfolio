@@ -87,64 +87,7 @@ declare global {
 		| 'utils'
 		| 'utilsArticle';
 
-	// types for unist tree
-	interface UnistNode {
-		type: string;
-		name?: string;
-		tagName?: string;
-		value?: string;
-		properties?: {
-			__rawString__?: string;
-			[key: string]: unknown;
-		} & {
-			__pnpm__?: string;
-			__yarn__?: string;
-			__npm__?: string;
-			__bun__?: string;
-		};
-		attributes?: {
-			name: string;
-			value: unknown;
-			type?: string;
-		}[];
-		children?: UnistNode[];
-	}
-
-	interface UnistTree {
-		type: string;
-		children: UnistNode[];
-	}
-
 	// types for blog, components, and utils posts
-	interface PostMetadata {
-		title: string;
-		description: string;
-		image?: string;
-		bannerLight?: string;
-		bannerDark?: string;
-		category?: string;
-		createdAt: string;
-		updatedAt: string;
-		tags?: string[];
-		author?: string;
-		isNew?: boolean;
-	}
-
-	interface Post {
-		metadata: PostMetadata;
-		slug: string;
-		content: string;
-		reading?: {
-			time: string;
-			words: number;
-		};
-	}
-
-	interface PostReadingTime {
-		time: string;
-		minutes: number;
-		words: number;
-	}
 
 	// types for browser hook
 	type Browser =

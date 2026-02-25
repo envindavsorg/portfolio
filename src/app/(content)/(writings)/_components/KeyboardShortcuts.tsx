@@ -2,11 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
+import type { Content } from '@/lib/content';
 
 interface KeyboardShortcutsProps {
 	basePath: string;
-	previous: Post | null;
-	next: Post | null;
+	previous: Content | null;
+	next: Content | null;
 }
 
 export const KeyboardShortcuts = ({
@@ -17,7 +18,7 @@ export const KeyboardShortcuts = ({
 	const router = useRouter();
 
 	const navigate = useCallback(
-		(post: Post | null) => {
+		(post: Content | null) => {
 			if (post) {
 				router.push(`${basePath}/${post.slug}`);
 			}

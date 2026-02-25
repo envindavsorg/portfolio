@@ -13,7 +13,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/primitives/Tooltip';
-import { getMonthLabels } from '@/lib/github';
+import { getMonthLabels } from '@/lib/commits';
 import { dayjs } from '@/lib/utils';
 import { BLOCK_MARGIN, BLOCK_SIZE } from './config';
 import { useContributionGraph } from './Graph';

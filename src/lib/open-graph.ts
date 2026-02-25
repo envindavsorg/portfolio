@@ -1,58 +1,48 @@
-interface OpenGraphImageParams {
-	type: PageType;
+import type { Metadata } from 'next';
+
+interface OGImageParams {
+	type?: PageType;
 	title: string;
-	description: string;
+	description?: string;
 }
 
-const openGraphImageUrl = ({
+const buildOGImageUrl = ({
 	type = 'homepage',
 	title,
 	description,
-}: OpenGraphImageParams): string => {
-	const baseUrl = 'https://cuzeacflorin.fr';
-	const endpoint = `${baseUrl}/api/og`;
-
-	const params = new URLSearchParams({
-		type: type.toString(),
-		title: title.trim(),
-	});
-
-	if (description.trim()) {
-		params.append('subtitle', description.trim());
+}: OGImageParams): string => {
+	const params = new URLSearchParams({ type, title: title.trim() });
+	if (description?.trim()) {
+		params.set('description', description.trim());
 	}
-
-	return `${endpoint}?${params.toString()}`;
+	return `https://cuzeacflorin.fr/api/og?${params}`;
 };
 
-interface OpenGraphImageProps {
+interface ContentMetadataParams {
 	title: string;
 	description: string;
-	ogImageParams: OpenGraphImageParams;
+	ogImageParams: OGImageParams;
 }
 
-export const openGraphImage = ({
+export const buildContentMetadata = ({
 	title,
 	description,
 	ogImageParams,
-}: OpenGraphImageProps) => ({
-	title,
-	description,
-	openGraph: {
+}: ContentMetadataParams): Metadata => {
+	const imageUrl = buildOGImageUrl(ogImageParams);
+	return {
 		title,
 		description,
-		images: [
-			{
-				url: openGraphImageUrl(ogImageParams),
-				width: 1200,
-				height: 630,
-				alt: title,
-			},
-		],
-	},
-	twitter: {
-		card: 'summary_large_image',
-		title,
-		description,
-		images: [openGraphImageUrl(ogImageParams)],
-	},
-});
+		openGraph: {
+			title,
+			description,
+			images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title,
+			description,
+			images: [imageUrl],
+		},
+	};
+};

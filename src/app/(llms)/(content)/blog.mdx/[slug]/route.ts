@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation';
-import { getLLMText } from '@/lib/blog/llm';
-import { getAllPosts } from '@/lib/blog/posts';
+import { type Content, getAllContent, getLLMText } from '@/lib/content';
 
 export const generateStaticParams = async (): Promise<{ slug: string }[]> => {
-	const posts: Post[] = getAllPosts();
+	const posts: Content[] = getAllContent();
 	return posts.map(({ slug }) => ({ slug }));
 };
 
@@ -17,8 +16,8 @@ export const GET = async (
 ): Promise<Response> => {
 	const { slug } = await params;
 
-	const allPosts: Post[] = getAllPosts();
-	const post = allPosts.find((article: Post) => article.slug === slug);
+	const allPosts: Content[] = getAllContent();
+	const post = allPosts.find((article: Content) => article.slug === slug);
 
 	if (!post) {
 		notFound();

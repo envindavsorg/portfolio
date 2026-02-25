@@ -21,18 +21,18 @@ import {
 import { Divider } from '@/components/primitives/Divider';
 import { PanelContent } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
-import { getPostsByCategory } from '@/lib/blog/posts';
-import { openGraphImage } from '@/lib/open-graph';
+import { type Content, getContentByCategory } from '@/lib/content';
+import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
 const getCachedComponents = cache(() =>
-	getPostsByCategory('components').sort((a, b) =>
+	getContentByCategory('components').sort((a, b) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	)
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
-	openGraphImage({
+	buildContentMetadata({
 		title: 'Composants React',
 		description:
 			'Ma collection de snippets React réutilisables dans tous vos projets.',
@@ -135,7 +135,7 @@ const ComponentsPage = async ({
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					{filtered.map((component: Post) => (
+					{filtered.map((component: Content) => (
 						<ArticleItem article={component} key={component.slug} />
 					))}
 				</div>

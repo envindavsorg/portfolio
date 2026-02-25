@@ -37,7 +37,8 @@ import {
 } from '@/components/primitives/Drawer';
 import { Kbd, KbdGroup } from '@/components/primitives/Kbd';
 import { Separator } from '@/components/primitives/Separator';
-import useMediaQuery from '@/hooks/use-media-query';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import type { Content } from '@/lib/content';
 import { cn } from '@/lib/utils';
 import { CATEGORY, LABELS } from './content';
 import { buildKindMap, buildPostGroups, getFilteredGroups } from './functions';
@@ -120,7 +121,7 @@ const CommandLinkGroup = memo(
 );
 
 interface NavBarCommandProps {
-	posts?: Post[];
+	posts?: Content[];
 }
 
 export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {

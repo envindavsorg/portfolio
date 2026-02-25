@@ -4,11 +4,12 @@ import { DotPattern } from '@/components/blocks/DotPattern';
 import { Badge } from '@/components/primitives/Badge';
 import { Divider } from '@/components/primitives/Divider';
 import { PulsatingCircle } from '@/components/primitives/PulsatingCircle';
+import type { Content } from '@/lib/content';
 import { dayjs } from '@/lib/utils';
 import { TOOLS_ICONS } from './content';
 
 interface ToolItemProps {
-	tool: Post;
+	tool: Content;
 	isLast?: boolean;
 }
 

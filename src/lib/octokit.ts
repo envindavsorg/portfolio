@@ -2,7 +2,7 @@ import { Octokit } from 'octokit';
 
 const github = new Octokit({
 	auth: process.env.GITHUB_API_TOKEN,
-	userAgent: 'Mon portfolio - Cuzeac Florin',
+	userAgent: 'envindavsorg',
 	timeZone: 'UTC',
 });
 

@@ -8,7 +8,7 @@ import { Combobox } from '@/components/primitives/Combobox';
 import { InputNumber } from '@/components/primitives/Input';
 import { Label } from '@/components/primitives/Label';
 import { Textarea } from '@/components/primitives/Textarea';
-import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
+import useCopyToClipboard from '@/hooks/useCopyToClipboard';
 import { generateLoremIpsum } from '@/lib/lorem-ipsum';
 
 const generationOptions = [

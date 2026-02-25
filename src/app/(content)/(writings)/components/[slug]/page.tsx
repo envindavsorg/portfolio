@@ -8,8 +8,12 @@ import { Badge } from '@/components/primitives/Badge';
 import { Divider } from '@/components/primitives/Divider';
 import { Prose } from '@/components/primitives/Typography';
 import GLOBAL_DATA from '@/content/data/global';
-import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
-import { openGraphImage } from '@/lib/open-graph';
+import {
+	type Content,
+	getContentByCategory,
+	getContentBySlug,
+} from '@/lib/content';
+import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 import { TableOfContents } from '../../_components/TableOfContents';
 import { TopNav } from '../../_components/TopNav';
@@ -21,7 +25,7 @@ interface Props {
 }
 
 export const generateStaticParams = async () => {
-	const posts = getPostsByCategory('components');
+	const posts = getContentByCategory('components');
 	return posts.map((post) => ({
 		slug: post.slug,
 	}));
@@ -31,7 +35,7 @@ export const generateMetadata = async ({
 	params,
 }: Props): Promise<Metadata> => {
 	const slug = (await params).slug;
-	const post = getPostBySlug(slug);
+	const post = getContentBySlug(slug);
 
 	if (!post) {
 		return notFound();
@@ -40,7 +44,7 @@ export const generateMetadata = async ({
 	const { title, description } = post.metadata;
 	const postUrl = `/components/${post.slug}`;
 
-	const og = openGraphImage({
+	const og = buildContentMetadata({
 		title,
 		description,
 		ogImageParams: {
@@ -58,7 +62,7 @@ export const generateMetadata = async ({
 	};
 };
 
-const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
+const getPageJsonLd = (post: Content): WithContext<PageSchema> => ({
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
 	headline: post.metadata.title,
@@ -79,14 +83,14 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 
 const Page = async ({ params }: Props) => {
 	const slug = (await params).slug;
-	const component = getPostBySlug(slug);
+	const component = getContentBySlug(slug);
 
 	if (!component) {
 		notFound();
 	}
 
 	const toc = getTableOfContents(component.content);
-	const components = getPostsByCategory('components');
+	const components = getContentByCategory('components');
 
 	return (
 		<>

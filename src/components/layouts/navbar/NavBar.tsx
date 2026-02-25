@@ -1,4 +1,4 @@
-import { getAllPosts } from '@/lib/blog/posts';
+import { type Content, getAllContent } from '@/lib/content';
 import { NavBarCommand } from './elements/NavBarCommand';
 import { NavBarProvider } from './elements/NavBarContext';
 import { NavBarGitHub } from './elements/NavBarGitHub';
@@ -12,7 +12,7 @@ import { NavBarTheme } from './elements/NavBarTheme';
 import { NavBarWrapper } from './elements/NavBarWrapper';
 
 export const NavBar = () => {
-	const posts: Post[] = getAllPosts();
+	const posts: Content[] = getAllContent();
 
 	return (
 		<NavBarProvider>

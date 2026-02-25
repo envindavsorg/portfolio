@@ -1,0 +1,135 @@
+import type { Dayjs } from 'dayjs';
+import { dayjs } from '@/lib/utils';
+
+const DEFAULT_MONTH_LABELS = [
+	'jan.',
+	'fév.',
+	'mars',
+	'avr.',
+	'mai',
+	'juin',
+	'juil.',
+	'août',
+	'sep.',
+	'oct.',
+	'nov.',
+	'déc.',
+];
+
+export const DEFAULT_LABELS: Labels = {
+	months: DEFAULT_MONTH_LABELS,
+	weekdays: ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'],
+	totalCount: '{{count}} contributions en {{year}}',
+	legend: {
+		less: 'moins',
+		more: 'plus',
+	},
+};
+
+const CONTRIBUTION_LEVEL_MAP: Record<ContributionLevel, number> = {
+	NONE: 0,
+	FIRST_QUARTILE: 1,
+	SECOND_QUARTILE: 2,
+	THIRD_QUARTILE: 3,
+	FOURTH_QUARTILE: 4,
+};
+
+export const contributionLevelToNumber = (level: ContributionLevel): number =>
+	CONTRIBUTION_LEVEL_MAP[level];
+
+export const eachDayOfInterval = (start: Dayjs, end: Dayjs): Dayjs[] => {
+	const days: Dayjs[] = [];
+	let current = start;
+	while (current.isBefore(end) || current.isSame(end, 'day')) {
+		days.push(current);
+		current = current.add(1, 'day');
+	}
+	return days;
+};
+
+export const nextDay = (date: Dayjs, targetWeekDay: WeekDay): Dayjs => {
+	const currentDay = date.day();
+	const daysToAdd =
+		targetWeekDay >= currentDay
+			? targetWeekDay - currentDay
+			: 7 - currentDay + targetWeekDay;
+	return date.add(daysToAdd, 'day');
+};
+
+export const fillHoles = (activities: CommitActivity[]): CommitActivity[] => {
+	if (activities.length === 0) {
+		return [];
+	}
+
+	const sorted = [...activities].sort((a, b) => a.date.localeCompare(b.date));
+	const calendar = new Map(activities.map((a) => [a.date, a]));
+	const first = sorted[0]!;
+	const last = sorted.at(-1)!;
+
+	return eachDayOfInterval(dayjs(first.date), dayjs(last.date)).map((day) => {
+		const date = day.format('YYYY-MM-DD');
+		return calendar.get(date) ?? { date, count: 0, level: 0 };
+	});
+};
+
+export const groupByWeeks = (
+	activities: CommitActivity[],
+	weekStart: WeekDay = 0
+): Week[] => {
+	if (activities.length === 0) {
+		return [];
+	}
+
+	const normalized = fillHoles(activities);
+	const firstDate = dayjs(normalized[0]!.date);
+	const firstCalendarDate =
+		firstDate.day() === weekStart
+			? firstDate
+			: nextDay(firstDate, weekStart).subtract(1, 'week');
+
+	const padding = firstDate.diff(firstCalendarDate, 'day');
+	const padded: (CommitActivity | undefined)[] = [
+		...Array.from<undefined>({ length: padding }),
+		...normalized,
+	];
+
+	const numberOfWeeks = Math.ceil(padded.length / 7);
+	return Array.from({ length: numberOfWeeks }, (_, i) =>
+		padded.slice(i * 7, i * 7 + 7)
+	);
+};
+
+export const getMonthLabels = (
+	weeks: Week[],
+	monthNames: string[] = DEFAULT_MONTH_LABELS
+): MonthLabel[] =>
+	weeks
+		.reduce<MonthLabel[]>((labels, week, weekIndex) => {
+			const firstActivity = week.find((activity) => activity !== undefined);
+			if (!firstActivity) {
+				throw new Error(`Week ${weekIndex + 1} is empty.`);
+			}
+
+			const month = monthNames[dayjs(firstActivity.date).month()];
+			if (!month) {
+				throw new Error(
+					`Undefined month label for ${dayjs(firstActivity.date).format('MMM')}.`
+				);
+			}
+
+			const prevLabel = labels.at(-1);
+			if (weekIndex === 0 || !prevLabel || prevLabel.label !== month) {
+				return [...labels, { weekIndex, label: month }];
+			}
+			return labels;
+		}, [])
+		.filter(({ weekIndex }, index, labels) => {
+			const minWeeks = 3;
+			if (index === 0) {
+				return labels[1] ? labels[1].weekIndex - weekIndex >= minWeeks : true;
+			}
+			if (index === labels.length - 1) {
+				return weeks.length - weekIndex >= minWeeks;
+			}
+			return true;
+		});

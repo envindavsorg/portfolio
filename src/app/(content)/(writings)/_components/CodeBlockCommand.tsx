@@ -13,8 +13,8 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '@/components/primitives/Tabs';
-import type { PackageManager } from '@/hooks/use-config';
-import useConfig from '@/hooks/use-config';
+import type { PackageManager } from '@/hooks/useConfig';
+import useConfig from '@/hooks/useConfig';
 
 const getIconForPackageManager = (manager: string) => {
 	switch (manager) {

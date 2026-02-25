@@ -118,6 +118,7 @@
     "tslog": "^4.10.2",
     "vaul": "^1.1.2",
     "vcard-creator": "^0.7.2",
+    "vfile": "^6.0.3",
     "zod": "^4.3.6"
   },
   "devDependencies": {

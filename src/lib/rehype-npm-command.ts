@@ -1,70 +1,84 @@
 import { visit } from 'unist-util-visit';
+import type { UnistNode, UnistTree } from './remark-code-import';
+
+interface CommandMapping {
+	prefix: string;
+	pnpm: string;
+	yarn: string;
+	bun: string;
+	replace: 'all' | 'first';
+}
+
+const COMMAND_MAPPINGS: CommandMapping[] = [
+	{
+		prefix: 'npm install',
+		pnpm: 'pnpm add',
+		yarn: 'yarn add',
+		bun: 'bun add',
+		replace: 'all',
+	},
+	{
+		prefix: 'npx create-',
+		pnpm: 'pnpm create ',
+		yarn: 'yarn create ',
+		bun: 'bunx --bun create-',
+		replace: 'first',
+	},
+	{
+		prefix: 'npm create',
+		pnpm: 'pnpm create',
+		yarn: 'yarn create',
+		bun: 'bun create',
+		replace: 'first',
+	},
+	{
+		prefix: 'npx',
+		pnpm: 'pnpm dlx',
+		yarn: 'npx',
+		bun: 'bunx --bun',
+		replace: 'first',
+	},
+	{
+		prefix: 'npm run',
+		pnpm: 'pnpm',
+		yarn: 'yarn',
+		bun: 'bun',
+		replace: 'first',
+	},
+];
+
+const applyMapping = (command: string, mapping: CommandMapping) => {
+	const transform =
+		mapping.replace === 'all'
+			? (cmd: string, from: string, to: string) => cmd.replaceAll(from, to)
+			: (cmd: string, from: string, to: string) => cmd.replace(from, to);
+
+	return {
+		__npm__: command,
+		__pnpm__: transform(command, mapping.prefix, mapping.pnpm),
+		__yarn__: transform(command, mapping.prefix, mapping.yarn),
+		__bun__: transform(command, mapping.prefix, mapping.bun),
+	};
+};
 
 export const rehypeNpmCommand = () => (tree: UnistTree) => {
 	visit(tree, (node: UnistNode) => {
-		if (node.type !== 'element' || node?.tagName !== 'pre') {
+		if (node.type !== 'element' || node.tagName !== 'pre' || !node.properties) {
 			return;
 		}
 
-		if (node.properties?.__rawString__?.startsWith('npm install')) {
-			const npmCommand = node.properties?.__rawString__;
-			node.properties.__pnpm__ = npmCommand.replaceAll(
-				'npm install',
-				'pnpm add'
-			);
-			node.properties.__yarn__ = npmCommand.replaceAll(
-				'npm install',
-				'yarn add'
-			);
-			node.properties.__npm__ = npmCommand;
-			node.properties.__bun__ = npmCommand.replaceAll('npm install', 'bun add');
+		const rawString = node.properties.__rawString__ as string | undefined;
+		if (!rawString) {
+			return;
 		}
 
-		if (node.properties?.__rawString__?.startsWith('npx create-')) {
-			const npmCommand = node.properties?.__rawString__;
-			node.properties.__pnpm__ = npmCommand.replace(
-				'npx create-',
-				'pnpm create '
-			);
-			node.properties.__yarn__ = npmCommand.replace(
-				'npx create-',
-				'yarn create '
-			);
-			node.properties.__npm__ = npmCommand;
-			node.properties.__bun__ = npmCommand.replace('npx', 'bunx --bun');
+		const mapping = COMMAND_MAPPINGS.find((m) =>
+			rawString.startsWith(m.prefix)
+		);
+		if (!mapping) {
+			return;
 		}
 
-		if (node.properties?.__rawString__?.startsWith('npm create')) {
-			const npmCommand = node.properties?.__rawString__;
-			node.properties.__pnpm__ = npmCommand.replace(
-				'npm create',
-				'pnpm create'
-			);
-			node.properties.__yarn__ = npmCommand.replace(
-				'npm create',
-				'yarn create'
-			);
-			node.properties.__npm__ = npmCommand;
-			node.properties.__bun__ = npmCommand.replace('npm create', 'bun create');
-		}
-
-		if (
-			node.properties?.__rawString__?.startsWith('npx') &&
-			!node.properties?.__rawString__?.startsWith('npx create-')
-		) {
-			const npmCommand = node.properties?.__rawString__;
-			node.properties.__pnpm__ = npmCommand.replace('npx', 'pnpm dlx');
-			node.properties.__yarn__ = npmCommand;
-			node.properties.__npm__ = npmCommand;
-			node.properties.__bun__ = npmCommand.replace('npx', 'bunx --bun');
-		}
-
-		if (node.properties?.__rawString__?.startsWith('npm run')) {
-			const npmCommand = node.properties?.__rawString__;
-			node.properties.__pnpm__ = npmCommand.replace('npm run', 'pnpm');
-			node.properties.__yarn__ = npmCommand.replace('npm run', 'yarn');
-			node.properties.__npm__ = npmCommand;
-			node.properties.__bun__ = npmCommand.replace('npm run', 'bun');
-		}
+		Object.assign(node.properties, applyMapping(rawString, mapping));
 	});
 };

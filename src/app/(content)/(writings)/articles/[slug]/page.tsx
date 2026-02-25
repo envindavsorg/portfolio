@@ -10,11 +10,12 @@ import { Divider } from '@/components/primitives/Divider';
 import { Prose } from '@/components/primitives/Typography';
 import GLOBAL_DATA from '@/content/data/global';
 import {
-	getAllPosts,
-	getPostBySlug,
-	getPostsByCategory,
-} from '@/lib/blog/posts';
-import { openGraphImage } from '@/lib/open-graph';
+	type Content,
+	getAllContent,
+	getContentByCategory,
+	getContentBySlug,
+} from '@/lib/content';
+import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 import { TableOfContents } from '../../_components/TableOfContents';
 import { TopNav } from '../../_components/TopNav';
@@ -24,7 +25,7 @@ interface Props {
 }
 
 export const generateStaticParams = async () => {
-	const posts = getAllPosts();
+	const posts = getAllContent();
 	return posts.map((post) => ({
 		slug: post.slug,
 	}));
@@ -34,14 +35,14 @@ export const generateMetadata = async ({
 	params,
 }: Props): Promise<Metadata> => {
 	const slug = (await params).slug;
-	const post = getPostBySlug(slug);
+	const post = getContentBySlug(slug);
 
 	if (!post) {
 		return notFound();
 	}
 
 	const { title, description } = post.metadata;
-	const og = openGraphImage({
+	const og = buildContentMetadata({
 		title,
 		description,
 		ogImageParams: {
@@ -59,7 +60,7 @@ export const generateMetadata = async ({
 	};
 };
 
-const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
+const getPageJsonLd = (post: Content): WithContext<PageSchema> => ({
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
 	headline: post.metadata.title,
@@ -80,14 +81,14 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 
 const Page = async ({ params }: Props) => {
 	const slug = (await params).slug;
-	const article = getPostBySlug(slug);
+	const article = getContentBySlug(slug);
 
 	if (!article) {
 		notFound();
 	}
 
 	const toc = getTableOfContents(article.content);
-	const articles = getPostsByCategory('articles');
+	const articles = getContentByCategory(article?.metadata.category!);
 
 	return (
 		<>

@@ -9,8 +9,8 @@ import {
 } from '@/components/primitives/Form';
 import { Input } from '@/components/primitives/Input';
 import { Spinner } from '@/components/primitives/Spinner';
-import type useEmailForm from '@/hooks/use-email-form';
-import type { EmailFormData } from '@/hooks/use-email-form';
+import type useEmailForm from '@/hooks/useEmailForm';
+import type { EmailFormData } from '@/hooks/useEmailForm';
 
 interface CvForm {
 	form: ReturnType<typeof useEmailForm>['form'];

@@ -15,18 +15,18 @@ import {
 import { Divider } from '@/components/primitives/Divider';
 import { PanelContent } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
-import { getPostsByCategory } from '@/lib/blog/posts';
-import { openGraphImage } from '@/lib/open-graph';
+import { type Content, getContentByCategory } from '@/lib/content';
+import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
 const getCachedUtils = cache(() =>
-	getPostsByCategory('utils').sort((a, b) =>
+	getContentByCategory('utils').sort((a, b) =>
 		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 	)
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
-	openGraphImage({
+	buildContentMetadata({
 		title: 'Outils pour développeurs',
 		description:
 			"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
@@ -92,7 +92,7 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 
 			<Divider after={false} before={false} border={false} type="half" />
 
-			{filtered.map((util: Post) => (
+			{filtered.map((util: Content) => (
 				<ToolItem key={util.slug} tool={util} />
 			))}
 		</div>

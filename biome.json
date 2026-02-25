@@ -69,17 +69,20 @@
         "noNestedTernary": "off",
         "useFilenamingConvention": "off",
         "noParameterAssign": "off",
-        "noExportedImports": "off"
+        "noExportedImports": "off",
+        "noNonNullAssertion": "off"
       },
       "performance": {
         "noImgElement": "off",
         "useTopLevelRegex": "off",
-        "noBarrelFile": "off"
+        "noBarrelFile": "off",
+        "noAccumulatingSpread": "off"
       },
       "suspicious": {
         "noArrayIndexKey": "off",
         "useAwait": "off",
-        "noBitwiseOperators": "off"
+        "noBitwiseOperators": "off",
+        "noNonNullAssertedOptionalChain": "off"
       },
       "nursery": {
         "noLeakedRender": "off",

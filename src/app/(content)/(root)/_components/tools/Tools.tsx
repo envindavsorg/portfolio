@@ -7,12 +7,12 @@ import {
 	PanelHeader,
 } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
-import { getPostsByCategory } from '@/lib/blog/posts';
+import { getContentByCategory } from '@/lib/content';
 import { dayjs } from '@/lib/utils';
 import { ToolItem } from './ToolItem';
 
 export const Tools = () => {
-	const tools = getPostsByCategory('utils')
+	const tools = getContentByCategory('utils')
 		.sort((a, b) =>
 			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
 		)

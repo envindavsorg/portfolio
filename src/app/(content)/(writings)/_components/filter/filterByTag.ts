@@ -1,11 +1,16 @@
+import type { Content } from '@/lib/content';
+
 interface TagFilterResult {
 	tags: string[];
 	tagCounts: Record<string, number>;
-	filtered: Post[];
+	filtered: Content[];
 	selectedTag: string;
 }
 
-export const filterByTag = (posts: Post[], tag?: string): TagFilterResult => {
+export const filterByTag = (
+	posts: Content[],
+	tag?: string
+): TagFilterResult => {
 	const tagCounts: Record<string, number> = {
 		tout: posts.length,
 	};

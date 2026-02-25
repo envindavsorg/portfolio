@@ -1,6 +1,6 @@
-import { getAllPosts } from '@/lib/blog/posts';
+import { type Content, getAllContent } from '@/lib/content';
 
-const allPosts: Post[] = getAllPosts();
+const allPosts: Content[] = getAllContent();
 
 const content = `
 # cuzeacflorin.fr

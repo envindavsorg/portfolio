@@ -16,7 +16,7 @@ import { TechStack } from '@/app/(content)/(root)/_components/stack/Stack';
 import { Tools } from '@/app/(content)/(root)/_components/tools/Tools';
 import { Divider } from '@/components/primitives/Divider';
 import GLOBAL_DATA from '@/content/data/global';
-import { openGraphImage } from '@/lib/open-graph';
+import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 
 const About = dynamic(() =>
@@ -28,7 +28,7 @@ const About = dynamic(() =>
 export const revalidate = 3600;
 
 export const generateMetadata = async (): Promise<Metadata> =>
-	openGraphImage({
+	buildContentMetadata({
 		title: GLOBAL_DATA.USER.fullName,
 		description: GLOBAL_DATA.USER.bio,
 		ogImageParams: {

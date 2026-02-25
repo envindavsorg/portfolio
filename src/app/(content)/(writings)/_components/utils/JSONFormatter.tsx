@@ -6,7 +6,7 @@ import { useCallback, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
 import { Label } from '@/components/primitives/Label';
 import { Textarea } from '@/components/primitives/Textarea';
-import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
+import useCopyToClipboard from '@/hooks/useCopyToClipboard';
 
 export const JSONFormatter = () => {
 	const [input, setInput] = useState('');

@@ -15,12 +15,13 @@ import {
 } from '@/components/primitives/Breadcrumb';
 import { Button } from '@/components/primitives/Button';
 import { Divider } from '@/components/primitives/Divider';
+import type { Content } from '@/lib/content';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { ShareMenu } from './ShareMenu';
 
 interface TopNavProps {
-	items: Post[];
-	item: Post;
+	items: Content[];
+	item: Content;
 	slug: string;
 	description: string;
 }

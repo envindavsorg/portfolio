@@ -2,8 +2,8 @@
 
 import type { ComponentProps } from 'react';
 import { Tabs } from '@/components/primitives/Tabs';
-import type { InstallationType } from '@/hooks/use-config';
-import useConfig from '@/hooks/use-config';
+import type { InstallationType } from '@/hooks/useConfig';
+import useConfig from '@/hooks/useConfig';
 
 export const CodeTabs = (props: ComponentProps<typeof Tabs>) => {
 	const [config, setConfig] = useConfig();

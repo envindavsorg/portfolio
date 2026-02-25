@@ -1,7 +1,8 @@
+import type { Content } from '@/lib/content';
 import { CATEGORY, COMMANDS } from './content';
 import type { CommandGroupDef, CommandItemProps, CommandKind } from './types';
 
-export const buildKindMap = (posts: Post[]): Map<string, CommandKind> => {
+export const buildKindMap = (posts: Content[]): Map<string, CommandKind> => {
 	const map = new Map<string, CommandKind>();
 
 	for (const group of COMMANDS) {
@@ -23,7 +24,7 @@ export const buildKindMap = (posts: Post[]): Map<string, CommandKind> => {
 };
 
 export const buildPostGroups = (
-	posts: Post[]
+	posts: Content[]
 ): Record<string, CommandItemProps[]> => {
 	const grouped: Record<string, CommandItemProps[]> = {
 		article: [],

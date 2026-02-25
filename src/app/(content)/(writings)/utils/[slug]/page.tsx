@@ -6,8 +6,12 @@ import { MDX } from '@/components/markdown/mdx';
 import { Divider } from '@/components/primitives/Divider';
 import { Prose } from '@/components/primitives/Typography';
 import GLOBAL_DATA from '@/content/data/global';
-import { getPostBySlug, getPostsByCategory } from '@/lib/blog/posts';
-import { openGraphImage } from '@/lib/open-graph';
+import {
+	type Content,
+	getContentByCategory,
+	getContentBySlug,
+} from '@/lib/content';
+import { buildContentMetadata } from '@/lib/open-graph';
 import { dayjs } from '@/lib/utils';
 import { TopNav } from '../../_components/TopNav';
 
@@ -18,7 +22,7 @@ interface Props {
 }
 
 export const generateStaticParams = async () => {
-	const posts: Post[] = getPostsByCategory('utils');
+	const posts: Content[] = getContentByCategory('utils');
 	return posts.map(({ slug }) => ({ slug }));
 };
 
@@ -26,7 +30,7 @@ export const generateMetadata = async ({
 	params,
 }: Props): Promise<Metadata> => {
 	const { slug } = await params;
-	const post = getPostBySlug(slug);
+	const post = getContentBySlug(slug);
 
 	if (!post) {
 		return notFound();
@@ -35,7 +39,7 @@ export const generateMetadata = async ({
 	const { title, description } = post.metadata;
 	const postUrl = `/utils/${post.slug}`;
 
-	const og = openGraphImage({
+	const og = buildContentMetadata({
 		title,
 		description,
 		ogImageParams: { type: 'utilsArticle', title, description },
@@ -49,7 +53,7 @@ export const generateMetadata = async ({
 	};
 };
 
-const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
+const getPageJsonLd = (post: Content): WithContext<PageSchema> => ({
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
 	headline: post.metadata.title,
@@ -70,13 +74,13 @@ const getPageJsonLd = (post: Post): WithContext<PageSchema> => ({
 
 const Page = async ({ params }: Props) => {
 	const { slug } = await params;
-	const util = getPostBySlug(slug);
+	const util = getContentBySlug(slug);
 
 	if (!util) {
 		notFound();
 	}
 
-	const utils = getPostsByCategory('utils');
+	const utils = getContentByCategory('utils');
 
 	return (
 		<>
