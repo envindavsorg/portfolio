@@ -9,9 +9,9 @@ import {
 import type { ComponentType } from 'react';
 
 export const TOOLS_ICONS: Record<string, ComponentType<IconProps>> = {
-	Base64: VaultIcon,
-	Couleurs: PaletteIcon,
-	Texte: TextTIcon,
-	Internet: GaugeIcon,
-	Json: SlidersIcon,
+	base64: VaultIcon,
+	couleurs: PaletteIcon,
+	texte: TextTIcon,
+	internet: GaugeIcon,
+	json: SlidersIcon,
 };

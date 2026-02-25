@@ -9,9 +9,9 @@ import { cn } from '@/lib/utils';
 const Mark = () => (
 	<svg
 		fill="none"
-		height="36"
+		height="26"
 		viewBox="0 0 39 26"
-		width="49"
+		width="39"
 		xmlns="http://www.w3.org/2000/svg"
 	>
 		<path
@@ -86,15 +86,17 @@ export const BrandingMark = () => {
 	return (
 		<div
 			className={cn(
-				'flex items-center justify-evenly',
-				'px-8 after:z-1 max-sm:flex-col max-sm:gap-y-4 max-sm:py-4'
+				'flex items-center justify-evenly max-sm:mx-auto max-sm:w-fit',
+				'after:z-1 max-sm:flex-col max-sm:space-y-4 max-sm:py-4'
 			)}
 		>
 			<div className="flex items-center gap-x-6">
-				<Mark />
+				<div className="flex aspect-square size-12 shrink-0 items-center justify-center rounded-lg border border-theme/15 bg-background text-2xl ring-1 ring-theme ring-offset-1 ring-offset-background">
+					<Mark />
+				</div>
 				<div className="flex flex-col gap-y-1">
 					<p className="text-muted-foreground text-xs leading-snug">identité</p>
-					<p className="font-medium text-sm">logo principal</p>
+					<p className="font-medium text-sm">mon logo</p>
 				</div>
 				<CopyButton className="ms-3" value={MARK_SVG} />
 			</div>
@@ -104,9 +106,7 @@ export const BrandingMark = () => {
 					@
 				</div>
 				<div className="flex flex-col gap-y-1">
-					<p className="text-muted-foreground text-xs leading-snug">
-						police d'écriture
-					</p>
+					<p className="text-muted-foreground text-xs leading-snug">police</p>
 					<p className="font-medium font-pixel-square text-foreground text-sm">
 						Geist Pixel
 					</p>

@@ -37,7 +37,7 @@ export const ProjectItem = ({ project, isLast = false }: ProjectItemProps) => {
 			</article>
 
 			<div className="screen-line-before flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
-				<span className="text-theme">---</span>
+				<span className="text-theme max-sm:hidden">---</span>
 				<Prose className="lowercase">{project.title}</Prose>
 			</div>
 

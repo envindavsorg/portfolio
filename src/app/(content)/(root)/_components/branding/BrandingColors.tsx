@@ -3,11 +3,11 @@ import { cn } from '@/lib/utils';
 
 const BRANDING_COLORS = [
 	{
-		label: 'couleur principale',
+		label: 'principale',
 		hex: '#F3B993',
 	},
 	{
-		label: 'couleur secondaire',
+		label: 'secondaire',
 		hex: '#FAD7C1',
 	},
 ] as const;
@@ -15,8 +15,8 @@ const BRANDING_COLORS = [
 export const BrandingColors = () => (
 	<div
 		className={cn(
-			'flex items-center justify-evenly',
-			'px-8 after:z-1 max-sm:flex-col max-sm:gap-y-4 max-sm:py-4'
+			'flex items-center justify-evenly max-sm:mx-auto max-sm:max-w-xs',
+			'after:z-1 max-sm:flex-col max-sm:space-y-4 max-sm:py-4'
 		)}
 	>
 		{BRANDING_COLORS.map(({ label, hex }) => (

@@ -53,10 +53,14 @@ export const ExperienceItem = ({
 			<div className="screen-line-before flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
 				<span className="text-theme">---</span>
 				<div className="flex items-center gap-2 sm:gap-4">
-					<Badge className="lowercase">{experience.type}</Badge>
-					<Badge className="text-theme lowercase max-sm:hidden">
-						{experience.title}
-					</Badge>
+					{experience.type && (
+						<Badge className="lowercase">{experience.type}</Badge>
+					)}
+					{experience.title && (
+						<Badge className="text-theme lowercase max-sm:hidden">
+							{experience.title}
+						</Badge>
+					)}
 					<Badge className="lowercase">
 						{start} - {isOngoing ? "aujourd'hui" : end}
 					</Badge>
