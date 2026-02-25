@@ -68,7 +68,7 @@ const renderLayout = (
 		<img
 			alt="Cuzeac Florin"
 			height={300}
-			src="https://cuzeacflorin.fr/images/og-banner.png"
+			src="https://cuzeacflorin.fr/images/og-banner.webp"
 			style={{
 				position: 'absolute',
 				bottom: '-10%',
