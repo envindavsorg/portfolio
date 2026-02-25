@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import VCard from 'vcard-creator';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import { convertImageToJpeg } from '@/lib/server';
 
 export const dynamic = 'force-static';

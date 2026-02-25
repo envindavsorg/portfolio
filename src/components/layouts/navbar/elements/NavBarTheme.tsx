@@ -6,7 +6,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { MoonIcon } from '@/components/blocks/icons/MoonIcon';
 import { SunIcon } from '@/components/blocks/icons/SunIcon';
 import { Button } from '@/components/primitives/Button';
-import { META_THEME_COLORS } from '@/content/data/theme';
+import { META_THEME_COLORS } from '@/data/theme';
 import useMetaColor from '@/hooks/useMetaColor';
 import { soundManager } from '@/lib/sound-manager';
 

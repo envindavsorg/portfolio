@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRef } from 'react';
 import { GitHubIcon } from '@/components/blocks/icons/GitHubIcon';
 import { Button } from '@/components/primitives/Button';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 
 export const NavBarGitHub = () => {
 	const iconRef = useRef<AnimatedIconHandle>(null);

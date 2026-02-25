@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { FlickeringGrid } from '@/components/blocks/FlickeringGrid';
 import { PixelHeading } from '@/components/blocks/PixelHeading';
 import { Panel, PanelContent } from '@/components/primitives/Panel';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import { cn } from '@/lib/utils';
 import { FlipSentences } from '@/registry/flip-sentences';
 import { HeaderPronounce } from './HeaderPronounce';

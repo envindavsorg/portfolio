@@ -1,4 +1,4 @@
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import { getAllContent } from '@/lib/content';
 import { dayjs } from '@/lib/functions';
 

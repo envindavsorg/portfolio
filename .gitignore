@@ -3,15 +3,15 @@
 # dependencies
 /node_modules
 
-# bun
-bun.lock
-
-# testing
-/coverage
-
 # next.js
 /.next/
 /out/
+
+# get shit done
+/.planning
+
+# zed
+/.zed
 
 # production
 /build
@@ -19,6 +19,10 @@ bun.lock
 # misc
 .DS_Store
 *.pem
+.nvmrc
+
+# claude code
+CLAUDE.md
 
 # debug
 .pnpm-debug.log*
@@ -34,10 +38,3 @@ pnpm-workspace.yaml
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# envindavsorg
-envindavsorg
-
-# webstorm
-.idea
-.env*.local

@@ -1,5 +1,5 @@
 import { Prose } from '@/components/primitives/Typography';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 
 export const FooterDate = () => (
 	<div className="screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 md:max-w-3xl">

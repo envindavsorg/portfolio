@@ -5,7 +5,7 @@ import { PixelHeading } from '@/components/blocks/PixelHeading';
 import { MDX } from '@/components/markdown/mdx';
 import { Divider } from '@/components/primitives/Divider';
 import { Prose } from '@/components/primitives/Typography';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import {
 	type Content,
 	getContentByCategory,

@@ -15,7 +15,7 @@ import {
 	DrawerTitle,
 } from '@/components/primitives/Drawer';
 import { PanelFooter } from '@/components/primitives/Panel';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import type { EmailFormData } from '@/hooks/useEmailForm';
 import useEmailForm from '@/hooks/useEmailForm';
 import useMediaQuery from '@/hooks/useMediaQuery';

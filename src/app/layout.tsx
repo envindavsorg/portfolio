@@ -12,8 +12,8 @@ import type { Metadata, Viewport } from 'next';
 import type React from 'react';
 import { TooltipProvider } from '@/components/primitives/Tooltip';
 import { Providers } from '@/components/providers/Providers';
-import GLOBAL_DATA from '@/content/data/global';
-import { META_THEME_COLORS } from '@/content/data/theme';
+import GLOBAL_DATA from '@/data/global';
+import { META_THEME_COLORS } from '@/data/theme';
 import { cn } from '@/lib/utils';
 
 const getJsonLd = () => ({

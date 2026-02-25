@@ -8,7 +8,7 @@ import { MDX } from '@/components/markdown/mdx';
 import { Badge } from '@/components/primitives/Badge';
 import { Divider } from '@/components/primitives/Divider';
 import { Prose } from '@/components/primitives/Typography';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import {
 	type Content,
 	getAllContent,

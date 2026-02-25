@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
 import type { JSX } from 'react';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';

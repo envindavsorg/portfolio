@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 
 const manifest = (): MetadataRoute.Manifest => ({
 	short_name: GLOBAL_DATA.USER.firstName,

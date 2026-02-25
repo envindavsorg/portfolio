@@ -5,7 +5,7 @@ import {
 	FlaskIcon,
 	PhoneIcon,
 } from '@phosphor-icons/react/dist/ssr';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import { cn } from '@/lib/utils';
 
 interface OverviewItemProps {

@@ -1,5 +1,5 @@
 import { STACK_ICONS } from '@/app/(content)/(root)/_components/stack/content';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 
 const content = `
 # À propos de moi

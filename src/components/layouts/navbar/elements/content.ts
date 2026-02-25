@@ -8,7 +8,7 @@ import { HomeIcon } from '@/components/blocks/icons/HomeIcon';
 import { IdCardIcon } from '@/components/blocks/icons/IdCardIcon';
 import { LayersIcon } from '@/components/blocks/icons/LayersIcon';
 import { UserIcon } from '@/components/blocks/icons/UserIcon';
-import GLOBAL_DATA from '@/content/data/global';
+import GLOBAL_DATA from '@/data/global';
 import type { CommandGroupDef, CommandKind } from './types';
 
 export const LABELS: Record<CommandKind, string> = {
