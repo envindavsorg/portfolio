@@ -133,16 +133,17 @@ const components: MDXRemoteProps['components'] = {
 		}
 
 		return (
-			<>
+			<div className="rounded-md border border-input">
 				<pre {...props} />
 
 				{__rawString__ && (
 					<CopyButton
-						className="absolute top-2 right-2"
+						className="absolute top-3 right-3"
 						value={__rawString__}
+						variant="ghost"
 					/>
 				)}
-			</>
+			</div>
 		);
 	},
 	code: Code,
@@ -150,15 +151,6 @@ const components: MDXRemoteProps['components'] = {
 	ComponentSource,
 	CodeCollapsibleWrapper,
 	CodeTabs,
-	Steps: (props) => (
-		<div
-			className="prose-h3:text-wrap border-theme md:ml-3.5 md:border-l md:pl-7.5"
-			{...props}
-		/>
-	),
-	Step: ({ className, ...props }: ComponentProps<'h3'>) => (
-		<h3 className={cn('step', className)} {...props} />
-	),
 	Tabs,
 	TabsList,
 	TabsTrigger,

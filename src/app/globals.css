@@ -295,11 +295,11 @@
 		@apply relative text-code-foreground;
 
 		pre {
-			@apply overflow-x-auto px-4 py-4 has-data-line-numbers:px-0;
+			@apply overflow-x-auto p-3;
 		}
 
 		code {
-			@apply font-mono! text-sm sm:text-base;
+			@apply text-sm sm:text-base normal-case;
 		}
 	}
 
@@ -323,14 +323,6 @@
 	[data-line-numbers] > [data-line]::before {
 		counter-increment: line;
 		content: counter(line);
-		@apply sticky left-0 inline-block w-16 bg-code pr-6 text-right text-sm text-code-number;
-	}
-
-	[data-line-numbers] [data-highlighted-line][data-line]::before {
-		@apply bg-code-highlight;
-	}
-
-	[data-highlighted-line] {
-		@apply bg-code-highlight;
+		@apply sticky left-0 inline-block w-8 pr-4 text-right text-sm text-code-number;
 	}
 }

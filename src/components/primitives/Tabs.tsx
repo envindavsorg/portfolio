@@ -77,6 +77,7 @@ interface TabsAnimatedProps {
 	tabs: Tab[];
 	onChangeAction?: () => void;
 	after?: boolean;
+	className?: string;
 }
 
 const contentVariants = {
@@ -113,6 +114,7 @@ export const TabsAnimated = ({
 	tabs,
 	onChangeAction,
 	after = true,
+	className,
 }: TabsAnimatedProps) => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [direction, setDirection] = useState(0);
@@ -145,6 +147,7 @@ export const TabsAnimated = ({
 			<div
 				className={cn(
 					'grid w-full cursor-pointer grid-cols-2 gap-x-3 py-3',
+					className,
 					after && 'screen-line-after'
 				)}
 			>
