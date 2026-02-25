@@ -7,7 +7,7 @@ import { z } from 'zod';
 		NODE_ENV: z
 			.enum(['development', 'production', 'test'])
 			.default('development'),
-		GITHUB_API_TOKEN: z.string().min(1, 'GitHub API token is required'),
+		GITHUB_API_TOKEN: z.string().min(1, 'gitHub API token is required !'),
 		GITHUB_USERNAME: z.string().optional(),
 		GITHUB_REPO_NAME: z.string().optional(),
 
@@ -23,13 +23,15 @@ import { z } from 'zod';
 	const parsed = envSchema.safeParse(process.env);
 
 	if (!parsed.success) {
-		consola.error('Invalid environment variables :');
+		consola.error('invalid environment variables :');
 		consola.error(`${z.treeifyError(parsed.error)}\n`);
 		process.exit(1);
 	}
 
 	if (!process.env.__ENV_VALIDATED) {
-		consola.success("Env vars look good ! You're safe to ship 🚀\n");
+		consola.success(
+			"environment variables look good ! you're safe to ship 🚀\n"
+		);
 		process.env.__ENV_VALIDATED = 'true';
 	}
 })();
@@ -42,10 +44,6 @@ const nextConfig: NextConfig = {
 	devIndicators: false,
 	images: {
 		remotePatterns: [
-			{
-				protocol: 'https',
-				hostname: 'avatars.githubusercontent.com',
-			},
 			{
 				protocol: 'https',
 				hostname: 'cuzeacflorin.fr',
