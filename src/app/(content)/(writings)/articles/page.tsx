@@ -104,7 +104,7 @@ const ArticlesPage = async ({ searchParams }: BlogPageProps) => {
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					{filtered.map((item) => (
-						<ArticleItem article={item} key={item.slug} />
+						<ArticleItem article={item} key={item.slug} noTitle />
 					))}
 				</div>
 			</div>

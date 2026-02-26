@@ -136,7 +136,11 @@ const ComponentsPage = async ({
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					{filtered.map((component: Content) => (
-						<ArticleItem article={component} key={component.slug} />
+						<ArticleItem
+							article={component}
+							key={component.slug}
+							noMetadata={true}
+						/>
 					))}
 				</div>
 			</div>
