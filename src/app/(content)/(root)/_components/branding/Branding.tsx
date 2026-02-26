@@ -3,28 +3,31 @@ import { Panel, PanelHeader } from '@/components/primitives/Panel';
 import { BrandingColors } from './BrandingColors';
 import { BrandingMark } from './BrandingMark';
 
+interface BrandingSectionProps {
+	label: string;
+	children: React.ReactNode;
+}
+
+const BrandingSection = ({ label, children }: BrandingSectionProps) => (
+	<div className="grid grid-cols-[2rem_1fr]">
+		<div className="flex items-center justify-center border-edge border-r bg-background sm:h-22">
+			<span className="rotate-270 select-none text-muted-foreground text-xs sm:text-sm">
+				{label}
+			</span>
+		</div>
+		{children}
+	</div>
+);
+
 export const Branding = () => (
 	<Panel>
 		<PanelHeader sticky title="mon branding" />
-
-		<div className="grid grid-cols-[2rem_1fr]">
-			<div className="flex items-center justify-center border-edge border-r bg-background sm:h-26">
-				<span className="rotate-270 select-none text-muted-foreground text-sm">
-					assets
-				</span>
-			</div>
-
+		<BrandingSection label="assets">
 			<BrandingMark />
-		</div>
+		</BrandingSection>
 		<Divider border={false} type="half" />
-		<div className="grid grid-cols-[2rem_1fr]">
-			<div className="flex items-center justify-center border-edge border-r bg-background sm:h-26">
-				<span className="rotate-270 select-none text-muted-foreground text-sm">
-					couleurs
-				</span>
-			</div>
-
+		<BrandingSection label="couleurs">
 			<BrandingColors />
-		</div>
+		</BrandingSection>
 	</Panel>
 );

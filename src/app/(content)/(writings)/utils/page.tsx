@@ -93,7 +93,7 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 			<Divider after={false} before={false} border={false} type="half" />
 
 			{filtered.map((util: Content) => (
-				<ToolItem key={util.slug} tool={util} />
+				<ToolItem isDescription key={util.slug} tool={util} />
 			))}
 		</div>
 	);

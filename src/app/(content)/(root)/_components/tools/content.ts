@@ -1,5 +1,6 @@
 import type { IconProps } from '@phosphor-icons/react';
 import {
+	CircleHalfTiltIcon,
 	GaugeIcon,
 	PaletteIcon,
 	SlidersIcon,
@@ -14,4 +15,5 @@ export const TOOLS_ICONS: Record<string, ComponentType<IconProps>> = {
 	texte: TextTIcon,
 	internet: GaugeIcon,
 	json: SlidersIcon,
+	design: CircleHalfTiltIcon,
 };

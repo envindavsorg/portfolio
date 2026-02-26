@@ -1,35 +1,25 @@
 import { CopyButton } from '@/components/primitives/Button';
-import { cn } from '@/lib/utils';
 
 const BRANDING_COLORS = [
-	{
-		label: 'principale',
-		hex: '#F3B993',
-	},
-	{
-		label: 'secondaire',
-		hex: '#FAD7C1',
-	},
+	{ label: 'couleur principale', hex: '#F3B993' },
+	{ label: 'couleur secondaire', hex: '#FAD7C1' },
 ] as const;
 
 export const BrandingColors = () => (
-	<div
-		className={cn(
-			'flex items-center justify-evenly max-sm:mx-auto max-sm:max-w-xs',
-			'after:z-1 max-sm:flex-col max-sm:space-y-4 max-sm:py-4'
-		)}
-	>
+	<div className="p-4 after:z-1 max-sm:flex max-sm:flex-col max-sm:space-y-4 sm:grid sm:grid-cols-2 sm:items-center sm:gap-x-12">
 		{BRANDING_COLORS.map(({ label, hex }) => (
-			<div className="flex items-center gap-x-6" key={hex}>
-				<div
-					className="aspect-square size-12 rounded-lg"
-					style={{ backgroundColor: hex }}
-				/>
-				<div className="flex flex-col gap-y-1">
-					<p className="text-muted-foreground text-xs leading-snug">{label}</p>
-					<p className="font-medium text-sm">{hex}</p>
+			<div className="flex items-center justify-between gap-x-6" key={hex}>
+				<div className="flex items-center gap-x-4">
+					<div
+						className="aspect-square size-10 rounded-md sm:size-12"
+						style={{ backgroundColor: hex }}
+					/>
+					<div className="flex flex-col gap-y-1">
+						<p className="text-muted-foreground text-xs">{label}</p>
+						<p className="text-sm">{hex}</p>
+					</div>
 				</div>
-				<CopyButton className="ms-3" value={hex} />
+				<CopyButton value={hex} variant="ghost" />
 			</div>
 		))}
 	</div>

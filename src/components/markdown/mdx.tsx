@@ -12,6 +12,7 @@ import { CodeBlockCommand } from '@/app/(content)/(writings)/_components/CodeBlo
 import { CodeCollapsibleWrapper } from '@/app/(content)/(writings)/_components/CodeCollapsibleWrapper';
 import { ComponentPreview } from '@/app/(content)/(writings)/_components/ComponentPreview';
 import { ComponentSource } from '@/app/(content)/(writings)/_components/ComponentSource';
+import { ArticleBanner } from '@/app/(content)/(writings)/_components/utils/ArticleBannerGenerator';
 import { Base64 } from '@/app/(content)/(writings)/_components/utils/Base64';
 import { ColorGenerator } from '@/app/(content)/(writings)/_components/utils/ColorGenerator';
 import { JSONFormatter } from '@/app/(content)/(writings)/_components/utils/JSONFormatter';
@@ -145,6 +146,7 @@ const components: MDXRemoteProps['components'] = {
 	LoremIpsumGeneratorUtils: LoremIpsumGenerator,
 	InternetSpeedTestUtils: SpeedTest,
 	JSONFormatterUtils: JSONFormatter,
+	ArticleBannerUtils: ArticleBanner,
 };
 
 const options: MDXRemoteProps['options'] = {

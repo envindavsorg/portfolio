@@ -1,0 +1,113 @@
+---
+title: Générateur de bannière d'article
+description: Créez des bannières professionnelles pour vos articles de blog en quelques clics. Personnalisez le titre, le sous-titre, la police, l'alignement, la couleur du texte, l'overlay et la hauteur. Téléchargez votre bannière en PNG haute résolution (1400px), prête à l'emploi pour Medium, Dev.to, WordPress ou tout autre CMS.
+category: utils
+createdAt: 2026-02-26
+updatedAt: 2026-02-26
+tags: ["design"]
+isNew: true
+author: Florin Cuzeac
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+<ArticleBannerUtils />
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Utilisation
+
+Utilisez ce générateur de bannière d'article gratuit pour créer des images d'en-tête attrayantes pour vos publications de blog.
+Personnalisez chaque aspect de votre bannière — titre, sous-titre, image de fond, police, alignement et couleurs — puis téléchargez le résultat en PNG haute résolution.
+Aucune inscription nécessaire — configurez votre bannière et téléchargez-la instantanément.
+
+# Comment utiliser le générateur de bannière :
+
+Renseignez votre titre et sous-titre dans les champs prévus, puis ajustez les paramètres visuels selon vos préférences.
+Choisissez parmi les images de fond prédéfinies, sélectionnez une police et un alignement, puis réglez la taille du texte, l'opacité de l'overlay et la hauteur de la bannière à l'aide des curseurs.
+L'aperçu se met à jour en temps réel. Une fois satisfait, cliquez sur le bouton de téléchargement pour obtenir votre bannière au format PNG (1400px de large).
+
+# Cas d'usage :
+
+- **Articles de blog :** Générez des bannières cohérentes et professionnelles pour vos publications sur Medium, Dev.to, Hashnode, WordPress ou tout autre CMS.
+- **Réseaux sociaux :** Créez des images d'en-tête adaptées au partage sur Twitter/X, LinkedIn ou Facebook pour maximiser l'engagement de vos publications.
+- **Newsletters :** Concevez des visuels d'en-tête percutants pour vos campagnes d'emailing et newsletters techniques.
+- **Documentation :** Illustrez vos guides techniques, tutoriels et pages de documentation avec des bannières sur mesure.
+
+# Générer une bannière via l'API Canvas en JavaScript :
+
+En JavaScript, la génération d'images dynamiques peut être réalisée via l'API Canvas native du navigateur, comme illustré ci-dessous :
+```javascript
+const canvas = document.createElement("canvas");
+canvas.width = 1400;
+canvas.height = 700;
+const ctx = canvas.getContext("2d");
+
+ctx.fillStyle = "#1a1a2e";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+ctx.font = "bold 64px Georgia";
+ctx.fillStyle = "#ffffff";
+ctx.textAlign = "center";
+ctx.fillText("Mon titre d'article", canvas.width / 2, canvas.height / 2);
+
+const link = document.createElement("a");
+link.download = "banner.png";
+link.href = canvas.toDataURL("image/png");
+link.click();
+```
+
+# Générer une bannière en TypeScript (Node.js) :
+
+En TypeScript avec Node.js, la génération d'images côté serveur peut être effectuée avec la librairie **canvas** (node-canvas), comme illustré ci-dessous :
+```typescript
+import { createCanvas } from "canvas";
+import { writeFileSync } from "node:fs";
+
+const canvas = createCanvas(1400, 700);
+const ctx = canvas.getContext("2d");
+
+ctx.fillStyle = "#1a1a2e";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+ctx.font = "bold 64px Georgia";
+ctx.fillStyle = "#ffffff";
+ctx.textAlign = "center";
+ctx.fillText("Mon titre d'article", canvas.width / 2, canvas.height / 2);
+
+const buffer: Buffer = canvas.toBuffer("image/png");
+writeFileSync("banner.png", buffer);
+console.log("Bannière générée : banner.png");
+```
+
+Installer la dépendance :
+```bash
+npm install canvas
+```
+
+# Générer une bannière en Rust :
+
+En Rust, la génération d'images peut être réalisée avec la crate **image** et **imageproc** pour le rendu de texte, comme illustré ci-dessous :
+```rust
+use image::{Rgb, RgbImage};
+
+fn main() {
+    let width = 1400;
+    let height = 700;
+    let mut img = RgbImage::new(width, height);
+
+    let bg_color = Rgb([26u8, 26, 46]);
+    for pixel in img.pixels_mut() {
+        *pixel = bg_color;
+    }
+
+    img.save("banner.png").unwrap();
+    println!("Bannière générée : banner.png");
+}
+```
+
+Ajouter dans `Cargo.toml` :
+```toml
+[dependencies]
+image = "0.25"
+```
+
+Ces approches vous permettent d'automatiser la génération de bannières directement dans votre pipeline de publication, que ce soit côté client pour un aperçu instantané ou côté serveur pour un traitement en lot de vos articles.

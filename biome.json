@@ -60,7 +60,8 @@
         "noUselessSwitchCase": "off"
       },
       "correctness": {
-        "useExhaustiveDependencies": "off"
+        "useExhaustiveDependencies": "off",
+        "useImageSize": "off"
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
