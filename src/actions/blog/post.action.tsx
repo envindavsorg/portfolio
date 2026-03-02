@@ -181,35 +181,37 @@ export const ViewOptions = ({
 	}, [markdownUrl, isComponent]);
 
 	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<button
-					className="group/toggle flex size-7 cursor-pointer items-center justify-center gap-2 rounded-r-full text-sm"
-					type="button"
-				>
-					<CaretDownIcon className="mr-1 size-4 group-data-[state=open]/toggle:hidden" />
-					<CaretUpIcon className="mr-1 size-4 group-data-[state=closed]/toggle:hidden" />
-					<span className="sr-only">voir les options de visualisation</span>
-				</button>
-			</DropdownMenuTrigger>
+		<div suppressHydrationWarning>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<button
+						className="group/toggle flex size-7 cursor-pointer items-center justify-center gap-2 rounded-r-full text-sm"
+						type="button"
+					>
+						<CaretDownIcon className="mr-1 size-4 group-data-[state=open]/toggle:hidden" />
+						<CaretUpIcon className="mr-1 size-4 group-data-[state=closed]/toggle:hidden" />
+						<span className="sr-only">voir les options de visualisation</span>
+					</button>
+				</DropdownMenuTrigger>
 
-			<DropdownMenuContent
-				align="end"
-				className="w-fit py-2 *:cursor-pointer"
-				collisionPadding={8}
-				onCloseAutoFocus={(event: Event) => event.preventDefault()}
-				sideOffset={8}
-			>
-				{items.map(({ title, href, icon: Icon }) => (
-					<DropdownMenuItem asChild className="font-medium" key={href}>
-						<Link href={href} rel="noreferrer noopener" target="_blank">
-							<Icon className="size-4" />
-							{title}
-						</Link>
-					</DropdownMenuItem>
-				))}
-			</DropdownMenuContent>
-		</DropdownMenu>
+				<DropdownMenuContent
+					align="end"
+					className="w-fit py-2 *:cursor-pointer"
+					collisionPadding={8}
+					onCloseAutoFocus={(event: Event) => event.preventDefault()}
+					sideOffset={8}
+				>
+					{items.map(({ title, href, icon: Icon }) => (
+						<DropdownMenuItem asChild className="font-medium" key={href}>
+							<Link href={href} rel="noreferrer noopener" target="_blank">
+								<Icon className="size-4" />
+								{title}
+							</Link>
+						</DropdownMenuItem>
+					))}
+				</DropdownMenuContent>
+			</DropdownMenu>
+		</div>
 	);
 };
 

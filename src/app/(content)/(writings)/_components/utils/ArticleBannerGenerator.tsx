@@ -1,4 +1,3 @@
-// components/ArticleBanner.tsx
 'use client';
 
 import NextImage from 'next/image';
@@ -112,8 +111,8 @@ const ALIGNMENTS: AlignmentOption[] = [
 	{ value: 'right', label: 'Droite' },
 ];
 
-const CANVAS_W = 1400;
-const CANVAS_H = 640;
+const CANVAS_W = 6016;
+const CANVAS_H = 3388;
 const ASPECT_RATIO = `${CANVAS_W} / ${CANVAS_H}`;
 
 const DEFAULT_CONFIG: BannerConfig = {
@@ -122,7 +121,7 @@ const DEFAULT_CONFIG: BannerConfig = {
 	bgIndex: 0,
 	fontIndex: 0,
 	align: 'center',
-	fontSize: 80,
+	fontSize: 380,
 	overlayOpacity: 40,
 	textColor: '#ffffff',
 };
@@ -208,11 +207,19 @@ const drawBanner = (
 	ctx.fillStyle = config.textColor;
 
 	const titleLines = wrapText(ctx, config.title, maxTextW);
-	const subtitleSize = Math.round(titleSize * 0.35);
 	const lineHeight = titleSize * 1.15;
+
+	const hasSubtitle = config.subtitle.trim().length > 0;
+	const subtitleSize = Math.round(titleSize * 0.35);
 	const subLineHeight = subtitleSize * 1.5;
 	const gap = titleSize * 0.2;
-	const totalTextH = titleLines.length * lineHeight + gap + subLineHeight;
+
+	const subLines = hasSubtitle ? wrapText(ctx, config.subtitle, maxTextW) : [];
+
+	const totalTextH = hasSubtitle
+		? titleLines.length * lineHeight + gap + subLines.length * subLineHeight
+		: titleLines.length * lineHeight;
+
 	let y = (h - totalTextH) / 2 + titleSize;
 
 	for (const line of titleLines) {
@@ -222,13 +229,14 @@ const drawBanner = (
 		y += lineHeight;
 	}
 
-	y += gap;
-	ctx.font = `400 ${subtitleSize}px ${realFontFamily}`;
-	ctx.fillStyle = `${config.textColor}bb`;
-	const subLines = wrapText(ctx, config.subtitle, maxTextW);
-	for (const line of subLines) {
-		ctx.fillText(line, textX, y);
-		y += subLineHeight;
+	if (hasSubtitle) {
+		y += gap;
+		ctx.font = `400 ${subtitleSize}px ${realFontFamily}`;
+		ctx.fillStyle = `${config.textColor}bb`;
+		for (const line of subLines) {
+			ctx.fillText(line, textX, y);
+			y += subLineHeight;
+		}
 	}
 
 	return true;
@@ -347,14 +355,13 @@ export const ArticleBanner = () => {
 
 			setDownloading(format);
 
-			const EXPORT_SCALE = 2;
 			const exportCanvas = document.createElement('canvas');
-			exportCanvas.width = CANVAS_W * EXPORT_SCALE;
-			exportCanvas.height = CANVAS_H * EXPORT_SCALE;
+			exportCanvas.width = CANVAS_W;
+			exportCanvas.height = CANVAS_H;
 			const ctx = exportCanvas.getContext('2d');
 
 			if (ctx) {
-				drawBanner(ctx, exportCanvas.width, exportCanvas.height, config, img);
+				drawBanner(ctx, CANVAS_W, CANVAS_H, config, img);
 				const link = document.createElement('a');
 				link.download = `banner-${Date.now()}.${format}`;
 
@@ -583,8 +590,8 @@ export const ArticleBanner = () => {
 					</Label>
 					<Slider
 						aria-label="Taille du titre"
-						max={120}
-						min={24}
+						max={620}
+						min={240}
 						onValueChange={([v]) => updateConfig('fontSize', v)}
 						step={1}
 						value={[config.fontSize]}
