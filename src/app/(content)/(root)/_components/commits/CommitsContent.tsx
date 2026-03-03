@@ -13,11 +13,7 @@ export const CommitsContent = ({ contributions }: CommitsContentProps) => (
 	<Graph data={contributions}>
 		<GraphCalendar>
 			{({ activity, dayIndex, weekIndex }) => (
-				<GraphBlock
-					activity={activity}
-					dayIndex={dayIndex}
-					weekIndex={weekIndex}
-				/>
+				<GraphBlock activity={activity} dayIndex={dayIndex} weekIndex={weekIndex} />
 			)}
 		</GraphCalendar>
 

@@ -29,12 +29,7 @@ const LINE_VARIANTS: Variants = {
 	}),
 };
 
-export const MenuIcon = ({
-	isOpen,
-	className,
-	size = 28,
-	...props
-}: NavBarMenuIconProps) => {
+export const MenuIcon = ({ isOpen, className, size = 28, ...props }: NavBarMenuIconProps) => {
 	const controls = useAnimation();
 
 	useEffect(() => {

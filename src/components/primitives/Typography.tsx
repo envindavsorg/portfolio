@@ -54,8 +54,7 @@ export const Code = ({ className, ...props }: React.ComponentProps<'code'>) => {
 	return (
 		<code
 			className={cn(
-				!isCodeBlock &&
-					'not-prose rounded-md border bg-muted/50 px-[0.3rem] py-[0.2rem] text-sm',
+				!isCodeBlock && 'not-prose rounded-md border bg-muted/50 px-[0.3rem] py-[0.2rem] text-sm',
 				className
 			)}
 			data-slot={isCodeBlock ? 'code-block' : 'code-inline'}

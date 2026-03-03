@@ -4,33 +4,23 @@ import { Dialog as DialogPrimitive } from 'radix-ui';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Dialog = ({
-	...props
-}: ComponentProps<typeof DialogPrimitive.Root>) => (
+export const Dialog = ({ ...props }: ComponentProps<typeof DialogPrimitive.Root>) => (
 	<DialogPrimitive.Root data-slot="dialog" {...props} />
 );
 
-export const DialogTrigger = ({
-	...props
-}: ComponentProps<typeof DialogPrimitive.Trigger>) => (
+export const DialogTrigger = ({ ...props }: ComponentProps<typeof DialogPrimitive.Trigger>) => (
 	<DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 );
 
-export const DialogPortal = ({
-	...props
-}: ComponentProps<typeof DialogPrimitive.Portal>) => (
+export const DialogPortal = ({ ...props }: ComponentProps<typeof DialogPrimitive.Portal>) => (
 	<DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
 );
 
-export const DialogClose = ({
-	...props
-}: ComponentProps<typeof DialogPrimitive.Close>) => (
+export const DialogClose = ({ ...props }: ComponentProps<typeof DialogPrimitive.Close>) => (
 	<DialogPrimitive.Close data-slot="dialog-close" {...props} />
 );
 
-export const DialogOverlay = ({
-	...props
-}: ComponentProps<typeof DialogPrimitive.Overlay>) => (
+export const DialogOverlay = ({ ...props }: ComponentProps<typeof DialogPrimitive.Overlay>) => (
 	<DialogPrimitive.Overlay
 		className={cn(
 			'pointer-events-none fixed inset-0 z-50 select-none',
@@ -70,21 +60,11 @@ export const DialogContent = ({
 	</DialogPortal>
 );
 
-export const DialogHeader = ({
-	className,
-	...props
-}: ComponentProps<'div'>) => (
-	<div
-		className={cn('mb-4 flex flex-col gap-2 text-left', className)}
-		data-slot="dialog-header"
-		{...props}
-	/>
+export const DialogHeader = ({ className, ...props }: ComponentProps<'div'>) => (
+	<div className={cn('mb-4 flex flex-col gap-2 text-left', className)} data-slot="dialog-header" {...props} />
 );
 
-export const DialogFooter = ({
-	className,
-	...props
-}: ComponentProps<'div'>) => (
+export const DialogFooter = ({ className, ...props }: ComponentProps<'div'>) => (
 	<div
 		className={cn('mt-6 flex flex-row items-center justify-between', className)}
 		data-slot="dialog-footer"
@@ -92,10 +72,7 @@ export const DialogFooter = ({
 	/>
 );
 
-export const DialogTitle = ({
-	className,
-	...props
-}: ComponentProps<typeof DialogPrimitive.Title>) => (
+export const DialogTitle = ({ className, ...props }: ComponentProps<typeof DialogPrimitive.Title>) => (
 	<DialogPrimitive.Title
 		className={cn('font-semibold text-lg text-theme leading-normal', className)}
 		data-slot="dialog-title"
@@ -103,10 +80,7 @@ export const DialogTitle = ({
 	/>
 );
 
-export const DialogDescription = ({
-	className,
-	...props
-}: ComponentProps<typeof DialogPrimitive.Description>) => (
+export const DialogDescription = ({ className, ...props }: ComponentProps<typeof DialogPrimitive.Description>) => (
 	<DialogPrimitive.Description
 		className={cn('text-muted-foreground text-sm', className)}
 		data-slot="dialog-description"

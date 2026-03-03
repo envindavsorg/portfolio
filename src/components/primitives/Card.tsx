@@ -3,11 +3,7 @@ import { cn } from '@/lib/utils';
 
 export const Card = ({ className, ...props }: ComponentProps<'div'>) => (
 	<div
-		className={cn(
-			'flex flex-col gap-6',
-			'rounded-xl border border-input bg-card py-6 text-card-foreground',
-			className
-		)}
+		className={cn('flex flex-col gap-6', 'rounded-xl border border-input bg-card py-6 text-card-foreground', className)}
 		data-slot="card"
 		{...props}
 	/>
@@ -27,30 +23,16 @@ export const CardHeader = ({ className, ...props }: ComponentProps<'div'>) => (
 );
 
 export const CardTitle = ({ className, ...props }: ComponentProps<'div'>) => (
-	<div
-		className={cn('font-semibold leading-none', className)}
-		data-slot="card-title"
-		{...props}
-	/>
+	<div className={cn('font-semibold leading-none', className)} data-slot="card-title" {...props} />
 );
 
-export const CardDescription = ({
-	className,
-	...props
-}: ComponentProps<'div'>) => (
-	<div
-		className={cn('text-muted-foreground text-sm', className)}
-		data-slot="card-description"
-		{...props}
-	/>
+export const CardDescription = ({ className, ...props }: ComponentProps<'div'>) => (
+	<div className={cn('text-muted-foreground text-sm', className)} data-slot="card-description" {...props} />
 );
 
 export const CardAction = ({ className, ...props }: ComponentProps<'div'>) => (
 	<div
-		className={cn(
-			'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
-			className
-		)}
+		className={cn('col-start-2 row-span-2 row-start-1 self-start justify-self-end', className)}
 		data-slot="card-action"
 		{...props}
 	/>
@@ -62,11 +44,7 @@ export const CardContent = ({ className, ...props }: ComponentProps<'div'>) => (
 
 export const CardFooter = ({ className, ...props }: ComponentProps<'div'>) => (
 	<div
-		className={cn(
-			'flex items-center',
-			'border-input px-6 [.border-t]:pt-6',
-			className
-		)}
+		className={cn('flex items-center', 'border-input px-6 [.border-t]:pt-6', className)}
 		data-slot="card-footer"
 		{...props}
 	/>

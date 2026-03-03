@@ -6,8 +6,7 @@ import { type Browser, launch, type Page } from 'puppeteer-core';
 
 type FilePath = `${string}.webp` | `${string}.png` | `${string}.jpeg`;
 
-const executablePath =
-	'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const executablePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const url = 'http://localhost:1409';
 
 const screenshotsDir = join(process.cwd(), 'public/images/meta');
@@ -83,9 +82,7 @@ const captureScreenshot = async ({
 
 		const relativePath = path.replace(process.cwd(), '');
 
-		consola.info(
-			`${size === 'og-image' ? 'OG Image' : 'Screenshot'} saved : ${yellow(relativePath)}`
-		);
+		consola.info(`${size === 'og-image' ? 'OG Image' : 'Screenshot'} saved : ${yellow(relativePath)}`);
 
 		await page.close();
 	}
@@ -119,9 +116,7 @@ const main = async (): Promise<void> => {
 			type: 'png',
 		});
 
-		consola.success(
-			`All screenshots and og image ${green('captured successfully')} !`
-		);
+		consola.success(`All screenshots and og image ${green('captured successfully')} !`);
 	} catch (error) {
 		consola.error(`${red('Error capturing')} screenshots or og image:`, error);
 	} finally {

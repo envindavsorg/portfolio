@@ -42,12 +42,7 @@ export const FlaskIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="currentColor"
 					height={size}

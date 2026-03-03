@@ -6,10 +6,7 @@ import { FrownIcon } from '@/components/blocks/icons/FrownIcon';
 import { SearchIcon } from '@/components/blocks/icons/SearchIcon';
 import { cn } from '@/lib/utils';
 
-export const Command = ({
-	className,
-	...props
-}: ComponentProps<typeof CommandPrimitive>) => (
+export const Command = ({ className, ...props }: ComponentProps<typeof CommandPrimitive>) => (
 	<CommandPrimitive
 		className={cn('flex size-full flex-col overflow-hidden', className)}
 		data-slot="command"
@@ -17,10 +14,7 @@ export const Command = ({
 	/>
 );
 
-export const CommandInput = ({
-	className,
-	...props
-}: ComponentProps<typeof CommandPrimitive.Input>) => {
+export const CommandInput = ({ className, ...props }: ComponentProps<typeof CommandPrimitive.Input>) => {
 	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	return (
@@ -41,24 +35,15 @@ export const CommandInput = ({
 	);
 };
 
-export const CommandList = ({
-	className,
-	...props
-}: ComponentProps<typeof CommandPrimitive.List>) => (
+export const CommandList = ({ className, ...props }: ComponentProps<typeof CommandPrimitive.List>) => (
 	<CommandPrimitive.List
-		className={cn(
-			'no-scrollbar max-h-100 scroll-py-0 overflow-y-auto overflow-x-hidden',
-			className
-		)}
+		className={cn('no-scrollbar max-h-100 scroll-py-0 overflow-y-auto overflow-x-hidden', className)}
 		data-slot="command-list"
 		{...props}
 	/>
 );
 
-export const CommandEmpty = ({
-	className,
-	...props
-}: ComponentProps<typeof CommandPrimitive.Empty>) => {
+export const CommandEmpty = ({ className, ...props }: ComponentProps<typeof CommandPrimitive.Empty>) => {
 	const iconRef = useRef<AnimatedIconHandle>(null);
 	const search = useCommandState((state) => state.search);
 	const filtered = useCommandState((state) => state.filtered.count);
@@ -73,28 +58,20 @@ export const CommandEmpty = ({
 
 	return (
 		<CommandPrimitive.Empty
-			className={cn(
-				'flex flex-col items-center justify-center gap-y-3 px-6 py-8',
-				className
-			)}
+			className={cn('flex flex-col items-center justify-center gap-y-3 px-6 py-8', className)}
 			data-slot="command-empty"
 			{...props}
 		>
 			<FrownIcon className="text-theme" ref={iconRef} />
 			<div className="space-y-1 text-center">
 				<h3 className="font-semibold text-sm">Aucun résultat ...</h3>
-				<p className="text-muted-foreground text-xs">
-					Essayez un autre terme de recherche.
-				</p>
+				<p className="text-muted-foreground text-xs">Essayez un autre terme de recherche.</p>
 			</div>
 		</CommandPrimitive.Empty>
 	);
 };
 
-export const CommandGroup = ({
-	className,
-	...props
-}: ComponentProps<typeof CommandPrimitive.Group>) => (
+export const CommandGroup = ({ className, ...props }: ComponentProps<typeof CommandPrimitive.Group>) => (
 	<CommandPrimitive.Group
 		className={cn(
 			'overflow-hidden p-1 text-foreground',
@@ -106,21 +83,11 @@ export const CommandGroup = ({
 	/>
 );
 
-export const CommandSeparator = ({
-	className,
-	...props
-}: ComponentProps<typeof CommandPrimitive.Separator>) => (
-	<CommandPrimitive.Separator
-		className={cn('h-px bg-input', className)}
-		data-slot="command-separator"
-		{...props}
-	/>
+export const CommandSeparator = ({ className, ...props }: ComponentProps<typeof CommandPrimitive.Separator>) => (
+	<CommandPrimitive.Separator className={cn('h-px bg-input', className)} data-slot="command-separator" {...props} />
 );
 
-export const CommandItem = ({
-	className,
-	...props
-}: ComponentProps<typeof CommandPrimitive.Item>) => (
+export const CommandItem = ({ className, ...props }: ComponentProps<typeof CommandPrimitive.Item>) => (
 	<CommandPrimitive.Item
 		className={cn(
 			'relative flex cursor-pointer select-none items-center gap-x-2 rounded-md text-sm outline-hidden',

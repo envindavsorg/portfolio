@@ -25,9 +25,7 @@ export const NavBarTheme = () => {
 	};
 
 	const handleClick = () => {
-		document.startViewTransition
-			? document.startViewTransition(switchTheme)
-			: switchTheme();
+		document.startViewTransition ? document.startViewTransition(switchTheme) : switchTheme();
 	};
 
 	const handleMouseEnter = () => {

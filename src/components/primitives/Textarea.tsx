@@ -1,10 +1,7 @@
 import { type ComponentProps, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Textarea = forwardRef<
-	HTMLTextAreaElement,
-	ComponentProps<'textarea'>
->(({ className, ...props }, ref) => (
+export const Textarea = forwardRef<HTMLTextAreaElement, ComponentProps<'textarea'>>(({ className, ...props }, ref) => (
 	<textarea
 		className={cn(
 			'flex min-h-20 w-full px-3 py-2',

@@ -8,15 +8,8 @@ import {
 } from '@/components/primitives/Collapsible';
 import { cn } from '@/lib/utils';
 
-export const CodeCollapsibleWrapper = ({
-	className,
-	children,
-	...props
-}: ComponentProps<typeof Collapsible>) => (
-	<CollapsibleWithContext
-		className={cn('group/collapsible not-prose relative mt-6', className)}
-		{...props}
-	>
+export const CodeCollapsibleWrapper = ({ className, children, ...props }: ComponentProps<typeof Collapsible>) => (
+	<CollapsibleWithContext className={cn('group/collapsible not-prose relative mt-6', className)} {...props}>
 		<CollapsibleTrigger asChild>
 			<div className="absolute top-2.25 right-10 z-10 cursor-pointer">
 				<CollapsibleChevronsIcon />

@@ -6,14 +6,7 @@ import { useEffect, useRef } from 'react';
 import { annotate } from 'rough-notation';
 import type { RoughAnnotation } from 'rough-notation/lib/model';
 
-type AnnotationAction =
-	| 'highlight'
-	| 'underline'
-	| 'box'
-	| 'circle'
-	| 'strike-through'
-	| 'crossed-off'
-	| 'bracket';
+type AnnotationAction = 'highlight' | 'underline' | 'box' | 'circle' | 'strike-through' | 'crossed-off' | 'bracket';
 
 interface HighlighterProps {
 	children: React.ReactNode;
@@ -87,16 +80,7 @@ export const Highlighter = ({
 				resizeObserver.disconnect();
 			}
 		};
-	}, [
-		shouldShow,
-		action,
-		color,
-		strokeWidth,
-		animationDuration,
-		iterations,
-		padding,
-		multiline,
-	]);
+	}, [shouldShow, action, color, strokeWidth, animationDuration, iterations, padding, multiline]);
 
 	return (
 		<span className="relative inline-block bg-transparent" ref={elementRef}>

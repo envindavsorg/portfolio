@@ -2,22 +2,15 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
-import { LLMCopyButtonWithViewOptions } from '@/actions/blog/post.action';
 import { ArrowLeftIcon } from '@/components/blocks/icons/ArrowLeftIcon';
 import { ArrowRightIcon } from '@/components/blocks/icons/ArrowRightIcon';
 import { KeyboardShortcuts } from '@/components/blog/KeyboardShortcuts';
 import { ShareMenu } from '@/components/blog/ShareMenu';
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from '@/components/primitives/Breadcrumb';
 import { Button } from '@/components/primitives/Button';
 import { Divider } from '@/components/primitives/Divider';
 import type { Content } from '@/lib/content';
+import { ArticleCopyMarkdown } from './ArticleCopyMarkdown';
+import { ArticleViewOptions } from './ArticleViewOptions';
 
 interface TopNavProps {
 	items: Content[];
@@ -39,24 +32,6 @@ export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }:
 		<>
 			<KeyboardShortcuts basePath={`/${item.metadata.category}`} next={next} previous={previous} />
 
-			<div className="screen-line-after px-2 py-0.5 sm:px-4">
-				<Breadcrumb>
-					<BreadcrumbList>
-						<BreadcrumbItem>
-							<BreadcrumbLink aria-label={description} href={`/${item.metadata.category}`}>
-								{description}
-							</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<BreadcrumbPage>{item.metadata.title}</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
-			</div>
-
-			<Divider before={false} border={false} type="half" />
-
 			<div className="flex items-center px-2 py-2 sm:justify-between sm:px-4">
 				<Button
 					asChild
@@ -73,12 +48,13 @@ export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }:
 
 				<div className="flex items-center gap-2 max-sm:flex-1 max-sm:justify-end">
 					{useLlm && (
-						<LLMCopyButtonWithViewOptions
-							className="max-sm:me-auto"
+						<ArticleViewOptions
 							isComponent={item.metadata.category === 'components'}
 							markdownUrl={`/${item.metadata.category}/${item.slug}.mdx`}
 						/>
 					)}
+
+					{useLlm && <ArticleCopyMarkdown markdownUrl={`/${item.metadata.category}/${item.slug}.mdx`} />}
 
 					<ShareMenu url={`/${item.metadata.category}/${item.slug}`} />
 

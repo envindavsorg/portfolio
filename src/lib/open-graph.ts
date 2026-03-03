@@ -6,11 +6,7 @@ interface OGImageParams {
 	description?: string;
 }
 
-const buildOGImageUrl = ({
-	type = 'homepage',
-	title,
-	description,
-}: OGImageParams): string => {
+const buildOGImageUrl = ({ type = 'homepage', title, description }: OGImageParams): string => {
 	const params = new URLSearchParams({ type, title: title.trim() });
 	if (description?.trim()) {
 		params.set('description', description.trim());
@@ -24,11 +20,7 @@ interface ContentMetadataParams {
 	ogImageParams: OGImageParams;
 }
 
-export const buildContentMetadata = ({
-	title,
-	description,
-	ogImageParams,
-}: ContentMetadataParams): Metadata => {
+export const buildContentMetadata = ({ title, description, ogImageParams }: ContentMetadataParams): Metadata => {
 	const imageUrl = buildOGImageUrl(ogImageParams);
 	return {
 		title,

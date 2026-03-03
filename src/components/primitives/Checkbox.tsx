@@ -14,28 +14,27 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Checkbox = forwardRef<
-	ComponentRef<typeof Root>,
-	ComponentPropsWithoutRef<typeof Root>
->(({ className, ...props }, ref) => (
-	<Root
-		className={cn(
-			'peer grid size-4 shrink-0 place-content-center rounded-sm',
-			'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-			'data-[state=checked]:bg-primary',
-			'data-[state=checked]:text-primary-foreground',
-			'disabled:cursor-not-allowed disabled:opacity-50',
-			'border border-primary ring-offset-background',
-			className
-		)}
-		ref={ref}
-		{...props}
-	>
-		<Indicator className={cn('grid place-content-center text-current')}>
-			<CheckIcon className="size-4" />
-		</Indicator>
-	</Root>
-));
+export const Checkbox = forwardRef<ComponentRef<typeof Root>, ComponentPropsWithoutRef<typeof Root>>(
+	({ className, ...props }, ref) => (
+		<Root
+			className={cn(
+				'peer grid size-4 shrink-0 place-content-center rounded-sm',
+				'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+				'data-[state=checked]:bg-primary',
+				'data-[state=checked]:text-primary-foreground',
+				'disabled:cursor-not-allowed disabled:opacity-50',
+				'border border-primary ring-offset-background',
+				className
+			)}
+			ref={ref}
+			{...props}
+		>
+			<Indicator className={cn('grid place-content-center text-current')}>
+				<CheckIcon className="size-4" />
+			</Indicator>
+		</Root>
+	)
+);
 
 export const CheckboxAnimated = ({
 	className,
@@ -44,9 +43,7 @@ export const CheckboxAnimated = ({
 	onCheckedChange,
 	...props
 }: ComponentProps<typeof Root> & HTMLMotionProps<'button'>) => {
-	const [isChecked, setIsChecked] = useState(
-		controlledChecked ?? defaultChecked ?? false
-	);
+	const [isChecked, setIsChecked] = useState(controlledChecked ?? defaultChecked ?? false);
 
 	useEffect(() => {
 		if (controlledChecked !== undefined) {
@@ -63,12 +60,7 @@ export const CheckboxAnimated = ({
 	);
 
 	return (
-		<Root
-			asChild
-			checked={controlledChecked}
-			defaultChecked={defaultChecked}
-			onCheckedChange={handleCheckedChange}
-		>
+		<Root asChild checked={controlledChecked} defaultChecked={defaultChecked} onCheckedChange={handleCheckedChange}>
 			<motion.button
 				className={cn(
 					'peer size-4 shrink-0 cursor-pointer rounded-sm border border-input outline-none',

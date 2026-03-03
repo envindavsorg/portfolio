@@ -4,16 +4,8 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
-import {
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-} from '@/components/primitives/Dialog';
-import {
-	DrawerDescription,
-	DrawerHeader,
-	DrawerTitle,
-} from '@/components/primitives/Drawer';
+import { DialogDescription, DialogHeader, DialogTitle } from '@/components/primitives/Dialog';
+import { DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/primitives/Drawer';
 import { PanelFooter } from '@/components/primitives/Panel';
 import GLOBAL_DATA from '@/data/global';
 import type { EmailFormData } from '@/hooks/useEmailForm';
@@ -27,9 +19,7 @@ import { CvSuccess } from './CvSuccess';
 export const CvFooter = () => {
 	const isDesktop = useMediaQuery('(min-width: 768px)');
 	const [open, setOpen] = useState(false);
-	const [formState, setFormState] = useState<'form' | 'success' | 'error'>(
-		'form'
-	);
+	const [formState, setFormState] = useState<'form' | 'success' | 'error'>('form');
 
 	const { form, isLoading, sendEmail } = useEmailForm();
 	const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -63,9 +53,7 @@ export const CvFooter = () => {
 		if (formState === 'success' || formState === 'error') {
 			const isSuccess = formState === 'success';
 			const FeedbackComponent = isSuccess ? CvSuccess : CvError;
-			const title = isSuccess
-				? 'le mail est en route !'
-				: 'une erreur est survenue !';
+			const title = isSuccess ? 'le mail est en route !' : 'une erreur est survenue !';
 			const buttonText = isSuccess ? "d'accord !" : 'je comprends !';
 			const HeaderComp = isDesktop ? DialogTitle : DrawerTitle;
 
@@ -95,17 +83,11 @@ export const CvFooter = () => {
 						recevez maintenant mon CV !
 					</Title>
 					<Description className="text-foreground text-sm leading-normal">
-						entrez votre prénom et votre adresse e-mail pour recevoir
-						immédiatement mon CV.
+						entrez votre prénom et votre adresse e-mail pour recevoir immédiatement mon CV.
 					</Description>
 				</Header>
 
-				<CvForm
-					form={form}
-					isLoading={isLoading}
-					onCancel={handleClose}
-					onSubmit={handleSubmit}
-				/>
+				<CvForm form={form} isLoading={isLoading} onCancel={handleClose} onSubmit={handleSubmit} />
 			</div>
 		);
 	};
@@ -113,12 +95,7 @@ export const CvFooter = () => {
 	return (
 		<PanelFooter className="flex max-sm:flex-col max-sm:gap-y-2">
 			<Button asChild variant="outline">
-				<Link
-					aria-label={GLOBAL_DATA.CV.name}
-					href={GLOBAL_DATA.CV.url}
-					rel="noopener noreferrer"
-					target="_blank"
-				>
+				<Link aria-label={GLOBAL_DATA.CV.name} href={GLOBAL_DATA.CV.url} rel="noopener noreferrer" target="_blank">
 					voir et télécharger
 				</Link>
 			</Button>

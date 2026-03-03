@@ -63,12 +63,7 @@ export const LlmIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}
@@ -91,13 +86,7 @@ export const LlmIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 						x="3"
 						y="3"
 					/>
-					<motion.path
-						animate={controls}
-						custom={3}
-						d="M7 11v4a2 2 0 0 0 2 2h4"
-						initial="normal"
-						variants={VARIANTS}
-					/>
+					<motion.path animate={controls} custom={3} d="M7 11v4a2 2 0 0 0 2 2h4" initial="normal" variants={VARIANTS} />
 					<motion.rect
 						animate={controls}
 						custom={0}

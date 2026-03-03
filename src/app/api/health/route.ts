@@ -10,5 +10,4 @@ const headers = {
 	'Content-Type': 'text/plain',
 } as const;
 
-export const GET = (): NextResponse =>
-	new NextResponse('OK', { status: 200, headers });
+export const GET = (): NextResponse => new NextResponse('OK', { status: 200, headers });

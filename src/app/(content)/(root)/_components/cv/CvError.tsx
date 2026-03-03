@@ -10,9 +10,7 @@ interface CvErrorProps {
 const CvError = memo(({ children }: CvErrorProps) => (
 	<>
 		<div className="flex flex-col items-center justify-center gap-y-2 py-8 text-center">
-			<h3 className="font-semibold text-destructive text-xl leading-normal">
-				une erreur est survenue !
-			</h3>
+			<h3 className="font-semibold text-destructive text-xl leading-normal">une erreur est survenue !</h3>
 
 			<Prose>oups, veuillez réessayer plus tard.</Prose>
 

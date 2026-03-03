@@ -4,10 +4,7 @@ import { Label as Primitive } from 'radix-ui';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Label = ({
-	className,
-	...props
-}: ComponentProps<typeof Primitive.Root>) => (
+export const Label = ({ className, ...props }: ComponentProps<typeof Primitive.Root>) => (
 	<Primitive.Root
 		className={cn(
 			'flex items-center gap-2',

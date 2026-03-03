@@ -10,10 +10,7 @@ export const BrandingColors = () => (
 		{BRANDING_COLORS.map(({ label, hex }) => (
 			<div className="flex items-center justify-between gap-x-6" key={hex}>
 				<div className="flex items-center gap-x-4">
-					<div
-						className="aspect-square size-10 rounded-md sm:size-12"
-						style={{ backgroundColor: hex }}
-					/>
+					<div className="aspect-square size-10 rounded-md sm:size-12" style={{ backgroundColor: hex }} />
 					<div className="flex flex-col gap-y-1">
 						<p className="text-muted-foreground text-xs">{label}</p>
 						<p className="text-sm">{hex}</p>

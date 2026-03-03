@@ -126,10 +126,7 @@ const DEFAULT_CONFIG: BannerConfig = {
 	textColor: '#ffffff',
 };
 
-const getResolvedFontFamily = (
-	fontValue: string,
-	fallbackCanvasName: string
-) => {
+const getResolvedFontFamily = (fontValue: string, fallbackCanvasName: string) => {
 	if (typeof window === 'undefined') {
 		return fallbackCanvasName;
 	}
@@ -137,9 +134,7 @@ const getResolvedFontFamily = (
 	const match = fontValue.match(/var\((--[^)]+)\)/);
 	if (match) {
 		const cssVarName = match[1];
-		const resolvedRealName = getComputedStyle(document.documentElement)
-			.getPropertyValue(cssVarName)
-			.trim();
+		const resolvedRealName = getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
 
 		if (resolvedRealName) {
 			return resolvedRealName;
@@ -148,11 +143,7 @@ const getResolvedFontFamily = (
 	return fallbackCanvasName;
 };
 
-const wrapText = (
-	ctx: CanvasRenderingContext2D,
-	text: string,
-	maxW: number
-): string[] => {
+const wrapText = (ctx: CanvasRenderingContext2D, text: string, maxW: number): string[] => {
 	const words = text.split(' ');
 	const lines: string[] = [];
 	let line = '';
@@ -198,8 +189,7 @@ const drawBanner = (
 
 	const pad = w * 0.08;
 	const maxTextW = w - pad * 2;
-	const textX =
-		config.align === 'left' ? pad : config.align === 'right' ? w - pad : w / 2;
+	const textX = config.align === 'left' ? pad : config.align === 'right' ? w - pad : w / 2;
 	ctx.textAlign = config.align;
 
 	const titleSize = Math.round(config.fontSize * (w / CANVAS_W));
@@ -244,9 +234,7 @@ const drawBanner = (
 
 export const ArticleBanner = () => {
 	const [config, setConfig] = useState<BannerConfig>(DEFAULT_CONFIG);
-	const [loadedImages, setLoadedImages] = useState<
-		Record<number, HTMLImageElement>
-	>({});
+	const [loadedImages, setLoadedImages] = useState<Record<number, HTMLImageElement>>({});
 	const [downloading, setDownloading] = useState<false | 'png' | 'webp'>(false);
 	const [fontsReady, setFontsReady] = useState(false);
 
@@ -256,12 +244,9 @@ export const ArticleBanner = () => {
 
 	const imagesReady = Boolean(loadedImages[config.bgIndex]);
 
-	const updateConfig = useCallback(
-		<K extends keyof BannerConfig>(key: K, value: BannerConfig[K]) => {
-			setConfig((prev) => ({ ...prev, [key]: value }));
-		},
-		[]
-	);
+	const updateConfig = useCallback(<K extends keyof BannerConfig>(key: K, value: BannerConfig[K]) => {
+		setConfig((prev) => ({ ...prev, [key]: value }));
+	}, []);
 
 	const handleImageUpload = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -379,11 +364,7 @@ export const ArticleBanner = () => {
 	return (
 		<>
 			<div className="relative py-3">
-				<canvas
-					className="block h-auto w-full rounded-xl"
-					ref={previewRef}
-					style={{ aspectRatio: ASPECT_RATIO }}
-				/>
+				<canvas className="block h-auto w-full rounded-xl" ref={previewRef} style={{ aspectRatio: ASPECT_RATIO }} />
 				{!imagesReady && (
 					<div className="absolute inset-0 flex items-center justify-center">
 						<div className="flex flex-col items-center gap-y-1">
@@ -397,11 +378,7 @@ export const ArticleBanner = () => {
 			</div>
 
 			<div className="screen-line-before flex gap-3 py-2 *:lowercase max-sm:flex-col sm:justify-end">
-				<Button
-					disabled={!imagesReady}
-					onClick={() => handleDownload('png')}
-					variant="outline"
-				>
+				<Button disabled={!imagesReady} onClick={() => handleDownload('png')} variant="outline">
 					{downloading === 'png' ? 'PNG téléchargé !' : 'Télécharger en PNG'}
 				</Button>
 				<Button disabled={!imagesReady} onClick={() => handleDownload('webp')}>
@@ -413,11 +390,7 @@ export const ArticleBanner = () => {
 				<Label className="text-foreground text-sm" htmlFor="banner-title">
 					Titre de votre article
 				</Label>
-				<Input
-					id="banner-title"
-					onChange={(event) => updateConfig('title', event.target.value)}
-					value={config.title}
-				/>
+				<Input id="banner-title" onChange={(event) => updateConfig('title', event.target.value)} value={config.title} />
 			</div>
 
 			<div className="screen-line-before flex flex-col gap-y-3 py-3">
@@ -433,9 +406,7 @@ export const ArticleBanner = () => {
 
 			<div className="screen-line-before py-3">
 				<fieldset>
-					<legend className="mb-3 text-foreground text-sm">
-						Choisissez votre image de fond
-					</legend>
+					<legend className="mb-3 text-foreground text-sm">Choisissez votre image de fond</legend>
 					<div className="flex flex-wrap gap-4">
 						<div className="flex flex-col gap-y-2">
 							<input
@@ -464,14 +435,7 @@ export const ArticleBanner = () => {
 									<span className="text-2xl text-zinc-500">+</span>
 								)}
 							</Label>
-							<span
-								className={cn(
-									'text-center text-xs',
-									config.bgIndex === -1 && 'text-theme'
-								)}
-							>
-								Personnalisée
-							</span>
+							<span className={cn('text-center text-xs', config.bgIndex === -1 && 'text-theme')}>Personnalisée</span>
 						</div>
 
 						{PRESET_BACKGROUNDS.map((bg, i) => (
@@ -480,9 +444,7 @@ export const ArticleBanner = () => {
 									aria-pressed={config.bgIndex === i}
 									className={cn(
 										'relative aspect-video w-32 shrink-0 cursor-pointer overflow-hidden rounded-xl border-2 transition-all',
-										config.bgIndex === i
-											? 'border-theme opacity-100'
-											: 'border-transparent opacity-35 hover:opacity-70'
+										config.bgIndex === i ? 'border-theme opacity-100' : 'border-transparent opacity-35 hover:opacity-70'
 									)}
 									onClick={() => updateConfig('bgIndex', i)}
 									type="button"
@@ -496,14 +458,7 @@ export const ArticleBanner = () => {
 										width={1400}
 									/>
 								</button>
-								<span
-									className={cn(
-										'text-center text-xs',
-										config.bgIndex === i && 'text-theme'
-									)}
-								>
-									{bg.name}
-								</span>
+								<span className={cn('text-center text-xs', config.bgIndex === i && 'text-theme')}>{bg.name}</span>
 							</div>
 						))}
 					</div>
@@ -512,16 +467,12 @@ export const ArticleBanner = () => {
 
 			<div className="screen-line-before py-3">
 				<fieldset>
-					<legend className="mb-3 text-foreground text-sm">
-						Police de votre titre et description
-					</legend>
+					<legend className="mb-3 text-foreground text-sm">Police de votre titre et description</legend>
 					<div className="flex flex-wrap gap-3">
 						{FONTS.map((f, i) => (
 							<Button
 								aria-pressed={config.fontIndex === i}
-								className={cn(
-									config.fontIndex === i && 'text-theme hover:text-theme'
-								)}
+								className={cn(config.fontIndex === i && 'text-theme hover:text-theme')}
 								key={f.name}
 								onClick={() => updateConfig('fontIndex', i)}
 								style={{ fontFamily: f.value }}
@@ -541,9 +492,7 @@ export const ArticleBanner = () => {
 						{ALIGNMENTS.map(({ value, label }) => (
 							<Button
 								aria-pressed={config.align === value}
-								className={cn(
-									config.align === value && 'text-theme hover:text-theme'
-								)}
+								className={cn(config.align === value && 'text-theme hover:text-theme')}
 								key={value}
 								onClick={() => updateConfig('align', value)}
 								variant="outline"
@@ -554,9 +503,7 @@ export const ArticleBanner = () => {
 					</div>
 				</fieldset>
 				<fieldset>
-					<legend className="mb-3 text-foreground text-sm">
-						Couleur du titre et de la description
-					</legend>
+					<legend className="mb-3 text-foreground text-sm">Couleur du titre et de la description</legend>
 					<div className="flex items-center gap-3">
 						<input
 							className="aspect-square size-12 cursor-pointer rounded-md border-none bg-transparent"
@@ -566,9 +513,7 @@ export const ArticleBanner = () => {
 							value={config.textColor}
 						/>
 						<div className="flex flex-col gap-y-1">
-							<span className="text-muted-foreground text-xs">
-								Couleur sélectionnée :
-							</span>
+							<span className="text-muted-foreground text-xs">Couleur sélectionnée :</span>
 							<span
 								className="text-lg uppercase"
 								style={{
@@ -585,8 +530,7 @@ export const ArticleBanner = () => {
 			<div className="screen-line-before grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6 py-3">
 				<div className="space-y-3">
 					<Label className="text-foreground text-sm">
-						Taille du texte —{' '}
-						<span className="text-base text-theme">{config.fontSize}px</span>
+						Taille du texte — <span className="text-base text-theme">{config.fontSize}px</span>
 					</Label>
 					<Slider
 						aria-label="Taille du titre"
@@ -599,10 +543,7 @@ export const ArticleBanner = () => {
 				</div>
 				<div className="space-y-3">
 					<Label className="text-foreground text-sm">
-						Overlay —{' '}
-						<span className="text-base text-theme">
-							{config.overlayOpacity}%
-						</span>
+						Overlay — <span className="text-base text-theme">{config.overlayOpacity}%</span>
 					</Label>
 					<Slider
 						aria-label="Opacité de l'overlay"

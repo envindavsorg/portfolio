@@ -2,12 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { CopyButton } from '@/components/primitives/Button';
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from '@/components/primitives/Tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/primitives/Tabs';
 import { Bun } from '@/components/svgs/bun';
 import { Npm } from '@/components/svgs/npm';
 import { Pnpm } from '@/components/svgs/pnpm';

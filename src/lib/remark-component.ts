@@ -5,21 +5,15 @@ import { Index } from '@/__registry__';
 import { logger } from './logger';
 import type { UnistNode, UnistTree } from './remark-code-import';
 
-const getNodeAttribute = (node: UnistNode, name: string) =>
-	node.attributes?.find((attr) => attr.name === name);
+const getNodeAttribute = (node: UnistNode, name: string) => node.attributes?.find((attr) => attr.name === name);
 
 const getAttributeValue = (node: UnistNode, name: string): string | undefined =>
 	getNodeAttribute(node, name)?.value as string | undefined;
 
 const normalizeSource = (source: string): string =>
-	source
-		.replaceAll('@/registry/', '@/components/')
-		.replaceAll('export default', 'export');
+	source.replaceAll('@/registry/', '@/components/').replaceAll('export default', 'export');
 
-const resolveFilePath = (
-	name: string,
-	fileName?: string
-): string | undefined => {
+const resolveFilePath = (name: string, fileName?: string): string | undefined => {
 	const component = Index[name];
 	if (!component) {
 		return undefined;
@@ -32,27 +26,18 @@ const resolveFilePath = (
 	return (
 		component.files.find(
 			(file: unknown) =>
-				typeof file === 'string' &&
-				(file.endsWith(`${fileName}.tsx`) || file.endsWith(`${fileName}.ts`))
+				typeof file === 'string' && (file.endsWith(`${fileName}.tsx`) || file.endsWith(`${fileName}.ts`))
 		) || component.files[0]?.path
 	);
 };
 
-const replaceNode = (
-	parent: UnistNode | undefined,
-	index: number | undefined,
-	codeBlock: UnistNode
-) => {
+const replaceNode = (parent: UnistNode | undefined, index: number | undefined, codeBlock: UnistNode) => {
 	if (parent?.children && typeof index === 'number') {
 		parent.children.splice(index, 1, codeBlock);
 	}
 };
 
-const handleComponentSource = (
-	node: UnistNode,
-	parent: UnistNode | undefined,
-	index: number | undefined
-) => {
+const handleComponentSource = (node: UnistNode, parent: UnistNode | undefined, index: number | undefined) => {
 	const name = getAttributeValue(node, 'name');
 	const srcPath = getAttributeValue(node, 'src');
 	const fileName = getAttributeValue(node, 'fileName');
@@ -61,9 +46,7 @@ const handleComponentSource = (
 		return;
 	}
 
-	const filePath = srcPath
-		? join(process.cwd(), srcPath)
-		: resolveFilePath(name!, fileName);
+	const filePath = srcPath ? join(process.cwd(), srcPath) : resolveFilePath(name!, fileName);
 
 	if (!filePath) {
 		return;
@@ -76,21 +59,12 @@ const handleComponentSource = (
 	replaceNode(parent, index, {
 		type: 'code',
 		lang: extname(filePath).slice(1),
-		meta: [
-			title ? `title="${title}"` : '',
-			showLineNumbers ? 'showLineNumbers' : '',
-		]
-			.filter(Boolean)
-			.join(' '),
+		meta: [title ? `title="${title}"` : '', showLineNumbers ? 'showLineNumbers' : ''].filter(Boolean).join(' '),
 		value: source,
 	} as UnistNode);
 };
 
-const handleComponentPreview = (
-	node: UnistNode,
-	parent: UnistNode | undefined,
-	index: number | undefined
-) => {
+const handleComponentPreview = (node: UnistNode, parent: UnistNode | undefined, index: number | undefined) => {
 	const name = getAttributeValue(node, 'name');
 	if (!name) {
 		return;

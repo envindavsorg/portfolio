@@ -21,20 +21,13 @@ import { soundManager } from '@/lib/sound-manager';
 const preventAutoFocus = (event: Event) => event.preventDefault();
 
 interface AnimatedMenuItemProps {
-	icon: React.ForwardRefExoticComponent<
-		AnimatedIconProps & React.RefAttributes<AnimatedIconHandle>
-	>;
+	icon: React.ForwardRefExoticComponent<AnimatedIconProps & React.RefAttributes<AnimatedIconHandle>>;
 	children: ReactNode;
 	href?: string;
 	onClick?: () => void;
 }
 
-const AnimatedMenuItem = ({
-	icon: Icon,
-	children,
-	href,
-	onClick,
-}: AnimatedMenuItemProps) => {
+const AnimatedMenuItem = ({ icon: Icon, children, href, onClick }: AnimatedMenuItemProps) => {
 	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	const handleMouseEnter = useCallback(() => {
@@ -54,11 +47,7 @@ const AnimatedMenuItem = ({
 
 	if (href) {
 		return (
-			<DropdownMenuItem
-				asChild
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-			>
+			<DropdownMenuItem asChild onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
 				<Link href={href} rel="noopener noreferrer" target="_blank">
 					{content}
 				</Link>
@@ -67,11 +56,7 @@ const AnimatedMenuItem = ({
 	}
 
 	return (
-		<DropdownMenuItem
-			onClick={onClick}
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
-		>
+		<DropdownMenuItem onClick={onClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
 			{content}
 		</DropdownMenuItem>
 	);
@@ -127,14 +112,8 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 					size="icon"
 					variant="outline"
 				>
-					<ShareIcon
-						className="group-data-[state=open]/toggle:hidden"
-						ref={iconShareRef}
-					/>
-					<XIcon
-						className="group-data-[state=closed]/toggle:hidden"
-						ref={iconXRef}
-					/>
+					<ShareIcon className="group-data-[state=open]/toggle:hidden" ref={iconShareRef} />
+					<XIcon className="group-data-[state=closed]/toggle:hidden" ref={iconXRef} />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent

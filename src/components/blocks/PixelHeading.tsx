@@ -39,15 +39,13 @@ const ISOLATE_FONT_MAP: Record<string, string> = {
 	mono: 'font-mono',
 };
 
-const resolveIsolateFont = (value: string): string =>
-	ISOLATE_FONT_MAP[value] ?? value;
+const resolveIsolateFont = (value: string): string => ISOLATE_FONT_MAP[value] ?? value;
 
 const PHI = (1 + Math.sqrt(5)) / 2;
 
 const TICK_MS = 50;
 
-const goldenBase = (index: number): number =>
-	Math.floor((index * PHI * FONT_COUNT) % FONT_COUNT);
+const goldenBase = (index: number): number => Math.floor((index * PHI * FONT_COUNT) % FONT_COUNT);
 
 const pseudoRandom = (tick: number, index: number): number =>
 	((tick * 2_654_435_761 + index * 340_573_321) >>> 0) % FONT_COUNT;
@@ -62,15 +60,8 @@ function extractText(children: ReactNode): string {
 	if (Array.isArray(children)) {
 		return children.map(extractText).join('');
 	}
-	if (
-		children !== null &&
-		children !== undefined &&
-		typeof children === 'object' &&
-		'props' in children
-	) {
-		return extractText(
-			(children as ReactElement<{ children?: ReactNode }>).props.children
-		);
+	if (children !== null && children !== undefined && typeof children === 'object' && 'props' in children) {
+		return extractText((children as ReactElement<{ children?: ReactNode }>).props.children);
 	}
 	return '';
 }
@@ -123,8 +114,7 @@ export const PixelHeading = ({
 	useEffect(() => {
 		const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
 		setPrefersReducedMotion(mql.matches);
-		const handler = (e: MediaQueryListEvent) =>
-			setPrefersReducedMotion(e.matches);
+		const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
 		mql.addEventListener('change', handler);
 		return () => mql.removeEventListener('change', handler);
 	}, []);
@@ -295,16 +285,10 @@ export const PixelHeading = ({
 		[cycleInterval, onKeyDown]
 	);
 
-	const uniformIdx =
-		mode === 'uniform'
-			? (charFonts.find((f) => f !== -1) ?? defaultFontIndex)
-			: 0;
+	const uniformIdx = mode === 'uniform' ? (charFonts.find((f) => f !== -1) ?? defaultFontIndex) : 0;
 
 	return (
-		<div
-			className="inline-flex flex-col items-start gap-2"
-			data-slot="pixel-heading"
-		>
+		<div className="inline-flex flex-col items-start gap-2" data-slot="pixel-heading">
 			<Tag
 				aria-label={prefix ? `${prefix} ${text}` : text}
 				className={cn(
@@ -330,12 +314,8 @@ export const PixelHeading = ({
 								<span
 									aria-hidden
 									className={cn(
-										prefixFont !== 'none'
-											? PREFIX_FONT_MAP[prefixFont]
-											: undefined,
-										isolate[char]
-											? resolveIsolateFont(isolate[char])
-											: undefined
+										prefixFont !== 'none' ? PREFIX_FONT_MAP[prefixFont] : undefined,
+										isolate[char] ? resolveIsolateFont(isolate[char]) : undefined
 									)}
 									key={`p${i}`}
 								>
@@ -343,14 +323,7 @@ export const PixelHeading = ({
 								</span>
 							))
 						) : (
-							<span
-								aria-hidden
-								className={
-									prefixFont !== 'none'
-										? PREFIX_FONT_MAP[prefixFont]
-										: undefined
-								}
-							>
+							<span aria-hidden className={prefixFont !== 'none' ? PREFIX_FONT_MAP[prefixFont] : undefined}>
 								{prefix}
 							</span>
 						)}
@@ -364,11 +337,7 @@ export const PixelHeading = ({
 							char === ' ' ? (
 								<span key={i}> </span>
 							) : isolate?.[char] ? (
-								<span
-									aria-hidden
-									className={resolveIsolateFont(isolate[char])}
-									key={i}
-								>
+								<span aria-hidden className={resolveIsolateFont(isolate[char])} key={i}>
 									{char}
 								</span>
 							) : (

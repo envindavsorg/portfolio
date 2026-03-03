@@ -9,8 +9,7 @@ export const GraphFooter = () => {
 		<div className="screen-line-before flex gap-y-2 px-3 py-2 max-sm:flex-col-reverse sm:items-center sm:justify-between">
 			<p className="text-muted-foreground text-xs max-sm:ms-auto sm:text-sm">
 				<span className="font-medium text-theme">
-					<Counter value={Number(totalCount.toLocaleString('en'))} />{' '}
-					contributions
+					<Counter value={Number(totalCount.toLocaleString('en'))} /> contributions
 				</span>{' '}
 				effectuées en <span className="font-medium text-theme">{year}</span>
 			</p>

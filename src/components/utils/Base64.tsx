@@ -9,18 +9,14 @@ import { Textarea } from '@/components/primitives/Textarea';
 import useCopyToClipboard from '@/hooks/useCopyToClipboard';
 import { cn } from '@/lib/utils';
 
-const encodeToBase64 = (
-	text: string
-): { result: string; error: string | null } => {
+const encodeToBase64 = (text: string): { result: string; error: string | null } => {
 	if (!text) {
 		return { result: '', error: null };
 	}
 
 	try {
 		const uint8Array = new TextEncoder().encode(text);
-		const binaryString = Array.from(uint8Array, (byte) =>
-			String.fromCodePoint(byte)
-		).join('');
+		const binaryString = Array.from(uint8Array, (byte) => String.fromCodePoint(byte)).join('');
 		return { result: btoa(binaryString), error: null };
 	} catch {
 		return { result: '', error: "erreur lors de l'encodage" };
@@ -29,9 +25,7 @@ const encodeToBase64 = (
 
 const BASE64_REGEX = /^[A-Za-z0-9+/]*={0,2}$/;
 
-const decodeFromBase64 = (
-	text: string
-): { result: string; error: string | null } => {
+const decodeFromBase64 = (text: string): { result: string; error: string | null } => {
 	if (!text) {
 		return { result: '', error: null };
 	}
@@ -42,19 +36,13 @@ const decodeFromBase64 = (
 		if (!BASE64_REGEX.test(cleaned)) {
 			return {
 				result: '',
-				error:
-					'format Base64 invalide. utilisez uniquement A-Z, a-z, 0-9, +, / et =',
+				error: 'format Base64 invalide. utilisez uniquement A-Z, a-z, 0-9, +, / et =',
 			};
 		}
 
 		const binaryString = atob(decodeURIComponent(cleaned));
-		const uint8Array = Uint8Array.from(
-			binaryString,
-			(char) => char.codePointAt(0) ?? 0
-		);
-		const decoded = new TextDecoder('utf-8', { fatal: true }).decode(
-			uint8Array
-		);
+		const uint8Array = Uint8Array.from(binaryString, (char) => char.codePointAt(0) ?? 0);
+		const decoded = new TextDecoder('utf-8', { fatal: true }).decode(uint8Array);
 
 		if (decoded.includes('\uFFFD')) {
 			return {
@@ -67,8 +55,7 @@ const decodeFromBase64 = (
 	} catch {
 		return {
 			result: '',
-			error:
-				'erreur lors du décodage. vérifiez que le texte est un Base64 valide.',
+			error: 'erreur lors du décodage. vérifiez que le texte est un Base64 valide.',
 		};
 	}
 };
@@ -82,14 +69,7 @@ interface FieldSectionProps {
 	children?: React.ReactNode;
 }
 
-const FieldSection = ({
-	label,
-	htmlFor,
-	value,
-	onCopy,
-	error,
-	children,
-}: FieldSectionProps) => (
+const FieldSection = ({ label, htmlFor, value, onCopy, error, children }: FieldSectionProps) => (
 	<div className="flex flex-col gap-y-3">
 		<div className="flex items-center justify-between">
 			<Label className="text-foreground text-sm" htmlFor={htmlFor}>
@@ -142,9 +122,7 @@ export const Base64 = () => {
 						<Textarea
 							className="outline-0"
 							id="encode-input"
-							onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-								setEncodeInput(event.target.value)
-							}
+							onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setEncodeInput(event.target.value)}
 							placeholder="entrez votre texte ici..."
 							rows={4}
 							spellCheck={false}
@@ -175,9 +153,7 @@ export const Base64 = () => {
 						<Textarea
 							className="outline-0"
 							id="decode-input"
-							onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-								setDecodeInput(event.target.value)
-							}
+							onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setDecodeInput(event.target.value)}
 							placeholder="collez du Base64 ici pour le décoder..."
 							rows={4}
 							spellCheck={false}

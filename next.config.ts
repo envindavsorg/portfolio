@@ -4,9 +4,7 @@ import { z } from 'zod';
 
 (() => {
 	const envSchema = z.object({
-		NODE_ENV: z
-			.enum(['development', 'production', 'test'])
-			.default('development'),
+		NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 		GITHUB_API_TOKEN: z.string().min(1, 'gitHub API token is required !'),
 		GITHUB_USERNAME: z.string().optional(),
 		GITHUB_REPO_NAME: z.string().optional(),
@@ -29,9 +27,7 @@ import { z } from 'zod';
 	}
 
 	if (!process.env.__ENV_VALIDATED) {
-		consola.success(
-			"environment variables look good ! you're safe to ship 🚀\n"
-		);
+		consola.success("environment variables look good ! you're safe to ship 🚀\n");
 		process.env.__ENV_VALIDATED = 'true';
 	}
 })();
@@ -64,11 +60,15 @@ const nextConfig: NextConfig = {
 	async rewrites() {
 		return [
 			{
-				source: '/blog/:slug.mdx',
+				source: '/articles/:slug.mdx',
 				destination: '/blog.mdx/:slug',
 			},
 			{
 				source: '/components/:slug.mdx',
+				destination: '/blog.mdx/:slug',
+			},
+			{
+				source: '/utils/:slug.mdx',
 				destination: '/blog.mdx/:slug',
 			},
 		];

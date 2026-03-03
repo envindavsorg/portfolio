@@ -13,11 +13,7 @@ interface ArticleItemProps {
 	noMetadata?: boolean;
 }
 
-export const ArticleItem = ({
-	article,
-	noTitle = false,
-	noMetadata = false,
-}: ArticleItemProps) => {
+export const ArticleItem = ({ article, noTitle = false, noMetadata = false }: ArticleItemProps) => {
 	const { slug, metadata, reading } = article;
 
 	return (
@@ -80,9 +76,7 @@ export const ArticleItem = ({
 
 			<div className="flex-1 p-4">
 				{noTitle ? (
-					<h2 className="text-balance text-sm lowercase sm:text-base">
-						{metadata.description}
-					</h2>
+					<h2 className="text-balance text-sm lowercase sm:text-base">{metadata.description}</h2>
 				) : (
 					<div className="flex flex-col gap-y-1">
 						<h2 className="text-base lowercase sm:text-xl">{metadata.title}</h2>
@@ -92,9 +86,7 @@ export const ArticleItem = ({
 
 				{!noMetadata && (
 					<div className="mt-4 flex items-center justify-end gap-2 border-edge border-t pt-4 sm:gap-4">
-						<Badge variant="primary">
-							{dayjs(metadata.createdAt).format('ddd DD MMM')}
-						</Badge>
+						<Badge variant="primary">{dayjs(metadata.createdAt).format('ddd DD MMM')}</Badge>
 						<Badge variant="primary">{reading?.time}</Badge>
 						<Badge variant="primary">{reading?.words} mots</Badge>
 					</div>

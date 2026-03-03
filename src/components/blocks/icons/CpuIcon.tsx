@@ -71,12 +71,7 @@ export const CpuIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 			[controls, onMouseLeave]
 		);
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}
@@ -90,62 +85,14 @@ export const CpuIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 				>
 					<rect height="16" rx="2" width="16" x="4" y="4" />
 					<rect height="6" rx="1" width="6" x="9" y="9" />
-					<motion.path
-						animate={controls}
-						d="M15 2v2"
-						initial="normal"
-						transition={TRANSITION}
-						variants={Y_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						d="M15 20v2"
-						initial="normal"
-						transition={TRANSITION}
-						variants={Y_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						d="M2 15h2"
-						initial="normal"
-						transition={TRANSITION}
-						variants={X_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						d="M2 9h2"
-						initial="normal"
-						transition={TRANSITION}
-						variants={X_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						d="M20 15h2"
-						initial="normal"
-						transition={TRANSITION}
-						variants={X_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						d="M20 9h2"
-						initial="normal"
-						transition={TRANSITION}
-						variants={X_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						d="M9 2v2"
-						initial="normal"
-						transition={TRANSITION}
-						variants={Y_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						d="M9 20v2"
-						initial="normal"
-						transition={TRANSITION}
-						variants={Y_VARIANTS}
-					/>
+					<motion.path animate={controls} d="M15 2v2" initial="normal" transition={TRANSITION} variants={Y_VARIANTS} />
+					<motion.path animate={controls} d="M15 20v2" initial="normal" transition={TRANSITION} variants={Y_VARIANTS} />
+					<motion.path animate={controls} d="M2 15h2" initial="normal" transition={TRANSITION} variants={X_VARIANTS} />
+					<motion.path animate={controls} d="M2 9h2" initial="normal" transition={TRANSITION} variants={X_VARIANTS} />
+					<motion.path animate={controls} d="M20 15h2" initial="normal" transition={TRANSITION} variants={X_VARIANTS} />
+					<motion.path animate={controls} d="M20 9h2" initial="normal" transition={TRANSITION} variants={X_VARIANTS} />
+					<motion.path animate={controls} d="M9 2v2" initial="normal" transition={TRANSITION} variants={Y_VARIANTS} />
+					<motion.path animate={controls} d="M9 20v2" initial="normal" transition={TRANSITION} variants={Y_VARIANTS} />
 				</svg>
 			</div>
 		);

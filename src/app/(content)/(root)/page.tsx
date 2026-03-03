@@ -19,11 +19,7 @@ import GLOBAL_DATA from '@/data/global';
 import { dayjs } from '@/lib/functions';
 import { buildContentMetadata } from '@/lib/open-graph';
 
-const About = dynamic(() =>
-	import('@/app/(content)/(root)/_components/about/About').then(
-		(mod) => mod.About
-	)
-);
+const About = dynamic(() => import('@/app/(content)/(root)/_components/about/About').then((mod) => mod.About));
 
 export const revalidate = 3600;
 

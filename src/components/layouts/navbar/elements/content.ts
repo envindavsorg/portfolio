@@ -99,10 +99,7 @@ export const COMMANDS: CommandGroupDef[] = [
 	},
 ];
 
-export const CATEGORY: Record<
-	string,
-	{ route: string; heading: string; kind: CommandKind }
-> = {
+export const CATEGORY: Record<string, { route: string; heading: string; kind: CommandKind }> = {
 	article: {
 		route: 'blog',
 		heading: 'derniers articles de blog :',

@@ -1,12 +1,6 @@
 'use client';
 
-import {
-	createContext,
-	type ReactNode,
-	useCallback,
-	useContext,
-	useState,
-} from 'react';
+import { createContext, type ReactNode, useCallback, useContext, useState } from 'react';
 
 interface NavBarContextValue {
 	isSecondaryMenuOpen: boolean;
@@ -27,20 +21,12 @@ export const useNavBar = () => {
 export const NavBarProvider = ({ children }: { children: ReactNode }) => {
 	const [isSecondaryMenuOpen, setIsSecondaryMenuOpen] = useState(false);
 
-	const toggleSecondaryMenu = useCallback(
-		() => setIsSecondaryMenuOpen((prev) => !prev),
-		[]
-	);
+	const toggleSecondaryMenu = useCallback(() => setIsSecondaryMenuOpen((prev) => !prev), []);
 
-	const closeSecondaryMenu = useCallback(
-		() => setIsSecondaryMenuOpen(false),
-		[]
-	);
+	const closeSecondaryMenu = useCallback(() => setIsSecondaryMenuOpen(false), []);
 
 	return (
-		<NavBarContext.Provider
-			value={{ isSecondaryMenuOpen, toggleSecondaryMenu, closeSecondaryMenu }}
-		>
+		<NavBarContext.Provider value={{ isSecondaryMenuOpen, toggleSecondaryMenu, closeSecondaryMenu }}>
 			{children}
 		</NavBarContext.Provider>
 	);

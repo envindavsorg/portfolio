@@ -20,12 +20,7 @@ type Props = React.ComponentProps<typeof motion.svg> & {
 	onAnimationComplete?: () => void;
 };
 
-export const AppleHelloEffect = ({
-	className,
-	speed = 1,
-	onAnimationComplete,
-	...props
-}: Props) => {
+export const AppleHelloEffect = ({ className, speed = 1, onAnimationComplete, ...props }: Props) => {
 	const calc = (x: number) => x * speed;
 
 	return (

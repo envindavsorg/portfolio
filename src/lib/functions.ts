@@ -36,10 +36,7 @@ export const downloadFile = (url: string, filename: string) => {
 
 type PromptType = 'component' | 'general' | 'summary';
 
-export const getPrompt = (
-	url: string,
-	type: PromptType = 'general'
-): string => {
+export const getPrompt = (url: string, type: PromptType = 'general'): string => {
 	switch (type) {
 		case 'component':
 			return `
@@ -71,13 +68,9 @@ Please analyze the content. I will be asking specific questions about its implem
 
 const PROTOCOL_REGEX = /^(?:\w+:)?\/\//;
 
-export const urlToFilename = (url: string) =>
-	url.replace(PROTOCOL_REGEX, '').replace(/[^a-zA-Z0-9._-]/g, '-');
+export const urlToFilename = (url: string) => url.replace(PROTOCOL_REGEX, '').replace(/[^a-zA-Z0-9._-]/g, '-');
 
-export const addQueryParams = (
-	urlString: string,
-	query: Record<string, string>
-): string => {
+export const addQueryParams = (urlString: string, query: Record<string, string>): string => {
 	const dummyBase = 'http://base.com';
 	const isRelative = !urlString.startsWith('http');
 

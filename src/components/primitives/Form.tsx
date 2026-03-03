@@ -26,9 +26,7 @@ interface FormFieldContextValue<
 	name: TName;
 }
 
-const FormFieldContext = createContext<FormFieldContextValue>(
-	{} as FormFieldContextValue
-);
+const FormFieldContext = createContext<FormFieldContextValue>({} as FormFieldContextValue);
 
 export const FormField = <
 	TFieldValues extends FieldValues = FieldValues,
@@ -68,36 +66,24 @@ interface FormItemContextValue {
 	id: string;
 }
 
-const FormItemContext = createContext<FormItemContextValue>(
-	{} as FormItemContextValue
-);
+const FormItemContext = createContext<FormItemContextValue>({} as FormItemContextValue);
 
 export const FormItem = ({ className, ...props }: ComponentProps<'div'>) => {
 	const id = useId();
 
 	return (
 		<FormItemContext.Provider value={{ id }}>
-			<div
-				className={cn('grid gap-2', className)}
-				data-slot="form-item"
-				{...props}
-			/>
+			<div className={cn('grid gap-2', className)} data-slot="form-item" {...props} />
 		</FormItemContext.Provider>
 	);
 };
 
-export const FormLabel = ({
-	className,
-	...props
-}: ComponentProps<typeof LabelPrimitive.Root>) => {
+export const FormLabel = ({ className, ...props }: ComponentProps<typeof LabelPrimitive.Root>) => {
 	const { error, formItemId } = useFormField();
 
 	return (
 		<Label
-			className={cn(
-				'font-medium text-xs data-[error=true]:text-destructive',
-				className
-			)}
+			className={cn('font-medium text-xs data-[error=true]:text-destructive', className)}
 			data-error={!!error}
 			data-slot="form-label"
 			htmlFor={formItemId}
@@ -107,14 +93,11 @@ export const FormLabel = ({
 };
 
 export const FormControl = ({ ...props }: ComponentProps<typeof Slot>) => {
-	const { error, formItemId, formDescriptionId, formMessageId } =
-		useFormField();
+	const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
 	return (
 		<Slot
-			aria-describedby={
-				error ? `${formDescriptionId} ${formMessageId}` : `${formDescriptionId}`
-			}
+			aria-describedby={error ? `${formDescriptionId} ${formMessageId}` : `${formDescriptionId}`}
 			aria-invalid={!!error}
 			data-slot="form-control"
 			id={formItemId}
@@ -123,10 +106,7 @@ export const FormControl = ({ ...props }: ComponentProps<typeof Slot>) => {
 	);
 };
 
-export const FormDescription = ({
-	className,
-	...props
-}: ComponentProps<'p'>) => {
+export const FormDescription = ({ className, ...props }: ComponentProps<'p'>) => {
 	const { formDescriptionId } = useFormField();
 
 	return (

@@ -17,33 +17,24 @@ interface ExperienceItemProps {
 	isLast?: boolean;
 }
 
-export const ExperienceItem = ({
-	experience,
-	isLast = false,
-}: ExperienceItemProps) => {
+export const ExperienceItem = ({ experience, isLast = false }: ExperienceItemProps) => {
 	const { start, end } = experience.period;
 	const isOngoing = !end;
 
 	return (
 		<CollapsibleWithContext>
 			<article className="screen-line-before flex items-center hover:bg-accent2">
-				<CollapsibleTrigger
-					className={cn('w-full', experience.link && 'cursor-pointer')}
-				>
+				<CollapsibleTrigger className={cn('w-full', experience.link && 'cursor-pointer')}>
 					<div className="flex w-full flex-1 items-center justify-between">
 						<div className="w-full select-none border-edge border-r p-4">
 							<div className="flex items-center gap-x-3 [&_h2]:font-pixel-square [&_h2]:lowercase">
 								{experience.isCurrentEmployer && <PulsatingCircle />}
-								<h2 className="text-left text-base sm:text-xl">
-									{experience.company}
-								</h2>
+								<h2 className="text-left text-base sm:text-xl">{experience.company}</h2>
 							</div>
 						</div>
 						{experience.link && (
 							<div className="relative m-4 flex size-6 shrink-0 items-center justify-center sm:size-8">
-								{experience.description && experience.skills && (
-									<CollapsibleChevronsIcon />
-								)}
+								{experience.description && experience.skills && <CollapsibleChevronsIcon />}
 							</div>
 						)}
 					</div>
@@ -53,14 +44,8 @@ export const ExperienceItem = ({
 			<div className="screen-line-before flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
 				<span className="text-theme">---</span>
 				<div className="flex items-center gap-2 sm:gap-4">
-					{experience.type && (
-						<Badge className="lowercase">{experience.type}</Badge>
-					)}
-					{experience.title && (
-						<Badge className="text-theme lowercase max-sm:hidden">
-							{experience.title}
-						</Badge>
-					)}
+					{experience.type && <Badge className="lowercase">{experience.type}</Badge>}
+					{experience.title && <Badge className="text-theme lowercase max-sm:hidden">{experience.title}</Badge>}
 					<Badge className="lowercase">
 						{start} - {isOngoing ? "aujourd'hui" : end}
 					</Badge>

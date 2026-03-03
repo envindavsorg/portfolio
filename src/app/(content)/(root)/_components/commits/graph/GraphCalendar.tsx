@@ -1,18 +1,7 @@
 'use client';
 
-import {
-	Fragment,
-	type HTMLAttributes,
-	type ReactNode,
-	useCallback,
-	useRef,
-	useState,
-} from 'react';
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from '@/components/primitives/Tooltip';
+import { Fragment, type HTMLAttributes, type ReactNode, useCallback, useRef, useState } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/Tooltip';
 import { getMonthLabels } from '@/lib/commits';
 import { dayjs } from '@/lib/functions';
 import { BLOCK_MARGIN, BLOCK_SIZE } from './config';
@@ -23,18 +12,11 @@ interface HoveredBlock {
 }
 
 type GraphCalendarProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
-	children: (props: {
-		activity: CommitActivity;
-		dayIndex: number;
-		weekIndex: number;
-	}) => ReactNode;
+	children: (props: { activity: CommitActivity; dayIndex: number; weekIndex: number }) => ReactNode;
 };
 
 const formatContribution = (count: number, date: string) => {
-	const label =
-		count === 0
-			? 'aucune contribution'
-			: `${count} contribution${count > 1 ? 's' : ''}`;
+	const label = count === 0 ? 'aucune contribution' : `${count} contribution${count > 1 ? 's' : ''}`;
 	return `${label} le ${dayjs(date).format('ddd DD MMM')}`;
 };
 
@@ -109,9 +91,7 @@ export const GraphCalendar = ({ children, ...props }: GraphCalendarProps) => {
 								return null;
 							}
 							return (
-								<Fragment key={`${weekIndex}-${dayIndex}`}>
-									{children({ activity, dayIndex, weekIndex })}
-								</Fragment>
+								<Fragment key={`${weekIndex}-${dayIndex}`}>{children({ activity, dayIndex, weekIndex })}</Fragment>
 							);
 						})
 					)}
@@ -122,8 +102,7 @@ export const GraphCalendar = ({ children, ...props }: GraphCalendarProps) => {
 					<div className="pointer-events-none absolute" ref={anchorRef} />
 				</TooltipTrigger>
 				<TooltipContent side="top" sideOffset={4}>
-					{hovered &&
-						formatContribution(hovered.activity.count, hovered.activity.date)}
+					{hovered && formatContribution(hovered.activity.count, hovered.activity.date)}
 				</TooltipContent>
 			</Tooltip>
 		</div>

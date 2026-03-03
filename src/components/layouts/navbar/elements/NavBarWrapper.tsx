@@ -8,8 +8,7 @@ export const NavBarWrapper = (props: ComponentProps<'header'>) => {
 	const { scrollY } = useScroll();
 	const headerRef = useRef<HTMLHeadElement>(null);
 
-	const updateAffix = (y: number) =>
-		headerRef.current?.toggleAttribute('data-affix', y >= 8);
+	const updateAffix = (y: number) => headerRef.current?.toggleAttribute('data-affix', y >= 8);
 
 	useMotionValueEvent(scrollY, 'change', updateAffix);
 

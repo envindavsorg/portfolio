@@ -41,12 +41,7 @@ export const CogIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 			[controls, onMouseLeave]
 		);
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<motion.svg
 					animate={controls}
 					fill="none"

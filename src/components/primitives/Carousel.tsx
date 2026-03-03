@@ -1,8 +1,6 @@
 'use client';
 
-import useEmblaCarousel, {
-	type UseEmblaCarouselType,
-} from 'embla-carousel-react';
+import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
 import {
 	type ComponentProps,
 	createContext,
@@ -54,14 +52,8 @@ export const useCarousel = () => {
 	return context;
 };
 
-export const Carousel = forwardRef<
-	HTMLDivElement,
-	HTMLAttributes<HTMLDivElement> & CarouselProps
->(
-	(
-		{ orientation = 'horizontal', opts, setApi, plugins, children, ...props },
-		ref
-	) => {
+export const Carousel = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & CarouselProps>(
+	({ orientation = 'horizontal', opts, setApi, plugins, children, ...props }, ref) => {
 		const [carouselRef, api] = useEmblaCarousel(
 			{
 				...opts,
@@ -130,8 +122,7 @@ export const Carousel = forwardRef<
 					carouselRef,
 					api,
 					opts,
-					orientation:
-						orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
+					orientation: orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
 					scrollPrev,
 					scrollNext,
 					canScrollPrev,
@@ -155,94 +146,86 @@ export const Carousel = forwardRef<
 	}
 );
 
-export const CarouselContent = forwardRef<
-	HTMLDivElement,
-	HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-	const { carouselRef, orientation } = useCarousel();
+export const CarouselContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+	({ className, ...props }, ref) => {
+		const { carouselRef, orientation } = useCarousel();
 
-	return (
-		<div className="overflow-hidden" ref={carouselRef}>
+		return (
+			<div className="overflow-hidden" ref={carouselRef}>
+				<div
+					className={cn('flex', orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col', className)}
+					ref={ref}
+					{...props}
+				/>
+			</div>
+		);
+	}
+);
+
+export const CarouselItem = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+	({ className, ...props }, ref) => {
+		const { orientation } = useCarousel();
+
+		return (
 			<div
 				className={cn(
-					'flex',
-					orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
+					'flex min-w-0 shrink-0 grow-0 basis-full items-center justify-center',
+					orientation === 'horizontal' ? 'pl-4' : 'pt-4',
 					className
 				)}
 				ref={ref}
 				{...props}
 			/>
-		</div>
-	);
-});
+		);
+	}
+);
 
-export const CarouselItem = forwardRef<
-	HTMLDivElement,
-	HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-	const { orientation } = useCarousel();
+export const CarouselNext = forwardRef<HTMLButtonElement, ComponentProps<typeof Button>>(
+	({ className, variant = 'outline', size = 'icon', ...props }, ref) => {
+		const { scrollNext, canScrollNext } = useCarousel();
 
-	return (
-		<div
-			className={cn(
-				'flex min-w-0 shrink-0 grow-0 basis-full items-center justify-center',
-				orientation === 'horizontal' ? 'pl-4' : 'pt-4',
-				className
-			)}
-			ref={ref}
-			{...props}
-		/>
-	);
-});
+		const iconRef = useRef<AnimatedIconHandle>(null);
 
-export const CarouselNext = forwardRef<
-	HTMLButtonElement,
-	ComponentProps<typeof Button>
->(({ className, variant = 'outline', size = 'icon', ...props }, ref) => {
-	const { scrollNext, canScrollNext } = useCarousel();
+		return (
+			<Button
+				className="absolute right-2 bottom-2 sm:bottom-4"
+				disabled={!canScrollNext}
+				onClick={scrollNext}
+				onMouseEnter={() => iconRef.current?.startAnimation()}
+				onMouseLeave={() => iconRef.current?.stopAnimation()}
+				ref={ref}
+				size={size}
+				variant={variant}
+				{...props}
+			>
+				<ArrowRightIcon ref={iconRef} />
+				<span className="sr-only">Next slide</span>
+			</Button>
+		);
+	}
+);
 
-	const iconRef = useRef<AnimatedIconHandle>(null);
+export const CarouselPrevious = forwardRef<HTMLButtonElement, ComponentProps<typeof Button>>(
+	({ className, variant = 'outline', size = 'icon', ...props }, ref) => {
+		const { scrollPrev, canScrollPrev } = useCarousel();
 
-	return (
-		<Button
-			className="absolute right-2 bottom-2 sm:bottom-4"
-			disabled={!canScrollNext}
-			onClick={scrollNext}
-			onMouseEnter={() => iconRef.current?.startAnimation()}
-			onMouseLeave={() => iconRef.current?.stopAnimation()}
-			ref={ref}
-			size={size}
-			variant={variant}
-			{...props}
-		>
-			<ArrowRightIcon ref={iconRef} />
-			<span className="sr-only">Next slide</span>
-		</Button>
-	);
-});
+		const iconRef = useRef<AnimatedIconHandle>(null);
 
-export const CarouselPrevious = forwardRef<
-	HTMLButtonElement,
-	ComponentProps<typeof Button>
->(({ className, variant = 'outline', size = 'icon', ...props }, ref) => {
-	const { scrollPrev, canScrollPrev } = useCarousel();
-
-	const iconRef = useRef<AnimatedIconHandle>(null);
-
-	return (
-		<Button
-			className="absolute right-12 bottom-2 sm:bottom-4"
-			disabled={!canScrollPrev}
-			onClick={scrollPrev}
-			onMouseEnter={() => iconRef.current?.startAnimation()}
-			onMouseLeave={() => iconRef.current?.stopAnimation()}
-			ref={ref}
-			size={size}
-			variant={variant}
-			{...props}
-		>
-			<ArrowLeftIcon ref={iconRef} />
-			<span className="sr-only">Previous slide</span>
-		</Button>
-	);
-});
+		return (
+			<Button
+				className="absolute right-12 bottom-2 sm:bottom-4"
+				disabled={!canScrollPrev}
+				onClick={scrollPrev}
+				onMouseEnter={() => iconRef.current?.startAnimation()}
+				onMouseLeave={() => iconRef.current?.stopAnimation()}
+				ref={ref}
+				size={size}
+				variant={variant}
+				{...props}
+			>
+				<ArrowLeftIcon ref={iconRef} />
+				<span className="sr-only">Previous slide</span>
+			</Button>
+		);
+	}
+);

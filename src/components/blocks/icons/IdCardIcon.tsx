@@ -58,12 +58,7 @@ export const IdCardIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}
@@ -75,20 +70,8 @@ export const IdCardIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<motion.path
-						animate={controls}
-						custom={2}
-						d="M16 10h2"
-						initial="normal"
-						variants={VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						custom={2}
-						d="M16 14h2"
-						initial="normal"
-						variants={VARIANTS}
-					/>
+					<motion.path animate={controls} custom={2} d="M16 10h2" initial="normal" variants={VARIANTS} />
+					<motion.path animate={controls} custom={2} d="M16 14h2" initial="normal" variants={VARIANTS} />
 					<motion.path
 						animate={controls}
 						custom={0}
@@ -96,15 +79,7 @@ export const IdCardIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 						initial="normal"
 						variants={VARIANTS}
 					/>
-					<motion.circle
-						animate={controls}
-						custom={1}
-						cx="9"
-						cy="11"
-						initial="normal"
-						r="2"
-						variants={VARIANTS}
-					/>
+					<motion.circle animate={controls} custom={1} cx="9" cy="11" initial="normal" r="2" variants={VARIANTS} />
 					<rect height="14" rx="2" width="20" x="2" y="5" />
 				</svg>
 			</div>

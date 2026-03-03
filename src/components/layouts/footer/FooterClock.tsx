@@ -59,13 +59,7 @@ export const FooterClock = ({ isActionnable = true }: FooterClockProps) => {
 
 	if (!time) {
 		return (
-			<div
-				className={cn(
-					'text-balance',
-					isActionnable && 'text-sm tracking-tight',
-					!isActionnable && 'text-base'
-				)}
-			>
+			<div className={cn('text-balance', isActionnable && 'text-sm tracking-tight', !isActionnable && 'text-base')}>
 				00:00:00, dim. 00 janv. 0000
 			</div>
 		);
@@ -89,11 +83,7 @@ export const FooterClock = ({ isActionnable = true }: FooterClockProps) => {
 			)}
 		>
 			<time
-				className={cn(
-					'text-balance',
-					isActionnable && 'text-sm tracking-tight',
-					!isActionnable && 'text-base'
-				)}
+				className={cn('text-balance', isActionnable && 'text-sm tracking-tight', !isActionnable && 'text-base')}
 				dateTime={time.toISOString()}
 			>
 				{hours}:{minutes}:{seconds}

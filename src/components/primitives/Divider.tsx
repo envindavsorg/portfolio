@@ -8,16 +8,8 @@ interface DividerProps {
 	className?: string;
 }
 
-export const Divider = ({
-	type = 'full',
-	before = true,
-	after = true,
-	border = true,
-	className,
-}: DividerProps) => (
-	<div
-		className={cn(before && 'screen-line-before', after && 'screen-line-after')}
-	>
+export const Divider = ({ type = 'full', before = true, after = true, border = true, className }: DividerProps) => (
+	<div className={cn(before && 'screen-line-before', after && 'screen-line-after')}>
 		<div
 			className={cn(
 				className,

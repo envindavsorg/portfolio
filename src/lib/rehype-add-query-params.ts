@@ -4,18 +4,17 @@ import type { UnistNode, UnistTree } from './remark-code-import';
 
 const SKIP_PREFIXES = ['/', 'mailto:', 'tel:', '#'];
 
-export const rehypeAddQueryParams =
-	(params: Record<string, string>) => (tree: UnistTree) => {
-		visit(tree, (node: UnistNode) => {
-			if (node.type !== 'element' || node.tagName !== 'a' || !node.properties) {
-				return;
-			}
+export const rehypeAddQueryParams = (params: Record<string, string>) => (tree: UnistTree) => {
+	visit(tree, (node: UnistNode) => {
+		if (node.type !== 'element' || node.tagName !== 'a' || !node.properties) {
+			return;
+		}
 
-			const href = node.properties.href as string | undefined;
-			if (!href || SKIP_PREFIXES.some((prefix) => href.startsWith(prefix))) {
-				return;
-			}
+		const href = node.properties.href as string | undefined;
+		if (!href || SKIP_PREFIXES.some((prefix) => href.startsWith(prefix))) {
+			return;
+		}
 
-			node.properties.href = addQueryParams(href, params);
-		});
-	};
+		node.properties.href = addQueryParams(href, params);
+	});
+};

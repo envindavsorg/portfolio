@@ -34,8 +34,7 @@ const CONTRIBUTION_LEVEL_MAP: Record<ContributionLevel, number> = {
 	FOURTH_QUARTILE: 4,
 };
 
-export const contributionLevelToNumber = (level: ContributionLevel): number =>
-	CONTRIBUTION_LEVEL_MAP[level];
+export const contributionLevelToNumber = (level: ContributionLevel): number => CONTRIBUTION_LEVEL_MAP[level];
 
 export const eachDayOfInterval = (start: Dayjs, end: Dayjs): Dayjs[] => {
 	const days: Dayjs[] = [];
@@ -49,10 +48,7 @@ export const eachDayOfInterval = (start: Dayjs, end: Dayjs): Dayjs[] => {
 
 export const nextDay = (date: Dayjs, targetWeekDay: WeekDay): Dayjs => {
 	const currentDay = date.day();
-	const daysToAdd =
-		targetWeekDay >= currentDay
-			? targetWeekDay - currentDay
-			: 7 - currentDay + targetWeekDay;
+	const daysToAdd = targetWeekDay >= currentDay ? targetWeekDay - currentDay : 7 - currentDay + targetWeekDay;
 	return date.add(daysToAdd, 'day');
 };
 
@@ -72,10 +68,7 @@ export const fillHoles = (activities: CommitActivity[]): CommitActivity[] => {
 	});
 };
 
-export const groupByWeeks = (
-	activities: CommitActivity[],
-	weekStart: WeekDay = 0
-): Week[] => {
+export const groupByWeeks = (activities: CommitActivity[], weekStart: WeekDay = 0): Week[] => {
 	if (activities.length === 0) {
 		return [];
 	}
@@ -83,26 +76,16 @@ export const groupByWeeks = (
 	const normalized = fillHoles(activities);
 	const firstDate = dayjs(normalized[0]!.date);
 	const firstCalendarDate =
-		firstDate.day() === weekStart
-			? firstDate
-			: nextDay(firstDate, weekStart).subtract(1, 'week');
+		firstDate.day() === weekStart ? firstDate : nextDay(firstDate, weekStart).subtract(1, 'week');
 
 	const padding = firstDate.diff(firstCalendarDate, 'day');
-	const padded: (CommitActivity | undefined)[] = [
-		...Array.from<undefined>({ length: padding }),
-		...normalized,
-	];
+	const padded: (CommitActivity | undefined)[] = [...Array.from<undefined>({ length: padding }), ...normalized];
 
 	const numberOfWeeks = Math.ceil(padded.length / 7);
-	return Array.from({ length: numberOfWeeks }, (_, i) =>
-		padded.slice(i * 7, i * 7 + 7)
-	);
+	return Array.from({ length: numberOfWeeks }, (_, i) => padded.slice(i * 7, i * 7 + 7));
 };
 
-export const getMonthLabels = (
-	weeks: Week[],
-	monthNames: string[] = DEFAULT_MONTH_LABELS
-): MonthLabel[] =>
+export const getMonthLabels = (weeks: Week[], monthNames: string[] = DEFAULT_MONTH_LABELS): MonthLabel[] =>
 	weeks
 		.reduce<MonthLabel[]>((labels, week, weekIndex) => {
 			const firstActivity = week.find((activity) => activity !== undefined);
@@ -112,9 +95,7 @@ export const getMonthLabels = (
 
 			const month = monthNames[dayjs(firstActivity.date).month()];
 			if (!month) {
-				throw new Error(
-					`Undefined month label for ${dayjs(firstActivity.date).format('MMM')}.`
-				);
+				throw new Error(`Undefined month label for ${dayjs(firstActivity.date).format('MMM')}.`);
 			}
 
 			const prevLabel = labels.at(-1);

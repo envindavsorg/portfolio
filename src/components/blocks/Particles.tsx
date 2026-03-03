@@ -13,9 +13,7 @@ const canRender = (): boolean => {
 	if (typeof window === 'undefined') {
 		return false;
 	}
-	const reducedMotion = window.matchMedia(
-		'(prefers-reduced-motion: reduce)'
-	).matches;
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	return !reducedMotion && (navigator.hardwareConcurrency ?? 2) > 2;
 };
 
@@ -53,9 +51,7 @@ interface SparklesProps {
 	density?: number;
 }
 
-export const Particles = memo(function Sparkles({
-	density = 50,
-}: SparklesProps) {
+export const Particles = memo(function Sparkles({ density = 50 }: SparklesProps) {
 	const { resolvedTheme } = useTheme();
 	const [ready, setReady] = useState(!!Cached);
 
@@ -66,11 +62,10 @@ export const Particles = memo(function Sparkles({
 
 		let active = true;
 		const timer = setTimeout(async () => {
-			const [{ default: P, initParticlesEngine }, { loadSlim }] =
-				await Promise.all([
-					import('@tsparticles/react'),
-					import('@tsparticles/slim'),
-				]);
+			const [{ default: P, initParticlesEngine }, { loadSlim }] = await Promise.all([
+				import('@tsparticles/react'),
+				import('@tsparticles/slim'),
+			]);
 			init ??= initParticlesEngine(loadSlim);
 			await init;
 			if (active) {

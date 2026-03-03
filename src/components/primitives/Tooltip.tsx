@@ -8,22 +8,13 @@ type TooltipProviderProps = ComponentProps<typeof TooltipPrimitive.Provider> & {
 	delay?: number;
 };
 
-export const TooltipProvider = ({
-	delay = 0,
-	...props
-}: TooltipProviderProps) => (
-	<TooltipPrimitive.Provider
-		data-slot="tooltip-provider"
-		delayDuration={delay}
-		{...props}
-	/>
+export const TooltipProvider = ({ delay = 0, ...props }: TooltipProviderProps) => (
+	<TooltipPrimitive.Provider data-slot="tooltip-provider" delayDuration={delay} {...props} />
 );
 
 type TooltipProps = ComponentProps<typeof TooltipPrimitive.Root>;
 
-export const Tooltip = ({ ...props }: TooltipProps) => (
-	<TooltipPrimitive.Root data-slot="tooltip" {...props} />
-);
+export const Tooltip = ({ ...props }: TooltipProps) => <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
 
 type TooltipTriggerProps = ComponentProps<typeof TooltipPrimitive.Trigger>;
 
@@ -35,11 +26,7 @@ type TooltipContentProps = ComponentProps<typeof TooltipPrimitive.Content> & {
 	offset?: number;
 };
 
-export const TooltipContent = ({
-	offset = 5,
-	children,
-	...props
-}: TooltipContentProps) => (
+export const TooltipContent = ({ offset = 5, children, ...props }: TooltipContentProps) => (
 	<TooltipPrimitive.Portal>
 		<TooltipPrimitive.Content
 			className={cn(

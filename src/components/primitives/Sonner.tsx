@@ -1,12 +1,6 @@
 'use client';
 
-import {
-	CheckCircleIcon,
-	CircleNotchIcon,
-	InfoIcon,
-	WarningIcon,
-	XSquareIcon,
-} from '@phosphor-icons/react';
+import { CheckCircleIcon, CircleNotchIcon, InfoIcon, WarningIcon, XSquareIcon } from '@phosphor-icons/react';
 import { useMediaQuery } from '@uidotdev/usehooks';
 import { useTheme } from 'next-themes';
 import type { CSSProperties } from 'react';
@@ -20,19 +14,11 @@ export const Toaster = ({ ...props }: ToasterProps) => {
 		<Sonner
 			className="toaster group"
 			icons={{
-				success: (
-					<CheckCircleIcon className="size-5 text-green-600 sm:size-6 dark:text-green-300" />
-				),
-				info: (
-					<InfoIcon className="size-5 text-blue-600 sm:size-6 dark:text-blue-300" />
-				),
-				warning: (
-					<WarningIcon className="size-5 text-amber-600 sm:size-6 dark:text-amber-300" />
-				),
+				success: <CheckCircleIcon className="size-5 text-green-600 sm:size-6 dark:text-green-300" />,
+				info: <InfoIcon className="size-5 text-blue-600 sm:size-6 dark:text-blue-300" />,
+				warning: <WarningIcon className="size-5 text-amber-600 sm:size-6 dark:text-amber-300" />,
 				error: <XSquareIcon className="size-5 text-destructive sm:size-6" />,
-				loading: (
-					<CircleNotchIcon className="size-5 animate-spin text-theme sm:size-6" />
-				),
+				loading: <CircleNotchIcon className="size-5 animate-spin text-theme sm:size-6" />,
 			}}
 			position={isDesktop ? 'top-right' : 'top-center'}
 			style={

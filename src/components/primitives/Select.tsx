@@ -21,19 +21,13 @@ import {
 import type React from 'react';
 import { cn } from '@/lib/utils';
 
-export const Select = ({ ...props }: React.ComponentProps<typeof Root>) => (
-	<Root data-slot="select" {...props} />
-);
+export const Select = ({ ...props }: React.ComponentProps<typeof Root>) => <Root data-slot="select" {...props} />;
 
-export const SelectGroup = ({
-	...props
-}: React.ComponentProps<typeof Group>) => (
+export const SelectGroup = ({ ...props }: React.ComponentProps<typeof Group>) => (
 	<Group data-slot="select-group" {...props} />
 );
 
-export const SelectValue = ({
-	...props
-}: React.ComponentProps<typeof Value>) => (
+export const SelectValue = ({ ...props }: React.ComponentProps<typeof Value>) => (
 	<Value data-slot="select-value" {...props} />
 );
 
@@ -61,15 +55,9 @@ export const SelectTrigger = ({
 	</Trigger>
 );
 
-const SelectScrollUpButton = ({
-	className,
-	...props
-}: React.ComponentProps<typeof ScrollUpButton>) => (
+const SelectScrollUpButton = ({ className, ...props }: React.ComponentProps<typeof ScrollUpButton>) => (
 	<ScrollUpButton
-		className={cn(
-			'flex cursor-default items-center justify-center py-1',
-			className
-		)}
+		className={cn('flex cursor-default items-center justify-center py-1', className)}
 		data-slot="select-scroll-up-button"
 		{...props}
 	>
@@ -77,15 +65,9 @@ const SelectScrollUpButton = ({
 	</ScrollUpButton>
 );
 
-const SelectScrollDownButton = ({
-	className,
-	...props
-}: React.ComponentProps<typeof ScrollDownButton>) => (
+const SelectScrollDownButton = ({ className, ...props }: React.ComponentProps<typeof ScrollDownButton>) => (
 	<ScrollDownButton
-		className={cn(
-			'flex cursor-default items-center justify-center py-1',
-			className
-		)}
+		className={cn('flex cursor-default items-center justify-center py-1', className)}
 		data-slot="select-scroll-down-button"
 		{...props}
 	>
@@ -128,22 +110,11 @@ export const SelectContent = ({
 	</Portal>
 );
 
-export const SelectLabel = ({
-	className,
-	...props
-}: React.ComponentProps<typeof Label>) => (
-	<Label
-		className={cn('px-2 py-1.5 text-muted-foreground text-xs', className)}
-		data-slot="select-label"
-		{...props}
-	/>
+export const SelectLabel = ({ className, ...props }: React.ComponentProps<typeof Label>) => (
+	<Label className={cn('px-2 py-1.5 text-muted-foreground text-xs', className)} data-slot="select-label" {...props} />
 );
 
-export const SelectItem = ({
-	className,
-	children,
-	...props
-}: React.ComponentProps<typeof Item>) => (
+export const SelectItem = ({ className, children, ...props }: React.ComponentProps<typeof Item>) => (
 	<Item
 		className={cn(
 			"relative flex w-full cursor-default select-none items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
@@ -161,10 +132,7 @@ export const SelectItem = ({
 	</Item>
 );
 
-export const SelectSeparator = ({
-	className,
-	...props
-}: React.ComponentProps<typeof Separator>) => (
+export const SelectSeparator = ({ className, ...props }: React.ComponentProps<typeof Separator>) => (
 	<Separator
 		className={cn('pointer-events-none -mx-1 my-1 h-px bg-border', className)}
 		data-slot="select-separator"

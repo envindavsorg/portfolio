@@ -1,13 +1,6 @@
 import type { ElementType } from 'react';
 
-export type CommandKind =
-	| 'command'
-	| 'page'
-	| 'utils'
-	| 'article'
-	| 'components'
-	| 'section'
-	| 'download';
+export type CommandKind = 'command' | 'page' | 'utils' | 'article' | 'components' | 'section' | 'download';
 
 export interface CommandItemProps {
 	title: string;

@@ -2,13 +2,7 @@
 
 import type { Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
-import {
-	forwardRef,
-	type MouseEvent,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type MouseEvent, useCallback, useImperativeHandle, useRef } from 'react';
 
 const PATH_VARIANTS: Variants = {
 	normal: {
@@ -32,76 +26,60 @@ const PATH_VARIANTS: Variants = {
 	}),
 };
 
-export const GalleryHorizontalEndIcon = forwardRef<
-	AnimatedIconHandle,
-	AnimatedIconProps
->(({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
-	const controls = useAnimation();
-	const isControlledRef = useRef(false);
+export const GalleryHorizontalEndIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
+		const controls = useAnimation();
+		const isControlledRef = useRef(false);
 
-	useImperativeHandle(ref, () => {
-		isControlledRef.current = true;
+		useImperativeHandle(ref, () => {
+			isControlledRef.current = true;
 
-		return {
-			startAnimation: () => controls.start('animate'),
-			stopAnimation: () => controls.start('normal'),
-		};
-	});
+			return {
+				startAnimation: () => controls.start('animate'),
+				stopAnimation: () => controls.start('normal'),
+			};
+		});
 
-	const handleMouseEnter = useCallback(
-		(event: MouseEvent<HTMLDivElement>) => {
-			if (isControlledRef.current) {
-				onMouseEnter?.(event);
-			} else {
-				controls.start('animate');
-			}
-		},
-		[controls, onMouseEnter]
-	);
+		const handleMouseEnter = useCallback(
+			(event: MouseEvent<HTMLDivElement>) => {
+				if (isControlledRef.current) {
+					onMouseEnter?.(event);
+				} else {
+					controls.start('animate');
+				}
+			},
+			[controls, onMouseEnter]
+		);
 
-	const handleMouseLeave = useCallback(
-		(event: MouseEvent<HTMLDivElement>) => {
-			if (isControlledRef.current) {
-				onMouseLeave?.(event);
-			} else {
-				controls.start('normal');
-			}
-		},
-		[controls, onMouseLeave]
-	);
+		const handleMouseLeave = useCallback(
+			(event: MouseEvent<HTMLDivElement>) => {
+				if (isControlledRef.current) {
+					onMouseLeave?.(event);
+				} else {
+					controls.start('normal');
+				}
+			},
+			[controls, onMouseLeave]
+		);
 
-	return (
-		<div
-			className={className}
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
-			{...props}
-		>
-			<svg
-				fill="none"
-				height={size}
-				stroke="currentColor"
-				strokeLinecap="round"
-				strokeLinejoin="round"
-				strokeWidth="2"
-				viewBox="0 0 24 24"
-				width={size}
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<motion.path
-					animate={controls}
-					custom={2}
-					d="M6 5v14"
-					variants={PATH_VARIANTS}
-				/>
-				<motion.path
-					animate={controls}
-					custom={1}
-					d="M2 7v10"
-					variants={PATH_VARIANTS}
-				/>
-				<rect height="18" rx="2" width="12" x="10" y="3" />
-			</svg>
-		</div>
-	);
-});
+		return (
+			<div className={className} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
+				<svg
+					fill="none"
+					height={size}
+					stroke="currentColor"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					strokeWidth="2"
+					viewBox="0 0 24 24"
+					width={size}
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<motion.path animate={controls} custom={2} d="M6 5v14" variants={PATH_VARIANTS} />
+					<motion.path animate={controls} custom={1} d="M2 7v10" variants={PATH_VARIANTS} />
+					<rect height="18" rx="2" width="12" x="10" y="3" />
+				</svg>
+			</div>
+		);
+	}
+);

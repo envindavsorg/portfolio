@@ -66,8 +66,7 @@ const extractLines = (
 	return lines.slice(start - 1, end).join('\n');
 };
 
-const FILE_META_REGEX =
-	/^file=(?<path>.+?)(?:(?:#(?:L(?<from>\d+)(?<dash>-)?)?)(?:L(?<to>\d+))?)?$/;
+const FILE_META_REGEX = /^file=(?<path>.+?)(?:(?:#(?:L(?<from>\d+)(?<dash>-)?)?)(?:L(?<to>\d+))?)?$/;
 
 export const remarkCodeImport = (options: RemarkCodeImportOptions = {}) => {
 	const rootDir = options.rootDir ?? join(process.cwd(), 'src');
@@ -83,9 +82,7 @@ export const remarkCodeImport = (options: RemarkCodeImportOptions = {}) => {
 		});
 
 		for (const [node] of codes) {
-			const fileMeta = (node.meta || '')
-				.split(/(?<!\\) /g)
-				.find((meta: string) => meta.startsWith('file='));
+			const fileMeta = (node.meta || '').split(/(?<!\\) /g).find((meta: string) => meta.startsWith('file='));
 
 			if (!fileMeta) {
 				continue;
@@ -96,18 +93,12 @@ export const remarkCodeImport = (options: RemarkCodeImportOptions = {}) => {
 				throw new Error(`Unable to parse file path ${fileMeta}`);
 			}
 
-			const fromLine = res.groups.from
-				? Number.parseInt(res.groups.from, 10)
-				: undefined;
+			const fromLine = res.groups.from ? Number.parseInt(res.groups.from, 10) : undefined;
 			const hasDash = !!res.groups.dash || fromLine === undefined;
-			const toLine = res.groups.to
-				? Number.parseInt(res.groups.to, 10)
-				: undefined;
+			const toLine = res.groups.to ? Number.parseInt(res.groups.to, 10) : undefined;
 
 			const dirname = file.dirname ?? file.cwd;
-			const normalizedFilePath = res.groups.path
-				.replace(/^@/, rootDir)
-				.replace(/\\ /g, ' ');
+			const normalizedFilePath = res.groups.path.replace(/^@/, rootDir).replace(/\\ /g, ' ');
 			const fileAbsPath = resolve(dirname, normalizedFilePath);
 			const relativePath = relative(rootDir, fileAbsPath);
 

@@ -64,12 +64,7 @@ export const ArrowLeftIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}
@@ -81,16 +76,8 @@ export const ArrowLeftIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<motion.path
-						animate={controls}
-						initial="normal"
-						variants={PATH_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						initial="normal"
-						variants={SECOND_PATH_VARIANTS}
-					/>
+					<motion.path animate={controls} initial="normal" variants={PATH_VARIANTS} />
+					<motion.path animate={controls} initial="normal" variants={SECOND_PATH_VARIANTS} />
 				</svg>
 			</div>
 		);

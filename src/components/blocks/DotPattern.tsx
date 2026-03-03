@@ -49,9 +49,7 @@ export const DotPattern = ({
 
 	const dots = Array.from(
 		{
-			length:
-				Math.ceil(dimensions.width / width) *
-				Math.ceil(dimensions.height / height),
+			length: Math.ceil(dimensions.width / width) * Math.ceil(dimensions.height / height),
 		},
 		(_, i) => {
 			const col = i % Math.ceil(dimensions.width / width);
@@ -68,10 +66,7 @@ export const DotPattern = ({
 	return (
 		<svg
 			aria-hidden="true"
-			className={cn(
-				'pointer-events-none absolute inset-0 h-full w-full text-muted-foreground/30',
-				className
-			)}
+			className={cn('pointer-events-none absolute inset-0 h-full w-full text-muted-foreground/30', className)}
 			ref={containerRef}
 			{...props}
 		>

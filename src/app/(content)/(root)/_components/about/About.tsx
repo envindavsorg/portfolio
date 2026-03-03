@@ -31,11 +31,7 @@ export const About = () => {
 					variant="outline"
 				>
 					{isExpanded ? 'réduire le texte' : 'en savoir plus'}
-					{isExpanded ? (
-						<ChevronUpIcon ref={iconRef} />
-					) : (
-						<ChevronDownIcon ref={iconRef} />
-					)}
+					{isExpanded ? <ChevronUpIcon ref={iconRef} /> : <ChevronDownIcon ref={iconRef} />}
 				</Button>
 			</PanelFooter>
 		</Panel>

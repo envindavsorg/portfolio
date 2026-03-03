@@ -27,8 +27,7 @@ const UNIT_LABELS: Record<GenerationUnit, string> = {
 
 export const LoremIpsumGenerator = () => {
 	const [inputAmount, setInputAmount] = useState(2);
-	const [generationUnit, setGenerationUnit] =
-		useState<GenerationUnit>('paragraphs');
+	const [generationUnit, setGenerationUnit] = useState<GenerationUnit>('paragraphs');
 	const [asHTML, setAsHTML] = useState(false);
 	const [startWithStandard, setStartWithStandard] = useState(false);
 	const [seed, setSeed] = useState(0);
@@ -39,8 +38,7 @@ export const LoremIpsumGenerator = () => {
 			generateLoremIpsum({
 				generationUnit,
 				inputAmount,
-				startWithStandard:
-					generationUnit === 'words' ? false : startWithStandard,
+				startWithStandard: generationUnit === 'words' ? false : startWithStandard,
 				asHTML,
 			}),
 		[inputAmount, generationUnit, asHTML, startWithStandard, seed]
@@ -87,20 +85,14 @@ export const LoremIpsumGenerator = () => {
 						checked={startWithStandard}
 						disabled={generationUnit === 'words'}
 						id="standard-sentence"
-						onCheckedChange={(checked: boolean) =>
-							setStartWithStandard(checked)
-						}
+						onCheckedChange={(checked: boolean) => setStartWithStandard(checked)}
 					/>
 					<Label className="cursor-pointer" htmlFor="standard-sentence">
 						lorem Ipsum en premier
 					</Label>
 				</div>
 				<div className="flex items-center gap-x-1">
-					<CheckboxAnimated
-						checked={asHTML}
-						id="as-html"
-						onCheckedChange={(checked: boolean) => setAsHTML(checked)}
-					/>
+					<CheckboxAnimated checked={asHTML} id="as-html" onCheckedChange={(checked: boolean) => setAsHTML(checked)} />
 					<Label className="cursor-pointer" htmlFor="as-html">
 						format HTML
 					</Label>
@@ -111,12 +103,7 @@ export const LoremIpsumGenerator = () => {
 				<Label className="text-muted-foreground text-xs" htmlFor="lorem-output">
 					texte généré
 				</Label>
-				<Textarea
-					id="lorem-output"
-					readOnly
-					rows={inputAmount <= 1 ? 4 : 8}
-					value={output}
-				/>
+				<Textarea id="lorem-output" readOnly rows={inputAmount <= 1 ? 4 : 8} value={output} />
 			</div>
 
 			<div className="flex justify-between py-1.5">

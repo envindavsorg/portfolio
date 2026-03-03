@@ -11,11 +11,7 @@ import {
 	CommandItem,
 	CommandList,
 } from '@/components/primitives/Command';
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/primitives/Popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/Popover';
 import { cn } from '@/lib/utils';
 
 interface ComboboxProps {
@@ -56,24 +52,15 @@ export const Combobox = (props: ComboboxProps) => {
 
 			<PopoverContent className={cn('h-auto p-0', props.className)}>
 				<Command>
-					{props.search && (
-						<CommandInput placeholder="tapez une commande ou recherchez ..." />
-					)}
+					{props.search && <CommandInput placeholder="tapez une commande ou recherchez ..." />}
 					<CommandList className="h-auto">
 						<CommandEmpty>Aucun résultat ...</CommandEmpty>
 						<CommandGroup>
 							{props.data.map((item) => (
-								<CommandItem
-									key={item.value}
-									onSelect={() => setNewValue(item.value)}
-									value={item.label}
-								>
+								<CommandItem key={item.value} onSelect={() => setNewValue(item.value)} value={item.label}>
 									{item.label}
 									<CheckIcon
-										className={cn(
-											'ml-auto size-4',
-											props.value === item.value ? 'opacity-100' : 'opacity-0'
-										)}
+										className={cn('ml-auto size-4', props.value === item.value ? 'opacity-100' : 'opacity-0')}
 									/>
 								</CommandItem>
 							))}

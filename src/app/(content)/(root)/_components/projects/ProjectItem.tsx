@@ -23,10 +23,7 @@ export const ProjectItem = ({ project, isLast = false }: ProjectItemProps) => {
 					<div className="flex w-full flex-1 items-center justify-between">
 						<div className="w-full select-none border-edge border-r p-4">
 							<h2 className="text-left font-pixel-square text-base lowercase sm:text-xl">
-								{project.name}{' '}
-								<span className="font-normal text-theme text-xs">
-									({project.type})
-								</span>
+								{project.name} <span className="font-normal text-theme text-xs">({project.type})</span>
 							</h2>
 						</div>
 						<div className="relative m-4 flex size-6 shrink-0 items-center justify-center sm:size-8">

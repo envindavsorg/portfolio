@@ -1,11 +1,6 @@
 import { CaretRightIcon, DotsThreeIcon } from '@phosphor-icons/react/dist/ssr';
 import { Slot } from '@radix-ui/react-slot';
-import {
-	type ComponentProps,
-	type ComponentPropsWithoutRef,
-	forwardRef,
-	type ReactNode,
-} from 'react';
+import { type ComponentProps, type ComponentPropsWithoutRef, forwardRef, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 export const Breadcrumb = forwardRef<
@@ -13,34 +8,26 @@ export const Breadcrumb = forwardRef<
 	ComponentPropsWithoutRef<'nav'> & {
 		separator?: ReactNode;
 	}
->(({ ...props }, ref) => (
-	<nav aria-label="breadcrumb" className="lowercase" ref={ref} {...props} />
-));
+>(({ ...props }, ref) => <nav aria-label="breadcrumb" className="lowercase" ref={ref} {...props} />);
 
-export const BreadcrumbList = forwardRef<
-	HTMLOListElement,
-	ComponentPropsWithoutRef<'ol'>
->(({ className, ...props }, ref) => (
-	<ol
-		className={cn(
-			'wrap-break-word flex flex-wrap items-center gap-1.5 text-muted-foreground text-xs sm:gap-2.5 sm:text-sm',
-			className
-		)}
-		ref={ref}
-		{...props}
-	/>
-));
+export const BreadcrumbList = forwardRef<HTMLOListElement, ComponentPropsWithoutRef<'ol'>>(
+	({ className, ...props }, ref) => (
+		<ol
+			className={cn(
+				'wrap-break-word flex flex-wrap items-center gap-1.5 text-muted-foreground text-xs sm:gap-2.5 sm:text-sm',
+				className
+			)}
+			ref={ref}
+			{...props}
+		/>
+	)
+);
 
-export const BreadcrumbItem = forwardRef<
-	HTMLLIElement,
-	ComponentPropsWithoutRef<'li'>
->(({ className, ...props }, ref) => (
-	<li
-		className={cn('inline-flex items-center gap-1.5', className)}
-		ref={ref}
-		{...props}
-	/>
-));
+export const BreadcrumbItem = forwardRef<HTMLLIElement, ComponentPropsWithoutRef<'li'>>(
+	({ className, ...props }, ref) => (
+		<li className={cn('inline-flex items-center gap-1.5', className)} ref={ref} {...props} />
+	)
+);
 
 export const BreadcrumbLink = forwardRef<
 	HTMLAnchorElement,
@@ -50,48 +37,29 @@ export const BreadcrumbLink = forwardRef<
 >(({ asChild, className, ...props }, ref) => {
 	const Comp = asChild ? Slot : 'a';
 
-	return (
-		<Comp
-			className={cn('transition-colors hover:text-foreground', className)}
-			ref={ref}
-			{...props}
-		/>
-	);
+	return <Comp className={cn('transition-colors hover:text-foreground', className)} ref={ref} {...props} />;
 });
 
-export const BreadcrumbPage = forwardRef<
-	HTMLSpanElement,
-	ComponentPropsWithoutRef<'span'>
->(({ className, ...props }, ref) => (
-	<span
-		aria-current="page"
-		aria-disabled="true"
-		className={cn('font-normal text-theme', className)}
-		ref={ref}
-		role="link"
-		{...props}
-	/>
-));
+export const BreadcrumbPage = forwardRef<HTMLSpanElement, ComponentPropsWithoutRef<'span'>>(
+	({ className, ...props }, ref) => (
+		<span
+			aria-current="page"
+			aria-disabled="true"
+			className={cn('font-normal text-theme', className)}
+			ref={ref}
+			role="link"
+			{...props}
+		/>
+	)
+);
 
-export const BreadcrumbSeparator = ({
-	children,
-	className,
-	...props
-}: ComponentProps<'li'>) => (
-	<li
-		aria-hidden="true"
-		className={cn('[&>svg]:h-3.5 [&>svg]:w-3.5', className)}
-		role="presentation"
-		{...props}
-	>
+export const BreadcrumbSeparator = ({ children, className, ...props }: ComponentProps<'li'>) => (
+	<li aria-hidden="true" className={cn('[&>svg]:h-3.5 [&>svg]:w-3.5', className)} role="presentation" {...props}>
 		{children ?? <CaretRightIcon />}
 	</li>
 );
 
-export const BreadcrumbEllipsis = ({
-	className,
-	...props
-}: ComponentProps<'span'>) => (
+export const BreadcrumbEllipsis = ({ className, ...props }: ComponentProps<'span'>) => (
 	<span
 		aria-hidden="true"
 		className={cn('flex h-9 w-9 items-center justify-center', className)}

@@ -43,16 +43,8 @@ const PATHS = [
 	},
 ];
 
-type BonjourProps = Omit<
-	ComponentProps<typeof CoverEffect>,
-	'paths' | 'viewBox'
->;
+type BonjourProps = Omit<ComponentProps<typeof CoverEffect>, 'paths' | 'viewBox'>;
 
 export const Bonjour = (props: BonjourProps) => (
-	<CoverEffect
-		className="h-20 sm:h-30"
-		paths={PATHS}
-		viewBox="0 0 949 279"
-		{...props}
-	/>
+	<CoverEffect className="h-20 sm:h-30" paths={PATHS} viewBox="0 0 949 279" {...props} />
 );

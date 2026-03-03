@@ -2,13 +2,7 @@
 
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import {
-	type ComponentProps,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import { type ComponentProps, useCallback, useEffect, useRef, useState } from 'react';
 import { CheckIcon } from '@/components/blocks/icons/CheckIcon';
 import { CopyIcon } from '@/components/blocks/icons/CopyIcon';
 import { XIcon } from '@/components/blocks/icons/XIcon';
@@ -65,10 +59,7 @@ export const Button = ({
 
 	return (
 		<Comp
-			className={cn(
-				buttonVariants({ variant, size, className }),
-				'font-pixel-square'
-			)}
+			className={cn(buttonVariants({ variant, size, className }), 'font-pixel-square')}
 			data-slot="button"
 			{...props}
 		/>
@@ -84,7 +75,8 @@ const ICONS = {
 } as const;
 
 interface CopyButtonProps {
-	value: string;
+	value?: string;
+	getValueAction?: () => Promise<string>;
 	variant?: 'default' | 'outline' | 'link' | 'ghost';
 	className?: string;
 	label?: string;
@@ -93,6 +85,7 @@ interface CopyButtonProps {
 
 export const CopyButton = ({
 	value,
+	getValueAction,
 	variant = 'outline',
 	className,
 	label = 'copier le texte dans le presse-papier',
@@ -116,14 +109,15 @@ export const CopyButton = ({
 		}
 
 		try {
-			await navigator.clipboard.writeText(value);
+			const text = getValueAction ? await getValueAction() : (value ?? '');
+			await navigator.clipboard.writeText(text);
 			setState('success');
 		} catch {
 			setState('fail');
 		}
 
 		timeoutRef.current = setTimeout(() => setState('idle'), timeout);
-	}, [value, timeout]);
+	}, [value, getValueAction, timeout]);
 
 	const handleMouseEnter = useCallback(() => {
 		iconRef.current?.startAnimation();

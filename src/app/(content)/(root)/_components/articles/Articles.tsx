@@ -1,11 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/primitives/Button';
-import {
-	Panel,
-	PanelContent,
-	PanelFooter,
-	PanelHeader,
-} from '@/components/primitives/Panel';
+import { Panel, PanelContent, PanelFooter, PanelHeader } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
 import { getContentByCategory } from '@/lib/content';
 import { dayjs } from '@/lib/functions';
@@ -22,14 +17,12 @@ export const Articles = () => {
 
 			<PanelContent>
 				<Prose>
-					-- des articles issus d'expériences concrètes sur le{' '}
-					<span>développement web</span> : bonnes pratiques,{' '}
-					<span>patterns modernes</span> et solutions techniques sur
-					l'écosystème <span>JavaScript</span> --
+					-- des articles issus d'expériences concrètes sur le <span>développement web</span> : bonnes pratiques,{' '}
+					<span>patterns modernes</span> et solutions techniques sur l'écosystème <span>JavaScript</span> --
 				</Prose>
 				<Prose>
-					-- un objectif simple : <i>documenter</i>, <i>partager</i> et{' '}
-					<i>aider</i> les développeurs qui rencontrent les mêmes défis --
+					-- un objectif simple : <i>documenter</i>, <i>partager</i> et <i>aider</i> les développeurs qui rencontrent
+					les mêmes défis --
 				</Prose>
 			</PanelContent>
 

@@ -20,12 +20,7 @@ declare global {
 	}
 
 	// types for GitHub data
-	type ContributionLevel =
-		| 'NONE'
-		| 'FIRST_QUARTILE'
-		| 'SECOND_QUARTILE'
-		| 'THIRD_QUARTILE'
-		| 'FOURTH_QUARTILE';
+	type ContributionLevel = 'NONE' | 'FIRST_QUARTILE' | 'SECOND_QUARTILE' | 'THIRD_QUARTILE' | 'FOURTH_QUARTILE';
 
 	interface ContributionDay {
 		date: string;
@@ -78,24 +73,12 @@ declare global {
 	type ThemeType = 'light' | 'dark' | 'system';
 
 	// types for page layout and OG image generation
-	type PageType =
-		| 'homepage'
-		| 'blog'
-		| 'blogArticle'
-		| 'components'
-		| 'componentsArticle'
-		| 'utils'
-		| 'utilsArticle';
+	type PageType = 'homepage' | 'blog' | 'blogArticle' | 'components' | 'componentsArticle' | 'utils' | 'utilsArticle';
 
 	// types for blog, components, and utils posts
 
 	// types for browser hook
-	type Browser =
-		| 'Arc Browser'
-		| 'Mozilla Firefox'
-		| 'Google Chrome'
-		| 'Apple Safari'
-		| 'Microsoft Edge';
+	type Browser = 'Arc Browser' | 'Mozilla Firefox' | 'Google Chrome' | 'Apple Safari' | 'Microsoft Edge';
 
 	interface BrowserInfo {
 		name: Browser;

@@ -14,8 +14,7 @@ interface CoverProps {
 }
 
 export const Cover = ({ loop = true }: CoverProps) => {
-	const { setApi, currentIndex, handleAnimationComplete, content } =
-		useGreetingsCarousel(loop);
+	const { setApi, currentIndex, handleAnimationComplete, content } = useGreetingsCarousel(loop);
 
 	return (
 		<Carousel opts={{ loop, watchDrag: false }} setApi={setApi}>
@@ -23,10 +22,7 @@ export const Cover = ({ loop = true }: CoverProps) => {
 				{content.map(({ key, Component }, idx) => (
 					<CarouselItem key={key}>
 						{idx === currentIndex && (
-							<Component
-								capture={process.env.ENV_TYPE === 'capture'}
-								onAnimationComplete={handleAnimationComplete}
-							/>
+							<Component capture={process.env.ENV_TYPE === 'capture'} onAnimationComplete={handleAnimationComplete} />
 						)}
 					</CarouselItem>
 				))}

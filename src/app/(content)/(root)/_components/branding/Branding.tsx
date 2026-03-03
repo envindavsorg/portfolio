@@ -11,9 +11,7 @@ interface BrandingSectionProps {
 const BrandingSection = ({ label, children }: BrandingSectionProps) => (
 	<div className="grid grid-cols-[2rem_1fr]">
 		<div className="flex items-center justify-center border-edge border-r bg-background sm:h-22">
-			<span className="rotate-270 select-none text-muted-foreground text-xs sm:text-sm">
-				{label}
-			</span>
+			<span className="rotate-270 select-none text-muted-foreground text-xs sm:text-sm">{label}</span>
 		</div>
 		{children}
 	</div>

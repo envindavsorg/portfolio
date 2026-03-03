@@ -69,43 +69,24 @@ const LOREM_WORDS = [
 const STANDARD_SENTENCE =
 	'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua';
 
-const capitalizeFirstLetter = (sentence: string): string =>
-	sentence.charAt(0).toUpperCase() + sentence.slice(1);
+const capitalizeFirstLetter = (sentence: string): string => sentence.charAt(0).toUpperCase() + sentence.slice(1);
 
-const randomBetween = (min: number, max: number): number =>
-	Math.floor(Math.random() * (max - min + 1)) + min;
+const randomBetween = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const randomWords = (amount: number): string =>
-	Array.from(
-		{ length: amount },
-		() => LOREM_WORDS[randomBetween(0, LOREM_WORDS.length - 1)]
-	).join(' ');
+	Array.from({ length: amount }, () => LOREM_WORDS[randomBetween(0, LOREM_WORDS.length - 1)]).join(' ');
 
 const generateSentence = (useStandard: boolean): string =>
-	useStandard
-		? STANDARD_SENTENCE
-		: capitalizeFirstLetter(randomWords(randomBetween(7, 14)));
+	useStandard ? STANDARD_SENTENCE : capitalizeFirstLetter(randomWords(randomBetween(7, 14)));
 
-const generateSentences = (
-	amount: number,
-	startWithStandard: boolean
-): string => {
-	const sentences = Array.from({ length: amount }, (_, i) =>
-		generateSentence(startWithStandard && i === 0)
-	);
+const generateSentences = (amount: number, startWithStandard: boolean): string => {
+	const sentences = Array.from({ length: amount }, (_, i) => generateSentence(startWithStandard && i === 0));
 	return `${sentences.join('. ')}.`;
 };
 
-const generateParagraphs = (
-	amount: number,
-	startWithStandard: boolean,
-	asHTML: boolean
-): string =>
+const generateParagraphs = (amount: number, startWithStandard: boolean, asHTML: boolean): string =>
 	Array.from({ length: amount }, (_, i) => {
-		const paragraph = generateSentences(
-			randomBetween(3, 6),
-			startWithStandard && i === 0
-		);
+		const paragraph = generateSentences(randomBetween(3, 6), startWithStandard && i === 0);
 		return asHTML ? `<p>${paragraph}</p>` : paragraph;
 	}).join('\n\n');
 
@@ -127,8 +108,7 @@ export const generateLoremIpsum = ({
 	const generators: Record<GenerationUnit, () => string> = {
 		words: () => randomWords(inputAmount),
 		sentences: () => generateSentences(inputAmount, startWithStandard),
-		paragraphs: () =>
-			generateParagraphs(inputAmount, startWithStandard, asHTML),
+		paragraphs: () => generateParagraphs(inputAmount, startWithStandard, asHTML),
 	};
 
 	const text = generators[generationUnit]();

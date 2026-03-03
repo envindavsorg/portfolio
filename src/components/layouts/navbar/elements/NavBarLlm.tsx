@@ -16,12 +16,7 @@ export const NavBarLlm = () => {
 			size="icon"
 			variant="outline"
 		>
-			<Link
-				aria-label="Contexte essentiel"
-				href="/llms.txt"
-				rel="noopener noreferrer"
-				target="_blank"
-			>
+			<Link aria-label="Contexte essentiel" href="/llms.txt" rel="noopener noreferrer" target="_blank">
 				<LlmIcon ref={iconRef} />
 				<span className="sr-only">Contexte essentiel</span>
 			</Link>

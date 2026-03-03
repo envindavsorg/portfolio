@@ -1,15 +1,7 @@
 import type { SVGProps } from 'react';
 
 export const MarkdownIcon = (props: SVGProps<SVGSVGElement>) => (
-	<svg
-		height="1em"
-		viewBox="0 0 208 128"
-		width="1em"
-		xmlns="http://www.w3.org/2000/svg"
-		xmlSpace="preserve"
-		{...props}
-	>
-		<title>Markdown</title>
+	<svg height="1em" viewBox="0 0 208 128" width="1em" xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" {...props}>
 		<path
 			className="stroke-black dark:stroke-white"
 			d="M15 5h178a10 10 0 0 1 10 10v98a10 10 0 0 1-10 10H15a10 10 0 0 1-10-10V15A10 10 0 0 1 15 5z"

@@ -5,27 +5,12 @@ import type { MarqueeProps as FastMarqueeProps } from 'react-fast-marquee';
 import FastMarquee from 'react-fast-marquee';
 import { cn } from '@/lib/utils';
 
-export const Marquee = memo(
-	({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
-		<div
-			className={cn('relative w-full overflow-hidden', className)}
-			{...props}
-		/>
-	)
-);
+export const Marquee = memo(({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+	<div className={cn('relative w-full overflow-hidden', className)} {...props} />
+));
 
-export const MarqueeContent = ({
-	loop = 0,
-	autoFill = true,
-	pauseOnHover = true,
-	...props
-}: FastMarqueeProps) => (
-	<FastMarquee
-		autoFill={autoFill}
-		loop={loop}
-		pauseOnHover={pauseOnHover}
-		{...props}
-	/>
+export const MarqueeContent = ({ loop = 0, autoFill = true, pauseOnHover = true, ...props }: FastMarqueeProps) => (
+	<FastMarquee autoFill={autoFill} loop={loop} pauseOnHover={pauseOnHover} {...props} />
 );
 
 export const MarqueeFade = ({
@@ -45,10 +30,7 @@ export const MarqueeFade = ({
 	/>
 );
 
-export const MarqueeItem = ({
-	className,
-	...props
-}: HTMLAttributes<HTMLDivElement>) => (
+export const MarqueeItem = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
 	<div
 		className={cn(
 			'mx-2 shrink-0 object-contain',

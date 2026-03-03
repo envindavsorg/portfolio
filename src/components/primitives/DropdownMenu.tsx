@@ -5,21 +5,15 @@ import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 import type React from 'react';
 import { cn } from '@/lib/utils';
 
-export const DropdownMenu = ({
-	...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) => (
+export const DropdownMenu = ({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) => (
 	<DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
 );
 
-export const DropdownMenuPortal = ({
-	...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>) => (
+export const DropdownMenuPortal = ({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>) => (
 	<DropdownMenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />
 );
 
-export const DropdownMenuTrigger = ({
-	...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) => (
+export const DropdownMenuTrigger = ({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) => (
 	<DropdownMenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />
 );
 
@@ -41,9 +35,7 @@ export const DropdownMenuContent = ({
 	</DropdownMenuPrimitive.Portal>
 );
 
-export const DropdownMenuGroup = ({
-	...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) => (
+export const DropdownMenuGroup = ({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) => (
 	<DropdownMenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />
 );
 
@@ -98,13 +90,8 @@ export const DropdownMenuCheckboxItem = ({
 	</DropdownMenuPrimitive.CheckboxItem>
 );
 
-export const DropdownMenuRadioGroup = ({
-	...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) => (
-	<DropdownMenuPrimitive.RadioGroup
-		data-slot="dropdown-menu-radio-group"
-		{...props}
-	/>
+export const DropdownMenuRadioGroup = ({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) => (
+	<DropdownMenuPrimitive.RadioGroup data-slot="dropdown-menu-radio-group" {...props} />
 );
 
 export const DropdownMenuRadioItem = ({
@@ -155,23 +142,15 @@ export const DropdownMenuSeparator = ({
 	/>
 );
 
-export const DropdownMenuShortcut = ({
-	className,
-	...props
-}: React.ComponentProps<'span'>) => (
+export const DropdownMenuShortcut = ({ className, ...props }: React.ComponentProps<'span'>) => (
 	<span
-		className={cn(
-			'ml-auto text-muted-foreground text-xs tracking-widest',
-			className
-		)}
+		className={cn('ml-auto text-muted-foreground text-xs tracking-widest', className)}
 		data-slot="dropdown-menu-shortcut"
 		{...props}
 	/>
 );
 
-export const DropdownMenuSub = ({
-	...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Sub>) => (
+export const DropdownMenuSub = ({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Sub>) => (
 	<DropdownMenuPrimitive.Sub data-slot="dropdown-menu-sub" {...props} />
 );
 

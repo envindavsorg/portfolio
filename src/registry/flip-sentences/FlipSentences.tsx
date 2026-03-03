@@ -31,10 +31,7 @@ export const FlipSentences = ({
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const sentenceCount = sentences.length;
 
-	const longestSentence = useMemo(
-		() => sentences.reduce((a, b) => (b.length > a.length ? b : a), ''),
-		[sentences]
-	);
+	const longestSentence = useMemo(() => sentences.reduce((a, b) => (b.length > a.length ? b : a), ''), [sentences]);
 
 	useEffect(() => {
 		if (disableAnimation) {
@@ -63,11 +60,7 @@ export const FlipSentences = ({
 	}, [sentenceCount, interval, disableAnimation]);
 
 	if (disableAnimation) {
-		return (
-			<p className={cn('font-medium text-theme text-xs sm:text-sm', className)}>
-				{sentences[0]}
-			</p>
-		);
+		return <p className={cn('font-medium text-theme text-xs sm:text-sm', className)}>{sentences[0]}</p>;
 	}
 
 	return (

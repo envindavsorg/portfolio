@@ -1,11 +1,6 @@
 'use client';
 
-import {
-	AnimatePresence,
-	type MotionProps,
-	motion,
-	type Variants,
-} from 'motion/react';
+import { AnimatePresence, type MotionProps, motion, type Variants } from 'motion/react';
 import { type ElementType, memo } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -73,10 +68,7 @@ const defaultItemVariants: Variants = {
 	},
 };
 
-const defaultItemAnimationVariants: Record<
-	AnimationVariant,
-	{ container: Variants; item: Variants }
-> = {
+const defaultItemAnimationVariants: Record<AnimationVariant, { container: Variants; item: Variants }> = {
 	fadeIn: {
 		container: defaultContainerVariants,
 		item: {

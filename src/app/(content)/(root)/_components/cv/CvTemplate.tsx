@@ -1,15 +1,4 @@
-import {
-	Body,
-	Container,
-	Head,
-	Heading,
-	Hr,
-	Html,
-	Img,
-	Link,
-	Preview,
-	Text,
-} from '@react-email/components';
+import { Body, Container, Head, Heading, Hr, Html, Img, Link, Preview, Text } from '@react-email/components';
 
 interface CvTemplateProps {
 	firstName: string;
@@ -35,9 +24,8 @@ export const CvTemplate = ({ firstName }: CvTemplateProps) => (
 				<Heading style={heading}>Bonjour {firstName} !</Heading>
 
 				<Text style={paragraph}>
-					Merci de votre intérêt pour mon profil. Vous trouverez en pièce jointe
-					mon CV au format PDF. N'hésitez pas à me contacter si vous avez des
-					questions.
+					Merci de votre intérêt pour mon profil. Vous trouverez en pièce jointe mon CV au format PDF. N'hésitez pas à
+					me contacter si vous avez des questions.
 				</Text>
 
 				<Hr style={hr} />

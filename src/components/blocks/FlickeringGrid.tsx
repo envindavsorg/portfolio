@@ -1,13 +1,6 @@
 'use client';
 
-import {
-	type HTMLAttributes,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { type HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 interface FlickeringGridProps extends HTMLAttributes<HTMLDivElement> {
 	squareSize?: number;
@@ -40,8 +33,7 @@ export const FlickeringGrid = ({
 	useEffect(() => {
 		const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
 		setPrefersReducedMotion(mql.matches);
-		const handler = (e: MediaQueryListEvent) =>
-			setPrefersReducedMotion(e.matches);
+		const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
 		mql.addEventListener('change', handler);
 		return () => mql.removeEventListener('change', handler);
 	}, []);
@@ -160,15 +152,7 @@ export const FlickeringGrid = ({
 			lastTime = time;
 
 			updateSquares(gridParams.squares, deltaTime);
-			drawGrid(
-				ctx,
-				canvas.width,
-				canvas.height,
-				gridParams.cols,
-				gridParams.rows,
-				gridParams.squares,
-				gridParams.dpr
-			);
+			drawGrid(ctx, canvas.width, canvas.height, gridParams.cols, gridParams.rows, gridParams.squares, gridParams.dpr);
 			animationFrameId = requestAnimationFrame(animate);
 		};
 
@@ -188,15 +172,7 @@ export const FlickeringGrid = ({
 		intersectionObserver.observe(canvas);
 
 		if (prefersReducedMotion) {
-			drawGrid(
-				ctx,
-				canvas.width,
-				canvas.height,
-				gridParams.cols,
-				gridParams.rows,
-				gridParams.squares,
-				gridParams.dpr
-			);
+			drawGrid(ctx, canvas.width, canvas.height, gridParams.cols, gridParams.rows, gridParams.squares, gridParams.dpr);
 		} else if (isInView) {
 			animationFrameId = requestAnimationFrame(animate);
 		}
@@ -206,23 +182,11 @@ export const FlickeringGrid = ({
 			resizeObserver.disconnect();
 			intersectionObserver.disconnect();
 		};
-	}, [
-		setupCanvas,
-		updateSquares,
-		drawGrid,
-		width,
-		height,
-		isInView,
-		prefersReducedMotion,
-	]);
+	}, [setupCanvas, updateSquares, drawGrid, width, height, isInView, prefersReducedMotion]);
 
 	return (
 		<div className="relative flex grow overflow-hidden">
-			<div
-				className="absolute inset-0 z-0 h-full w-full"
-				ref={containerRef}
-				{...props}
-			>
+			<div className="absolute inset-0 z-0 h-full w-full" ref={containerRef} {...props}>
 				<canvas
 					className="pointer-events-none"
 					ref={canvasRef}

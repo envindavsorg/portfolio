@@ -72,9 +72,7 @@ export const rehypeNpmCommand = () => (tree: UnistTree) => {
 			return;
 		}
 
-		const mapping = COMMAND_MAPPINGS.find((m) =>
-			rawString.startsWith(m.prefix)
-		);
+		const mapping = COMMAND_MAPPINGS.find((m) => rawString.startsWith(m.prefix));
 		if (!mapping) {
 			return;
 		}

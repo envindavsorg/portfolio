@@ -112,12 +112,7 @@ const FrownIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 		};
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<motion.svg
 					animate={controls}
 					fill="none"
@@ -133,21 +128,8 @@ const FrownIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 					xmlns="http://www.w3.org/2000/svg"
 				>
 					<circle cx="12" cy="12" r="10" />
-					<motion.path
-						animate={controls}
-						d="M16 16s-1.5-2-4-2-4 2-4 2"
-						initial="normal"
-						variants={mouthVariants}
-					/>
-					<motion.line
-						animate={controls}
-						initial="normal"
-						variants={leftEyeVariants}
-						x1="9"
-						x2="9.01"
-						y1="9"
-						y2="9"
-					/>
+					<motion.path animate={controls} d="M16 16s-1.5-2-4-2-4 2-4 2" initial="normal" variants={mouthVariants} />
+					<motion.line animate={controls} initial="normal" variants={leftEyeVariants} x1="9" x2="9.01" y1="9" y2="9" />
 					<motion.line
 						animate={controls}
 						initial="normal"

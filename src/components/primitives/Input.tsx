@@ -1,39 +1,29 @@
 'use client';
 
 import { CaretDownIcon, CaretUpIcon } from '@phosphor-icons/react';
-import {
-	type ComponentProps,
-	forwardRef,
-	type RefObject,
-	useCallback,
-	useEffect,
-	useState,
-} from 'react';
+import { type ComponentProps, forwardRef, type RefObject, useCallback, useEffect, useState } from 'react';
 import { NumericFormat, type NumericFormatProps } from 'react-number-format';
 import { Button } from '@/components/primitives/Button';
 import { cn } from '@/lib/utils';
 
-export const Input = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
-	({ className, type, ...props }, ref) => (
-		<input
-			className={cn(
-				'flex h-10 w-full px-3 py-2',
-				'rounded-md border border-input bg-background outline-none',
-				'disabled:cursor-not-allowed disabled:opacity-50',
-				'file:border-0 file:bg-transparent file:font-medium file:text-foreground file:text-sm',
-				'text-base placeholder:text-muted-foreground md:text-sm',
-				'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
-				className
-			)}
-			ref={ref}
-			type={type}
-			{...props}
-		/>
-	)
-);
+export const Input = forwardRef<HTMLInputElement, ComponentProps<'input'>>(({ className, type, ...props }, ref) => (
+	<input
+		className={cn(
+			'flex h-10 w-full px-3 py-2',
+			'rounded-md border border-input bg-background outline-none',
+			'disabled:cursor-not-allowed disabled:opacity-50',
+			'file:border-0 file:bg-transparent file:font-medium file:text-foreground file:text-sm',
+			'text-base placeholder:text-muted-foreground md:text-sm',
+			'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
+			className
+		)}
+		ref={ref}
+		type={type}
+		{...props}
+	/>
+));
 
-export interface InputNumberProps
-	extends Omit<NumericFormatProps, 'value' | 'onValueChange'> {
+export interface InputNumberProps extends Omit<NumericFormatProps, 'value' | 'onValueChange'> {
 	stepper?: number;
 	thousandSeparator?: string;
 	placeholder?: string;
@@ -67,24 +57,14 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
 		},
 		ref
 	) => {
-		const [value, setValue] = useState<number | undefined>(
-			controlledValue ?? defaultValue
-		);
+		const [value, setValue] = useState<number | undefined>(controlledValue ?? defaultValue);
 
 		const handleIncrement = useCallback(() => {
-			setValue((prev) =>
-				prev === undefined
-					? (stepper ?? 1)
-					: Math.min(prev + (stepper ?? 1), max)
-			);
+			setValue((prev) => (prev === undefined ? (stepper ?? 1) : Math.min(prev + (stepper ?? 1), max)));
 		}, [stepper, max]);
 
 		const handleDecrement = useCallback(() => {
-			setValue((prev) =>
-				prev === undefined
-					? -(stepper ?? 1)
-					: Math.max(prev - (stepper ?? 1), min)
-			);
+			setValue((prev) => (prev === undefined ? -(stepper ?? 1) : Math.max(prev - (stepper ?? 1), min)));
 		}, [stepper, min]);
 
 		useEffect(() => {
@@ -93,12 +73,8 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
 			}
 		}, [controlledValue]);
 
-		const handleChange = (values: {
-			value: string;
-			floatValue: number | undefined;
-		}) => {
-			const newValue =
-				values.floatValue === undefined ? undefined : values.floatValue;
+		const handleChange = (values: { value: string; floatValue: number | undefined }) => {
+			const newValue = values.floatValue === undefined ? undefined : values.floatValue;
 			setValue(newValue);
 			if (onValueChange) {
 				onValueChange(newValue);

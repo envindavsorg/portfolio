@@ -26,10 +26,7 @@ const items: BrandingMarkItem[] = [
 export const BrandingMark = () => (
 	<div className="p-4 after:z-1 max-sm:flex max-sm:flex-col max-sm:space-y-4 sm:grid sm:grid-cols-2 sm:items-center sm:gap-x-12">
 		{items.map((item) => (
-			<div
-				className="flex items-center justify-between gap-x-6"
-				key={item.label}
-			>
+			<div className="flex items-center justify-between gap-x-6" key={item.label}>
 				<div className="flex items-center gap-x-4">
 					<div className="flex aspect-square size-10 items-center justify-center rounded-md text-4xl sm:size-12">
 						{item.icon}

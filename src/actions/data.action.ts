@@ -68,10 +68,7 @@ const fetchGitHubData = async (): Promise<GitHubData> => {
 		avatar: user.avatarUrl,
 		followers: user.followers.totalCount,
 		following: user.following.totalCount,
-		stars: user.repositories.nodes.reduce(
-			(total, repo) => total + repo.stargazers.totalCount,
-			0
-		),
+		stars: user.repositories.nodes.reduce((total, repo) => total + repo.stargazers.totalCount, 0),
 		contributions,
 	};
 };

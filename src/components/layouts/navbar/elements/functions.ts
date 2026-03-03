@@ -23,9 +23,7 @@ export const buildKindMap = (posts: Content[]): Map<string, CommandKind> => {
 	return map;
 };
 
-export const buildPostGroups = (
-	posts: Content[]
-): Record<string, CommandItemProps[]> => {
+export const buildPostGroups = (posts: Content[]): Record<string, CommandItemProps[]> => {
 	const grouped: Record<string, CommandItemProps[]> = {
 		article: [],
 		components: [],
@@ -56,16 +54,11 @@ export const getFilteredGroups = (pathname: string): CommandGroupDef[] => {
 	}
 
 	return COMMANDS.map((group, idx) =>
-		idx === 0
-			? { ...group, items: group.items.filter((item) => item.url !== '/') }
-			: group
+		idx === 0 ? { ...group, items: group.items.filter((item) => item.url !== '/') } : group
 	);
 };
 
-export const isRouteActive = (
-	href: string,
-	pathname: string | null
-): boolean => {
+export const isRouteActive = (href: string, pathname: string | null): boolean => {
 	const path = pathname ?? '';
 
 	if (path === href) {

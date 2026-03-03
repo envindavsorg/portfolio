@@ -1,12 +1,6 @@
 'use client';
 
-import {
-	createContext,
-	type HTMLAttributes,
-	type ReactNode,
-	useContext,
-	useMemo,
-} from 'react';
+import { createContext, type HTMLAttributes, type ReactNode, useContext, useMemo } from 'react';
 import { groupByWeeks } from '@/lib/commits';
 import { dayjs } from '@/lib/functions';
 import { BLOCK_MARGIN, BLOCK_SIZE, LABEL_HEIGHT, WEEK_START } from './config';
@@ -40,17 +34,13 @@ export const Graph = ({ data, children, ...props }: GraphProps) => {
 		const year = data.length > 0 ? dayjs(data[0].date).year() : dayjs().year();
 		const totalCount = data.reduce((sum, activity) => sum + activity.count, 0);
 		const width = weeks.length * (BLOCK_SIZE + BLOCK_MARGIN) - BLOCK_MARGIN;
-		const height =
-			LABEL_HEIGHT + (BLOCK_SIZE + BLOCK_MARGIN) * 7 - BLOCK_MARGIN;
+		const height = LABEL_HEIGHT + (BLOCK_SIZE + BLOCK_MARGIN) * 7 - BLOCK_MARGIN;
 		return { weeks, year, totalCount, width, height };
 	}, [data]);
 
 	return (
 		<GraphContext.Provider value={value}>
-			<div
-				className="screen-line-before screen-line-after mx-auto flex w-max max-w-full flex-col"
-				{...props}
-			>
+			<div className="screen-line-before screen-line-after mx-auto flex w-max max-w-full flex-col" {...props}>
 				{children}
 			</div>
 		</GraphContext.Provider>

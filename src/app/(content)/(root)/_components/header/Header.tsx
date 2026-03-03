@@ -13,9 +13,7 @@ interface HeaderProps {
 	capture?: boolean;
 }
 
-export const Header = ({
-	capture = process.env.ENV_TYPE === 'capture',
-}: HeaderProps) => (
+export const Header = ({ capture = process.env.ENV_TYPE === 'capture' }: HeaderProps) => (
 	<Panel>
 		<div className="flex">
 			<div
@@ -34,10 +32,7 @@ export const Header = ({
 					width={1190}
 				/>
 				{!capture && (
-					<HeaderPronounce
-						className="absolute right-1 bottom-1 sm:hidden"
-						pronunciation={USER.pronunciation}
-					/>
+					<HeaderPronounce className="absolute right-1 bottom-1 sm:hidden" pronunciation={USER.pronunciation} />
 				)}
 			</div>
 
@@ -45,18 +40,10 @@ export const Header = ({
 				<FlickeringGrid />
 				<div className="flex items-center justify-between gap-x-3 border-edge border-t px-2 sm:px-3">
 					<PixelHeading>{USER.fullName}</PixelHeading>
-					{!capture && (
-						<HeaderPronounce
-							className="max-sm:hidden"
-							pronunciation={USER.pronunciation}
-						/>
-					)}
+					{!capture && <HeaderPronounce className="max-sm:hidden" pronunciation={USER.pronunciation} />}
 				</div>
 				<div className="flex min-h-6 items-center border-edge border-t px-2 sm:min-h-8 sm:px-3">
-					<FlipSentences
-						disableAnimation={capture}
-						sentences={OVERVIEW.sentences}
-					/>
+					<FlipSentences disableAnimation={capture} sentences={OVERVIEW.sentences} />
 				</div>
 			</PanelContent>
 		</div>

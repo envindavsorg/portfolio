@@ -34,10 +34,7 @@ export const NavBarSecondaryMenu = () => {
 							as="p"
 							by="word"
 							delay={0.4 + idx * 0.1}
-							segmentClassName={cn(
-								'text-xs',
-								active ? 'font-bold text-theme' : 'font-medium text-foreground'
-							)}
+							segmentClassName={cn('text-xs', active ? 'font-bold text-theme' : 'font-medium text-foreground')}
 						>
 							{title}
 						</TextAnimate>

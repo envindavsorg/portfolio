@@ -1,12 +1,5 @@
 import { Button } from '@/components/primitives/Button';
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@/components/primitives/Form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/primitives/Form';
 import { Input } from '@/components/primitives/Input';
 import { Spinner } from '@/components/primitives/Spinner';
 import type useEmailForm from '@/hooks/useEmailForm';
@@ -27,9 +20,7 @@ export const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm) => (
 				name="firstName"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel className="text-muted-foreground">
-							votre prénom :
-						</FormLabel>
+						<FormLabel className="text-muted-foreground">votre prénom :</FormLabel>
 						<FormControl>
 							<Input disabled={isLoading} placeholder="..." {...field} />
 						</FormControl>
@@ -43,16 +34,9 @@ export const CvForm = ({ form, isLoading, onSubmit, onCancel }: CvForm) => (
 				name="recipientEmail"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel className="text-muted-foreground">
-							votre adresse e-mail :
-						</FormLabel>
+						<FormLabel className="text-muted-foreground">votre adresse e-mail :</FormLabel>
 						<FormControl>
-							<Input
-								disabled={isLoading}
-								placeholder="..."
-								type="email"
-								{...field}
-							/>
+							<Input disabled={isLoading} placeholder="..." type="email" {...field} />
 						</FormControl>
 						<FormMessage />
 					</FormItem>

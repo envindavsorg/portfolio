@@ -43,19 +43,13 @@ export const POST = async (request: Request): Promise<Response> => {
 		});
 
 		if (error) {
-			return Response.json(
-				{ error: "Erreur lors de l'envoi du mail !" },
-				{ status: 500 }
-			);
+			return Response.json({ error: "Erreur lors de l'envoi du mail !" }, { status: 500 });
 		}
 
 		return Response.json({
 			message: 'Email envoyé avec succès ! ',
 		});
 	} catch {
-		return Response.json(
-			{ error: 'Une erreur serveur est survenue !' },
-			{ status: 500 }
-		);
+		return Response.json({ error: 'Une erreur serveur est survenue !' }, { status: 500 });
 	}
 };

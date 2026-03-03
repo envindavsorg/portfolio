@@ -2,13 +2,7 @@
 
 import type { Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
-import {
-	forwardRef,
-	type MouseEvent,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type MouseEvent, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 const ARROW_VARIANTS: Variants = {
@@ -61,12 +55,7 @@ export const ShareIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}

@@ -48,12 +48,7 @@ const CopyIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 			[controls, onMouseLeave]
 		);
 		return (
-			<div
-				className={className}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={className} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}

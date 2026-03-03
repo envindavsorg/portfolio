@@ -31,10 +31,5 @@ const PATHS = [
 type HolaProps = Omit<ComponentProps<typeof CoverEffect>, 'paths' | 'viewBox'>;
 
 export const Hola = (props: HolaProps) => (
-	<CoverEffect
-		className="h-15 sm:h-22"
-		paths={PATHS}
-		viewBox="0 0 562 201"
-		{...props}
-	/>
+	<CoverEffect className="h-15 sm:h-22" paths={PATHS} viewBox="0 0 562 201" {...props} />
 );

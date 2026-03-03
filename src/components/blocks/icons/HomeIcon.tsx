@@ -59,10 +59,7 @@ export const HomeIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 		);
 		return (
 			<div
-				className={cn(
-					'relative shrink-0 after:absolute after:-inset-2',
-					className
-				)}
+				className={cn('relative shrink-0 after:absolute after:-inset-2', className)}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				{...props}

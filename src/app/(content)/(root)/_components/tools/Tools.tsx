@@ -1,11 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/primitives/Button';
-import {
-	Panel,
-	PanelContent,
-	PanelFooter,
-	PanelHeader,
-} from '@/components/primitives/Panel';
+import { Panel, PanelContent, PanelFooter, PanelHeader } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
 import { getContentByCategory } from '@/lib/content';
 import { dayjs } from '@/lib/functions';
@@ -13,9 +8,7 @@ import { ToolItem } from './ToolItem';
 
 export const Tools = () => {
 	const tools = getContentByCategory('utils')
-		.sort((a, b) =>
-			dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-		)
+		.sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
 		.slice(0, 3);
 
 	return (
@@ -24,25 +17,18 @@ export const Tools = () => {
 
 			<PanelContent>
 				<Prose>
-					-- une suite <span>d'outils web</span> gratuits pour simplifier votre
-					quotidien de développeur --
+					-- une suite <span>d'outils web</span> gratuits pour simplifier votre quotidien de développeur --
 				</Prose>
 				<Prose>
-					-- tous vos <span>utilitaires essentiels</span> réunis au même endroit
-					pour un workflow plus efficace --
+					-- tous vos <span>utilitaires essentiels</span> réunis au même endroit pour un workflow plus efficace --
 				</Prose>
 				<Prose>
-					-- moins de tâches <i>répétitives</i>, plus de <i>productivité</i>,
-					sans aucune contrainte technique --
+					-- moins de tâches <i>répétitives</i>, plus de <i>productivité</i>, sans aucune contrainte technique --
 				</Prose>
 			</PanelContent>
 
 			{tools.map((item, idx) => (
-				<ToolItem
-					isLast={idx === tools.length - 1}
-					key={item.slug}
-					tool={item}
-				/>
+				<ToolItem isLast={idx === tools.length - 1} key={item.slug} tool={item} />
 			))}
 
 			<PanelFooter>

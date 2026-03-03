@@ -3,14 +3,9 @@ import { join } from 'node:path';
 import { GifEncoder } from '@skyra/gifenc';
 import consola from 'consola';
 import { PNG } from 'pngjs';
-import puppeteer, {
-	type Browser,
-	type ElementHandle,
-	type Page,
-} from 'puppeteer-core';
+import puppeteer, { type Browser, type ElementHandle, type Page } from 'puppeteer-core';
 
-const executablePath =
-	'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const executablePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const baseUrl = 'http://localhost:1409';
 const outputDir = join(process.cwd(), 'public/images/blog');
 
@@ -56,9 +51,7 @@ const captureGif = async (
 	const frameInterval = 1000 / fps;
 	const totalFrames = Math.ceil(duration / frameInterval);
 
-	consola.info(
-		`Recording ${totalFrames} frames at ${fps}fps for ${duration}ms...`
-	);
+	consola.info(`Recording ${totalFrames} frames at ${fps}fps for ${duration}ms...`);
 
 	const encoder = new GifEncoder(Math.round(box.width), Math.round(box.height));
 	const stream = createWriteStream(outputPath);
@@ -139,9 +132,7 @@ const captureComponent = async ({
 
 	await new Promise((resolve) => setTimeout(resolve, 3000));
 
-	const componentElement = await page.$(
-		'[data-screenshot-anchor-target-for-capture]'
-	);
+	const componentElement = await page.$('[data-screenshot-anchor-target-for-capture]');
 
 	if (!componentElement) {
 		consola.warn(`Component preview not found for ${componentName}`);
@@ -153,9 +144,7 @@ const captureComponent = async ({
 
 	if (canReplay && duration) {
 		const buttonFound = await page.evaluate(() => {
-			const preview = document.querySelector(
-				'[role="tabpanel"][data-state="active"]'
-			);
+			const preview = document.querySelector('[role="tabpanel"][data-state="active"]');
 
 			if (!preview) {
 				return false;
@@ -184,14 +173,10 @@ const captureComponent = async ({
 
 		await new Promise((resolve) => setTimeout(resolve, 300));
 
-		const remountedElement = await page.$(
-			'[data-screenshot-anchor-target-for-capture]'
-		);
+		const remountedElement = await page.$('[data-screenshot-anchor-target-for-capture]');
 
 		if (!remountedElement) {
-			consola.warn(
-				`Component element not found after remount for ${componentName}`
-			);
+			consola.warn(`Component element not found after remount for ${componentName}`);
 
 			await page.close();
 
@@ -225,9 +210,7 @@ const main = async (): Promise<void> => {
 
 	try {
 		for (const component of COMPONENTS) {
-			consola.info(
-				`Capturing ${component.canReplay ? 'GIFs' : 'screenshots'} for ${component.name}...`
-			);
+			consola.info(`Capturing ${component.canReplay ? 'GIFs' : 'screenshots'} for ${component.name}...`);
 
 			for (const theme of THEMES) {
 				await captureComponent({

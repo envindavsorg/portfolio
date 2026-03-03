@@ -3,13 +3,7 @@ import { Particles } from '@/components/blocks/Particles';
 import { TextAnimate } from '@/components/blocks/TextAnimate';
 import { Button } from '@/components/primitives/Button';
 import { Divider } from '@/components/primitives/Divider';
-import {
-	Panel,
-	PanelContent,
-	PanelFooter,
-	PanelHeader,
-	PanelTitle,
-} from '@/components/primitives/Panel';
+import { Panel, PanelContent, PanelFooter, PanelHeader, PanelTitle } from '@/components/primitives/Panel';
 
 const NotFound = () => (
 	<div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl">
@@ -18,12 +12,7 @@ const NotFound = () => (
 		<Panel>
 			<PanelHeader>
 				<PanelTitle>
-					<TextAnimate
-						animation="slideLeft"
-						by="character"
-						className="text-4xl! sm:text-5xl!"
-						delay={0.2}
-					>
+					<TextAnimate animation="slideLeft" by="character" className="text-4xl! sm:text-5xl!" delay={0.2}>
 						oups, page perdue !
 					</TextAnimate>
 				</PanelTitle>
@@ -33,15 +22,13 @@ const NotFound = () => (
 
 			<PanelContent>
 				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Peut-être avez-vous cliqué sur un ancien lien ou avez-vous fait une
-					faute de frappe ...
+					Peut-être avez-vous cliqué sur un ancien lien ou avez-vous fait une faute de frappe ...
 				</TextAnimate>
 
 				<Divider border={false} type="half" />
 
 				<TextAnimate animation="slideUp" as="p" by="word" delay={0.6} themed>
-					Veuillez vérifier l'URL ou revenir à la page d'accueil pour continuer
-					votre navigation.
+					Veuillez vérifier l'URL ou revenir à la page d'accueil pour continuer votre navigation.
 				</TextAnimate>
 			</PanelContent>
 

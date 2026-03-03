@@ -1,27 +1,13 @@
 'use client';
 
 import SpeedTestEngine from '@cloudflare/speedtest';
-import {
-	DownloadIcon,
-	GaugeIcon,
-	type Icon,
-	SpeedometerIcon,
-	UploadIcon,
-} from '@phosphor-icons/react';
+import { DownloadIcon, GaugeIcon, type Icon, SpeedometerIcon, UploadIcon } from '@phosphor-icons/react';
 import { memo, useCallback, useRef, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
-import {
-	Item,
-	ItemActions,
-	ItemContent,
-	ItemMedia,
-	ItemTitle,
-} from '@/components/primitives/Item';
+import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from '@/components/primitives/Item';
 import { cn } from '@/lib/utils';
 
-type SpeedResult = ReturnType<
-	typeof SpeedTestEngine.prototype.results.getSummary
->;
+type SpeedResult = ReturnType<typeof SpeedTestEngine.prototype.results.getSummary>;
 
 type TestStatus = 'idle' | 'running' | 'finished';
 
@@ -78,9 +64,7 @@ const createSpeedTestEngine = () =>
 	});
 
 const cleanSummary = (summary: SpeedResult): Partial<SpeedResult> =>
-	Object.fromEntries(
-		Object.entries(summary).filter(([, value]) => value !== undefined)
-	) as Partial<SpeedResult>;
+	Object.fromEntries(Object.entries(summary).filter(([, value]) => value !== undefined)) as Partial<SpeedResult>;
 
 const formatValue = (val: number | undefined, measure: string): string => {
 	const num = val ?? 0;
@@ -99,12 +83,7 @@ const PulsatingCircle = memo(({ status }: { status: TestStatus }) => {
 
 	return (
 		<span className="relative flex items-center justify-center">
-			<span
-				className={cn(
-					'absolute inline-flex size-3 animate-ping rounded-full opacity-50',
-					color
-				)}
-			/>
+			<span className={cn('absolute inline-flex size-3 animate-ping rounded-full opacity-50', color)} />
 			<span className={cn('relative inline-flex size-2 rounded-full', color)} />
 		</span>
 	);
@@ -118,29 +97,21 @@ interface SpeedTestItemProps {
 	icon: Icon;
 }
 
-const SpeedTestItem = memo(
-	({ status, label, value, measure, icon: ItemIcon }: SpeedTestItemProps) => (
-		<Item
-			className={status !== 'idle' ? STATUS_COLORS[status] : undefined}
-			size="sm"
-			variant="outline"
-		>
-			<ItemMedia>
-				<ItemIcon className="size-5 sm:size-6" />
-			</ItemMedia>
-			<ItemContent className="flex flex-row items-center gap-x-3">
-				<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
-				<PulsatingCircle status={status} />
-			</ItemContent>
-			<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
-				{formatValue(value, measure)}
-				<span className="font-normal text-muted-foreground text-xs sm:text-sm">
-					{measure}
-				</span>
-			</ItemActions>
-		</Item>
-	)
-);
+const SpeedTestItem = memo(({ status, label, value, measure, icon: ItemIcon }: SpeedTestItemProps) => (
+	<Item className={status !== 'idle' ? STATUS_COLORS[status] : undefined} size="sm" variant="outline">
+		<ItemMedia>
+			<ItemIcon className="size-5 sm:size-6" />
+		</ItemMedia>
+		<ItemContent className="flex flex-row items-center gap-x-3">
+			<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
+			<PulsatingCircle status={status} />
+		</ItemContent>
+		<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
+			{formatValue(value, measure)}
+			<span className="font-normal text-muted-foreground text-xs sm:text-sm">{measure}</span>
+		</ItemActions>
+	</Item>
+));
 
 export const SpeedTest = () => {
 	const [testState, setTestState] = useState<TestState>({

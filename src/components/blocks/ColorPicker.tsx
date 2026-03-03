@@ -7,11 +7,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
 import { Input } from '@/components/primitives/Input';
 import { Label } from '@/components/primitives/Label';
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/primitives/Popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/Popover';
 import { hexToHsl, normalizeColor, trimColorString } from '@/lib/palette';
 
 interface ColorPickerProps {
@@ -46,9 +42,7 @@ export const ColorPicker = ({ color, onChangeAction }: ColorPickerProps) => {
 		handleColorChange(`hsl(${newHsl[0]}, ${newHsl[1]}%, ${newHsl[2]}%)`);
 	};
 
-	const handleSaturationLightnessChange = (
-		event: React.MouseEvent<HTMLDivElement>
-	) => {
+	const handleSaturationLightnessChange = (event: React.MouseEvent<HTMLDivElement>) => {
 		const rect = event.currentTarget.getBoundingClientRect();
 		const x = event.clientX - rect.left;
 		const y = event.clientY - rect.top;
@@ -59,15 +53,10 @@ export const ColorPicker = ({ color, onChangeAction }: ColorPickerProps) => {
 		handleColorChange(`hsl(${newHsl[0]}, ${newHsl[1]}%, ${newHsl[2]}%)`);
 	};
 
-	const handleColorInputChange = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
+	const handleColorInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const newColor = event.target.value;
 		setColorInput(newColor);
-		if (
-			/^#[0-9A-Fa-f]{6}$/.test(newColor) ||
-			/^hsl$$\d+,\s*\d+%,\s*\d+%$$$/.test(newColor)
-		) {
+		if (/^#[0-9A-Fa-f]{6}$/.test(newColor) || /^hsl$$\d+,\s*\d+%,\s*\d+%$$$/.test(newColor)) {
 			handleColorChange(newColor);
 		}
 	};
@@ -90,14 +79,8 @@ export const ColorPicker = ({ color, onChangeAction }: ColorPickerProps) => {
 	return (
 		<Popover onOpenChange={setIsOpen} open={isOpen}>
 			<PopoverTrigger asChild>
-				<Button
-					className="w-[250px] justify-start text-left font-normal"
-					variant="outline"
-				>
-					<div
-						className="mr-2 size-4 rounded-full shadow-sm"
-						style={{ backgroundColor: colorInput }}
-					/>
+				<Button className="w-[250px] justify-start text-left font-normal" variant="outline">
+					<div className="mr-2 size-4 rounded-full shadow-sm" style={{ backgroundColor: colorInput }} />
 					<span className="flex-grow">{trimColorString(colorInput)}</span>
 					<CaretDownIcon className="size-4 opacity-50" />
 				</Button>

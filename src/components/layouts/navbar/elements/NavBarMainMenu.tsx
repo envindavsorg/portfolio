@@ -18,9 +18,7 @@ export const NavBarMainMenu = () => {
 						aria-current={active ? 'page' : undefined}
 						className={cn(
 							'text-sm transition-colors duration-300',
-							active
-								? 'font-bold text-theme'
-								: 'font-medium text-foreground hover:text-foreground'
+							active ? 'font-bold text-theme' : 'font-medium text-foreground hover:text-foreground'
 						)}
 						href={link}
 						key={link}

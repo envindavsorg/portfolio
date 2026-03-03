@@ -22,13 +22,10 @@ export const CvSuccess = memo(({ children }: CvSuccessProps) => (
 				wind={0.01}
 			/>
 
-			<h3 className="font-semibold text-lg text-theme leading-normal sm:text-xl">
-				le mail est en route !
-			</h3>
+			<h3 className="font-semibold text-lg text-theme leading-normal sm:text-xl">le mail est en route !</h3>
 
 			<p className="text-sm leading-normal">
-				vous devriez le recevoir dans quelques instants dans votre boîte aux
-				lettres.
+				vous devriez le recevoir dans quelques instants dans votre boîte aux lettres.
 			</p>
 
 			{children}

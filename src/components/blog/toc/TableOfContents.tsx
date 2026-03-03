@@ -13,42 +13,11 @@ import {
 import { Divider } from '@/components/primitives/Divider';
 import useActiveItem from '@/hooks/useActiveItem';
 import { cn } from '@/lib/utils';
+import { groupTocItems } from './groupTocItems';
 import { TocContent } from './TocContent';
 
 type TableOfContentsProps = ComponentProps<typeof Collapsible> & {
 	items: TOCItemType[];
-};
-
-export interface TocGroup {
-	parent: TOCItemType;
-	children: TOCItemType[];
-}
-
-const groupTocItems = (items: TOCItemType[]): TocGroup[] => {
-	if (items.length === 0) {
-		return [];
-	}
-
-	const minDepth = Math.min(...items.map((item) => item.depth));
-	const groups: TocGroup[] = [];
-	let currentGroup: TocGroup | null = null;
-
-	for (const item of items) {
-		if (item.depth === minDepth) {
-			if (currentGroup) {
-				groups.push(currentGroup);
-			}
-			currentGroup = { parent: item, children: [] };
-		} else if (currentGroup) {
-			currentGroup.children.push(item);
-		}
-	}
-
-	if (currentGroup) {
-		groups.push(currentGroup);
-	}
-
-	return groups;
 };
 
 export const TableOfContents = ({ items, ...props }: TableOfContentsProps) => {
@@ -81,10 +50,7 @@ export const TableOfContents = ({ items, ...props }: TableOfContentsProps) => {
 	return (
 		<>
 			<Divider before={false} border={false} type="half" />
-			<CollapsibleWithContext
-				{...props}
-				className="screen-line-after sticky top-14 bg-background"
-			>
+			<CollapsibleWithContext {...props} className="screen-line-after sticky top-14 bg-background">
 				<CollapsibleTrigger
 					className={cn(
 						'flex w-full cursor-pointer items-center gap-x-3',

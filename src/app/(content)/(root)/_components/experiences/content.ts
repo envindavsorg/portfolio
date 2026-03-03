@@ -92,17 +92,7 @@ export const EXPERIENCES: Experience[] = [
 			start: '2017',
 			end: '2019',
 		},
-		skills: [
-			'JavaScript',
-			'HTML5',
-			'CSS3',
-			'Git',
-			'Figma',
-			'Python',
-			'Django',
-			'Flask',
-			'APIs',
-		],
+		skills: ['JavaScript', 'HTML5', 'CSS3', 'Git', 'Figma', 'Python', 'Django', 'Flask', 'APIs'],
 		description: [
 			"Création d'un intranet sécurisé pour le ministère des Armées avec authentification SSO.",
 			"Création d'un annuaire interne optimisé.",

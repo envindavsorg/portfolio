@@ -1,12 +1,6 @@
 import type { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
-import {
-	BLOCK_MARGIN,
-	BLOCK_RADIUS,
-	BLOCK_SIZE,
-	LABEL_HEIGHT,
-	LEVEL_FILLS,
-} from './config';
+import { BLOCK_MARGIN, BLOCK_RADIUS, BLOCK_SIZE, LABEL_HEIGHT, LEVEL_FILLS } from './config';
 
 type GraphBlockProps = HTMLAttributes<SVGRectElement> & {
 	activity: CommitActivity;
@@ -14,13 +8,7 @@ type GraphBlockProps = HTMLAttributes<SVGRectElement> & {
 	weekIndex: number;
 };
 
-export const GraphBlock = ({
-	activity,
-	dayIndex,
-	weekIndex,
-	className,
-	...props
-}: GraphBlockProps) => (
+export const GraphBlock = ({ activity, dayIndex, weekIndex, className, ...props }: GraphBlockProps) => (
 	<rect
 		className={cn(LEVEL_FILLS[activity.level], className)}
 		data-count={activity.count}

@@ -20,10 +20,7 @@ interface HeaderPronounceProps {
 	className?: string;
 }
 
-export const HeaderPronounce = ({
-	pronunciation,
-	className,
-}: HeaderPronounceProps) => {
+export const HeaderPronounce = ({ pronunciation, className }: HeaderPronounceProps) => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const isPlayingRef = useRef(false);
 	const playIconRef = useRef<AnimatedIconHandle>(null);
@@ -81,11 +78,7 @@ export const HeaderPronounce = ({
 					onAnimationComplete={handleIconAnimationComplete}
 					variants={iconVariants}
 				>
-					{isPlaying ? (
-						<AudioLinesIcon ref={playingIconRef} />
-					) : (
-						<PlayIcon ref={playIconRef} />
-					)}
+					{isPlaying ? <AudioLinesIcon ref={playingIconRef} /> : <PlayIcon ref={playIconRef} />}
 				</motion.div>
 			</AnimatePresence>
 		</MotionButton>

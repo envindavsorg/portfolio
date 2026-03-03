@@ -17,12 +17,7 @@ export const NavBarGitHub = () => {
 			size="icon"
 			variant="outline"
 		>
-			<Link
-				aria-label="Mon profil GitHub"
-				href={GLOBAL_DATA.SOCIAL.github}
-				rel="noopener noreferrer"
-				target="_blank"
-			>
+			<Link aria-label="Mon profil GitHub" href={GLOBAL_DATA.SOCIAL.github} rel="noopener noreferrer" target="_blank">
 				<GitHubIcon ref={iconRef} />
 				<span className="sr-only">Mon profil GitHub</span>
 			</Link>

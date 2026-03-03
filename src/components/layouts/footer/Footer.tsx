@@ -1,5 +1,5 @@
 import { GitBranchIcon, GitDiffIcon } from '@phosphor-icons/react/dist/ssr';
-import { getCommitData } from '@/actions/github/commit.action';
+import { getCommitData } from '@/actions/commit.action';
 import { HeartIcon } from '@/components/blocks/icons/HeartIcon';
 import { Divider } from '@/components/primitives/Divider';
 import { Panel } from '@/components/primitives/Panel';
@@ -26,9 +26,7 @@ export const Footer = async () => {
 						<div className="w-full flex-1 border-edge border-l p-3 text-left">
 							<p className="mt-0.5 flex items-baseline gap-x-1 text-balance font-bold text-sm">
 								{dayjs(updated).format('dddd DD MMM')}
-								<span className="font-light text-[10px] text-theme">
-									({dayjs(updated).fromNow()})
-								</span>
+								<span className="font-light text-[10px] text-theme">({dayjs(updated).fromNow()})</span>
 							</p>
 						</div>
 					</div>
@@ -39,9 +37,7 @@ export const Footer = async () => {
 						<div className="w-full flex-1 border-edge border-l p-3 text-left">
 							<p className="mt-0.5 flex items-baseline gap-x-1 text-balance font-bold text-sm">
 								{hash}
-								<span className="font-light text-[10px] text-theme">
-									(sur la branche {branch})
-								</span>
+								<span className="font-light text-[10px] text-theme">(sur la branche {branch})</span>
 							</p>
 						</div>
 					</div>
@@ -60,11 +56,7 @@ export const Footer = async () => {
 
 			<div className="screen-line-before screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 text-sm sm:text-base md:max-w-3xl">
 				développé avec beaucoup d'
-				<HeartIcon
-					className="relative me-1 text-destructive after:absolute after:-inset-2"
-					size={14}
-				/>
-				à Paris.
+				<HeartIcon className="relative me-1 text-destructive after:absolute after:-inset-2" size={14} />à Paris.
 			</div>
 
 			<FooterDate />

@@ -6,21 +6,15 @@ import { Index } from '@/__registry__';
 import { logger } from './logger';
 import type { UnistNode, UnistTree } from './remark-code-import';
 
-const getNodeAttribute = (node: UnistNode, name: string) =>
-	node.attributes?.find((attr) => attr.name === name);
+const getNodeAttribute = (node: UnistNode, name: string) => node.attributes?.find((attr) => attr.name === name);
 
 const getAttributeValue = (node: UnistNode, name: string): string | undefined =>
 	getNodeAttribute(node, name)?.value as string | undefined;
 
 const normalizeSource = (source: string): string =>
-	source
-		.replaceAll('@/registry/', '@/components/')
-		.replaceAll('export default', 'export');
+	source.replaceAll('@/registry/', '@/components/').replaceAll('export default', 'export');
 
-const resolveSourceFilePath = (
-	name: string,
-	fileName?: string
-): string | undefined => {
+const resolveSourceFilePath = (name: string, fileName?: string): string | undefined => {
 	const component = Index[name];
 	if (!component) {
 		return undefined;
@@ -33,8 +27,7 @@ const resolveSourceFilePath = (
 	return (
 		component.files.find(
 			(file: unknown) =>
-				typeof file === 'string' &&
-				(file.endsWith(`${fileName}.tsx`) || file.endsWith(`${fileName}.ts`))
+				typeof file === 'string' && (file.endsWith(`${fileName}.tsx`) || file.endsWith(`${fileName}.ts`))
 		) || component.files[0]?.path
 	);
 };
@@ -63,9 +56,7 @@ const handleComponentSource = (node: UnistNode) => {
 		return;
 	}
 
-	const filePath = srcPath
-		? join(process.cwd(), srcPath)
-		: resolveSourceFilePath(name!, fileName);
+	const filePath = srcPath ? join(process.cwd(), srcPath) : resolveSourceFilePath(name!, fileName);
 
 	if (!filePath) {
 		return;
@@ -75,18 +66,11 @@ const handleComponentSource = (node: UnistNode) => {
 	const title = getAttributeValue(node, 'title');
 	const showLineNumbers = getNodeAttribute(node, 'showLineNumbers');
 
-	const meta = [
-		title ? `title="${title}"` : '',
-		showLineNumbers ? 'showLineNumbers' : '',
-	]
-		.filter(Boolean)
-		.join(' ');
+	const meta = [title ? `title="${title}"` : '', showLineNumbers ? 'showLineNumbers' : ''].filter(Boolean).join(' ');
 
 	// Pass collapsible as a preserved attribute on the node
 	if (noCollapsible) {
-		node.attributes = node.attributes?.filter(
-			(attr) => attr.name !== 'noCollapsible'
-		);
+		node.attributes = node.attributes?.filter((attr) => attr.name !== 'noCollapsible');
 		node.attributes?.push({
 			name: 'collapsible',
 			value: 'false',
@@ -94,9 +78,7 @@ const handleComponentSource = (node: UnistNode) => {
 		});
 	}
 
-	node.children?.push(
-		buildCodeElement(source, extname(filePath).slice(1), meta)
-	);
+	node.children?.push(buildCodeElement(source, extname(filePath).slice(1), meta));
 };
 
 const handleComponentPreview = (node: UnistNode) => {

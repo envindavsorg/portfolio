@@ -1,10 +1,6 @@
-import { getGitHubData } from '@/actions/github/data.action';
+import { getGitHubData } from '@/actions/data.action';
 import { Badge } from '@/components/primitives/Badge';
-import {
-	Panel,
-	PanelContent,
-	PanelHeader,
-} from '@/components/primitives/Panel';
+import { Panel, PanelContent, PanelHeader } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
 import { CommitsContent } from './CommitsContent';
 
@@ -17,12 +13,10 @@ export const Commits = async () => {
 
 			<PanelContent>
 				<Prose>
-					-- retrouvez ici <span>l'historique complet</span> de mes
-					contributions open source sur GitHub --
+					-- retrouvez ici <span>l'historique complet</span> de mes contributions open source sur GitHub --
 				</Prose>
 				<Prose>
-					-- chaque commit représente une <i>étape</i> de mon parcours en tant
-					que développeur --
+					-- chaque commit représente une <i>étape</i> de mon parcours en tant que développeur --
 				</Prose>
 			</PanelContent>
 

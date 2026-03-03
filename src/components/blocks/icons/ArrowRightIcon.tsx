@@ -3,13 +3,7 @@
 import type { Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
-import {
-	forwardRef,
-	type HTMLAttributes,
-	useCallback,
-	useImperativeHandle,
-	useRef,
-} from 'react';
+import { forwardRef, type HTMLAttributes, useCallback, useImperativeHandle, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface ArrowRightIconHandle {
@@ -79,12 +73,7 @@ const ArrowRightIcon = forwardRef<ArrowRightIconHandle, ArrowRightIconProps>(
 		);
 
 		return (
-			<div
-				className={cn(className)}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
-				{...props}
-			>
+			<div className={cn(className)} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
 				<svg
 					fill="none"
 					height={size}
@@ -96,16 +85,8 @@ const ArrowRightIcon = forwardRef<ArrowRightIconHandle, ArrowRightIconProps>(
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<motion.path
-						animate={controls}
-						initial="normal"
-						variants={PATH_VARIANTS}
-					/>
-					<motion.path
-						animate={controls}
-						initial="normal"
-						variants={SECONDARY_PATH_VARIANTS}
-					/>
+					<motion.path animate={controls} initial="normal" variants={PATH_VARIANTS} />
+					<motion.path animate={controls} initial="normal" variants={SECONDARY_PATH_VARIANTS} />
 				</svg>
 			</div>
 		);

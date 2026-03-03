@@ -1,12 +1,6 @@
 'use client';
 
-import {
-	ArrowsClockwiseIcon,
-	CopyIcon,
-	LockKeyIcon,
-	LockSimpleOpenIcon,
-	SwatchesIcon,
-} from '@phosphor-icons/react';
+import { ArrowsClockwiseIcon, CopyIcon, LockKeyIcon, LockSimpleOpenIcon, SwatchesIcon } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { Poline, positionFunctions } from 'poline';
 import { useCallback, useState } from 'react';
@@ -44,8 +38,7 @@ const parseHSL = (hsl: string): [number, number, number] => {
 	return [parts[0], parts[1], parts[2]];
 };
 
-const formatHSL = (h: number, s: number, l: number): string =>
-	`${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`;
+const formatHSL = (h: number, s: number, l: number): string => `${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`;
 
 const getContrastColor = (hsl: string): string => {
 	const [, , l] = parseHSL(hsl);
@@ -74,8 +67,7 @@ const buildCSSOutput = (scheme: ColorScheme): string => {
 };
 
 export const ColorGenerator = () => {
-	const [colorScheme, setColorScheme] =
-		useState<ColorScheme>(DEFAULT_COLOR_SCHEME);
+	const [colorScheme, setColorScheme] = useState<ColorScheme>(DEFAULT_COLOR_SCHEME);
 	const [lockedColor, setLockedColor] = useState<string | null>(null);
 	const { handleCopy } = useCopyToClipboard();
 
@@ -148,9 +140,7 @@ export const ColorGenerator = () => {
 							<span className="text-muted-foreground text-xs">{key}</span>
 							<Button
 								className="mr-6"
-								onClick={() =>
-									setLockedColor((prev) => (prev === key ? null : key))
-								}
+								onClick={() => setLockedColor((prev) => (prev === key ? null : key))}
 								size="icon"
 								variant="ghost"
 							>
@@ -158,23 +148,16 @@ export const ColorGenerator = () => {
 							</Button>
 						</div>
 						<div className="mt-2 flex items-center">
-							<ColorPicker
-								color={`hsl(${value})`}
-								onChangeAction={(color) => updateColor(key, color)}
-							/>
+							<ColorPicker color={`hsl(${value})`} onChangeAction={(color) => updateColor(key, color)} />
 						</div>
 					</div>
 				))}
 			</div>
 
 			<div className="screen-line-before py-1.5">
+				<Prose>-- explorez une palette de couleurs harmonieuses générée pour vos projets web --</Prose>
 				<Prose>
-					-- explorez une palette de couleurs harmonieuses générée pour vos
-					projets web --
-				</Prose>
-				<Prose>
-					-- chaque couleur est soigneusement sélectionnée pour assurer une
-					esthétique cohérente et attrayante --
+					-- chaque couleur est soigneusement sélectionnée pour assurer une esthétique cohérente et attrayante --
 				</Prose>
 			</div>
 
@@ -206,10 +189,7 @@ export const ColorGenerator = () => {
 			</div>
 
 			<div className="screen-line-before flex justify-end py-1.5">
-				<Button
-					onClick={() => handleCopy(buildCSSOutput(colorScheme))}
-					variant="outline"
-				>
+				<Button onClick={() => handleCopy(buildCSSOutput(colorScheme))} variant="outline">
 					<CopyIcon />
 					copier les couleurs
 				</Button>

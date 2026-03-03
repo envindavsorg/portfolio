@@ -1,10 +1,5 @@
 import { Fragment } from 'react';
-import {
-	Marquee,
-	MarqueeContent,
-	MarqueeFade,
-	MarqueeItem,
-} from '@/components/blocks/Marquee';
+import { Marquee, MarqueeContent, MarqueeFade, MarqueeItem } from '@/components/blocks/Marquee';
 import { Divider } from '@/components/primitives/Divider';
 import { PanelContent } from '@/components/primitives/Panel';
 import type { Stack } from './content';

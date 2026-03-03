@@ -32,9 +32,7 @@ const getJsonLd = () => ({
 			name: GLOBAL_DATA.USER.fullName,
 			url: GLOBAL_DATA.SOCIAL.portfolio,
 			jobTitle: GLOBAL_DATA.WORK.title,
-			sameAs: [GLOBAL_DATA.SOCIAL.github, GLOBAL_DATA.SOCIAL.linkedin].filter(
-				Boolean
-			),
+			sameAs: [GLOBAL_DATA.SOCIAL.github, GLOBAL_DATA.SOCIAL.linkedin].filter(Boolean),
 			knowsAbout: ['React', 'Next.js', 'TypeScript'],
 		},
 	],
@@ -143,10 +141,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
 		suppressHydrationWarning
 	>
 		<head>
-			<script
-				dangerouslySetInnerHTML={{ __html: darkModeScript }}
-				type="text/javascript"
-			/>
+			<script dangerouslySetInnerHTML={{ __html: darkModeScript }} type="text/javascript" />
 			<script
 				dangerouslySetInnerHTML={{
 					__html: JSON.stringify(getJsonLd()).replace(/</g, '\\u003c'),

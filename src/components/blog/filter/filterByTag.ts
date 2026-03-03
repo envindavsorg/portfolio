@@ -7,10 +7,7 @@ interface TagFilterResult {
 	selectedTag: string;
 }
 
-export const filterByTag = (
-	posts: Content[],
-	tag?: string
-): TagFilterResult => {
+export const filterByTag = (posts: Content[], tag?: string): TagFilterResult => {
 	const tagCounts: Record<string, number> = {
 		tout: posts.length,
 	};
@@ -32,9 +29,7 @@ export const filterByTag = (
 	const filtered =
 		!normalizedTag || normalizedTag === 'tout'
 			? posts
-			: posts.filter((post) =>
-					post.metadata.tags?.some((t) => t.toLowerCase() === normalizedTag)
-				);
+			: posts.filter((post) => post.metadata.tags?.some((t) => t.toLowerCase() === normalizedTag));
 
 	return { tags, tagCounts, filtered, selectedTag: tag || 'tout' };
 };

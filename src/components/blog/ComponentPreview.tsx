@@ -2,14 +2,7 @@
 
 import Link from 'next/link';
 import type React from 'react';
-import {
-	Children,
-	type ComponentProps,
-	Suspense,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { Children, type ComponentProps, Suspense, useMemo, useRef, useState } from 'react';
 import { Index } from '@/__registry__';
 import { RefreshIcon } from '@/components/blocks/icons/RefreshIcon';
 import { V0Icon } from '@/components/blocks/icons/stack/V0';
@@ -46,9 +39,7 @@ export const ComponentPreview = ({
 		if (!Component) {
 			return (
 				<p className="text-muted-foreground text-sm">
-					-- le composant{' '}
-					<CodeInline className="font-semibold">{name}</CodeInline> n'existe pas
-					dans le registre --
+					-- le composant <CodeInline className="font-semibold">{name}</CodeInline> n'existe pas dans le registre --
 				</p>
 			);
 		}
@@ -112,11 +103,7 @@ export const ComponentPreview = ({
 			label: 'code',
 			content: (
 				<div className="[&>figure]:m-0 [&_button.absolute]:top-3 [&_button.absolute]:right-3">
-					{codeCollapsible ? (
-						<CodeCollapsibleWrapper>{Code}</CodeCollapsibleWrapper>
-					) : (
-						Code
-					)}
+					{codeCollapsible ? <CodeCollapsibleWrapper>{Code}</CodeCollapsibleWrapper> : Code}
 				</div>
 			),
 		},
@@ -124,11 +111,7 @@ export const ComponentPreview = ({
 
 	return (
 		<div className={cn(notProse && 'not-prose')} {...props}>
-			<TabsAnimated
-				after={false}
-				className="ms-auto max-w-sm pt-0"
-				tabs={tabs}
-			/>
+			<TabsAnimated after={false} className="ms-auto max-w-sm pt-0" tabs={tabs} />
 		</div>
 	);
 };

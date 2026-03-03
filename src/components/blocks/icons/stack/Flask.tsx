@@ -1,14 +1,7 @@
 import type { SVGProps } from 'react';
 
 export const FlaskIcon = (props: SVGProps<SVGSVGElement>) => (
-	<svg
-		fill="#ffffff"
-		height="1em"
-		viewBox="0 0 32 32"
-		width="1em"
-		xmlns="http://www.w3.org/2000/svg"
-		{...props}
-	>
+	<svg fill="#ffffff" height="1em" viewBox="0 0 32 32" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}>
 		<title>Flask</title>
 		<path
 			className="fill-foreground"
