@@ -1,69 +1,54 @@
+import { getTableOfContents } from 'fumadocs-core/content/toc';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { BlogPosting as PageSchema, WithContext } from 'schema-dts';
-import { PixelHeading } from '@/components/blocks/PixelHeading';
+import { ArticleNavBar } from '@/components/blog/ArticleNavBar';
+import { ArticleTitle } from '@/components/blog/ArticleTitle';
+import { TableOfContents } from '@/components/blog/toc/TableOfContents';
 import { MDX } from '@/components/markdown/mdx';
-import { Divider } from '@/components/primitives/Divider';
-import { Prose } from '@/components/primitives/Typography';
 import GLOBAL_DATA from '@/data/global';
-import {
-	type Content,
-	getContentByCategory,
-	getContentBySlug,
-} from '@/lib/content';
+import { type Content, getContentByCategory, getContentBySlug } from '@/lib/content';
 import { dayjs } from '@/lib/functions';
 import { buildContentMetadata } from '@/lib/open-graph';
-import { TopNav } from '../../_components/TopNav';
 
 interface Props {
-	params: Promise<{
-		slug: string;
-	}>;
+	params: Promise<{ slug: string }>;
 }
 
 export const generateStaticParams = async () => {
-	const posts: Content[] = getContentByCategory('utils');
-	return posts.map(({ slug }) => ({ slug }));
+	const utils = getContentByCategory('utils');
+	return utils.map(({ slug }) => ({ slug }));
 };
 
-export const generateMetadata = async ({
-	params,
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
 	const { slug } = await params;
-	const post = getContentBySlug(slug);
-
-	if (!post) {
+	const util = getContentBySlug(slug);
+	if (!util) {
 		return notFound();
 	}
 
-	const { title, description } = post.metadata;
-	const postUrl = `/utils/${post.slug}`;
-
-	const og = buildContentMetadata({
-		title,
-		description,
-		ogImageParams: { type: 'utilsArticle', title, description },
-	});
-
+	const { title, description, category } = util.metadata;
 	return {
-		...og,
+		...buildContentMetadata({
+			title,
+			description,
+			ogImageParams: { type: 'utilsArticle', title, description },
+		}),
 		alternates: {
-			canonical: postUrl,
+			canonical: `https://cuzeacflorin.fr/${category}/${slug}`,
 		},
 	};
 };
 
-const getPageJsonLd = (post: Content): WithContext<PageSchema> => ({
+const getPageJsonLd = ({ metadata, slug }: Content): WithContext<PageSchema> => ({
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
-	headline: post.metadata.title,
-	description: post.metadata.description,
-	image:
-		post.metadata.image ||
-		`/og/simple?title=${encodeURIComponent(post.metadata.title)}`,
-	url: `https://cuzeacflorin.fr/utils/${post.slug}`,
-	datePublished: dayjs(post.metadata.createdAt).toISOString(),
-	dateModified: dayjs(post.metadata.updatedAt).toISOString(),
+	headline: metadata.title,
+	description: metadata.description,
+	image: metadata.image || `/og/simple?title=${encodeURIComponent(metadata.title)}`,
+	url: `https://cuzeacflorin.fr/${metadata.category}/${slug}`,
+	datePublished: dayjs(metadata.createdAt).toISOString(),
+	dateModified: dayjs(metadata.updatedAt).toISOString(),
 	author: {
 		'@type': 'Person',
 		name: GLOBAL_DATA.USER.firstName,
@@ -80,7 +65,9 @@ const Page = async ({ params }: Props) => {
 		notFound();
 	}
 
-	const utils = getContentByCategory('utils');
+	const { content, metadata } = util;
+	const toc = getTableOfContents(content);
+	const utils = metadata.category ? getContentByCategory(metadata.category) : [];
 
 	return (
 		<>
@@ -90,34 +77,10 @@ const Page = async ({ params }: Props) => {
 				}}
 				type="application/ld+json"
 			/>
-
-			<TopNav
-				description="tous les composants"
-				item={util}
-				items={utils}
-				slug={slug}
-				useLlm={false}
-			/>
-
-			<div className="screen-line-after flex w-full items-center justify-between gap-x-3 px-2 sm:px-4">
-				<PixelHeading
-					autoPlay
-					className="text-balance font-extrabold text-[28px] lowercase leading-snug sm:text-4xl"
-					mode="multi"
-				>
-					{util.metadata.title}
-				</PixelHeading>
-			</div>
-
-			<div className="screen-line-after px-2 py-2 sm:px-4">
-				<Prose className="lowercase">-- {util.metadata.description} --</Prose>
-			</div>
-
-			<Prose className="p-4 px-2 lowercase sm:px-4">
-				<MDX code={util.content} />
-			</Prose>
-
-			<Divider border={false} />
+			<ArticleNavBar description="tous les outils" item={util} items={utils} slug={slug} useLlm={false} />
+			<ArticleTitle title={metadata.title} />
+			<TableOfContents items={toc} />
+			<MDX code={content} />
 		</>
 	);
 };

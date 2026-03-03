@@ -12,9 +12,10 @@ import {
 	useMemo,
 	useState,
 } from 'react';
-import { ChevronsDownUpIcon } from '@/components/blocks/icons/ChevronsDownUpIcon';
-import { ChevronsUpDownIcon } from '@/components/blocks/icons/ChevronsUpDownIcon';
 import { Button } from '@/components/primitives/Button';
+import { cn } from '@/lib/utils';
+import { ChevronDownIcon } from '../blocks/icons/ChevronDownIcon';
+import { ChevronUpIcon } from '../blocks/icons/ChevronUpIcon';
 
 export const Collapsible = Primitive.Root;
 
@@ -26,7 +27,11 @@ export const CollapsibleContent = forwardRef<
 >(({ children, className, ...props }, ref) => (
 	<Primitive.CollapsibleContent
 		asChild
-		className={className}
+		className={cn(
+			'overflow-hidden duration-200',
+			'data-[state=closed]:animate-collapsible-fade-up',
+			'data-[state=open]:animate-collapsible-fade-down'
+		)}
 		ref={ref}
 		{...props}
 	>
@@ -56,6 +61,7 @@ export const CollapsibleContent = forwardRef<
 
 interface CollapsibleContextType {
 	open: boolean;
+	setOpen: (open: boolean) => void;
 }
 
 const CollapsibleContext = createContext<CollapsibleContextType | null>(null);
@@ -78,23 +84,19 @@ export const CollapsibleWithContext = ({
 }: ComponentProps<typeof Collapsible>) => {
 	const [open, setOpen] = useState(defaultOpen ?? false);
 	return (
-		<CollapsibleContext.Provider value={{ open }}>
+		<CollapsibleContext.Provider value={{ open, setOpen }}>
 			<Collapsible onOpenChange={setOpen} open={open} {...props} />
 		</CollapsibleContext.Provider>
 	);
 };
 
-export const CollapsibleChevronsIcon = () => {
-	const { open } = useCollapsible();
-	const Icon = open ? ChevronsDownUpIcon : ChevronsUpDownIcon;
-
-	return (
-		<Icon
-			className="relative before:absolute before:inset-0 before:-left-[100vw] before:content-['']"
-			size={20}
-		/>
-	);
-};
+export const CollapsibleChevronsIcon = forwardRef<AnimatedIconHandle>(
+	(_, ref) => {
+		const { open } = useCollapsible();
+		const Icon = open ? ChevronUpIcon : ChevronDownIcon;
+		return <Icon ref={ref} />;
+	}
+);
 
 interface CollapsibleListProps<T> {
 	items: T[];
@@ -114,7 +116,10 @@ export const CollapsibleList = <T,>({
 	max = 3,
 	keyExtractorAction,
 	className,
-	labels = { showMore: 'Afficher plus', showLess: 'Afficher moins' },
+	labels = {
+		showMore: 'afficher plus',
+		showLess: 'afficher moins',
+	},
 }: CollapsibleListProps<T>) => {
 	const { visibleItems, hiddenItems } = useMemo(
 		() => ({

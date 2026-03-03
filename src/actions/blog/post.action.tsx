@@ -9,7 +9,14 @@ import {
 } from '@phosphor-icons/react';
 import Link from 'next/link';
 import type React from 'react';
-import { lazy, useMemo, useOptimistic, useTransition } from 'react';
+import {
+	lazy,
+	useEffect,
+	useMemo,
+	useOptimistic,
+	useState,
+	useTransition,
+} from 'react';
 import { buttonVariants } from '@/components/primitives/Button';
 import {
 	DropdownMenu,
@@ -131,11 +138,16 @@ export const ViewOptions = ({
 	markdownUrl,
 	isComponent = false,
 }: ViewOptionsProps) => {
+	const [origin, setOrigin] = useState('');
+
+	useEffect(() => {
+		setOrigin(window.location.origin);
+	}, []);
+
 	const items = useMemo(() => {
-		const fullMarkdownUrl =
-			typeof window === 'undefined'
-				? markdownUrl
-				: new URL(markdownUrl, window.location.origin).toString();
+		const fullMarkdownUrl = origin
+			? new URL(markdownUrl, origin).toString()
+			: markdownUrl;
 
 		const promptType = isComponent ? 'component' : 'general';
 		const q = getPrompt(fullMarkdownUrl, promptType);
@@ -178,40 +190,38 @@ export const ViewOptions = ({
 		}
 
 		return _items;
-	}, [markdownUrl, isComponent]);
+	}, [markdownUrl, isComponent, origin]);
 
 	return (
-		<div suppressHydrationWarning>
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<button
-						className="group/toggle flex size-7 cursor-pointer items-center justify-center gap-2 rounded-r-full text-sm"
-						type="button"
-					>
-						<CaretDownIcon className="mr-1 size-4 group-data-[state=open]/toggle:hidden" />
-						<CaretUpIcon className="mr-1 size-4 group-data-[state=closed]/toggle:hidden" />
-						<span className="sr-only">voir les options de visualisation</span>
-					</button>
-				</DropdownMenuTrigger>
-
-				<DropdownMenuContent
-					align="end"
-					className="w-fit py-2 *:cursor-pointer"
-					collisionPadding={8}
-					onCloseAutoFocus={(event: Event) => event.preventDefault()}
-					sideOffset={8}
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<button
+					className="group/toggle flex size-7 cursor-pointer items-center justify-center gap-2 rounded-r-full text-sm"
+					type="button"
 				>
-					{items.map(({ title, href, icon: Icon }) => (
-						<DropdownMenuItem asChild className="font-medium" key={href}>
-							<Link href={href} rel="noreferrer noopener" target="_blank">
-								<Icon className="size-4" />
-								{title}
-							</Link>
-						</DropdownMenuItem>
-					))}
-				</DropdownMenuContent>
-			</DropdownMenu>
-		</div>
+					<CaretDownIcon className="mr-1 size-4 group-data-[state=open]/toggle:hidden" />
+					<CaretUpIcon className="mr-1 size-4 group-data-[state=closed]/toggle:hidden" />
+					<span className="sr-only">voir les options de visualisation</span>
+				</button>
+			</DropdownMenuTrigger>
+
+			<DropdownMenuContent
+				align="end"
+				className="w-fit py-2 *:cursor-pointer"
+				collisionPadding={8}
+				onCloseAutoFocus={(event: Event) => event.preventDefault()}
+				sideOffset={8}
+			>
+				{items.map(({ title, href, icon: Icon }) => (
+					<DropdownMenuItem asChild className="font-medium" key={href}>
+						<Link href={href} rel="noreferrer noopener" target="_blank">
+							<Icon className="size-4" />
+							{title}
+						</Link>
+					</DropdownMenuItem>
+				))}
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 };
 

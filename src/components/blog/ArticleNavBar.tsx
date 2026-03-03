@@ -5,6 +5,8 @@ import { useRef } from 'react';
 import { LLMCopyButtonWithViewOptions } from '@/actions/blog/post.action';
 import { ArrowLeftIcon } from '@/components/blocks/icons/ArrowLeftIcon';
 import { ArrowRightIcon } from '@/components/blocks/icons/ArrowRightIcon';
+import { KeyboardShortcuts } from '@/components/blog/KeyboardShortcuts';
+import { ShareMenu } from '@/components/blog/ShareMenu';
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -16,8 +18,6 @@ import {
 import { Button } from '@/components/primitives/Button';
 import { Divider } from '@/components/primitives/Divider';
 import type { Content } from '@/lib/content';
-import { KeyboardShortcuts } from './KeyboardShortcuts';
-import { ShareMenu } from './ShareMenu';
 
 interface TopNavProps {
 	items: Content[];
@@ -27,13 +27,7 @@ interface TopNavProps {
 	useLlm?: boolean;
 }
 
-export const TopNav = ({
-	items,
-	item,
-	slug,
-	description,
-	useLlm = true,
-}: TopNavProps) => {
+export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }: TopNavProps) => {
 	const currentIndex = items.findIndex((i) => i.slug === slug);
 	const previous = currentIndex > 0 ? items[currentIndex - 1] : null;
 	const next = currentIndex < items.length - 1 ? items[currentIndex + 1] : null;
@@ -43,20 +37,13 @@ export const TopNav = ({
 
 	return (
 		<>
-			<KeyboardShortcuts
-				basePath={`/${item.metadata.category}`}
-				next={next}
-				previous={previous}
-			/>
+			<KeyboardShortcuts basePath={`/${item.metadata.category}`} next={next} previous={previous} />
 
 			<div className="screen-line-after px-2 py-0.5 sm:px-4">
 				<Breadcrumb>
 					<BreadcrumbList>
 						<BreadcrumbItem>
-							<BreadcrumbLink
-								aria-label={description}
-								href={`/${item.metadata.category}`}
-							>
+							<BreadcrumbLink aria-label={description} href={`/${item.metadata.category}`}>
 								{description}
 							</BreadcrumbLink>
 						</BreadcrumbItem>
@@ -103,10 +90,7 @@ export const TopNav = ({
 							size="icon"
 							variant="outline"
 						>
-							<Link
-								aria-label={description}
-								href={`/${item.metadata.category}/${previous.slug}`}
-							>
+							<Link aria-label={description} href={`/${item.metadata.category}/${previous.slug}`}>
 								<ArrowLeftIcon ref={iconArrowLeftRef} />
 								<span className="sr-only">Précédent</span>
 							</Link>
@@ -121,10 +105,7 @@ export const TopNav = ({
 							size="icon"
 							variant="outline"
 						>
-							<Link
-								aria-label={description}
-								href={`/${item.metadata.category}/${next.slug}`}
-							>
+							<Link aria-label={description} href={`/${item.metadata.category}/${next.slug}`}>
 								<ArrowRightIcon ref={iconArrowRightRef} />
 								<span className="sr-only">Suivant</span>
 							</Link>

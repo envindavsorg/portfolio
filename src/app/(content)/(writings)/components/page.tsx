@@ -2,14 +2,10 @@ import { CheckIcon, InfoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { ArticleItem } from '@/app/(content)/(root)/_components/articles/ArticleItem';
-import { filterByTag } from '@/app/(content)/(writings)/_components/filter/filterByTag';
-import { TagsFilter } from '@/app/(content)/(writings)/_components/filter/TagsFilter';
 import { PixelHeading } from '@/components/blocks/PixelHeading';
-import {
-	AnimatedSpan,
-	Terminal,
-	TypingAnimation,
-} from '@/components/blocks/Terminal';
+import { AnimatedSpan, Terminal, TypingAnimation } from '@/components/blocks/Terminal';
+import { filterByTag } from '@/components/blog/filter/filterByTag';
+import { TagsFilter } from '@/components/blog/filter/TagsFilter';
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -26,21 +22,17 @@ import { dayjs } from '@/lib/functions';
 import { buildContentMetadata } from '@/lib/open-graph';
 
 const getCachedComponents = cache(() =>
-	getContentByCategory('components').sort((a, b) =>
-		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-	)
+	getContentByCategory('components').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	buildContentMetadata({
 		title: 'Composants React',
-		description:
-			'Ma collection de snippets React réutilisables dans tous vos projets.',
+		description: 'Ma collection de snippets React réutilisables dans tous vos projets.',
 		ogImageParams: {
 			type: 'components',
 			title: 'Composants React',
-			description:
-				'Ma collection de snippets React réutilisables dans tous vos projets.',
+			description: 'Ma collection de snippets React réutilisables dans tous vos projets.',
 		},
 	});
 
@@ -50,15 +42,10 @@ type ComponentsPageProps = Readonly<{
 	}>;
 }>;
 
-const ComponentsPage = async ({
-	searchParams,
-}: Readonly<ComponentsPageProps>) => {
+const ComponentsPage = async ({ searchParams }: Readonly<ComponentsPageProps>) => {
 	const { tag } = await searchParams;
 	const allComponents = getCachedComponents();
-	const { tags, tagCounts, filtered, selectedTag } = filterByTag(
-		allComponents,
-		tag
-	);
+	const { tags, tagCounts, filtered, selectedTag } = filterByTag(allComponents, tag);
 
 	return (
 		<div className="screen-line-after min-h-svh">
@@ -105,22 +92,18 @@ const ComponentsPage = async ({
 						<InfoIcon className="size-3" />
 						<span>1 fichier crée :</span>
 					</div>
-					<span className="pl-4 text-muted-foreground">
-						- components/ui/composant.tsx
-					</span>
+					<span className="pl-4 text-muted-foreground">- components/ui/composant.tsx</span>
 				</AnimatedSpan>
 			</Terminal>
 
 			<PanelContent className="screen-line-after screen-line-before">
 				<Prose>
-					-- accélérez vos développements avec une{' '}
-					<i>collection complète de composants et hooks React optimisés</i>,
+					-- accélérez vos développements avec une <i>collection complète de composants et hooks React optimisés</i>,
 					conçus pour des applications modernes et performantes. --
 				</Prose>
 				<Prose>
-					-- compatibles <span>App Router</span>, <span>Server Components</span>{' '}
-					et <span>Server Actions</span>. Intégration transparente avec les
-					dernières fonctionnalités de <i>Next.js 16</i> --
+					-- compatibles <span>App Router</span>, <span>Server Components</span> et <span>Server Actions</span>.
+					Intégration transparente avec les dernières fonctionnalités de <i>Next.js 16</i> --
 				</Prose>
 			</PanelContent>
 
@@ -136,11 +119,7 @@ const ComponentsPage = async ({
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					{filtered.map((component: Content) => (
-						<ArticleItem
-							article={component}
-							key={component.slug}
-							noMetadata={true}
-						/>
+						<ArticleItem article={component} key={component.slug} noMetadata={true} />
 					))}
 				</div>
 			</div>

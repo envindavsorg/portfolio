@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { ToolItem } from '@/app/(content)/(root)/_components/tools/ToolItem';
-import { filterByTag } from '@/app/(content)/(writings)/_components/filter/filterByTag';
-import { TagsFilter } from '@/app/(content)/(writings)/_components/filter/TagsFilter';
 import { PixelHeading } from '@/components/blocks/PixelHeading';
+import { filterByTag } from '@/components/blog/filter/filterByTag';
+import { TagsFilter } from '@/components/blog/filter/TagsFilter';
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -20,21 +20,17 @@ import { dayjs } from '@/lib/functions';
 import { buildContentMetadata } from '@/lib/open-graph';
 
 const getCachedUtils = cache(() =>
-	getContentByCategory('utils').sort((a, b) =>
-		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-	)
+	getContentByCategory('utils').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	buildContentMetadata({
 		title: 'Outils pour développeurs',
-		description:
-			"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
+		description: "Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
 		ogImageParams: {
 			type: 'utils',
 			title: 'Outils pour développeurs',
-			description:
-				"Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
+			description: "Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
 		},
 	});
 
@@ -79,12 +75,11 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 
 			<PanelContent className="screen-line-after">
 				<Prose>
-					-- optimisez votre workflow avec cette <i>suite d'outils web</i>{' '}
-					gratuits pour développeurs --
+					-- optimisez votre workflow avec cette <i>suite d'outils web</i> gratuits pour développeurs --
 				</Prose>
 				<Prose>
-					-- tous les outils sont <span>open-source</span> et conçus pour vous
-					aider à gagner du temps et à améliorer votre productivité --
+					-- tous les outils sont <span>open-source</span> et conçus pour vous aider à gagner du temps et à améliorer
+					votre productivité --
 				</Prose>
 			</PanelContent>
 

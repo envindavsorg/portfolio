@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { ArticleItem } from '@/app/(content)/(root)/_components/articles/ArticleItem';
-import { filterByTag } from '@/app/(content)/(writings)/_components/filter/filterByTag';
-import { TagsFilter } from '@/app/(content)/(writings)/_components/filter/TagsFilter';
 import { PixelHeading } from '@/components/blocks/PixelHeading';
+import { filterByTag } from '@/components/blog/filter/filterByTag';
+import { TagsFilter } from '@/components/blog/filter/TagsFilter';
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -20,21 +20,17 @@ import { dayjs } from '@/lib/functions';
 import { buildContentMetadata } from '@/lib/open-graph';
 
 const getCachedArticles = cache(() =>
-	getContentByCategory('articles').sort((a, b) =>
-		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-	)
+	getContentByCategory('articles').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	buildContentMetadata({
 		title: 'Mes articles de blog',
-		description:
-			'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
+		description: 'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		ogImageParams: {
 			type: 'blog',
 			title: 'Mes articles de blog',
-			description:
-				'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
+			description: 'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		},
 	});
 
@@ -47,10 +43,7 @@ type BlogPageProps = Readonly<{
 const ArticlesPage = async ({ searchParams }: BlogPageProps) => {
 	const { tag } = await searchParams;
 	const allArticles = getCachedArticles();
-	const { tags, tagCounts, filtered, selectedTag } = filterByTag(
-		allArticles,
-		tag
-	);
+	const { tags, tagCounts, filtered, selectedTag } = filterByTag(allArticles, tag);
 
 	return (
 		<div className="screen-line-after min-h-svh">
@@ -82,13 +75,11 @@ const ArticlesPage = async ({ searchParams }: BlogPageProps) => {
 
 			<PanelContent className="screen-line-after screen-line-before">
 				<Prose>
-					-- retrouvez tous mes <span>articles de blog</span> où je partage mon
-					expérience en développement web --
+					-- retrouvez tous mes <span>articles de blog</span> où je partage mon expérience en développement web --
 				</Prose>
 				<Prose>
-					-- j'y aborde les <i>bonnes pratiques</i>, les{' '}
-					<i>patterns modernes</i>, les solutions aux problèmes techniques du
-					quotidien, et mes découvertes sur l'écosystème <i>JavaScript</i> --
+					-- j'y aborde les <i>bonnes pratiques</i>, les <i>patterns modernes</i>, les solutions aux problèmes
+					techniques du quotidien, et mes découvertes sur l'écosystème <i>JavaScript</i> --
 				</Prose>
 			</PanelContent>
 

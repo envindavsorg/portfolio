@@ -40,8 +40,7 @@ const parseFrontmatter = (body: string) => {
 	return { metadata: contentMetadataSchema.parse(data), content };
 };
 
-const getMDXFiles = (dir: string) =>
-	readdirSync(dir).filter((file: string) => file.endsWith('.mdx'));
+const getMDXFiles = (dir: string) => readdirSync(dir).filter((file: string) => file.endsWith('.mdx'));
 
 const readMDXFile = (path: string) => {
 	const raw = readFileSync(path, 'utf-8');
@@ -69,20 +68,32 @@ const getMDXData = (dir: string) =>
 
 let contentCache: Content[] | null = null;
 const CONTENT_PATH = 'src/content';
+const CONTENT_CATEGORIES = ['articles', 'utils', 'components'] as const;
+
 export const getAllContent = () => {
 	if (contentCache && process.env.NODE_ENV !== 'development') {
 		return contentCache;
 	}
 
-	contentCache = getMDXData(join(process.cwd(), CONTENT_PATH)).sort(
-		(a, b) => b.metadata.createdAt.getTime() - a.metadata.createdAt.getTime()
-	);
+	const root = join(process.cwd(), CONTENT_PATH);
+
+	contentCache = CONTENT_CATEGORIES.flatMap((category) => {
+		const dir = join(root, category);
+
+		try {
+			return getMDXData(dir).map((content) => ({
+				...content,
+				metadata: { ...content.metadata, category },
+			}));
+		} catch {
+			return [];
+		}
+	}).sort((a, b) => b.metadata.createdAt.getTime() - a.metadata.createdAt.getTime());
 
 	return contentCache;
 };
 
-export const getContentBySlug = (slug: string) =>
-	getAllContent().find((content) => content.slug === slug);
+export const getContentBySlug = (slug: string) => getAllContent().find((content) => content.slug === slug);
 
 export const getContentByCategory = (category: ContentCategory) =>
 	getAllContent().filter((content) => content.metadata.category === category);

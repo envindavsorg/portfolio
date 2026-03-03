@@ -18,7 +18,7 @@ export const Prose = ({
 			className={cn(
 				'prose prose-sm prose-zinc dark:prose-invert max-w-none',
 				// headings
-				'prose-headings:text-balance prose-headings:font-pixel-square prose-headings:font-semibold',
+				'prose-headings:text-balance prose-headings:font-pixel-square prose-headings:font-semibold prose-headings:text-foreground',
 				'prose-h1:mt-10 prose-h1:mb-4 prose-h1:text-xl',
 				'prose-h2:mt-8 prose-h2:mb-3 prose-h2:text-lg',
 				'prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-base',
