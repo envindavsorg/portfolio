@@ -11,7 +11,7 @@ const WIFI_LEVELS = [
 	{ d: 'M2 8.82a15 15 0 0 1 20 0', initialOpacity: 1, delay: 0.3 },
 ];
 
-export const RssIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+export const Rss = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const { controls, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
 			ref,

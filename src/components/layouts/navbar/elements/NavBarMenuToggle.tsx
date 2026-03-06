@@ -1,6 +1,6 @@
 'use client';
 
-import { MenuIcon } from '@/components/icons/MenuIcon';
+import { MenuIcon } from '@/components/layouts/navbar/elements/NavBarMenuIcon';
 import { Button } from '@/components/primitives/Button';
 import { useNavBar } from './NavBarContext';
 

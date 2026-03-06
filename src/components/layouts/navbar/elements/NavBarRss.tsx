@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
-import { RssIcon } from '@/components/icons/RssIcon';
+import { Rss } from '@/components/motion/Rss';
 import { Button } from '@/components/primitives/Button';
 
 export const NavBarRss = () => {
@@ -22,7 +22,7 @@ export const NavBarRss = () => {
 				rel="noopener noreferrer"
 				target="_blank"
 			>
-				<RssIcon ref={iconRef} />
+				<Rss ref={iconRef} />
 				<span className="sr-only">Flux RSS</span>
 			</Link>
 		</Button>

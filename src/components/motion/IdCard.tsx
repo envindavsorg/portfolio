@@ -1,26 +1,10 @@
 'use client';
 
-import type { Variants } from 'motion/react';
 import { motion } from 'motion/react';
 import { forwardRef } from 'react';
 import useAnimatedIcon from '@/hooks/useAnimatedIcon';
 
-const VARIANTS: Variants = {
-	normal: {
-		pathLength: 1,
-		opacity: 1,
-	},
-	animate: (custom: number) => ({
-		pathLength: [0, 1],
-		opacity: [0, 1],
-		transition: {
-			duration: 0.3,
-			delay: custom * 0.1,
-		},
-	}),
-};
-
-export const IdCardIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+export const IdCard = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const { controls, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
 			ref,
@@ -52,21 +36,60 @@ export const IdCardIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 						custom={2}
 						d="M16 10h2"
 						initial="normal"
-						variants={VARIANTS}
+						variants={{
+							normal: {
+								pathLength: 1,
+								opacity: 1,
+							},
+							animate: (custom: number) => ({
+								pathLength: [0, 1],
+								opacity: [0, 1],
+								transition: {
+									duration: 0.3,
+									delay: custom * 0.1,
+								},
+							}),
+						}}
 					/>
 					<motion.path
 						animate={controls}
 						custom={2}
 						d="M16 14h2"
 						initial="normal"
-						variants={VARIANTS}
+						variants={{
+							normal: {
+								pathLength: 1,
+								opacity: 1,
+							},
+							animate: (custom: number) => ({
+								pathLength: [0, 1],
+								opacity: [0, 1],
+								transition: {
+									duration: 0.3,
+									delay: custom * 0.1,
+								},
+							}),
+						}}
 					/>
 					<motion.path
 						animate={controls}
 						custom={0}
 						d="M6.17 15a3 3 0 0 1 5.66 0"
 						initial="normal"
-						variants={VARIANTS}
+						variants={{
+							normal: {
+								pathLength: 1,
+								opacity: 1,
+							},
+							animate: (custom: number) => ({
+								pathLength: [0, 1],
+								opacity: [0, 1],
+								transition: {
+									duration: 0.3,
+									delay: custom * 0.1,
+								},
+							}),
+						}}
 					/>
 					<motion.circle
 						animate={controls}
@@ -75,7 +98,20 @@ export const IdCardIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 						cy="11"
 						initial="normal"
 						r="2"
-						variants={VARIANTS}
+						variants={{
+							normal: {
+								pathLength: 1,
+								opacity: 1,
+							},
+							animate: (custom: number) => ({
+								pathLength: [0, 1],
+								opacity: [0, 1],
+								transition: {
+									duration: 0.3,
+									delay: custom * 0.1,
+								},
+							}),
+						}}
 					/>
 					<rect height="14" rx="2" width="20" x="2" y="5" />
 				</svg>

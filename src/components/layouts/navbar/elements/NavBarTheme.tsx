@@ -3,7 +3,7 @@
 import { useTheme } from 'next-themes';
 import { useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { MoonIcon } from '@/components/icons/MoonIcon';
+import { Moon } from '@/components/motion/Moon';
 import { Sun } from '@/components/motion/Sun';
 import { Button } from '@/components/primitives/Button';
 import { META_THEME_COLORS } from '@/data/theme';
@@ -50,7 +50,7 @@ export const NavBarTheme = () => {
 			size="icon"
 			variant="outline"
 		>
-			<MoonIcon className="hidden [html.dark_&]:block" ref={moonIconRef} />
+			<Moon className="hidden [html.dark_&]:block" ref={moonIconRef} />
 			<Sun className="hidden [html.light_&]:block" ref={sunIconRef} />
 			<span className="sr-only">Changer de thème</span>
 		</Button>

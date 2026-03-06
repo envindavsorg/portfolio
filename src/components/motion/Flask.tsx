@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { forwardRef } from 'react';
 import useAnimatedIcon from '@/hooks/useAnimatedIcon';
 
-export const FlaskIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+export const Flask = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const { controls, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
 			ref,

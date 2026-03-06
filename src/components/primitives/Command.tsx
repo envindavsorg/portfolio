@@ -2,7 +2,7 @@
 
 import { Command as CommandPrimitive, useCommandState } from 'cmdk';
 import { type ComponentProps, useEffect, useRef } from 'react';
-import { FrownIcon } from '@/components/icons/FrownIcon';
+import { Frown } from '@/components/motion/Frown';
 import { Search } from '@/components/motion/Search';
 import { cn } from '@/lib/utils';
 
@@ -80,7 +80,7 @@ export const CommandEmpty = ({
 			data-slot="command-empty"
 			{...props}
 		>
-			<FrownIcon className="text-theme" ref={iconRef} />
+			<Frown className="text-theme" ref={iconRef} />
 			<div className="space-y-1 text-center">
 				<h3 className="font-semibold text-sm">Aucun résultat ...</h3>
 				<p className="text-muted-foreground text-xs">

@@ -1,12 +1,12 @@
-import { CodeIcon } from '@/components/icons/CodeIcon';
-import { FileIcon } from '@/components/icons/FileIcon';
-import { FlaskIcon } from '@/components/icons/FlaskIcon';
-import { IdCardIcon } from '@/components/icons/IdCardIcon';
-import { LayersIcon } from '@/components/icons/LayersIcon';
 import { Book } from '@/components/motion/Book';
+import { Code } from '@/components/motion/Code';
 import { Cog } from '@/components/motion/Cog';
+import { File } from '@/components/motion/File';
+import { Flask } from '@/components/motion/Flask';
 import { Home } from '@/components/motion/Home';
+import { IdCard } from '@/components/motion/IdCard';
 import { Keyboard } from '@/components/motion/Keyboard';
+import { Layers } from '@/components/motion/Layers';
 import { User } from '@/components/motion/User';
 import GLOBAL_DATA from '@/data/global';
 import type { CommandGroupDef, CommandKind } from './types';
@@ -40,7 +40,7 @@ export const COMMANDS: CommandGroupDef[] = [
 			{
 				title: 'composants réutilisables',
 				url: '/components',
-				icon: CodeIcon,
+				icon: Code,
 				kind: 'page',
 			},
 			{
@@ -63,13 +63,13 @@ export const COMMANDS: CommandGroupDef[] = [
 			{
 				title: 'ma stack technique',
 				url: '/#my-stack',
-				icon: LayersIcon,
+				icon: Layers,
 				kind: 'section',
 			},
 			{
 				title: 'mes expériences',
 				url: '/#my-experiences',
-				icon: FlaskIcon,
+				icon: Flask,
 				kind: 'section',
 			},
 			{
@@ -86,13 +86,13 @@ export const COMMANDS: CommandGroupDef[] = [
 			{
 				title: 'ma carte de visite',
 				url: '/api/vcard',
-				icon: IdCardIcon,
+				icon: IdCard,
 				kind: 'download',
 			},
 			{
 				title: 'télécharger mon CV',
 				url: GLOBAL_DATA.CV.url,
-				icon: FileIcon,
+				icon: File,
 				kind: 'download',
 			},
 		],

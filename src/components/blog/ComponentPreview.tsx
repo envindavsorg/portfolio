@@ -11,8 +11,8 @@ import {
 	useState,
 } from 'react';
 import { Index } from '@/__registry__';
-import { RefreshIcon } from '@/components/icons/RefreshIcon';
-import { V0Icon } from '@/components/icons/stack/V0';
+import { V0Icon } from '@/components/svgs/stack/V0';
+import { Refresh } from '@/components/motion/Refresh';
 import { Button } from '@/components/primitives/Button';
 import { TabsAnimated } from '@/components/primitives/Tabs';
 import { Code as CodeInline } from '@/components/primitives/Typography';
@@ -78,7 +78,7 @@ export const ComponentPreview = ({
 									size="icon"
 									variant="outline"
 								>
-									<RefreshIcon ref={iconRef} />
+									<Refresh ref={iconRef} />
 								</Button>
 							)}
 

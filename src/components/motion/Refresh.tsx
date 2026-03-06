@@ -1,25 +1,10 @@
 'use client';
 
-import type { Transition, Variants } from 'motion/react';
 import { motion } from 'motion/react';
 import { forwardRef } from 'react';
 import useAnimatedIcon from '@/hooks/useAnimatedIcon';
 
-const SVG_VARIANTS: Variants = {
-	normal: {
-		rotate: 0,
-	},
-	animate: {
-		rotate: [0, -10, 10, -5, 5, 0],
-	},
-};
-
-const SVG_TRANSITION: Transition = {
-	duration: 1.2,
-	ease: 'easeInOut',
-};
-
-export const MoonIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+export const Refresh = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const { controls, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
 			ref,
@@ -43,13 +28,19 @@ export const MoonIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 					strokeLinecap="round"
 					strokeLinejoin="round"
 					strokeWidth="2"
-					transition={SVG_TRANSITION}
-					variants={SVG_VARIANTS}
+					transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+					variants={{
+						normal: { rotate: '0deg' },
+						animate: { rotate: '50deg' },
+					}}
 					viewBox="0 0 24 24"
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+					<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+					<path d="M21 3v5h-5" />
+					<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+					<path d="M8 16H3v5" />
 				</motion.svg>
 			</div>
 		);

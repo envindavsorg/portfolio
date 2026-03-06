@@ -10,7 +10,7 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { RabbitIcon } from '@/components/icons/RabbitIcon';
+import { Rabbit } from '@/components/motion/Rabbit';
 import { X } from '@/components/motion/X';
 import { Button } from '@/components/primitives/Button';
 import {
@@ -111,7 +111,7 @@ export const ArticleViewOptions = ({
 					size="icon"
 					variant="outline"
 				>
-					<RabbitIcon
+					<Rabbit
 						className="group-data-[state=open]/toggle:hidden"
 						ref={iconRabbitRef}
 					/>

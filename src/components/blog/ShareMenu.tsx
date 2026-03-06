@@ -2,8 +2,8 @@
 
 import { memo, type ReactNode, useCallback, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
-import { LinkedinIcon } from '@/components/icons/LinkedInIcon';
 import { Link } from '@/components/motion/Link';
+import { Linkedin } from '@/components/motion/LinkedIn';
 import { Share } from '@/components/motion/Share';
 import { Twitter } from '@/components/motion/Twitter';
 import { X } from '@/components/motion/X';
@@ -149,7 +149,7 @@ export const ShareMenu = memo(({ url }: ShareMenuProps) => {
 				<AnimatedMenuItem href={shareUrls.x} icon={Twitter}>
 					partager sur X
 				</AnimatedMenuItem>
-				<AnimatedMenuItem href={shareUrls.linkedin} icon={LinkedinIcon}>
+				<AnimatedMenuItem href={shareUrls.linkedin} icon={Linkedin}>
 					partager sur LinkedIn
 				</AnimatedMenuItem>
 			</DropdownMenuContent>

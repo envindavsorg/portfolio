@@ -1,6 +1,5 @@
 'use client';
 
-import type { Variants } from 'motion/react';
 import { motion, useAnimation } from 'motion/react';
 import type React from 'react';
 import { useEffect } from 'react';
@@ -10,24 +9,6 @@ interface NavBarMenuIconProps extends React.ComponentProps<'div'> {
 	isOpen: boolean;
 	size?: number;
 }
-
-const LINE_VARIANTS: Variants = {
-	normal: {
-		rotate: 0,
-		y: 0,
-		opacity: 1,
-	},
-	animate: (custom: number) => ({
-		rotate: custom === 1 ? 45 : custom === 3 ? -45 : 0,
-		y: custom === 1 ? 6 : custom === 3 ? -6 : 0,
-		opacity: custom === 2 ? 0 : 1,
-		transition: {
-			type: 'spring',
-			stiffness: 260,
-			damping: 20,
-		},
-	}),
-};
 
 export const MenuIcon = ({
 	isOpen,
@@ -59,7 +40,23 @@ export const MenuIcon = ({
 					animate={controls}
 					custom={1}
 					initial="normal"
-					variants={LINE_VARIANTS}
+					variants={{
+						normal: {
+							rotate: 0,
+							y: 0,
+							opacity: 1,
+						},
+						animate: (custom: number) => ({
+							rotate: custom === 1 ? 45 : custom === 3 ? -45 : 0,
+							y: custom === 1 ? 6 : custom === 3 ? -6 : 0,
+							opacity: custom === 2 ? 0 : 1,
+							transition: {
+								type: 'spring',
+								stiffness: 260,
+								damping: 20,
+							},
+						}),
+					}}
 					x1="4"
 					x2="20"
 					y1="6"
@@ -69,7 +66,23 @@ export const MenuIcon = ({
 					animate={controls}
 					custom={2}
 					initial="normal"
-					variants={LINE_VARIANTS}
+					variants={{
+						normal: {
+							rotate: 0,
+							y: 0,
+							opacity: 1,
+						},
+						animate: (custom: number) => ({
+							rotate: custom === 1 ? 45 : custom === 3 ? -45 : 0,
+							y: custom === 1 ? 6 : custom === 3 ? -6 : 0,
+							opacity: custom === 2 ? 0 : 1,
+							transition: {
+								type: 'spring',
+								stiffness: 260,
+								damping: 20,
+							},
+						}),
+					}}
 					x1="4"
 					x2="20"
 					y1="12"
@@ -79,7 +92,23 @@ export const MenuIcon = ({
 					animate={controls}
 					custom={3}
 					initial="normal"
-					variants={LINE_VARIANTS}
+					variants={{
+						normal: {
+							rotate: 0,
+							y: 0,
+							opacity: 1,
+						},
+						animate: (custom: number) => ({
+							rotate: custom === 1 ? 45 : custom === 3 ? -45 : 0,
+							y: custom === 1 ? 6 : custom === 3 ? -6 : 0,
+							opacity: custom === 2 ? 0 : 1,
+							transition: {
+								type: 'spring',
+								stiffness: 260,
+								damping: 20,
+							},
+						}),
+					}}
 					x1="4"
 					x2="20"
 					y1="18"

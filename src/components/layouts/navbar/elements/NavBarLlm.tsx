@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
-import { LlmIcon } from '@/components/icons/LlmIcon';
+import { Llm } from '@/components/motion/Llm';
 import { Button } from '@/components/primitives/Button';
 
 export const NavBarLlm = () => {
@@ -22,7 +22,7 @@ export const NavBarLlm = () => {
 				rel="noopener noreferrer"
 				target="_blank"
 			>
-				<LlmIcon ref={iconRef} />
+				<Llm ref={iconRef} />
 				<span className="sr-only">Contexte essentiel</span>
 			</Link>
 		</Button>

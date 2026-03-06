@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { forwardRef } from 'react';
 import useAnimatedIcon from '@/hooks/useAnimatedIcon';
 
-export const FileIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+export const File = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const { controls, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
 			ref,

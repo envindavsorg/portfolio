@@ -1,24 +1,10 @@
 'use client';
 
-import type { Variants } from 'motion/react';
 import { motion } from 'motion/react';
 import { forwardRef } from 'react';
 import useAnimatedIcon from '@/hooks/useAnimatedIcon';
 
-const CODE_VARIANTS: Variants = {
-	normal: { x: 0, rotate: 0, opacity: 1 },
-	animate: (direction: number) => ({
-		x: [0, direction * 2, 0],
-		rotate: [0, direction * -8, 0],
-		opacity: 1,
-		transition: {
-			duration: 0.5,
-			ease: 'easeInOut',
-		},
-	}),
-};
-
-export const CodeIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+export const Layers = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const { controls, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
 			ref,
@@ -45,20 +31,36 @@ export const CodeIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 					width={size}
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z" />
+					<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
 					<motion.path
 						animate={controls}
-						custom={-1}
-						d="M10 10.5 8 13l2 2.5"
-						initial="normal"
-						variants={CODE_VARIANTS}
+						d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"
+						transition={{
+							type: 'spring',
+							stiffness: 100,
+							damping: 14,
+							mass: 1,
+						}}
+						variants={{
+							normal: { y: 0 },
+							firstState: { y: -9 },
+							secondState: { y: 0 },
+						}}
 					/>
 					<motion.path
 						animate={controls}
-						custom={1}
-						d="m14 10.5 2 2.5-2 2.5"
-						initial="normal"
-						variants={CODE_VARIANTS}
+						d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"
+						transition={{
+							type: 'spring',
+							stiffness: 100,
+							damping: 14,
+							mass: 1,
+						}}
+						variants={{
+							normal: { y: 0 },
+							firstState: { y: -5 },
+							secondState: { y: 0 },
+						}}
 					/>
 				</svg>
 			</div>

@@ -2,7 +2,7 @@
 
 import type { TOCItemType } from 'fumadocs-core/toc';
 import { type ComponentProps, useRef } from 'react';
-import { GalleryHorizontalEndIcon } from '@/components/icons/GalleryHorizontalEnd';
+import { GalleryHorizontalEnd } from '@/components/motion/GalleryHorizontalEnd';
 import type { Collapsible } from '@/components/primitives/Collapsible';
 import {
 	CollapsibleChevronsIcon,
@@ -65,7 +65,7 @@ export const TableOfContents = ({ items, ...props }: TableOfContentsProps) => {
 					onMouseEnter={startAnimations}
 					onMouseLeave={stopAnimations}
 				>
-					<GalleryHorizontalEndIcon ref={iconGalleryRef} />
+					<GalleryHorizontalEnd ref={iconGalleryRef} />
 					<p>points importants sur cette page</p>
 					<CollapsibleChevronsIcon ref={iconChevronRef} />
 				</CollapsibleTrigger>

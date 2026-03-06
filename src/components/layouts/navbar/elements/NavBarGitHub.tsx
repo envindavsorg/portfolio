@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
-import { GitHubIcon } from '@/components/icons/GitHubIcon';
+import { GitHub } from '@/components/motion/GitHub';
 import { Button } from '@/components/primitives/Button';
 import GLOBAL_DATA from '@/data/global';
 
@@ -23,7 +23,7 @@ export const NavBarGitHub = () => {
 				rel="noopener noreferrer"
 				target="_blank"
 			>
-				<GitHubIcon ref={iconRef} />
+				<GitHub ref={iconRef} />
 				<span className="sr-only">Mon profil GitHub</span>
 			</Link>
 		</Button>

@@ -1,31 +1,10 @@
 'use client';
 
-import type { Transition, Variants } from 'motion/react';
 import { motion } from 'motion/react';
 import { forwardRef } from 'react';
 import useAnimatedIcon from '@/hooks/useAnimatedIcon';
 
-const TRANSITION: Transition = {
-	duration: 0.3,
-	opacity: { delay: 0.15 },
-};
-
-const VARIANTS: Variants = {
-	normal: {
-		pathLength: 1,
-		opacity: 1,
-	},
-	animate: (custom: number) => ({
-		pathLength: [0, 1],
-		opacity: [0, 1],
-		transition: {
-			...TRANSITION,
-			delay: 0.1 * custom,
-		},
-	}),
-};
-
-export const LlmIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
+export const Llm = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 	({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
 		const { controls, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
 			ref,
@@ -58,7 +37,23 @@ export const LlmIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 						height="8"
 						initial="normal"
 						rx="2"
-						variants={VARIANTS}
+						variants={{
+							normal: {
+								pathLength: 1,
+								opacity: 1,
+							},
+							animate: (custom: number) => ({
+								pathLength: [0, 1],
+								opacity: [0, 1],
+								transition: {
+									transition: {
+										duration: 0.3,
+										opacity: { delay: 0.15 },
+									},
+									delay: 0.1 * custom,
+								},
+							}),
+						}}
 						width="8"
 						x="3"
 						y="3"
@@ -68,7 +63,23 @@ export const LlmIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 						custom={3}
 						d="M7 11v4a2 2 0 0 0 2 2h4"
 						initial="normal"
-						variants={VARIANTS}
+						variants={{
+							normal: {
+								pathLength: 1,
+								opacity: 1,
+							},
+							animate: (custom: number) => ({
+								pathLength: [0, 1],
+								opacity: [0, 1],
+								transition: {
+									transition: {
+										duration: 0.3,
+										opacity: { delay: 0.15 },
+									},
+									delay: 0.1 * custom,
+								},
+							}),
+						}}
 					/>
 					<motion.rect
 						animate={controls}
@@ -76,7 +87,23 @@ export const LlmIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
 						height="8"
 						initial="normal"
 						rx="2"
-						variants={VARIANTS}
+						variants={{
+							normal: {
+								pathLength: 1,
+								opacity: 1,
+							},
+							animate: (custom: number) => ({
+								pathLength: [0, 1],
+								opacity: [0, 1],
+								transition: {
+									transition: {
+										duration: 0.3,
+										opacity: { delay: 0.15 },
+									},
+									delay: 0.1 * custom,
+								},
+							}),
+						}}
 						width="8"
 						x="13"
 						y="13"
