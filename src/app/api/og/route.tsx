@@ -47,7 +47,10 @@ const getBadge = (type: PageType): string => {
 
 const OG_DIMENSIONS = { width: 1200, height: 630 } as const;
 
-const renderLayout = (content: JSX.Element, fontFamily = 'sans-serif'): JSX.Element => (
+const renderLayout = (
+	content: JSX.Element,
+	fontFamily = 'sans-serif'
+): JSX.Element => (
 	<div
 		style={{
 			position: 'relative',
@@ -121,7 +124,7 @@ export const GET = async (req: NextRequest) => {
 		const font = await loadFont();
 		const badge = getBadge(type);
 
-		const response = new ImageResponse(
+		return new ImageResponse(
 			renderLayout(
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<div
@@ -176,12 +179,12 @@ export const GET = async (req: NextRequest) => {
 						weight: 400,
 					},
 				],
+				headers: {
+					'Cache-Control':
+						'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
+				},
 			}
 		);
-
-		response.headers.set('Cache-Control', 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800');
-
-		return response;
 	} catch (error) {
 		logger.error('Error generating OG image:', error);
 
