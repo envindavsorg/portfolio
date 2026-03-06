@@ -8,10 +8,16 @@ const cache = new Map<string, string>();
 interface ArticleCopyMarkdownProps {
 	markdownUrl: string;
 	variant?: 'default' | 'outline' | 'link' | 'ghost';
+	size?: 'default' | 'lg' | 'icon' | 'icon-lg';
 	className?: string;
 }
 
-export const ArticleCopyMarkdown = ({ markdownUrl, variant = 'outline', className }: ArticleCopyMarkdownProps) => {
+export const ArticleCopyMarkdown = ({
+	markdownUrl,
+	variant = 'outline',
+	size = 'icon',
+	className,
+}: ArticleCopyMarkdownProps) => {
 	const controllerRef = useRef<AbortController>(null);
 
 	const getMarkdown = useCallback(async () => {
@@ -38,6 +44,7 @@ export const ArticleCopyMarkdown = ({ markdownUrl, variant = 'outline', classNam
 			className={className}
 			getValueAction={getMarkdown}
 			label="copier le markdown dans le presse-papier"
+			size={size}
 			variant={variant}
 		/>
 	);

@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { ChevronDownIcon } from '@/components/blocks/icons/ChevronDownIcon';
-import { ChevronUpIcon } from '@/components/blocks/icons/ChevronUpIcon';
+import { ChevronDown } from '@/components/motion/ChevronDown';
+import { ChevronUp } from '@/components/motion/ChevronUp';
 import { Button } from '@/components/primitives/Button';
 import { Panel, PanelFooter, PanelHeader } from '@/components/primitives/Panel';
 import { AboutContent } from './AboutContent';
@@ -31,7 +31,11 @@ export const About = () => {
 					variant="outline"
 				>
 					{isExpanded ? 'réduire le texte' : 'en savoir plus'}
-					{isExpanded ? <ChevronUpIcon ref={iconRef} /> : <ChevronDownIcon ref={iconRef} />}
+					{isExpanded ? (
+						<ChevronUp ref={iconRef} />
+					) : (
+						<ChevronDown ref={iconRef} />
+					)}
 				</Button>
 			</PanelFooter>
 		</Panel>

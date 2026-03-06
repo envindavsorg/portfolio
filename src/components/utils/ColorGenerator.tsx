@@ -1,13 +1,15 @@
 'use client';
 
-import { ArrowsClockwiseIcon, CopyIcon, LockKeyIcon, LockSimpleOpenIcon, SwatchesIcon } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { Poline, positionFunctions } from 'poline';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { ColorPicker } from '@/components/blocks/ColorPicker';
-import { Button } from '@/components/primitives/Button';
+import { Button, CopyButton } from '@/components/primitives/Button';
 import { Prose } from '@/components/primitives/Typography';
 import useCopyToClipboard from '@/hooks/useCopyToClipboard';
+import { Lock } from '../motion/Lock';
+import { LockOpen } from '../motion/LockOpen';
 
 type ColorScheme = Record<string, string>;
 
@@ -38,7 +40,8 @@ const parseHSL = (hsl: string): [number, number, number] => {
 	return [parts[0], parts[1], parts[2]];
 };
 
-const formatHSL = (h: number, s: number, l: number): string => `${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`;
+const formatHSL = (h: number, s: number, l: number): string =>
+	`${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`;
 
 const getContrastColor = (hsl: string): string => {
 	const [, , l] = parseHSL(hsl);
@@ -67,9 +70,11 @@ const buildCSSOutput = (scheme: ColorScheme): string => {
 };
 
 export const ColorGenerator = () => {
-	const [colorScheme, setColorScheme] = useState<ColorScheme>(DEFAULT_COLOR_SCHEME);
+	const [colorScheme, setColorScheme] =
+		useState<ColorScheme>(DEFAULT_COLOR_SCHEME);
 	const [lockedColor, setLockedColor] = useState<string | null>(null);
 	const { handleCopy } = useCopyToClipboard();
+	const iconRef = useRef<AnimatedIconHandle>(null);
 
 	const generateColors = useCallback(() => {
 		setColorScheme((prev) => {
@@ -120,44 +125,73 @@ export const ColorGenerator = () => {
 
 	const colorEntries = Object.entries(colorScheme);
 
+	const handleMouseEnter = useCallback(
+		() => iconRef.current?.startAnimation(),
+		[]
+	);
+	const handleMouseLeave = useCallback(
+		() => iconRef.current?.stopAnimation(),
+		[]
+	);
+
 	return (
 		<>
 			<div className="screen-line-before flex items-center justify-between py-3">
 				<Button onClick={resetColors} variant="outline">
-					<ArrowsClockwiseIcon />
-					réinitialiser
+					réinitialiser la palette
 				</Button>
-				<Button onClick={generateColors}>
-					<SwatchesIcon />
-					générer
-				</Button>
+				<Button onClick={generateColors}>générer la palette</Button>
 			</div>
 
 			<div className="screen-line-before grid grid-cols-1 gap-3 py-3 sm:grid-cols-2">
 				{colorEntries.map(([key, value]) => (
 					<div className="relative" key={key}>
 						<div className="flex items-center justify-between">
-							<span className="text-muted-foreground text-xs">{key}</span>
+							<span className="text-foreground text-xs sm:text-sm">
+								--{key}
+							</span>
 							<Button
-								className="mr-6"
-								onClick={() => setLockedColor((prev) => (prev === key ? null : key))}
+								onClick={() => {
+									setLockedColor((prev) => (prev === key ? null : key));
+									toast.info('', {
+										id: 'color-hint',
+										description:
+											lockedColor === key
+												? 'couleur déverrouillée'
+												: 'couleur verrouillée',
+										duration: 3000,
+									});
+								}}
+								onMouseEnter={handleMouseEnter}
+								onMouseLeave={handleMouseLeave}
 								size="icon"
 								variant="ghost"
 							>
-								{lockedColor === key ? <LockKeyIcon /> : <LockSimpleOpenIcon />}
+								{lockedColor === key ? (
+									<Lock ref={iconRef} />
+								) : (
+									<LockOpen ref={iconRef} />
+								)}
 							</Button>
 						</div>
 						<div className="mt-2 flex items-center">
-							<ColorPicker color={`hsl(${value})`} onChangeAction={(color) => updateColor(key, color)} />
+							<ColorPicker
+								color={`hsl(${value})`}
+								onChangeAction={(color) => updateColor(key, color)}
+							/>
 						</div>
 					</div>
 				))}
 			</div>
 
 			<div className="screen-line-before py-1.5">
-				<Prose>-- explorez une palette de couleurs harmonieuses générée pour vos projets web --</Prose>
 				<Prose>
-					-- chaque couleur est soigneusement sélectionnée pour assurer une esthétique cohérente et attrayante --
+					-- explorez une palette de couleurs harmonieuses générée pour vos
+					projets web --
+				</Prose>
+				<Prose>
+					-- chaque couleur est soigneusement sélectionnée pour assurer une
+					esthétique cohérente et attrayante --
 				</Prose>
 			</div>
 
@@ -170,27 +204,32 @@ export const ColorGenerator = () => {
 				>
 					{colorEntries.map(([key, value]) => (
 						<div className="flex items-center justify-between" key={key}>
-							<span className="text-muted-foreground text-xs">{key}</span>
-							<Button
-								onClick={() => handleCopy(`--${key}: ${value};`)}
-								style={{
-									backgroundColor: `hsl(${value})`,
-									color: `hsl(${getContrastColor(value)})`,
-									borderColor: `hsl(${colorScheme.border})`,
-								}}
-								variant="outline"
-							>
-								{value}
-								<CopyIcon className="ml-2 size-4" />
-							</Button>
+							<div className="flex flex-col items-start gap-y-1">
+								<span className="text-muted-foreground text-xs sm:text-sm">
+									{key}
+								</span>
+								<span
+									className="rounded-md px-1 py-0.5 text-foreground text-xs sm:text-sm"
+									style={{
+										backgroundColor: `hsl(${value})`,
+										color: `hsl(${getContrastColor(value)})`,
+										borderColor: `hsl(${colorScheme.border})`,
+									}}
+								>
+									{value}
+								</span>
+							</div>
+							<CopyButton value={`--${key}: ${value};`} />
 						</div>
 					))}
 				</motion.div>
 			</div>
 
 			<div className="screen-line-before flex justify-end py-1.5">
-				<Button onClick={() => handleCopy(buildCSSOutput(colorScheme))} variant="outline">
-					<CopyIcon />
+				<Button
+					onClick={() => handleCopy(buildCSSOutput(colorScheme))}
+					variant="outline"
+				>
 					copier les couleurs
 				</Button>
 			</div>

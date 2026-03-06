@@ -9,4 +9,6 @@ declare global {
 	interface AnimatedIconProps extends HTMLAttributes<HTMLDivElement> {
 		size?: number;
 	}
+
+	type AnimatedIconEvent = MouseEvent<HTMLDivElement>;
 }

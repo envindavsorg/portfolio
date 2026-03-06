@@ -4,52 +4,60 @@ import { CaretDownIcon } from '@phosphor-icons/react/ssr';
 import { motion } from 'motion/react';
 import { Collapsible as Primitive } from 'radix-ui';
 import type React from 'react';
-import { type ComponentProps, createContext, forwardRef, useContext, useMemo, useState } from 'react';
+import {
+	type ComponentProps,
+	createContext,
+	forwardRef,
+	useContext,
+	useMemo,
+	useState,
+} from 'react';
 import { Button } from '@/components/primitives/Button';
 import { cn } from '@/lib/utils';
-import { ChevronDownIcon } from '../blocks/icons/ChevronDownIcon';
-import { ChevronUpIcon } from '../blocks/icons/ChevronUpIcon';
+import { ChevronDown } from '../motion/ChevronDown';
+import { ChevronUp } from '../motion/ChevronUp';
 
 export const Collapsible = Primitive.Root;
 
 export const CollapsibleTrigger = Primitive.CollapsibleTrigger;
 
-export const CollapsibleContent = forwardRef<HTMLDivElement, ComponentProps<typeof Primitive.CollapsibleContent>>(
-	({ children, className, ...props }, ref) => (
-		<Primitive.CollapsibleContent
-			asChild
-			className={cn(
-				'overflow-hidden duration-200',
-				'data-[state=closed]:animate-collapsible-fade-up',
-				'data-[state=open]:animate-collapsible-fade-down'
-			)}
-			ref={ref}
-			{...props}
+export const CollapsibleContent = forwardRef<
+	HTMLDivElement,
+	ComponentProps<typeof Primitive.CollapsibleContent>
+>(({ children, className, ...props }, ref) => (
+	<Primitive.CollapsibleContent
+		asChild
+		className={cn(
+			'overflow-hidden duration-200',
+			'data-[state=closed]:animate-collapsible-fade-up',
+			'data-[state=open]:animate-collapsible-fade-down'
+		)}
+		ref={ref}
+		{...props}
+	>
+		<motion.div
+			animate="open"
+			exit="collapsed"
+			initial="collapsed"
+			transition={{
+				duration: 0.3,
+				ease: [0.4, 0, 0.2, 1],
+			}}
+			variants={{
+				open: {
+					opacity: 1,
+					height: 'auto',
+				},
+				collapsed: {
+					opacity: 0,
+					height: 0,
+				},
+			}}
 		>
-			<motion.div
-				animate="open"
-				exit="collapsed"
-				initial="collapsed"
-				transition={{
-					duration: 0.3,
-					ease: [0.4, 0, 0.2, 1],
-				}}
-				variants={{
-					open: {
-						opacity: 1,
-						height: 'auto',
-					},
-					collapsed: {
-						opacity: 0,
-						height: 0,
-					},
-				}}
-			>
-				{children}
-			</motion.div>
-		</Primitive.CollapsibleContent>
-	)
-);
+			{children}
+		</motion.div>
+	</Primitive.CollapsibleContent>
+));
 
 interface CollapsibleContextType {
 	open: boolean;
@@ -62,13 +70,18 @@ export const useCollapsible = () => {
 	const context = useContext(CollapsibleContext);
 
 	if (!context) {
-		throw new Error('Collapsible components must be used within a CollapsibleWithContext');
+		throw new Error(
+			'Collapsible components must be used within a CollapsibleWithContext'
+		);
 	}
 
 	return context;
 };
 
-export const CollapsibleWithContext = ({ defaultOpen, ...props }: ComponentProps<typeof Collapsible>) => {
+export const CollapsibleWithContext = ({
+	defaultOpen,
+	...props
+}: ComponentProps<typeof Collapsible>) => {
 	const [open, setOpen] = useState(defaultOpen ?? false);
 	return (
 		<CollapsibleContext.Provider value={{ open, setOpen }}>
@@ -77,11 +90,13 @@ export const CollapsibleWithContext = ({ defaultOpen, ...props }: ComponentProps
 	);
 };
 
-export const CollapsibleChevronsIcon = forwardRef<AnimatedIconHandle>((_, ref) => {
-	const { open } = useCollapsible();
-	const Icon = open ? ChevronUpIcon : ChevronDownIcon;
-	return <Icon ref={ref} />;
-});
+export const CollapsibleChevronsIcon = forwardRef<AnimatedIconHandle>(
+	(_, ref) => {
+		const { open } = useCollapsible();
+		const Icon = open ? ChevronUp : ChevronDown;
+		return <Icon ref={ref} />;
+	}
+);
 
 interface CollapsibleListProps<T> {
 	items: T[];
@@ -118,7 +133,8 @@ export const CollapsibleList = <T,>({
 		return null;
 	}
 
-	const getKey = (item: T, index: number) => (keyExtractorAction ? keyExtractorAction(item) : index);
+	const getKey = (item: T, index: number) =>
+		keyExtractorAction ? keyExtractorAction(item) : index;
 
 	return (
 		<Collapsible className={className}>
@@ -131,7 +147,10 @@ export const CollapsibleList = <T,>({
 			{hiddenItems.length > 0 && (
 				<CollapsibleContent>
 					{hiddenItems.map((item, index) => (
-						<div className="border-edge border-b" key={getKey(item, max + index)}>
+						<div
+							className="border-edge border-b"
+							key={getKey(item, max + index)}
+						>
 							{renderItemAction(item)}
 						</div>
 					))}
@@ -142,8 +161,12 @@ export const CollapsibleList = <T,>({
 				<div className="flex justify-center py-2 md:justify-end md:pr-4">
 					<CollapsibleTrigger asChild>
 						<Button className="group flex items-center gap-2">
-							<span className="group-data-[state=open]:hidden">{labels.showMore}</span>
-							<span className="hidden group-data-[state=open]:inline">{labels.showLess}</span>
+							<span className="group-data-[state=open]:hidden">
+								{labels.showMore}
+							</span>
+							<span className="hidden group-data-[state=open]:inline">
+								{labels.showLess}
+							</span>
 
 							<CaretDownIcon
 								aria-hidden="true"

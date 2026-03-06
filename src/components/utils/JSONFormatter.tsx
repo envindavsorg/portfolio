@@ -1,6 +1,11 @@
 'use client';
 
-import { ArrowsDownUpIcon, BroomIcon, CopyIcon, MinusIcon } from '@phosphor-icons/react';
+import {
+	ArrowsDownUpIcon,
+	BroomIcon,
+	Copy,
+	MinusIcon,
+} from '@phosphor-icons/react';
 import { type ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
 import { Divider } from '@/components/primitives/Divider';
@@ -65,7 +70,10 @@ const getJSONStats = (value: string): JSONStats | null => {
 		const parsed = JSON.parse(value.trim());
 		const formatted = JSON.stringify(parsed, null, 2);
 		return {
-			keys: typeof parsed === 'object' && parsed !== null ? Object.keys(parsed).length : 0,
+			keys:
+				typeof parsed === 'object' && parsed !== null
+					? Object.keys(parsed).length
+					: 0,
 			lines: formatted.split('\n').length,
 			size: new Blob([JSON.stringify(parsed)]).size,
 		};
@@ -81,7 +89,13 @@ const formatSize = (bytes: number): string => {
 	return `${(bytes / 1024).toFixed(1)} Ko`;
 };
 
-type TokenType = 'key' | 'string' | 'number' | 'boolean' | 'null' | 'punctuation';
+type TokenType =
+	| 'key'
+	| 'string'
+	| 'number'
+	| 'boolean'
+	| 'null'
+	| 'punctuation';
 
 const TOKEN_CLASSES: Record<TokenType, string> = {
 	key: 'text-sky-400',
@@ -127,7 +141,9 @@ const tokenize = (json: string): Token[] => {
 				continue;
 			}
 
-			const numberMatch = remaining.match(/^(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/);
+			const numberMatch = remaining.match(
+				/^(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/
+			);
 			if (numberMatch) {
 				tokens.push({ type: 'number', value: numberMatch[1] });
 				remaining = remaining.slice(numberMatch[1].length);
@@ -182,11 +198,17 @@ export const JSONFormatter = () => {
 	const [input, setInput] = useState('');
 	const { handleCopy } = useCopyToClipboard();
 	const { output, isValid } = useMemo(() => formatJSON(input), [input]);
-	const stats = useMemo(() => (isValid && output ? getJSONStats(input) : null), [input, isValid, output]);
+	const stats = useMemo(
+		() => (isValid && output ? getJSONStats(input) : null),
+		[input, isValid, output]
+	);
 
-	const handleChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {
-		setInput(event.currentTarget.value);
-	}, []);
+	const handleChange = useCallback(
+		(event: ChangeEvent<HTMLTextAreaElement>) => {
+			setInput(event.currentTarget.value);
+		},
+		[]
+	);
 
 	const handleMinify = useCallback(() => {
 		setInput((prev) => minifyJSON(prev));
@@ -247,7 +269,8 @@ export const JSONFormatter = () => {
 				<div className="flex items-center justify-between py-1.5">
 					{stats && (
 						<p className="text-muted-foreground text-xs">
-							{stats.keys} clés · {stats.lines} lignes · {formatSize(stats.size)}
+							{stats.keys} clés · {stats.lines} lignes ·{' '}
+							{formatSize(stats.size)}
 						</p>
 					)}
 
@@ -266,8 +289,12 @@ export const JSONFormatter = () => {
 								<Button onClick={handleMinify} size="icon" variant="outline">
 									<MinusIcon />
 								</Button>
-								<Button onClick={() => handleCopy(output)} size="icon" variant="outline">
-									<CopyIcon />
+								<Button
+									onClick={() => handleCopy(output)}
+									size="icon"
+									variant="outline"
+								>
+									<Copy />
 								</Button>
 							</>
 						)}

@@ -1,6 +1,6 @@
 'use client';
 
-import { MonitorIcon, MoonIcon, SunIcon } from '@phosphor-icons/react';
+import { MonitorIcon, MoonIcon, Sun } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { useTheme } from 'next-themes';
 import type React from 'react';
@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 
 const THEME_OPTIONS = [
 	{
-		icon: <SunIcon weight="duotone" />,
+		icon: <Sun weight="duotone" />,
 		value: 'light',
 	},
 	{

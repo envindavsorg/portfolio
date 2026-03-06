@@ -3,8 +3,8 @@
 import { useTheme } from 'next-themes';
 import { useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { MoonIcon } from '@/components/blocks/icons/MoonIcon';
-import { SunIcon } from '@/components/blocks/icons/SunIcon';
+import { MoonIcon } from '@/components/icons/MoonIcon';
+import { Sun } from '@/components/motion/Sun';
 import { Button } from '@/components/primitives/Button';
 import { META_THEME_COLORS } from '@/data/theme';
 import useMetaColor from '@/hooks/useMetaColor';
@@ -25,7 +25,9 @@ export const NavBarTheme = () => {
 	};
 
 	const handleClick = () => {
-		document.startViewTransition ? document.startViewTransition(switchTheme) : switchTheme();
+		document.startViewTransition
+			? document.startViewTransition(switchTheme)
+			: switchTheme();
 	};
 
 	const handleMouseEnter = () => {
@@ -49,7 +51,7 @@ export const NavBarTheme = () => {
 			variant="outline"
 		>
 			<MoonIcon className="hidden [html.dark_&]:block" ref={moonIconRef} />
-			<SunIcon className="hidden [html.light_&]:block" ref={sunIconRef} />
+			<Sun className="hidden [html.light_&]:block" ref={sunIconRef} />
 			<span className="sr-only">Changer de thème</span>
 		</Button>
 	);

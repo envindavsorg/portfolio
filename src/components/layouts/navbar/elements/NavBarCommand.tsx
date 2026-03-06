@@ -3,9 +3,17 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useCommandState } from 'cmdk';
 import { usePathname, useRouter } from 'next/navigation';
-import { memo, type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+	memo,
+	type RefObject,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { toast } from 'sonner';
-import { SearchIcon } from '@/components/blocks/icons/SearchIcon';
+import { Search } from '@/components/motion/Search';
 import { Button } from '@/components/primitives/Button';
 import {
 	Command,
@@ -15,8 +23,18 @@ import {
 	CommandItem,
 	CommandList,
 } from '@/components/primitives/Command';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/primitives/Dialog';
-import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@/components/primitives/Drawer';
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogTitle,
+} from '@/components/primitives/Dialog';
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerTitle,
+} from '@/components/primitives/Drawer';
 import { Kbd, KbdGroup } from '@/components/primitives/Kbd';
 import { Separator } from '@/components/primitives/Separator';
 import useMediaQuery from '@/hooks/useMediaQuery';
@@ -40,7 +58,10 @@ const CommandFooter = memo(({ kindMap }: CommandFooterProps) => {
 				<Kbd>↵</Kbd>
 			</KbdGroup>
 
-			<Separator className="data-[orientation=vertical]:h-4" orientation="vertical" />
+			<Separator
+				className="data-[orientation=vertical]:h-4"
+				orientation="vertical"
+			/>
 
 			<KbdGroup>
 				<span className="font-medium text-xs">fermer</span>
@@ -68,7 +89,11 @@ const CommandRow = memo(({ item, index, onSelect }: CommandRowProps) => {
 			onSelect={() => onSelect(item.url, item.openInNewTab)}
 			value={item.title}
 		>
-			{Icon ? <Icon ref={iconRef as RefObject<AnimatedIconHandle>} size={16} /> : <span>{index + 1}.</span>}
+			{Icon ? (
+				<Icon ref={iconRef as RefObject<AnimatedIconHandle>} size={16} />
+			) : (
+				<span>{index + 1}.</span>
+			)}
 			<p className="lowercase">{item.title}</p>
 		</CommandItem>
 	);
@@ -80,13 +105,20 @@ interface CommandLinkGroupProps {
 	onSelect: (url: string, newTab?: boolean) => void;
 }
 
-const CommandLinkGroup = memo(({ heading, items, onSelect }: CommandLinkGroupProps) => (
-	<CommandGroup heading={heading}>
-		{items.map((item, idx) => (
-			<CommandRow index={idx} item={item} key={item.title} onSelect={onSelect} />
-		))}
-	</CommandGroup>
-));
+const CommandLinkGroup = memo(
+	({ heading, items, onSelect }: CommandLinkGroupProps) => (
+		<CommandGroup heading={heading}>
+			{items.map((item, idx) => (
+				<CommandRow
+					index={idx}
+					item={item}
+					key={item.title}
+					onSelect={onSelect}
+				/>
+			))}
+		</CommandGroup>
+	)
+);
 
 interface NavBarCommandProps {
 	posts?: Content[];
@@ -101,11 +133,17 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
 			const target = event.target as HTMLElement;
-			if (target.isContentEditable || target.matches('input, textarea, select')) {
+			if (
+				target.isContentEditable ||
+				target.matches('input, textarea, select')
+			) {
 				return;
 			}
 
-			if ((event.key === 'k' && (event.metaKey || event.ctrlKey)) || event.key === '/') {
+			if (
+				(event.key === 'k' && (event.metaKey || event.ctrlKey)) ||
+				event.key === '/'
+			) {
 				event.preventDefault();
 				setOpen((prev) => !prev);
 			}
@@ -171,7 +209,7 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
 	return (
 		<>
 			<Button onClick={handleOpen} size="icon" variant="outline">
-				<SearchIcon />
+				<Search />
 				<span className="sr-only">rechercher</span>
 			</Button>
 
@@ -189,8 +227,9 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
 					<VisuallyHidden>
 						<Title>palette de commandes</Title>
 						<Description>
-							utilisez la barre de recherche pour naviguer rapidement vers différentes sections du site ou pour accéder
-							à des fonctionnalités spécifiques.
+							utilisez la barre de recherche pour naviguer rapidement vers
+							différentes sections du site ou pour accéder à des fonctionnalités
+							spécifiques.
 						</Description>
 					</VisuallyHidden>
 
@@ -207,7 +246,12 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
 
 							<div className="max-sm:mx-2">
 								{filteredGroups.map(({ heading, items }) => (
-									<CommandLinkGroup heading={heading} items={items} key={heading} onSelect={handleSelect} />
+									<CommandLinkGroup
+										heading={heading}
+										items={items}
+										key={heading}
+										onSelect={handleSelect}
+									/>
 								))}
 							</div>
 

@@ -2,10 +2,16 @@
 
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { type ComponentProps, useCallback, useEffect, useRef, useState } from 'react';
-import { CheckIcon } from '@/components/blocks/icons/CheckIcon';
-import { CopyIcon } from '@/components/blocks/icons/CopyIcon';
-import { XIcon } from '@/components/blocks/icons/XIcon';
+import {
+	type ComponentProps,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
+import { Check } from '@/components/motion/Check';
+import { Copy } from '@/components/motion/Copy';
+import { X } from '@/components/motion/X';
 import { cn } from '@/lib/utils';
 
 export const buttonVariants = cva(
@@ -59,7 +65,10 @@ export const Button = ({
 
 	return (
 		<Comp
-			className={cn(buttonVariants({ variant, size, className }), 'font-pixel-square')}
+			className={cn(
+				buttonVariants({ variant, size, className }),
+				'font-pixel-square'
+			)}
 			data-slot="button"
 			{...props}
 		/>
@@ -69,15 +78,16 @@ export const Button = ({
 type CopyState = 'idle' | 'success' | 'fail';
 
 const ICONS = {
-	idle: CopyIcon,
-	success: CheckIcon,
-	fail: XIcon,
+	idle: Copy,
+	success: Check,
+	fail: X,
 } as const;
 
 interface CopyButtonProps {
 	value?: string;
 	getValueAction?: () => Promise<string>;
 	variant?: 'default' | 'outline' | 'link' | 'ghost';
+	size?: 'default' | 'icon';
 	className?: string;
 	label?: string;
 	timeout?: number;
@@ -87,6 +97,7 @@ export const CopyButton = ({
 	value,
 	getValueAction,
 	variant = 'outline',
+	size = 'icon',
 	className,
 	label = 'copier le texte dans le presse-papier',
 	timeout = 2000,
@@ -136,7 +147,7 @@ export const CopyButton = ({
 			onClick={handleCopy}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			size="icon"
+			size={size}
 			variant={variant}
 		>
 			<Icon ref={iconRef} size={22} />

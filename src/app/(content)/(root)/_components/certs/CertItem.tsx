@@ -20,7 +20,14 @@ interface CertItemProps {
 }
 
 export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
-	const { credentialURL, title, issuer, issueDate, coverImageURL, icon: Icon } = cert;
+	const {
+		credentialURL,
+		title,
+		issuer,
+		issueDate,
+		coverImageURL,
+		icon: Icon,
+	} = cert;
 
 	return (
 		<CollapsibleWithContext>
@@ -28,10 +35,16 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
 				<CollapsibleTrigger className="flex w-full flex-1 cursor-pointer items-center">
 					<div className="pointer-events-none relative m-4 flex size-6 shrink-0 items-center justify-center sm:size-8">
 						{Icon && <Icon aria-hidden="true" className="size-6 sm:size-8" />}
-						<DotPattern className="-z-10 text-theme opacity-20" height={8} width={8} />
+						<DotPattern
+							className="-z-10 text-theme opacity-20"
+							height={8}
+							width={8}
+						/>
 					</div>
 					<div className="flex-1 border-edge border-l p-4 md:border-r">
-						<h2 className="text-left font-pixel-square text-base lowercase sm:text-xl">{title}</h2>
+						<h2 className="text-start font-pixel-square text-base lowercase sm:text-xl">
+							{title}
+						</h2>
 					</div>
 					<div className="relative m-4 hidden size-6 shrink-0 items-center justify-center sm:flex sm:size-8">
 						<CollapsibleChevronsIcon />
@@ -54,7 +67,12 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
 				</div>
 				<div className="screen-line-before flex justify-between gap-3 px-3 py-2 max-sm:flex-col sm:justify-end">
 					<Button asChild variant="outline">
-						<Link aria-label={title} href={credentialURL} rel="noopener" target="_blank">
+						<Link
+							aria-label={title}
+							href={credentialURL}
+							rel="noopener"
+							target="_blank"
+						>
 							voir la certification
 						</Link>
 					</Button>

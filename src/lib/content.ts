@@ -12,6 +12,7 @@ const contentMetadataSchema = z.object({
 	title: z.string(),
 	description: z.string(),
 	image: z.string().optional(),
+	cover: z.string().optional(),
 	bannerLight: z.string().optional(),
 	bannerDark: z.string().optional(),
 	category: z.enum(['articles', 'utils', 'components']).optional(),

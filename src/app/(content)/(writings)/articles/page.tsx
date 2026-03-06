@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
-import { ArticleItem } from '@/app/(content)/(root)/_components/articles/ArticleItem';
 import { PixelHeading } from '@/components/blocks/PixelHeading';
+import { ArticleItem } from '@/components/blog/ArticleItem';
 import { filterByTag } from '@/components/blog/filter/filterByTag';
 import { TagsFilter } from '@/components/blog/filter/TagsFilter';
 import {
@@ -20,17 +20,21 @@ import { dayjs } from '@/lib/functions';
 import { buildContentMetadata } from '@/lib/open-graph';
 
 const getCachedArticles = cache(() =>
-	getContentByCategory('articles').sort((a, b) => dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt)))
+	getContentByCategory('articles').sort((a, b) =>
+		dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+	)
 );
 
 export const generateMetadata = async (): Promise<Metadata> =>
 	buildContentMetadata({
 		title: 'Mes articles de blog',
-		description: 'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
+		description:
+			'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		ogImageParams: {
 			type: 'blog',
 			title: 'Mes articles de blog',
-			description: 'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
+			description:
+				'Retrouvez tous mes articles de blog où je partage mon expérience en développement web.',
 		},
 	});
 
@@ -43,7 +47,10 @@ type BlogPageProps = Readonly<{
 const ArticlesPage = async ({ searchParams }: BlogPageProps) => {
 	const { tag } = await searchParams;
 	const allArticles = getCachedArticles();
-	const { tags, tagCounts, filtered, selectedTag } = filterByTag(allArticles, tag);
+	const { tags, tagCounts, filtered, selectedTag } = filterByTag(
+		allArticles,
+		tag
+	);
 
 	return (
 		<div className="screen-line-after min-h-svh">
@@ -75,29 +82,50 @@ const ArticlesPage = async ({ searchParams }: BlogPageProps) => {
 
 			<PanelContent className="screen-line-after screen-line-before">
 				<Prose>
-					-- retrouvez tous mes <span>articles de blog</span> où je partage mon expérience en développement web --
+					-- retrouvez tous mes <span>articles de blog</span> où je partage mon
+					expérience en développement web --
 				</Prose>
 				<Prose>
-					-- j'y aborde les <i>bonnes pratiques</i>, les <i>patterns modernes</i>, les solutions aux problèmes
-					techniques du quotidien, et mes découvertes sur l'écosystème <i>JavaScript</i> --
+					-- j'y aborde les <i>bonnes pratiques</i>, les{' '}
+					<i>patterns modernes</i>, les solutions aux problèmes techniques du
+					quotidien, et mes découvertes sur l'écosystème <i>JavaScript</i> --
 				</Prose>
 			</PanelContent>
 
 			<TagsFilter selectedTag={selectedTag} tagCounts={tagCounts} tags={tags} />
 
-			<Divider after={false} before={false} border={false} type="half" />
+			<Divider before={false} border={false} type="half" />
 
-			<div className="screen-line-before screen-line-after relative py-4">
-				<div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
-					<div className="border-edge border-r" />
-					<div className="border-edge border-l" />
-				</div>
-
-				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					{filtered.map((item) => (
-						<ArticleItem article={item} key={item.slug} noTitle />
-					))}
-				</div>
+			<div className="flex flex-col">
+				{filtered.map(({ metadata, slug, reading, content }) => {
+					const {
+						category,
+						image,
+						title,
+						description,
+						cover,
+						author,
+						createdAt,
+						tags,
+					} = metadata;
+					return (
+						<div key={slug}>
+							<ArticleItem
+								author={author}
+								category={category}
+								content={content}
+								cover={cover}
+								createdAt={createdAt}
+								description={description}
+								image={image}
+								reading={reading}
+								slug={slug}
+								tags={tags}
+								title={title}
+							/>
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

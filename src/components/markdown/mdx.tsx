@@ -25,13 +25,20 @@ import { rehypeComponent } from '@/lib/rehype-component';
 import { rehypeNpmCommand } from '@/lib/rehype-npm-command';
 import { remarkCodeImport } from '@/lib/remark-code-import';
 import { cn } from '@/lib/utils';
-import { CSSIcon } from '../blocks/icons/stack/CSS';
-import { JavaScriptIcon } from '../blocks/icons/stack/JavaScript';
-import { JSONIcon } from '../blocks/icons/stack/JSON';
-import { ReactIcon } from '../blocks/icons/stack/React';
-import { TypeScriptIcon } from '../blocks/icons/stack/TypeScript';
+import { CSSIcon } from '../icons/stack/CSS';
+import { JavaScriptIcon } from '../icons/stack/JavaScript';
+import { JSONIcon } from '../icons/stack/JSON';
+import { ReactIcon } from '../icons/stack/React';
+import { TypeScriptIcon } from '../icons/stack/TypeScript';
 import { Divider } from '../primitives/Divider';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../primitives/Table';
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '../primitives/Table';
 
 const getIconForLanguageExtension = (language: string) => {
 	switch (language) {
@@ -53,8 +60,12 @@ const getIconForLanguageExtension = (language: string) => {
 };
 
 const components: MDXRemoteProps['components'] = {
-	h1: (props: React.ComponentProps<'h1'>) => <Heading as="h1" className="scroll-mt-32 text-theme!" {...props} />,
-	h2: (props: React.ComponentProps<'h2'>) => <Heading as="h2" className="scroll-mt-32" {...props} />,
+	h1: (props: React.ComponentProps<'h1'>) => (
+		<Heading as="h1" className="scroll-mt-32 text-theme!" {...props} />
+	),
+	h2: (props: React.ComponentProps<'h2'>) => (
+		<Heading as="h2" className="scroll-mt-32" {...props} />
+	),
 	h3: (props: React.ComponentProps<'h3'>) => <Heading as="h3" {...props} />,
 	h4: (props: React.ComponentProps<'h4'>) => <Heading as="h4" {...props} />,
 	h5: (props: React.ComponentProps<'h5'>) => <Heading as="h5" {...props} />,
@@ -68,7 +79,12 @@ const components: MDXRemoteProps['components'] = {
 	figure({ className, ...props }: React.ComponentProps<'figure'>) {
 		const hasPrettyCode = 'data-rehype-pretty-code-figure' in props;
 
-		return <figure className={cn(hasPrettyCode && 'not-prose', className)} {...props} />;
+		return (
+			<figure
+				className={cn(hasPrettyCode && 'not-prose', className)}
+				{...props}
+			/>
+		);
 	},
 	figcaption: ({ children, ...props }: React.ComponentProps<'figcaption'>) => {
 		const iconExtension =
@@ -102,14 +118,27 @@ const components: MDXRemoteProps['components'] = {
 	}) {
 		const isNpmCommand = __pnpm__ && __yarn__ && __npm__ && __bun__;
 		if (isNpmCommand) {
-			return <CodeBlockCommand __bun__={__bun__} __npm__={__npm__} __pnpm__={__pnpm__} __yarn__={__yarn__} />;
+			return (
+				<CodeBlockCommand
+					__bun__={__bun__}
+					__npm__={__npm__}
+					__pnpm__={__pnpm__}
+					__yarn__={__yarn__}
+				/>
+			);
 		}
 
 		return (
 			<div className="rounded-md border border-input">
 				<pre {...props} />
 
-				{__rawString__ && <CopyButton className="absolute top-1 right-0" value={__rawString__} variant="ghost" />}
+				{__rawString__ && (
+					<CopyButton
+						className="absolute top-1 right-0"
+						value={__rawString__}
+						variant="ghost"
+					/>
+				)}
 			</div>
 		);
 	},
@@ -129,7 +158,10 @@ const options: MDXRemoteProps['options'] = {
 	mdxOptions: {
 		remarkPlugins: [remarkGfm, remarkCodeImport],
 		rehypePlugins: [
-			[rehypeExternalLinks, { target: '_blank', rel: 'nofollow noopener noreferrer' }],
+			[
+				rehypeExternalLinks,
+				{ target: '_blank', rel: 'nofollow noopener noreferrer' },
+			],
 			rehypeSlug,
 			rehypeComponent,
 			() => (tree) => {
@@ -171,7 +203,8 @@ const options: MDXRemoteProps['options'] = {
 							return;
 						}
 
-						preElement.properties.__withMeta__ = node.children.at(0).tagName === 'figcaption';
+						preElement.properties.__withMeta__ =
+							node.children.at(0).tagName === 'figcaption';
 						preElement.properties.__rawString__ = node.__rawString__;
 					}
 				});
@@ -182,11 +215,17 @@ const options: MDXRemoteProps['options'] = {
 	},
 };
 
-export const MDX = ({ code }: { code: string }) => (
+interface MDXProps {
+	code: string;
+	isDivider?: boolean;
+}
+
+export const MDX = ({ code, isDivider = true }: MDXProps) => (
 	<>
 		<Prose className="px-2 sm:px-4">
 			<MDXRemote components={components} options={options} source={code} />
 		</Prose>
-		<Divider border={false} />
+
+		{isDivider && <Divider border={false} />}
 	</>
 );

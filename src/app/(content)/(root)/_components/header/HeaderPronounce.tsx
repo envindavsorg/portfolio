@@ -2,8 +2,8 @@
 
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useRef, useState } from 'react';
-import { AudioLinesIcon } from '@/components/blocks/icons/AudioLinesIcon';
-import { PlayIcon } from '@/components/blocks/icons/PlayIcon';
+import { AudioLines } from '@/components/motion/AudioLines';
+import { Play } from '@/components/motion/Play';
 import { Button } from '@/components/primitives/Button';
 import { soundManager } from '@/lib/sound-manager';
 
@@ -20,7 +20,10 @@ interface HeaderPronounceProps {
 	className?: string;
 }
 
-export const HeaderPronounce = ({ pronunciation, className }: HeaderPronounceProps) => {
+export const HeaderPronounce = ({
+	pronunciation,
+	className,
+}: HeaderPronounceProps) => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const isPlayingRef = useRef(false);
 	const playIconRef = useRef<AnimatedIconHandle>(null);
@@ -78,7 +81,11 @@ export const HeaderPronounce = ({ pronunciation, className }: HeaderPronouncePro
 					onAnimationComplete={handleIconAnimationComplete}
 					variants={iconVariants}
 				>
-					{isPlaying ? <AudioLinesIcon ref={playingIconRef} /> : <PlayIcon ref={playIconRef} />}
+					{isPlaying ? (
+						<AudioLines ref={playingIconRef} />
+					) : (
+						<Play ref={playIconRef} />
+					)}
 				</motion.div>
 			</AnimatePresence>
 		</MotionButton>

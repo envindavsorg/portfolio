@@ -17,6 +17,7 @@ const variants = cva(
 				default: 'bg-background text-muted-foreground',
 				primary: 'border-theme text-theme',
 				secondary: 'bg-zinc-50 text-muted-foreground dark:bg-zinc-900',
+				transparent: 'border-foreground bg-transparent text-foreground',
 			},
 		},
 		defaultVariants: {

@@ -1,9 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { type HTMLAttributes, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { RabbitIcon } from '@/components/blocks/icons/RabbitIcon';
-import { XIcon } from '@/components/blocks/icons/XIcon';
+import {
+	type HTMLAttributes,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import { RabbitIcon } from '@/components/icons/RabbitIcon';
+import { X } from '@/components/motion/X';
 import { Button } from '@/components/primitives/Button';
 import {
 	DropdownMenu,
@@ -34,7 +42,10 @@ interface ArticleViewOptionsProps {
 	className?: string;
 }
 
-export const ArticleViewOptions = ({ markdownUrl, isComponent = false }: ArticleViewOptionsProps) => {
+export const ArticleViewOptions = ({
+	markdownUrl,
+	isComponent = false,
+}: ArticleViewOptionsProps) => {
 	const [origin, setOrigin] = useState('');
 
 	useEffect(() => {
@@ -42,7 +53,9 @@ export const ArticleViewOptions = ({ markdownUrl, isComponent = false }: Article
 	}, []);
 
 	const items = useMemo(() => {
-		const fullMarkdownUrl = origin ? new URL(markdownUrl, origin).toString() : markdownUrl;
+		const fullMarkdownUrl = origin
+			? new URL(markdownUrl, origin).toString()
+			: markdownUrl;
 		const q = getPrompt(fullMarkdownUrl, isComponent ? 'component' : 'general');
 
 		const result = [
@@ -98,8 +111,14 @@ export const ArticleViewOptions = ({ markdownUrl, isComponent = false }: Article
 					size="icon"
 					variant="outline"
 				>
-					<RabbitIcon className="group-data-[state=open]/toggle:hidden" ref={iconRabbitRef} />
-					<XIcon className="group-data-[state=closed]/toggle:hidden" ref={iconCloseRef} />
+					<RabbitIcon
+						className="group-data-[state=open]/toggle:hidden"
+						ref={iconRabbitRef}
+					/>
+					<X
+						className="group-data-[state=closed]/toggle:hidden"
+						ref={iconCloseRef}
+					/>
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent

@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
-import { NextJSIcon } from '@/components/blocks/icons/stack/Next';
-import { ReactIcon } from '@/components/blocks/icons/stack/React';
+import { NextJSIcon } from '@/components/icons/stack/Next';
+import { ReactIcon } from '@/components/icons/stack/React';
 
 export interface Cert {
 	title: string;
@@ -38,7 +38,8 @@ export const CERTS: Cert[] = [
 		issuer: 'Vercel',
 		issueDate: '2025-10-03',
 		credentialID: 'seo-99069-1759756935192',
-		credentialURL: 'https://nextjs.org/learn/certificate?course=seo&user=99069&certId=seo-99069-1759756935192',
+		credentialURL:
+			'https://nextjs.org/learn/certificate?course=seo&user=99069&certId=seo-99069-1759756935192',
 		coverImageURL: '/images/certs/nextjs-seo-fundamentals.webp',
 		icon: NextJSIcon,
 	},

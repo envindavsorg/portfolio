@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
-import { ArrowLeftIcon } from '@/components/blocks/icons/ArrowLeftIcon';
-import { ArrowRightIcon } from '@/components/blocks/icons/ArrowRightIcon';
 import { KeyboardShortcuts } from '@/components/blog/KeyboardShortcuts';
 import { ShareMenu } from '@/components/blog/ShareMenu';
+import { ArrowLeft } from '@/components/motion/ArrowLeft';
+import { ArrowRightIcon } from '@/components/motion/ArrowRight';
 import { Button } from '@/components/primitives/Button';
 import { Divider } from '@/components/primitives/Divider';
 import type { Content } from '@/lib/content';
@@ -20,7 +20,13 @@ interface TopNavProps {
 	useLlm?: boolean;
 }
 
-export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }: TopNavProps) => {
+export const ArticleNavBar = ({
+	items,
+	item,
+	slug,
+	description,
+	useLlm = true,
+}: TopNavProps) => {
 	const currentIndex = items.findIndex((i) => i.slug === slug);
 	const previous = currentIndex > 0 ? items[currentIndex - 1] : null;
 	const next = currentIndex < items.length - 1 ? items[currentIndex + 1] : null;
@@ -30,7 +36,11 @@ export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }:
 
 	return (
 		<>
-			<KeyboardShortcuts basePath={`/${item.metadata.category}`} next={next} previous={previous} />
+			<KeyboardShortcuts
+				basePath={`/${item.metadata.category}`}
+				next={next}
+				previous={previous}
+			/>
 
 			<div className="flex items-center px-2 py-2 sm:justify-between sm:px-4">
 				<Button
@@ -41,7 +51,7 @@ export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }:
 					variant="link"
 				>
 					<Link aria-label={description} href={`/${item.metadata.category}`}>
-						<ArrowLeftIcon ref={iconArrowLeftRef} />
+						<ArrowLeft ref={iconArrowLeftRef} />
 						{description}
 					</Link>
 				</Button>
@@ -54,7 +64,11 @@ export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }:
 						/>
 					)}
 
-					{useLlm && <ArticleCopyMarkdown markdownUrl={`/${item.metadata.category}/${item.slug}.mdx`} />}
+					{useLlm && (
+						<ArticleCopyMarkdown
+							markdownUrl={`/${item.metadata.category}/${item.slug}.mdx`}
+						/>
+					)}
 
 					<ShareMenu url={`/${item.metadata.category}/${item.slug}`} />
 
@@ -66,8 +80,11 @@ export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }:
 							size="icon"
 							variant="outline"
 						>
-							<Link aria-label={description} href={`/${item.metadata.category}/${previous.slug}`}>
-								<ArrowLeftIcon ref={iconArrowLeftRef} />
+							<Link
+								aria-label={description}
+								href={`/${item.metadata.category}/${previous.slug}`}
+							>
+								<ArrowLeft ref={iconArrowLeftRef} />
 								<span className="sr-only">Précédent</span>
 							</Link>
 						</Button>
@@ -81,7 +98,10 @@ export const ArticleNavBar = ({ items, item, slug, description, useLlm = true }:
 							size="icon"
 							variant="outline"
 						>
-							<Link aria-label={description} href={`/${item.metadata.category}/${next.slug}`}>
+							<Link
+								aria-label={description}
+								href={`/${item.metadata.category}/${next.slug}`}
+							>
 								<ArrowRightIcon ref={iconArrowRightRef} />
 								<span className="sr-only">Suivant</span>
 							</Link>

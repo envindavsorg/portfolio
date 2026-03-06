@@ -2,7 +2,7 @@
 
 import type { TOCItemType } from 'fumadocs-core/toc';
 import { type ComponentProps, useRef } from 'react';
-import { GalleryHorizontalEndIcon } from '@/components/blocks/icons/GalleryHorizontalEnd';
+import { GalleryHorizontalEndIcon } from '@/components/icons/GalleryHorizontalEnd';
 import type { Collapsible } from '@/components/primitives/Collapsible';
 import {
 	CollapsibleChevronsIcon,
@@ -50,7 +50,10 @@ export const TableOfContents = ({ items, ...props }: TableOfContentsProps) => {
 	return (
 		<>
 			<Divider before={false} border={false} type="half" />
-			<CollapsibleWithContext {...props} className="screen-line-after sticky top-14 bg-background">
+			<CollapsibleWithContext
+				{...props}
+				className="screen-line-after sticky top-14 bg-background"
+			>
 				<CollapsibleTrigger
 					className={cn(
 						'flex w-full cursor-pointer items-center gap-x-3',

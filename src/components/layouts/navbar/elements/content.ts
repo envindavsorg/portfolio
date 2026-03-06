@@ -1,13 +1,13 @@
-import { BookIcon } from '@/components/blocks/icons/BookIcon';
-import { CodeIcon } from '@/components/blocks/icons/CodeIcon';
-import { CogIcon } from '@/components/blocks/icons/CogIcon';
-import { CpuIcon } from '@/components/blocks/icons/CpuIcon';
-import { FileIcon } from '@/components/blocks/icons/FileIcon';
-import { FlaskIcon } from '@/components/blocks/icons/FlaskIcon';
-import { HomeIcon } from '@/components/blocks/icons/HomeIcon';
-import { IdCardIcon } from '@/components/blocks/icons/IdCardIcon';
-import { LayersIcon } from '@/components/blocks/icons/LayersIcon';
-import { UserIcon } from '@/components/blocks/icons/UserIcon';
+import { CodeIcon } from '@/components/icons/CodeIcon';
+import { FileIcon } from '@/components/icons/FileIcon';
+import { FlaskIcon } from '@/components/icons/FlaskIcon';
+import { IdCardIcon } from '@/components/icons/IdCardIcon';
+import { LayersIcon } from '@/components/icons/LayersIcon';
+import { Book } from '@/components/motion/Book';
+import { Cog } from '@/components/motion/Cog';
+import { Home } from '@/components/motion/Home';
+import { Keyboard } from '@/components/motion/Keyboard';
+import { User } from '@/components/motion/User';
 import GLOBAL_DATA from '@/data/global';
 import type { CommandGroupDef, CommandKind } from './types';
 
@@ -28,13 +28,13 @@ export const COMMANDS: CommandGroupDef[] = [
 			{
 				title: "retourner à l'accueil",
 				url: '/',
-				icon: HomeIcon,
+				icon: Home,
 				kind: 'page',
 			},
 			{
 				title: 'mes articles de blog',
 				url: '/articles',
-				icon: BookIcon,
+				icon: Book,
 				kind: 'page',
 			},
 			{
@@ -46,7 +46,7 @@ export const COMMANDS: CommandGroupDef[] = [
 			{
 				title: 'outils pour développeurs',
 				url: '/utils',
-				icon: CogIcon,
+				icon: Cog,
 				kind: 'page',
 			},
 		],
@@ -57,7 +57,7 @@ export const COMMANDS: CommandGroupDef[] = [
 			{
 				title: 'à propos de moi',
 				url: '/#about-me',
-				icon: UserIcon,
+				icon: User,
 				kind: 'section',
 			},
 			{
@@ -75,7 +75,7 @@ export const COMMANDS: CommandGroupDef[] = [
 			{
 				title: 'mes projets',
 				url: '/#my-projects',
-				icon: CpuIcon,
+				icon: Keyboard,
 				kind: 'section',
 			},
 		],
@@ -99,7 +99,10 @@ export const COMMANDS: CommandGroupDef[] = [
 	},
 ];
 
-export const CATEGORY: Record<string, { route: string; heading: string; kind: CommandKind }> = {
+export const CATEGORY: Record<
+	string,
+	{ route: string; heading: string; kind: CommandKind }
+> = {
 	article: {
 		route: 'blog',
 		heading: 'derniers articles de blog :',
