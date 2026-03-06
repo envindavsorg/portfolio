@@ -1,93 +1,22 @@
 'use client';
 
 import {
-	ArrowsDownUpIcon,
-	BroomIcon,
-	Copy,
-	MinusIcon,
-} from '@phosphor-icons/react';
-import { type ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { Button } from '@/components/primitives/Button';
+	type ChangeEvent,
+	useCallback,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import { Button, CopyButton } from '@/components/primitives/Button';
 import { Divider } from '@/components/primitives/Divider';
 import { Label } from '@/components/primitives/Label';
 import { Textarea } from '@/components/primitives/Textarea';
-import useCopyToClipboard from '@/hooks/useCopyToClipboard';
+import { ArrowDownAtoZ } from '../motion/ArrowDownAtoZ';
+import { ArrowDownZtoA } from '../motion/ArrowDownZtoA';
+import { DeleteIcon } from '../motion/Delete';
 
-const sortKeys = (obj: unknown): unknown => {
-	if (Array.isArray(obj)) {
-		return obj.map(sortKeys);
-	}
-	if (obj !== null && typeof obj === 'object') {
-		return Object.keys(obj as Record<string, unknown>)
-			.sort()
-			.reduce<Record<string, unknown>>((acc, key) => {
-				acc[key] = sortKeys((obj as Record<string, unknown>)[key]);
-				return acc;
-			}, {});
-	}
-	return obj;
-};
-
-const formatJSON = (value: string): { output: string; isValid: boolean } => {
-	if (!value.trim()) {
-		return { output: '', isValid: true };
-	}
-
-	try {
-		return {
-			output: JSON.stringify(JSON.parse(value.trim()), null, '\t\t'),
-			isValid: true,
-		};
-	} catch {
-		return { output: 'Le JSON saisi est invalide.', isValid: false };
-	}
-};
-
-const minifyJSON = (value: string): string => {
-	try {
-		return JSON.stringify(JSON.parse(value.trim()));
-	} catch {
-		return value;
-	}
-};
-
-const sortJSONKeys = (value: string): string => {
-	try {
-		return JSON.stringify(sortKeys(JSON.parse(value.trim())), null, '\t\t');
-	} catch {
-		return value;
-	}
-};
-
-interface JSONStats {
-	keys: number;
-	lines: number;
-	size: number;
-}
-
-const getJSONStats = (value: string): JSONStats | null => {
-	try {
-		const parsed = JSON.parse(value.trim());
-		const formatted = JSON.stringify(parsed, null, 2);
-		return {
-			keys:
-				typeof parsed === 'object' && parsed !== null
-					? Object.keys(parsed).length
-					: 0,
-			lines: formatted.split('\n').length,
-			size: new Blob([JSON.stringify(parsed)]).size,
-		};
-	} catch {
-		return null;
-	}
-};
-
-const formatSize = (bytes: number): string => {
-	if (bytes < 1024) {
-		return `${bytes} octets`;
-	}
-	return `${(bytes / 1024).toFixed(1)} Ko`;
-};
+type SortOrder = 'asc' | 'desc';
+type DisplayMode = 'formatted' | 'minified';
 
 type TokenType =
 	| 'key'
@@ -96,6 +25,17 @@ type TokenType =
 	| 'boolean'
 	| 'null'
 	| 'punctuation';
+
+interface Token {
+	type: TokenType;
+	value: string;
+}
+
+interface JSONStats {
+	keys: number;
+	lines: number;
+	size: number;
+}
 
 const TOKEN_CLASSES: Record<TokenType, string> = {
 	key: 'text-sky-400',
@@ -106,10 +46,80 @@ const TOKEN_CLASSES: Record<TokenType, string> = {
 	punctuation: 'text-muted-foreground',
 };
 
-interface Token {
-	type: TokenType;
-	value: string;
-}
+const sortKeys = (obj: unknown, order: SortOrder): unknown => {
+	if (Array.isArray(obj)) {
+		return obj.map((item) => sortKeys(item, order));
+	}
+	if (obj !== null && typeof obj === 'object') {
+		const keys = Object.keys(obj as Record<string, unknown>).sort();
+		if (order === 'desc') {
+			keys.reverse();
+		}
+		return keys.reduce<Record<string, unknown>>((acc, key) => {
+			acc[key] = sortKeys((obj as Record<string, unknown>)[key], order);
+			return acc;
+		}, {});
+	}
+	return obj;
+};
+
+const safeParse = (value: string): { parsed: unknown; valid: boolean } => {
+	try {
+		return { parsed: JSON.parse(value.trim()), valid: true };
+	} catch {
+		return { parsed: null, valid: false };
+	}
+};
+
+const formatJSON = (value: string): { output: string; isValid: boolean } => {
+	if (!value.trim()) {
+		return { output: '', isValid: true };
+	}
+
+	const { parsed, valid } = safeParse(value);
+	if (!valid) {
+		return { output: 'Le JSON saisi est invalide.', isValid: false };
+	}
+
+	return {
+		output: JSON.stringify(parsed, null, '\t\t'),
+		isValid: true,
+	};
+};
+
+const minifyJSON = (value: string): string => {
+	const { parsed, valid } = safeParse(value);
+	return valid ? JSON.stringify(parsed) : value;
+};
+
+const sortJSONKeys = (value: string, order: SortOrder): string => {
+	const { parsed, valid } = safeParse(value);
+	return valid ? JSON.stringify(sortKeys(parsed, order), null, '\t\t') : value;
+};
+
+const getJSONStats = (value: string): JSONStats | null => {
+	const { parsed, valid } = safeParse(value);
+	if (!valid) {
+		return null;
+	}
+
+	const formatted = JSON.stringify(parsed, null, 2);
+	return {
+		keys:
+			typeof parsed === 'object' && parsed !== null
+				? Object.keys(parsed).length
+				: 0,
+		lines: formatted.split('\n').length,
+		size: new Blob([JSON.stringify(parsed)]).size,
+	};
+};
+
+const formatSize = (bytes: number): string => {
+	if (bytes < 1024) {
+		return `${bytes} octets`;
+	}
+	return `${(bytes / 1024).toFixed(1)} Ko`;
+};
 
 const tokenize = (json: string): Token[] => {
 	const tokens: Token[] = [];
@@ -182,7 +192,6 @@ const SyntaxHighlight = ({ json }: { json: string }) => {
 			className="my-0 overflow-auto rounded-md border border-input bg-background p-4 font-mono text-base! leading-relaxed sm:text-lg!"
 			style={{ tabSize: 2 }}
 		>
-			{' '}
 			<code className="border-0! bg-background!">
 				{tokens.map((token, index) => (
 					<span className={TOKEN_CLASSES[token.type]} key={index}>
@@ -196,8 +205,20 @@ const SyntaxHighlight = ({ json }: { json: string }) => {
 
 export const JSONFormatter = () => {
 	const [input, setInput] = useState('');
-	const { handleCopy } = useCopyToClipboard();
+	const [displayMode, setDisplayMode] = useState<DisplayMode>('formatted');
+	const iconAscRef = useRef<AnimatedIconHandle>(null);
+	const iconDescRef = useRef<AnimatedIconHandle>(null);
+	const iconDeleteRef = useRef<AnimatedIconHandle>(null);
+
 	const { output, isValid } = useMemo(() => formatJSON(input), [input]);
+
+	const displayOutput = useMemo(() => {
+		if (!(isValid && output)) {
+			return output;
+		}
+		return displayMode === 'minified' ? minifyJSON(input) : output;
+	}, [input, output, isValid, displayMode]);
+
 	const stats = useMemo(
 		() => (isValid && output ? getJSONStats(input) : null),
 		[input, isValid, output]
@@ -206,20 +227,23 @@ export const JSONFormatter = () => {
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLTextAreaElement>) => {
 			setInput(event.currentTarget.value);
+			setDisplayMode('formatted');
 		},
 		[]
 	);
 
 	const handleMinify = useCallback(() => {
-		setInput((prev) => minifyJSON(prev));
+		setDisplayMode((prev) => (prev === 'minified' ? 'formatted' : 'minified'));
 	}, []);
 
-	const handleSortKeys = useCallback(() => {
-		setInput((prev) => sortJSONKeys(prev));
+	const handleSortKeys = useCallback((order: SortOrder) => {
+		setInput((prev) => sortJSONKeys(prev, order));
+		setDisplayMode('formatted');
 	}, []);
 
 	const handleClear = useCallback(() => {
 		setInput('');
+		setDisplayMode('formatted');
 	}, []);
 
 	const hasOutput = isValid && output;
@@ -238,11 +262,7 @@ export const JSONFormatter = () => {
 						placeholder="Collez le JSON ici ..."
 						rows={8}
 						spellCheck={false}
-						value={
-							process.env.NODE_ENV === 'development'
-								? '{"name":"Cuzeac Florin","role":"développeur full-stack","stack":["Next.js","TypeScript","Tailwind CSS"],"experience":{"years":8,"companies":[{"name":"Économat des Armées","type":"alternance"},{"name":"SpinalCom","type":"startup"},{"name":"WeFix","type":"CDI"}]},"available":true}'
-								: input
-						}
+						value={input}
 					/>
 				</div>
 
@@ -251,7 +271,7 @@ export const JSONFormatter = () => {
 				<div className="flex flex-col gap-y-3">
 					<Label className="text-foreground text-sm">json mis en forme</Label>
 					{hasOutput ? (
-						<SyntaxHighlight json={output} />
+						<SyntaxHighlight json={displayOutput} />
 					) : (
 						<div
 							aria-live="polite"
@@ -276,26 +296,49 @@ export const JSONFormatter = () => {
 
 					<div className="ml-auto flex items-center gap-x-2">
 						{input.trim() && (
-							<Button onClick={handleClear} size="icon" variant="outline">
-								<BroomIcon />
+							<Button
+								onClick={handleClear}
+								onMouseEnter={() => iconDeleteRef.current?.startAnimation()}
+								onMouseLeave={() => iconDeleteRef.current?.stopAnimation()}
+								size="icon"
+								variant="outline"
+							>
+								<DeleteIcon ref={iconDeleteRef} />
 							</Button>
 						)}
 
 						{hasOutput && (
 							<>
-								<Button onClick={handleSortKeys} size="icon" variant="outline">
-									<ArrowsDownUpIcon />
-								</Button>
-								<Button onClick={handleMinify} size="icon" variant="outline">
-									<MinusIcon />
-								</Button>
 								<Button
-									onClick={() => handleCopy(output)}
+									onClick={() => handleSortKeys('asc')}
+									onMouseEnter={() => iconAscRef.current?.startAnimation()}
+									onMouseLeave={() => iconAscRef.current?.stopAnimation()}
 									size="icon"
 									variant="outline"
 								>
-									<Copy />
+									<ArrowDownAtoZ ref={iconAscRef} />
 								</Button>
+
+								<Button
+									onClick={() => handleSortKeys('desc')}
+									onMouseEnter={() => iconDescRef.current?.startAnimation()}
+									onMouseLeave={() => iconDescRef.current?.stopAnimation()}
+									size="icon"
+									variant="outline"
+								>
+									<ArrowDownZtoA ref={iconDescRef} />
+								</Button>
+
+								<Button
+									aria-pressed={displayMode === 'minified'}
+									data-active={displayMode === 'minified'}
+									onClick={handleMinify}
+									variant="outline"
+								>
+									{displayMode === 'minified' ? 'formatter' : 'minifier'}
+								</Button>
+
+								<CopyButton value={displayOutput} />
 							</>
 						)}
 					</div>

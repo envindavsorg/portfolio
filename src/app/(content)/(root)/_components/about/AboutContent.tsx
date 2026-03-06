@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { lazy, memo } from 'react';
+import { memo } from 'react';
 import {
 	Marquee,
 	MarqueeContent,
@@ -8,47 +8,18 @@ import {
 } from '@/components/blocks/Marquee';
 import { PanelContent } from '@/components/primitives/Panel';
 import { Prose } from '@/components/primitives/Typography';
+import { CSSIcon } from '@/components/svgs/stack/CSS';
+import { HTML5Icon } from '@/components/svgs/stack/HTML';
+import { JavaScriptIcon } from '@/components/svgs/stack/JavaScript';
+import { NextJSIcon } from '@/components/svgs/stack/Next';
+import { ReactIcon } from '@/components/svgs/stack/React';
+import { TailwindIcon } from '@/components/svgs/stack/Tailwind';
+import { TypeScriptIcon } from '@/components/svgs/stack/TypeScript';
 
 export interface Stack {
 	icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 	title: string;
 }
-
-const CSSIcon = lazy(() =>
-	import('@/components/icons/stack/CSS').then((m) => ({
-		default: m.CSSIcon,
-	}))
-);
-const HTML5Icon = lazy(() =>
-	import('@/components/icons/stack/HTML').then((m) => ({
-		default: m.HTML5Icon,
-	}))
-);
-const JavaScriptIcon = lazy(() =>
-	import('@/components/icons/stack/JavaScript').then((m) => ({
-		default: m.JavaScriptIcon,
-	}))
-);
-const NextJSIcon = lazy(() =>
-	import('@/components/icons/stack/Next').then((m) => ({
-		default: m.NextJSIcon,
-	}))
-);
-const ReactIcon = lazy(() =>
-	import('@/components/icons/stack/React').then((m) => ({
-		default: m.ReactIcon,
-	}))
-);
-const TailwindIcon = lazy(() =>
-	import('@/components/icons/stack/Tailwind').then((m) => ({
-		default: m.TailwindIcon,
-	}))
-);
-const TypeScriptIcon = lazy(() =>
-	import('@/components/icons/stack/TypeScript').then((m) => ({
-		default: m.TypeScriptIcon,
-	}))
-);
 
 export const CONTENT: Stack[] = [
 	{ icon: HTML5Icon, title: 'HTML5' },

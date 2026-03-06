@@ -18,9 +18,14 @@ import { TocContent } from './TocContent';
 
 type TableOfContentsProps = ComponentProps<typeof Collapsible> & {
 	items: TOCItemType[];
+	after?: boolean;
 };
 
-export const TableOfContents = ({ items, ...props }: TableOfContentsProps) => {
+export const TableOfContents = ({
+	items,
+	after = true,
+	...props
+}: TableOfContentsProps) => {
 	const iconGalleryRef = useRef<AnimatedIconHandle>(null);
 	const iconChevronRef = useRef<AnimatedIconHandle>(null);
 	const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
@@ -52,7 +57,10 @@ export const TableOfContents = ({ items, ...props }: TableOfContentsProps) => {
 			<Divider before={false} border={false} type="half" />
 			<CollapsibleWithContext
 				{...props}
-				className="screen-line-after sticky top-14 bg-background"
+				className={cn(
+					'sticky top-14 bg-background',
+					after && 'screen-line-after'
+				)}
 			>
 				<CollapsibleTrigger
 					className={cn(

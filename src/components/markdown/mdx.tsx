@@ -25,11 +25,6 @@ import { rehypeComponent } from '@/lib/rehype-component';
 import { rehypeNpmCommand } from '@/lib/rehype-npm-command';
 import { remarkCodeImport } from '@/lib/remark-code-import';
 import { cn } from '@/lib/utils';
-import { CSSIcon } from '../icons/stack/CSS';
-import { JavaScriptIcon } from '../icons/stack/JavaScript';
-import { JSONIcon } from '../icons/stack/JSON';
-import { ReactIcon } from '../icons/stack/React';
-import { TypeScriptIcon } from '../icons/stack/TypeScript';
 import { Divider } from '../primitives/Divider';
 import {
 	Table,
@@ -39,6 +34,11 @@ import {
 	TableHeader,
 	TableRow,
 } from '../primitives/Table';
+import { CSSIcon } from '../svgs/stack/CSS';
+import { JavaScriptIcon } from '../svgs/stack/JavaScript';
+import { JSONIcon } from '../svgs/stack/JSON';
+import { ReactIcon } from '../svgs/stack/React';
+import { TypeScriptIcon } from '../svgs/stack/TypeScript';
 
 const getIconForLanguageExtension = (language: string) => {
 	switch (language) {

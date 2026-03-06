@@ -65,7 +65,6 @@ const buildCSSOutput = (scheme: ColorScheme): string => {
 	const variables = Object.entries(scheme)
 		.map(([key, value]) => `    --${key}: ${value};`)
 		.join('\n');
-
 	return `@layer base {\n  :root {\n${variables}\n  }\n}`;
 };
 
@@ -104,7 +103,6 @@ export const ColorGenerator = () => {
 				if (key === lockedColor) {
 					continue;
 				}
-
 				const [h, s, l] = parseHSL(colors[index % colors.length]);
 				next[key] = formatHSL(h, s, adjustLightness(key, l));
 			}

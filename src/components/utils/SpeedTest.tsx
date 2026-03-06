@@ -1,22 +1,25 @@
 'use client';
 
 import SpeedTestEngine from '@cloudflare/speedtest';
-import { DownloadIcon, GaugeIcon, type Icon, SpeedometerIcon, UploadIcon } from '@phosphor-icons/react';
 import { memo, useCallback, useRef, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
-import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from '@/components/primitives/Item';
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemTitle,
+} from '@/components/primitives/Item';
 import { cn } from '@/lib/utils';
 
-type SpeedResult = ReturnType<typeof SpeedTestEngine.prototype.results.getSummary>;
+type SpeedResult = ReturnType<
+	typeof SpeedTestEngine.prototype.results.getSummary
+>;
 
 type TestStatus = 'idle' | 'running' | 'finished';
 
-interface TestState {
-	status: TestStatus;
-	result: Partial<SpeedResult>;
-}
+type MetricKey = 'download' | 'upload' | 'latency' | 'jitter';
 
-const INITIAL_RESULT: Partial<SpeedResult> = {
+const INITIAL_RESULT: Record<MetricKey, number | undefined> = {
 	download: undefined,
 	upload: undefined,
 	latency: undefined,
@@ -40,15 +43,10 @@ const PULSE_COLORS: Record<Exclude<TestStatus, 'idle'>, string> = {
 };
 
 const SPEED_METRICS = [
-	{
-		key: 'download',
-		label: 'téléchargement',
-		measure: 'Mb/s',
-		icon: DownloadIcon,
-	},
-	{ key: 'upload', label: 'téléversement', measure: 'Mb/s', icon: UploadIcon },
-	{ key: 'latency', label: 'latence', measure: 'ms', icon: SpeedometerIcon },
-	{ key: 'jitter', label: 'gigue', measure: 'ms', icon: GaugeIcon },
+	{ key: 'download', label: 'téléchargement', measure: 'Mb/s' },
+	{ key: 'upload', label: 'téléversement', measure: 'Mb/s' },
+	{ key: 'latency', label: 'latence', measure: 'ms' },
+	{ key: 'jitter', label: 'gigue', measure: 'ms' },
 ] as const;
 
 const createSpeedTestEngine = () =>
@@ -63,8 +61,14 @@ const createSpeedTestEngine = () =>
 		],
 	});
 
-const cleanSummary = (summary: SpeedResult): Partial<SpeedResult> =>
-	Object.fromEntries(Object.entries(summary).filter(([, value]) => value !== undefined)) as Partial<SpeedResult>;
+const extractResults = (
+	summary: SpeedResult
+): Record<MetricKey, number | undefined> => ({
+	download: summary.download,
+	upload: summary.upload,
+	latency: summary.latency,
+	jitter: summary.jitter,
+});
 
 const formatValue = (val: number | undefined, measure: string): string => {
 	const num = val ?? 0;
@@ -83,7 +87,12 @@ const PulsatingCircle = memo(({ status }: { status: TestStatus }) => {
 
 	return (
 		<span className="relative flex items-center justify-center">
-			<span className={cn('absolute inline-flex size-3 animate-ping rounded-full opacity-50', color)} />
+			<span
+				className={cn(
+					'absolute inline-flex size-3 animate-ping rounded-full opacity-50',
+					color
+				)}
+			/>
 			<span className={cn('relative inline-flex size-2 rounded-full', color)} />
 		</span>
 	);
@@ -94,42 +103,44 @@ interface SpeedTestItemProps {
 	label: string;
 	value: number | undefined;
 	measure: string;
-	icon: Icon;
 }
 
-const SpeedTestItem = memo(({ status, label, value, measure, icon: ItemIcon }: SpeedTestItemProps) => (
-	<Item className={status !== 'idle' ? STATUS_COLORS[status] : undefined} size="sm" variant="outline">
-		<ItemMedia>
-			<ItemIcon className="size-5 sm:size-6" />
-		</ItemMedia>
-		<ItemContent className="flex flex-row items-center gap-x-3">
-			<ItemTitle className="text-base sm:text-lg">{label}</ItemTitle>
-			<PulsatingCircle status={status} />
-		</ItemContent>
-		<ItemActions className="items-baseline gap-x-1 font-bold text-xl tabular-nums leading-none sm:text-2xl">
-			{formatValue(value, measure)}
-			<span className="font-normal text-muted-foreground text-xs sm:text-sm">{measure}</span>
-		</ItemActions>
-	</Item>
-));
+const SpeedTestItem = memo(
+	({ status, label, value, measure }: SpeedTestItemProps) => (
+		<Item
+			className={status !== 'idle' ? STATUS_COLORS[status] : undefined}
+			size="sm"
+			variant="outline"
+		>
+			<ItemContent className="flex flex-row items-center gap-x-3">
+				<ItemTitle className="text-foreground text-lg sm:text-xl">
+					{label}
+				</ItemTitle>
+				<PulsatingCircle status={status} />
+			</ItemContent>
+			<ItemActions className="items-baseline gap-x-1 font-bold text-2xl text-foreground tabular-nums leading-none sm:text-3xl">
+				{formatValue(value, measure)}
+				<span className="font-normal text-xs sm:text-sm">{measure}</span>
+			</ItemActions>
+		</Item>
+	)
+);
 
 export const SpeedTest = () => {
-	const [testState, setTestState] = useState<TestState>({
-		status: 'idle',
-		result: INITIAL_RESULT,
-	});
-
+	const [status, setStatus] = useState<TestStatus>('idle');
+	const [result, setResult] = useState(INITIAL_RESULT);
 	const engineRef = useRef<SpeedTestEngine | null>(null);
 
 	const toggleTest = useCallback(() => {
 		if (engineRef.current) {
 			engineRef.current.pause?.();
 			engineRef.current = null;
-			setTestState((prev) => ({ ...prev, status: 'idle' }));
+			setStatus('idle');
 			return;
 		}
 
-		setTestState({ status: 'running', result: INITIAL_RESULT });
+		setStatus('running');
+		setResult(INITIAL_RESULT);
 
 		const engine = createSpeedTestEngine();
 		engineRef.current = engine;
@@ -138,26 +149,26 @@ export const SpeedTest = () => {
 			if (engineRef.current !== engine) {
 				return;
 			}
-			setTestState((prev) => ({
-				status: prev.status,
-				result: {
-					...prev.result,
-					...cleanSummary(engine.results.getSummary()),
-				},
-			}));
+			const summary = extractResults(engine.results.getSummary());
+			setResult((prev) => {
+				if (
+					prev.download === summary.download &&
+					prev.upload === summary.upload &&
+					prev.latency === summary.latency &&
+					prev.jitter === summary.jitter
+				) {
+					return prev;
+				}
+				return { ...prev, ...summary };
+			});
 		};
 
 		engine.onFinish = () => {
 			if (engineRef.current !== engine) {
 				return;
 			}
-			setTestState({
-				status: 'finished',
-				result: {
-					...INITIAL_RESULT,
-					...cleanSummary(engine.results.getSummary()),
-				},
-			});
+			setResult(extractResults(engine.results.getSummary()));
+			setStatus('finished');
 			engineRef.current = null;
 		};
 
@@ -166,7 +177,7 @@ export const SpeedTest = () => {
 				return;
 			}
 			engineRef.current = null;
-			setTestState((prev) => ({ ...prev, status: 'idle' }));
+			setStatus('idle');
 		};
 
 		engine.play();
@@ -177,19 +188,18 @@ export const SpeedTest = () => {
 			<div className="flex flex-col gap-y-3 py-3">
 				{SPEED_METRICS.map((metric) => (
 					<SpeedTestItem
-						icon={metric.icon}
 						key={metric.key}
 						label={metric.label}
 						measure={metric.measure}
-						status={testState.status}
-						value={testState.result[metric.key]}
+						status={status}
+						value={result[metric.key]}
 					/>
 				))}
 			</div>
 
 			<div className="screen-line-before flex justify-end py-1.5">
 				<Button onClick={toggleTest} variant="outline">
-					{BUTTON_LABELS[testState.status]}
+					{BUTTON_LABELS[status]}
 				</Button>
 			</div>
 		</>

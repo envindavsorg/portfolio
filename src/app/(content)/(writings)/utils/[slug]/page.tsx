@@ -7,7 +7,11 @@ import { ArticleTitle } from '@/components/blog/ArticleTitle';
 import { TableOfContents } from '@/components/blog/toc/TableOfContents';
 import { MDX } from '@/components/markdown/mdx';
 import GLOBAL_DATA from '@/data/global';
-import { type Content, getContentByCategory, getContentBySlug } from '@/lib/content';
+import {
+	type Content,
+	getContentByCategory,
+	getContentBySlug,
+} from '@/lib/content';
 import { dayjs } from '@/lib/functions';
 import { buildContentMetadata } from '@/lib/open-graph';
 
@@ -20,7 +24,9 @@ export const generateStaticParams = async () => {
 	return utils.map(({ slug }) => ({ slug }));
 };
 
-export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
+export const generateMetadata = async ({
+	params,
+}: Props): Promise<Metadata> => {
 	const { slug } = await params;
 	const util = getContentBySlug(slug);
 	if (!util) {
@@ -40,12 +46,16 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
 	};
 };
 
-const getPageJsonLd = ({ metadata, slug }: Content): WithContext<PageSchema> => ({
+const getPageJsonLd = ({
+	metadata,
+	slug,
+}: Content): WithContext<PageSchema> => ({
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
 	headline: metadata.title,
 	description: metadata.description,
-	image: metadata.image || `/og/simple?title=${encodeURIComponent(metadata.title)}`,
+	image:
+		metadata.image || `/og/simple?title=${encodeURIComponent(metadata.title)}`,
 	url: `https://cuzeacflorin.fr/${metadata.category}/${slug}`,
 	datePublished: dayjs(metadata.createdAt).toISOString(),
 	dateModified: dayjs(metadata.updatedAt).toISOString(),
@@ -67,7 +77,9 @@ const Page = async ({ params }: Props) => {
 
 	const { content, metadata } = util;
 	const toc = getTableOfContents(content);
-	const utils = metadata.category ? getContentByCategory(metadata.category) : [];
+	const utils = metadata.category
+		? getContentByCategory(metadata.category)
+		: [];
 
 	return (
 		<>
@@ -77,9 +89,15 @@ const Page = async ({ params }: Props) => {
 				}}
 				type="application/ld+json"
 			/>
-			<ArticleNavBar description="tous les outils" item={util} items={utils} slug={slug} useLlm={false} />
+			<ArticleNavBar
+				description="tous les outils"
+				item={util}
+				items={utils}
+				slug={slug}
+				useLlm={false}
+			/>
 			<ArticleTitle title={metadata.title} />
-			<TableOfContents items={toc} />
+			<TableOfContents after={false} items={toc} />
 			<MDX code={content} />
 		</>
 	);

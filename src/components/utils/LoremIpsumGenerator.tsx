@@ -1,6 +1,5 @@
 'use client';
 
-import { Copy } from '@phosphor-icons/react';
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/primitives/Button';
 import { CheckboxAnimated } from '@/components/primitives/Checkbox';
@@ -121,10 +120,11 @@ export const LoremIpsumGenerator = () => {
 
 			<div className="flex justify-between py-1.5">
 				<Button onClick={() => handleCopy(output)} variant="outline">
-					<Copy />
-					copier
+					copier le texte
 				</Button>
-				<Button onClick={() => setSeed((prev) => prev + 1)}>générer</Button>
+				<Button onClick={() => setSeed((prev) => prev + 1)}>
+					générer le texte
+				</Button>
 			</div>
 		</>
 	);

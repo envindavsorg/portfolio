@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
-import { NextJSIcon } from '@/components/icons/stack/Next';
-import { ReactIcon } from '@/components/icons/stack/React';
+import { NextJSIcon } from '@/components/svgs/stack/Next';
+import { ReactIcon } from '@/components/svgs/stack/React';
 
 export interface Cert {
 	title: string;

@@ -1,12 +1,10 @@
 'use client';
 
-import { ArrowsClockwiseIcon, Copy } from '@phosphor-icons/react';
 import { type ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { Button } from '@/components/primitives/Button';
+import { Button, CopyButton } from '@/components/primitives/Button';
 import { Label } from '@/components/primitives/Label';
 import { TabsAnimated } from '@/components/primitives/Tabs';
 import { Textarea } from '@/components/primitives/Textarea';
-import useCopyToClipboard from '@/hooks/useCopyToClipboard';
 import { cn } from '@/lib/utils';
 
 const encodeToBase64 = (
@@ -77,7 +75,6 @@ interface FieldSectionProps {
 	label: string;
 	htmlFor?: string;
 	value: string;
-	onCopy: () => void;
 	error?: string | null;
 	children?: React.ReactNode;
 }
@@ -86,7 +83,6 @@ const FieldSection = ({
 	label,
 	htmlFor,
 	value,
-	onCopy,
 	error,
 	children,
 }: FieldSectionProps) => (
@@ -95,16 +91,12 @@ const FieldSection = ({
 			<Label className="text-foreground text-sm" htmlFor={htmlFor}>
 				{label}
 			</Label>
-			{value && (
-				<Button onClick={onCopy} size="icon" variant="outline">
-					<Copy />
-				</Button>
-			)}
+			{value && <CopyButton value={value} />}
 		</div>
 		{children ?? (
 			<div
 				className={cn(
-					'min-h-25 w-full overflow-auto rounded-md bg-accent px-3 py-2 text-sm',
+					'min-h-45 w-full overflow-auto rounded-md bg-accent px-3 py-2 text-sm',
 					error && 'text-destructive'
 				)}
 			>
@@ -117,7 +109,6 @@ const FieldSection = ({
 export const Base64 = () => {
 	const [encodeInput, setEncodeInput] = useState('');
 	const [decodeInput, setDecodeInput] = useState('');
-	const { handleCopy } = useCopyToClipboard();
 
 	const encoded = useMemo(() => encodeToBase64(encodeInput), [encodeInput]);
 	const decoded = useMemo(() => decodeFromBase64(decodeInput), [decodeInput]);
@@ -136,7 +127,6 @@ export const Base64 = () => {
 					<FieldSection
 						htmlFor="encode-input"
 						label="texte à encoder"
-						onCopy={() => handleCopy(encodeInput)}
 						value={encodeInput}
 					>
 						<Textarea
@@ -146,7 +136,7 @@ export const Base64 = () => {
 								setEncodeInput(event.target.value)
 							}
 							placeholder="entrez votre texte ici..."
-							rows={4}
+							rows={8}
 							spellCheck={false}
 							value={encodeInput}
 						/>
@@ -154,8 +144,7 @@ export const Base64 = () => {
 
 					<FieldSection
 						error={encoded.error}
-						label="base64"
-						onCopy={() => handleCopy(encoded.result)}
+						label="texte encodé en base64"
 						value={encoded.result}
 					/>
 				</div>
@@ -168,8 +157,7 @@ export const Base64 = () => {
 				<div className="flex w-full flex-col gap-y-6 overflow-hidden py-3">
 					<FieldSection
 						htmlFor="decode-input"
-						label="base64"
-						onCopy={() => handleCopy(decodeInput)}
+						label="texte encodé en base64"
 						value={decodeInput}
 					>
 						<Textarea
@@ -179,7 +167,7 @@ export const Base64 = () => {
 								setDecodeInput(event.target.value)
 							}
 							placeholder="collez du Base64 ici pour le décoder..."
-							rows={4}
+							rows={8}
 							spellCheck={false}
 							value={decodeInput}
 						/>
@@ -188,7 +176,6 @@ export const Base64 = () => {
 					<FieldSection
 						error={decoded.error}
 						label="texte décodé"
-						onCopy={() => handleCopy(decoded.result)}
 						value={decoded.result}
 					/>
 				</div>
@@ -198,13 +185,9 @@ export const Base64 = () => {
 
 	return (
 		<>
-			<TabsAnimated className="ms-auto max-w-sm pt-0" tabs={tabs} />
-
+			<TabsAnimated className="ms-auto max-w-sm" tabs={tabs} />
 			<div className="screen-line-before flex justify-end py-1.5">
-				<Button onClick={handleReset} variant="outline">
-					<ArrowsClockwiseIcon />
-					réinitialiser
-				</Button>
+				<Button onClick={handleReset}>réinitialiser</Button>
 			</div>
 		</>
 	);

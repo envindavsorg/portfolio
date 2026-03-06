@@ -2,15 +2,31 @@
 
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { Tabs as Primitive } from 'radix-ui';
-import { type ComponentProps, type ReactNode, useCallback, useMemo, useState } from 'react';
+import {
+	type ComponentProps,
+	type ReactNode,
+	useCallback,
+	useMemo,
+	useState,
+} from 'react';
 import useMeasure from 'react-use-measure';
 import { cn } from '@/lib/utils';
 
-export const Tabs = ({ className, ...props }: ComponentProps<typeof Primitive.Root>) => (
-	<Primitive.Root className={cn('flex flex-col gap-2', className)} data-slot="tabs" {...props} />
+export const Tabs = ({
+	className,
+	...props
+}: ComponentProps<typeof Primitive.Root>) => (
+	<Primitive.Root
+		className={cn('flex flex-col gap-2', className)}
+		data-slot="tabs"
+		{...props}
+	/>
 );
 
-export const TabsList = ({ className, ...props }: ComponentProps<typeof Primitive.List>) => (
+export const TabsList = ({
+	className,
+	...props
+}: ComponentProps<typeof Primitive.List>) => (
 	<Primitive.List
 		className={cn(
 			'inline-flex h-8 w-fit items-center justify-center rounded-md bg-transparent p-0.5 text-muted-foreground',
@@ -21,7 +37,10 @@ export const TabsList = ({ className, ...props }: ComponentProps<typeof Primitiv
 	/>
 );
 
-export const TabsTrigger = ({ className, ...props }: ComponentProps<typeof Primitive.Trigger>) => (
+export const TabsTrigger = ({
+	className,
+	...props
+}: ComponentProps<typeof Primitive.Trigger>) => (
 	<Primitive.Trigger
 		className={cn(
 			'inline-flex flex-1 cursor-pointer items-center justify-center gap-2',
@@ -37,7 +56,10 @@ export const TabsTrigger = ({ className, ...props }: ComponentProps<typeof Primi
 	/>
 );
 
-export const TabsContent = ({ className, ...props }: ComponentProps<typeof Primitive.Content>) => (
+export const TabsContent = ({
+	className,
+	...props
+}: ComponentProps<typeof Primitive.Content>) => (
 	<Primitive.Content
 		className={cn('flex-1 space-y-1 py-1 outline-none', className)}
 		data-slot="tabs-content"
@@ -54,6 +76,7 @@ interface Tab {
 interface TabsAnimatedProps {
 	tabs: Tab[];
 	onChangeAction?: () => void;
+	before?: boolean;
 	after?: boolean;
 	className?: string;
 }
@@ -88,13 +111,22 @@ const springTransition = {
 	bounce: 0.2,
 } as const;
 
-export const TabsAnimated = ({ tabs, onChangeAction, after = true, className }: TabsAnimatedProps) => {
+export const TabsAnimated = ({
+	tabs,
+	onChangeAction,
+	before = false,
+	after = true,
+	className,
+}: TabsAnimatedProps) => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [direction, setDirection] = useState(0);
 	const [isAnimating, setIsAnimating] = useState(false);
 	const [ref, bounds] = useMeasure();
 
-	const content = useMemo(() => tabs.find((tab) => tab.id === activeTab)?.content ?? null, [activeTab, tabs]);
+	const content = useMemo(
+		() => tabs.find((tab) => tab.id === activeTab)?.content ?? null,
+		[activeTab, tabs]
+	);
 
 	const handleTabClick = useCallback(
 		(newTabId: number) => {
@@ -115,7 +147,12 @@ export const TabsAnimated = ({ tabs, onChangeAction, after = true, className }: 
 	return (
 		<div className="flex w-full flex-col items-center">
 			<div
-				className={cn('grid w-full cursor-pointer grid-cols-2 gap-x-3 py-3', className, after && 'screen-line-after')}
+				className={cn(
+					'grid w-full cursor-pointer grid-cols-2 gap-x-3 py-3',
+					className,
+					before && 'screen-line-before',
+					after && 'screen-line-after'
+				)}
 			>
 				{tabs.map((tab) => {
 					const isActive = activeTab === tab.id;
@@ -153,7 +190,11 @@ export const TabsAnimated = ({ tabs, onChangeAction, after = true, className }: 
 					initial={false}
 				>
 					<div ref={ref}>
-						<AnimatePresence custom={direction} mode="popLayout" onExitComplete={handleAnimationComplete}>
+						<AnimatePresence
+							custom={direction}
+							mode="popLayout"
+							onExitComplete={handleAnimationComplete}
+						>
 							<motion.div
 								animate="active"
 								custom={direction}
