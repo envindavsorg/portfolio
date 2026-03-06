@@ -1,8 +1,8 @@
 'use client';
 
+import NextLink from 'next/link';
 import { memo, type ReactNode, useCallback, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
-import { Link } from '@/components/motion/Link';
 import { Linkedin } from '@/components/motion/LinkedIn';
 import { Share } from '@/components/motion/Share';
 import { Twitter } from '@/components/motion/Twitter';
@@ -16,6 +16,7 @@ import {
 } from '@/components/primitives/DropdownMenu';
 import { copyText, getAbsoluteUrl } from '@/lib/functions';
 import { soundManager } from '@/lib/sound-manager';
+import { Link } from '../motion/Link';
 
 const preventAutoFocus = (event: Event) => event.preventDefault();
 
@@ -58,9 +59,9 @@ const AnimatedMenuItem = ({
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 			>
-				<Link href={href} rel="noopener noreferrer" target="_blank">
+				<NextLink href={href} rel="noopener noreferrer" target="_blank">
 					{content}
-				</Link>
+				</NextLink>
 			</DropdownMenuItem>
 		);
 	}

@@ -10,7 +10,11 @@ interface KeyboardShortcutsProps {
 	next: Content | null;
 }
 
-export const KeyboardShortcuts = ({ basePath, previous, next }: KeyboardShortcutsProps) => {
+export const KeyboardShortcuts = ({
+	basePath,
+	previous,
+	next,
+}: KeyboardShortcutsProps) => {
 	const router = useRouter();
 
 	const navigate = useCallback(
@@ -33,7 +37,9 @@ export const KeyboardShortcuts = ({ basePath, previous, next }: KeyboardShortcut
 
 			const target = event.target as HTMLElement;
 
-			const isInput = target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
+			const isInput =
+				target.isContentEditable ||
+				['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
 
 			if (isInput) {
 				return;

@@ -9,7 +9,12 @@ interface TocItemProps {
 }
 
 export const TocItem = ({ item, isActive, onNavigate }: TocItemProps) => (
-	<div className={cn('border-l py-1.5 transition-colors', isActive ? 'border-theme' : 'border-input')}>
+	<div
+		className={cn(
+			'border-l py-1.5 transition-colors',
+			isActive ? 'border-theme' : 'border-input'
+		)}
+	>
 		<Link
 			className={cn(
 				'block pl-3 text-sm lowercase underline-offset-4 transition-colors',

@@ -8,7 +8,7 @@ const cache = new Map<string, string>();
 interface ArticleCopyMarkdownProps {
 	markdownUrl: string;
 	variant?: 'default' | 'outline' | 'link' | 'ghost';
-	size?: 'default' | 'lg' | 'icon' | 'icon-lg';
+	size?: 'default' | 'icon';
 	className?: string;
 }
 
@@ -29,7 +29,9 @@ export const ArticleCopyMarkdown = ({
 		controllerRef.current?.abort();
 		controllerRef.current = new AbortController();
 
-		const res = await fetch(markdownUrl, { signal: controllerRef.current.signal });
+		const res = await fetch(markdownUrl, {
+			signal: controllerRef.current.signal,
+		});
 		if (!res.ok) {
 			throw new Error(`${res.status}`);
 		}

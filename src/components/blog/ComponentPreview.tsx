@@ -11,11 +11,11 @@ import {
 	useState,
 } from 'react';
 import { Index } from '@/__registry__';
-import { V0Icon } from '@/components/svgs/stack/V0';
 import { Refresh } from '@/components/motion/Refresh';
 import { Button } from '@/components/primitives/Button';
 import { TabsAnimated } from '@/components/primitives/Tabs';
 import { Code as CodeInline } from '@/components/primitives/Typography';
+import { V0Icon } from '@/components/svgs/stack/V0';
 import { cn } from '@/lib/utils';
 import { CodeCollapsibleWrapper } from './CodeCollapsibleWrapper';
 

@@ -23,7 +23,11 @@ export const TocContent = ({ groups, activeUrl }: TocContentProps) => {
 				const isLastGroup = groupIndex === groups.length - 1;
 				return (
 					<div key={group.parent.url}>
-						<TocItem isActive={isParentActive} item={group.parent} onNavigate={handleNavigate} />
+						<TocItem
+							isActive={isParentActive}
+							item={group.parent}
+							onNavigate={handleNavigate}
+						/>
 						{hasChildren && (
 							<>
 								<TocConnector direction="down" />

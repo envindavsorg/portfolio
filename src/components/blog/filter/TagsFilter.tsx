@@ -29,21 +29,36 @@ type TagFilterListProps = TagsFilterProps & {
 const isTagActive = (tag: string, selectedTag: string) =>
 	tag === 'tout' ? selectedTag === 'tout' : selectedTag === tag.toLowerCase();
 
-const DesktopTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilterListProps) => (
+const DesktopTagFilter = ({
+	tags,
+	selectedTag,
+	tagCounts,
+	onTagClick,
+}: TagFilterListProps) => (
 	<div className="screen-line-after hidden flex-wrap gap-x-4 px-3 py-1.5 md:flex">
 		{tags.map((tag) => {
 			const isActive = isTagActive(tag, selectedTag);
 			return (
 				<div className="flex items-center gap-x-1.5" key={tag}>
 					<Button
-						className={cn('px-0', isActive ? 'text-theme underline underline-offset-4' : 'text-foreground lowercase')}
+						className={cn(
+							'px-0',
+							isActive
+								? 'text-theme underline underline-offset-4'
+								: 'text-foreground lowercase'
+						)}
 						onClick={() => onTagClick(tag)}
 						variant="link"
 					>
 						{tag}
 					</Button>
 					{tagCounts?.[tag] && (
-						<sup className={cn('font-medium text-[10px]', isActive ? 'text-theme' : 'text-foreground')}>
+						<sup
+							className={cn(
+								'font-medium text-[10px]',
+								isActive ? 'text-theme' : 'text-foreground'
+							)}
+						>
 							{tagCounts[tag]}
 						</sup>
 					)}
@@ -53,10 +68,17 @@ const DesktopTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilte
 	</div>
 );
 
-const MobileTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilterListProps) => (
+const MobileTagFilter = ({
+	tags,
+	selectedTag,
+	tagCounts,
+	onTagClick,
+}: TagFilterListProps) => (
 	<Drawer>
 		<DrawerTrigger className="screen-line-after flex size-full items-center justify-between p-3 md:hidden">
-			<span className="font-medium text-sm">Catégorie: {capitalize(selectedTag)}</span>
+			<span className="font-medium text-sm">
+				Catégorie: {capitalize(selectedTag)}
+			</span>
 			<CaretDownIcon className="size-4" />
 		</DrawerTrigger>
 		<DrawerContent className="bg-background p-0 md:hidden">
@@ -77,7 +99,9 @@ const MobileTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilter
 								<Button
 									className={cn(
 										'px-0 font-medium text-sm',
-										isActive ? 'text-theme underline underline-offset-4' : 'text-foreground'
+										isActive
+											? 'text-theme underline underline-offset-4'
+											: 'text-foreground'
 									)}
 									onClick={() => onTagClick(tag)}
 									variant="link"
@@ -88,7 +112,9 @@ const MobileTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilter
 									<Badge
 										className={cn(
 											'aspect-square border',
-											isActive ? 'border-theme text-theme' : 'border-input text-foreground'
+											isActive
+												? 'border-theme text-theme'
+												: 'border-input text-foreground'
 										)}
 									>
 										{tagCounts[tag]}
@@ -103,7 +129,11 @@ const MobileTagFilter = ({ tags, selectedTag, tagCounts, onTagClick }: TagFilter
 	</Drawer>
 );
 
-export const TagsFilter = ({ tags, selectedTag, tagCounts }: TagsFilterProps) => {
+export const TagsFilter = ({
+	tags,
+	selectedTag,
+	tagCounts,
+}: TagsFilterProps) => {
 	const router = useRouter();
 	const pathname = usePathname();
 
