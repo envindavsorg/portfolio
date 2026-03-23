@@ -10,7 +10,8 @@
     "allowImportingTsExtensions": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "strictNullChecks": true
   },
   "include": [
     "./src/scripts/**/*.{ts,mts}",

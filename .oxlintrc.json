@@ -1,0 +1,14 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"rules": {
+		"eslint/require-await": "off",
+		"react/no-unescaped-entities": "off",
+		"react/display-name": "off",
+		"unicorn/filename-case": "off",
+	},
+	"extends": [
+		"./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
+		"./node_modules/ultracite/config/oxlint/react/.oxlintrc.json",
+		"./node_modules/ultracite/config/oxlint/next/.oxlintrc.json"
+	]
+}
