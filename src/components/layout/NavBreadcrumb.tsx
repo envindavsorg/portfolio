@@ -13,7 +13,6 @@ import {
 import { cn } from "@/lib/utils";
 
 import { ChevronRight } from "../motion/ChevronRight";
-import { Home } from "../motion/Home";
 
 interface BreadcrumbEntry {
   label: string;
@@ -24,25 +23,24 @@ interface NavigationBreadcrumbProps {
   items: BreadcrumbEntry[];
 }
 
-export const NavBreadcrumb = ({ items }: NavigationBreadcrumbProps) => {
-  const iconHouseRef = useRef<AnimatedIconHandle>(null);
-  const iconChevronRef = useRef<AnimatedIconHandle>(null);
+export const NavBreadcrumb = ({
+  items,
+}: NavigationBreadcrumbProps) => {
+  const iconRef = useRef<AnimatedIconHandle>(null);
 
   const handleMouseEnter = useCallback(() => {
-    iconHouseRef.current?.startAnimation();
-    iconChevronRef.current?.startAnimation();
+    iconRef.current?.startAnimation();
   }, []);
 
   const handleMouseLeave = useCallback(() => {
-    iconHouseRef.current?.stopAnimation();
-    iconChevronRef.current?.stopAnimation();
+    iconRef.current?.stopAnimation();
   }, []);
 
   return (
     <div className="screen-line-after px-3 py-1">
       <Breadcrumb>
         <BreadcrumbList>
-          {items.map(({ label, href }, idx: number) => {
+          {items.map(({ label, href }, idx) => {
             const isLast = idx === items.length - 1;
 
             return (
@@ -57,7 +55,6 @@ export const NavBreadcrumb = ({ items }: NavigationBreadcrumbProps) => {
                       onMouseEnter={handleMouseEnter}
                       onMouseLeave={handleMouseLeave}
                     >
-                      <Home ref={iconHouseRef} />
                       {label}
                     </BreadcrumbLink>
                   )}
@@ -66,11 +63,9 @@ export const NavBreadcrumb = ({ items }: NavigationBreadcrumbProps) => {
                 {!isLast && (
                   <BreadcrumbSeparator>
                     <ChevronRight
-                      className={cn(
-                        "[&>svg]:size-3 sm:[&>svg]:size-4",
-                        !isLast && "text-theme"
-                      )}
-                      ref={iconChevronRef}
+                      className={cn(!isLast && "text-theme")}
+                      ref={iconRef}
+                      size={16}
                     />
                   </BreadcrumbSeparator>
                 )}

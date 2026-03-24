@@ -6,12 +6,12 @@ import { forwardRef } from "react";
 import useAnimatedIcon from "@/hooks/useAnimatedIcon";
 
 export const Home = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
-  ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
-    const { controls, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
-      ref,
-      onMouseEnter,
-      onMouseLeave
-    );
+  (
+    { onMouseEnter, onMouseLeave, className, size = 28, ...props },
+    ref
+  ) => {
+    const { controls, handleMouseEnter, handleMouseLeave } =
+      useAnimatedIcon(ref, onMouseEnter, onMouseLeave);
 
     return (
       <div

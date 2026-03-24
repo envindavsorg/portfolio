@@ -1,63 +1,64 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
-import type { Content } from '@/lib/content';
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
+
+import type { Content } from "@/lib/content";
 
 interface KeyboardShortcutsProps {
-	basePath: string;
-	previous: Content | null;
-	next: Content | null;
+  basePath: string;
+  previous: Content | null;
+  next: Content | null;
 }
 
 export const KeyboardShortcuts = ({
-	basePath,
-	previous,
-	next,
+  basePath,
+  previous,
+  next,
 }: KeyboardShortcutsProps) => {
-	const router = useRouter();
+  const router = useRouter();
 
-	const navigate = useCallback(
-		(post: Content | null) => {
-			if (post) {
-				router.push(`${basePath}/${post.slug}`);
-			}
-		},
-		[router, basePath]
-	);
+  const navigate = useCallback(
+    (post: Content | null) => {
+      if (post) {
+        router.push(`${basePath}/${post.slug}`);
+      }
+    },
+    [router, basePath]
+  );
 
-	useEffect(() => {
-		const abortController = new AbortController();
-		const { signal } = abortController;
+  useEffect(() => {
+    const abortController = new AbortController();
+    const { signal } = abortController;
 
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
-				return;
-			}
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+        return;
+      }
 
-			const target = event.target as HTMLElement;
+      const target = event.target as HTMLElement;
 
-			const isInput =
-				target.isContentEditable ||
-				['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
+      const isInput =
+        target.isContentEditable ||
+        ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
 
-			if (isInput) {
-				return;
-			}
+      if (isInput) {
+        return;
+      }
 
-			event.preventDefault();
+      event.preventDefault();
 
-			if (event.key === 'ArrowRight') {
-				navigate(next);
-			} else {
-				navigate(previous);
-			}
-		};
+      if (event.key === "ArrowRight") {
+        navigate(next);
+      } else {
+        navigate(previous);
+      }
+    };
 
-		document.addEventListener('keydown', handleKeyDown, { signal });
+    document.addEventListener("keydown", handleKeyDown, { signal });
 
-		return () => abortController.abort();
-	}, [navigate, next, previous]);
+    return () => abortController.abort();
+  }, [navigate, next, previous]);
 
-	return null;
+  return null;
 };

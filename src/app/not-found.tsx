@@ -1,50 +1,70 @@
-import Link from 'next/link';
-import { Particles } from '@/components/blocks/Particles';
-import { TextAnimate } from '@/components/blocks/TextAnimate';
-import { Button } from '@/components/primitives/Button';
-import { Divider } from '@/components/primitives/Divider';
-import { Panel, PanelContent, PanelFooter, PanelHeader, PanelTitle } from '@/components/primitives/Panel';
+import Link from "next/link";
+
+import { Particles } from "@/components/blocks/Particles";
+import { TextAnimate } from "@/components/blocks/TextAnimate";
+import { Button } from "@/components/primitives/Button";
+import { Divider } from "@/components/primitives/Divider";
+import {
+  Panel,
+  PanelContent,
+  PanelFooter,
+  PanelHeader,
+  PanelTitle,
+} from "@/components/primitives/Panel";
 
 const NotFound = () => (
-	<div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl">
-		<Divider border={false} type="half" />
+  <div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl">
+    <Divider border={false} type="half" />
 
-		<Panel>
-			<PanelHeader>
-				<PanelTitle>
-					<TextAnimate animation="slideLeft" by="character" className="text-4xl! sm:text-5xl!" delay={0.2}>
-						oups, page perdue !
-					</TextAnimate>
-				</PanelTitle>
-			</PanelHeader>
+    <Panel>
+      <PanelHeader>
+        <PanelTitle>
+          <TextAnimate
+            animation="slideLeft"
+            by="character"
+            className="text-4xl! sm:text-5xl!"
+            delay={0.2}
+          >
+            oups, page perdue !
+          </TextAnimate>
+        </PanelTitle>
+      </PanelHeader>
 
-			<Divider before={false} border={false} type="half" />
+      <Divider before={false} border={false} type="half" />
 
-			<PanelContent>
-				<TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
-					Peut-être avez-vous cliqué sur un ancien lien ou avez-vous fait une faute de frappe ...
-				</TextAnimate>
+      <PanelContent>
+        <TextAnimate animation="slideUp" as="p" by="word" delay={0.4}>
+          Peut-être avez-vous cliqué sur un ancien lien ou avez-vous
+          fait une faute de frappe ...
+        </TextAnimate>
 
-				<Divider border={false} type="half" />
+        <Divider border={false} type="half" />
 
-				<TextAnimate animation="slideUp" as="p" by="word" delay={0.6} themed>
-					Veuillez vérifier l'URL ou revenir à la page d'accueil pour continuer votre navigation.
-				</TextAnimate>
-			</PanelContent>
+        <TextAnimate
+          animation="slideUp"
+          as="p"
+          by="word"
+          delay={0.6}
+          themed
+        >
+          Veuillez vérifier l'URL ou revenir à la page d'accueil pour
+          continuer votre navigation.
+        </TextAnimate>
+      </PanelContent>
 
-			<PanelFooter>
-				<Button asChild variant="outline">
-					<Link aria-label="Retour en arrière" href="/">
-						Revenir en arrière ...
-					</Link>
-				</Button>
-			</PanelFooter>
-		</Panel>
+      <PanelFooter>
+        <Button asChild variant="outline">
+          <Link aria-label="Retour en arrière" href="/">
+            Revenir en arrière ...
+          </Link>
+        </Button>
+      </PanelFooter>
+    </Panel>
 
-		<Divider border={false} type="half" />
+    <Divider border={false} type="half" />
 
-		<Particles density={150} />
-	</div>
+    <Particles density={150} />
+  </div>
 );
 
 export default NotFound;

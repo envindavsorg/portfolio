@@ -1,30 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const useMediaQuery = (query: string) => {
-	const [value, setValue] = useState(false);
+  const [value, setValue] = useState(false);
 
-	useEffect(() => {
-		const abortController = new AbortController();
-		const { signal } = abortController;
+  useEffect(() => {
+    const abortController = new AbortController();
+    const { signal } = abortController;
 
-		const result = matchMedia(query);
+    const result = matchMedia(query);
 
-		result.addEventListener(
-			'change',
-			(event: MediaQueryListEvent) => {
-				setValue(event.matches);
-			},
-			{ signal }
-		);
+    result.addEventListener(
+      "change",
+      (event: MediaQueryListEvent) => {
+        setValue(event.matches);
+      },
+      { signal }
+    );
 
-		setValue(result.matches);
+    setValue(result.matches);
 
-		return () => {
-			abortController.abort();
-		};
-	}, [query]);
+    return () => {
+      abortController.abort();
+    };
+  }, [query]);
 
-	return value;
+  return value;
 };
 
 export default useMediaQuery;

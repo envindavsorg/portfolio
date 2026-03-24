@@ -1,11 +1,10 @@
-import { CaretRightIcon, DotsThreeIcon } from "@phosphor-icons/react/dist/ssr";
 import { Slot } from "@radix-ui/react-slot";
-import { forwardRef } from "react";
 import type {
   ComponentProps,
   ComponentPropsWithoutRef,
   ReactNode,
 } from "react";
+import { forwardRef } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -15,7 +14,12 @@ export const Breadcrumb = forwardRef<
     separator?: ReactNode;
   }
 >(({ ...props }, ref) => (
-  <nav aria-label="breadcrumb" className="lowercase" ref={ref} {...props} />
+  <nav
+    aria-label="breadcrumb"
+    className="lowercase"
+    ref={ref}
+    {...props}
+  />
 ));
 
 export const BreadcrumbList = forwardRef<
@@ -25,7 +29,7 @@ export const BreadcrumbList = forwardRef<
   <ol
     className={cn(
       "flex flex-wrap items-center gap-x-1.5 sm:gap-x-2 wrap-break-word",
-      "text-xs sm:text-sm text-foreground",
+      "text-sm text-foreground",
       className
     )}
     ref={ref}
@@ -57,7 +61,6 @@ export const BreadcrumbLink = forwardRef<
         "inline-flex items-center gap-x-1.5",
         "transition-colors hover:text-foreground",
         "hover:underline underline-offset-2",
-        "[&_svg]:size-2.5 sm:[&_svg]:size-3 [&_svg]:mt-0.5 [&_svg]:shrink-0",
         className
       )}
       ref={ref}
@@ -84,22 +87,12 @@ export const BreadcrumbSeparator = ({
   className,
   ...props
 }: ComponentProps<"li">) => (
-  <li aria-hidden="true" className={className} role="presentation" {...props}>
-    {children}
-  </li>
-);
-
-export const BreadcrumbEllipsis = ({
-  className,
-  ...props
-}: ComponentProps<"span">) => (
-  <span
+  <li
     aria-hidden="true"
-    className={cn("flex h-9 w-9 items-center justify-center", className)}
+    className={className}
     role="presentation"
     {...props}
   >
-    <DotsThreeIcon className="h-4 w-4" />
-    <span className="sr-only">More</span>
-  </span>
+    {children}
+  </li>
 );

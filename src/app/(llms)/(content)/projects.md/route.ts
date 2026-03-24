@@ -1,19 +1,21 @@
-import { PROJECTS } from '@/app/(content)/(root)/_components/projects/content';
+import { PROJECTS } from "@/app/(content)/(root)/_components/projects/content";
 
 const content = `# Projects
 
 ${PROJECTS.map((item) => {
-	const skills = `\n\nCompétences: ${item.skills.join(', ')}`;
-	const description = item.description ? `\n\n${item.description}` : '';
-	return `## ${item.title}\n\nLien du projet: ${item.link}${skills}${description}`;
-}).join('\n\n')}
+  const skills = `\n\nCompétences: ${item.skills.join(", ")}`;
+  const description = item.description
+    ? `\n\n${item.description}`
+    : "";
+  return `## ${item.title}\n\nLien du projet: ${item.link}${skills}${description}`;
+}).join("\n\n")}
 `;
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 
 export const GET = async (): Promise<Response> =>
-	new Response(content, {
-		headers: {
-			'Content-Type': 'text/markdown;charset=utf-8',
-		},
-	});
+  new Response(content, {
+    headers: {
+      "Content-Type": "text/markdown;charset=utf-8",
+    },
+  });

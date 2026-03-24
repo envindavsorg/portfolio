@@ -6,9 +6,9 @@ export const MAX_LEVEL = 4;
 export const WEEK_START = 0;
 
 export const LEVEL_FILLS = [
-	'fill-theme/5',
-	'fill-theme/20',
-	'fill-theme/40',
-	'fill-theme/60',
-	'fill-theme/80',
+  "fill-theme/5",
+  "fill-theme/20",
+  "fill-theme/40",
+  "fill-theme/60",
+  "fill-theme/80",
 ] as const;

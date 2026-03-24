@@ -1,13 +1,13 @@
-import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
 
 const robots = (): MetadataRoute.Robots => ({
-	rules: [
-		{
-			userAgent: '*',
-			disallow: ['/api/*', '/ingest/*'],
-		},
-	],
-	sitemap: 'https://cuzeacflorin.fr/sitemap.xml',
+  rules: [
+    {
+      disallow: ["/api/*", "/ingest/*"],
+      userAgent: "*",
+    },
+  ],
+  sitemap: "https://cuzeacflorin.fr/sitemap.xml",
 });
 
 export default robots;

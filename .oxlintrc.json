@@ -1,14 +1,28 @@
 {
-	"$schema": "./node_modules/oxlint/configuration_schema.json",
-	"rules": {
-		"eslint/require-await": "off",
-		"react/no-unescaped-entities": "off",
-		"react/display-name": "off",
-		"unicorn/filename-case": "off",
-	},
-	"extends": [
-		"./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
-		"./node_modules/ultracite/config/oxlint/react/.oxlintrc.json",
-		"./node_modules/ultracite/config/oxlint/next/.oxlintrc.json"
-	]
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "rules": {
+    "eslint/require-await": "off",
+    "jsx-a11y/heading-has-content": "off",
+    "react/no-unescaped-entities": "off",
+    "react/display-name": "off",
+    "unicorn/filename-case": "off"
+  },
+  "settings": {
+    "jsdoc": {
+      "ignorePrivate": false,
+      "ignoreInternal": false,
+      "ignoreReplacesDocs": true,
+      "overrideReplacesDocs": true,
+      "augmentsExtendsReplacesDocs": false,
+      "implementsReplacesDocs": false,
+      "exemptDestructuredRootsFromChecks": false,
+      "tagNamePreference": {}
+    }
+  },
+  "ignorePatterns": ["next-env.d.ts"],
+  "extends": [
+    "./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
+    "./node_modules/ultracite/config/oxlint/react/.oxlintrc.json",
+    "./node_modules/ultracite/config/oxlint/next/.oxlintrc.json"
+  ]
 }

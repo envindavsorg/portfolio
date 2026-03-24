@@ -1,5 +1,5 @@
-import { STACK_ICONS } from '@/app/(content)/(root)/_components/stack/content';
-import GLOBAL_DATA from '@/data/global';
+import { STACK_ICONS } from "@/app/(content)/(root)/_components/stack/content";
+import GLOBAL_DATA from "@/data/global";
 
 const content = `
 # À propos de moi
@@ -22,13 +22,13 @@ Aujourd'hui, je maîtrise cette stack (Next.js/TS/Tailwind) pour déployer rapid
 
 ## Stack technique
 
-${STACK_ICONS.map((item) => `- [${item.title}]`).join('\n')}\n`;
+${STACK_ICONS.map((item) => `- [${item.title}]`).join("\n")}\n`;
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 
 export const GET = async (): Promise<Response> =>
-	new Response(content, {
-		headers: {
-			'Content-Type': 'text/markdown;charset=utf-8',
-		},
-	});
+  new Response(content, {
+    headers: {
+      "Content-Type": "text/markdown;charset=utf-8",
+    },
+  });

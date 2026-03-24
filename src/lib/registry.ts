@@ -1,3 +1,3 @@
 export const registryConfig = {
-	baseUrl: 'https://cuzeacflorin.fr/r',
+  baseUrl: "https://cuzeacflorin.fr/r",
 };

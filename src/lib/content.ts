@@ -1,109 +1,131 @@
-import { readdirSync, readFileSync } from 'node:fs';
-import { basename, join } from 'node:path';
-import matter from 'gray-matter';
-import { remark } from 'remark';
-import remarkGfm from 'remark-gfm';
-import remarkMdx from 'remark-mdx';
-import { z } from 'zod';
-import { dayjs } from '@/lib/functions';
-import { remarkComponent } from '@/lib/remark-component';
+import { readdirSync, readFileSync } from "node:fs";
+import { basename, join } from "node:path";
+
+import matter from "gray-matter";
+import { remark } from "remark";
+import remarkGfm from "remark-gfm";
+import remarkMdx from "remark-mdx";
+import { z } from "zod";
+
+import { dayjs } from "@/lib/functions";
+import { remarkComponent } from "@/lib/remark-component";
 
 const contentMetadataSchema = z.object({
-	title: z.string(),
-	description: z.string(),
-	image: z.string().optional(),
-	cover: z.string().optional(),
-	bannerLight: z.string().optional(),
-	bannerDark: z.string().optional(),
-	category: z.enum(['articles', 'utils', 'components']).optional(),
-	createdAt: z.coerce.date(),
-	updatedAt: z.coerce.date(),
-	tags: z.array(z.string()).optional(),
-	author: z.string().optional(),
-	isNew: z.boolean().optional(),
+  author: z.string().optional(),
+  bannerDark: z.string().optional(),
+  bannerLight: z.string().optional(),
+  category: z.enum(["articles", "utils", "components"]).optional(),
+  cover: z.string().optional(),
+  createdAt: z.coerce.date(),
+  description: z.string(),
+  image: z.string().optional(),
+  isNew: z.boolean().optional(),
+  tags: z.array(z.string()).optional(),
+  title: z.string(),
+  updatedAt: z.coerce.date(),
 });
 
 export type ContentMetadata = z.infer<typeof contentMetadataSchema>;
-export type ContentCategory = NonNullable<ContentMetadata['category']>;
+export type ContentCategory = NonNullable<
+  ContentMetadata["category"]
+>;
 
 export interface Content {
-	metadata: ContentMetadata;
-	slug: string;
-	content: string;
-	reading: {
-		time: string;
-		words: number;
-	};
+  metadata: ContentMetadata;
+  slug: string;
+  content: string;
+  reading: {
+    time: string;
+    words: number;
+  };
 }
 
 const parseFrontmatter = (body: string) => {
-	const { data, content } = matter(body);
-	return { metadata: contentMetadataSchema.parse(data), content };
+  const { data, content } = matter(body);
+  return { content, metadata: contentMetadataSchema.parse(data) };
 };
 
-const getMDXFiles = (dir: string) => readdirSync(dir).filter((file: string) => file.endsWith('.mdx'));
+const getMDXFiles = (dir: string) =>
+  readdirSync(dir).filter((file: string) => file.endsWith(".mdx"));
 
 const readMDXFile = (path: string) => {
-	const raw = readFileSync(path, 'utf-8');
-	return parseFrontmatter(raw);
+  const raw = readFileSync(path, "utf8");
+  return parseFrontmatter(raw);
 };
 
 const WORDS_PER_MINUTE = 150;
 const readingTime = (content: string) => {
-	const words = content.trim().split(/\s+/).length;
-	const minutes = Math.ceil(words / WORDS_PER_MINUTE);
-	return { time: `${minutes} minutes`, words };
+  const words = content.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / WORDS_PER_MINUTE);
+  return { time: `${minutes} minutes`, words };
 };
 
 const getMDXData = (dir: string) =>
-	getMDXFiles(dir).map<Content>((file) => {
-		const { metadata, content } = readMDXFile(join(dir, file));
-		const { time, words } = readingTime(content);
-		return {
-			metadata,
-			slug: basename(file, '.mdx'),
-			content,
-			reading: { time, words },
-		};
-	});
+  getMDXFiles(dir).map<Content>((file) => {
+    const { metadata, content } = readMDXFile(join(dir, file));
+    const { time, words } = readingTime(content);
+    return {
+      content,
+      metadata,
+      reading: { time, words },
+      slug: basename(file, ".mdx"),
+    };
+  });
 
 let contentCache: Content[] | null = null;
-const CONTENT_PATH = 'src/content';
-const CONTENT_CATEGORIES = ['articles', 'utils', 'components'] as const;
+const CONTENT_PATH = "src/content";
+const CONTENT_CATEGORIES = [
+  "articles",
+  "utils",
+  "components",
+] as const;
 
 export const getAllContent = () => {
-	if (contentCache && process.env.NODE_ENV !== 'development') {
-		return contentCache;
-	}
+  if (contentCache && process.env.NODE_ENV !== "development") {
+    return contentCache;
+  }
 
-	const root = join(process.cwd(), CONTENT_PATH);
+  const root = join(process.cwd(), CONTENT_PATH);
 
-	contentCache = CONTENT_CATEGORIES.flatMap((category) => {
-		const dir = join(root, category);
+  contentCache = CONTENT_CATEGORIES.flatMap((category) => {
+    const dir = join(root, category);
 
-		try {
-			return getMDXData(dir).map((content) => ({
-				...content,
-				metadata: { ...content.metadata, category },
-			}));
-		} catch {
-			return [];
-		}
-	}).sort((a, b) => b.metadata.createdAt.getTime() - a.metadata.createdAt.getTime());
+    try {
+      return getMDXData(dir).map((content) => ({
+        ...content,
+        metadata: { ...content.metadata, category },
+      }));
+    } catch {
+      return [];
+    }
+  }).toSorted(
+    (a, b) =>
+      b.metadata.createdAt.getTime() - a.metadata.createdAt.getTime()
+  );
 
-	return contentCache;
+  return contentCache;
 };
 
-export const getContentBySlug = (slug: string) => getAllContent().find((content) => content.slug === slug);
+export const getContentBySlug = (slug: string) =>
+  getAllContent().find((content) => content.slug === slug);
 
 export const getContentByCategory = (category: ContentCategory) =>
-	getAllContent().filter((content) => content.metadata.category === category);
+  getAllContent().filter(
+    (content) => content.metadata.category === category
+  );
 
-const processor = remark().use(remarkMdx).use(remarkComponent).use(remarkGfm);
-export const getLLMText = async (content: Content): Promise<string> => {
-	const processed = await processor.process({ value: content.content });
-	return `# ${content.metadata.title}
+const processor = remark()
+  .use(remarkMdx)
+  .use(remarkComponent)
+  .use(remarkGfm);
+export const getLLMText = async (
+  content: Content
+): Promise<string> => {
+  const processed = await processor.process({
+    value: content.content,
+  });
+  return `# ${content.metadata.title}
 ${content.metadata.description}
 ${processed.value}
-Dernière mise à jour le ${dayjs(content.metadata.updatedAt).format('dddd DD MMMM YYYY')}`;
+Dernière mise à jour le ${dayjs(content.metadata.updatedAt).format("dddd DD MMMM YYYY")}`;
 };

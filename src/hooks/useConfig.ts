@@ -1,17 +1,17 @@
-import { useAtom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
+import { useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
-export type PackageManager = 'pnpm' | 'yarn' | 'npm' | 'bun';
-export type InstallationType = 'cli' | 'manual';
+export type PackageManager = "pnpm" | "yarn" | "npm" | "bun";
+export type InstallationType = "cli" | "manual";
 
 interface Config {
-	packageManager: PackageManager;
-	installationType: InstallationType;
+  packageManager: PackageManager;
+  installationType: InstallationType;
 }
 
-const configAtom = atomWithStorage<Config>('envindavsorg.config', {
-	packageManager: 'pnpm',
-	installationType: 'cli',
+const configAtom = atomWithStorage<Config>("envindavsorg.config", {
+  installationType: "cli",
+  packageManager: "pnpm",
 });
 
 const useConfig = () => useAtom(configAtom);

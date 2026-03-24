@@ -1,4 +1,5 @@
-import { type Content, getAllContent } from '@/lib/content';
+import { getAllContent } from "@/lib/content";
+import type { Content } from "@/lib/content";
 
 const allPosts: Content[] = getAllContent();
 
@@ -21,14 +22,14 @@ Je partage régulièrement des articles sur le développement front-end, les mei
 
 Voici une liste de mes articles récents :
 
-${allPosts.map((item) => `- [${item.metadata.title}](https://cuzeacflorin.fr/blog/${item.slug}.mdx): ${item.metadata.description}`).join('\n')}
+${allPosts.map((item) => `- [${item.metadata.title}](https://cuzeacflorin.fr/blog/${item.slug}.mdx): ${item.metadata.description}`).join("\n")}
 `;
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 
 export const GET = async (): Promise<Response> =>
-	new Response(content, {
-		headers: {
-			'Content-Type': 'text/markdown;charset=utf-8',
-		},
-	});
+  new Response(content, {
+    headers: {
+      "Content-Type": "text/markdown;charset=utf-8",
+    },
+  });

@@ -4,12 +4,8 @@
   "title": "Flip Sentences",
   "author": "envindavsorg <contact@cuzeacflorin.fr>",
   "description": "Un composant React animé avec motion/react qui fait défiler automatiquement une liste de phrases avec une transition fluide.",
-  "dependencies": [
-    "motion"
-  ],
-  "registryDependencies": [
-    "@envindavsorg/utils"
-  ],
+  "dependencies": ["motion"],
+  "registryDependencies": ["@envindavsorg/utils"],
   "files": [
     {
       "path": "src/registry/flip-sentences/FlipSentences.tsx",

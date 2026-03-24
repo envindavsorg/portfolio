@@ -7,10 +7,7 @@
       "name": "utils",
       "title": "Fonctions utilitaires",
       "author": "envindavsorg <contact@cuzeacflorin.fr>",
-      "dependencies": [
-        "clsx",
-        "tailwind-merge"
-      ],
+      "dependencies": ["clsx", "tailwind-merge"],
       "files": [
         {
           "path": "src/lib/utils.ts",
@@ -29,9 +26,7 @@
         "@phosphor-icons/react",
         "motion"
       ],
-      "registryDependencies": [
-        "@envindavsorg/utils"
-      ],
+      "registryDependencies": ["@envindavsorg/utils"],
       "files": [
         {
           "path": "src/registry/theme-switcher/ThemeSwitcher.tsx",
@@ -46,12 +41,8 @@
       "title": "Apple Hello Effect",
       "author": "envindavsorg <contact@cuzeacflorin.fr>",
       "description": "Créez un effet d'écriture Bonjour, Hello et Hola inspiré d'Apple en utilisant motion/react.",
-      "dependencies": [
-        "motion"
-      ],
-      "registryDependencies": [
-        "@envindavsorg/utils"
-      ],
+      "dependencies": ["motion"],
+      "registryDependencies": ["@envindavsorg/utils"],
       "files": [
         {
           "path": "src/registry/apple-hello-effect/AppleHelloEffect.tsx",
@@ -66,12 +57,8 @@
       "title": "Flip Sentences",
       "author": "envindavsorg <contact@cuzeacflorin.fr>",
       "description": "Un composant React animé avec motion/react qui fait défiler automatiquement une liste de phrases avec une transition fluide.",
-      "dependencies": [
-        "motion"
-      ],
-      "registryDependencies": [
-        "@envindavsorg/utils"
-      ],
+      "dependencies": ["motion"],
+      "registryDependencies": ["@envindavsorg/utils"],
       "files": [
         {
           "path": "src/registry/flip-sentences/FlipSentences.tsx",

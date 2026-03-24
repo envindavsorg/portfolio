@@ -1,55 +1,60 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { cache } from "react";
 
-import { ToolItem } from "@/app/(content)/(root)/_components/tools/ToolItem";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
-import { filterByTag } from "@/components/blog/filter/filterByTag";
-import { TagsFilter } from "@/components/blog/filter/TagsFilter";
+import { PageTags } from "@/components/features/PageTags";
 import { NavBreadcrumb } from "@/components/layout/NavBreadcrumb";
 import { Divider } from "@/components/primitives/Divider";
 import { PanelContent } from "@/components/primitives/Panel";
+import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory } from "@/lib/content";
-import type { Content } from "@/lib/content";
-import { dayjs } from "@/lib/functions";
-import { buildContentMetadata } from "@/lib/open-graph";
+import { getTime } from "@/lib/date";
+import { createMetadata } from "@/lib/metadata";
+import { filterByTag } from "@/lib/tags";
+
+const pageType = "utils";
+const pageTitle = "suite d'outils web";
+const pageDescription =
+  "une suite d'outils web gratuits conçus pour optimiser votre workflow et booster votre productivité";
+
+export const metadata: Metadata = createMetadata({
+  description: pageDescription,
+  ogImageParams: {
+    description: pageDescription,
+    title: pageTitle,
+    type: pageType,
+  },
+  title: pageTitle,
+});
 
 const getCachedUtils = cache(() =>
-  getContentByCategory("utils").sort((a, b) =>
-    dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+  getContentByCategory(pageType).sort(
+    (a, b) =>
+      getTime(b.metadata.createdAt) - getTime(a.metadata.createdAt)
   )
 );
 
-export const generateMetadata = async (): Promise<Metadata> =>
-  buildContentMetadata({
-    description:
-      "Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
-    ogImageParams: {
-      description:
-        "Optimisez votre workflow avec cette suite d'outils web gratuits pour développeurs.",
-      title: "Outils pour développeurs",
-      type: "utils",
-    },
-    title: "Outils pour développeurs",
-  });
-
-type UtilsPageProps = Readonly<{
+const UtilsPage = async ({
+  searchParams,
+}: Readonly<{
   searchParams: Promise<{
     tag?: string;
   }>;
-}>;
-
-const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
+}>) => {
   const { tag } = await searchParams;
-  const allUtils = getCachedUtils();
-  const { tags, tagCounts, filtered, selectedTag } = filterByTag(allUtils, tag);
+  const { contents, activeTag, tagCounts, tags } = filterByTag(
+    getCachedUtils(),
+    tag
+  );
 
   return (
     <div className="screen-line-after min-h-svh">
       <NavBreadcrumb
         items={[
           { href: "/", label: "page d'accueil" },
-          { href: "/utils", label: "suite d'outils web" },
+          { href: "/utils", label: pageTitle },
         ]}
       />
 
@@ -57,33 +62,50 @@ const UtilsPage = async ({ searchParams }: UtilsPageProps) => {
 
       <PixelHeading
         autoPlay
-        className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl px-3"
+        className="text-3xl sm:text-4xl px-3 py-1 text-theme"
         mode="multi"
       >
         suite d'outils web
       </PixelHeading>
 
       <PanelContent className="screen-line-before">
-        <Prose>
-          -- optimisez votre workflow avec cette{" "}
-          <span className="font-bold text-theme">suite d'outils web</span>{" "}
-          gratuits pour développeurs --
-        </Prose>
-        <Prose>
-          -- tous les outils sont{" "}
-          <span className="font-bold text-theme">conçus pour vous aider</span> à
-          gagner du temps et à améliorer votre productivité --
-        </Prose>
+        <Prose>-- {pageDescription} --</Prose>
+      </PanelContent>
+
+      <PanelContent className="screen-line-before space-y-0">
+        <PageTags
+          activeTag={activeTag}
+          tagCounts={tagCounts}
+          tags={tags}
+        />
       </PanelContent>
 
       <Divider border={false} type="half" />
 
-      <TagsFilter selectedTag={selectedTag} tagCounts={tagCounts} tags={tags} />
+      {contents.map((item, idx) => (
+        <Link
+          aria-label={item.metadata.title}
+          href={`/utils/${item.slug}`}
+          prefetch={false}
+          key={item.slug}
+          className="cursor-pointer select-none"
+        >
+          <article className="group/article screen-line-after flex flex-col">
+            <div className="w-full p-3 flex items-center justify-between group-hover/article:bg-accent2">
+              <h2 className="text-base sm:text-xl font-pixel-square lowercase group-hover/article:text-theme transition-colors">
+                <span>{idx + 1}. </span>
+                {item.metadata.title}
+              </h2>
+              {item.metadata.isNew && <PulsatingCircle />}
+            </div>
 
-      <Divider after={false} before={false} border={false} type="half" />
-
-      {filtered.map((util: Content) => (
-        <ToolItem isDescription key={util.slug} tool={util} />
+            <div className="border-t border-edge px-3 py-1.5">
+              <Prose className="lowercase">
+                -- {item.metadata.description} --
+              </Prose>
+            </div>
+          </article>
+        </Link>
       ))}
     </div>
   );

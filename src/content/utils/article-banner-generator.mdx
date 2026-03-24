@@ -35,6 +35,7 @@ L'aperçu se met à jour en temps réel. Une fois satisfait, cliquez sur le bout
 # Générer une bannière via l'API Canvas en JavaScript :
 
 En JavaScript, la génération d'images dynamiques peut être réalisée via l'API Canvas native du navigateur, comme illustré ci-dessous :
+
 ```javascript
 const canvas = document.createElement("canvas");
 canvas.width = 1400;
@@ -47,7 +48,11 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.font = "bold 64px Georgia";
 ctx.fillStyle = "#ffffff";
 ctx.textAlign = "center";
-ctx.fillText("Mon titre d'article", canvas.width / 2, canvas.height / 2);
+ctx.fillText(
+  "Mon titre d'article",
+  canvas.width / 2,
+  canvas.height / 2
+);
 
 const link = document.createElement("a");
 link.download = "banner.png";
@@ -58,6 +63,7 @@ link.click();
 # Générer une bannière en TypeScript (Node.js) :
 
 En TypeScript avec Node.js, la génération d'images côté serveur peut être effectuée avec la librairie **canvas** (node-canvas), comme illustré ci-dessous :
+
 ```typescript
 import { createCanvas } from "canvas";
 import { writeFileSync } from "node:fs";
@@ -71,7 +77,11 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.font = "bold 64px Georgia";
 ctx.fillStyle = "#ffffff";
 ctx.textAlign = "center";
-ctx.fillText("Mon titre d'article", canvas.width / 2, canvas.height / 2);
+ctx.fillText(
+  "Mon titre d'article",
+  canvas.width / 2,
+  canvas.height / 2
+);
 
 const buffer: Buffer = canvas.toBuffer("image/png");
 writeFileSync("banner.png", buffer);
@@ -79,6 +89,7 @@ console.log("Bannière générée : banner.png");
 ```
 
 Installer la dépendance :
+
 ```bash
 npm install canvas
 ```
@@ -86,6 +97,7 @@ npm install canvas
 # Générer une bannière en Rust :
 
 En Rust, la génération d'images peut être réalisée avec la crate **image** et **imageproc** pour le rendu de texte, comme illustré ci-dessous :
+
 ```rust
 use image::{Rgb, RgbImage};
 
@@ -105,6 +117,7 @@ fn main() {
 ```
 
 Ajouter dans `Cargo.toml` :
+
 ```toml
 [dependencies]
 image = "0.25"

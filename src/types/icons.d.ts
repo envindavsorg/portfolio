@@ -1,14 +1,14 @@
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes } from "react";
 
 declare global {
-	interface AnimatedIconHandle {
-		startAnimation: () => void;
-		stopAnimation: () => void;
-	}
+  interface AnimatedIconHandle {
+    startAnimation: () => void;
+    stopAnimation: () => void;
+  }
 
-	interface AnimatedIconProps extends HTMLAttributes<HTMLDivElement> {
-		size?: number;
-	}
+  interface AnimatedIconProps extends HTMLAttributes<HTMLDivElement> {
+    size?: number;
+  }
 
-	type AnimatedIconEvent = MouseEvent<HTMLDivElement>;
+  type AnimatedIconEvent = MouseEvent<HTMLDivElement>;
 }

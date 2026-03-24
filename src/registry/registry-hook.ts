@@ -1,3 +1,3 @@
-import type { Registry } from 'shadcn/schema';
+import type { Registry } from "shadcn/schema";
 
-export const hook: Registry['items'] = [];
+export const hook: Registry["items"] = [];

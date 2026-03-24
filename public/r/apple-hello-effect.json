@@ -4,12 +4,8 @@
   "title": "Apple Hello Effect",
   "author": "envindavsorg <contact@cuzeacflorin.fr>",
   "description": "Créez un effet d'écriture Bonjour, Hello et Hola inspiré d'Apple en utilisant motion/react.",
-  "dependencies": [
-    "motion"
-  ],
-  "registryDependencies": [
-    "@envindavsorg/utils"
-  ],
+  "dependencies": ["motion"],
+  "registryDependencies": ["@envindavsorg/utils"],
   "files": [
     {
       "path": "src/registry/apple-hello-effect/AppleHelloEffect.tsx",

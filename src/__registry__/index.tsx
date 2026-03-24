@@ -7,70 +7,93 @@
 import React from "react";
 
 export const Index: Record<string, any> = {
-  "utils": {
-    name: "utils",
-    description: "",
-    type: "registry:lib",
-    files: [{
-      path: "src/registry/src/lib/utils.ts",
-      type: "registry:lib",
-    }],
-  },
-  "theme-switcher": {
-    name: "theme-switcher",
-    description: "Un composant de sélection de thème pour les applications Next.js avec next-themes et Tailwind CSS, supportant les modes système, clair et sombre.",
-    type: "registry:component",
-    files: [{
-      path: "src/registry/theme-switcher/ThemeSwitcher.tsx",
-      type: "registry:component",
-    }],
-  },
   "apple-hello-effect": {
+    description:
+      "Créez un effet d'écriture Bonjour, Hello et Hola inspiré d'Apple en utilisant motion/react.",
+    files: [
+      {
+        path: "src/registry/apple-hello-effect/AppleHelloEffect.tsx",
+        type: "registry:component",
+      },
+    ],
     name: "apple-hello-effect",
-    description: "Créez un effet d'écriture Bonjour, Hello et Hola inspiré d'Apple en utilisant motion/react.",
     type: "registry:component",
-    files: [{
-      path: "src/registry/apple-hello-effect/AppleHelloEffect.tsx",
-      type: "registry:component",
-    }],
-  },
-  "flip-sentences": {
-    name: "flip-sentences",
-    description: "Un composant React animé avec motion/react qui fait défiler automatiquement une liste de phrases avec une transition fluide.",
-    type: "registry:component",
-    files: [{
-      path: "src/registry/flip-sentences/FlipSentences.tsx",
-      type: "registry:component",
-    }],
   },
   "apple-hello-effect-demo": {
+    component: React.lazy(
+      () => import("@/registry/examples/AppleHelloEffectDemo.tsx")
+    ),
+    description: "",
+    files: [
+      {
+        path: "src/registry/examples/AppleHelloEffectDemo.tsx",
+        type: "registry:example",
+      },
+    ],
     name: "apple-hello-effect-demo",
-    description: "",
     type: "registry:example",
-    files: [{
-      path: "src/registry/examples/AppleHelloEffectDemo.tsx",
-      type: "registry:example",
-    }],
-    component: React.lazy(() => import("@/registry/examples/AppleHelloEffectDemo.tsx")),
   },
-  "theme-switcher-demo": {
-    name: "theme-switcher-demo",
-    description: "",
-    type: "registry:example",
-    files: [{
-      path: "src/registry/examples/ThemeSwitcherDemo.tsx",
-      type: "registry:example",
-    }],
-    component: React.lazy(() => import("@/registry/examples/ThemeSwitcherDemo.tsx")),
+  "flip-sentences": {
+    description:
+      "Un composant React animé avec motion/react qui fait défiler automatiquement une liste de phrases avec une transition fluide.",
+    files: [
+      {
+        path: "src/registry/flip-sentences/FlipSentences.tsx",
+        type: "registry:component",
+      },
+    ],
+    name: "flip-sentences",
+    type: "registry:component",
   },
   "flip-sentences-demo": {
-    name: "flip-sentences-demo",
+    component: React.lazy(
+      () => import("@/registry/examples/FlipSentencesDemo.tsx")
+    ),
     description: "",
+    files: [
+      {
+        path: "src/registry/examples/FlipSentencesDemo.tsx",
+        type: "registry:example",
+      },
+    ],
+    name: "flip-sentences-demo",
     type: "registry:example",
-    files: [{
-      path: "src/registry/examples/FlipSentencesDemo.tsx",
-      type: "registry:example",
-    }],
-    component: React.lazy(() => import("@/registry/examples/FlipSentencesDemo.tsx")),
   },
-}
+  "theme-switcher": {
+    description:
+      "Un composant de sélection de thème pour les applications Next.js avec next-themes et Tailwind CSS, supportant les modes système, clair et sombre.",
+    files: [
+      {
+        path: "src/registry/theme-switcher/ThemeSwitcher.tsx",
+        type: "registry:component",
+      },
+    ],
+    name: "theme-switcher",
+    type: "registry:component",
+  },
+  "theme-switcher-demo": {
+    component: React.lazy(
+      () => import("@/registry/examples/ThemeSwitcherDemo.tsx")
+    ),
+    description: "",
+    files: [
+      {
+        path: "src/registry/examples/ThemeSwitcherDemo.tsx",
+        type: "registry:example",
+      },
+    ],
+    name: "theme-switcher-demo",
+    type: "registry:example",
+  },
+  utils: {
+    description: "",
+    files: [
+      {
+        path: "src/registry/src/lib/utils.ts",
+        type: "registry:lib",
+      },
+    ],
+    name: "utils",
+    type: "registry:lib",
+  },
+};
