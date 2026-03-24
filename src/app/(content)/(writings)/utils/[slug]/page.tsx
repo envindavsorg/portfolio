@@ -1,4 +1,3 @@
-import { getTableOfContents } from "fumadocs-core/content/toc";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type {
@@ -6,22 +5,22 @@ import type {
   WithContext,
 } from "schema-dts";
 
-import { ArticleNavBar } from "@/components/blog/ArticleNavBar";
-import { ArticleTitle } from "@/components/blog/ArticleTitle";
-import { TableOfContents } from "@/components/blog/toc/TableOfContents";
-import { MDX } from "@/components/markdown/mdx";
+import { PixelHeading } from "@/components/blocks/PixelHeading";
+import { PageNav } from "@/components/features/PageNav";
+import { PageToC } from "@/components/features/PageToC";
+import { NavBreadcrumb } from "@/components/layout/NavBreadcrumb";
+import { Mdx } from "@/components/markdown/mdx";
+import { Divider } from "@/components/primitives/Divider";
+import { PanelContent } from "@/components/primitives/Panel";
+import { Prose } from "@/components/primitives/Typography";
 import GLOBAL_DATA from "@/data/global";
+import type { Content } from "@/lib/content";
 import {
   getContentByCategory,
   getContentBySlug,
 } from "@/lib/content";
-import type { Content } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
 import { buildContentMetadata } from "@/lib/open-graph";
-
-interface Props {
-  params: Promise<{ slug: string }>;
-}
 
 export const generateStaticParams = async () => {
   const utils = getContentByCategory("utils");
@@ -30,7 +29,9 @@ export const generateStaticParams = async () => {
 
 export const generateMetadata = async ({
   params,
-}: Props): Promise<Metadata> => {
+}: Readonly<{
+  params: Promise<{ slug: string }>;
+}>): Promise<Metadata> => {
   const { slug } = await params;
   const util = getContentBySlug(slug);
   if (!util) {
@@ -72,41 +73,66 @@ const getPageJsonLd = ({
   url: `https://cuzeacflorin.fr/${metadata.category}/${slug}`,
 });
 
-const Page = async ({ params }: Props) => {
+const Page = async ({
+  params,
+}: Readonly<{
+  params: Promise<{ slug: string }>;
+}>) => {
   const { slug } = await params;
-  const util = getContentBySlug(slug);
+  const item = getContentBySlug(slug);
 
-  if (!util) {
+  if (!item) {
     notFound();
   }
 
-  const { content, metadata } = util;
-  const toc = getTableOfContents(content);
+  const { content, metadata } = item;
+
   const utils = metadata.category
     ? getContentByCategory(metadata.category)
     : [];
 
   return (
     <>
+      <NavBreadcrumb
+        items={[
+          { href: "/", label: "Page d'accueil" },
+          { href: "/utils", label: "Suite d'outils web" },
+          { label: item.metadata.title },
+        ]}
+      />
+
+      <Divider before={false} border={false} type="half" />
+
+      <PixelHeading
+        autoPlay
+        className="text-3xl sm:text-4xl px-3 py-1 text-theme"
+        mode="multi"
+      >
+        {metadata.title}
+      </PixelHeading>
+      <PanelContent className="screen-line-before">
+        <Prose>-- {metadata.description} --</Prose>
+      </PanelContent>
+
+      <Divider border={false} type="half" />
+
+      <PageToC content={content} />
+
+      <Divider border={false} after={false} type="half" />
+
+      <Mdx code={content} />
+
+      <PageNav item={item} items={utils} slug={slug} />
+
       <script
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPageJsonLd(util)).replaceAll(
+          __html: JSON.stringify(getPageJsonLd(item)).replaceAll(
             "<",
             "\\u003c"
           ),
         }}
         type="application/ld+json"
       />
-      <ArticleNavBar
-        description="tous les outils"
-        item={util}
-        items={utils}
-        slug={slug}
-        useLlm={false}
-      />
-      <ArticleTitle title={metadata.title} />
-      <TableOfContents after={false} items={toc} />
-      <MDX code={content} />
     </>
   );
 };

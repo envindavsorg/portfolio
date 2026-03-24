@@ -105,10 +105,6 @@ export const getAbsoluteUrl = (url: string): string => {
     return url;
   }
 
-  if (typeof window !== "undefined") {
-    return new URL(url, window.location.origin).toString();
-  }
-
   const siteUrl =
     process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL;
   if (siteUrl) {

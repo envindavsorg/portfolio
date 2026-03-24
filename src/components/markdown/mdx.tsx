@@ -253,7 +253,7 @@ interface MDXProps {
   isDivider?: boolean;
 }
 
-export const MDX = ({ code, isDivider = true }: MDXProps) => (
+export const Mdx = ({ code, isDivider = true }: MDXProps) => (
   <>
     <Prose className="px-2 sm:px-4">
       <MDXRemote

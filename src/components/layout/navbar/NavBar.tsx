@@ -1,5 +1,5 @@
-import { getAllContent } from "@/lib/content";
 import type { Content } from "@/lib/content";
+import { getAllContent } from "@/lib/content";
 
 import { NavBarCommand } from "./elements/NavBarCommand";
 import { NavBarProvider } from "./elements/NavBarContext";
@@ -19,7 +19,7 @@ export const NavBar = () => {
   return (
     <NavBarProvider>
       <NavBarWrapper>
-        <div className="screen-line-before screen-line-after mx-auto flex h-12 max-w-3xl items-center justify-between gap-x-4 border-edge border-x px-2">
+        <div className="screen-line-before screen-line-after mx-auto flex h-12 max-w-3xl items-center justify-between gap-x-4 border-edge border-x px-3">
           <NavBarMark />
           <NavBarMainMenu />
 

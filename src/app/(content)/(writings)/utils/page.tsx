@@ -15,9 +15,9 @@ import { createMetadata } from "@/lib/metadata";
 import { filterByTag } from "@/lib/tags";
 
 const pageType = "utils";
-const pageTitle = "suite d'outils web";
+const pageTitle = "Suite d'outils web";
 const pageDescription =
-  "une suite d'outils web gratuits conçus pour optimiser votre workflow et booster votre productivité";
+  "Une suite d'outils web gratuits conçus pour optimiser votre workflow et booster votre productivité";
 
 export const metadata: Metadata = createMetadata({
   description: pageDescription,
@@ -36,7 +36,7 @@ const getCachedUtils = cache(() =>
   )
 );
 
-const UtilsPage = async ({
+const Page = async ({
   searchParams,
 }: Readonly<{
   searchParams: Promise<{
@@ -53,8 +53,8 @@ const UtilsPage = async ({
     <div className="screen-line-after min-h-svh">
       <NavBreadcrumb
         items={[
-          { href: "/", label: "page d'accueil" },
-          { href: "/utils", label: pageTitle },
+          { href: "/", label: "Page d'accueil" },
+          { label: pageTitle },
         ]}
       />
 
@@ -65,14 +65,15 @@ const UtilsPage = async ({
         className="text-3xl sm:text-4xl px-3 py-1 text-theme"
         mode="multi"
       >
-        suite d'outils web
+        {pageTitle}
       </PixelHeading>
-
       <PanelContent className="screen-line-before">
         <Prose>-- {pageDescription} --</Prose>
       </PanelContent>
 
-      <PanelContent className="screen-line-before space-y-0">
+      <Divider border={false} type="half" />
+
+      <PanelContent className="space-y-0">
         <PageTags
           activeTag={activeTag}
           tagCounts={tagCounts}
@@ -88,15 +89,21 @@ const UtilsPage = async ({
           href={`/utils/${item.slug}`}
           prefetch={false}
           key={item.slug}
-          className="cursor-pointer select-none"
         >
-          <article className="group/article screen-line-after flex flex-col">
+          <article className="group/article screen-line-after flex flex-col cursor-pointer select-none">
             <div className="w-full p-3 flex items-center justify-between group-hover/article:bg-accent2">
               <h2 className="text-base sm:text-xl font-pixel-square lowercase group-hover/article:text-theme transition-colors">
                 <span>{idx + 1}. </span>
                 {item.metadata.title}
               </h2>
-              {item.metadata.isNew && <PulsatingCircle />}
+              {item.metadata.isNew && (
+                <div className="flex items-center gap-x-2">
+                  <PulsatingCircle />
+                  <span className="max-md:hidden text-sm text-theme">
+                    Nouveau
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="border-t border-edge px-3 py-1.5">
@@ -111,4 +118,4 @@ const UtilsPage = async ({
   );
 };
 
-export default UtilsPage;
+export default Page;

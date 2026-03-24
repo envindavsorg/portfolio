@@ -18,7 +18,10 @@ const AppLayout = ({ children }: Readonly<AppLayoutProps>) => (
     </a>
 
     <NavBar />
-    <main className="max-w-screen overflow-x-clip px-2" id="main">
+    <main
+      className="max-w-screen overflow-x-clip px-2 lowercase"
+      id="main"
+    >
       {children}
     </main>
     <Footer />

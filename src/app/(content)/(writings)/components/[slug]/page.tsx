@@ -6,16 +6,16 @@ import type {
   WithContext,
 } from "schema-dts";
 
-import { ArticleNavBar } from "@/components/blog/ArticleNavBar";
 import { ArticleTitle } from "@/components/blog/ArticleTitle";
-import { TableOfContents } from "@/components/blog/toc/TableOfContents";
+import { ArticleNavBar } from "@/components/features/PageNav";
+import { TableOfContents } from "@/components/features/PageToC";
 import { MDX } from "@/components/markdown/mdx";
 import GLOBAL_DATA from "@/data/global";
+import type { Content } from "@/lib/content";
 import {
   getContentByCategory,
   getContentBySlug,
 } from "@/lib/content";
-import type { Content } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
 import { buildContentMetadata } from "@/lib/open-graph";
 
