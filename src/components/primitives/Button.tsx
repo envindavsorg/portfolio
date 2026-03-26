@@ -88,12 +88,14 @@ const ICONS = {
   success: Check,
 } as const;
 
-interface CopyButtonProps {
+interface CopyButtonProps extends Omit<
+  ComponentProps<"button">,
+  "size"
+> {
   value?: string;
   getValueAction?: () => Promise<string>;
   variant?: "default" | "outline" | "link" | "ghost";
   size?: "default" | "icon";
-  className?: string;
   label?: string;
   timeout?: number;
 }
@@ -106,6 +108,7 @@ export const CopyButton = ({
   className,
   label = "copier le texte dans le presse-papier",
   timeout = 2000,
+  ...props
 }: CopyButtonProps) => {
   const [state, setState] = useState<CopyState>("idle");
   const iconRef = useRef<AnimatedIconHandle>(null);
@@ -150,6 +153,7 @@ export const CopyButton = ({
 
   return (
     <Button
+      {...props}
       aria-label={label}
       className={cn(
         className,

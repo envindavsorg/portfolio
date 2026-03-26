@@ -1,7 +1,12 @@
 "use client";
 
-import useEmblaCarousel from "embla-carousel-react";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
+import useEmblaCarousel from "embla-carousel-react";
+import type {
+  ComponentProps,
+  HTMLAttributes,
+  KeyboardEvent,
+} from "react";
 import {
   createContext,
   forwardRef,
@@ -11,17 +16,12 @@ import {
   useRef,
   useState,
 } from "react";
-import type {
-  ComponentProps,
-  HTMLAttributes,
-  KeyboardEvent,
-} from "react";
 
 import { cn } from "@/lib/utils";
 
 import { DotPattern } from "../blocks/DotPattern";
 import { ArrowLeft } from "../motion/ArrowLeft";
-import { ArrowRightIcon } from "../motion/ArrowRight";
+import { ArrowRight } from "../motion/ArrowRight";
 import { Button } from "./Button";
 
 export type CarouselApi = UseEmblaCarouselType[1];
@@ -232,7 +232,7 @@ export const CarouselNext = forwardRef<
         variant={variant}
         {...props}
       >
-        <ArrowRightIcon ref={iconRef} />
+        <ArrowRight ref={iconRef} />
         <span className="sr-only">Next slide</span>
       </Button>
     );

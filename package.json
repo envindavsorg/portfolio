@@ -66,6 +66,7 @@
     "fix": "ultracite fix"
   },
   "dependencies": {
+    "@base-ui/react": "^1.3.0",
     "@bprogress/next": "^3.2.12",
     "@cloudflare/speedtest": "^1.7.0",
     "@hookform/resolvers": "^5.2.2",
@@ -80,6 +81,7 @@
     "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slider": "^1.3.6",
     "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "@radix-ui/react-visually-hidden": "^1.2.4",
     "@react-email/components": "^1.0.10",
     "@react-email/render": "^2.0.4",
@@ -122,6 +124,7 @@
     "sharp": "^0.34.5",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
+    "tooltip": "link:@base-ui/react/tooltip",
     "tslog": "^4.10.2",
     "vaul": "^1.1.2",
     "vcard-creator": "^0.7.2",

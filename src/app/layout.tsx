@@ -1,4 +1,3 @@
-import "./globals.css";
 import { GeistMono } from "geist/font/mono";
 import {
   GeistPixelCircle,
@@ -11,7 +10,8 @@ import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
 import type React from "react";
 
-import { TooltipProvider } from "@/components/primitives/Tooltip";
+import "./globals.css";
+import { TooltipProvider } from "@/components/base/Tooltip";
 import { Providers } from "@/components/providers/Providers";
 import GLOBAL_DATA from "@/data/global";
 import { META_THEME_COLORS } from "@/data/theme";

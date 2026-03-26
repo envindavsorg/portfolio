@@ -7,8 +7,8 @@ import type {
 } from "schema-dts";
 
 import { ArticleTitle } from "@/components/blog/ArticleTitle";
-import { ArticleNavBar } from "@/components/features/PageNav";
-import { TableOfContents } from "@/components/features/PageToC";
+import { TableOfContents } from "@/components/features/WritingsToC";
+import { ArticleNavBar } from "@/components/features/WritingsTopBar";
 import { MDX } from "@/components/markdown/mdx";
 import GLOBAL_DATA from "@/data/global";
 import type { Content } from "@/lib/content";

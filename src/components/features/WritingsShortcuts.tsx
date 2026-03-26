@@ -5,17 +5,17 @@ import { useCallback, useEffect } from "react";
 
 import type { Content } from "@/lib/content";
 
-interface PageShortcutsProps {
+interface WritingsShortcutsProps {
   basePath: string;
   previous: Content | null;
   next: Content | null;
 }
 
-export const PageShortcuts = ({
+export const WritingsShortcuts = ({
   basePath,
   previous,
   next,
-}: PageShortcutsProps) => {
+}: WritingsShortcutsProps) => {
   const router = useRouter();
 
   const navigate = useCallback(

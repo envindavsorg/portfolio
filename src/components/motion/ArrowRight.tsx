@@ -5,7 +5,7 @@ import { forwardRef } from "react";
 
 import useAnimatedIcon from "@/hooks/useAnimatedIcon";
 
-export const ArrowRightIcon = forwardRef<
+export const ArrowRight = forwardRef<
   AnimatedIconHandle,
   AnimatedIconProps
 >(

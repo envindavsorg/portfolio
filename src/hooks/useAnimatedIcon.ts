@@ -1,6 +1,6 @@
 import { useAnimation } from "motion/react";
-import { useCallback, useImperativeHandle, useRef } from "react";
 import type { ForwardedRef } from "react";
+import { useCallback, useImperativeHandle, useRef } from "react";
 
 const useAnimatedIcon = (
   ref: ForwardedRef<AnimatedIconHandle>,

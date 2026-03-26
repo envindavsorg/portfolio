@@ -19,13 +19,13 @@ interface BreadcrumbEntry {
   href?: string;
 }
 
-interface NavigationBreadcrumbProps {
+interface WritingsBreadcrumbProps {
   items: BreadcrumbEntry[];
 }
 
-export const NavBreadcrumb = ({
+export const WritingsBreadcrumb = ({
   items,
-}: NavigationBreadcrumbProps) => {
+}: WritingsBreadcrumbProps) => {
   const iconRef = useRef<AnimatedIconHandle>(null);
 
   const handleMouseEnter = useCallback(() => {

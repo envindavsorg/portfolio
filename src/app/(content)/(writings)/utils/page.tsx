@@ -1,22 +1,17 @@
 import type { Metadata } from "next";
 import { cache } from "react";
 
-import { PixelHeading } from "@/components/blocks/PixelHeading";
-import { PageTags } from "@/components/features/PageTags";
 import { Utils } from "@/components/features/utils/Utils";
-import { NavBreadcrumb } from "@/components/layout/NavBreadcrumb";
+import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
+import { WritingsHeading } from "@/components/features/WritingsHeading";
+import { WritingsTags } from "@/components/features/WritingsTags";
 import { Divider } from "@/components/primitives/Divider";
-import { PanelContent } from "@/components/primitives/Panel";
-import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory } from "@/lib/content";
 import { getTime } from "@/lib/date";
 import { createMetadata } from "@/lib/metadata";
 import { filterByTag } from "@/lib/tags";
 
-const pageType = "utils";
-const pageTitle = "Suite d'outils web";
-const pageDescription =
-  "Une suite d'outils web gratuits conçus pour optimiser votre workflow et booster votre productivité";
+import { pageDescription, pageTitle, pageType } from "./_constants";
 
 export const metadata: Metadata = createMetadata({
   description: pageDescription,
@@ -50,7 +45,7 @@ const Page = async ({
 
   return (
     <div className="screen-line-after min-h-svh">
-      <NavBreadcrumb
+      <WritingsBreadcrumb
         items={[
           { href: "/", label: "Page d'accueil" },
           { label: pageTitle },
@@ -59,39 +54,36 @@ const Page = async ({
 
       <Divider before={false} border={false} type="half" />
 
-      <PixelHeading
-        autoPlay
-        className="text-3xl sm:text-4xl px-3 py-1 text-theme"
-        mode="multi"
-      >
-        {pageTitle}
-      </PixelHeading>
-      <PanelContent className="screen-line-before">
-        <Prose>-- {pageDescription} --</Prose>
-      </PanelContent>
+      <WritingsHeading
+        title={pageTitle}
+        description={pageDescription}
+      />
 
       <Divider border={false} type="half" />
 
-      <PanelContent className="space-y-0">
-        <PageTags
-          activeTag={activeTag}
-          tagCounts={tagCounts}
-          tags={tags}
-        />
-      </PanelContent>
+      <WritingsTags
+        activeTag={activeTag}
+        tagCounts={tagCounts}
+        tags={tags}
+      />
 
       <Divider border={false} type="half" />
 
       <Utils
-        contents={contents.map((item) => ({
-          metadata: {
-            createdAt: item.metadata.createdAt.toISOString(),
-            description: item.metadata.description,
-            isNew: item.metadata.isNew,
-            title: item.metadata.title,
-          },
-          slug: item.slug,
-        }))}
+        contents={contents.map(
+          ({
+            metadata: { createdAt, description, isNew, title },
+            slug,
+          }) => ({
+            metadata: {
+              createdAt: createdAt.toISOString(),
+              description,
+              isNew,
+              title,
+            },
+            slug,
+          })
+        )}
       />
     </div>
   );

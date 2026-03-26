@@ -113,11 +113,14 @@ const Content = ({ groups, activeUrl }: ContentProps) => {
   );
 };
 
-type PageToCProps = ComponentProps<typeof Collapsible> & {
+type WritingsToCProps = ComponentProps<typeof Collapsible> & {
   content: string;
 };
 
-export const PageToC = ({ content, ...props }: PageToCProps) => {
+export const WritingsToC = ({
+  content,
+  ...props
+}: WritingsToCProps) => {
   const iconGalleryRef = useRef<AnimatedIconHandle>(null);
   const iconChevronRef = useRef<AnimatedIconHandle>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);

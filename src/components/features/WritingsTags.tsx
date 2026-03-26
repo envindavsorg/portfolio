@@ -7,6 +7,8 @@ import { ALL_TAG, isActiveTag } from "@/lib/tags";
 import { cn } from "@/lib/utils";
 
 import { Button } from "../primitives/Button";
+import { Field } from "../primitives/Field";
+import { PanelContent } from "../primitives/Panel";
 
 interface TagButtonProps {
   count?: number;
@@ -46,17 +48,17 @@ const TagButton = ({
   );
 };
 
-export interface PageTagsProps {
+export interface WritingsTagsProps {
   activeTag: string;
   tagCounts?: Record<string, number>;
   tags: string[];
 }
 
-export const PageTags = ({
+export const WritingsTags = ({
   activeTag,
   tagCounts,
   tags,
-}: PageTagsProps) => {
+}: WritingsTagsProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -81,22 +83,24 @@ export const PageTags = ({
   }
 
   return (
-    <div className="flex flex-col gap-y-2">
-      <p className="text-muted-foreground text-xs sm:text-sm">
-        consulter par catégorie :
-      </p>
+    <PanelContent>
+      <Field className="flex flex-col md:flex-row items-center">
+        <p className="text-xs sm:text-sm text-theme">
+          par catégorie :
+        </p>
 
-      <div className="flex flex-wrap gap-2 sm:gap-3">
-        {tags.map((tag) => (
-          <TagButton
-            count={tagCounts?.[tag]}
-            isActive={isActiveTag(tag, activeTag)}
-            key={tag}
-            onTagClick={handleTagClick}
-            tag={tag}
-          />
-        ))}
-      </div>
-    </div>
+        <div className="flex max-md:flex-wrap gap-2 sm:gap-3">
+          {tags.map((tag) => (
+            <TagButton
+              count={tagCounts?.[tag]}
+              isActive={isActiveTag(tag, activeTag)}
+              key={tag}
+              onTagClick={handleTagClick}
+              tag={tag}
+            />
+          ))}
+        </div>
+      </Field>
+    </PanelContent>
   );
 };
