@@ -5,7 +5,7 @@ import { forwardRef } from "react";
 
 import useAnimatedIcon from "@/hooks/useAnimatedIcon";
 
-export const DeleteIcon = forwardRef<
+export const Delete = forwardRef<
   AnimatedIconHandle,
   AnimatedIconProps
 >(

@@ -1,10 +1,10 @@
 "use client";
 
 import { Slot } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { cva } from "class-variance-authority";
 import type { ComponentProps } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Check } from "@/components/motion/Check";
 import { Copy } from "@/components/motion/Copy";
@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 export const buttonVariants = cva(
   [
-    "inline-flex items-center justify-center gap-2 rounded-full font-medium text-sm",
+    "inline-flex items-center justify-center shrink-0 gap-2 rounded-full font-medium text-sm",
     "cursor-pointer select-none whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
     "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   ],
@@ -37,11 +37,18 @@ export const buttonVariants = cva(
           "hover:to-zinc-700 dark:hover:to-zinc-600",
           "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/20",
         ],
+        destructive: [
+          "border border-destructive",
+          "text-destructive",
+          "bg-background hover:bg-destructive/10",
+          "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-destructive/20",
+        ],
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-foreground underline-offset-2 transition-colors hover:bg-transparent hover:text-theme hover:underline",
         outline: [
-          "border border-input hover:text-accent-foreground",
-          "bg-background hover:bg-accent",
+          "border border-foreground/30",
+          "text-foreground",
+          "bg-transparent hover:bg-accent/40",
           "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15",
         ],
       },

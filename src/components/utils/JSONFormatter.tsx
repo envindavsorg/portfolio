@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
 import type { ChangeEvent } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import { Button, CopyButton } from "@/components/primitives/Button";
 import { Divider } from "@/components/primitives/Divider";
@@ -10,7 +10,7 @@ import { Textarea } from "@/components/primitives/Textarea";
 
 import { ArrowDownAtoZ } from "../motion/ArrowDownAtoZ";
 import { ArrowDownZtoA } from "../motion/ArrowDownZtoA";
-import { DeleteIcon } from "../motion/Delete";
+import { Delete } from "../motion/Delete";
 
 type SortOrder = "asc" | "desc";
 type DisplayMode = "formatted" | "minified";
@@ -329,7 +329,7 @@ export const JSONFormatter = () => {
                 size="icon"
                 variant="outline"
               >
-                <DeleteIcon ref={iconDeleteRef} />
+                <Delete ref={iconDeleteRef} />
               </Button>
             )}
 

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ComponentProps } from "react";
 import {
   forwardRef,
   useCallback,
@@ -8,7 +9,6 @@ import {
   useRef,
   useState,
 } from "react";
-import type { ComponentProps } from "react";
 
 import { TextAnimate } from "@/components/blocks/TextAnimate";
 import { cn } from "@/lib/utils";
@@ -119,10 +119,14 @@ export const PanelHeader = forwardRef<
 
 export const PanelContent = ({
   className,
+  reset = false,
   ...props
-}: ComponentProps<"div">) => (
+}: ComponentProps<"div"> & { reset?: boolean }) => (
   <div
-    className={cn("space-y-1.5 p-3", className)}
+    className={cn(
+      reset ? "space-y-0 p-0" : "space-y-1.5 p-3",
+      className
+    )}
     data-slot="panel-body"
     {...props}
   />

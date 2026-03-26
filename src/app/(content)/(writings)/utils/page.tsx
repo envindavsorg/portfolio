@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { cache } from "react";
 
 import { PixelHeading } from "@/components/blocks/PixelHeading";
 import { PageTags } from "@/components/features/PageTags";
+import { Utils } from "@/components/features/utils/Utils";
 import { NavBreadcrumb } from "@/components/layout/NavBreadcrumb";
 import { Divider } from "@/components/primitives/Divider";
 import { PanelContent } from "@/components/primitives/Panel";
-import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory } from "@/lib/content";
 import { getTime } from "@/lib/date";
@@ -83,37 +82,17 @@ const Page = async ({
 
       <Divider border={false} type="half" />
 
-      {contents.map((item, idx) => (
-        <Link
-          aria-label={item.metadata.title}
-          href={`/utils/${item.slug}`}
-          prefetch={false}
-          key={item.slug}
-        >
-          <article className="group/article screen-line-after flex flex-col cursor-pointer select-none">
-            <div className="w-full p-3 flex items-center justify-between group-hover/article:bg-accent2">
-              <h2 className="text-base sm:text-xl font-pixel-square lowercase group-hover/article:text-theme transition-colors">
-                <span>{idx + 1}. </span>
-                {item.metadata.title}
-              </h2>
-              {item.metadata.isNew && (
-                <div className="flex items-center gap-x-2">
-                  <PulsatingCircle />
-                  <span className="max-md:hidden text-sm text-theme">
-                    Nouveau
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <div className="border-t border-edge px-3 py-1.5">
-              <Prose className="lowercase">
-                -- {item.metadata.description} --
-              </Prose>
-            </div>
-          </article>
-        </Link>
-      ))}
+      <Utils
+        contents={contents.map((item) => ({
+          metadata: {
+            createdAt: item.metadata.createdAt.toISOString(),
+            description: item.metadata.description,
+            isNew: item.metadata.isNew,
+            title: item.metadata.title,
+          },
+          slug: item.slug,
+        }))}
+      />
     </div>
   );
 };
