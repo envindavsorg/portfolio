@@ -46,7 +46,7 @@ export const WritingsTopBar = ({
 
       <PanelContent
         reset
-        className="flex items-center justify-between px-3 py-2"
+        className="flex items-center md:justify-between px-3 py-2"
       >
         <WritingsPagination
           category={category}

@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 
 import { getRecentSlugs, RECENT_KEY } from "./lib";
 import type { UtilsItem, UtilsSortMode } from "./types";

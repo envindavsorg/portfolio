@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Particles } from "@/components/blocks/Particles";
 import { TextAnimate } from "@/components/blocks/TextAnimate";
 import { Button } from "@/components/primitives/Button";
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 import {
   Panel,
   PanelContent,

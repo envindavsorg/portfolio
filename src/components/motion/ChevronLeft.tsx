@@ -5,7 +5,7 @@ import { forwardRef } from "react";
 
 import useAnimatedIcon from "@/hooks/useAnimatedIcon";
 
-export const ChevronsUpDown = forwardRef<
+export const ChevronLeft = forwardRef<
   AnimatedIconHandle,
   AnimatedIconProps
 >(
@@ -37,30 +37,14 @@ export const ChevronsUpDown = forwardRef<
         >
           <motion.path
             animate={controls}
-            d="m7 15 5 5 5-5"
-            initial="normal"
+            d="m15 18-6-6 6-6"
             transition={{
-              damping: 25,
-              stiffness: 250,
-              type: "spring",
+              duration: 0.5,
+              times: [0, 0.4, 1],
             }}
             variants={{
-              animate: { translateY: "2px" },
-              normal: { translateY: "0%" },
-            }}
-          />
-          <motion.path
-            animate={controls}
-            d="m7 9 5-5 5 5"
-            initial="normal"
-            transition={{
-              damping: 25,
-              stiffness: 250,
-              type: "spring",
-            }}
-            variants={{
-              animate: { translateY: "-2px" },
-              normal: { translateY: "0%" },
+              animate: { x: [0, -2, 0] },
+              normal: { x: 0 },
             }}
           />
         </svg>

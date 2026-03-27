@@ -12,7 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/primitives/Breadcrumb";
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 import { PanelContent } from "@/components/primitives/Panel";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory } from "@/lib/content";

@@ -1,4 +1,4 @@
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 import { Panel, PanelHeader } from "@/components/primitives/Panel";
 
 import { BrandingColors } from "./BrandingColors";

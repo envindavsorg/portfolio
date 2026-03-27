@@ -18,7 +18,7 @@ import { Overview } from "@/app/(content)/(root)/_components/overview/Overview";
 import { Projects } from "@/app/(content)/(root)/_components/projects/Projects";
 import { TechStack } from "@/app/(content)/(root)/_components/stack/Stack";
 import { Tools } from "@/app/(content)/(root)/_components/tools/Tools";
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 import GLOBAL_DATA from "@/data/global";
 import { dayjs } from "@/lib/functions";
 import { buildContentMetadata } from "@/lib/open-graph";

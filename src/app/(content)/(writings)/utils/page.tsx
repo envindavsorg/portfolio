@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { cache } from "react";
 
+import { Divider } from "@/components/base/Divider";
 import { Utils } from "@/components/features/utils/Utils";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsTags } from "@/components/features/WritingsTags";
-import { Divider } from "@/components/primitives/Divider";
 import { getContentByCategory } from "@/lib/content";
 import { getTime } from "@/lib/date";
 import { createMetadata } from "@/lib/metadata";

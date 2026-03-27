@@ -2,7 +2,7 @@
 
 import { Fragment, useCallback, useRef } from "react";
 
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 
 import { Delete } from "../../motion/Delete";
 import { Button } from "../../primitives/Button";
@@ -32,9 +32,7 @@ export const UtilsHistory = ({
   if (items.length === 0) {
     return null;
   }
-  {
-    return null;
-  }
+
   return (
     <>
       <PanelContent

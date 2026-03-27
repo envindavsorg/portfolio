@@ -1,3 +1,4 @@
+import { Divider } from "@/components/base/Divider";
 import { Badge } from "@/components/primitives/Badge";
 import {
   CollapsibleChevronsIcon,
@@ -5,7 +6,6 @@ import {
   CollapsibleTrigger,
   CollapsibleWithContext,
 } from "@/components/primitives/Collapsible";
-import { Divider } from "@/components/primitives/Divider";
 import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Tag } from "@/components/primitives/Tag";
 import { Prose } from "@/components/primitives/Typography";

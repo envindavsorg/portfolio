@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { Fragment } from "react";
 
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 
 import { PanelContent } from "../../primitives/Panel";
 import type { UtilsItem } from "./types";

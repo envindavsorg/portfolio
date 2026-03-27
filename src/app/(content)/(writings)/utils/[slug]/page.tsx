@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { Divider } from "@/components/base/Divider";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
 import { Mdx } from "@/components/markdown/mdx";
-import { Divider } from "@/components/primitives/Divider";
 import {
   getContentByCategory,
   getContentBySlug,

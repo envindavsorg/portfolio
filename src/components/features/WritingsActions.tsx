@@ -16,6 +16,13 @@ import { copyText, getPrompt } from "@/lib/functions";
 import { soundManager } from "@/lib/sound-manager";
 
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../base/DropdownMenu";
+import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -26,19 +33,13 @@ import { Linkedin as LinkedinIcon } from "../motion/LinkedIn";
 import { Twitter as TwitterIcon } from "../motion/Twitter";
 import { X } from "../motion/X";
 import { Button, CopyButton } from "../primitives/Button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../primitives/DropdownMenu";
+import { DropdownMenuLabel } from "../primitives/DropdownMenu";
 import { ChatGPT } from "../svgs/chatgpt";
 import { Claude } from "../svgs/claude";
 import { Markdown } from "../svgs/markdown";
 import { V0 } from "../svgs/v0";
 
 const cache = new Map<string, string>();
-const preventAutoFocus = (event: Event) => event.preventDefault();
 
 type IconProps = HTMLAttributes<SVGElement>;
 const Icons: Record<string, (props: IconProps) => ReactNode> = {
@@ -128,26 +129,26 @@ export const WritingsActions = ({
       {
         href: fullUrl,
         icon: Icons.markdown,
-        title: "voir en Markdown",
+        title: "Markdown",
       },
       ...(isComponent
         ? [
             {
               href: `https://v0.app/?${new URLSearchParams({ q })}`,
               icon: Icons.v0,
-              title: "ouvrir dans v0",
+              title: "v0",
             },
           ]
         : []),
       {
         href: `https://chatgpt.com/?${new URLSearchParams({ hints: "search", q })}`,
         icon: Icons.chatgpt,
-        title: "ouvrir dans ChatGPT",
+        title: "ChatGPT",
       },
       {
         href: `https://claude.ai/new?${new URLSearchParams({ q })}`,
         icon: Icons.claude,
-        title: "ouvrir dans Claude",
+        title: "Claude",
       },
     ];
   }, [markdownUrl, isComponent, origin]);
@@ -250,49 +251,58 @@ export const WritingsActions = ({
       </Tooltip>
 
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            className="group/toggle"
-            onMouseEnter={handleBotEnter}
-            onMouseLeave={handleBotLeave}
-            size="icon"
-            variant="outline"
-          >
-            <Bot
-              className="group-data-[state=open]/toggle:hidden"
-              ref={iconBotRef}
-            />
-            <X
-              className="group-data-[state=closed]/toggle:hidden"
-              ref={iconCloseRef}
-            />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="start"
-          className="w-fit py-2 *:cursor-pointer"
-          collisionPadding={8}
-          onCloseAutoFocus={preventAutoFocus}
-          sideOffset={8}
-        >
-          {viewOptions.map(({ title, href, icon: Icon }) => (
-            <DropdownMenuItem
-              asChild
-              className="lowercase"
-              key={href}
+        <DropdownMenuTrigger
+          render={
+            <Button
+              className="group/toggle"
+              onMouseEnter={handleBotEnter}
+              onMouseLeave={handleBotLeave}
+              size="icon"
+              variant="outline"
             >
+              <Bot
+                className="group-data-popup-open/toggle:hidden"
+                ref={iconBotRef}
+              />
+              <X
+                className="not-group-data-popup-open/toggle:hidden"
+                ref={iconCloseRef}
+              />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="start" sideOffset={8}>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Ouvrir dans :</DropdownMenuLabel>
+            {viewOptions.map(({ title, href, icon: Icon }) => (
               <Link
                 href={href}
                 rel="noreferrer noopener"
                 target="_blank"
+                key={href}
               >
-                <Icon className="size-4" />
-                {title}
+                <DropdownMenuItem className="gap-x-2 items-center py-1.5 cursor-pointer">
+                  <Icon className="size-4" />
+                  {title}
+                </DropdownMenuItem>
               </Link>
-            </DropdownMenuItem>
-          ))}
+            ))}
+          </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/*<DropdownMenu>
+        <DropdownMenuTrigger asChild>
+
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="start"
+          className="w-fit py-2 *:cursor-pointer"
+
+        >
+
+        </DropdownMenuContent>
+      </DropdownMenu>*/}
     </div>
   );
 };

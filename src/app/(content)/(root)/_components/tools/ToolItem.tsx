@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { memo } from "react";
 
+import { Divider } from "@/components/base/Divider";
 import { DotPattern } from "@/components/blocks/DotPattern";
 import { Badge } from "@/components/primitives/Badge";
-import { Divider } from "@/components/primitives/Divider";
 import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Prose } from "@/components/primitives/Typography";
 import type { Content } from "@/lib/content";

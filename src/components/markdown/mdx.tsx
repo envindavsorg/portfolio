@@ -31,7 +31,7 @@ import { rehypeNpmCommand } from "@/lib/rehype-npm-command";
 import { remarkCodeImport } from "@/lib/remark-code-import";
 import { cn } from "@/lib/utils";
 
-import { Divider } from "../primitives/Divider";
+import { Divider } from "../base/Divider";
 import {
   Table,
   TableBody,

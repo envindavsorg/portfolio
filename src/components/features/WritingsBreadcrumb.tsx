@@ -4,12 +4,13 @@ import { Fragment, useCallback, useRef } from "react";
 
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/primitives/Breadcrumb";
+} from "@/components/base/Breadcrumb";
 import { cn } from "@/lib/utils";
 
 import { ChevronRight } from "../motion/ChevronRight";
@@ -72,6 +73,10 @@ export const WritingsBreadcrumb = ({
               </Fragment>
             );
           })}
+
+          <BreadcrumbItem>
+            <BreadcrumbEllipsis />
+          </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
     </div>

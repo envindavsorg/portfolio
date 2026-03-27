@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type React from "react";
 
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 
 export const metadata: Metadata = {
   description:

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Divider } from "@/components/base/Divider";
 import { DotPattern } from "@/components/blocks/DotPattern";
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
@@ -10,7 +11,6 @@ import {
   CollapsibleTrigger,
   CollapsibleWithContext,
 } from "@/components/primitives/Collapsible";
-import { Divider } from "@/components/primitives/Divider";
 import { dayjs } from "@/lib/functions";
 import { cn } from "@/lib/utils";
 

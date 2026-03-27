@@ -1,10 +1,10 @@
+import { Divider } from "@/components/base/Divider";
 import {
   CollapsibleChevronsIcon,
   CollapsibleContent,
   CollapsibleTrigger,
   CollapsibleWithContext,
 } from "@/components/primitives/Collapsible";
-import { Divider } from "@/components/primitives/Divider";
 import { Tag } from "@/components/primitives/Tag";
 import { Prose } from "@/components/primitives/Typography";
 import { cn } from "@/lib/utils";

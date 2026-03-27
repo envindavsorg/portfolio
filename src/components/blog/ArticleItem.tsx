@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 import { MDX } from "../markdown/mdx";
 import { Button } from "../primitives/Button";
-import { Divider } from "../primitives/Divider";
+import { Divider } from "../base/Divider";
 import {
   Portal,
   PortalDialog,

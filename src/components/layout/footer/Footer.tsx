@@ -5,7 +5,7 @@ import {
 
 import { getCommitData } from "@/actions/commit.action";
 import { Heart } from "@/components/motion/Heart";
-import { Divider } from "@/components/primitives/Divider";
+import { Divider } from "@/components/base/Divider";
 import { Panel } from "@/components/primitives/Panel";
 import { dayjs } from "@/lib/functions";
 
