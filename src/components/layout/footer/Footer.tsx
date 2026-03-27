@@ -4,9 +4,9 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 
 import { getCommitData } from "@/actions/commit.action";
-import { Heart } from "@/components/motion/Heart";
 import { Divider } from "@/components/base/Divider";
-import { Panel } from "@/components/primitives/Panel";
+import { Panel } from "@/components/base/Panel";
+import { Heart } from "@/components/motion/Heart";
 import { dayjs } from "@/lib/functions";
 
 import { FooterClock } from "./FooterClock";

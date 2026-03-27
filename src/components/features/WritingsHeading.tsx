@@ -1,5 +1,5 @@
+import { PanelContent } from "../base/Panel";
 import { PixelHeading } from "../blocks/PixelHeading";
-import { PanelContent } from "../primitives/Panel";
 import { Prose } from "../primitives/Typography";
 
 interface WritingsHeadingProps {

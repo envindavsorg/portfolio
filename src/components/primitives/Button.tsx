@@ -40,7 +40,7 @@ export const buttonVariants = cva(
         destructive: [
           "border border-destructive",
           "text-destructive",
-          "bg-background hover:bg-destructive/10",
+          "bg-transparent hover:bg-destructive/10",
           "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-destructive/20",
         ],
         ghost: "hover:bg-accent hover:text-accent-foreground",

@@ -1,7 +1,14 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { toast } from "sonner";
 
 import { Divider } from "@/components/base/Divider";
 
@@ -16,6 +23,7 @@ interface UtilsProps {
 }
 
 export const Utils = ({ contents }: UtilsProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<UtilsSortMode>("a-z");
   const [recentSlugs, setRecentSlugs] = useState<string[]>([]);
@@ -63,8 +71,16 @@ export const Utils = ({ contents }: UtilsProps) => {
     setSort((prev) => (prev === "a-z" ? "z-a" : "a-z"));
   }, []);
 
-  const clearQuery = useCallback(() => {
+  const handleRetry = useCallback(() => {
     setQuery("");
+    inputRef.current?.focus();
+
+    // test
+    toast.info("Ceci est un titre", {
+      description: "Ceci est une description.",
+      duration: Number.POSITIVE_INFINITY,
+      id: "command-hint",
+    });
   }, []);
 
   const clearRecent = useCallback(() => {
@@ -76,7 +92,8 @@ export const Utils = ({ contents }: UtilsProps) => {
     <>
       <UtilsSearch
         count={filtered.length}
-        onClear={clearQuery}
+        inputRef={inputRef}
+        onClear={handleRetry}
         onQueryChange={setQuery}
         onToggleSort={toggleSort}
         query={query}
@@ -87,7 +104,11 @@ export const Utils = ({ contents }: UtilsProps) => {
 
       <UtilsHistory items={recentItems} onClear={clearRecent} />
 
-      <UtilsContent items={filtered} query={query} />
+      <UtilsContent
+        items={filtered}
+        onRetry={handleRetry}
+        query={query}
+      />
     </>
   );
 };

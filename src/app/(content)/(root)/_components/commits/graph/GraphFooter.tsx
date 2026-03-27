@@ -1,4 +1,4 @@
-import { Counter } from "@/components/primitives/Counter";
+import { Counter } from "@/components/base/Counter";
 
 import { useContributionGraph } from "./Graph";
 import { GraphLegend } from "./GraphLegend";

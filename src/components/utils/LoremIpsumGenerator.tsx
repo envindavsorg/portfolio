@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from "react";
 
+import { Label } from "@/components/base/Label";
 import { Button } from "@/components/primitives/Button";
 import { CheckboxAnimated } from "@/components/primitives/Checkbox";
 import { Combobox } from "@/components/primitives/Combobox";
 import { InputNumber } from "@/components/primitives/Input";
-import { Label } from "@/components/primitives/Label";
 import { Textarea } from "@/components/primitives/Textarea";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { generateLoremIpsum } from "@/lib/lorem-ipsum";

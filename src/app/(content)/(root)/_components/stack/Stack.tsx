@@ -2,7 +2,7 @@ import {
   Panel,
   PanelContent,
   PanelHeader,
-} from "@/components/primitives/Panel";
+} from "@/components/base/Panel";
 import { Prose } from "@/components/primitives/Typography";
 
 import { STACK_ICONS } from "./content";

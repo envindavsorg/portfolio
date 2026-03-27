@@ -1,6 +1,6 @@
 "use client";
 
-import { Panel } from "@/components/primitives/Panel";
+import { Panel } from "@/components/base/Panel";
 
 import { OverviewContent } from "./OverviewContent";
 

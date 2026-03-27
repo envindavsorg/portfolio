@@ -2,14 +2,14 @@
 
 import { useCallback, useRef, useState } from "react";
 
-import { ChevronDown } from "@/components/motion/ChevronDown";
-import { ChevronUp } from "@/components/motion/ChevronUp";
-import { Button } from "@/components/primitives/Button";
 import {
   Panel,
   PanelFooter,
   PanelHeader,
-} from "@/components/primitives/Panel";
+} from "@/components/base/Panel";
+import { ChevronDown } from "@/components/motion/ChevronDown";
+import { ChevronUp } from "@/components/motion/ChevronUp";
+import { Button } from "@/components/primitives/Button";
 
 import { AboutContent } from "./AboutContent";
 

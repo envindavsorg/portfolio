@@ -6,7 +6,7 @@ import { WritingsShortcuts } from "@/components/features/WritingsShortcuts";
 import type { Content } from "@/lib/content";
 import { getAbsoluteUrl } from "@/lib/functions";
 
-import { PanelContent } from "../primitives/Panel";
+import { PanelContent } from "../base/Panel";
 import { WritingsActions } from "./WritingsActions";
 import { WritingsPagination } from "./WritingsPagination";
 

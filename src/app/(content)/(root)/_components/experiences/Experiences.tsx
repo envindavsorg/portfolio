@@ -1,17 +1,17 @@
 import { CaretDownIcon } from "@phosphor-icons/react/ssr";
 
+import {
+  Panel,
+  PanelContent,
+  PanelFooter,
+  PanelHeader,
+} from "@/components/base/Panel";
 import { Button } from "@/components/primitives/Button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/primitives/Collapsible";
-import {
-  Panel,
-  PanelContent,
-  PanelFooter,
-  PanelHeader,
-} from "@/components/primitives/Panel";
 import { Prose } from "@/components/primitives/Typography";
 
 import { EXPERIENCES } from "./content";

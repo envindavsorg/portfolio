@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
 import type { ChangeEvent } from "react";
+import { useCallback, useMemo, useState } from "react";
 
+import { Label } from "@/components/base/Label";
 import { Button, CopyButton } from "@/components/primitives/Button";
-import { Label } from "@/components/primitives/Label";
 import { TabsAnimated } from "@/components/primitives/Tabs";
 import { Textarea } from "@/components/primitives/Textarea";
 import { cn } from "@/lib/utils";

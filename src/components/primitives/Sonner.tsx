@@ -5,13 +5,16 @@ import {
   CircleNotchIcon,
   InfoIcon,
   WarningIcon,
-  XSquareIcon,
 } from "@phosphor-icons/react";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { useTheme } from "next-themes";
 import type { CSSProperties } from "react";
-import { Toaster as Sonner } from "sonner";
 import type { ToasterProps } from "sonner";
+import { Toaster as Sonner } from "sonner";
+
+import { cn } from "@/lib/utils";
+
+import { Frown } from "../motion/Frown";
 
 export const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme();
@@ -19,11 +22,9 @@ export const Toaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
-      className="toaster group"
+      className="toaster group lowercase"
       icons={{
-        error: (
-          <XSquareIcon className="size-5 text-destructive sm:size-6" />
-        ),
+        error: <Frown size={22} />,
         info: (
           <InfoIcon className="size-5 text-blue-600 sm:size-6 dark:text-blue-300" />
         ),
@@ -40,19 +41,32 @@ export const Toaster = ({ ...props }: ToasterProps) => {
       position={isDesktop ? "top-right" : "top-center"}
       style={
         {
-          "--border-radius": "var(--radius-lg)",
-          "--normal-bg": "var(--popover)",
+          "--border-radius": "var(--radius-md)",
+          "--normal-bg": "var(--background)",
           "--normal-border": "var(--input)",
-          "--normal-text": "var(--popover-foreground)",
+          "--normal-text": "var(--foreground)",
         } as CSSProperties
       }
       theme={theme as ToasterProps["theme"]}
       toastOptions={{
         classNames: {
-          description:
-            "ps-1 sm:ps-2 text-xs sm:text-sm text-muted-foreground",
-          title: "text-sm font-medium text-foreground",
-          toast: "border-edge shadow-lg backdrop-blur-sm",
+          actionButton: "action-button",
+          cancelButton: "cancel-button",
+          closeButton: "close-button",
+          description: "text-sm",
+          error: "border! border-red-600! dark:border-red-300!",
+          icon: cn(
+            "group-data-[type=error]/toast:text-red-600! dark:group-data-[type=error]/toast:text-red-300!",
+            "group-data-[type=info]/toast:text-blue-600! dark:group-data-[type=info]/toast:text-blue-300!"
+          ),
+          info: "border! border-blue-600! dark:border-blue-300!",
+          title: cn(
+            "text-base leading-none text-balance",
+            "group-data-[type=error]/toast:text-red-600! dark:group-data-[type=error]/toast:text-red-300!",
+            "group-data-[type=info]/toast:text-blue-600! dark:group-data-[type=info]/toast:text-blue-300!"
+          ),
+          toast:
+            "group/toast flex! items-center! gap-x-3! font-pixel-square",
         },
       }}
       {...props}

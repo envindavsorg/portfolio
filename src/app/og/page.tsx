@@ -1,7 +1,7 @@
 import { Header } from "@/app/(content)/(root)/_components/header/Header";
 import { Overview } from "@/app/(content)/(root)/_components/overview/Overview";
-import { FooterClock } from "@/components/layout/footer/FooterClock";
 import { Divider } from "@/components/base/Divider";
+import { FooterClock } from "@/components/layout/footer/FooterClock";
 
 const Page = () => (
   <div className="mx-auto flex h-screen flex-col justify-center px-2 md:max-w-3xl">

@@ -1,8 +1,5 @@
 import Link from "next/link";
 
-import { Particles } from "@/components/blocks/Particles";
-import { TextAnimate } from "@/components/blocks/TextAnimate";
-import { Button } from "@/components/primitives/Button";
 import { Divider } from "@/components/base/Divider";
 import {
   Panel,
@@ -10,7 +7,10 @@ import {
   PanelFooter,
   PanelHeader,
   PanelTitle,
-} from "@/components/primitives/Panel";
+} from "@/components/base/Panel";
+import { Particles } from "@/components/blocks/Particles";
+import { TextAnimate } from "@/components/blocks/TextAnimate";
+import { Button } from "@/components/primitives/Button";
 
 const NotFound = () => (
   <div className="mx-auto flex h-screen flex-col justify-center md:max-w-3xl">

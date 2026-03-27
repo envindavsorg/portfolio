@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { cache } from "react";
 
+import { Divider } from "@/components/base/Divider";
+import { PanelContent } from "@/components/base/Panel";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
 import { ArticleItem } from "@/components/blog/ArticleItem";
 import { TagsFilter } from "@/components/features/PageTags";
@@ -12,8 +14,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/primitives/Breadcrumb";
-import { Divider } from "@/components/base/Divider";
-import { PanelContent } from "@/components/primitives/Panel";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory } from "@/lib/content";
 import { dayjs } from "@/lib/functions";

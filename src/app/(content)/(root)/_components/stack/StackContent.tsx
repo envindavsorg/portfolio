@@ -1,13 +1,13 @@
 import { Fragment } from "react";
 
 import { Divider } from "@/components/base/Divider";
+import { PanelContent } from "@/components/base/Panel";
 import {
   Marquee,
   MarqueeContent,
   MarqueeFade,
   MarqueeItem,
 } from "@/components/blocks/Marquee";
-import { PanelContent } from "@/components/primitives/Panel";
 
 import type { Stack } from "./content";
 

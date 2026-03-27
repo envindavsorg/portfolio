@@ -1,9 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, RefObject } from "react";
 import { useCallback, useRef } from "react";
 
+import { Counter } from "@/components/base/Counter";
 import {
   Field,
   FieldContent,
@@ -12,16 +13,17 @@ import {
 } from "@/components/primitives/Field";
 import { Input } from "@/components/primitives/Input";
 
+import { PanelContent } from "../../base/Panel";
 import { ArrowDownAtoZ } from "../../motion/ArrowDownAtoZ";
 import { ArrowDownZtoA } from "../../motion/ArrowDownZtoA";
 import { Delete } from "../../motion/Delete";
 import { Search } from "../../motion/Search";
 import { Button } from "../../primitives/Button";
-import { PanelContent } from "../../primitives/Panel";
 import type { UtilsSortMode } from "./types";
 
 interface UtilsSearchProps {
   count: number;
+  inputRef: RefObject<HTMLInputElement | null>;
   onClear: () => void;
   onQueryChange: (value: string) => void;
   onToggleSort: () => void;
@@ -31,6 +33,7 @@ interface UtilsSearchProps {
 
 export const UtilsSearch = ({
   count,
+  inputRef,
   onClear,
   onQueryChange,
   onToggleSort,
@@ -72,9 +75,7 @@ export const UtilsSearch = ({
     sort === "a-z" ? "· trié de a à z" : "· trié de z à a";
 
   const countLabel =
-    count === 1
-      ? "1 outil disponible"
-      : `${count} outils disponibles`;
+    count === 1 ? "outil disponible" : "outils disponibles";
 
   return (
     <PanelContent>
@@ -84,6 +85,7 @@ export const UtilsSearch = ({
         </FieldLabel>
         <FieldContent>
           <Input
+            ref={inputRef}
             icon={Search}
             id="input-search-utils"
             onChange={handleInputChange}
@@ -126,7 +128,7 @@ export const UtilsSearch = ({
         </FieldContent>
         {count > 0 && (
           <FieldDescription className="text-theme">
-            -- {countLabel} {sortLabel} --
+            -- <Counter value={count} /> {countLabel} {sortLabel} --
           </FieldDescription>
         )}
       </Field>

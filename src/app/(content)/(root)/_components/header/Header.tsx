@@ -1,8 +1,8 @@
 import Image from "next/image";
 
+import { Panel, PanelContent } from "@/components/base/Panel";
 import { FlickeringGrid } from "@/components/blocks/FlickeringGrid";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
-import { Panel, PanelContent } from "@/components/primitives/Panel";
 import GLOBAL_DATA from "@/data/global";
 import { cn } from "@/lib/utils";
 import { FlipSentences } from "@/registry/flip-sentences";

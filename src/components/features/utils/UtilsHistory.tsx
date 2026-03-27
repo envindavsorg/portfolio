@@ -4,9 +4,9 @@ import { Fragment, useCallback, useRef } from "react";
 
 import { Divider } from "@/components/base/Divider";
 
+import { PanelContent } from "../../base/Panel";
 import { Delete } from "../../motion/Delete";
 import { Button } from "../../primitives/Button";
-import { PanelContent } from "../../primitives/Panel";
 import type { UtilsItem } from "./types";
 import { UtilsCard } from "./UtilsCard";
 

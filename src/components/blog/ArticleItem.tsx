@@ -3,9 +3,9 @@ import Link from "next/link";
 import { dayjs } from "@/lib/functions";
 import { cn } from "@/lib/utils";
 
+import { Divider } from "../base/Divider";
 import { MDX } from "../markdown/mdx";
 import { Button } from "../primitives/Button";
-import { Divider } from "../base/Divider";
 import {
   Portal,
   PortalDialog,

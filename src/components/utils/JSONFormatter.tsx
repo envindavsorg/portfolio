@@ -3,9 +3,9 @@
 import type { ChangeEvent } from "react";
 import { useCallback, useMemo, useRef, useState } from "react";
 
-import { Button, CopyButton } from "@/components/primitives/Button";
 import { Divider } from "@/components/base/Divider";
-import { Label } from "@/components/primitives/Label";
+import { Label } from "@/components/base/Label";
+import { Button, CopyButton } from "@/components/primitives/Button";
 import { Textarea } from "@/components/primitives/Textarea";
 
 import { ArrowDownAtoZ } from "../motion/ArrowDownAtoZ";

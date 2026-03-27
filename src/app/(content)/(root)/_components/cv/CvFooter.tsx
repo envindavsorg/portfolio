@@ -4,6 +4,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { PanelFooter } from "@/components/base/Panel";
 import { Button } from "@/components/primitives/Button";
 import {
   DialogDescription,
@@ -15,7 +16,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/primitives/Drawer";
-import { PanelFooter } from "@/components/primitives/Panel";
 import GLOBAL_DATA from "@/data/global";
 import type { EmailFormData } from "@/hooks/useEmailForm";
 import useEmailForm from "@/hooks/useEmailForm";

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { forwardRef } from "react";
+import { forwardRef, useEffect } from "react";
 
 import useAnimatedIcon from "@/hooks/useAnimatedIcon";
 
@@ -15,6 +15,14 @@ export const Frown = forwardRef<
   ) => {
     const { controls, handleMouseEnter, handleMouseLeave } =
       useAnimatedIcon(ref, onMouseEnter, onMouseLeave);
+
+    useEffect(() => {
+      const interval = setInterval(async () => {
+        await controls.start("animate");
+        await controls.start("normal");
+      }, 5000);
+      return () => clearInterval(interval);
+    }, [controls]);
 
     return (
       <div

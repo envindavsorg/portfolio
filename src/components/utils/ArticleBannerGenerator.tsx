@@ -3,10 +3,10 @@
 import NextImage from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { Label } from "@/components/base/Label";
 import { TextAnimate } from "@/components/blocks/TextAnimate";
 import { Button } from "@/components/primitives/Button";
 import { Input } from "@/components/primitives/Input";
-import { Label } from "@/components/primitives/Label";
 import { Slider } from "@/components/primitives/Slider";
 import { Spinner } from "@/components/primitives/Spinner";
 import { cn } from "@/lib/utils";

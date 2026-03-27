@@ -4,7 +4,6 @@ import { Fragment, useCallback, useRef } from "react";
 
 import {
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -73,10 +72,6 @@ export const WritingsBreadcrumb = ({
               </Fragment>
             );
           })}
-
-          <BreadcrumbItem>
-            <BreadcrumbEllipsis />
-          </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
     </div>

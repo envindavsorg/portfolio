@@ -6,9 +6,9 @@ import { useCallback } from "react";
 import { ALL_TAG, isActiveTag } from "@/lib/tags";
 import { cn } from "@/lib/utils";
 
+import { PanelContent } from "../base/Panel";
 import { Button } from "../primitives/Button";
 import { Field } from "../primitives/Field";
-import { PanelContent } from "../primitives/Panel";
 
 interface TagButtonProps {
   count?: number;

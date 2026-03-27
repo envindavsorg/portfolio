@@ -3,6 +3,7 @@
   "rules": {
     "eslint/require-await": "off",
     "jsx-a11y/heading-has-content": "off",
+    "jsx-a11y/label-has-associated-control": "off",
     "react/no-danger": "off",
     "react/no-unescaped-entities": "off",
     "react/display-name": "off",

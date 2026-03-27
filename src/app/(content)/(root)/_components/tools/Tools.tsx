@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-import { Button } from "@/components/primitives/Button";
 import {
   Panel,
   PanelContent,
   PanelFooter,
   PanelHeader,
-} from "@/components/primitives/Panel";
+} from "@/components/base/Panel";
+import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory } from "@/lib/content";
 import { dayjs } from "@/lib/functions";

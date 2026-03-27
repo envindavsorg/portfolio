@@ -4,9 +4,9 @@ import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { useCallback, useRef, useState } from "react";
 
+import { Label } from "@/components/base/Label";
 import { Button } from "@/components/primitives/Button";
 import { Input } from "@/components/primitives/Input";
-import { Label } from "@/components/primitives/Label";
 import {
   Popover,
   PopoverContent,

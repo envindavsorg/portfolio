@@ -1,10 +1,10 @@
 import { getGitHubData } from "@/actions/data.action";
-import { Badge } from "@/components/primitives/Badge";
 import {
   Panel,
   PanelContent,
   PanelHeader,
-} from "@/components/primitives/Panel";
+} from "@/components/base/Panel";
+import { Badge } from "@/components/primitives/Badge";
 import { Prose } from "@/components/primitives/Typography";
 
 import { CommitsContent } from "./CommitsContent";

@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from "motion/react";
 import { memo } from "react";
 
+import { PanelContent } from "@/components/base/Panel";
 import {
   Marquee,
   MarqueeContent,
   MarqueeFade,
   MarqueeItem,
 } from "@/components/blocks/Marquee";
-import { PanelContent } from "@/components/primitives/Panel";
 import { Prose } from "@/components/primitives/Typography";
 import { CSSIcon } from "@/components/svgs/stack/CSS";
 import { HTML5Icon } from "@/components/svgs/stack/HTML";

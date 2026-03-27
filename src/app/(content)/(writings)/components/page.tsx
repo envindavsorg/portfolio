@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { cache } from "react";
 
 import { ArticleItem } from "@/app/(content)/(root)/_components/articles/ArticleItem";
+import { Divider } from "@/components/base/Divider";
+import { PanelContent } from "@/components/base/Panel";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
 import {
   AnimatedSpan,
@@ -18,8 +20,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/primitives/Breadcrumb";
-import { Divider } from "@/components/base/Divider";
-import { PanelContent } from "@/components/primitives/Panel";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory } from "@/lib/content";
 import type { Content } from "@/lib/content";

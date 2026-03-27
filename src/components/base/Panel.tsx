@@ -29,15 +29,20 @@ export const PanelTitle = ({
   ...props
 }: ComponentProps<"h2">) => (
   <h2
-    className={cn("font-semibold text-2xl sm:text-3xl", className)}
+    className={cn("text-2xl sm:text-3xl", className)}
     data-slot="panel-title"
     {...props}
   />
 );
 
+interface PanelHeaderProps extends ComponentProps<"div"> {
+  sticky?: boolean;
+  title?: string;
+}
+
 export const PanelHeader = forwardRef<
   HTMLDivElement,
-  ComponentProps<"div"> & { sticky?: boolean; title?: string }
+  PanelHeaderProps
 >(({ className, sticky, title, ...props }, forwardedRef) => {
   const internalRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
