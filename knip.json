@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["src/scripts/*.{ts,mts}", "e2e/**/*.spec.ts"],
+  "ignore": [
+    "src/__registry__/**",
+    "src/paraglide/**",
+    "src/registry/**"
+  ],
+  "ignoreDependencies": [
+    "babel-plugin-react-compiler",
+    "sharp",
+    "oxfmt",
+    "oxlint"
+  ]
+}

@@ -1,0 +1,11 @@
+# https://lefthook.dev/configuration/
+pre-commit:
+  jobs:
+    - name: lint & format
+      run: pnpm fix
+      stage_fixed: true
+
+pre-push:
+  jobs:
+    - name: typecheck
+      run: pnpm types

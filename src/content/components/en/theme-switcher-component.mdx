@@ -1,0 +1,71 @@
+---
+title: Theme Switcher
+description: A theme selection component for Next.js applications with next-themes and Tailwind CSS, supporting system, light and dark modes
+bannerDark: /images/blog/theme-switcher-demo/dark.webp
+bannerLight: /images/blog/theme-switcher-demo/light.webp
+category: components
+createdAt: 2025-01-10
+updatedAt: 2025-01-10
+tags: ["react"]
+author: "Cuzeac Florin"
+isNew: true
+---
+
+<ComponentPreview
+  name="theme-switcher-demo"
+  openInV0Url="https://cuzeacflorin.fr/r/theme-switcher.json"
+/>
+
+# 1. Installation with the shadcn/ui CLI
+
+Copy the command below into your terminal to install the component
+
+```bash
+npx shadcn@latest add @envindavsorg/theme-switcher
+```
+
+# 2. Manual installation
+
+## (2.1) install the dependencies:
+
+```bash
+npm install motion clsx tailwind-merge
+```
+
+## (2.2) add the **cn** helper:
+
+<ComponentSource
+  src="src/lib/utils.ts"
+  title="lib/utils.ts"
+  showLineNumbers
+  noCollapsible
+/>
+
+## (2.3) add the following code:
+
+<ComponentSource
+  name="theme-switcher"
+  title="components/ThemeSwitcher.tsx"
+  showLineNumbers
+/>
+
+## (2.4) a little tip:
+
+Update the import paths of your dependencies to match your project structure so it works correctly.
+
+# 3. Usage
+
+```tsx
+"use client";
+
+import { ThemeSwitcher } from "@/components/theme-switcher";
+
+<ThemeSwitcher />;
+```
+
+# 4. References
+
+- https://ui.shadcn.com/docs/registry
+- https://ui.shadcn.com/docs/dark-mode/next
+- https://github.com/pacocoursey/next-themes
+- https://motion.dev/docs/react-motion-component

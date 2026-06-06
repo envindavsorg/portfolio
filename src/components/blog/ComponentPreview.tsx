@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import type React from "react";
-import { Children, Suspense, useMemo, useRef, useState } from "react";
 import type { ComponentProps } from "react";
+import { Children, Suspense, useMemo, useRef, useState } from "react";
 
 import { Index } from "@/__registry__";
 import { Refresh } from "@/components/motion/Refresh";
@@ -12,6 +12,8 @@ import { TabsAnimated } from "@/components/primitives/Tabs";
 import { Code as CodeInline } from "@/components/primitives/Typography";
 import { V0Icon } from "@/components/svgs/stack/V0";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 
 import { CodeCollapsibleWrapper } from "./CodeCollapsibleWrapper";
 
@@ -35,16 +37,30 @@ export const ComponentPreview = ({
   const [replay, setReplay] = useState(0);
 
   const Codes = Children.toArray(children) as React.ReactElement[];
-  const Code = Codes[0];
+  const [Code] = Codes;
 
   const Preview = useMemo(() => {
     const Component = Index[name]?.component;
     if (!Component) {
       return (
         <p className="text-muted-foreground text-sm">
-          -- le composant{" "}
-          <CodeInline className="font-semibold">{name}</CodeInline>{" "}
-          n'existe pas dans le registre --
+          {getLocale() === "en" ? (
+            <>
+              -- the{" "}
+              <CodeInline className="font-semibold">
+                {name}
+              </CodeInline>{" "}
+              component doesn't exist in the registry --
+            </>
+          ) : (
+            <>
+              -- le composant{" "}
+              <CodeInline className="font-semibold">
+                {name}
+              </CodeInline>{" "}
+              n'existe pas dans le registre --
+            </>
+          )}
         </p>
       );
     }
@@ -83,12 +99,13 @@ export const ComponentPreview = ({
               {openInV0Url && (
                 <Button asChild variant="outline">
                   <Link
-                    aria-label="Ouvrir dans v0"
+                    aria-label={m.writings_component_preview_open_v0_aria()}
                     href={`https://v0.app/chat/api/open?url=${openInV0Url}`}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    ouvrir dans <V0Icon className="size-5" />
+                    {m.writings_component_preview_open_in()}{" "}
+                    <V0Icon className="size-5" />
                   </Link>
                 </Button>
               )}
@@ -105,7 +122,7 @@ export const ComponentPreview = ({
         </div>
       ),
       id: 0,
-      label: "composant",
+      label: m.writings_component_preview_tab_preview(),
     },
     {
       content: (
@@ -118,7 +135,7 @@ export const ComponentPreview = ({
         </div>
       ),
       id: 1,
-      label: "code",
+      label: m.writings_component_preview_tab_code(),
     },
   ];
 

@@ -84,13 +84,13 @@ export const Carousel = forwardRef<
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(false);
 
-    const onSelect = useCallback((api: CarouselApi) => {
-      if (!api) {
+    const onSelect = useCallback((emblaApi: CarouselApi) => {
+      if (!emblaApi) {
         return;
       }
 
-      setCanScrollPrev(api.canScrollPrev());
-      setCanScrollNext(api.canScrollNext());
+      setCanScrollPrev(emblaApi.canScrollPrev());
+      setCanScrollNext(emblaApi.canScrollNext());
     }, []);
 
     const scrollPrev = useCallback(() => {
@@ -213,7 +213,12 @@ export const CarouselNext = forwardRef<
   ComponentProps<typeof Button>
 >(
   (
-    { className, variant = "outline", size = "icon", ...props },
+    {
+      className: _className,
+      variant = "outline",
+      size = "icon",
+      ...props
+    },
     ref
   ) => {
     const { scrollNext, canScrollNext } = useCarousel();
@@ -244,7 +249,12 @@ export const CarouselPrevious = forwardRef<
   ComponentProps<typeof Button>
 >(
   (
-    { className, variant = "outline", size = "icon", ...props },
+    {
+      className: _className,
+      variant = "outline",
+      size = "icon",
+      ...props
+    },
     ref
   ) => {
     const { scrollPrev, canScrollPrev } = useCarousel();

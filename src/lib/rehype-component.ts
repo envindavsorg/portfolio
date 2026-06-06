@@ -74,15 +74,16 @@ const handleComponentSource = (node: UnistNode) => {
     return;
   }
 
+  // chemin statiquement scopé à src/ (voir remark-component.ts)
   const filePath = srcPath
-    ? join(process.cwd(), srcPath)
-    : resolveSourceFilePath(name!, fileName);
+    ? join(process.cwd(), "src", srcPath.replace(/^src\//u, ""))
+    : resolveSourceFilePath(name ?? "", fileName);
 
   if (!filePath) {
     return;
   }
 
-  const source = normalizeSource(readFileSync(filePath, "utf8"));
+  const source = normalizeSource(readFileSync(filePath, "utf-8"));
   const title = getAttributeValue(node, "title");
   const showLineNumbers = getNodeAttribute(node, "showLineNumbers");
 
@@ -121,7 +122,7 @@ const handleComponentPreview = (node: UnistNode) => {
     return;
   }
 
-  const source = normalizeSource(readFileSync(filePath, "utf8"));
+  const source = normalizeSource(readFileSync(filePath, "utf-8"));
   node.children?.push(
     buildCodeElement(source, "tsx", "showLineNumbers")
   );

@@ -7,6 +7,13 @@ import GLOBAL_DATA from "@/data/global";
 
 import type { Content } from "./content";
 import { dayjs } from "./functions";
+import { BASE_URL, openGraphImage } from "./metadata";
+
+const CATEGORY_OG_TYPES: Record<string, PageType> = {
+  articles: "blogArticle",
+  components: "componentsArticle",
+  utils: "utilsArticle",
+};
 
 export const getPageJsonLd = ({
   metadata,
@@ -24,8 +31,12 @@ export const getPageJsonLd = ({
   datePublished: dayjs(metadata.createdAt).toISOString(),
   description: metadata.description,
   headline: metadata.title,
-  image:
-    metadata.image ||
-    `/og/simple?title=${encodeURIComponent(metadata.title)}`,
-  url: `https://cuzeacflorin.fr/${metadata.category}/${slug}`,
+  image: metadata.image
+    ? `${BASE_URL}${metadata.image}`
+    : openGraphImage({
+        description: metadata.description,
+        title: metadata.title,
+        type: CATEGORY_OG_TYPES[metadata.category ?? "articles"],
+      }),
+  url: `${BASE_URL}/${metadata.category}/${slug}`,
 });

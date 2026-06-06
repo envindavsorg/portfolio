@@ -10,9 +10,11 @@ import { Input } from "@/components/primitives/Input";
 import { Slider } from "@/components/primitives/Slider";
 import { Spinner } from "@/components/primitives/Spinner";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 
 interface PresetBackground {
-  name: string;
+  name: () => string;
   url: string;
 }
 
@@ -24,7 +26,7 @@ interface FontOption {
 
 interface AlignmentOption {
   value: CanvasTextAlign;
-  label: string;
+  label: () => string;
 }
 
 interface BannerConfig {
@@ -40,15 +42,15 @@ interface BannerConfig {
 
 const PRESET_BACKGROUNDS: PresetBackground[] = [
   {
-    name: "Sapins mystiques",
+    name: () => m.utils_banner_bg_mystic_firs(),
     url: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1400&q=80",
   },
   {
-    name: "Forêt brumeuse",
+    name: () => m.utils_banner_bg_misty_forest(),
     url: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80",
   },
   {
-    name: "Montagne ensoleillée",
+    name: () => m.utils_banner_bg_sunny_mountain(),
     url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&q=80",
   },
 ];
@@ -107,24 +109,22 @@ const FONTS: FontOption[] = [
 ];
 
 const ALIGNMENTS: AlignmentOption[] = [
-  { label: "Gauche", value: "left" },
-  { label: "Centre", value: "center" },
-  { label: "Droite", value: "right" },
+  { label: () => m.utils_banner_align_left(), value: "left" },
+  { label: () => m.utils_banner_align_center(), value: "center" },
+  { label: () => m.utils_banner_align_right(), value: "right" },
 ];
 
 const CANVAS_W = 6016;
 const CANVAS_H = 3388;
 const ASPECT_RATIO = `${CANVAS_W} / ${CANVAS_H}`;
 
-const DEFAULT_CONFIG: BannerConfig = {
+const DEFAULT_CONFIG: Omit<BannerConfig, "title" | "subtitle"> = {
   align: "center",
   bgIndex: 0,
   fontIndex: 0,
   fontSize: 380,
   overlayOpacity: 40,
-  subtitle: "description courte ...",
   textColor: "#ffffff",
-  title: "titre de l'article",
 };
 
 const getResolvedFontFamily = (
@@ -135,9 +135,9 @@ const getResolvedFontFamily = (
     return fallbackCanvasName;
   }
 
-  const match = fontValue.match(/var\((--[^)]+)\)/);
+  const match = fontValue.match(/var\((--[^)]+)\)/u);
   if (match) {
-    const cssVarName = match[1];
+    const [, cssVarName] = match;
     const resolvedRealName = getComputedStyle(
       document.documentElement
     )
@@ -205,12 +205,14 @@ const drawBanner = (
 
   const pad = w * 0.08;
   const maxTextW = w - pad * 2;
-  const textX =
-    config.align === "left"
-      ? pad
-      : (config.align === "right"
-        ? w - pad
-        : w / 2);
+
+  let textX = w / 2;
+  if (config.align === "left") {
+    textX = pad;
+  } else if (config.align === "right") {
+    textX = w - pad;
+  }
+
   ctx.textAlign = config.align;
 
   const titleSize = Math.round(config.fontSize * (w / CANVAS_W));
@@ -258,7 +260,11 @@ const drawBanner = (
 };
 
 export const ArticleBanner = () => {
-  const [config, setConfig] = useState<BannerConfig>(DEFAULT_CONFIG);
+  const [config, setConfig] = useState<BannerConfig>(() => ({
+    ...DEFAULT_CONFIG,
+    subtitle: m.utils_banner_default_subtitle(),
+    title: m.utils_banner_default_title(),
+  }));
   const [loadedImages, setLoadedImages] = useState<
     Record<number, HTMLImageElement>
   >({});
@@ -298,10 +304,10 @@ export const ArticleBanner = () => {
       customImageUrlRef.current = objectUrl;
 
       const img = new window.Image();
-      img.onload = () => {
+      img.addEventListener("load", () => {
         setLoadedImages((prev) => ({ ...prev, [-1]: img }));
         updateConfig("bgIndex", -1);
-      };
+      });
       img.src = objectUrl;
 
       event.target.value = "";
@@ -312,20 +318,20 @@ export const ArticleBanner = () => {
   useEffect(() => {
     const controllers: (() => void)[] = [];
 
-    PRESET_BACKGROUNDS.forEach((bg, i) => {
+    for (const [i, bg] of PRESET_BACKGROUNDS.entries()) {
       const img = new window.Image();
       img.crossOrigin = "anonymous";
       let cancelled = false;
-      img.onload = () => {
+      img.addEventListener("load", () => {
         if (!cancelled) {
           setLoadedImages((prev) => ({ ...prev, [i]: img }));
         }
-      };
+      });
       img.src = bg.url;
       controllers.push(() => {
         cancelled = true;
       });
-    });
+    }
 
     return () => {
       for (const cancel of controllers) {
@@ -339,9 +345,20 @@ export const ArticleBanner = () => {
   }, []);
 
   useEffect(() => {
-    document.fonts.ready.then(() => {
-      setFontsReady(true);
-    });
+    let cancelled = false;
+
+    const waitForFonts = async () => {
+      await document.fonts.ready;
+      if (!cancelled) {
+        setFontsReady(true);
+      }
+    };
+
+    waitForFonts();
+
+    return () => {
+      cancelled = true;
+    };
   }, [config.fontIndex]);
 
   useEffect(() => {
@@ -407,6 +424,7 @@ export const ArticleBanner = () => {
     <>
       <div className="relative py-3">
         <canvas
+          aria-label={m.utils_banner_bg_legend()}
           className="block h-auto w-full rounded-xl"
           ref={previewRef}
           style={{ aspectRatio: ASPECT_RATIO }}
@@ -421,7 +439,7 @@ export const ArticleBanner = () => {
                 by="word"
                 themed
               >
-                chargement de l'image ...
+                {m.utils_banner_loading_image()}
               </TextAnimate>
             </div>
           </div>
@@ -435,16 +453,16 @@ export const ArticleBanner = () => {
           variant="outline"
         >
           {downloading === "png"
-            ? "PNG téléchargé !"
-            : "Télécharger en PNG"}
+            ? m.utils_banner_png_downloaded()
+            : m.utils_banner_download_png()}
         </Button>
         <Button
           disabled={!imagesReady}
           onClick={() => handleDownload("webp")}
         >
           {downloading === "webp"
-            ? "WEBP téléchargé !"
-            : "Télécharger en WEBP"}
+            ? m.utils_banner_webp_downloaded()
+            : m.utils_banner_download_webp()}
         </Button>
       </div>
 
@@ -453,7 +471,7 @@ export const ArticleBanner = () => {
           className="text-foreground text-sm"
           htmlFor="banner-title"
         >
-          Titre de votre article
+          {m.utils_banner_title_label()}
         </Label>
         <Input
           id="banner-title"
@@ -469,7 +487,7 @@ export const ArticleBanner = () => {
           className="text-foreground text-sm"
           htmlFor="banner-subtitle"
         >
-          Sous-titre ou description de votre article
+          {m.utils_banner_subtitle_label()}
         </Label>
         <Input
           id="banner-subtitle"
@@ -483,12 +501,13 @@ export const ArticleBanner = () => {
       <div className="screen-line-before py-3">
         <fieldset>
           <legend className="mb-3 text-foreground text-sm">
-            Choisissez votre image de fond
+            {m.utils_banner_bg_legend()}
           </legend>
           <div className="flex flex-wrap gap-4">
             <div className="flex flex-col gap-y-2">
               <input
                 accept="image/*"
+                aria-label={m.utils_banner_custom_image_aria()}
                 className="hidden"
                 id="custom-image-upload"
                 onChange={handleImageUpload}
@@ -505,7 +524,7 @@ export const ArticleBanner = () => {
               >
                 {loadedImages[-1] ? (
                   <img
-                    aria-label="Image personnalisée"
+                    aria-label={m.utils_banner_custom_image_aria()}
                     className="m-0! block h-full w-full object-cover"
                     src={loadedImages[-1].src}
                   />
@@ -519,12 +538,12 @@ export const ArticleBanner = () => {
                   config.bgIndex === -1 && "text-theme"
                 )}
               >
-                Personnalisée
+                {m.utils_banner_custom_label()}
               </span>
             </div>
 
             {PRESET_BACKGROUNDS.map((bg, i) => (
-              <div className="flex flex-col gap-y-2" key={bg.name}>
+              <div className="flex flex-col gap-y-2" key={bg.name()}>
                 <button
                   aria-pressed={config.bgIndex === i}
                   className={cn(
@@ -537,7 +556,7 @@ export const ArticleBanner = () => {
                   type="button"
                 >
                   <NextImage
-                    alt={bg.name}
+                    alt={bg.name()}
                     className="m-0! block h-full w-full object-cover"
                     height={800}
                     loading="lazy"
@@ -551,7 +570,7 @@ export const ArticleBanner = () => {
                     config.bgIndex === i && "text-theme"
                   )}
                 >
-                  {bg.name}
+                  {bg.name()}
                 </span>
               </div>
             ))}
@@ -562,7 +581,7 @@ export const ArticleBanner = () => {
       <div className="screen-line-before py-3">
         <fieldset>
           <legend className="mb-3 text-foreground text-sm">
-            Police de votre titre et description
+            {m.utils_banner_font_legend()}
           </legend>
           <div className="flex flex-wrap gap-3">
             {FONTS.map((f, i) => (
@@ -587,7 +606,7 @@ export const ArticleBanner = () => {
       <div className="screen-line-before grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6 py-3">
         <fieldset>
           <legend className="mb-3 text-foreground text-sm">
-            Alignement
+            {m.utils_banner_alignment_legend()}
           </legend>
           <div className="flex flex-wrap gap-3">
             {ALIGNMENTS.map(({ value, label }) => (
@@ -601,17 +620,18 @@ export const ArticleBanner = () => {
                 onClick={() => updateConfig("align", value)}
                 variant="outline"
               >
-                {label}
+                {label()}
               </Button>
             ))}
           </div>
         </fieldset>
         <fieldset>
           <legend className="mb-3 text-foreground text-sm">
-            Couleur du titre et de la description
+            {m.utils_banner_color_legend()}
           </legend>
           <div className="flex items-center gap-3">
             <input
+              aria-label={m.utils_banner_color_legend()}
               className="aspect-square size-12 cursor-pointer rounded-md border-none bg-transparent"
               id="text-color"
               onChange={(e) =>
@@ -622,7 +642,11 @@ export const ArticleBanner = () => {
             />
             <div className="flex flex-col gap-y-1">
               <span className="text-muted-foreground text-xs">
-                Couleur sélectionnée :
+                {getLocale() === "en" ? (
+                  <>selected color:</>
+                ) : (
+                  <>Couleur sélectionnée :</>
+                )}
               </span>
               <span
                 className="text-lg uppercase"
@@ -640,13 +664,13 @@ export const ArticleBanner = () => {
       <div className="screen-line-before grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6 py-3">
         <div className="space-y-3">
           <Label className="text-foreground text-sm">
-            Taille du texte —{" "}
+            {m.utils_banner_text_size_label()}{" "}
             <span className="text-base text-theme">
               {config.fontSize}px
             </span>
           </Label>
           <Slider
-            aria-label="Taille du titre"
+            aria-label={m.utils_banner_title_size_aria()}
             max={620}
             min={240}
             onValueChange={([v]) => updateConfig("fontSize", v)}
@@ -656,13 +680,13 @@ export const ArticleBanner = () => {
         </div>
         <div className="space-y-3">
           <Label className="text-foreground text-sm">
-            Overlay —{" "}
+            {m.utils_banner_overlay_label()}{" "}
             <span className="text-base text-theme">
               {config.overlayOpacity}%
             </span>
           </Label>
           <Slider
-            aria-label="Opacité de l'overlay"
+            aria-label={m.utils_banner_overlay_opacity_aria()}
             max={80}
             min={0}
             onValueChange={([v]) => updateConfig("overlayOpacity", v)}

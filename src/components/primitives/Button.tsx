@@ -1,9 +1,9 @@
 "use client";
 
-import { Slot } from "@radix-ui/react-slot";
+import { useRender } from "@base-ui/react/use-render";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactElement } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Check } from "@/components/motion/Check";
@@ -61,23 +61,29 @@ export const Button = ({
   variant,
   size,
   asChild = false,
+  children,
   ...props
 }: ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
   }) => {
-  const Comp = asChild ? Slot : "button";
-
-  return (
-    <Comp
-      className={cn(
+  const element = useRender({
+    defaultTagName: "button",
+    props: {
+      className: cn(
         buttonVariants({ className, size, variant }),
         "font-pixel-square"
-      )}
-      data-slot="button"
-      {...props}
-    />
-  );
+      ),
+      "data-slot": "button",
+      // When `asChild`, the rendered element carries its own children, so we
+      // must not also pass them here (it would override the child's content).
+      ...(asChild ? {} : { children }),
+      ...props,
+    },
+    render: asChild ? (children as ReactElement) : undefined,
+  });
+
+  return element;
 };
 
 type CopyState = "idle" | "success" | "fail";

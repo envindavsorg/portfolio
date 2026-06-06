@@ -7,7 +7,9 @@ const useActiveItem = (items: TOCItemType[]) => {
   useEffect(() => {
     const elements = items
       .map((item) =>
-        document.getElementById(item.url.replace("#", ""))
+        document.querySelector<HTMLElement>(
+          `[id="${item.url.replace("#", "")}"]`
+        )
       )
       .filter(Boolean) as HTMLElement[];
 

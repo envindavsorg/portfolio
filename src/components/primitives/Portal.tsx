@@ -1,6 +1,5 @@
 "use client";
 
-import { Root } from "@radix-ui/react-portal";
 import { AnimatePresence, motion } from "motion/react";
 import type {
   Easing,
@@ -13,11 +12,17 @@ import {
   useCallback,
   useContext,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import type { HTMLAttributes, PropsWithChildren } from "react";
+import type {
+  ComponentPropsWithoutRef,
+  HTMLAttributes,
+  PropsWithChildren,
+} from "react";
+import { createPortal } from "react-dom";
 import { RemoveScroll } from "react-remove-scroll";
 
 import useDelay, { useFnDelay } from "@/hooks/useDelay";
@@ -45,40 +50,43 @@ const DEFAULT_TRANSITION: Transition & {
 };
 
 const createDurationVariables = (duration: number) => ({
-  ["--dialog-duration" as string]: `${duration}s`,
-  ["--dialog-duration-95" as string]: `${duration * 0.95}s`,
-  ["--dialog-duration-90" as string]: `${duration * 0.9}s`,
-  ["--dialog-duration-80" as string]: `${duration * 0.8}s`,
-  ["--dialog-duration-70" as string]: `${duration * 0.7}s`,
-  ["--dialog-duration-60" as string]: `${duration * 0.6}s`,
-  ["--dialog-duration-50" as string]: `${duration * 0.5}s`,
-  ["--dialog-duration-40" as string]: `${duration * 0.4}s`,
-  ["--dialog-duration-30" as string]: `${duration * 0.3}s`,
-  ["--dialog-duration-20" as string]: `${duration * 0.2}s`,
-  ["--dialog-duration-10" as string]: `${duration * 0.1}s`,
+  "--dialog-duration": `${duration}s`,
+  "--dialog-duration-10": `${duration * 0.1}s`,
+  "--dialog-duration-20": `${duration * 0.2}s`,
+  "--dialog-duration-30": `${duration * 0.3}s`,
+  "--dialog-duration-40": `${duration * 0.4}s`,
+  "--dialog-duration-50": `${duration * 0.5}s`,
+  "--dialog-duration-60": `${duration * 0.6}s`,
+  "--dialog-duration-70": `${duration * 0.7}s`,
+  "--dialog-duration-80": `${duration * 0.8}s`,
+  "--dialog-duration-90": `${duration * 0.9}s`,
+  "--dialog-duration-95": `${duration * 0.95}s`,
 });
 
-function deepMerge<T>(obj1: T, obj2: T = {} as T) {
+const deepMerge = <T,>(obj1: T, obj2: T = {} as T) => {
   const result = { ...obj1 };
 
   for (const key in obj2) {
-    if (
+    if (!Object.hasOwn(obj2 as object, key)) {
+      continue;
+    }
+
+    const isMergeableObject =
       obj2[key] &&
       typeof obj2[key] === "object" &&
-      !Array.isArray(obj2[key])
-    ) {
-      result[key] = deepMerge(
-        (result[key] as T[Extract<keyof T, string>]) ||
-          ({} as T[Extract<keyof T, string>]),
-        obj2[key] as T[Extract<keyof T, string>]
-      );
-    } else {
-      result[key] = obj2[key];
-    }
+      !Array.isArray(obj2[key]);
+
+    result[key] = isMergeableObject
+      ? deepMerge(
+          (result[key] as T[Extract<keyof T, string>]) ||
+            ({} as T[Extract<keyof T, string>]),
+          obj2[key] as T[Extract<keyof T, string>]
+        )
+      : obj2[key];
   }
 
   return result;
-}
+};
 
 interface DialogContextType {
   id: string;
@@ -115,7 +123,7 @@ export const Portal = ({
 }: DialogProps & PropsWithChildren) => {
   const id = useId();
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const isOpen = open !== undefined ? open : internalOpen;
+  const isOpen = open === undefined ? internalOpen : open;
 
   const setIsOpen = useCallback(
     (value: boolean | ((prev: boolean) => boolean)) => {
@@ -154,7 +162,7 @@ export const Portal = ({
         animatedOpen: animatedOpen ?? isOpen,
         dataOpen: isOpen ? (awaitedOpen ?? isOpen) : isOpen,
         id,
-        presenceOpen: isOpen ? isOpen : (awaitedOpen ?? isOpen),
+        presenceOpen: isOpen || (awaitedOpen ?? isOpen),
         setIsOpen,
         transition,
       }}
@@ -274,7 +282,13 @@ export const PortalImage = forwardRef<
   Omit<HTMLMotionProps<"img">, "layoutId">
 >(
   (
-    { children, className, whileHover, transition, ...props },
+    {
+      children: _children,
+      className: _className,
+      whileHover,
+      transition,
+      ...props
+    },
     ref
   ) => {
     const {
@@ -394,9 +408,11 @@ export interface DialogContentProps {
   wrapper?: HTMLAttributes<HTMLDivElement>;
 }
 
+const EMPTY_WRAPPER_PROPS: HTMLAttributes<HTMLDivElement> = {};
+
 export const PortalDialogContent = ({
   children,
-  wrapper = {},
+  wrapper = EMPTY_WRAPPER_PROPS,
   ...props
 }: DialogContentProps &
   Omit<HTMLMotionProps<"div">, "layoutId"> &
@@ -561,7 +577,37 @@ export const PortalDialogOverlay = forwardRef<
   );
 });
 
-export const PortalDialog = Root;
+// Migration radix -> createPortal (react-dom).
+// Reproduit exactement la sémantique de @radix-ui/react-portal `Root` :
+//   - rend `null` tant que non monté (donc rien en SSR, comme radix) ;
+//   - une fois monté, porte un <div> (avec les props/ref étalés dessus)
+//     dans `container` (par défaut document.body) en y imbriquant children.
+type PortalDialogProps = ComponentPropsWithoutRef<"div"> & {
+  container?: Element | DocumentFragment | null;
+};
+
+export const PortalDialog = forwardRef<
+  HTMLDivElement,
+  PortalDialogProps
+>(({ container: containerProp, children, ...portalProps }, ref) => {
+  const [mounted, setMounted] = useState(false);
+
+  useLayoutEffect(() => setMounted(true), []);
+
+  const container =
+    containerProp || (mounted && globalThis?.document?.body);
+
+  if (!container) {
+    return null;
+  }
+
+  return createPortal(
+    <div {...portalProps} ref={ref}>
+      {children}
+    </div>,
+    container
+  );
+});
 
 export const PortalDialogClose = forwardRef<
   HTMLButtonElement,
@@ -639,7 +685,7 @@ export const PortalDialogTitle = ({
       className="text-sm! lowercase sm:text-balance sm:text-base! md:text-lg!"
       delay={0.8}
     >
-      {description!}
+      {description ?? ""}
     </TextAnimate>
   </div>
 );

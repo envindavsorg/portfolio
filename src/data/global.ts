@@ -63,11 +63,11 @@ const CV = {
 } satisfies CV;
 
 const GLOBAL_DATA = {
-  USER,
+  CV,
   OVERVIEW,
   SOCIAL,
+  USER,
   WORK,
-  CV,
 
   // keywords for better SEO
   keywords: [

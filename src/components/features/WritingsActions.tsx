@@ -14,12 +14,14 @@ import { toast } from "sonner";
 import useAnimatedRef from "@/hooks/useAnimatedRef";
 import { copyText, getPrompt } from "@/lib/functions";
 import { soundManager } from "@/lib/sound-manager";
+import { m } from "@/paraglide/messages";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../base/DropdownMenu";
 import {
@@ -33,7 +35,6 @@ import { Linkedin as LinkedinIcon } from "../motion/LinkedIn";
 import { Twitter as TwitterIcon } from "../motion/Twitter";
 import { X } from "../motion/X";
 import { Button, CopyButton } from "../primitives/Button";
-import { DropdownMenuLabel } from "../primitives/DropdownMenu";
 import { ChatGPT } from "../svgs/chatgpt";
 import { Claude } from "../svgs/claude";
 import { Markdown } from "../svgs/markdown";
@@ -72,7 +73,7 @@ export const WritingsActions = ({
   const handleCopyPageUrl = useCallback(() => {
     copyText(url);
     toast.success("", {
-      description: "lien copié avec succès !",
+      description: m.writings_actions_toast_link_copied(),
       duration: 3000,
       id: "copy-hint",
     });
@@ -97,17 +98,17 @@ export const WritingsActions = ({
 
   const shareUrls = useMemo(() => {
     const encodedUrl = encodeURIComponent(url);
-    let type = "ceci";
+    let type = m.writings_actions_share_type_default();
     if (url.includes("article")) {
-      type = "cet article";
+      type = m.writings_actions_share_type_article();
     } else if (url.includes("utils")) {
-      type = "cet outil";
+      type = m.writings_actions_share_type_util();
     } else if (url.includes("component")) {
-      type = "ce composant";
+      type = m.writings_actions_share_type_component();
     }
 
     const encodedText = encodeURIComponent(
-      `Découvrez ${type} sur mon portfolio :\n`
+      m.writings_actions_share_text({ type })
     );
 
     return {
@@ -180,7 +181,7 @@ export const WritingsActions = ({
           }
         />
         <TooltipContent>
-          <p>Copier le lien</p>
+          <p>{m.writings_actions_tooltip_copy_link()}</p>
         </TooltipContent>
       </Tooltip>
 
@@ -189,14 +190,14 @@ export const WritingsActions = ({
           render={
             <CopyButton
               getValueAction={handleCopyMarkdown}
-              label="copier le markdown dans le presse-papier"
+              label={m.writings_actions_copy_markdown_aria()}
               size="icon"
               variant="outline"
             />
           }
         />
         <TooltipContent>
-          <p>Copier le markdown</p>
+          <p>{m.writings_actions_tooltip_copy_markdown()}</p>
         </TooltipContent>
       </Tooltip>
 
@@ -211,7 +212,7 @@ export const WritingsActions = ({
             >
               <Link
                 href={shareUrls.x}
-                aria-label="Partager sur X"
+                aria-label={m.writings_actions_share_x_aria()}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -221,7 +222,7 @@ export const WritingsActions = ({
           }
         />
         <TooltipContent>
-          <p>Partager sur X</p>
+          <p>{m.writings_actions_tooltip_share_x()}</p>
         </TooltipContent>
       </Tooltip>
 
@@ -236,7 +237,7 @@ export const WritingsActions = ({
             >
               <Link
                 href={shareUrls.linkedin}
-                aria-label="Partager sur LinkedIn"
+                aria-label={m.writings_actions_share_linkedin_aria()}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -246,7 +247,7 @@ export const WritingsActions = ({
           }
         />
         <TooltipContent>
-          <p>Partager sur LinkedIn</p>
+          <p>{m.writings_actions_tooltip_share_linkedin()}</p>
         </TooltipContent>
       </Tooltip>
 
@@ -273,7 +274,9 @@ export const WritingsActions = ({
         />
         <DropdownMenuContent align="start" sideOffset={8}>
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Ouvrir dans :</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {m.writings_actions_dropdown_open_in()}
+            </DropdownMenuLabel>
             {viewOptions.map(({ title, href, icon: Icon }) => (
               <Link
                 href={href}

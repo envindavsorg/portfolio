@@ -7,6 +7,7 @@ import { Divider } from "@/components/base/Divider";
 import { Label } from "@/components/base/Label";
 import { Button, CopyButton } from "@/components/primitives/Button";
 import { Textarea } from "@/components/primitives/Textarea";
+import { m } from "@/paraglide/messages";
 
 import { ArrowDownAtoZ } from "../motion/ArrowDownAtoZ";
 import { ArrowDownZtoA } from "../motion/ArrowDownZtoA";
@@ -54,13 +55,14 @@ const sortKeys = (obj: unknown, order: SortOrder): unknown => {
     if (order === "desc") {
       keys.reverse();
     }
-    return keys.reduce<Record<string, unknown>>((acc, key) => {
-      acc[key] = sortKeys(
+    const sorted: Record<string, unknown> = {};
+    for (const key of keys) {
+      sorted[key] = sortKeys(
         (obj as Record<string, unknown>)[key],
         order
       );
-      return acc;
-    }, {});
+    }
+    return sorted;
   }
   return obj;
 };
@@ -84,7 +86,7 @@ const formatJSON = (
 
   const { parsed, valid } = safeParse(value);
   if (!valid) {
-    return { isValid: false, output: "Le JSON saisi est invalide." };
+    return { isValid: false, output: m.utils_json_invalid() };
   }
 
   return {
@@ -124,9 +126,9 @@ const getJSONStats = (value: string): JSONStats | null => {
 
 const formatSize = (bytes: number): string => {
   if (bytes < 1024) {
-    return `${bytes} octets`;
+    return `${bytes} ${m.utils_json_unit_bytes()}`;
   }
-  return `${(bytes / 1024).toFixed(1)} Ko`;
+  return `${(bytes / 1024).toFixed(1)} ${m.utils_json_unit_kb()}`;
 };
 
 const tokenize = (json: string): Token[] => {
@@ -137,7 +139,7 @@ const tokenize = (json: string): Token[] => {
     let remaining = line;
 
     while (remaining.length > 0) {
-      const leadingWhitespace = remaining.match(/^(\s+)/);
+      const leadingWhitespace = remaining.match(/^(\s+)/u);
       if (leadingWhitespace) {
         tokens.push({
           type: "punctuation",
@@ -147,7 +149,7 @@ const tokenize = (json: string): Token[] => {
         continue;
       }
 
-      const keyMatch = remaining.match(/^("(?:[^"\\]|\\.)*")\s*:/);
+      const keyMatch = remaining.match(/^("(?:[^"\\]|\\.)*")\s*:/u);
       if (keyMatch) {
         tokens.push({ type: "key", value: keyMatch[1] });
         tokens.push({ type: "punctuation", value: ": " });
@@ -155,7 +157,7 @@ const tokenize = (json: string): Token[] => {
         continue;
       }
 
-      const stringMatch = remaining.match(/^("(?:[^"\\]|\\.)*")/);
+      const stringMatch = remaining.match(/^("(?:[^"\\]|\\.)*")/u);
       if (stringMatch) {
         tokens.push({ type: "string", value: stringMatch[1] });
         remaining = remaining.slice(stringMatch[1].length);
@@ -163,7 +165,7 @@ const tokenize = (json: string): Token[] => {
       }
 
       const numberMatch = remaining.match(
-        /^(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/
+        /^(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/u
       );
       if (numberMatch) {
         tokens.push({ type: "number", value: numberMatch[1] });
@@ -171,14 +173,14 @@ const tokenize = (json: string): Token[] => {
         continue;
       }
 
-      const boolMatch = remaining.match(/^(true|false)/);
+      const boolMatch = remaining.match(/^(true|false)/u);
       if (boolMatch) {
         tokens.push({ type: "boolean", value: boolMatch[1] });
         remaining = remaining.slice(boolMatch[1].length);
         continue;
       }
 
-      const nullMatch = remaining.match(/^(null)/);
+      const nullMatch = remaining.match(/^(null)/u);
       if (nullMatch) {
         tokens.push({ type: "null", value: nullMatch[1] });
         remaining = remaining.slice(nullMatch[1].length);
@@ -273,13 +275,13 @@ export const JSONFormatter = () => {
             className="text-foreground text-sm"
             htmlFor="json-input"
           >
-            entrez votre json à formatter
+            {m.utils_json_input_label()}
           </Label>
           <Textarea
             className="outline-0"
             id="json-input"
             onChange={handleChange}
-            placeholder="Collez le JSON ici ..."
+            placeholder={m.utils_json_input_placeholder()}
             rows={8}
             spellCheck={false}
             value={input}
@@ -290,7 +292,7 @@ export const JSONFormatter = () => {
 
         <div className="flex flex-col gap-y-3">
           <Label className="text-foreground text-sm">
-            json mis en forme
+            {m.utils_json_output_label()}
           </Label>
           {hasOutput ? (
             <SyntaxHighlight json={displayOutput} />
@@ -301,7 +303,7 @@ export const JSONFormatter = () => {
                 isValid ? "text-muted-foreground" : "text-destructive"
               }`}
             >
-              {output || "le résultat apparaîtra ici ..."}
+              {output || m.utils_json_output_placeholder()}
             </div>
           )}
         </div>
@@ -311,8 +313,11 @@ export const JSONFormatter = () => {
         <div className="flex items-center justify-between py-1.5">
           {stats && (
             <p className="text-muted-foreground text-xs">
-              {stats.keys} clés · {stats.lines} lignes ·{" "}
-              {formatSize(stats.size)}
+              {m.utils_json_stats({
+                keys: stats.keys,
+                lines: stats.lines,
+                size: formatSize(stats.size),
+              })}
             </p>
           )}
 
@@ -370,8 +375,8 @@ export const JSONFormatter = () => {
                   variant="outline"
                 >
                   {displayMode === "minified"
-                    ? "formatter"
-                    : "minifier"}
+                    ? m.utils_json_toggle_format()
+                    : m.utils_json_toggle_minify()}
                 </Button>
 
                 <CopyButton value={displayOutput} />

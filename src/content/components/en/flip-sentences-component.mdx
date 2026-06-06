@@ -1,0 +1,81 @@
+---
+title: Flip Sentences
+description: An animated React component built with motion/react that automatically cycles through a list of sentences with a smooth transition
+bannerDark: /images/blog/flip-sentences-demo/dark.gif
+bannerLight: /images/blog/flip-sentences-demo/light.gif
+category: components
+createdAt: 2025-03-10
+updatedAt: 2025-03-10
+tags: ["react"]
+author: "Cuzeac Florin"
+isNew: true
+---
+
+<ComponentPreview
+  name="flip-sentences-demo"
+  openInV0Url="https://cuzeacflorin.fr/r/flip-sentences.json"
+  canReplay
+/>
+
+# 1. Installation with the shadcn/ui CLI
+
+Copy the command below into your terminal to install the component
+
+```bash
+npx shadcn@latest add @envindavsorg/flip-sentences
+```
+
+# 2. Manual installation
+
+## (2.1) install the dependencies:
+
+```bash
+npm install motion clsx tailwind-merge
+```
+
+## (2.2) add the **cn** helper:
+
+<ComponentSource
+  src="src/lib/utils.ts"
+  title="lib/utils.ts"
+  showLineNumbers
+  noCollapsible
+/>
+
+## (2.3) create the array with the sentences you want to cycle through:
+
+```ts
+const EXAMPLE_SENTENCES = [
+  "Imagine, code, crée, inspire.",
+  "Chaque petit pixel compte !",
+  "Chaque petit détail compte !",
+  "Du concept au déploiement !",
+];
+```
+
+## (2.4) add the following code:
+
+<ComponentSource
+  name="flip-sentences"
+  title="components/FlipSentences.tsx"
+  showLineNumbers
+/>
+
+## (2.5) a little tip:
+
+Update the import paths of your dependencies to match your project's structure so it works correctly.
+
+# 3. Usage
+
+```tsx
+"use client";
+
+import { FlipSentences } from "@/components/flip-sentences";
+
+<FlipSentences sentences={EXAMPLE_SENTENCES} />;
+```
+
+# 4. References
+
+- https://ui.shadcn.com/docs/registry
+- https://motion.dev/docs/react-motion-component

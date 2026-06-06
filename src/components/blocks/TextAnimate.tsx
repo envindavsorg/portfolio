@@ -290,7 +290,7 @@ const TextAnimateBase = ({
   let segments: string[] = [];
   switch (by) {
     case "word": {
-      segments = children.split(/(\s+)/);
+      segments = children.split(/(\s+)/u);
       break;
     }
     case "character": {
@@ -301,15 +301,15 @@ const TextAnimateBase = ({
       segments = children.split("\n");
       break;
     }
-    case "text":
     default: {
       segments = [children];
       break;
     }
   }
 
-  const finalVariants = variants
-    ? {
+  const getFinalVariants = () => {
+    if (variants) {
+      return {
         container: {
           exit: {
             opacity: 0,
@@ -329,34 +329,39 @@ const TextAnimateBase = ({
           },
         },
         item: variants,
-      }
-    : (animation
-      ? {
-          container: {
-            ...defaultItemAnimationVariants[animation].container,
-            show: {
-              ...defaultItemAnimationVariants[animation].container
-                .show,
-              transition: {
-                delayChildren: delay,
-                staggerChildren: duration / segments.length,
-              },
-            },
-            exit: {
-              ...defaultItemAnimationVariants[animation].container
-                .exit,
-              transition: {
-                staggerChildren: duration / segments.length,
-                staggerDirection: -1,
-              },
+      };
+    }
+
+    if (animation) {
+      return {
+        container: {
+          ...defaultItemAnimationVariants[animation].container,
+          exit: {
+            ...defaultItemAnimationVariants[animation].container.exit,
+            transition: {
+              staggerChildren: duration / segments.length,
+              staggerDirection: -1,
             },
           },
-          item: defaultItemAnimationVariants[animation].item,
-        }
-      : {
-          container: defaultContainerVariants,
-          item: defaultItemVariants,
-        });
+          show: {
+            ...defaultItemAnimationVariants[animation].container.show,
+            transition: {
+              delayChildren: delay,
+              staggerChildren: duration / segments.length,
+            },
+          },
+        },
+        item: defaultItemAnimationVariants[animation].item,
+      };
+    }
+
+    return {
+      container: defaultContainerVariants,
+      item: defaultItemVariants,
+    };
+  };
+
+  const finalVariants = getFinalVariants();
 
   return (
     <AnimatePresence mode="popLayout">

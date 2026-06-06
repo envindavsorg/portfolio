@@ -32,7 +32,7 @@ export const downloadFile = (url: string, filename: string) => {
   link.download = filename;
   document.body.append(link);
   link.click();
-  document.body.removeChild(link);
+  link.remove();
 };
 
 type PromptType = "component" | "general" | "summary";
@@ -73,10 +73,12 @@ Please analyze the content. I will be asking specific questions about its implem
   }
 };
 
-const PROTOCOL_REGEX = /^(?:\w+:)?\/\//;
+const PROTOCOL_REGEX = /^(?:\w+:)?\/\//u;
 
 export const urlToFilename = (url: string) =>
-  url.replace(PROTOCOL_REGEX, "").replaceAll(/[^a-zA-Z0-9._-]/g, "-");
+  url
+    .replace(PROTOCOL_REGEX, "")
+    .replaceAll(/[^a-zA-Z0-9._-]/gu, "-");
 
 export const addQueryParams = (
   urlString: string,
@@ -106,13 +108,11 @@ export const getAbsoluteUrl = (url: string): string => {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL;
-  if (siteUrl) {
-    const baseUrl = siteUrl.startsWith("http")
-      ? siteUrl
-      : `https://${siteUrl}`;
-    return new URL(url, baseUrl).toString();
-  }
-
-  return url;
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.VERCEL_URL ||
+    "https://cuzeacflorin.fr";
+  const baseUrl = siteUrl.startsWith("http")
+    ? siteUrl
+    : `https://${siteUrl}`;
+  return new URL(url, baseUrl).toString();
 };

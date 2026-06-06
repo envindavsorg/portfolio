@@ -1,0 +1,85 @@
+import { Button } from "@/components/primitives/Button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/primitives/Form";
+import { Input } from "@/components/primitives/Input";
+import { Spinner } from "@/components/primitives/Spinner";
+import type useEmailForm from "@/hooks/useEmailForm";
+import type { EmailFormData } from "@/hooks/useEmailForm";
+import { m } from "@/paraglide/messages";
+
+interface CvForm {
+  form: ReturnType<typeof useEmailForm>["form"];
+  isLoading: boolean;
+  onSubmit: (data: EmailFormData) => Promise<void>;
+  onCancel: () => void;
+}
+
+export const CvForm = ({
+  form,
+  isLoading,
+  onSubmit,
+  onCancel,
+}: CvForm) => (
+  <Form {...form}>
+    <form
+      className="space-y-4"
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
+      <FormField
+        control={form.control}
+        name="firstName"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-muted-foreground">
+              {m.home_cv_form_firstname_label()}
+            </FormLabel>
+            <FormControl>
+              <Input
+                disabled={isLoading}
+                placeholder="..."
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="recipientEmail"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-muted-foreground">
+              {m.home_cv_form_email_label()}
+            </FormLabel>
+            <FormControl>
+              <Input
+                disabled={isLoading}
+                placeholder="..."
+                type="email"
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <div className="flex flex-row justify-between">
+        <Button onClick={onCancel} type="button" variant="outline">
+          {m.home_cv_form_close_button()}
+        </Button>
+        <Button disabled={isLoading} type="submit">
+          {isLoading ? <Spinner /> : m.home_cv_form_submit_button()}
+        </Button>
+      </div>
+    </form>
+  </Form>
+);

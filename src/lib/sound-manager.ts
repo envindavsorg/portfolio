@@ -1,5 +1,15 @@
 import { logger } from "@/lib/logger";
 
+const waitForEnded = (audio: HTMLAudioElement): Promise<void> =>
+  // oxlint-disable-next-line avoid-new -- bridging the DOM `ended` event into a promise requires the Promise constructor
+  new Promise<void>((resolve) => {
+    const handleEnded = () => {
+      audio.removeEventListener("ended", handleEnded);
+      resolve();
+    };
+    audio.addEventListener("ended", handleEnded);
+  });
+
 class SoundManager {
   private readonly audioCache = new Map<string, HTMLAudioElement>();
   private readonly isClient = typeof window !== "undefined";
@@ -16,28 +26,22 @@ class SoundManager {
     return audio;
   };
 
-  playAudio = (url: string): Promise<void> =>
-    new Promise((resolve) => {
-      if (!this.isClient) {
-        resolve();
-        return;
-      }
+  playAudio = async (url: string): Promise<void> => {
+    if (!this.isClient) {
+      return;
+    }
 
-      const audio = this.getAudio(url);
-      audio.currentTime = 0;
+    const audio = this.getAudio(url);
+    audio.currentTime = 0;
 
-      const handleEnded = () => {
-        audio.removeEventListener("ended", handleEnded);
-        resolve();
-      };
-
-      audio.addEventListener("ended", handleEnded);
-      audio.play().catch((error) => {
-        audio.removeEventListener("ended", handleEnded);
-        logger.warn(`Audio play failed for ${url}:`, error);
-        resolve();
-      });
-    });
+    try {
+      await audio.play();
+    } catch (error) {
+      logger.warn(`Audio play failed for ${url}:`, error);
+      return;
+    }
+    await waitForEnded(audio);
+  };
 
   playThemeSound = () => this.playAudio("/audio/click.wav");
 

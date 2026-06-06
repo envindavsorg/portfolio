@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-export const runtime = "edge";
-
 const headers = {
   "Cache-Control": "public, max-age=300, s-maxage=300",
   "Content-Type": "text/plain",

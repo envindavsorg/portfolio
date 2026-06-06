@@ -64,19 +64,24 @@ const handleComponentSource = (
   const srcPath = getAttributeValue(node, "src");
   const fileName = getAttributeValue(node, "fileName");
 
-  if (!(name || srcPath)) {
-    return;
+  // chemin statiquement scopé à src/ pour éviter que l'analyse NFT de
+  // Turbopack ne trace tout le projet (warning "unexpected file in NFT list")
+  let filePath: string | undefined;
+  if (srcPath) {
+    filePath = join(
+      process.cwd(),
+      "src",
+      srcPath.replace(/^src\//u, "")
+    );
+  } else if (name) {
+    filePath = resolveFilePath(name, fileName);
   }
-
-  const filePath = srcPath
-    ? join(process.cwd(), srcPath)
-    : resolveFilePath(name!, fileName);
 
   if (!filePath) {
     return;
   }
 
-  const source = normalizeSource(readFileSync(filePath, "utf8"));
+  const source = normalizeSource(readFileSync(filePath, "utf-8"));
   const title = getAttributeValue(node, "title");
   const showLineNumbers = getNodeAttribute(node, "showLineNumbers");
 
@@ -108,7 +113,7 @@ const handleComponentPreview = (
     return;
   }
 
-  const source = normalizeSource(readFileSync(filePath, "utf8"));
+  const source = normalizeSource(readFileSync(filePath, "utf-8"));
 
   replaceNode(parent, index, {
     lang: "tsx",

@@ -38,8 +38,10 @@ interface CodeBlockCommandProps {
 }
 
 export const CodeBlockCommand = (props: CodeBlockCommandProps) => {
-  const [config, setConfig] = useConfig();
-  const { packageManager } = config;
+  const packageManager = useConfig((state) => state.packageManager);
+  const setPackageManager = useConfig(
+    (state) => state.setPackageManager
+  );
 
   const commands: Record<PackageManager, string | undefined> = {
     bun: props.__bun__,
@@ -52,10 +54,7 @@ export const CodeBlockCommand = (props: CodeBlockCommandProps) => {
     <div className="relative mt-6 overflow-hidden">
       <Tabs
         onValueChange={(value) =>
-          setConfig((prev) => ({
-            ...prev,
-            packageManager: value as PackageManager,
-          }))
+          setPackageManager(value as PackageManager)
         }
         value={packageManager}
       >

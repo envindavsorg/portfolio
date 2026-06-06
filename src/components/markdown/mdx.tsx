@@ -4,7 +4,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import type React from "react";
 import rehypeExternalLinks from "rehype-external-links";
 import type { LineElement } from "rehype-pretty-code";
-import rehypePrettyCode from "rehype-pretty-code";
+import rehypePretty from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { visit } from "unist-util-visit";
@@ -204,7 +204,7 @@ const options: MDXRemoteProps["options"] = {
         });
       },
       [
-        rehypePrettyCode,
+        rehypePretty,
         {
           keepBackground: false,
           onVisitLine(node: LineElement) {

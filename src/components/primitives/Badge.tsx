@@ -1,7 +1,7 @@
-import { Slot } from "@radix-ui/react-slot";
+import { useRender } from "@base-ui/react/use-render";
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactElement } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -39,15 +39,18 @@ export const Badge = ({
   className,
   variant,
   asChild = false,
+  children,
   ...props
-}: BadgeProps) => {
-  const Comp = asChild ? Slot : "span";
-
-  return (
-    <Comp
-      className={cn(variants({ variant }), className)}
-      data-slot="badge"
-      {...props}
-    />
-  );
-};
+}: BadgeProps) =>
+  useRender({
+    defaultTagName: "span",
+    props: {
+      className: cn(variants({ variant }), className),
+      "data-slot": "badge",
+      // In `asChild` mode the rendered element supplies its own children;
+      // merging `children` here would be overridden by `render.props.children`.
+      ...(asChild ? {} : { children }),
+      ...props,
+    },
+    render: asChild ? (children as ReactElement) : undefined,
+  });

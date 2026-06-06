@@ -7,6 +7,7 @@ import type { JSX } from "react/jsx-dev-runtime";
 import { Highlighter } from "@/components/blocks/Highlighter";
 import { TextAnimate } from "@/components/blocks/TextAnimate";
 import { cn } from "@/lib/utils";
+import { localizeHref } from "@/paraglide/runtime";
 
 import { NAVIGATION_DATA } from "../data";
 import { isRouteActive } from "./functions";
@@ -29,7 +30,8 @@ export const NavBarSecondaryMenu = () => {
 
       <div className="grid grid-cols-4 divide-x divide-edge">
         {NAVIGATION_DATA.map(({ title, link }, idx) => {
-          const active = isRouteActive(link, pathname);
+          const href = localizeHref(link);
+          const active = isRouteActive(href, pathname);
           const text: JSX.Element = (
             <TextAnimate
               animation="slideUp"
@@ -43,7 +45,7 @@ export const NavBarSecondaryMenu = () => {
                   : "font-medium text-foreground"
               )}
             >
-              {title}
+              {title()}
             </TextAnimate>
           );
 
@@ -51,7 +53,7 @@ export const NavBarSecondaryMenu = () => {
             <Link
               aria-current={active ? "page" : undefined}
               className="pointer-events-auto py-3 text-center"
-              href={link}
+              href={href}
               key={link}
               onClick={closeSecondaryMenu}
             >

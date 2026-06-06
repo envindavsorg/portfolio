@@ -1,10 +1,12 @@
 import { createWriteStream, promises } from "node:fs";
 import { join } from "node:path";
+import { finished as streamFinished } from "node:stream/promises";
+import { setTimeout as sleep } from "node:timers/promises";
 
 import { GifEncoder } from "@skyra/gifenc";
 import consola from "consola";
 import { PNG } from "pngjs";
-import puppeteer from "puppeteer-core";
+import { launch } from "puppeteer-core";
 import type { Browser, ElementHandle, Page } from "puppeteer-core";
 
 const executablePath =
@@ -70,7 +72,7 @@ const captureGif = async (
   encoder.setDelay(frameInterval);
   encoder.setQuality(20);
 
-  for (let i = 0; i < totalFrames; i++) {
+  for (let i = 0; i < totalFrames; i += 1) {
     const screenshot = (await componentElement.screenshot({
       type: "png",
     })) as Buffer;
@@ -78,9 +80,7 @@ const captureGif = async (
     const png = PNG.sync.read(screenshot);
     encoder.addFrame(new Uint8ClampedArray(png.data));
 
-    await new Promise((resolve) =>
-      setTimeout(resolve, frameInterval)
-    );
+    await sleep(frameInterval);
 
     if ((i + 1) % 10 === 0) {
       consola.info(`  - progress: ${i + 1}/${totalFrames} frames`);
@@ -89,10 +89,7 @@ const captureGif = async (
 
   encoder.finish();
 
-  await new Promise<void>((resolve, reject) => {
-    stream.on("finish", () => resolve());
-    stream.on("error", reject);
-  });
+  await streamFinished(stream);
 };
 
 const captureComponent = async ({
@@ -121,7 +118,7 @@ const captureComponent = async ({
     return;
   }
 
-  const url = `${baseUrl}/blog/${blogSlug}`;
+  const url = `${baseUrl}/components/${blogSlug}`;
 
   await page.emulateMediaFeatures([
     {
@@ -143,7 +140,7 @@ const captureComponent = async ({
     }
   );
 
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await sleep(3000);
 
   const componentElement = await page.$(
     "[data-screenshot-anchor-target-for-capture]"
@@ -188,7 +185,7 @@ const captureComponent = async ({
       return;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await sleep(300);
 
     const remountedElement = await page.$(
       "[data-screenshot-anchor-target-for-capture]"
@@ -228,7 +225,7 @@ const captureComponent = async ({
 };
 
 const main = async (): Promise<void> => {
-  const browser = await puppeteer.launch({
+  const browser = await launch({
     executablePath,
   });
 

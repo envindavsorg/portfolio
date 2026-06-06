@@ -8,6 +8,7 @@ import { Button, CopyButton } from "@/components/primitives/Button";
 import { TabsAnimated } from "@/components/primitives/Tabs";
 import { Textarea } from "@/components/primitives/Textarea";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 const encodeToBase64 = (
   text: string
@@ -23,11 +24,11 @@ const encodeToBase64 = (
     ).join("");
     return { error: null, result: btoa(binaryString) };
   } catch {
-    return { error: "erreur lors de l'encodage", result: "" };
+    return { error: m.utils_base64_encode_error(), result: "" };
   }
 };
 
-const BASE64_REGEX = /^[A-Za-z0-9+/]*={0,2}$/;
+const BASE64_REGEX = /^[A-Za-z0-9+/]*={0,2}$/u;
 
 const decodeFromBase64 = (
   text: string
@@ -41,8 +42,7 @@ const decodeFromBase64 = (
 
     if (!BASE64_REGEX.test(cleaned)) {
       return {
-        error:
-          "format Base64 invalide. utilisez uniquement A-Z, a-z, 0-9, +, / et =",
+        error: m.utils_base64_invalid_format(),
         result: "",
       };
     }
@@ -58,7 +58,7 @@ const decodeFromBase64 = (
 
     if (decoded.includes("\uFFFD")) {
       return {
-        error: "le texte décodé contient des caractères invalides.",
+        error: m.utils_base64_invalid_chars(),
         result: "",
       };
     }
@@ -66,8 +66,7 @@ const decodeFromBase64 = (
     return { error: null, result: decoded };
   } catch {
     return {
-      error:
-        "erreur lors du décodage. vérifiez que le texte est un Base64 valide.",
+      error: m.utils_base64_decode_error(),
       result: "",
     };
   }
@@ -132,7 +131,7 @@ export const Base64 = () => {
         <div className="flex w-full flex-col gap-y-6 overflow-hidden py-3">
           <FieldSection
             htmlFor="encode-input"
-            label="texte à encoder"
+            label={m.utils_base64_label_encode_input()}
             value={encodeInput}
           >
             <Textarea
@@ -141,7 +140,7 @@ export const Base64 = () => {
               onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                 setEncodeInput(event.target.value)
               }
-              placeholder="entrez votre texte ici..."
+              placeholder={m.utils_base64_placeholder_encode()}
               rows={8}
               spellCheck={false}
               value={encodeInput}
@@ -150,20 +149,20 @@ export const Base64 = () => {
 
           <FieldSection
             error={encoded.error}
-            label="texte encodé en base64"
+            label={m.utils_base64_label_encoded()}
             value={encoded.result}
           />
         </div>
       ),
       id: 0,
-      label: "encoder la chaîne",
+      label: m.utils_base64_tab_encode(),
     },
     {
       content: (
         <div className="flex w-full flex-col gap-y-6 overflow-hidden py-3">
           <FieldSection
             htmlFor="decode-input"
-            label="texte encodé en base64"
+            label={m.utils_base64_label_decode_input()}
             value={decodeInput}
           >
             <Textarea
@@ -172,7 +171,7 @@ export const Base64 = () => {
               onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                 setDecodeInput(event.target.value)
               }
-              placeholder="collez du Base64 ici pour le décoder..."
+              placeholder={m.utils_base64_placeholder_decode()}
               rows={8}
               spellCheck={false}
               value={decodeInput}
@@ -181,13 +180,13 @@ export const Base64 = () => {
 
           <FieldSection
             error={decoded.error}
-            label="texte décodé"
+            label={m.utils_base64_label_decoded()}
             value={decoded.result}
           />
         </div>
       ),
       id: 1,
-      label: "décoder la chaîne",
+      label: m.utils_base64_tab_decode(),
     },
   ];
 
@@ -195,7 +194,9 @@ export const Base64 = () => {
     <>
       <TabsAnimated className="ms-auto max-w-sm" tabs={tabs} />
       <div className="screen-line-before flex justify-end py-1.5">
-        <Button onClick={handleReset}>réinitialiser</Button>
+        <Button onClick={handleReset}>
+          {m.utils_base64_reset_button()}
+        </Button>
       </div>
     </>
   );

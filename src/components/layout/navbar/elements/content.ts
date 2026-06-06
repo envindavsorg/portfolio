@@ -9,91 +9,92 @@ import { Keyboard } from "@/components/motion/Keyboard";
 import { Layers } from "@/components/motion/Layers";
 import { User } from "@/components/motion/User";
 import GLOBAL_DATA from "@/data/global";
+import { m } from "@/paraglide/messages";
 
 import type { CommandGroupDef, CommandKind } from "./types";
 
-export const LABELS: Record<CommandKind, string> = {
-  article: "lire l'article",
-  command: "lancer la commande",
-  components: "voir le composant",
-  download: "télécharger le fichier",
-  page: "aller à la page",
-  section: "aller à la section",
-  utils: "utiliser cet outil",
+export const LABELS: Record<CommandKind, () => string> = {
+  article: m.nav_command_label_article,
+  command: m.nav_command_label_command,
+  components: m.nav_command_label_components,
+  download: m.nav_command_label_download,
+  page: m.nav_command_label_page,
+  section: m.nav_command_label_section,
+  utils: m.nav_command_label_utils,
 };
 
 export const COMMANDS: CommandGroupDef[] = [
   {
-    heading: "menu principal :",
+    heading: m.nav_command_group_main_menu,
     items: [
       {
         icon: Home,
         kind: "page",
-        title: "retourner à l'accueil",
+        title: m.nav_command_home,
         url: "/",
       },
       {
         icon: Book,
         kind: "page",
-        title: "mes articles de blog",
+        title: m.nav_command_blog_articles,
         url: "/articles",
       },
       {
         icon: Code,
         kind: "page",
-        title: "composants réutilisables",
+        title: m.nav_command_reusable_components,
         url: "/components",
       },
       {
         icon: Cog,
         kind: "page",
-        title: "outils pour développeurs",
+        title: m.nav_command_dev_tools,
         url: "/utils",
       },
     ],
   },
   {
-    heading: "contenu de mon portfolio :",
+    heading: m.nav_command_group_portfolio,
     items: [
       {
         icon: User,
         kind: "section",
-        title: "à propos de moi",
+        title: m.nav_command_about_me,
         url: "/#about-me",
       },
       {
         icon: Layers,
         kind: "section",
-        title: "ma stack technique",
+        title: m.nav_command_my_stack,
         url: "/#my-stack",
       },
       {
         icon: Flask,
         kind: "section",
-        title: "mes expériences",
+        title: m.nav_command_my_experiences,
         url: "/#my-experiences",
       },
       {
         icon: Keyboard,
         kind: "section",
-        title: "mes projets",
+        title: m.nav_command_my_projects,
         url: "/#my-projects",
       },
     ],
   },
   {
-    heading: "documents à télécharger :",
+    heading: m.nav_command_group_downloads,
     items: [
       {
         icon: IdCard,
         kind: "download",
-        title: "ma carte de visite",
+        title: m.nav_command_business_card,
         url: "/api/vcard",
       },
       {
         icon: File,
         kind: "download",
-        title: "télécharger mon CV",
+        title: m.nav_command_download_cv,
         url: GLOBAL_DATA.CV.url,
       },
     ],
@@ -102,20 +103,20 @@ export const COMMANDS: CommandGroupDef[] = [
 
 export const CATEGORY: Record<
   string,
-  { route: string; heading: string; kind: CommandKind }
+  { route: string; heading: () => string; kind: CommandKind }
 > = {
-  article: {
-    heading: "derniers articles de blog :",
+  articles: {
+    heading: m.nav_command_group_latest_articles,
     kind: "article",
-    route: "blog",
+    route: "articles",
   },
   components: {
-    heading: "derniers snippets de code :",
+    heading: m.nav_command_group_latest_snippets,
     kind: "components",
     route: "components",
   },
   utils: {
-    heading: "derniers outils :",
+    heading: m.nav_command_group_latest_utils,
     kind: "utils",
     route: "utils",
   },

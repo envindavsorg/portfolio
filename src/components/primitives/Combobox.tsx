@@ -1,6 +1,6 @@
 "use client";
 
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { CaretUpDownIcon, CheckIcon } from "@phosphor-icons/react";
 import { useId, useState } from "react";
 
 import { Button } from "@/components/primitives/Button";
@@ -56,7 +56,7 @@ export const Combobox = (props: ComboboxProps) => {
           variant="outline"
         >
           {selectedItem ? selectedItem.label : "Choisir ..."}
-          <CaretSortIcon />
+          <CaretUpDownIcon className="size-4 opacity-50" />
         </Button>
       </PopoverTrigger>
 

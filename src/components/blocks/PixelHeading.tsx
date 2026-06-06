@@ -59,9 +59,10 @@ const goldenBase = (index: number): number =>
   Math.floor((index * PHI * FONT_COUNT) % FONT_COUNT);
 
 const pseudoRandom = (tick: number, index: number): number =>
+  // oxlint-disable-next-line no-bitwise, prefer-math-trunc -- intentional uint32 wraparound for deterministic hash
   ((tick * 2_654_435_761 + index * 340_573_321) >>> 0) % FONT_COUNT;
 
-function extractText(children: ReactNode): string {
+const extractText = (children: ReactNode): string => {
   if (typeof children === "string") {
     return children;
   }
@@ -83,13 +84,102 @@ function extractText(children: ReactNode): string {
     );
   }
   return "";
-}
+};
 
 export type PixelHeadingMode =
   | "uniform"
   | "multi"
   | "wave"
   | "random";
+
+interface CharFontParams {
+  mode: PixelHeadingMode;
+  vi: number;
+  msElapsed: number;
+  cycleInterval: number;
+  staggerDelay: number;
+  defaultFontIndex: number;
+}
+
+const computeCharFont = ({
+  mode,
+  vi,
+  msElapsed,
+  cycleInterval,
+  staggerDelay,
+  defaultFontIndex,
+}: CharFontParams): number => {
+  const charMs = Math.max(0, msElapsed - vi * staggerDelay);
+  const staggeredCycles = Math.floor(charMs / cycleInterval);
+
+  switch (mode) {
+    case "uniform": {
+      const cycles = Math.floor(msElapsed / cycleInterval);
+      return (defaultFontIndex + cycles) % FONT_COUNT;
+    }
+    case "multi": {
+      return (goldenBase(vi) + staggeredCycles) % FONT_COUNT;
+    }
+    case "wave": {
+      return (vi + staggeredCycles) % FONT_COUNT;
+    }
+    case "random": {
+      return staggeredCycles > 0
+        ? pseudoRandom(staggeredCycles, vi)
+        : goldenBase(vi);
+    }
+    default: {
+      return defaultFontIndex;
+    }
+  }
+};
+
+type PrefixFont =
+  | "square"
+  | "grid"
+  | "circle"
+  | "triangle"
+  | "line"
+  | "none";
+
+const PixelPrefix = ({
+  prefix,
+  prefixFont,
+  isolate,
+}: {
+  prefix: string;
+  prefixFont: PrefixFont;
+  isolate?: Record<string, string>;
+}) => {
+  const prefixFontClass =
+    prefixFont === "none" ? undefined : PREFIX_FONT_MAP[prefixFont];
+
+  return (
+    <>
+      {isolate ? (
+        [...prefix].map((char, i) => (
+          <span
+            aria-hidden
+            className={cn(
+              prefixFontClass,
+              isolate[char]
+                ? resolveIsolateFont(isolate[char])
+                : undefined
+            )}
+            key={`p${i}`}
+          >
+            {char}
+          </span>
+        ))
+      ) : (
+        <span aria-hidden className={prefixFontClass}>
+          {prefix}
+        </span>
+      )}
+      <span> </span>
+    </>
+  );
+};
 
 export interface PixelHeadingProps extends ComponentProps<"h1"> {
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -188,40 +278,17 @@ export const PixelHeading = ({
         fonts.push(-1);
         continue;
       }
-      switch (mode) {
-        case "uniform": {
-          const cycles = Math.floor(msElapsed / cycleInterval);
-          const idx = (defaultFontIndex + cycles) % FONT_COUNT;
-          fonts.push(idx);
-          break;
-        }
-        case "multi": {
-          const base = goldenBase(vi);
-          const charMs = Math.max(0, msElapsed - vi * staggerDelay);
-          const cycles = Math.floor(charMs / cycleInterval);
-          fonts.push((base + cycles) % FONT_COUNT);
-          break;
-        }
-        case "wave": {
-          const charMs = Math.max(0, msElapsed - vi * staggerDelay);
-          const cycles = Math.floor(charMs / cycleInterval);
-          fonts.push((vi + cycles) % FONT_COUNT);
-          break;
-        }
-        case "random": {
-          const charMs = Math.max(0, msElapsed - vi * staggerDelay);
-          const cycles = Math.floor(charMs / cycleInterval);
-          fonts.push(
-            cycles > 0 ? pseudoRandom(cycles, vi) : goldenBase(vi)
-          );
-          break;
-        }
-        default: {
-          fonts.push(defaultFontIndex);
-          break;
-        }
-      }
-      vi++;
+      fonts.push(
+        computeCharFont({
+          cycleInterval,
+          defaultFontIndex,
+          mode,
+          msElapsed,
+          staggerDelay,
+          vi,
+        })
+      );
+      vi += 1;
     }
     return fonts;
   }, [
@@ -357,63 +424,34 @@ export const PixelHeading = ({
         {...props}
       >
         {prefix && (
-          <>
-            {isolate ? (
-              [...prefix].map((char, i) => (
-                <span
-                  aria-hidden
-                  className={cn(
-                    prefixFont !== "none"
-                      ? PREFIX_FONT_MAP[prefixFont]
-                      : undefined,
-                    isolate[char]
-                      ? resolveIsolateFont(isolate[char])
-                      : undefined
-                  )}
-                  key={`p${i}`}
-                >
-                  {char}
-                </span>
-              ))
-            ) : (
-              <span
-                aria-hidden
-                className={
-                  prefixFont !== "none"
-                    ? PREFIX_FONT_MAP[prefixFont]
-                    : undefined
-                }
-              >
-                {prefix}
-              </span>
-            )}
-            <span> </span>
-          </>
+          <PixelPrefix
+            isolate={isolate}
+            prefix={prefix}
+            prefixFont={prefixFont}
+          />
         )}
 
         {mode === "uniform"
           ? children
-          : [...text].map((char, i) =>
-              char === " " ? (
-                <span key={i}> </span>
-              ) : (isolate?.[char] ? (
+          : [...text].map((char, i) => {
+              if (char === " ") {
+                return <span key={i}> </span>;
+              }
+              const isolateFont = isolate?.[char];
+              return (
                 <span
                   aria-hidden
-                  className={resolveIsolateFont(isolate[char])}
+                  className={
+                    isolateFont
+                      ? resolveIsolateFont(isolateFont)
+                      : PIXEL_FONTS[charFonts[i]]
+                  }
                   key={i}
                 >
                   {char}
                 </span>
-              ) : (
-                <span
-                  aria-hidden
-                  className={PIXEL_FONTS[charFonts[i]]}
-                  key={i}
-                >
-                  {char}
-                </span>
-              ))
-            )}
+              );
+            })}
       </Tag>
       {showLabel && (
         <output

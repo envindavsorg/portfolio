@@ -14,7 +14,7 @@ export const hslToHex = (h: number, s: number, l: number): string => {
 };
 
 export const hexToHsl = (hex: string): [number, number, number] => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/iu.exec(
     hex
   );
   if (!result) {
@@ -67,7 +67,7 @@ export const normalizeColor = (color: string): string => {
   }
 
   if (color.startsWith("hsl")) {
-    const [h, s, l] = color.match(/\d+(\.\d+)?/g)?.map(Number) || [
+    const [h, s, l] = color.match(/\d+(\.\d+)?/gu)?.map(Number) || [
       0, 0, 0,
     ];
     return `hsl(${Math.round(h)}, ${Math.round(s)}%, ${Math.round(l)}%)`;

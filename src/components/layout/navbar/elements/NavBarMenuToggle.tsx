@@ -2,6 +2,7 @@
 
 import { MenuIcon } from "@/components/layout/navbar/elements/NavBarMenuIcon";
 import { Button } from "@/components/primitives/Button";
+import { m } from "@/paraglide/messages";
 
 import { useNavBar } from "./NavBarContext";
 
@@ -11,7 +12,7 @@ export const NavBarMenuToggle = () => {
   return (
     <Button
       aria-expanded={isSecondaryMenuOpen}
-      aria-label="Menu principal"
+      aria-label={m.nav_menu_toggle_aria()}
       className="sm:hidden"
       onClick={toggleSecondaryMenu}
       size="icon"

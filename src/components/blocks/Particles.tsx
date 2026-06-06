@@ -1,13 +1,14 @@
 "use client";
 
-import type { ISourceOptions } from "@tsparticles/engine";
+import type { Engine, ISourceOptions } from "@tsparticles/engine";
+import type * as ParticlesReact from "@tsparticles/react";
 import { useTheme } from "next-themes";
 import { memo, useEffect, useMemo, useState } from "react";
 
-type ParticlesComponent = typeof import("@tsparticles/react").default;
+type ParticlesModule = typeof ParticlesReact;
 
-let Cached: ParticlesComponent | null = null;
-let init: Promise<void> | null = null;
+let Cached: ParticlesModule | null = null;
+let registerSlim: ((engine: Engine) => Promise<void>) | null = null;
 
 const canRender = (): boolean => {
   if (typeof window === "undefined") {
@@ -56,9 +57,7 @@ interface SparklesProps {
   density?: number;
 }
 
-export const Particles = memo(function Sparkles({
-  density = 50,
-}: SparklesProps) {
+export const Particles = memo(({ density = 50 }: SparklesProps) => {
   const { resolvedTheme } = useTheme();
   const [ready, setReady] = useState(!!Cached);
 
@@ -69,15 +68,13 @@ export const Particles = memo(function Sparkles({
 
     let active = true;
     const timer = setTimeout(async () => {
-      const [{ default: P, initParticlesEngine }, { loadSlim }] =
-        await Promise.all([
-          import("@tsparticles/react"),
-          import("@tsparticles/slim"),
-        ]);
-      init ??= initParticlesEngine(loadSlim);
-      await init;
+      const [reactModule, { loadSlim }] = await Promise.all([
+        import("@tsparticles/react"),
+        import("@tsparticles/slim"),
+      ]);
       if (active) {
-        Cached = P;
+        Cached = reactModule;
+        registerSlim = (engine: Engine) => loadSlim(engine);
         setReady(true);
       }
     }, 1000);
@@ -97,17 +94,21 @@ export const Particles = memo(function Sparkles({
     [density, resolvedTheme]
   );
 
-  if (!(ready && Cached)) {
+  if (!(ready && Cached && registerSlim)) {
     return null;
   }
 
+  const { Particles: ParticlesCanvas, ParticlesProvider } = Cached;
+
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 size-full overflow-hidden">
-      <Cached
-        className="size-full"
-        id="tsparticles"
-        options={options}
-      />
+      <ParticlesProvider init={registerSlim}>
+        <ParticlesCanvas
+          className="size-full"
+          id="tsparticles"
+          options={options}
+        />
+      </ParticlesProvider>
     </div>
   );
 });

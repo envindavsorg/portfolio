@@ -7,5 +7,6 @@ export interface UtilsItem {
     description: string;
     isNew?: boolean;
     createdAt: string;
+    tags?: string[];
   };
 }

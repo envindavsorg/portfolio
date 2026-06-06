@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import useAnimatedRef from "@/hooks/useAnimatedRef";
 import type { Content } from "@/lib/content";
+import { m } from "@/paraglide/messages";
+import { localizeHref } from "@/paraglide/runtime";
 
 import {
   Tooltip,
@@ -40,11 +42,13 @@ export const WritingsPagination = ({
                 variant="outline"
               >
                 <Link
-                  aria-label="Précédent"
-                  href={`/${category}/${previous.slug}`}
+                  aria-label={m.writings_pagination_previous_aria()}
+                  href={localizeHref(`/${category}/${previous.slug}`)}
                 >
                   <ArrowLeft ref={arrowLeft.ref} />
-                  <span className="sr-only">Précédent</span>
+                  <span className="sr-only">
+                    {m.writings_pagination_previous_sr()}
+                  </span>
                 </Link>
               </Button>
             }
@@ -67,11 +71,13 @@ export const WritingsPagination = ({
                 variant="outline"
               >
                 <Link
-                  aria-label="Suivant"
-                  href={`/${category}/${next.slug}`}
+                  aria-label={m.writings_pagination_next_aria()}
+                  href={localizeHref(`/${category}/${next.slug}`)}
                 >
                   <ArrowRight ref={arrowRight.ref} />
-                  <span className="sr-only">Suivant</span>
+                  <span className="sr-only">
+                    {m.writings_pagination_next_sr()}
+                  </span>
                 </Link>
               </Button>
             }

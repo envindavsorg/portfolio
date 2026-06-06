@@ -1,0 +1,83 @@
+---
+title: My technical stack
+description: The tools, frameworks and patterns that make me the most productive — forged by years of shipped projects and lessons learned
+image: /images/articles/4.webp
+cover: /images/articles/covers/4.webp
+category: articles
+createdAt: 2026-01-24
+updatedAt: 2026-01-24
+tags: ["stack", "lessons learned"]
+author: "Cuzeac Florin"
+---
+
+People often ask me what tools I use. Here's my current stack — the one where I'm the fastest, the most confident, and the most dangerous when it comes to shipping.
+
+# 1. Framework (Next.js & React)
+
+Next.js with the App Router is my foundation. Every one of my projects starts here, no exceptions.
+
+React Server Components by default. The `"use client"` directive only shows up when it's strictly necessary — interactivity, state hooks, browser APIs. Everything else lives on the server. The result: a lightweight client bundle, a Time to Interactive that drops, and an architecture that scales naturally.
+
+For mutations, Server Actions have replaced almost all of my API endpoints. Route Handlers only survive for webhooks and external integrations. It's simpler, more typed, and fits React's mental model perfectly.
+
+Streaming with `Suspense` and `loading.tsx` files isn't optional in my projects. It's the baseline. Every async component streams its content progressively. The user never stares at a blank screen.
+
+The latest AI models are excellent at React — that's a non-negligible advantage when you bring code agents into your workflow.
+
+# 2. Styling (Tailwind CSS)
+
+Pure Tailwind CSS. No CSS modules, no `@apply`, no custom `.css` files except for ultra-specific animations or unavoidable global variables.
+
+Utility classes live directly in the JSX. The colocation of styles and markup is what makes Tailwind so effective — and so AI-friendly. When a code agent can read the style and the structure in the same place, generating and editing code becomes trivial.
+
+On the component side, I favor composition over heavy overlays. If a need can be covered natively with Tailwind and semantic HTML, that's what I do. No extra dependency.
+
+# 3. TypeScript (strict: true, always)
+
+TypeScript in strict mode, no compromise. The `any` type is formally banned in my projects. If a type is unknown, it's `unknown` with a type guard or Zod validation.
+
+Interfaces for objects, types for unions and intersections. PascalCase for components and types, camelCase for everything else. Descriptive, self-documenting names — code should read like prose, not like a puzzle.
+
+I barely comment anything. If you need a comment to understand what a function does, then the name is bad or the abstraction is shaky.
+
+# 4. Back-End (Express, Fastify & Nest.js)
+
+On the server side, three tools depending on the context.
+
+**Express** for simple APIs and quick prototypes — the ecosystem is unbeatable and everyone knows it. **Fastify** when raw performance matters — its JSON serialization system and plugin-based architecture make it a fearsome choice for high-load APIs. **Nest.js** for enterprise projects that demand an opinionated, injectable architecture that's testable end to end.
+
+In all three cases, strict TypeScript, input validation with Zod, and zero stray `any`.
+
+# 5. Code Quality (Biome.js)
+
+ESLint + Prettier, I'm done with that. Biome.js does both in a single tool, faster, without config sprawl. Formatting, linting, ordered imports — everything goes through Biome.
+
+A single tool. A single source of truth. Less friction, more focus on the real problem.
+
+# 6. AI (Cursor & Agents)
+
+Cursor has become a natural extension of how I code. Editing, refactoring, debugging — code agents handle the repetitive tasks while I focus on architecture and product decisions.
+
+AI is all the more effective when your stack is mainstream and well structured. React + Tailwind + TypeScript is the most AI-friendly combo out there today. The models understand the context, generate idiomatic code, and slot into the flow without friction.
+
+# 7. Patterns & Convictions
+
+Here are the rules I apply day to day — my personal `AGENTS.md`:
+
+**React** — Server Components by default. The React Compiler is enabled, so no manual `useMemo` or `useCallback` except in surgical cases. Small, composable components. Code that changes together lives together. And `useEffect` only when there's truly no alternative.
+
+**Architecture** — No abstraction without a real need. No helper function when an inline expression does the job. Dead code gets deleted immediately. Every dependency has to justify its presence.
+
+**Styling** — Tailwind v4 with the global CSS format. Built-in values first, dynamic values occasionally, globals rarely.
+
+**TypeScript** — No useless `try/catch`. No casting to `any`. Errors are handled where they make sense, not everywhere out of paranoia.
+
+**Accessibility** — Semantic HTML (`<nav>`, `<main>`, `<article>`, `<dialog>`). `aria-*` attributes aren't optional. Every interactive element is keyboard-navigable.
+
+**SEO** — Next.js's metadata API (`generateMetadata`) in every layout and every page. No excuse.
+
+---
+
+The best stack is the one you know well enough to stop thinking about. The one where the gap between your idea and its execution is as short as possible. Every friction you remove is brainpower freed up for the real problem.
+
+Mine is this one. It will change. But today, it's the one that makes me the most dangerous.

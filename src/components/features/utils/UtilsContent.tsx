@@ -14,11 +14,12 @@ import {
 } from "@/components/base/Empty";
 import { Frown } from "@/components/motion/Frown";
 import { Button } from "@/components/primitives/Button";
+import { m } from "@/paraglide/messages";
 
 import type { UtilsItem } from "./types";
 import { UtilsCard } from "./UtilsCard";
 
-const MotionEmpty = motion(Empty);
+const MotionEmpty = motion.create(Empty);
 
 interface UtilsContentProps {
   items: UtilsItem[];
@@ -46,15 +47,14 @@ export const UtilsContent = ({
             <EmptyMedia variant="icon">
               <Frown />
             </EmptyMedia>
-            <EmptyTitle>Aucun outil trouvé !</EmptyTitle>
+            <EmptyTitle>{m.utils_empty_title()}</EmptyTitle>
             <EmptyDescription>
-              aucun outil trouvé pour <span>{query}</span> pour le
-              moment
+              {m.utils_empty_description({ query })}
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent className="flex-row justify-center">
             <Button onClick={onRetry} variant="destructive">
-              réessayer avec un autre mot-clé
+              {m.utils_empty_retry_button()}
             </Button>
           </EmptyContent>
         </MotionEmpty>

@@ -1,0 +1,89 @@
+---
+title: Apple Writing Effect
+description: Create an Apple-inspired "Hello" writing effect using Motion for React
+bannerDark: /images/blog/apple-hello-effect-demo/dark.gif
+bannerLight: /images/blog/apple-hello-effect-demo/light.gif
+category: components
+createdAt: 2025-02-10
+updatedAt: 2025-02-10
+tags: ["react"]
+author: "Cuzeac Florin"
+isNew: true
+---
+
+<ComponentPreview
+  name="apple-hello-effect-demo"
+  openInV0Url="https://cuzeacflorin.fr/r/apple-hello-effect.json"
+  canReplay
+/>
+
+# 1. Installation with the shadcn/ui CLI
+
+Copy the command below into your terminal to install the component
+
+```bash
+npx shadcn@latest add @envindavsorg/apple-hello-effect
+```
+
+# 2. Manual installation
+
+## (2.1) install the dependencies:
+
+```bash
+npm install motion clsx tailwind-merge
+```
+
+## (2.2) add the **cn** helper:
+
+<ComponentSource
+  src="src/lib/utils.ts"
+  title="lib/utils.ts"
+  showLineNumbers
+  noCollapsible
+/>
+
+## (2.3) add the following code:
+
+<ComponentSource
+  name="apple-hello-effect"
+  title="components/AppleHelloEffect.tsx"
+  showLineNumbers
+/>
+
+## (2.4) quick tip:
+
+Update the import paths of your dependencies to match your project's structure so it works properly.
+
+# 3. Usage
+
+```tsx
+'use client';
+
+import { AppleHelloEffect } from '@/components/apple-hello-effect';
+
+const AppleHelloEffectDemo = () => (
+	<div className="flex min-h-64 items-center justify-center">
+		<AppleHelloEffect className="text-foreground" speed={0.8} />
+	</div>
+);
+
+export AppleHelloEffectDemo;
+```
+
+# 4. Properties
+
+| Prop                  | Type         | Default     | Description                                                                                |
+| --------------------- | ------------ | ----------- | ------------------------------------------------------------------------------------------ |
+| `speed`               | `number`     | 1           | A multiplier that affects the animation's duration. Higher values slow the animation down. |
+| `onAnimationComplete` | `() => void` | `undefined` | A callback function triggered when the animation completes.                                |
+
+# 5. Additional resources
+
+- Official documentation for the effect, with the SVG extracted from macOS Sonoma in SVG format: https://www.figma.com/community/file/1414773009964314315/official-apple-hello-lettering
+- A modern animation library for JavaScript and React: https://motion.dev
+- Host your own component registry: https://ui.shadcn.com/docs/registry
+
+# 6. References
+
+- https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pathLength
+- https://motion.dev/docs/react-motion-component

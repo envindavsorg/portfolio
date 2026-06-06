@@ -1,8 +1,6 @@
 import type { Content } from "@/lib/content";
 
-interface TagFilterResult {
-  activeTag: string;
-  contents: Content[];
+interface TagData {
   tagCounts: Record<string, number>;
   tags: string[];
 }
@@ -13,6 +11,13 @@ export const isActiveTag = (tag: string, activeTag: string) =>
   tag === ALL_TAG
     ? activeTag === ALL_TAG
     : activeTag === tag.toLowerCase();
+
+export const matchesTag = (
+  tags: string[] | undefined,
+  activeTag: string
+) =>
+  activeTag === ALL_TAG ||
+  (tags ?? []).some((t) => t.toLowerCase() === activeTag);
 
 const buildTagCounts = (
   contents: Content[]
@@ -30,25 +35,7 @@ const buildTagCounts = (
   return counts;
 };
 
-const filterContents = (
-  contents: Content[],
-  tag?: string
-): Content[] => {
-  const normalized = tag?.toLowerCase();
-
-  if (!normalized || normalized === ALL_TAG) {
-    return contents;
-  }
-
-  return contents.filter(({ metadata }) =>
-    metadata.tags?.some((t) => t.toLowerCase() === normalized)
-  );
-};
-
-export const filterByTag = (
-  contents: Content[],
-  tag?: string
-): TagFilterResult => {
+export const getTagData = (contents: Content[]): TagData => {
   const tagCounts = buildTagCounts(contents);
 
   const tags = [
@@ -58,10 +45,5 @@ export const filterByTag = (
       .toSorted(),
   ];
 
-  return {
-    activeTag: tag || ALL_TAG,
-    contents: filterContents(contents, tag),
-    tagCounts,
-    tags,
-  };
+  return { tagCounts, tags };
 };

@@ -55,6 +55,7 @@ export const WritingsTopBar = ({
         />
 
         <WritingsActions
+          isComponent={category === "components"}
           url={absoluteUrl}
           markdownUrl={`/${category}/${item.slug}.mdx`}
         />

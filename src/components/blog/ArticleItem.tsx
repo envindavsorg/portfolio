@@ -2,9 +2,11 @@ import Link from "next/link";
 
 import { dayjs } from "@/lib/functions";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
+import { localizeHref } from "@/paraglide/runtime";
 
 import { Divider } from "../base/Divider";
-import { MDX } from "../markdown/mdx";
+import { Mdx } from "../markdown/mdx";
 import { Button } from "../primitives/Button";
 import {
   Portal,
@@ -76,10 +78,10 @@ export const ArticleItem = ({
           >
             <Link
               aria-label={title}
-              href={`${category?.toLowerCase()}/${slug}`}
+              href={localizeHref(`/${category}/${slug}`)}
               prefetch
             >
-              lire l'article
+              {m.writings_article_read_link()}
             </Link>
           </Button>
 
@@ -104,7 +106,7 @@ export const ArticleItem = ({
           >
             <PortalDialogTitle
               className="max-sm:hidden"
-              description={description!}
+              description={description}
               title={title}
             />
           </PortalDialogDiv>
@@ -121,7 +123,7 @@ export const ArticleItem = ({
           >
             <PortalDialogTitle
               className="pt-3 sm:hidden"
-              description={description!}
+              description={description}
               title={title}
             />
 
@@ -131,42 +133,47 @@ export const ArticleItem = ({
                   {author}
                 </p>
                 <p className="font-medium text-muted-foreground text-xs sm:text-sm">
-                  écrit le{" "}
-                  {dayjs(createdAt).format("dddd, DD MMMM YYYY")}
+                  {m.writings_article_written_on({
+                    date: dayjs(createdAt).format(
+                      "dddd, DD MMMM YYYY"
+                    ),
+                  })}
                 </p>
               </div>
 
               <div className="flex w-fit flex-col gap-y-2 text-foreground text-xs sm:text-sm">
                 <p className="text-theme">
                   <span className="mr-1 text-muted-foreground">
-                    mis à jour :
+                    {m.writings_article_updated_label()}
                   </span>
                   {dayjs(createdAt).format("dddd, DD MMMM YYYY")}
                 </p>
                 <p className="text-theme">
                   <span className="mr-1 text-muted-foreground">
-                    temps de lecture :
+                    {m.writings_article_reading_time_label()}
                   </span>
                   {reading.time}
                 </p>
                 <p className="text-theme">
                   <span className="mr-1 text-muted-foreground">
-                    nombre de mots :
+                    {m.writings_article_words_label()}
                   </span>
-                  {reading.words} mots
+                  {m.writings_article_words_count({
+                    words: reading.words,
+                  })}
                 </p>
               </div>
             </div>
 
             <div className="space-y-6 pt-6 [&_.prose]:m-0! [&_.prose]:p-0!">
-              <MDX
+              <Mdx
                 code={`${content.slice(0, 300)}...`}
                 isDivider={false}
               />
 
               <div className="space-y-2 border-t pt-3">
                 <p className="text-muted-foreground text-sm leading-relaxed sm:text-base">
-                  tags :
+                  {m.writings_article_tags_label()}
                 </p>
                 <div className="flex flex-wrap gap-x-3 text-muted-foreground text-sm sm:gap-x-6">
                   {tags?.map((tag) => (

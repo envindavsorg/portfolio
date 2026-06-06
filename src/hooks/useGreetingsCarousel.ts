@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Bonjour } from "@/app/(content)/(root)/_components/cover/effects/Bonjour";
-import { Hello } from "@/app/(content)/(root)/_components/cover/effects/Hello";
-import { Hola } from "@/app/(content)/(root)/_components/cover/effects/Hola";
+import { Bonjour } from "@/app/(fr)/(content)/(root)/_components/cover/effects/Bonjour";
+import { Hello } from "@/app/(fr)/(content)/(root)/_components/cover/effects/Hello";
+import { Hola } from "@/app/(fr)/(content)/(root)/_components/cover/effects/Hola";
 import type { CarouselApi } from "@/components/primitives/Carousel";
 
 const GREETINGS_COUNT = 3;

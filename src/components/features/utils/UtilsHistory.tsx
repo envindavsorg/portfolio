@@ -3,6 +3,7 @@
 import { Fragment, useCallback, useRef } from "react";
 
 import { Divider } from "@/components/base/Divider";
+import { getLocale } from "@/paraglide/runtime";
 
 import { PanelContent } from "../../base/Panel";
 import { Delete } from "../../motion/Delete";
@@ -41,7 +42,9 @@ export const UtilsHistory = ({
       >
         <div className="flex items-center justify-between border-b border-theme/40 px-3 py-2">
           <span className="text-sm font-pixel-square lowercase text-theme sm:text-base">
-            -- récemment utilisés --
+            {getLocale() === "en"
+              ? "-- recently used --"
+              : "-- récemment utilisés --"}
           </span>
           <Button
             onClick={onClear}
@@ -52,7 +55,9 @@ export const UtilsHistory = ({
           >
             <Delete ref={deleteIconRef} size={14} />
             <span className="sr-only">
-              effacer l'historique récent
+              {getLocale() === "en"
+                ? "clear recent history"
+                : "effacer l'historique récent"}
             </span>
           </Button>
         </div>

@@ -1,14 +1,15 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
 
-import { ALL_TAG, isActiveTag } from "@/lib/tags";
+import { isActiveTag } from "@/lib/tags";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 import { PanelContent } from "../base/Panel";
 import { Button } from "../primitives/Button";
 import { Field } from "../primitives/Field";
+import { useTagFilter } from "./WritingsTagFilter";
 
 interface TagButtonProps {
   count?: number;
@@ -49,33 +50,21 @@ const TagButton = ({
 };
 
 export interface WritingsTagsProps {
-  activeTag: string;
   tagCounts?: Record<string, number>;
   tags: string[];
 }
 
 export const WritingsTags = ({
-  activeTag,
   tagCounts,
   tags,
 }: WritingsTagsProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
+  const { activeTag, setTag } = useTagFilter();
 
   const handleTagClick = useCallback(
     (tag: string) => {
-      const params = new URLSearchParams(window.location.search);
-      if (tag === ALL_TAG) {
-        params.delete("tag");
-      } else {
-        params.set("tag", tag.toLowerCase());
-      }
-      const query = params.toString();
-      router.push(query ? `${pathname}?${query}` : pathname, {
-        scroll: false,
-      });
+      setTag(tag);
     },
-    [pathname, router]
+    [setTag]
   );
 
   if (tags.length <= 1) {
@@ -86,7 +75,7 @@ export const WritingsTags = ({
     <PanelContent>
       <Field className="flex flex-col md:flex-row items-center">
         <p className="text-xs sm:text-sm text-theme">
-          par catégorie :
+          {m.writings_tags_by_category()}
         </p>
 
         <div className="flex max-md:flex-wrap gap-2 sm:gap-3">

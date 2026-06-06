@@ -6,6 +6,9 @@ import { usePathname } from "next/navigation";
 import { forwardRef, useEffect, useRef } from "react";
 import type { ComponentProps } from "react";
 
+import { m } from "@/paraglide/messages";
+import { localizeHref } from "@/paraglide/runtime";
+
 const StaticMark = forwardRef<SVGSVGElement, ComponentProps<"svg">>(
   (props, ref) => (
     <svg
@@ -71,6 +74,10 @@ const StaticMark = forwardRef<SVGSVGElement, ComponentProps<"svg">>(
   )
 );
 
+const handleScrollToTop = () => {
+  window.scrollTo({ behavior: "smooth", top: 0 });
+};
+
 const MotionMark = () => {
   const svgRef = useRef<SVGSVGElement>(null);
   const triggerDistanceRef = useRef(160);
@@ -104,13 +111,9 @@ const MotionMark = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleScrollToTop = () => {
-    window.scrollTo({ behavior: "smooth", top: 0 });
-  };
-
   return (
     <button
-      aria-label="Retour en haut de la page"
+      aria-label={m.nav_mark_scroll_top_aria()}
       className="cursor-pointer transition-opacity hover:opacity-80"
       onClick={handleScrollToTop}
       type="button"
@@ -131,7 +134,10 @@ export const NavBarMark = () => {
       {pathname === "/" ? (
         <MotionMark />
       ) : (
-        <Link aria-label="Retour à l'accueil" href="/">
+        <Link
+          aria-label={m.nav_mark_home_aria()}
+          href={localizeHref("/")}
+        >
           <StaticMark />
         </Link>
       )}

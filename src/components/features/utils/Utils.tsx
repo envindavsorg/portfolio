@@ -11,6 +11,9 @@ import {
 import { toast } from "sonner";
 
 import { Divider } from "@/components/base/Divider";
+import { useTagFilter } from "@/components/features/WritingsTagFilter";
+import { matchesTag } from "@/lib/tags";
+import { m } from "@/paraglide/messages";
 
 import { getRecentSlugs, RECENT_KEY } from "./lib";
 import type { UtilsItem, UtilsSortMode } from "./types";
@@ -28,6 +31,7 @@ export const Utils = ({ contents }: UtilsProps) => {
   const [sort, setSort] = useState<UtilsSortMode>("a-z");
   const [recentSlugs, setRecentSlugs] = useState<string[]>([]);
   const pathname = usePathname();
+  const { activeTag } = useTagFilter();
 
   useEffect(() => {
     setRecentSlugs(getRecentSlugs());
@@ -35,7 +39,9 @@ export const Utils = ({ contents }: UtilsProps) => {
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
-    let items = contents;
+    let items = contents.filter((item) =>
+      matchesTag(item.metadata.tags, activeTag)
+    );
 
     if (q) {
       items = items.filter(
@@ -52,7 +58,7 @@ export const Utils = ({ contents }: UtilsProps) => {
     );
 
     return items;
-  }, [query, contents, sort]);
+  }, [query, contents, sort, activeTag]);
 
   const recentItems = useMemo(() => {
     if (query || recentSlugs.length === 0) {
@@ -76,8 +82,8 @@ export const Utils = ({ contents }: UtilsProps) => {
     inputRef.current?.focus();
 
     // test
-    toast.info("Ceci est un titre", {
-      description: "Ceci est une description.",
+    toast.info(m.utils_toast_test_title(), {
+      description: m.utils_toast_test_description(),
       duration: Number.POSITIVE_INFINITY,
       id: "command-hint",
     });

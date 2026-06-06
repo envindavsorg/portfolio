@@ -1,19 +1,24 @@
-import { useAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export type PackageManager = "pnpm" | "yarn" | "npm" | "bun";
 export type InstallationType = "cli" | "manual";
 
-interface Config {
-  packageManager: PackageManager;
+interface ConfigState {
   installationType: InstallationType;
+  packageManager: PackageManager;
+  setPackageManager: (packageManager: PackageManager) => void;
 }
 
-const configAtom = atomWithStorage<Config>("envindavsorg.config", {
-  installationType: "cli",
-  packageManager: "pnpm",
-});
-
-const useConfig = () => useAtom(configAtom);
+const useConfig = create<ConfigState>()(
+  persist(
+    (set) => ({
+      installationType: "cli",
+      packageManager: "pnpm",
+      setPackageManager: (packageManager) => set({ packageManager }),
+    }),
+    { name: "envindavsorg.config" }
+  )
+);
 
 export default useConfig;

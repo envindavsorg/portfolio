@@ -6,19 +6,20 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import { useCallback, useRef } from "react";
 
-import { GalleryHorizontalEnd } from "@/components/motion/GalleryHorizontalEnd";
-import type { Collapsible } from "@/components/primitives/Collapsible";
+import type { Collapsible } from "@/components/base/Collapsible";
 import {
   CollapsibleChevronsIcon,
   CollapsibleContent,
   CollapsibleTrigger,
   CollapsibleWithContext,
   useCollapsible,
-} from "@/components/primitives/Collapsible";
+} from "@/components/base/Collapsible";
+import { GalleryHorizontalEnd } from "@/components/motion/GalleryHorizontalEnd";
 import useActiveItem from "@/hooks/useActiveItem";
 import type { TocGroup } from "@/lib/toc";
 import { groupTocItems } from "@/lib/toc";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 interface ConnectorProps {
   direction: "up" | "down";
@@ -163,7 +164,7 @@ export const WritingsToC = ({
         onMouseLeave={stopAnimations}
       >
         <GalleryHorizontalEnd ref={iconGalleryRef} />
-        <p>points importants sur cette page</p>
+        <p>{m.writings_toc_trigger_label()}</p>
         <CollapsibleChevronsIcon ref={iconChevronRef} />
       </CollapsibleTrigger>
 

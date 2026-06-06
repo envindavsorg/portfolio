@@ -11,6 +11,26 @@ interface NavBarMenuIconProps extends React.ComponentProps<"div"> {
   size?: number;
 }
 
+const getLineRotate = (custom: number): number => {
+  if (custom === 1) {
+    return 45;
+  }
+  if (custom === 3) {
+    return -45;
+  }
+  return 0;
+};
+
+const getLineY = (custom: number): number => {
+  if (custom === 1) {
+    return 6;
+  }
+  if (custom === 3) {
+    return -6;
+  }
+  return 0;
+};
+
 export const MenuIcon = ({
   isOpen,
   className,
@@ -44,13 +64,13 @@ export const MenuIcon = ({
           variants={{
             animate: (custom: number) => ({
               opacity: custom === 2 ? 0 : 1,
-              rotate: custom === 1 ? 45 : (custom === 3 ? -45 : 0),
+              rotate: getLineRotate(custom),
               transition: {
                 damping: 20,
                 stiffness: 260,
                 type: "spring",
               },
-              y: custom === 1 ? 6 : (custom === 3 ? -6 : 0),
+              y: getLineY(custom),
             }),
             normal: {
               opacity: 1,
@@ -70,13 +90,13 @@ export const MenuIcon = ({
           variants={{
             animate: (custom: number) => ({
               opacity: custom === 2 ? 0 : 1,
-              rotate: custom === 1 ? 45 : (custom === 3 ? -45 : 0),
+              rotate: getLineRotate(custom),
               transition: {
                 damping: 20,
                 stiffness: 260,
                 type: "spring",
               },
-              y: custom === 1 ? 6 : (custom === 3 ? -6 : 0),
+              y: getLineY(custom),
             }),
             normal: {
               opacity: 1,
@@ -96,13 +116,13 @@ export const MenuIcon = ({
           variants={{
             animate: (custom: number) => ({
               opacity: custom === 2 ? 0 : 1,
-              rotate: custom === 1 ? 45 : (custom === 3 ? -45 : 0),
+              rotate: getLineRotate(custom),
               transition: {
                 damping: 20,
                 stiffness: 260,
                 type: "spring",
               },
-              y: custom === 1 ? 6 : (custom === 3 ? -6 : 0),
+              y: getLineY(custom),
             }),
             normal: {
               opacity: 1,

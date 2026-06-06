@@ -1,6 +1,5 @@
 "use client";
 
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useCommandState } from "cmdk";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -41,6 +40,8 @@ import { Separator } from "@/components/primitives/Separator";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import type { Content } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
+import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { CATEGORY, LABELS } from "./content";
 import {
@@ -62,7 +63,7 @@ const CommandFooter = memo(({ kindMap }: CommandFooterProps) => {
   return (
     <div className="hidden h-12 items-center justify-end gap-x-4 border-input border-t px-4 sm:flex">
       <KbdGroup>
-        <span className="font-medium text-xs">{LABELS[kind]}</span>
+        <span className="font-medium text-xs">{LABELS[kind]()}</span>
         <Kbd>↵</Kbd>
       </KbdGroup>
 
@@ -72,7 +73,9 @@ const CommandFooter = memo(({ kindMap }: CommandFooterProps) => {
       />
 
       <KbdGroup>
-        <span className="font-medium text-xs">fermer</span>
+        <span className="font-medium text-xs">
+          {getLocale() === "en" ? "close" : "fermer"}
+        </span>
         <Kbd>␛</Kbd>
       </KbdGroup>
     </div>
@@ -89,6 +92,7 @@ const CommandRow = memo(
   ({ item, index, onSelect }: CommandRowProps) => {
     const iconRef = useRef<AnimatedIconHandle>(null);
     const Icon = item.icon;
+    const title = item.title();
 
     return (
       <CommandItem
@@ -96,7 +100,7 @@ const CommandRow = memo(
         onMouseEnter={() => iconRef.current?.startAnimation?.()}
         onMouseLeave={() => iconRef.current?.stopAnimation?.()}
         onSelect={() => onSelect(item.url, item.openInNewTab)}
-        value={item.title}
+        value={title}
       >
         {Icon ? (
           <Icon
@@ -106,7 +110,7 @@ const CommandRow = memo(
         ) : (
           <span>{index + 1}.</span>
         )}
-        <p className="lowercase">{item.title}</p>
+        <p className="lowercase">{title}</p>
       </CommandItem>
     );
   }
@@ -125,7 +129,7 @@ const CommandLinkGroup = memo(
         <CommandRow
           index={idx}
           item={item}
-          key={item.title}
+          key={item.title()}
           onSelect={onSelect}
         />
       ))}
@@ -137,7 +141,11 @@ interface NavBarCommandProps {
   posts?: Content[];
 }
 
-export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
+const EMPTY_POSTS: Content[] = [];
+
+export const NavBarCommand = ({
+  posts = EMPTY_POSTS,
+}: NavBarCommandProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -185,7 +193,7 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
       if (href.startsWith("/#")) {
         const hash = href.slice(1);
         if (pathname !== "/") {
-          window.location.href = href;
+          window.location.href = localizeHref(href);
           return;
         }
         document
@@ -195,7 +203,7 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
         return;
       }
 
-      router.push(href);
+      router.push(localizeHref(href));
     },
     [router, pathname]
   );
@@ -213,8 +221,7 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
     }
     setOpen(true);
     toast.info("", {
-      description:
-        "glissez vers le bas ou appuyez en dehors pour fermer.",
+      description: m.nav_command_drawer_hint(),
       duration: Number.POSITIVE_INFINITY,
       id: "command-hint",
     });
@@ -231,7 +238,7 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
     <>
       <Button onClick={handleOpen} size="icon" variant="outline">
         <Search />
-        <span className="sr-only">rechercher</span>
+        <span className="sr-only">{m.nav_command_search()}</span>
       </Button>
 
       <Wrapper onOpenChange={handleOpenChange} open={open}>
@@ -245,14 +252,12 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
             overlay: true,
           })}
         >
-          <VisuallyHidden>
-            <Title>palette de commandes</Title>
+          <div className="sr-only">
+            <Title>{m.nav_command_dialog_title()}</Title>
             <Description>
-              utilisez la barre de recherche pour naviguer rapidement
-              vers différentes sections du site ou pour accéder à des
-              fonctionnalités spécifiques.
+              {m.nav_command_dialog_description()}
             </Description>
-          </VisuallyHidden>
+          </div>
 
           <Command>
             <CommandInput
@@ -268,9 +273,9 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
               <div className="max-sm:mx-2">
                 {filteredGroups.map(({ heading, items }) => (
                   <CommandLinkGroup
-                    heading={heading}
+                    heading={heading()}
                     items={items}
-                    key={heading}
+                    key={heading()}
                     onSelect={handleSelect}
                   />
                 ))}
@@ -281,7 +286,7 @@ export const NavBarCommand = ({ posts = [] }: NavBarCommandProps) => {
                   ([category, config]) =>
                     postGroups[category]?.length > 0 && (
                       <CommandLinkGroup
-                        heading={config.heading}
+                        heading={config.heading()}
                         items={postGroups[category]}
                         key={category}
                         onSelect={handleSelect}

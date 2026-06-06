@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import VCard from "vcard-creator";
+import { VCard } from "vcard-creator";
 
 import GLOBAL_DATA from "@/data/global";
 import { convertImageToJpeg } from "@/lib/server";
@@ -29,7 +29,7 @@ const getVCardPhoto = async (url: string) => {
 
     return {
       image,
-      mine: "jpeg",
+      mime: "jpeg",
     };
   } catch {
     return null;
@@ -40,20 +40,25 @@ export const GET = async (): Promise<Response> => {
   const card = new VCard();
 
   card
-    .addName(GLOBAL_DATA.USER.fullName)
-    .addPhoneNumber(GLOBAL_DATA.USER.phoneNumber)
-    .addAddress(GLOBAL_DATA.USER.location.city)
-    .addEmail(GLOBAL_DATA.USER.emailAddress)
-    .addURL(GLOBAL_DATA.SOCIAL.portfolio);
+    .addName({
+      familyName: GLOBAL_DATA.USER.lastName,
+      givenName: GLOBAL_DATA.USER.firstName,
+    })
+    .addPhoneNumber({ number: GLOBAL_DATA.USER.phoneNumber })
+    .addAddress({ locality: GLOBAL_DATA.USER.location.city })
+    .addEmail({ address: GLOBAL_DATA.USER.emailAddress })
+    .addUrl({ url: GLOBAL_DATA.SOCIAL.portfolio });
 
   const photo = await getVCardPhoto(GLOBAL_DATA.USER.avatar);
   if (photo) {
-    card.addPhoto(photo.image, photo.mine);
+    card.addPhoto({ image: photo.image, mime: photo.mime });
   }
 
   if (GLOBAL_DATA.WORK.jobs.length > 0) {
-    const company = GLOBAL_DATA.WORK.jobs[0];
-    card.addCompany(company.company).addJobtitle(company.title);
+    const [company] = GLOBAL_DATA.WORK.jobs;
+    card
+      .addCompany({ name: company.company })
+      .addJobtitle(company.title);
   }
 
   return new NextResponse(card.toString(), {

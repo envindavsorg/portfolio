@@ -1,1 +1,1 @@
-export * from "./FlipSentences";
+export { FlipSentences } from "./FlipSentences";

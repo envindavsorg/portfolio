@@ -1,6 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  parseAsInteger,
+  parseAsStringLiteral,
+  useQueryState,
+} from "nuqs";
+import { Suspense, useMemo, useState } from "react";
 
 import { Label } from "@/components/base/Label";
 import { Button } from "@/components/primitives/Button";
@@ -10,30 +15,51 @@ import { InputNumber } from "@/components/primitives/Input";
 import { Textarea } from "@/components/primitives/Textarea";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { generateLoremIpsum } from "@/lib/lorem-ipsum";
+import { m } from "@/paraglide/messages";
 
-type GenerationUnit = "words" | "sentences" | "paragraphs";
+const GENERATION_UNITS = [
+  "words",
+  "sentences",
+  "paragraphs",
+] as const;
 
-const GENERATION_OPTIONS: { value: GenerationUnit; label: string }[] =
-  [
-    { label: "Paragraphes", value: "paragraphs" },
-    { label: "Phrases", value: "sentences" },
-    { label: "Mots", value: "words" },
-  ];
+type GenerationUnit = (typeof GENERATION_UNITS)[number];
 
-const UNIT_LABELS: Record<GenerationUnit, string> = {
-  paragraphs: "combien de paragraphes ?",
-  sentences: "combien de phrases ?",
-  words: "combien de mots ?",
+const UNIT_LABELS: Record<GenerationUnit, () => string> = {
+  paragraphs: () => m.utils_lorem_label_paragraphs(),
+  sentences: () => m.utils_lorem_label_sentences(),
+  words: () => m.utils_lorem_label_words(),
 };
 
-export const LoremIpsumGenerator = () => {
-  const [inputAmount, setInputAmount] = useState(2);
-  const [generationUnit, setGenerationUnit] =
-    useState<GenerationUnit>("paragraphs");
+const LoremIpsumGeneratorContent = () => {
+  // état synchronisé dans l'URL (nuqs) — configuration partageable
+  const [inputAmount, setInputAmount] = useQueryState(
+    "count",
+    parseAsInteger.withDefault(2)
+  );
+  const [generationUnit, setGenerationUnit] = useQueryState(
+    "unit",
+    parseAsStringLiteral(GENERATION_UNITS).withDefault("paragraphs")
+  );
   const [asHTML, setAsHTML] = useState(false);
   const [startWithStandard, setStartWithStandard] = useState(false);
   const [seed, setSeed] = useState(0);
   const { handleCopy } = useCopyToClipboard();
+
+  const generationOptions: {
+    value: GenerationUnit;
+    label: string;
+  }[] = useMemo(
+    () => [
+      {
+        label: m.utils_lorem_option_paragraphs(),
+        value: "paragraphs",
+      },
+      { label: m.utils_lorem_option_sentences(), value: "sentences" },
+      { label: m.utils_lorem_option_words(), value: "words" },
+    ],
+    []
+  );
 
   const output = useMemo(
     () =>
@@ -60,7 +86,7 @@ export const LoremIpsumGenerator = () => {
           className="text-muted-foreground text-xs"
           htmlFor="lorem-amount"
         >
-          {UNIT_LABELS[generationUnit]}
+          {UNIT_LABELS[generationUnit]()}
         </Label>
         <div className="flex items-center gap-3">
           <div className="flex-1">
@@ -71,13 +97,13 @@ export const LoremIpsumGenerator = () => {
               min={1}
               onFocus={(event) => event.target.select()}
               onValueChange={handleAmountChange}
-              placeholder="entrez un nombre ..."
+              placeholder={m.utils_lorem_amount_placeholder()}
               value={inputAmount}
             />
           </div>
           <Combobox
             className="w-42"
-            data={GENERATION_OPTIONS}
+            data={generationOptions}
             onSelect={(value: GenerationUnit) =>
               setGenerationUnit(value)
             }
@@ -101,7 +127,7 @@ export const LoremIpsumGenerator = () => {
             className="cursor-pointer"
             htmlFor="standard-sentence"
           >
-            lorem Ipsum en premier
+            {m.utils_lorem_start_standard_label()}
           </Label>
         </div>
         <div className="flex items-center gap-x-1">
@@ -111,7 +137,7 @@ export const LoremIpsumGenerator = () => {
             onCheckedChange={(checked: boolean) => setAsHTML(checked)}
           />
           <Label className="cursor-pointer" htmlFor="as-html">
-            format HTML
+            {m.utils_lorem_as_html_label()}
           </Label>
         </div>
       </div>
@@ -121,7 +147,7 @@ export const LoremIpsumGenerator = () => {
           className="text-muted-foreground text-xs"
           htmlFor="lorem-output"
         >
-          texte généré
+          {m.utils_lorem_output_label()}
         </Label>
         <Textarea
           id="lorem-output"
@@ -133,12 +159,19 @@ export const LoremIpsumGenerator = () => {
 
       <div className="flex justify-between py-1.5">
         <Button onClick={() => handleCopy(output)} variant="outline">
-          copier le texte
+          {m.utils_lorem_copy_button()}
         </Button>
         <Button onClick={() => setSeed((prev) => prev + 1)}>
-          générer le texte
+          {m.utils_lorem_generate_button()}
         </Button>
       </div>
     </>
   );
 };
+
+// useQueryState (nuqs) requiert une frontière Suspense sur les pages statiques
+export const LoremIpsumGenerator = () => (
+  <Suspense>
+    <LoremIpsumGeneratorContent />
+  </Suspense>
+);

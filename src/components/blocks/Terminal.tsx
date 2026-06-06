@@ -73,11 +73,8 @@ export const AnimatedSpan = ({
     itemIndex,
   ]);
 
-  const shouldAnimate = sequence
-    ? hasStarted
-    : (startOnView
-      ? isInView
-      : true);
+  const animateWhenNoSequence = startOnView ? isInView : true;
+  const shouldAnimate = sequence ? hasStarted : animateWhenNoSequence;
 
   return (
     <motion.div
@@ -196,7 +193,7 @@ export const TypingAnimation = ({
     let i = 0;
     const typingEffect = setInterval(() => {
       if (i < children.length) {
-        setDisplayedText(children.substring(0, i + 1));
+        setDisplayedText(children.slice(0, i + 1));
         i += 1;
       } else {
         clearInterval(typingEffect);

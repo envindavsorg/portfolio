@@ -1,46 +1,19 @@
-import consola from "consola";
+import bundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
-import { z } from "zod";
 
-(() => {
-  const envSchema = z.object({
-    API_TOKEN: z.string().optional(),
-    BLOB_READ_WRITE_TOKEN: z.string().optional(),
-    GITHUB_API_TOKEN: z
-      .string()
-      .min(1, "gitHub API token is required !"),
-    GITHUB_REPO_NAME: z.string().optional(),
+import "./src/env";
 
-    GITHUB_USERNAME: z.string().optional(),
-    NODE_ENV: z
-      .enum(["development", "production", "test"])
-      .default("development"),
-
-    RESEND_API_KEY: z.string().optional(),
-    TURBO_TEAM: z.string().optional(),
-
-    TURBO_TOKEN: z.string().optional(),
-  });
-
-  const parsed = envSchema.safeParse(process.env);
-
-  if (!parsed.success) {
-    consola.error("invalid environment variables :");
-    consola.error(`${z.treeifyError(parsed.error)}\n`);
-    process.exit(1);
-  }
-
-  if (!process.env.__ENV_VALIDATED) {
-    consola.success(
-      "environment variables look good ! you're safe to ship 🚀\n"
-    );
-    process.env.__ENV_VALIDATED = "true";
-  }
-})();
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["MacBook-Pro-16-M4-Max-de-Florin.local"],
   devIndicators: false,
+  experimental: {
+    globalNotFound: true,
+    optimizePackageImports: ["@phosphor-icons/react", "radix-ui"],
+  },
   async headers() {
     return [
       {
@@ -67,6 +40,15 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    contentSecurityPolicy:
+      "default-src 'self'; script-src 'none'; sandbox;",
+    dangerouslyAllowSVG: true,
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    formats: ["image/avif", "image/webp"],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // 30 days
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+    qualities: [75, 90, 100],
     remotePatterns: [
       {
         hostname: "cuzeacflorin.fr",
@@ -81,16 +63,9 @@ const nextConfig: NextConfig = {
         protocol: "https",
       },
     ],
-    qualities: [75, 90, 100],
-    formats: ["image/avif", "image/webp"],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy:
-      "default-src 'self'; script-src 'none'; sandbox;",
   },
   pageExtensions: ["mdx", "ts", "tsx"],
+  reactCompiler: true,
   reactStrictMode: true,
   async rewrites() {
     return [
@@ -111,4 +86,4 @@ const nextConfig: NextConfig = {
   transpilePackages: ["next-mdx-remote"],
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

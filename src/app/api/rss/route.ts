@@ -16,25 +16,27 @@ export const GET = () => {
   const allPosts = getAllContent();
 
   const itemsXml = allPosts
-    .map(
-      (post) => `
+    .map((post) => {
+      const postUrl = `https://cuzeacflorin.fr/${post.metadata.category}/${post.slug}`;
+
+      return `
     <item>
       <title><![CDATA[ ${post.metadata.title} ]]></title>
       <description><![CDATA[ ${post.metadata.description || ""} ]]></description>
-      <link>https://cuzeacflorin.fr/blog/${post.slug}</link>
-      <guid isPermaLink="false">https://cuzeacflorin.fr/blog/${post.slug}</guid>
+      <link>${postUrl}</link>
+      <guid isPermaLink="false">${postUrl}</guid>
       <dc:creator><![CDATA[ ${GLOBAL_DATA.USER.firstName} ]]></dc:creator>
       <pubDate>${dayjs(post.metadata.createdAt).format("ddd, DD MMM YYYY HH:mm:ss [GMT]")}</pubDate>
       <content:encoded>
         <p>${escapeXml(post.metadata.description || "")}</p>
         <div style="margin-top: 50px; font-style: italic;">
-          <strong><a href="https://cuzeacflorin.fr/blog/${post.slug}">Continuer la lecture</a>.</strong>
+          <strong><a href="${postUrl}">Continuer la lecture</a>.</strong>
         </div>
         <br />
         <br />
       </content:encoded>
-    </item>`
-    )
+    </item>`;
+    })
     .join("\n");
 
   const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>

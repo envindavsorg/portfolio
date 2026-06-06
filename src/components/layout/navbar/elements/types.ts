@@ -10,7 +10,7 @@ export type CommandKind =
   | "download";
 
 export interface CommandItemProps {
-  title: string;
+  title: () => string;
   url: string;
   icon?: ElementType;
   keywords?: string[];
@@ -19,6 +19,6 @@ export interface CommandItemProps {
 }
 
 export interface CommandGroupDef {
-  heading: string;
+  heading: () => string;
   items: CommandItemProps[];
 }

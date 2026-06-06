@@ -1,16 +1,14 @@
 import { lazy, Suspense } from "react";
 
-const AnalyticsReact = lazy(() =>
-  import("@vercel/analytics/react").then((module) => ({
-    default: module.Analytics,
-  }))
-);
+const AnalyticsReact = lazy(async () => {
+  const mod = await import("@vercel/analytics/react");
+  return { default: mod.Analytics };
+});
 
-const SpeedInsights = lazy(() =>
-  import("@vercel/speed-insights/react").then((module) => ({
-    default: module.SpeedInsights,
-  }))
-);
+const SpeedInsights = lazy(async () => {
+  const mod = await import("@vercel/speed-insights/react");
+  return { default: mod.SpeedInsights };
+});
 
 export const Analytics = () => (
   <Suspense fallback={null}>

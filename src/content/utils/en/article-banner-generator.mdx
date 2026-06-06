@@ -1,0 +1,127 @@
+---
+title: Banner Generator
+description: Create professional banners for your blog articles in just a few clicks
+category: utils
+createdAt: 2026-26-02
+updatedAt: 2026-26-02
+tags: ["design"]
+isNew: true
+author: Florin Cuzeac
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+<ArticleBannerUtils />
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Usage
+
+Use this free article banner generator to create eye-catching header images
+for your blog posts.
+Customize every aspect of your banner — title, subtitle, background image, font, alignment and colors — then download the result as a high-resolution PNG.
+No sign-up required — set up your banner and download it instantly.
+
+# How to use the banner generator:
+
+Fill in your title and subtitle in the provided fields, then adjust the visual settings to your liking.
+Pick from the preset background images, choose a font and an alignment, then tweak the text size, overlay opacity and banner height using the sliders.
+The preview updates in real time. Once you're happy, click the download button to get your banner as a PNG (1400px wide).
+
+# Use cases:
+
+- **Blog posts:** Generate consistent, professional banners for your publications on Medium, Dev.to, Hashnode, WordPress or any other CMS.
+- **Social media:** Create header images tailored for sharing on Twitter/X, LinkedIn or Facebook to maximize engagement on your posts.
+- **Newsletters:** Design striking header visuals for your email campaigns and technical newsletters.
+- **Documentation:** Illustrate your technical guides, tutorials and documentation pages with custom banners.
+
+# Generate a banner using the Canvas API in JavaScript:
+
+In JavaScript, dynamic image generation can be done using the browser's native Canvas API, as shown below:
+
+```javascript
+const canvas = document.createElement("canvas");
+canvas.width = 1400;
+canvas.height = 700;
+const ctx = canvas.getContext("2d");
+
+ctx.fillStyle = "#1a1a2e";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+ctx.font = "bold 64px Georgia";
+ctx.fillStyle = "#ffffff";
+ctx.textAlign = "center";
+ctx.fillText(
+  "Mon titre d'article",
+  canvas.width / 2,
+  canvas.height / 2
+);
+
+const link = document.createElement("a");
+link.download = "banner.png";
+link.href = canvas.toDataURL("image/png");
+link.click();
+```
+
+# Generate a banner in TypeScript (Node.js):
+
+In TypeScript with Node.js, server-side image generation can be done with the **canvas** library (node-canvas), as shown below:
+
+```typescript
+import { createCanvas } from "canvas";
+import { writeFileSync } from "node:fs";
+
+const canvas = createCanvas(1400, 700);
+const ctx = canvas.getContext("2d");
+
+ctx.fillStyle = "#1a1a2e";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+ctx.font = "bold 64px Georgia";
+ctx.fillStyle = "#ffffff";
+ctx.textAlign = "center";
+ctx.fillText(
+  "Mon titre d'article",
+  canvas.width / 2,
+  canvas.height / 2
+);
+
+const buffer: Buffer = canvas.toBuffer("image/png");
+writeFileSync("banner.png", buffer);
+console.log("Bannière générée : banner.png");
+```
+
+Install the dependency:
+
+```bash
+npm install canvas
+```
+
+# Generate a banner in Rust:
+
+In Rust, image generation can be done with the **image** crate and **imageproc** for text rendering, as shown below:
+
+```rust
+use image::{Rgb, RgbImage};
+
+fn main() {
+    let width = 1400;
+    let height = 700;
+    let mut img = RgbImage::new(width, height);
+
+    let bg_color = Rgb([26u8, 26, 46]);
+    for pixel in img.pixels_mut() {
+        *pixel = bg_color;
+    }
+
+    img.save("banner.png").unwrap();
+    println!("Bannière générée : banner.png");
+}
+```
+
+Add to `Cargo.toml`:
+
+```toml
+[dependencies]
+image = "0.25"
+```
+
+These approaches let you automate banner generation directly within your publishing pipeline, whether on the client side for an instant preview or on the server side for batch processing of your articles.

@@ -75,8 +75,12 @@ export const fillHoles = (
     a.date.localeCompare(b.date)
   );
   const calendar = new Map(activities.map((a) => [a.date, a]));
-  const first = sorted[0]!;
-  const last = sorted.at(-1)!;
+  const [first] = sorted;
+  const last = sorted.at(-1);
+
+  if (!(first && last)) {
+    return [];
+  }
 
   return eachDayOfInterval(dayjs(first.date), dayjs(last.date)).map(
     (day) => {
@@ -95,7 +99,11 @@ export const groupByWeeks = (
   }
 
   const normalized = fillHoles(activities);
-  const firstDate = dayjs(normalized[0]!.date);
+  const [firstNormalized] = normalized;
+  if (!firstNormalized) {
+    return [];
+  }
+  const firstDate = dayjs(firstNormalized.date);
   const firstCalendarDate =
     firstDate.day() === weekStart
       ? firstDate
@@ -116,42 +124,40 @@ export const groupByWeeks = (
 export const getMonthLabels = (
   weeks: Week[],
   monthNames: string[] = DEFAULT_MONTH_LABELS
-): MonthLabel[] =>
-  weeks
-    .reduce<MonthLabel[]>((labels, week, weekIndex) => {
-      const firstActivity = week.find(
-        (activity) => activity !== undefined
+): MonthLabel[] => {
+  const monthLabels: MonthLabel[] = [];
+
+  for (const [weekIndex, week] of weeks.entries()) {
+    const firstActivity = week.find(
+      (activity) => activity !== undefined
+    );
+    if (!firstActivity) {
+      throw new Error(`Week ${weekIndex + 1} is empty.`);
+    }
+
+    const month = monthNames[dayjs(firstActivity.date).month()];
+    if (!month) {
+      throw new Error(
+        `Undefined month label for ${dayjs(firstActivity.date).format("MMM")}.`
       );
-      if (!firstActivity) {
-        throw new Error(`Week ${weekIndex + 1} is empty.`);
-      }
+    }
 
-      const month = monthNames[dayjs(firstActivity.date).month()];
-      if (!month) {
-        throw new Error(
-          `Undefined month label for ${dayjs(firstActivity.date).format("MMM")}.`
-        );
-      }
+    const prevLabel = monthLabels.at(-1);
+    if (weekIndex === 0 || !prevLabel || prevLabel.label !== month) {
+      monthLabels.push({ label: month, weekIndex });
+    }
+  }
 
-      const prevLabel = labels.at(-1);
-      if (
-        weekIndex === 0 ||
-        !prevLabel ||
-        prevLabel.label !== month
-      ) {
-        return [...labels, { label: month, weekIndex }];
-      }
-      return labels;
-    }, [])
-    .filter(({ weekIndex }, index, labels) => {
-      const minWeeks = 3;
-      if (index === 0) {
-        return labels[1]
-          ? labels[1].weekIndex - weekIndex >= minWeeks
-          : true;
-      }
-      if (index === labels.length - 1) {
-        return weeks.length - weekIndex >= minWeeks;
-      }
-      return true;
-    });
+  return monthLabels.filter(({ weekIndex }, index, labels) => {
+    const minWeeks = 3;
+    if (index === 0) {
+      return labels[1]
+        ? labels[1].weekIndex - weekIndex >= minWeeks
+        : true;
+    }
+    if (index === labels.length - 1) {
+      return weeks.length - weekIndex >= minWeeks;
+    }
+    return true;
+  });
+};

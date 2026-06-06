@@ -1,8 +1,8 @@
 import type { ISourceOptions } from "@tsparticles/engine";
+import type ParticlesReact from "@tsparticles/react";
 
 declare global {
-  type ParticlesComponentType =
-    typeof import("@tsparticles/react").default;
+  type ParticlesComponentType = typeof ParticlesReact;
 
   interface ParticlesConfig {
     density?: number;

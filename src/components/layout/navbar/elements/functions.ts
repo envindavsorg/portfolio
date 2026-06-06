@@ -15,13 +15,13 @@ export const buildKindMap = (
   for (const group of COMMANDS) {
     for (const item of group.items) {
       if (item.kind) {
-        map.set(item.title, item.kind);
+        map.set(item.title(), item.kind);
       }
     }
   }
 
   for (const post of posts) {
-    const config = CATEGORY[post.metadata?.category ?? "article"];
+    const config = CATEGORY[post.metadata?.category ?? "articles"];
     if (config) {
       map.set(post.metadata.title, config.kind);
     }
@@ -34,22 +34,22 @@ export const buildPostGroups = (
   posts: Content[]
 ): Record<string, CommandItemProps[]> => {
   const grouped: Record<string, CommandItemProps[]> = {
-    article: [],
+    articles: [],
     components: [],
     utils: [],
   };
 
   for (const post of posts) {
-    const category = post.metadata?.category ?? "article";
+    const category = post.metadata?.category ?? "articles";
     const config = CATEGORY[category];
     if (!config) {
       continue;
     }
 
     grouped[category]?.push({
-      keywords: category === "article" ? undefined : [category],
+      keywords: category === "articles" ? undefined : [category],
       kind: config.kind,
-      title: post.metadata.title,
+      title: () => post.metadata.title,
       url: `/${config.route}/${post.slug}`,
     });
   }
@@ -76,10 +76,8 @@ export const getFilteredGroups = (
 
 export const isRouteActive = (
   href: string,
-  pathname: string | null
+  path: string | null = ""
 ): boolean => {
-  const path = pathname ?? "";
-
   if (path === href) {
     return true;
   }
@@ -88,5 +86,5 @@ export const isRouteActive = (
     return false;
   }
 
-  return path.startsWith(`${href}/`);
+  return path?.startsWith(`${href}/`) ?? false;
 };

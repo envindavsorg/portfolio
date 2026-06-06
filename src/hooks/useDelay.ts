@@ -23,6 +23,7 @@ export const useFnDelay = <T>(
     const currentAbortController = abortControllerRef.current;
 
     const delayFn = (timeMs: number): Promise<void> =>
+      // oxlint-disable-next-line avoid-new -- bridging setTimeout + abort signal to a promise requires the Promise constructor
       new Promise((resolve, reject) => {
         const timeoutId = setTimeout(() => {
           if (!currentAbortController.signal.aborted) {

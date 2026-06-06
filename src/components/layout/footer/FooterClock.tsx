@@ -89,7 +89,10 @@ export const FooterClock = ({
     : (time.getHours() % 12 || 12).toString().padStart(2, "0");
   const minutes = time.getMinutes().toString().padStart(2, "0");
   const seconds = time.getSeconds().toString().padStart(2, "0");
-  const amPm = is24Hour ? "" : (time.getHours() >= 12 ? " PM" : " AM");
+  let amPm = "";
+  if (!is24Hour) {
+    amPm = time.getHours() >= 12 ? " PM" : " AM";
+  }
 
   return (
     <div

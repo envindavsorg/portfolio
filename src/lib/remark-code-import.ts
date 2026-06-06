@@ -68,7 +68,7 @@ const extractLines = (
 };
 
 const FILE_META_REGEX =
-  /^file=(?<path>.+?)(?:(?:#(?:L(?<from>\d+)(?<dash>-)?)?)(?:L(?<to>\d+))?)?$/;
+  /^file=(?<path>.+?)(?:(?:#(?:L(?<from>\d+)(?<dash>-)?)?)(?:L(?<to>\d+))?)?$/u;
 
 export const remarkCodeImport = (
   options: RemarkCodeImportOptions = {}
@@ -91,7 +91,7 @@ export const remarkCodeImport = (
 
     for (const [node] of codes) {
       const fileMeta = (node.meta || "")
-        .split(/(?<!\\) /g)
+        .split(/(?<!\\) /gu)
         .find((meta: string) => meta.startsWith("file="));
 
       if (!fileMeta) {
@@ -113,7 +113,7 @@ export const remarkCodeImport = (
 
       const dirname = file.dirname ?? file.cwd;
       const normalizedFilePath = res.groups.path
-        .replace(/^@/, rootDir)
+        .replace(/^@/u, rootDir)
         .replaceAll("\\ ", " ");
       const fileAbsPath = resolve(dirname, normalizedFilePath);
       const relativePath = relative(rootDir, fileAbsPath);
@@ -128,7 +128,7 @@ export const remarkCodeImport = (
       }
 
       let value = extractLines(
-        readFileSync(fileAbsPath, "utf8"),
+        readFileSync(fileAbsPath, "utf-8"),
         fromLine,
         hasDash,
         toLine,

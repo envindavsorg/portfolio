@@ -1,4 +1,4 @@
-import { CERTS } from "@/app/(content)/(root)/_components/certs/content";
+import { CERTS } from "@/app/(fr)/(content)/(root)/_components/certs/content";
 
 const content = `
 # Mes certifications

@@ -11,6 +11,7 @@ import {
   ItemTitle,
 } from "@/components/primitives/Item";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 type SpeedResult = ReturnType<
   typeof SpeedTestEngine.prototype.results.getSummary
@@ -27,10 +28,10 @@ const INITIAL_RESULT: Record<MetricKey, number | undefined> = {
   upload: undefined,
 };
 
-const BUTTON_LABELS: Record<TestStatus, string> = {
-  finished: "refaire le test",
-  idle: "démarrer le test",
-  running: "arrêter le test",
+const BUTTON_LABELS: Record<TestStatus, () => string> = {
+  finished: () => m.utils_speedtest_button_finished(),
+  idle: () => m.utils_speedtest_button_idle(),
+  running: () => m.utils_speedtest_button_running(),
 };
 
 const STATUS_COLORS: Record<Exclude<TestStatus, "idle">, string> = {
@@ -44,10 +45,26 @@ const PULSE_COLORS: Record<Exclude<TestStatus, "idle">, string> = {
 };
 
 const SPEED_METRICS = [
-  { key: "download", label: "téléchargement", measure: "Mb/s" },
-  { key: "upload", label: "téléversement", measure: "Mb/s" },
-  { key: "latency", label: "latence", measure: "ms" },
-  { key: "jitter", label: "gigue", measure: "ms" },
+  {
+    key: "download",
+    label: () => m.utils_speedtest_metric_download(),
+    measure: "Mb/s",
+  },
+  {
+    key: "upload",
+    label: () => m.utils_speedtest_metric_upload(),
+    measure: "Mb/s",
+  },
+  {
+    key: "latency",
+    label: () => m.utils_speedtest_metric_latency(),
+    measure: "ms",
+  },
+  {
+    key: "jitter",
+    label: () => m.utils_speedtest_metric_jitter(),
+    measure: "ms",
+  },
 ] as const;
 
 const createSpeedTestEngine = () =>
@@ -138,7 +155,7 @@ const SpeedTestItem = memo(
   ({ status, label, value, measure }: SpeedTestItemProps) => (
     <Item
       className={
-        status !== "idle" ? STATUS_COLORS[status] : undefined
+        status === "idle" ? undefined : STATUS_COLORS[status]
       }
       size="sm"
       variant="outline"
@@ -222,7 +239,7 @@ export const SpeedTest = () => {
         {SPEED_METRICS.map((metric) => (
           <SpeedTestItem
             key={metric.key}
-            label={metric.label}
+            label={metric.label()}
             measure={metric.measure}
             status={status}
             value={result[metric.key]}
@@ -232,7 +249,7 @@ export const SpeedTest = () => {
 
       <div className="screen-line-before flex justify-end py-1.5">
         <Button onClick={toggleTest} variant="outline">
-          {BUTTON_LABELS[status]}
+          {BUTTON_LABELS[status]()}
         </Button>
       </div>
     </>

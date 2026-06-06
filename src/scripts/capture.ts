@@ -1,5 +1,6 @@
 import { promises } from "node:fs";
 import { join } from "node:path";
+import { setTimeout as sleep } from "node:timers/promises";
 
 import { green, red, yellow } from "colorette";
 import consola from "consola";
@@ -75,9 +76,9 @@ const captureScreenshot = async ({
       waitUntil: "networkidle2",
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await sleep(2000);
 
-    const fileName: string = `${size}-${theme}.${type}`;
+    const fileName = `${size}-${theme}.${type}`;
     const path = join(outputDir, fileName) as FilePath;
     const quality = type === "png" ? undefined : 90;
 

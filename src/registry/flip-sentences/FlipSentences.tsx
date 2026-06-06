@@ -32,11 +32,15 @@ export const FlipSentences = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const sentenceCount = sentences.length;
 
-  const longestSentence = useMemo(
-    () =>
-      sentences.reduce((a, b) => (b.length > a.length ? b : a), ""),
-    [sentences]
-  );
+  const longestSentence = useMemo(() => {
+    let longest = "";
+    for (const sentence of sentences) {
+      if (sentence.length > longest.length) {
+        longest = sentence;
+      }
+    }
+    return longest;
+  }, [sentences]);
 
   useEffect(() => {
     if (disableAnimation) {

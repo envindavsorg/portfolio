@@ -4,6 +4,8 @@ import { useCallback } from "react";
 import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Prose } from "@/components/primitives/Typography";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
+import { localizeHref } from "@/paraglide/runtime";
 
 import { trackVisit } from "./lib";
 import type { UtilsItem } from "./types";
@@ -24,7 +26,7 @@ export const UtilsCard = ({
   return (
     <Link
       aria-label={item.metadata.title}
-      href={`/utils/${item.slug}`}
+      href={localizeHref(`/utils/${item.slug}`)}
       onClick={handleClick}
       prefetch={false}
     >
@@ -44,7 +46,7 @@ export const UtilsCard = ({
             <div className="flex items-center gap-x-2">
               <PulsatingCircle />
               <span className="text-sm text-theme max-md:hidden">
-                Nouveau
+                {m.utils_card_new_badge()}
               </span>
             </div>
           )}

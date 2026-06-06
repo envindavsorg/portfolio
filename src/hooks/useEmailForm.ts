@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 
+import { sendCvAction } from "../actions/send-cv.action";
 import { emailSchema } from "../schemas/emailSchema";
 import type { EmailFormData } from "../schemas/emailSchema";
 
@@ -19,13 +20,9 @@ const useEmailForm = () => {
   const sendEmail = useCallback(
     async (data: EmailFormData) => {
       try {
-        const response = await fetch("/api/send", {
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" },
-          method: "POST",
-        });
+        const result = await sendCvAction(data);
 
-        if (!response.ok) {
+        if (!result?.data?.sent) {
           return false;
         }
 

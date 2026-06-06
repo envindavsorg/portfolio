@@ -12,6 +12,8 @@ import {
   FieldLabel,
 } from "@/components/primitives/Field";
 import { Input } from "@/components/primitives/Input";
+import { m } from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 
 import { PanelContent } from "../../base/Panel";
 import { ArrowDownAtoZ } from "../../motion/ArrowDownAtoZ";
@@ -69,19 +71,25 @@ export const UtilsSearch = ({
   const SortIcon = sort === "a-z" ? ArrowDownAtoZ : ArrowDownZtoA;
 
   const sortAriaLabel =
-    sort === "a-z" ? "trier de z à a" : "trier de a à z";
+    sort === "a-z"
+      ? m.utils_search_sort_to_za()
+      : m.utils_search_sort_to_az();
 
   const sortLabel =
-    sort === "a-z" ? "· trié de a à z" : "· trié de z à a";
+    sort === "a-z"
+      ? m.utils_search_sorted_az()
+      : m.utils_search_sorted_za();
 
   const countLabel =
-    count === 1 ? "outil disponible" : "outils disponibles";
+    count === 1
+      ? m.utils_search_count_singular()
+      : m.utils_search_count_plural();
 
   return (
     <PanelContent>
       <Field>
         <FieldLabel htmlFor="input-search-utils">
-          Rechercher un outil :
+          {m.utils_search_label()}
         </FieldLabel>
         <FieldContent>
           <Input
@@ -89,7 +97,7 @@ export const UtilsSearch = ({
             icon={Search}
             id="input-search-utils"
             onChange={handleInputChange}
-            placeholder="rechercher un outil ..."
+            placeholder={m.utils_search_placeholder()}
             value={query}
           />
           <AnimatePresence>
@@ -109,7 +117,9 @@ export const UtilsSearch = ({
                 >
                   <Delete ref={clearIconRef} size={16} />
                   <span className="sr-only">
-                    effacer la recherche
+                    {getLocale() === "en"
+                      ? "clear search"
+                      : "effacer la recherche"}
                   </span>
                 </Button>
               </motion.div>

@@ -5,13 +5,22 @@ export interface Props {
 }
 export type Provider = (p: Props) => React.JSX.Element;
 
-export const Compose = (...p: Provider[]) =>
-  p.reduceRight(
-    (Acc: Provider, P: Provider) =>
-      ({ children }: Props) => (
-        <P>
-          <Acc>{children}</Acc>
-        </P>
-      ),
-    ({ children }: Props) => <>{children}</>
-  );
+const IdentityProvider: Provider = ({ children }: Props) => (
+  <>{children}</>
+);
+
+export const Compose = (...p: Provider[]) => {
+  let Acc: Provider = IdentityProvider;
+
+  for (let index = p.length - 1; index >= 0; index -= 1) {
+    const P = p[index];
+    const Previous = Acc;
+    Acc = ({ children }: Props) => (
+      <P>
+        <Previous>{children}</Previous>
+      </P>
+    );
+  }
+
+  return Acc;
+};

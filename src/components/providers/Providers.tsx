@@ -1,6 +1,5 @@
 "use client";
 
-import { Provider as JotaiProvider } from "jotai";
 import dynamic from "next/dynamic";
 import type React from "react";
 
@@ -13,15 +12,14 @@ import { Compose } from "./utils/Compose";
 import type { Provider } from "./utils/Compose";
 
 const Toaster = dynamic(
-  () =>
-    import("@/components/primitives/Sonner").then(
-      (mod) => mod.Toaster
-    ),
+  async () => {
+    const mod = await import("@/components/primitives/Sonner");
+    return mod.Toaster;
+  },
   { ssr: false }
 );
 
 const AppProviders: Provider = Compose(
-  JotaiProvider,
   ThemeProvider,
   ProgressProvider
 );

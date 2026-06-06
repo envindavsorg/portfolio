@@ -1,1 +1,1 @@
-export * from "./AppleHelloEffect";
+export { AppleHelloEffect } from "./AppleHelloEffect";

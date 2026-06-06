@@ -1,8 +1,7 @@
 "use client";
 
-import type { Label as LabelPrimitive } from "radix-ui";
-import { Slot as SlotPrimitive } from "radix-ui";
-import type { ComponentProps } from "react";
+import { useRender } from "@base-ui/react/use-render";
+import type { ComponentProps, ReactElement } from "react";
 import { createContext, useContext, useId } from "react";
 import type {
   ControllerProps,
@@ -19,8 +18,6 @@ import {
 import { cn } from "@/lib/utils";
 
 import { Label } from "../base/Label";
-
-const { Slot } = SlotPrimitive;
 
 export const Form = FormProvider;
 
@@ -46,6 +43,14 @@ export const FormField = <
   </FormFieldContext.Provider>
 );
 
+interface FormItemContextValue {
+  id: string;
+}
+
+const FormItemContext = createContext<FormItemContextValue>(
+  {} as FormItemContextValue
+);
+
 export const useFormField = () => {
   const fieldContext = useContext(FormFieldContext);
   const itemContext = useContext(FormItemContext);
@@ -69,14 +74,6 @@ export const useFormField = () => {
   };
 };
 
-interface FormItemContextValue {
-  id: string;
-}
-
-const FormItemContext = createContext<FormItemContextValue>(
-  {} as FormItemContextValue
-);
-
 export const FormItem = ({
   className,
   ...props
@@ -97,7 +94,7 @@ export const FormItem = ({
 export const FormLabel = ({
   className,
   ...props
-}: ComponentProps<typeof LabelPrimitive.Root>) => {
+}: ComponentProps<typeof Label>) => {
   const { error, formItemId } = useFormField();
 
   return (
@@ -115,24 +112,24 @@ export const FormLabel = ({
 };
 
 export const FormControl = ({
+  children,
   ...props
-}: ComponentProps<typeof Slot>) => {
+}: ComponentProps<"div"> & { children: ReactElement }) => {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
 
-  return (
-    <Slot
-      aria-describedby={
-        error
-          ? `${formDescriptionId} ${formMessageId}`
-          : `${formDescriptionId}`
-      }
-      aria-invalid={!!error}
-      data-slot="form-control"
-      id={formItemId}
-      {...props}
-    />
-  );
+  return useRender({
+    props: {
+      "aria-describedby": error
+        ? `${formDescriptionId} ${formMessageId}`
+        : `${formDescriptionId}`,
+      "aria-invalid": !!error,
+      "data-slot": "form-control",
+      id: formItemId,
+      ...props,
+    },
+    render: children,
+  });
 };
 
 export const FormDescription = ({

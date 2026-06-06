@@ -1,4 +1,4 @@
-import { STACK_ICONS } from "@/app/(content)/(root)/_components/stack/content";
+import { STACK_ICONS } from "@/app/(fr)/(content)/(root)/_components/stack/content";
 import GLOBAL_DATA from "@/data/global";
 
 const content = `

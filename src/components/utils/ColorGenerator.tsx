@@ -9,6 +9,7 @@ import { ColorPicker } from "@/components/blocks/ColorPicker";
 import { Button, CopyButton } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
+import { m } from "@/paraglide/messages";
 
 import { Lock } from "../motion/Lock";
 import { LockOpen } from "../motion/LockOpen";
@@ -38,16 +39,20 @@ const DEFAULT_COLOR_SCHEME: ColorScheme = {
 };
 
 const parseHSL = (hsl: string): [number, number, number] => {
-  const parts = hsl.match(/[\d.]+/g)?.map(Number) ?? [0, 0, 0];
+  const parts = hsl.match(/[\d.]+/gu)?.map(Number) ?? [0, 0, 0];
   return [parts[0], parts[1], parts[2]];
 };
 
 const formatHSL = (h: number, s: number, l: number): string =>
   `${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`;
 
+const LIGHTNESS_INDEX = 2;
+const LIGHTNESS_CONTRAST_THRESHOLD = 50;
+
 const getContrastColor = (hsl: string): string => {
-  const [, , l] = parseHSL(hsl);
-  return l > 50 ? "0 0% 0%" : "0 0% 100%";
+  const isLight =
+    parseHSL(hsl)[LIGHTNESS_INDEX] > LIGHTNESS_CONTRAST_THRESHOLD;
+  return isLight ? "0 0% 0%" : "0 0% 100%";
 };
 
 const adjustLightness = (key: string, l: number): number => {
@@ -142,9 +147,11 @@ export const ColorGenerator = () => {
     <>
       <div className="screen-line-before flex items-center justify-between py-3">
         <Button onClick={resetColors} variant="outline">
-          réinitialiser la palette
+          {m.utils_color_reset_palette_button()}
         </Button>
-        <Button onClick={generateColors}>générer la palette</Button>
+        <Button onClick={generateColors}>
+          {m.utils_color_generate_palette_button()}
+        </Button>
       </div>
 
       <div className="screen-line-before grid grid-cols-1 gap-3 py-3 sm:grid-cols-2">
@@ -162,8 +169,8 @@ export const ColorGenerator = () => {
                   toast.info("", {
                     description:
                       lockedColor === key
-                        ? "couleur déverrouillée"
-                        : "couleur verrouillée",
+                        ? m.utils_color_unlocked_toast()
+                        : m.utils_color_locked_toast(),
                     duration: 3000,
                     id: "color-hint",
                   });
@@ -191,14 +198,8 @@ export const ColorGenerator = () => {
       </div>
 
       <div className="screen-line-before py-1.5">
-        <Prose>
-          -- explorez une palette de couleurs harmonieuses générée
-          pour vos projets web --
-        </Prose>
-        <Prose>
-          -- chaque couleur est soigneusement sélectionnée pour
-          assurer une esthétique cohérente et attrayante --
-        </Prose>
+        <Prose>{m.utils_color_intro_line1()}</Prose>
+        <Prose>{m.utils_color_intro_line2()}</Prose>
       </div>
 
       <div className="screen-line-before py-3">
@@ -239,7 +240,7 @@ export const ColorGenerator = () => {
           onClick={() => handleCopy(buildCSSOutput(colorScheme))}
           variant="outline"
         >
-          copier les couleurs
+          {m.utils_color_copy_button()}
         </Button>
       </div>
     </>

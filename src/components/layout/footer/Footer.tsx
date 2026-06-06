@@ -8,6 +8,8 @@ import { Divider } from "@/components/base/Divider";
 import { Panel } from "@/components/base/Panel";
 import { Heart } from "@/components/motion/Heart";
 import { dayjs } from "@/lib/functions";
+import { m } from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 
 import { FooterClock } from "./FooterClock";
 import { FooterDate } from "./FooterDate";
@@ -50,9 +52,11 @@ export const Footer = async () => {
             <div className="w-full flex-1 border-edge border-l p-3 text-start">
               <p className="mt-0.5 flex items-baseline gap-x-1 text-balance font-bold text-sm">
                 {hash}
-                <span className="font-light text-[10px] text-theme">
-                  (sur la branche {branch})
-                </span>
+                {branch && (
+                  <span className="font-light text-[10px] text-theme">
+                    {m.footer_on_branch({ branch })}
+                  </span>
+                )}
               </p>
             </div>
           </div>
@@ -70,8 +74,19 @@ export const Footer = async () => {
       </div>
 
       <div className="screen-line-before screen-line-after mx-auto flex items-center justify-center border-edge border-x py-2 text-sm sm:text-base md:max-w-3xl">
-        développé avec beaucoup d'
-        <Heart className="me-1 text-destructive" size={16} />à Paris.
+        {getLocale() === "en" ? (
+          <>
+            built with lots of
+            <Heart className="me-1 text-destructive" size={16} />
+            {m.footer_made_with_love_suffix()}
+          </>
+        ) : (
+          <>
+            développé avec beaucoup d'
+            <Heart className="me-1 text-destructive" size={16} />
+            {m.footer_made_with_love_suffix()}
+          </>
+        )}
       </div>
 
       <FooterDate />

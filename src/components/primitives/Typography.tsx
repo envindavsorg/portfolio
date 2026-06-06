@@ -1,51 +1,68 @@
-import { Slot as SlotPrimitive } from "radix-ui";
+import { useRender } from "@base-ui/react/use-render";
 import type React from "react";
+import type { ReactElement } from "react";
 
 import { cn } from "@/lib/utils";
 
-const { Slot } = SlotPrimitive;
+const PROSE_CLASSNAME = cn(
+  "prose prose-sm prose-zinc dark:prose-invert max-w-none",
+  // headings
+  "prose-headings:text-balance prose-headings:font-pixel-square prose-headings:font-semibold prose-headings:text-foreground",
+  "prose-h1:mt-10 prose-h1:mb-4 prose-h1:text-xl",
+  "prose-h2:mt-8 prose-h2:mb-3 prose-h2:text-lg",
+  "prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-base",
+  "prose-h4:mt-5 prose-h4:mb-2 prose-h4:text-sm",
+  // body text
+  "prose-p:my-3 prose-p:leading-relaxed",
+  "prose-lead:text-base prose-lead:text-muted-foreground",
+  // lists
+  "prose-li:my-1 prose-ol:my-3 prose-ul:my-3",
+  // blockquote
+  "prose-blockquote:my-4 prose-blockquote:border-theme prose-blockquote:font-normal prose-blockquote:not-italic",
+  // links
+  "prose-a:wrap-break-word prose-a:font-medium prose-a:text-foreground prose-a:underline prose-a:underline-offset-4",
+  // inline code
+  "prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:font-normal prose-code:text-sm prose-code:before:content-none prose-code:after:content-none",
+  // strong & emphasis
+  "prose-strong:font-semibold prose-strong:text-foreground",
+  // images
+  "prose-img:my-4 prose-img:rounded-lg",
+  // hr
+  "prose-hr:my-8 prose-hr:border-edge"
+);
 
 export const Prose = ({
   className,
   asChild = false,
+  children,
   ...props
 }: React.ComponentProps<"div"> & {
   asChild?: boolean;
 }) => {
-  const Comp = asChild ? Slot : "div";
+  // `useRender` must run unconditionally to respect the rules of hooks;
+  // `enabled` short-circuits it to `null` when we render a plain <div>.
+  const rendered = useRender({
+    enabled: asChild,
+    props: {
+      className: cn(PROSE_CLASSNAME, className),
+      "data-slot": "prose",
+      ...props,
+    },
+    render: children as ReactElement,
+  });
+
+  if (asChild) {
+    return rendered;
+  }
 
   return (
-    <Comp
-      className={cn(
-        "prose prose-sm prose-zinc dark:prose-invert max-w-none",
-        // headings
-        "prose-headings:text-balance prose-headings:font-pixel-square prose-headings:font-semibold prose-headings:text-foreground",
-        "prose-h1:mt-10 prose-h1:mb-4 prose-h1:text-xl",
-        "prose-h2:mt-8 prose-h2:mb-3 prose-h2:text-lg",
-        "prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-base",
-        "prose-h4:mt-5 prose-h4:mb-2 prose-h4:text-sm",
-        // body text
-        "prose-p:my-3 prose-p:leading-relaxed",
-        "prose-lead:text-base prose-lead:text-muted-foreground",
-        // lists
-        "prose-li:my-1 prose-ol:my-3 prose-ul:my-3",
-        // blockquote
-        "prose-blockquote:my-4 prose-blockquote:border-theme prose-blockquote:font-normal prose-blockquote:not-italic",
-        // links
-        "prose-a:wrap-break-word prose-a:font-medium prose-a:text-foreground prose-a:underline prose-a:underline-offset-4",
-        // inline code
-        "prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:font-normal prose-code:text-sm prose-code:before:content-none prose-code:after:content-none",
-        // strong & emphasis
-        "prose-strong:font-semibold prose-strong:text-foreground",
-        // images
-        "prose-img:my-4 prose-img:rounded-lg",
-        // hr
-        "prose-hr:my-8 prose-hr:border-edge",
-        className
-      )}
+    <div
+      className={cn(PROSE_CLASSNAME, className)}
       data-slot="prose"
       {...props}
-    />
+    >
+      {children}
+    </div>
   );
 };
 

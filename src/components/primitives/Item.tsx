@@ -1,4 +1,4 @@
-import { Slot } from "@radix-ui/react-slot";
+import { useRender } from "@base-ui/react/use-render";
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import type React from "react";
@@ -55,21 +55,35 @@ export const Item = ({
   variant = "default",
   size = "default",
   asChild = false,
+  children,
+  render,
   ...props
 }: React.ComponentProps<"div"> &
   VariantProps<typeof itemVariants> & {
     asChild?: boolean;
+    render?: useRender.RenderProp;
   }) => {
-  const Comp = asChild ? Slot : "div";
-  return (
-    <Comp
-      className={cn(itemVariants({ className, size, variant }))}
-      data-size={size}
-      data-slot="item"
-      data-variant={variant}
-      {...props}
-    />
-  );
+  // `asChild` (legacy radix API) is preserved: when true, the single child
+  // element is used as the rendered element, exactly like radix `Slot`.
+  // Internally we rely on Base UI's `useRender` (merges props, className,
+  // style and event handlers) instead of `@radix-ui/react-slot`.
+  const renderProp =
+    render ??
+    (asChild ? (children as useRender.RenderProp) : undefined);
+
+  return useRender({
+    defaultTagName: "div",
+    props: {
+      className: cn(itemVariants({ className, size, variant })),
+      "data-size": size,
+      "data-slot": "item",
+      "data-variant": variant,
+      // When not using `asChild`/`render`, render the children inside the div.
+      ...(renderProp ? {} : { children }),
+      ...props,
+    },
+    render: renderProp,
+  });
 };
 
 const itemMediaVariants = cva(
