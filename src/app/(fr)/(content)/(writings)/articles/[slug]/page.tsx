@@ -7,6 +7,7 @@ import { WritingsProgress } from "@/components/features/WritingsProgress";
 import { WritingsRelated } from "@/components/features/WritingsRelated";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
+import { WritingsViews } from "@/components/features/WritingsViews";
 import { Mdx } from "@/components/markdown/mdx";
 import type { ContentLocale } from "@/lib/content";
 import {
@@ -72,7 +73,9 @@ export const ArticleView = ({
       )}
       <WritingsProgress />
       <WritingsTopBar item={article} items={articles} slug={slug} />
-      <ArticleTitle title={metadata.title} />
+      <ArticleTitle title={metadata.title}>
+        <WritingsViews category="articles" slug={slug} />
+      </ArticleTitle>
       <WritingsToC content={content} />
       <Mdx code={content} />
       <WritingsRelated current={article} items={articles} />
