@@ -9,6 +9,7 @@ import {
 import { GeistSans } from "geist/font/sans";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
+import { RscBoundaryProvider } from "rsc-boundary";
 
 import { TooltipProvider } from "@/components/base/Tooltip";
 import { LocaleProvider } from "@/components/providers/modules/LocaleProvider";
@@ -111,13 +112,17 @@ export const RootDocument = ({
       </head>
 
       <body className="font-pixel-square">
-        <NuqsAdapter>
-          <LocaleProvider locale={locale}>
-            <Providers>
-              <TooltipProvider>{children}</TooltipProvider>
-            </Providers>
-          </LocaleProvider>
-        </NuqsAdapter>
+        {/* devtools de visualisation des frontières RSC, rend uniquement
+            children en production */}
+        <RscBoundaryProvider>
+          <NuqsAdapter>
+            <LocaleProvider locale={locale}>
+              <Providers>
+                <TooltipProvider>{children}</TooltipProvider>
+              </Providers>
+            </LocaleProvider>
+          </NuqsAdapter>
+        </RscBoundaryProvider>
       </body>
     </html>
   );

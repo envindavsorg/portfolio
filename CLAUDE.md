@@ -19,6 +19,7 @@ pnpm test                 # Vitest unit tests (src/**/*.test.ts)
 pnpm test:e2e             # Playwright e2e (e2e/, needs `playwright install chromium`)
 pnpm analyze              # Build with @next/bundle-analyzer
 pnpm knip                 # Dead code/dependency detection
+pnpm routes:map           # Interactive visual map of all routes (nextmap)
 pnpm i18n:compile         # Compile Paraglide messages to src/paraglide/
 pnpm registry:build       # Build component registry for distribution
 ```
