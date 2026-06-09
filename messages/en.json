@@ -290,6 +290,8 @@
   "writings_pagination_next_sr": "next",
   "writings_pagination_previous_aria": "previous",
   "writings_pagination_previous_sr": "previous",
+  "writings_related_heading": "read next:",
+  "writings_related_item_aria": "Read: {title}",
   "writings_tags_by_category": "by category:",
   "writings_toc_trigger_label": "key points on this page",
   "writings_utils_description": "a suite of free web tools designed to optimize your workflow and boost your productivity",

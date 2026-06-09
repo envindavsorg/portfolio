@@ -5,6 +5,8 @@ import { Divider } from "@/components/base/Divider";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
+import { WritingsProgress } from "@/components/features/WritingsProgress";
+import { WritingsRelated } from "@/components/features/WritingsRelated";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
 import { Mdx } from "@/components/markdown/mdx";
@@ -89,7 +91,11 @@ export const UtilView = ({
 
       <Divider border={false} after={false} type="half" />
 
+      <WritingsProgress />
+
       <Mdx code={content} />
+
+      <WritingsRelated current={item} items={utils} />
 
       <script
         dangerouslySetInnerHTML={{

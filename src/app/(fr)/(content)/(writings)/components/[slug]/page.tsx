@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 
 import { ArticleTitle } from "@/components/blog/ArticleTitle";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
+import { WritingsProgress } from "@/components/features/WritingsProgress";
+import { WritingsRelated } from "@/components/features/WritingsRelated";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
 import { Mdx } from "@/components/markdown/mdx";
@@ -72,6 +74,7 @@ export const ComponentView = ({
       {locale === "en" && component.locale === "fr" && (
         <WritingsLocaleNotice />
       )}
+      <WritingsProgress />
       <WritingsTopBar
         item={component}
         items={components}
@@ -80,6 +83,7 @@ export const ComponentView = ({
       <ArticleTitle title={metadata.title} />
       <WritingsToC content={content} />
       <Mdx code={content} />
+      <WritingsRelated current={component} items={components} />
     </>
   );
 };
