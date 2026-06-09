@@ -1,0 +1,29 @@
+# Configuration de actions/labeler@v4 (.github/workflows/label.yml) :
+# applique des labels aux PR selon les fichiers modifiés.
+
+documentation:
+  - "**/*.md"
+
+content:
+  - "src/content/**"
+  - "messages/**"
+
+components:
+  - "src/components/**"
+  - "src/registry/**"
+
+actions:
+  - "src/actions/**"
+
+routes:
+  - "src/app/**"
+
+tests:
+  - "**/*.test.ts"
+  - "e2e/**"
+
+dependencies:
+  - "package.json"
+
+ci:
+  - ".github/**"
