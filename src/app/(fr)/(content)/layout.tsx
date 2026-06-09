@@ -1,6 +1,8 @@
 import type React from "react";
 
 import { Particles } from "@/components/blocks/Particles";
+import { BackToTop } from "@/components/features/BackToTop";
+import { KonamiConfetti } from "@/components/features/KonamiConfetti";
 import { Footer } from "@/components/layout/footer/Footer";
 import { NavBar } from "@/components/layout/navbar/NavBar";
 import { m } from "@/paraglide/messages";
@@ -26,6 +28,9 @@ const AppLayout = ({ children }: Readonly<AppLayoutProps>) => (
       {children}
     </main>
     <Footer />
+
+    <BackToTop />
+    <KonamiConfetti />
 
     <Particles density={80} />
   </>

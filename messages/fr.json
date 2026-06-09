@@ -1,6 +1,8 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "article_french_only": "cet article est rédigé en français.",
+  "back_to_top_aria": "Retour en haut de page",
+  "easter_egg_toast": "code secret découvert, bravo ! 🎉",
   "footer_made_with_love_suffix": "à Paris.",
   "footer_on_branch": "(sur la branche {branch})",
   "home_about_collapse_button": "réduire le texte",
