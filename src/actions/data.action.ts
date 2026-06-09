@@ -2,6 +2,7 @@
 
 import { unstable_cache } from "next/cache";
 
+import { env } from "@/env";
 import { contributionLevelToNumber } from "@/lib/commits";
 import { octokit } from "@/lib/octokit";
 
@@ -49,8 +50,8 @@ const fetchGitHubData = async (): Promise<GitHubData> => {
 		}`,
     {
       from: from.toISOString(),
-      owner: process.env.GITHUB_USERNAME,
-      repo: process.env.GITHUB_REPO_NAME,
+      owner: env.GITHUB_USERNAME,
+      repo: env.GITHUB_REPO_NAME,
       to: to.toISOString(),
     }
   );

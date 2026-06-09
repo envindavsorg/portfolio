@@ -1,6 +1,8 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "article_french_only": "cet article est rédigé en français.",
+  "back_to_top_aria": "Retour en haut de page",
+  "easter_egg_toast": "code secret découvert, bravo ! 🎉",
   "footer_made_with_love_suffix": "à Paris.",
   "footer_on_branch": "(sur la branche {branch})",
   "home_about_collapse_button": "réduire le texte",
@@ -290,6 +292,9 @@
   "writings_pagination_next_sr": "Suivant",
   "writings_pagination_previous_aria": "Précédent",
   "writings_pagination_previous_sr": "Précédent",
+  "writings_related_heading": "à lire ensuite :",
+  "writings_views_count": "{views} vue{plural}",
+  "writings_related_item_aria": "Lire : {title}",
   "writings_tags_by_category": "par catégorie :",
   "writings_toc_trigger_label": "points importants sur cette page",
   "writings_utils_description": "Une suite d'outils web gratuits conçus pour optimiser votre workflow et booster votre productivité",

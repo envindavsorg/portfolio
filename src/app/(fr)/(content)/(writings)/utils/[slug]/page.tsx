@@ -5,8 +5,11 @@ import { Divider } from "@/components/base/Divider";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
+import { WritingsProgress } from "@/components/features/WritingsProgress";
+import { WritingsRelated } from "@/components/features/WritingsRelated";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
+import { WritingsViews } from "@/components/features/WritingsViews";
 import { Mdx } from "@/components/markdown/mdx";
 import type { ContentLocale } from "@/lib/content";
 import {
@@ -81,7 +84,11 @@ export const UtilView = ({
 
       <Divider border={false} type="half" />
 
-      <WritingsHeading title={title} description={description} />
+      <WritingsHeading
+        title={title}
+        description={description}
+        meta={<WritingsViews category="utils" slug={slug} />}
+      />
 
       <Divider border={false} type="half" />
 
@@ -89,7 +96,11 @@ export const UtilView = ({
 
       <Divider border={false} after={false} type="half" />
 
+      <WritingsProgress />
+
       <Mdx code={content} />
+
+      <WritingsRelated current={item} items={utils} />
 
       <script
         dangerouslySetInnerHTML={{

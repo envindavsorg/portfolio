@@ -16,6 +16,8 @@ const content = `
 
 - [Mes certifications](https://cuzeacflorin.fr/certifications.md): Les certifications que j'ai obtenues.
 
+- [Mon CV au format JSON Resume](https://cuzeacflorin.fr/resume.json): Mon CV dans un format structuré et machine-readable.
+
 ## Blog et registre de composants
 
 Je partage régulièrement des articles sur le développement front-end, les meilleures pratiques, et des tutoriels sur mon blog.

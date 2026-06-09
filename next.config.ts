@@ -19,6 +19,23 @@ const nextConfig: NextConfig = {
       {
         headers: [
           {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
+          {
+            key: "Content-Security-Policy",
+            value:
+              "base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self'",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
+          },
+          {
             key: "X-Frame-Options",
             value: "DENY",
           },
