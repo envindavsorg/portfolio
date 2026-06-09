@@ -2,6 +2,7 @@
 
 import { unstable_cache } from "next/cache";
 
+import { env } from "@/env";
 import { logger } from "@/lib/logger";
 import { octokit } from "@/lib/octokit";
 
@@ -25,8 +26,8 @@ const fetchCommitData = async (): Promise<CommitData> => {
 				}
 			}`,
       {
-        owner: process.env.GITHUB_USERNAME,
-        repo: process.env.GITHUB_REPO_NAME,
+        owner: env.GITHUB_USERNAME,
+        repo: env.GITHUB_REPO_NAME,
       }
     );
 

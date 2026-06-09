@@ -1,7 +1,9 @@
 import { Octokit } from "octokit";
 
+import { env } from "@/env";
+
 const github = new Octokit({
-  auth: process.env.GITHUB_API_TOKEN,
+  auth: env.GITHUB_API_TOKEN,
   timeZone: "UTC",
   userAgent: "envindavsorg",
 });

@@ -54,6 +54,24 @@ const getBadge = (type: PageType): string => {
 
 const OG_DIMENSIONS = { height: 630, width: 1200 } as const;
 
+const MAX_TITLE_LENGTH = 120;
+const MAX_DESCRIPTION_LENGTH = 280;
+
+const sanitizeParam = (
+  value: string | null,
+  maxLength: number,
+  fallback: string
+): string => {
+  const cleaned = value?.replaceAll(/\p{C}+/gu, " ").trim() ?? "";
+  if (!cleaned) {
+    return fallback;
+  }
+  if (cleaned.length <= maxLength) {
+    return cleaned;
+  }
+  return `${cleaned.slice(0, maxLength)}…`;
+};
+
 const renderLayout = (
   content: JSX.Element,
   fontFamily = "sans-serif"
@@ -127,10 +145,16 @@ export const GET = async (req: NextRequest) => {
     const type: PageType = isValidPageType(rawType)
       ? rawType
       : "homepage";
-    const title =
-      searchParams.get("title") || GLOBAL_DATA.USER.fullName;
-    const description =
-      searchParams.get("description") || GLOBAL_DATA.USER.bio;
+    const title = sanitizeParam(
+      searchParams.get("title"),
+      MAX_TITLE_LENGTH,
+      GLOBAL_DATA.USER.fullName
+    );
+    const description = sanitizeParam(
+      searchParams.get("description"),
+      MAX_DESCRIPTION_LENGTH,
+      GLOBAL_DATA.USER.bio
+    );
 
     const font = await loadFont();
     const badge = getBadge(type);
