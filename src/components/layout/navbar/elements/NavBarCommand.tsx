@@ -151,6 +151,7 @@ export const NavBarCommand = ({
   const pathname = usePathname();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -172,6 +173,7 @@ export const NavBarCommand = ({
           // à durée infinie posé par handleOpen restait affiché pour toujours
           if (prev) {
             toast.dismiss("command-hint");
+            triggerRef.current?.focus();
           }
           return !prev;
         });
@@ -224,9 +226,9 @@ export const NavBarCommand = ({
     : DrawerDescription;
 
   const handleOpen = useCallback(() => {
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
+    // pas de blur ici : retirer le focus du déclencheur avant l'ouverture ne
+    // laisse aucun point de retour à la fermeture, et le focus repart au début
+    // du document.
     setOpen(true);
     toast.info("", {
       description: m.nav_command_drawer_hint(),
@@ -239,12 +241,20 @@ export const NavBarCommand = ({
     setOpen(value);
     if (!value) {
       toast.dismiss("command-hint");
+      // la palette n'est pas montée via DialogTrigger : la restauration
+      // automatique du focus par Base UI n'a pas de cible, on la fait à la main
+      triggerRef.current?.focus();
     }
   }, []);
 
   return (
     <>
-      <Button onClick={handleOpen} size="icon" variant="outline">
+      <Button
+        onClick={handleOpen}
+        ref={triggerRef}
+        size="icon"
+        variant="outline"
+      >
         <Search />
         <span className="sr-only">{m.nav_command_search()}</span>
       </Button>

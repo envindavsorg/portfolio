@@ -232,6 +232,41 @@ export const TabsAnimated = ({
     [activeTab, isAnimating, onChangeAction]
   );
 
+  /**
+   * Les flèches font partie du contrat de `role="tab"` : sans elles, exposer la
+   * sémantique d'onglets promettrait une navigation qui n'existe pas.
+   */
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      const offsets: Record<string, number> = {
+        ArrowLeft: -1,
+        ArrowRight: 1,
+      };
+      const offset = offsets[event.key];
+
+      if (offset === undefined || tabs.length === 0) {
+        return;
+      }
+
+      event.preventDefault();
+      const currentIndex = tabs.findIndex(
+        (tab) => tab.id === activeTab
+      );
+      const nextIndex =
+        (currentIndex + offset + tabs.length) % tabs.length;
+      const next = tabs[nextIndex];
+
+      if (next) {
+        handleTabClick(next.id);
+        // le focus suit la sélection, comme attendu d'un tablist automatique
+        event.currentTarget.parentElement
+          ?.querySelectorAll("button")
+          ?.[nextIndex]?.focus();
+      }
+    },
+    [activeTab, handleTabClick, tabs]
+  );
+
   const handleAnimationStart = useCallback(
     () => setIsAnimating(true),
     []
@@ -244,6 +279,7 @@ export const TabsAnimated = ({
   return (
     <div className="flex w-full flex-col items-center">
       <div
+        role="tablist"
         className={cn(
           "grid w-full cursor-pointer grid-cols-2 gap-x-3 py-3",
           className,
@@ -256,15 +292,23 @@ export const TabsAnimated = ({
 
           return (
             <button
+              aria-controls={`tabpanel-${tab.id}`}
+              aria-selected={isActive}
               className={cn(
                 "relative flex items-center justify-center px-3 py-2",
                 "cursor-pointer rounded-md border border-edge font-medium text-sm transition",
                 "focus-visible:outline-none focus-visible:outline-1 focus-visible:ring-1",
                 isActive ? "text-theme" : "text-foreground"
               )}
+              id={`tab-${tab.id}`}
               key={tab.id}
               onClick={() => handleTabClick(tab.id)}
+              onKeyDown={handleKeyDown}
+              role="tab"
               style={{ WebkitTapHighlightColor: "transparent" }}
+              // un seul onglet dans l'ordre de tabulation : les flèches
+              // parcourent les autres
+              tabIndex={isActive ? 0 : -1}
               type="button"
             >
               {isActive && (
@@ -294,12 +338,15 @@ export const TabsAnimated = ({
             >
               <motion.div
                 animate="active"
+                aria-labelledby={`tab-${activeTab}`}
                 custom={direction}
                 exit="exit"
+                id={`tabpanel-${activeTab}`}
                 initial="initial"
                 key={activeTab}
                 onAnimationComplete={handleAnimationComplete}
                 onAnimationStart={handleAnimationStart}
+                role="tabpanel"
                 variants={contentVariants}
               >
                 {content}

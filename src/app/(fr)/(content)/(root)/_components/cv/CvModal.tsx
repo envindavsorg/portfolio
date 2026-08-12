@@ -36,10 +36,7 @@ export const CvModal = ({
         <DialogTrigger asChild>
           <Button>{m.home_cv_modal_trigger_button()}</Button>
         </DialogTrigger>
-        <DialogContent
-          aria-describedby="cv-modal-description"
-          className="bg-background p-0"
-        >
+        <DialogContent className="bg-background p-0">
           {children}
         </DialogContent>
       </Dialog>
@@ -52,7 +49,6 @@ export const CvModal = ({
         <Button>{m.home_cv_modal_trigger_button()}</Button>
       </DrawerTrigger>
       <DrawerContent
-        aria-describedby="cv-modal-description"
         className="bg-background p-0"
         onInteractOutside={(event) => event.preventDefault()}
       >

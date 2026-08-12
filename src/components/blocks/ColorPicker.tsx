@@ -17,6 +17,7 @@ import {
   normalizeColor,
   trimColorString,
 } from "@/lib/palette";
+import { m } from "@/paraglide/messages";
 
 import { Check } from "../motion/Check";
 import { ChevronDown } from "../motion/ChevronDown";
@@ -117,6 +118,40 @@ export const ColorPicker = ({
     [hsl, applyColor]
   );
 
+  /** pas de role="slider" ici : le controle est bidimensionnel */
+  const handleAreaKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const steps: Record<string, [number, number]> = {
+        ArrowDown: [0, -1],
+        ArrowLeft: [-1, 0],
+        ArrowRight: [1, 0],
+        ArrowUp: [0, 1],
+      };
+      const step = steps[event.key];
+      if (!step) {
+        return;
+      }
+
+      event.preventDefault();
+      const [deltaS, deltaL] = step;
+      // pas de 10 avec Maj, pour traverser la zone rapidement
+      const amount = event.shiftKey ? 10 : 1;
+      const clamp = (value: number) =>
+        Math.min(100, Math.max(0, value));
+
+      const next: [number, number, number] = [
+        hsl[0],
+        clamp(hsl[1] + deltaS * amount),
+        clamp(hsl[2] + deltaL * amount),
+      ];
+
+      setHsl(next);
+      setSelectedPreset(null);
+      applyColor(formatHsl(...next));
+    },
+    [hsl, applyColor]
+  );
+
   const handleSaturationLightnessChange = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       const rect = event.currentTarget.getBoundingClientRect();
@@ -196,9 +231,19 @@ export const ColorPicker = ({
           initial={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
         >
+          {/* la zone n'etait atteignable qu'a la souris : elle est desormais
+              focusable et pilotable aux fleches */}
           <motion.div
-            className="relative h-40 w-full cursor-crosshair overflow-hidden rounded-lg"
+            aria-label={m.color_picker_area_label()}
+            aria-valuetext={m.color_picker_area_value({
+              lightness: hsl[2],
+              saturation: hsl[1],
+            })}
+            className="relative h-40 w-full cursor-crosshair overflow-hidden rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             onClick={handleSaturationLightnessChange}
+            onKeyDown={handleAreaKeyDown}
+            role="group"
+            tabIndex={0}
             style={{
               background: `linear-gradient(to top, rgba(0, 0, 0, 1), transparent), linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 0, 0, 0)), hsl(${hsl[0]}, 100%, 50%)`,
             }}
@@ -216,6 +261,7 @@ export const ColorPicker = ({
           </motion.div>
 
           <motion.input
+            aria-label={m.color_picker_hue_label()}
             className="h-3 w-full cursor-pointer appearance-none rounded-full"
             max="360"
             min="0"
@@ -254,6 +300,10 @@ export const ColorPicker = ({
             <AnimatePresence>
               {COLOR_PRESETS.map((preset) => (
                 <motion.button
+                  aria-label={m.color_picker_preset_label({
+                    color: preset,
+                  })}
+                  aria-pressed={selectedPreset === preset}
                   className="relative size-8 rounded-full"
                   key={preset}
                   onClick={() => handlePresetClick(preset)}

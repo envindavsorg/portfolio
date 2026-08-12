@@ -27,6 +27,7 @@ import { RemoveScroll } from "react-remove-scroll";
 
 import useDelay, { useFnDelay } from "@/hooks/useDelay";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 import { TextAnimate } from "../blocks/TextAnimate";
 import { Eye } from "../motion/Eye";
@@ -618,6 +619,7 @@ export const PortalDialogClose = forwardRef<
 
   return (
     <Button
+      aria-label={m.portal_close_aria()}
       className="absolute top-4 right-4 z-50"
       onClick={() => setIsOpen(false)}
       onMouseEnter={() => iconRef.current?.startAnimation()}

@@ -325,6 +325,7 @@ export const JSONFormatter = () => {
             {input.trim() && (
               <Button
                 onClick={handleClear}
+                aria-label={m.utils_json_clear_aria()}
                 onMouseEnter={() =>
                   iconDeleteRef.current?.startAnimation()
                 }
@@ -341,6 +342,7 @@ export const JSONFormatter = () => {
             {hasOutput && (
               <>
                 <Button
+                  aria-label={m.utils_json_sort_asc_aria()}
                   onClick={() => handleSortKeys("asc")}
                   onMouseEnter={() =>
                     iconAscRef.current?.startAnimation()
@@ -355,6 +357,7 @@ export const JSONFormatter = () => {
                 </Button>
 
                 <Button
+                  aria-label={m.utils_json_sort_desc_aria()}
                   onClick={() => handleSortKeys("desc")}
                   onMouseEnter={() =>
                     iconDescRef.current?.startAnimation()
