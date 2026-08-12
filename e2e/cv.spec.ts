@@ -53,16 +53,21 @@ test.describe("page CV", () => {
       await page.goto(path);
 
       /**
-       * Deux précautions, chacune apprise en échouant :
+       * La portée est ce qui compte : le CONTENU du CV, pas le `<body>`.
        *
-       * - portée au CONTENU du CV et non au `<body>` : le script inline de
-       *   next-themes contient légitimement des flèches de fonction ;
-       * - `innerText` et non `textContent` : le second inclut le texte des
-       *   `<script>`, ce qui faisait échouer la garde sur du code sans rapport.
+       * Ma première version lisait le document entier et échouait sur le script
+       * inline de next-themes, qui contient légitimement des flèches de
+       * fonction. `textContent` inclut le texte des `<script>` — mais le
+       * conteneur du CV n'en contient aucun, ce qui a été vérifié, donc la
+       * lecture est sûre ici.
+       *
+       * (`oxlint --fix` réécrit de toute façon tout `.innerText` en
+       * `.textContent`, y compris à l'intérieur d'un `evaluate` : inutile de
+       * lutter contre la règle quand le cadrage suffit.)
        */
       const text = await page
         .locator('[data-slot="cv"]')
-        .textContent();
+        .evaluate((node) => (node as HTMLElement).textContent);
 
       expect(text).not.toMatch(COMPILED_FUNCTION);
       expect(text.length).toBeGreaterThan(500);
