@@ -1,5 +1,6 @@
-import { z } from "zod";
-
+// `z` vient d'ici et non de "zod" : le schéma part dans le bundle client, où le
+// JIT de Zod déclencherait une violation `script-src`. Voir zod-config.ts.
+import { z } from "@/lib/zod-config";
 import { m } from "@/paraglide/messages";
 
 /**

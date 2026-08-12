@@ -1,0 +1,97 @@
+---
+title: Case Converter
+description: Convert text to camelCase, snake_case, kebab-case and seven other formats, line by line
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["casse", "texte"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<CaseConverterUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# How to use it
+
+Paste a value, or a list with one value per line. Each line is converted on its own
+into all ten formats: pasting a column of field names does not merge them into a
+single identifier.
+
+# The formats
+
+| Format        | Example             | Typical use                        |
+| ------------- | ------------------- | ---------------------------------- |
+| camelCase     | `createAnElement`   | JavaScript variables and functions |
+| PascalCase    | `CreateAnElement`   | React components, classes, types   |
+| snake_case    | `create_an_element` | Python, SQL columns                |
+| kebab-case    | `create-an-element` | CSS classes, file names            |
+| CONSTANT_CASE | `CREATE_AN_ELEMENT` | constants, environment variables   |
+| Title Case    | `Create An Element` | headings                           |
+| Sentence case | `Create an element` | sentences, labels                  |
+| slug          | `create-an-element` | URL segments                       |
+
+`kebab-case` and `slug` look alike but do not do the same thing: the slug treats
+punctuation as a **separator**, case conversion **removes** it. So `a/b` becomes
+`a-b` as a slug and `ab` in kebab.
+
+# Splitting is the real work
+
+Joining words back together is trivial. Splitting them correctly is where
+everything happens, and most naive implementations fail on three cases.
+
+```javascript
+// an acronym followed by a word
+"HTTPServerError"; // → http, server, error   (not h, t, t, p, server…)
+
+// a digit against a letter
+"version2Beta"; // → version, 2, beta
+
+// accents and an initial capital
+"Élément"; // → element   (not e, lement)
+```
+
+Accents must be stripped **after** splitting: normalising first loses the initial
+capital, and the word becomes indistinguishable from its lowercase form.
+
+# A conversion has to be idempotent
+
+Re-applying a conversion to its own output must give the same output.
+
+```javascript
+toKebabCase("Create an element"); // "create-an-element"
+toKebabCase("create-an-element"); // "create-an-element" — identical
+```
+
+Without that property, a pipeline that converts twice — because two layers apply
+the same normalisation "just in case" — produces different identifiers on each
+pass.
+
+# Converting an object's keys
+
+The most common concrete case: an API in `snake_case`, a front end in `camelCase`.
+
+```javascript
+const toCamelKeys = (value) => {
+  if (Array.isArray(value)) {
+    return value.map(toCamelKeys);
+  }
+
+  if (value === null || typeof value !== "object") {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, nested]) => [
+      toCamelCase(key),
+      toCamelKeys(nested),
+    ])
+  );
+};
+```
+
+Watch the recursion: `null` is of type `object` in JavaScript, and without the
+explicit test the function crashes on the first null value.

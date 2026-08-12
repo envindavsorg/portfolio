@@ -37,6 +37,13 @@ export const WritingsShortcuts = ({
         return;
       }
 
+      // un composant a déjà traité la touche — la navigation entre onglets d'un
+      // `role="tablist"`, par exemple, appelle preventDefault(). Sans ce garde,
+      // changer d'onglet au clavier faisait AUSSI changer de page.
+      if (event.defaultPrevented) {
+        return;
+      }
+
       const target = event.target as HTMLElement;
 
       const isInput =

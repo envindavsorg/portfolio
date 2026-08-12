@@ -42,10 +42,18 @@ export const CodeCollapsibleWrapper = ({
     )}
     {...props}
   >
+    {/* un <button> et non un <div> : Base UI pose type, tabindex, aria-expanded
+        et aria-disabled sur l'élément rendu, or aria-expanded n'est pas permis
+        sur un élément générique. Le contrôle était donc focusable, sans rôle et
+        sans nom — un lecteur d'écran l'atteignait et n'annonçait rien. */}
     <CollapsibleTrigger asChild>
-      <div className="absolute top-2.25 right-10 z-10 cursor-pointer">
+      <button
+        aria-label={m.writings_code_collapsible_toggle()}
+        className="absolute top-2.25 right-10 z-10 cursor-pointer"
+        type="button"
+      >
         <CollapsibleChevronsIcon />
-      </div>
+      </button>
     </CollapsibleTrigger>
     <ClippedContent>{children}</ClippedContent>
     <CollapsibleTrigger className="absolute inset-x-0 bottom-0 flex h-30 cursor-pointer items-end justify-center bg-linear-to-t from-25% from-code to-transparent pb-4 text-foreground text-sm underline underline-offset-2 group-data-[state=open]/collapsible:hidden">

@@ -1,0 +1,97 @@
+---
+title: WCAG Contrast
+description: Measure the contrast ratio of two colours, check the AA and AAA levels, and get the closest compliant variant
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["contraste", "couleurs", "design"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<ContrastCheckerUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# How to use it
+
+Enter two colours in hexadecimal or `rgb()`. The tool computes the ratio, tests the
+five WCAG thresholds, and — when the contrast falls short — suggests the closest
+variant of your colour that reaches level AA.
+
+# The thresholds
+
+| Criterion | Target                          | Minimum ratio |
+| --------- | ------------------------------- | ------------- |
+| 1.4.3     | normal text, level AA           | 4.5:1         |
+| 1.4.3     | large text, level AA            | 3:1           |
+| 1.4.6     | normal text, level AAA          | 7:1           |
+| 1.4.6     | large text, level AAA           | 4.5:1         |
+| 1.4.11    | input borders, meaningful icons | 3:1           |
+
+"Large text" means **at least 24 px**, or 18.66 px bold. Below that, the 4.5:1
+threshold applies.
+
+Criterion 1.4.11 is the one most often forgotten: a form field's border, a focus
+state, an icon carrying information all have to reach 3:1 against their background.
+A `border-gray-200` on white sits at 1.24:1 — far below.
+
+# The formula
+
+```javascript
+const linearize = (channel) => {
+  const ratio = channel / 255;
+  return ratio <= 0.03928
+    ? ratio / 12.92
+    : ((ratio + 0.055) / 1.055) ** 2.4;
+};
+
+const luminance = ({ r, g, b }) =>
+  0.2126 * linearize(r) +
+  0.7152 * linearize(g) +
+  0.0722 * linearize(b);
+
+const contrast = (a, b) => {
+  const [hi, lo] = [luminance(a), luminance(b)].toSorted(
+    (x, y) => y - x
+  );
+  return (hi + 0.05) / (lo + 0.05);
+};
+```
+
+Two details matter. First the **per-channel linearisation**: it is not a division,
+it is a gamma curve. Then the **coefficients**: green weighs 0.7152 against 0.0722
+for blue, because the eye is far more sensitive to it.
+
+The approximation you sometimes see — averaging the three channels — lets pairs
+through that genuinely fail.
+
+# Transparency cannot be measured alone
+
+An alpha channel is accepted by the tool then **ignored**, and that is deliberate:
+compositing `#1e40af80` requires knowing what sits behind it. On white and on
+black, the same semi-transparent colour yields two completely different ratios.
+
+If your colour is semi-transparent, composite it against its real background first,
+then measure the resulting colour.
+
+# A few useful values
+
+| Colour on white | Ratio  | Normal text AA |
+| --------------- | ------ | -------------- |
+| `#000000`       | 21:1   | yes            |
+| `#595959`       | 7:1    | yes, and AAA   |
+| `#767676`       | 4.54:1 | just barely    |
+| `#777777`       | 4.48:1 | no             |
+
+`#767676` is the exact limit for grey used as normal text on white. One shade
+lighter and the criterion fails.
+
+# What contrast does not cover
+
+A compliant ratio does not make an interface accessible. Colour must not be **the
+only** way information is conveyed (criterion 1.4.1): a field in error marked only
+by a red border stays invisible to a colour-blind person. It needs text, an icon,
+or both.

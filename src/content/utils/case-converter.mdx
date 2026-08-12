@@ -1,0 +1,99 @@
+---
+title: Conversion de casse
+description: Convertissez un texte en camelCase, snake_case, kebab-case et sept autres formats, ligne par ligne
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["casse", "texte"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<CaseConverterUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Utilisation
+
+Collez une valeur, ou une liste avec une valeur par ligne. Chaque ligne est
+convertie séparément dans les dix formats : coller une colonne de noms de champs
+ne les fusionne pas en un seul identifiant.
+
+# Les formats
+
+| Format        | Exemple            | Usage habituel                        |
+| ------------- | ------------------ | ------------------------------------- |
+| camelCase     | `creerUnElement`   | variables et fonctions JavaScript     |
+| PascalCase    | `CreerUnElement`   | composants React, classes, types      |
+| snake_case    | `creer_un_element` | Python, colonnes SQL                  |
+| kebab-case    | `creer-un-element` | classes CSS, noms de fichiers         |
+| CONSTANT_CASE | `CREER_UN_ELEMENT` | constantes, variables d'environnement |
+| Title Case    | `Creer Un Element` | titres                                |
+| Sentence case | `Creer un element` | phrases, libellés                     |
+| slug          | `creer-un-element` | segments d'URL                        |
+
+`kebab-case` et `slug` se ressemblent mais ne font pas la même chose : le slug
+traite la ponctuation comme un **séparateur**, la conversion de casse la
+**supprime**. `a/b` devient donc `a-b` en slug et `ab` en kebab.
+
+# Le découpage est le vrai travail
+
+Recoller des mots est trivial. Les découper correctement est là où tout se joue,
+et la plupart des implémentations naïves échouent sur trois cas.
+
+```javascript
+// acronyme suivi d'un mot
+"HTTPServerError"; // → http, server, error   (et non h, t, t, p, server…)
+
+// chiffre accolé à une lettre
+"version2Beta"; // → version, 2, beta
+
+// accents et majuscule initiale
+"Élément"; // → element   (et non e, lement)
+```
+
+Les accents ne doivent être retirés **qu'après** le découpage : normaliser
+d'abord fait perdre la majuscule initiale, et le mot devient indistinct de sa
+version minuscule.
+
+# Une conversion doit être idempotente
+
+Réappliquer une conversion à son propre résultat doit donner le même résultat.
+
+```javascript
+toKebabCase("Créer un élément"); // "creer-un-element"
+toKebabCase("creer-un-element"); // "creer-un-element" — identique
+```
+
+Sans cette propriété, un pipeline qui convertit deux fois — parce que deux couches
+appliquent la même normalisation « au cas où » — produit des identifiants
+différents à chaque passage.
+
+# Conversion des clés d'un objet
+
+Le cas concret le plus fréquent : une API en `snake_case`, un front en
+`camelCase`.
+
+```javascript
+const toCamelKeys = (value) => {
+  if (Array.isArray(value)) {
+    return value.map(toCamelKeys);
+  }
+
+  if (value === null || typeof value !== "object") {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, nested]) => [
+      toCamelCase(key),
+      toCamelKeys(nested),
+    ])
+  );
+};
+```
+
+Attention à la récursion : `null` est de type `object` en JavaScript, et sans le
+test explicite la fonction plante sur la première valeur nulle.

@@ -20,6 +20,18 @@ const contentMetadataSchema = z.object({
   description: z.string(),
   image: z.string().optional(),
   isNew: z.boolean().optional(),
+  /**
+   * Identifiant de la série à laquelle ce contenu appartient.
+   *
+   * C'est une CLÉ, pas un libellé : elle doit être identique dans toutes les
+   * locales, sinon les traductions se retrouvent dans deux séries distinctes et
+   * les URL cessent de se correspondre. Le libellé affiché passe par `seriesName`.
+   */
+  series: z.string().optional(),
+  /** libellé affiché de la série ; à défaut, `series` est utilisé tel quel */
+  seriesName: z.string().optional(),
+  /** rang de lecture dans la série, à partir de 1 */
+  seriesOrder: z.number().int().positive().optional(),
   tags: z.array(z.string()).optional(),
   title: z.string(),
   updatedAt: z.coerce.date(),

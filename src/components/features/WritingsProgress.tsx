@@ -61,6 +61,9 @@ export const WritingsProgress = () => {
     <div
       aria-hidden="true"
       className="pointer-events-none fixed inset-x-0 top-12 z-40 h-0.5"
+      // aucune prise accessible sur un élément décoratif : ce `data-slot` est
+      // le seul point d'accroche des tests de bout en bout
+      data-slot="reading-progress"
     >
       <div
         className="h-full bg-theme"

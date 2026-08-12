@@ -1,0 +1,104 @@
+---
+title: Expressions cron
+description: Décortiquez une expression cron champ par champ et voyez ses cinq prochaines exécutions
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["cron", "texte"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<CronExplainerUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Utilisation
+
+Saisissez une expression à cinq champs. L'outil valide chaque champ, indique
+lequel pose problème le cas échéant, et calcule les cinq prochaines exécutions.
+
+# Les cinq champs
+
+```
+┌───────────── minute (0-59)
+│ ┌─────────── heure (0-23)
+│ │ ┌───────── jour du mois (1-31)
+│ │ │ ┌─────── mois (1-12 ou JAN-DEC)
+│ │ │ │ ┌───── jour de la semaine (0-6 ou SUN-SAT, 0 = dimanche)
+│ │ │ │ │
+* * * * *
+```
+
+| Syntaxe   | Sens                                  |
+| --------- | ------------------------------------- |
+| `*`       | toutes les valeurs                    |
+| `5`       | uniquement 5                          |
+| `1-5`     | de 1 à 5 inclus                       |
+| `*/15`    | toutes les 15 unités, à partir du min |
+| `5/10`    | à partir de 5, puis tous les 10       |
+| `1,15,30` | ces valeurs précisément               |
+
+`7` est accepté comme alias de dimanche, en plus de `0` : `crontab(5)` le
+documente explicitement.
+
+# Le piège du jour du mois et du jour de la semaine
+
+C'est **la** source de bug des expressions cron. Quand les deux champs de jour
+sont restreints — ni l'un ni l'autre à `*` — cron déclenche dès que **l'un des
+deux** correspond, pas quand les deux correspondent.
+
+```
+0 0 1 * 1
+```
+
+On lit volontiers « le premier lundi du mois ». En réalité : **tous les lundis, et
+en plus le 1er de chaque mois**. Pour obtenir un premier lundi, il faut tester la
+date dans le script lui-même :
+
+```bash
+# le 1er lundi du mois : cron déclenche tous les lundis, le script filtre
+0 0 * * 1 [ "$(date +%d)" -le 07 ] && /usr/local/bin/mon-script
+```
+
+Dès qu'un seul des deux champs est restreint, la règle redevient intuitive :
+`0 9 * * 1-5` signifie bien « à 9 h, du lundi au vendredi ».
+
+# Fuseau horaire
+
+Cet outil interprète les champs en **UTC**, comme cron système, GitHub Actions et
+Vercel. Un ordonnanceur qui interprète en heure locale pose deux questions sans
+bonne réponse : au passage à l'heure d'été, une tâche à 02:30 n'existe pas ; au
+passage à l'heure d'hiver, elle existe deux fois.
+
+D'où une règle simple : **planifiez en UTC** et convertissez à l'affichage. Une
+tâche à 9 h heure de Paris se planifie à `0 8 * * *` l'hiver et `0 7 * * *` l'été
+— ou, mieux, se planifie à une heure où le décalage n'a pas d'importance.
+
+# Expressions valides qui ne se déclenchent jamais
+
+```
+0 0 30 2 *
+```
+
+Le 30 février est syntaxiquement correct et n'arrivera jamais. L'outil le détecte
+et le dit, au lieu de chercher indéfiniment.
+
+`0 0 29 2 *` est plus subtile : elle se déclenche, mais seulement les années
+bissextiles — donc une fois tous les quatre ans.
+
+# Vérifier un cron dans un projet
+
+```javascript
+// GitHub Actions : les minutes exactes sont déconseillées, le planificateur
+// est surchargé à :00 et peut décaler de plusieurs minutes
+on:
+  schedule:
+    - cron: "17 3 * * *" // plutôt que "0 3 * * *"
+```
+
+Un cron GitHub Actions n'est pas garanti à la minute : c'est une file d'attente
+partagée. Pour une tâche qui doit vraiment partir à l'heure, il faut un
+ordonnanceur dédié.

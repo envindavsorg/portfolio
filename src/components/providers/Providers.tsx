@@ -7,6 +7,7 @@ import { FaviconSwitcher } from "@/components/composites/FaviconSwitcher";
 
 import { Analytics } from "./analytics/Analytics";
 import ProgressProvider from "./modules/ProgressProvider";
+import { ServiceWorker } from "./modules/ServiceWorker";
 import ThemeProvider from "./modules/ThemeProvider";
 import { Compose } from "./utils/Compose";
 import type { Provider } from "./utils/Compose";
@@ -34,6 +35,11 @@ export const Providers = ({ children }: ProvidersProps) => (
     {children}
     <Toaster />
 
-    {process.env.NODE_ENV === "production" && <Analytics />}
+    {process.env.NODE_ENV === "production" && (
+      <>
+        <Analytics />
+        <ServiceWorker />
+      </>
+    )}
   </AppProviders>
 );

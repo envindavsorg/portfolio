@@ -1,0 +1,105 @@
+---
+title: Testeur d'expressions régulières
+description: Testez un motif, voyez les correspondances surlignées, les groupes capturés et le résultat d'un remplacement
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["regex", "texte"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<RegexTesterUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Utilisation
+
+Écrivez un motif, choisissez vos drapeaux, collez le texte. Les correspondances
+sont surlignées en alternance, et chaque groupe — numéroté ou nommé — est listé
+avec sa valeur.
+
+# Les drapeaux
+
+| Drapeau | Effet                                                             |
+| ------- | ----------------------------------------------------------------- |
+| `g`     | toutes les correspondances, pas seulement la première             |
+| `i`     | insensible à la casse                                             |
+| `m`     | `^` et `$` s'appliquent à chaque ligne                            |
+| `s`     | `.` accepte aussi le retour à la ligne                            |
+| `u`     | mode Unicode : `\p{…}`, points de code au-delà de la BMP          |
+| `y`     | ancré : la correspondance doit commencer exactement à `lastIndex` |
+
+L'outil force `g` en interne, quel que soit votre choix : sans lui, `exec` repart
+de zéro à chaque appel et la recherche de toutes les correspondances boucle sur la
+première.
+
+# Le piège de `lastIndex`
+
+Une regex avec `g` est **mutable** : elle retient sa position entre deux appels.
+
+```javascript
+const regex = /\d+/g;
+
+regex.test("42"); // true
+regex.test("42"); // false — lastIndex vaut 2, la recherche repart de la fin
+```
+
+C'est pour cette raison qu'une regex avec `g` ne doit jamais être déclarée en
+constante partagée puis réutilisée avec `test` ou `exec`. Soit on la recrée, soit
+on remet `lastIndex` à zéro, soit on utilise `matchAll` qui travaille sur une
+copie.
+
+# Correspondances vides
+
+```javascript
+const regex = /a*/g;
+let match;
+
+// boucle infinie : la correspondance vide ne fait pas avancer lastIndex
+while ((match = regex.exec("bbb")) !== null) {
+  console.log(match.index);
+}
+```
+
+Il faut incrémenter `lastIndex` à la main quand la correspondance est vide. C'est
+exactement ce que fait cet outil, et pourquoi `a*` sur `bbb` y renvoie quatre
+correspondances vides au lieu de figer l'onglet.
+
+# Groupes nommés
+
+```javascript
+const { groups } = /(?<annee>\d{4})-(?<mois>\d{2})/.exec("2026-08");
+groups.annee; // "2026"
+```
+
+Dans un remplacement, `$<nom>` a un comportement surprenant qu'il vaut mieux
+connaître :
+
+```javascript
+// le motif A des groupes nommés : une référence inconnue devient vide
+"2026".replace(/(?<annee>\d{4})/, "[$<inconnu>]"); // "[]"
+
+// le motif n'a AUCUN groupe nommé : la référence est recopiée littéralement
+"2026".replace(/\d{4}/, "$<annee>"); // "$<annee>"
+```
+
+Aucune erreur n'est levée dans un cas comme dans l'autre. Une faute de frappe dans
+un nom de groupe passe donc totalement inaperçue.
+
+# Retour sur trace catastrophique
+
+```javascript
+// évitez : temps exponentiel en fonction de la longueur de l'entrée
+/(a+)+b/.test("a".repeat(30));
+```
+
+Un quantificateur imbriqué sur une alternative qui échoue force le moteur à
+essayer toutes les découpes possibles. JavaScript n'offre aucun moyen
+d'interrompre une regex en cours d'exécution : la seule protection côté navigateur
+est de borner la taille de l'entrée, ce que fait cet outil.
+
+Pour des motifs venant d'un utilisateur, la vraie réponse est un moteur à automate
+fini (RE2) exécuté côté serveur, avec une limite de temps.

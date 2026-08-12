@@ -1,0 +1,99 @@
+---
+title: Contraste WCAG
+description: Mesurez le rapport de contraste de deux couleurs, vérifiez les niveaux AA et AAA, et obtenez la variante conforme la plus proche
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["contraste", "couleurs", "design"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<ContrastCheckerUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Utilisation
+
+Saisissez deux couleurs en hexadécimal ou en `rgb()`. L'outil calcule le rapport,
+teste les cinq seuils WCAG, et — si le contraste est insuffisant — propose la
+variante la plus proche de votre couleur qui atteint le niveau AA.
+
+# Les seuils
+
+| Critère | Cible                                        | Rapport minimal |
+| ------- | -------------------------------------------- | --------------- |
+| 1.4.3   | texte normal, niveau AA                      | 4.5:1           |
+| 1.4.3   | texte large, niveau AA                       | 3:1             |
+| 1.4.6   | texte normal, niveau AAA                     | 7:1             |
+| 1.4.6   | texte large, niveau AAA                      | 4.5:1           |
+| 1.4.11  | bordures de champs, icônes porteuses de sens | 3:1             |
+
+« Texte large » signifie **au moins 24 px**, ou 18,66 px en gras. En dessous, le
+seuil de 4.5:1 s'applique.
+
+Le critère 1.4.11 est le plus souvent oublié : la bordure d'un champ de
+formulaire, l'état de focus, une icône qui porte une information doivent atteindre
+3:1 contre leur fond. Un `border-gray-200` sur du blanc est à 1.24:1 — bien en
+dessous.
+
+# La formule
+
+```javascript
+const linearize = (channel) => {
+  const ratio = channel / 255;
+  return ratio <= 0.03928
+    ? ratio / 12.92
+    : ((ratio + 0.055) / 1.055) ** 2.4;
+};
+
+const luminance = ({ r, g, b }) =>
+  0.2126 * linearize(r) +
+  0.7152 * linearize(g) +
+  0.0722 * linearize(b);
+
+const contrast = (a, b) => {
+  const [hi, lo] = [luminance(a), luminance(b)].toSorted(
+    (x, y) => y - x
+  );
+  return (hi + 0.05) / (lo + 0.05);
+};
+```
+
+Deux détails comptent. D'abord la **linéarisation par canal** : ce n'est pas une
+division, c'est une courbe de gamma. Ensuite les **coefficients** : le vert pèse
+0,7152 contre 0,0722 pour le bleu, parce que l'œil y est beaucoup plus sensible.
+
+L'approximation qu'on croise parfois — la moyenne des trois canaux — fait passer
+des paires qui échouent réellement.
+
+# La transparence n'est pas calculable seule
+
+Un canal alpha est accepté par l'outil puis **ignoré**, et c'est un choix
+délibéré : composer `#1e40af80` demande de connaître ce qu'il y a derrière. Sur
+blanc et sur noir, la même couleur semi-transparente donne deux rapports
+totalement différents.
+
+Si votre couleur est semi-transparente, composez-la d'abord contre son fond réel,
+puis mesurez la couleur obtenue.
+
+# Quelques valeurs utiles
+
+| Couleur sur blanc | Rapport | Texte normal AA |
+| ----------------- | ------- | --------------- |
+| `#000000`         | 21:1    | oui             |
+| `#595959`         | 7:1     | oui, et AAA     |
+| `#767676`         | 4.54:1  | tout juste      |
+| `#777777`         | 4.48:1  | non             |
+
+`#767676` est la limite exacte du gris utilisable en texte normal sur blanc.
+Un cran plus clair et le critère tombe.
+
+# Ce que le contraste ne couvre pas
+
+Un rapport conforme ne rend pas une interface accessible. La couleur ne doit pas
+être **le seul** moyen de transmettre une information (critère 1.4.1) : un champ
+en erreur signalé uniquement par une bordure rouge reste invisible pour une
+personne daltonienne. Il faut un texte, une icône, ou les deux.
