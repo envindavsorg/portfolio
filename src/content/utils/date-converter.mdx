@@ -1,0 +1,97 @@
+---
+title: Dates et horodatages
+description: Convertissez un horodatage Unix en date lisible, dans les deux sens et dans sept fuseaux horaires
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["dates", "texte"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<DateConverterUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Utilisation
+
+Collez ce que vous avez : un horodatage en secondes, en millisecondes, ou une
+date ISO 8601. L'outil devine de quoi il s'agit et affiche les trois formes, plus
+l'heure locale dans sept fuseaux.
+
+# Secondes ou millisecondes ?
+
+Rien ne distingue les deux formats : ce sont deux entiers. La seule heuristique
+fiable est le **nombre de chiffres**.
+
+| Valeur          | Chiffres | Interprétation  | Date obtenue     |
+| --------------- | -------- | --------------- | ---------------- |
+| `1700000000`    | 10       | secondes        | 14 novembre 2023 |
+| `1700000000123` | 13       | millisecondes   | 14 novembre 2023 |
+| `1700000000`    | 10       | millisecondes ? | 20 janvier 1970  |
+
+Un horodatage en secondes n'atteindra pas douze chiffres avant l'an 33 658 : le
+seuil est donc sans ambiguïté en pratique.
+
+C'est l'erreur la plus fréquente avec `Date` en JavaScript, dont le constructeur
+attend des **millisecondes** :
+
+```javascript
+// une API renvoie des secondes, comme la plupart des API Unix
+const seconds = 1_700_000_000;
+
+new Date(seconds); // 20 janvier 1970 — 1,7 million de secondes après l'époque
+new Date(seconds * 1000); // 14 novembre 2023
+```
+
+# Le décalage d'un fuseau n'est pas une constante
+
+`Europe/Paris` vaut `+01:00` en hiver et `+02:00` en été. Stocker un décalage en
+base de données au lieu du nom du fuseau donne donc une heure fausse la moitié de
+l'année.
+
+```javascript
+// faux : le décalage est figé
+const offsetHours = 1;
+
+// juste : le fuseau, et la bibliothèque applique la règle de l'année
+new Intl.DateTimeFormat("fr-FR", {
+  dateStyle: "short",
+  timeStyle: "long",
+  timeZone: "Europe/Paris",
+}).format(date);
+```
+
+# Ce qu'il faut stocker
+
+Toujours un instant absolu — horodatage Unix ou ISO 8601 en UTC (`…Z`). Une date
+locale sans fuseau est ambiguë, et le devient irrémédiablement dès qu'elle
+traverse une frontière.
+
+```javascript
+// ambigu : 14 novembre à 22:13 dans quel fuseau ?
+"2023-11-14T22:13:20";
+
+// non ambigu
+"2023-11-14T22:13:20Z";
+"2023-11-14T23:13:20+01:00"; // le même instant
+```
+
+Deux exceptions légitimes : une date d'anniversaire et une heure de réveil sont
+des données _locales_. Les convertir en UTC casse leur sens dès que l'utilisateur
+change de fuseau.
+
+# Calculer un écart
+
+```javascript
+const parts = new Intl.RelativeTimeFormat("fr-FR", {
+  numeric: "auto",
+}).format(-3, "day");
+// « il y a 3 jours »
+```
+
+`Intl.RelativeTimeFormat` fait la traduction et l'accord ; il ne choisit pas
+l'unité. C'est à vous de décider qu'un écart de 90 000 secondes s'exprime en
+jours et non en secondes.

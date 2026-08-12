@@ -1,0 +1,101 @@
+---
+title: Regex Tester
+description: Test a pattern, see highlighted matches, captured groups and the result of a replacement
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["regex", "texte"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<RegexTesterUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# How to use it
+
+Write a pattern, pick your flags, paste the text. Matches are highlighted in
+alternating colours, and every group — numbered or named — is listed with its
+value.
+
+# The flags
+
+| Flag | Effect                                              |
+| ---- | --------------------------------------------------- |
+| `g`  | all matches, not just the first                     |
+| `i`  | case insensitive                                    |
+| `m`  | `^` and `$` apply per line                          |
+| `s`  | `.` also matches newlines                           |
+| `u`  | Unicode mode: `\p{…}`, code points beyond the BMP   |
+| `y`  | sticky: the match must start exactly at `lastIndex` |
+
+The tool forces `g` internally whatever you pick: without it, `exec` restarts from
+zero on every call and a search for all matches loops on the first one.
+
+# The `lastIndex` trap
+
+A regex with `g` is **mutable**: it remembers its position between calls.
+
+```javascript
+const regex = /\d+/g;
+
+regex.test("42"); // true
+regex.test("42"); // false — lastIndex is 2, the search restarts from the end
+```
+
+That is why a regex with `g` must never be declared as a shared constant and then
+reused with `test` or `exec`. Either recreate it, reset `lastIndex` to zero, or use
+`matchAll`, which works on a copy.
+
+# Empty matches
+
+```javascript
+const regex = /a*/g;
+let match;
+
+// infinite loop: an empty match does not advance lastIndex
+while ((match = regex.exec("bbb")) !== null) {
+  console.log(match.index);
+}
+```
+
+You have to increment `lastIndex` by hand when the match is empty. That is exactly
+what this tool does, and why `a*` against `bbb` returns four empty matches here
+instead of freezing the tab.
+
+# Named groups
+
+```javascript
+const { groups } = /(?<year>\d{4})-(?<month>\d{2})/.exec("2026-08");
+groups.year; // "2026"
+```
+
+In a replacement, `$<name>` has a surprising behaviour worth knowing:
+
+```javascript
+// the pattern HAS named groups: an unknown reference becomes empty
+"2026".replace(/(?<year>\d{4})/, "[$<unknown>]"); // "[]"
+
+// the pattern has NO named group: the reference is copied literally
+"2026".replace(/\d{4}/, "$<year>"); // "$<year>"
+```
+
+Neither case throws. A typo in a group name therefore goes completely unnoticed.
+
+# Catastrophic backtracking
+
+```javascript
+// avoid: exponential time in the length of the input
+/(a+)+b/.test("a".repeat(30));
+```
+
+A nested quantifier over an alternative that fails forces the engine to try every
+possible split. JavaScript offers no way to interrupt a running regex: the only
+protection in the browser is to bound the input size, which is what this tool
+does.
+
+For patterns coming from a user, the real answer is a finite-automaton engine (RE2)
+running server-side with a time limit.

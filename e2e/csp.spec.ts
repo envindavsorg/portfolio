@@ -37,12 +37,6 @@ const readReportedViolations = (page: Page) =>
   );
 
 /**
- * Garde-fou contre un faux positif : une page dont les scripts ne se chargent
- * pas ne signale évidemment aucune violation. Sans cette vérification, un
- * serveur servant du HTML périmé (chunks introuvables) rendait la suite entière
- * verte alors que rien ne s'exécutait.
- */
-/**
  * Les scripts Vercel Analytics et Speed Insights sont injectés par la
  * plateforme : en local ils répondent 404, ce qui est normal et sans rapport
  * avec la CSP (ils sont en même origine, donc couverts par `script-src 'self'`).
@@ -50,6 +44,12 @@ const readReportedViolations = (page: Page) =>
 const isTracked = (url: string) =>
   url.endsWith(".js") && !url.includes("/_vercel/");
 
+/**
+ * Garde-fou contre un faux positif : une page dont les scripts ne se chargent
+ * pas ne signale évidemment aucune violation. Sans cette vérification, un
+ * serveur servant du HTML périmé (chunks introuvables) rendait la suite entière
+ * verte alors que rien ne s'exécutait.
+ */
 const collectDeadScripts = (page: Page): string[] => {
   const dead: string[] = [];
 
@@ -79,6 +79,8 @@ const PAGES = [
   "/tags/retour-d-experience",
   "/utils",
   "/utils/hash-generator",
+  "/utils/regex-tester",
+  "/utils/cron-explainer",
   "/utils/color-generator",
   "/utils/article-banner-generator",
 ];

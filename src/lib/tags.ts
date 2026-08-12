@@ -1,5 +1,5 @@
+import { slugify } from "@/lib/case";
 import type { Content, ContentCategory } from "@/lib/content";
-import { normalize } from "@/lib/search";
 
 interface TagData {
   tagCounts: Record<string, number>;
@@ -19,9 +19,6 @@ export interface TagEntry {
   categories: ContentCategory[];
 }
 
-const NON_ALPHANUMERIC = /[^a-z0-9]+/gu;
-const EDGE_DASHES = /^-+|-+$/gu;
-
 /**
  * Transforme un tag en segment d'URL.
  *
@@ -29,11 +26,11 @@ const EDGE_DASHES = /^-+|-+$/gu;
  * « next js » donnent tous deux « next-js »), et c'est voulu : une page de tag
  * regroupe alors les deux, plutôt que d'en perdre une silencieusement ou de
  * servir deux URL pour le même sujet.
+ *
+ * Délègue à `slugify` : deux translittérations différentes dans le même codebase
+ * finiraient par divergent, et les URL des sujets cesseraient de correspondre.
  */
-export const slugifyTag = (tag: string): string =>
-  normalize(tag)
-    .replaceAll(NON_ALPHANUMERIC, "-")
-    .replaceAll(EDGE_DASHES, "");
+export const slugifyTag = (tag: string): string => slugify(tag);
 
 export const ALL_TAG = "tout";
 

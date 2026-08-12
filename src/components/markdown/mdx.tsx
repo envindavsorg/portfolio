@@ -63,6 +63,26 @@ const ColorGenerator = dynamic(async () => {
   const mod = await import("@/components/utils/ColorGenerator");
   return mod.ColorGenerator;
 });
+const CaseConverter = dynamic(async () => {
+  const mod = await import("@/components/utils/CaseConverter");
+  return mod.CaseConverter;
+});
+const ContrastChecker = dynamic(async () => {
+  const mod = await import("@/components/utils/ContrastChecker");
+  return mod.ContrastChecker;
+});
+const CronExplainer = dynamic(async () => {
+  const mod = await import("@/components/utils/CronExplainer");
+  return mod.CronExplainer;
+});
+const DateConverter = dynamic(async () => {
+  const mod = await import("@/components/utils/DateConverter");
+  return mod.DateConverter;
+});
+const RegexTester = dynamic(async () => {
+  const mod = await import("@/components/utils/RegexTester");
+  return mod.RegexTester;
+});
 const DiffViewer = dynamic(async () => {
   const mod = await import("@/components/utils/DiffViewer");
   return mod.DiffViewer;
@@ -116,16 +136,21 @@ const getIconForLanguageExtension = (language: string) => {
 const components: MDXRemoteProps["components"] = {
   ArticleBannerUtils: ArticleBanner,
   Base64Utils: Base64,
+  CaseConverterUtils: CaseConverter,
   CodeCollapsibleWrapper,
   ColorGeneratorUtils: ColorGenerator,
   ComponentPreview,
   ComponentSource,
+  ContrastCheckerUtils: ContrastChecker,
+  CronExplainerUtils: CronExplainer,
+  DateConverterUtils: DateConverter,
   DiffViewerUtils: DiffViewer,
   HashGeneratorUtils: HashGenerator,
   InternetSpeedTestUtils: SpeedTest,
   JSONFormatterUtils: JSONFormatter,
   JwtDecoderUtils: JwtDecoder,
   LoremIpsumGeneratorUtils: LoremIpsumGenerator,
+  RegexTesterUtils: RegexTester,
   code: Code,
   figcaption: ({
     children,

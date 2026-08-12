@@ -1,0 +1,96 @@
+---
+title: Dates and Timestamps
+description: Convert a Unix timestamp into a readable date, both ways and across seven time zones
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["dates", "texte"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<DateConverterUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# How to use it
+
+Paste whatever you have: a timestamp in seconds, in milliseconds, or an ISO 8601
+date. The tool works out which one it is and shows all three forms, plus the local
+time in seven zones.
+
+# Seconds or milliseconds?
+
+Nothing distinguishes the two formats — they are both integers. The only reliable
+heuristic is the **number of digits**.
+
+| Value           | Digits | Read as       | Resulting date   |
+| --------------- | ------ | ------------- | ---------------- |
+| `1700000000`    | 10     | seconds       | 14 November 2023 |
+| `1700000000123` | 13     | milliseconds  | 14 November 2023 |
+| `1700000000`    | 10     | milliseconds? | 20 January 1970  |
+
+A timestamp in seconds will not reach twelve digits before the year 33,658, so the
+threshold is unambiguous in practice.
+
+This is the most common mistake with `Date` in JavaScript, whose constructor
+expects **milliseconds**:
+
+```javascript
+// an API returns seconds, like most Unix APIs
+const seconds = 1_700_000_000;
+
+new Date(seconds); // 20 January 1970 — 1.7 million seconds after the epoch
+new Date(seconds * 1000); // 14 November 2023
+```
+
+# A zone offset is not a constant
+
+`Europe/Paris` is `+01:00` in winter and `+02:00` in summer. Storing an offset in
+the database instead of the zone name therefore gives the wrong time for half the
+year.
+
+```javascript
+// wrong: the offset is frozen
+const offsetHours = 1;
+
+// right: the zone, and the library applies that year's rule
+new Intl.DateTimeFormat("en-GB", {
+  dateStyle: "short",
+  timeStyle: "long",
+  timeZone: "Europe/Paris",
+}).format(date);
+```
+
+# What to store
+
+Always an absolute instant — a Unix timestamp, or ISO 8601 in UTC (`…Z`). A local
+date with no zone is ambiguous, and becomes irrecoverably so the moment it crosses
+a border.
+
+```javascript
+// ambiguous: 14 November at 22:13 in which zone?
+"2023-11-14T22:13:20";
+
+// unambiguous
+"2023-11-14T22:13:20Z";
+"2023-11-14T23:13:20+01:00"; // the same instant
+```
+
+Two legitimate exceptions: a birthday and an alarm time are _local_ data.
+Converting them to UTC breaks their meaning as soon as the user changes zone.
+
+# Computing a distance
+
+```javascript
+const parts = new Intl.RelativeTimeFormat("en-GB", {
+  numeric: "auto",
+}).format(-3, "day");
+// "3 days ago"
+```
+
+`Intl.RelativeTimeFormat` handles the wording and the plural; it does not pick the
+unit. Deciding that a gap of 90,000 seconds should be expressed in days rather
+than seconds is up to you.
