@@ -15,12 +15,12 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# How to use it
+## How to use it
 
 Type a five-field expression. The tool validates each field, points at the one
 that is wrong when there is one, and computes the next five runs.
 
-# The five fields
+## The five fields
 
 ```
 ┌───────────── minute (0-59)
@@ -44,7 +44,7 @@ that is wrong when there is one, and computes the next five runs.
 `7` is accepted as an alias for Sunday alongside `0`: `crontab(5)` documents it
 explicitly.
 
-# The day-of-month and day-of-week trap
+## The day-of-month and day-of-week trap
 
 This is **the** source of cron bugs. When both day fields are restricted — neither
 is `*` — cron fires as soon as **either one** matches, not when both do.
@@ -65,7 +65,7 @@ date inside the script:
 As soon as only one of the two fields is restricted, the rule becomes intuitive
 again: `0 9 * * 1-5` does mean "at 9am, Monday to Friday".
 
-# Time zone
+## Time zone
 
 This tool reads the fields as **UTC**, the way system cron, GitHub Actions and
 Vercel do. A scheduler that reads them in local time raises two questions with no
@@ -76,7 +76,7 @@ Hence a simple rule: **schedule in UTC** and convert for display. A task at 9am
 Paris time is `0 8 * * *` in winter and `0 7 * * *` in summer — or, better, is
 scheduled at an hour where the offset does not matter.
 
-# Valid expressions that never fire
+## Valid expressions that never fire
 
 ```
 0 0 30 2 *
@@ -88,7 +88,7 @@ detects it and says so, instead of searching forever.
 `0 0 29 2 *` is subtler: it does fire, but only in leap years — so once every four
 years.
 
-# Checking a cron in a project
+## Checking a cron in a project
 
 ```javascript
 // GitHub Actions: exact minutes are discouraged, the scheduler is

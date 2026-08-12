@@ -15,13 +15,13 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Utilisation
+## Utilisation
 
 Écrivez un motif, choisissez vos drapeaux, collez le texte. Les correspondances
 sont surlignées en alternance, et chaque groupe — numéroté ou nommé — est listé
 avec sa valeur.
 
-# Les drapeaux
+## Les drapeaux
 
 | Drapeau | Effet                                                             |
 | ------- | ----------------------------------------------------------------- |
@@ -36,7 +36,7 @@ L'outil force `g` en interne, quel que soit votre choix : sans lui, `exec` repar
 de zéro à chaque appel et la recherche de toutes les correspondances boucle sur la
 première.
 
-# Le piège de `lastIndex`
+## Le piège de `lastIndex`
 
 Une regex avec `g` est **mutable** : elle retient sa position entre deux appels.
 
@@ -52,7 +52,7 @@ constante partagée puis réutilisée avec `test` ou `exec`. Soit on la recrée,
 on remet `lastIndex` à zéro, soit on utilise `matchAll` qui travaille sur une
 copie.
 
-# Correspondances vides
+## Correspondances vides
 
 ```javascript
 const regex = /a*/g;
@@ -68,7 +68,7 @@ Il faut incrémenter `lastIndex` à la main quand la correspondance est vide. C'
 exactement ce que fait cet outil, et pourquoi `a*` sur `bbb` y renvoie quatre
 correspondances vides au lieu de figer l'onglet.
 
-# Groupes nommés
+## Groupes nommés
 
 ```javascript
 const { groups } = /(?<annee>\d{4})-(?<mois>\d{2})/.exec("2026-08");
@@ -89,7 +89,7 @@ connaître :
 Aucune erreur n'est levée dans un cas comme dans l'autre. Une faute de frappe dans
 un nom de groupe passe donc totalement inaperçue.
 
-# Retour sur trace catastrophique
+## Retour sur trace catastrophique
 
 ```javascript
 // évitez : temps exponentiel en fonction de la longueur de l'entrée

@@ -15,7 +15,7 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Utilisation
+## Utilisation
 
 Collez deux versions d'un même texte : la comparaison s'affiche ligne à ligne,
 avec les numéros de ligne de chaque côté. Les lignes ajoutées apparaissent en
@@ -24,7 +24,7 @@ vert, les supprimées en rouge, les inchangées en neutre.
 Pratique pour comparer deux réponses d'API, deux fichiers de configuration, ou
 deux rédactions d'un même paragraphe — sans passer par un dépôt Git.
 
-# Comment la comparaison est calculée
+## Comment la comparaison est calculée
 
 L'outil s'appuie sur la **plus longue sous-séquence commune** (LCS), le même
 principe que `git diff`. L'idée : trouver le plus grand ensemble de lignes
@@ -38,13 +38,13 @@ déplacements.
 Les fins de ligne sont normalisées : un texte en `CRLF` (Windows) et le même en
 `LF` (Unix) ne sont pas signalés comme différents.
 
-# Une limite assumée
+## Une limite assumée
 
 La table LCS occupe une place proportionnelle au produit des deux longueurs. Pour
 deux textes de 2 000 lignes, cela fait déjà quatre millions de cellules. Au-delà
 de cette taille, l'outil refuse la comparaison plutôt que de figer l'onglet.
 
-# Comparer deux fichiers en ligne de commande
+## Comparer deux fichiers en ligne de commande
 
 ```bash
 # comparaison classique, format unifié
@@ -57,7 +57,7 @@ diff -u -w ancien.txt nouveau.txt
 git diff --no-index ancien.txt nouveau.txt
 ```
 
-# Comparer deux objets en JavaScript
+## Comparer deux objets en JavaScript
 
 Pour des structures de données plutôt que du texte, comparer les représentations
 JSON _normalisées_ évite les faux positifs dus à l'ordre des clés :

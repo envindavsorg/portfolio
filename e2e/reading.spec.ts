@@ -58,7 +58,7 @@ test.describe("contenus liés", () => {
     await link.click();
 
     await expect(page).toHaveURL(href ?? "");
-    // le corps MDX utilise `#` pour ses sections : plusieurs h1 par page
+    // le titre de page est le seul h1 depuis le décalage des niveaux MDX
     await expect(
       page.getByRole("heading", { level: 1 }).first()
     ).toBeVisible();
@@ -306,4 +306,42 @@ test.describe("rendu des blocs de code", () => {
         .first()
     ).toBeVisible();
   });
+});
+
+/**
+ * Un seul <h1> par page.
+ *
+ * Les corps MDX utilisaient `#` pour leurs sections : chaque page de contenu
+ * rendait donc un h1 de titre PLUS un h1 par section — jusqu'à huit sur un
+ * article — et un plan de document entièrement plat. Tout est descendu d'un
+ * niveau ; l'échelle typographique a été translatée d'autant pour que le rendu
+ * ne change pas.
+ *
+ * Les identifiants ne bougent pas : rehype-slug les dérive du TEXTE, le niveau
+ * ne servant que de garde booléenne. Les ancres partagées survivent donc, ce qui
+ * a été vérifié page par page avant et après le décalage.
+ */
+test.describe("plan du document", () => {
+  for (const path of [
+    "/articles/how-i-write-css",
+    "/articles/my-stack",
+    "/components/flip-sentences-component",
+    "/utils/regex-tester",
+    "/en/articles/how-i-write-css",
+    "/en/utils/regex-tester",
+  ]) {
+    test(`${path} n'a qu'un seul h1`, async ({ page }) => {
+      await page.goto(path);
+
+      await expect(
+        page.getByRole("heading", { level: 1 })
+      ).toHaveCount(1);
+
+      // et il reste des sections : un plan à un seul niveau serait « conforme »
+      // en n'ayant simplement plus aucun titre de section
+      expect(
+        await page.getByRole("heading", { level: 2 }).count()
+      ).toBeGreaterThan(0);
+    });
+  }
 });

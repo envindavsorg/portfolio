@@ -15,13 +15,13 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Utilisation
+## Utilisation
 
 Collez ce que vous avez : un horodatage en secondes, en millisecondes, ou une
 date ISO 8601. L'outil devine de quoi il s'agit et affiche les trois formes, plus
 l'heure locale dans sept fuseaux.
 
-# Secondes ou millisecondes ?
+## Secondes ou millisecondes ?
 
 Rien ne distingue les deux formats : ce sont deux entiers. La seule heuristique
 fiable est le **nombre de chiffres**.
@@ -46,7 +46,7 @@ new Date(seconds); // 20 janvier 1970 — 1,7 million de secondes après l'époq
 new Date(seconds * 1000); // 14 novembre 2023
 ```
 
-# Le décalage d'un fuseau n'est pas une constante
+## Le décalage d'un fuseau n'est pas une constante
 
 `Europe/Paris` vaut `+01:00` en hiver et `+02:00` en été. Stocker un décalage en
 base de données au lieu du nom du fuseau donne donc une heure fausse la moitié de
@@ -64,7 +64,7 @@ new Intl.DateTimeFormat("fr-FR", {
 }).format(date);
 ```
 
-# Ce qu'il faut stocker
+## Ce qu'il faut stocker
 
 Toujours un instant absolu — horodatage Unix ou ISO 8601 en UTC (`…Z`). Une date
 locale sans fuseau est ambiguë, et le devient irrémédiablement dès qu'elle
@@ -83,7 +83,7 @@ Deux exceptions légitimes : une date d'anniversaire et une heure de réveil son
 des données _locales_. Les convertir en UTC casse leur sens dès que l'utilisateur
 change de fuseau.
 
-# Calculer un écart
+## Calculer un écart
 
 ```javascript
 const parts = new Intl.RelativeTimeFormat("fr-FR", {

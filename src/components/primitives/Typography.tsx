@@ -9,10 +9,23 @@ const PROSE_CLASSNAME = cn(
   "prose prose-sm prose-zinc dark:prose-invert max-w-none",
   // headings
   "prose-headings:text-balance prose-headings:font-pixel-square prose-headings:font-semibold prose-headings:text-foreground",
+  /**
+   * Échelle translatée d'un cran, pour que le décalage des titres MDX ne change
+   * RIEN à l'écran.
+   *
+   * Les corps MDX utilisaient `#` pour leurs sections : chaque page rendait donc
+   * un `<h1>` de titre plus un `<h1>` par section, soit un plan de document plat
+   * — une vraie faiblesse d'accessibilité et de référencement. Tout est descendu
+   * d'un niveau ; sans ce réajustement, chaque titre de section aurait rétréci.
+   *
+   * Les identifiants, eux, ne bougent pas : rehype-slug les dérive du TEXTE, le
+   * niveau ne servant que de garde booléenne. Les ancres partagées survivent.
+   */
   "prose-h1:mt-10 prose-h1:mb-4 prose-h1:text-xl",
-  "prose-h2:mt-8 prose-h2:mb-3 prose-h2:text-lg",
-  "prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-base",
-  "prose-h4:mt-5 prose-h4:mb-2 prose-h4:text-sm",
+  "prose-h2:mt-10 prose-h2:mb-4 prose-h2:text-xl",
+  "prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-lg",
+  "prose-h4:mt-6 prose-h4:mb-2 prose-h4:text-base",
+  "prose-h5:mt-5 prose-h5:mb-2 prose-h5:text-sm",
   // body text
   "prose-p:my-3 prose-p:leading-relaxed",
   "prose-lead:text-base prose-lead:text-muted-foreground",

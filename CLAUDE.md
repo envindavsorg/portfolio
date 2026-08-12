@@ -304,9 +304,10 @@ End-to-end tests (Playwright, `e2e/`):
   the font-preload count
 
 Watch out for two selector traps: Next.js always mounts an empty
-`<div role="alert">` route announcer (scope to `p[role="alert"]`), and MDX bodies
-use `#` for sections, so a content page has several `<h1>` and its own `<pre>`
-and `<li>` elements.
+`<div role="alert">` route announcer (scope to `p[role="alert"]`), and an article
+body brings its own `<pre>` and `<li>` elements. MDX section headings used to be
+`#`, giving every content page several `<h1>`; they are now `##`, so a content
+page has exactly ONE `<h1>` — the page title rendered outside MDX.
 
 ## Environment Variables
 

@@ -15,13 +15,13 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# How to use it
+## How to use it
 
 Paste a value, or a list with one value per line. Each line is converted on its own
 into all ten formats: pasting a column of field names does not merge them into a
 single identifier.
 
-# The formats
+## The formats
 
 | Format        | Example             | Typical use                        |
 | ------------- | ------------------- | ---------------------------------- |
@@ -38,7 +38,7 @@ single identifier.
 punctuation as a **separator**, case conversion **removes** it. So `a/b` becomes
 `a-b` as a slug and `ab` in kebab.
 
-# Splitting is the real work
+## Splitting is the real work
 
 Joining words back together is trivial. Splitting them correctly is where
 everything happens, and most naive implementations fail on three cases.
@@ -57,7 +57,7 @@ everything happens, and most naive implementations fail on three cases.
 Accents must be stripped **after** splitting: normalising first loses the initial
 capital, and the word becomes indistinguishable from its lowercase form.
 
-# A conversion has to be idempotent
+## A conversion has to be idempotent
 
 Re-applying a conversion to its own output must give the same output.
 
@@ -70,7 +70,7 @@ Without that property, a pipeline that converts twice — because two layers app
 the same normalisation "just in case" — produces different identifiers on each
 pass.
 
-# Converting an object's keys
+## Converting an object's keys
 
 The most common concrete case: an API in `snake_case`, a front end in `camelCase`.
 

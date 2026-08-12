@@ -14,7 +14,7 @@ Writing CSS has never been as good as it is today. Cross-browser support for nes
 
 But having good native CSS isn't enough. What matters is what the end user receives. And that's where the tooling makes all the difference.
 
-# 1. User experience first
+## 1. User experience first
 
 Before talking about DX, I always start from the UX. What does a good style load look like?
 
@@ -22,77 +22,77 @@ Stylesheets should be as lightweight as possible. They shouldn't be re-downloade
 
 Everything else flows from that. If a styling tool doesn't help me reach those goals, it's not part of my stack.
 
-# 2. What I expect from my tools
+## 2. What I expect from my tools
 
 On the performance side, my tools have to automatically remove unused styles, bundle the CSS files, minify and compress the output, and generate hashed file names for immutable caching.
 
 On the DX side, I want to be able to remove styles as easily as the component that uses them. To adhere to a design system without friction. To get autocompletion and linting right in the editor. And above all: to never run into naming collisions.
 
-# 3. Why Tailwind CSS
+## 3. Why Tailwind CSS
 
 I use Tailwind CSS v4, and that's all I use.
 
-## Colocation is everything
+### Colocation is everything
 
 Utility classes live directly in the JSX. Style and structure are in the same place. When I delete a component, its styles disappear with it. When I read a component, I immediately understand what it looks like.
 
 No separate `.module.css` file. No back-and-forth between two files to understand a button. No `buttonWrapperContainer` to name.
 
-## A fixed CSS budget
+### A fixed CSS budget
 
 Tailwind uses a compiler that only generates the classes you use. No matter how many classes exist in the framework — only the ones present in the code end up in the bundle. The result: a fixed upper bound on the size of the generated CSS, which is then minified, compressed and cached.
 
 In practice, my final CSS is tiny. And it doesn't grow proportionally to the size of the project.
 
-## The most AI-friendly
+### The most AI-friendly
 
 This is an advantage I underestimated at first. When a coding agent can read the style and the markup in the same place, generating and editing code becomes trivial. Tailwind is by far the CSS library best understood by today's models.
 
 With Cursor, I can describe a component in natural language and get idiomatic JSX + Tailwind in a few seconds. That's not possible with approaches where the styles live elsewhere.
 
-# 4. My rules
+## 4. My rules
 
-## No `@apply`
+### No `@apply`
 
 Never. `@apply` creates a useless layer of indirection. If I need to reuse styles, I extract a React component. Reuse happens at the component level, not at the CSS level.
 
-## No custom CSS files
+### No custom CSS files
 
 My only CSS file is Tailwind v4's `globals.css` — the entry point with the `@import`s and the few unavoidable global variables (custom fonts, complex animations). Everything else is utility-based, directly in the JSX.
 
-## Built-in values first
+### Built-in values first
 
 I lean on Tailwind's design system: `gap-4`, `text-sm`, `rounded-lg`. Arbitrary values (`w-[347px]`) are a signal that something is off in the design or in my approach. I use them occasionally, but it's always a conscious trade-off.
 
-## Semantic HTML, not `div`s everywhere
+### Semantic HTML, not `div`s everywhere
 
 Tailwind changes nothing about this rule. `<nav>`, `<main>`, `<article>`, `<section>`, `<dialog>` — the right HTML element, with the right `aria-*` attributes. Utility classes style the component, they don't replace the meaning of the markup.
 
-## Responsive by design, not as an afterthought
+### Responsive by design, not as an afterthought
 
 Mobile-first. Always. Tailwind's breakpoints (`sm:`, `md:`, `lg:`) apply from smallest to largest. I start with mobile, then I add the adjustments. Not the other way around.
 
-# 5. What I don't use (and why)
+## 5. What I don't use (and why)
 
-## CSS Modules
+### CSS Modules
 
 They solve scoping and work everywhere. But the styles live in a separate file, so no colocation. No TypeScript autocompletion. And as the project grows, navigating between the component and its `.module.css` becomes constant friction.
 
-## Runtime CSS-in-JS (styled-components, Emotion)
+### Runtime CSS-in-JS (styled-components, Emotion)
 
 They inject styles at runtime, which has a measurable performance cost. Incompatible with React Server Components without workarounds. It's a generation of tooling that served its purpose, but no longer has a place in a modern RSC-first stack.
 
-## Heavy UI libraries
+### Heavy UI libraries
 
 If the need can be covered natively with Tailwind and semantic HTML, that's what I do. UI overlays add weight, design opinions, and abstractions to work around. When I need accessible components, I start from headless primitives and style them with Tailwind.
 
-# 6. Streaming and Tailwind
+## 6. Streaming and Tailwind
 
 With Next.js and streaming SSR, styles have to be scoped or atomic so they don't affect content that's already displayed when a new chunk arrives.
 
 Tailwind generates atomic classes compiled into a single stylesheet, loaded before any class is used. No flash, no layout shift in the middle of the stream. It's compatible by design with React's and Next.js's rendering model.
 
-# 7. My editor setup
+## 7. My editor setup
 
 The Tailwind CSS IntelliSense extension in VS Code (or Cursor) is non-negotiable. Class autocompletion, color previews, conflict linting — it's what turns Tailwind from a "you have to memorize everything" framework into an "the editor guides you" framework.
 

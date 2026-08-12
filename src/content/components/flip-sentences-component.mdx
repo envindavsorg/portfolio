@@ -17,7 +17,7 @@ isNew: true
   canReplay
 />
 
-# 1. Installation avec le CLI de shadcn/ui
+## 1. Installation avec le CLI de shadcn/ui
 
 Copiez la commande ci-dessous dans votre terminal afin d'installer le composant
 
@@ -25,15 +25,15 @@ Copiez la commande ci-dessous dans votre terminal afin d'installer le composant
 npx shadcn@latest add @envindavsorg/flip-sentences
 ```
 
-# 2. Installation manuelle
+## 2. Installation manuelle
 
-## (2.1) installez les dépendances :
+### (2.1) installez les dépendances :
 
 ```bash
 npm install motion clsx tailwind-merge
 ```
 
-## (2.2) ajoutez le helper **cn** :
+### (2.2) ajoutez le helper **cn** :
 
 <ComponentSource
   src="src/lib/utils.ts"
@@ -42,7 +42,7 @@ npm install motion clsx tailwind-merge
   noCollapsible
 />
 
-## (2.3) créez le tableau avec les phrases que vous souhaitez voir défiler :
+### (2.3) créez le tableau avec les phrases que vous souhaitez voir défiler :
 
 ```ts title="sentences.ts" {2-5}
 const EXAMPLE_SENTENCES = [
@@ -53,7 +53,7 @@ const EXAMPLE_SENTENCES = [
 ];
 ```
 
-## (2.4) ajoutez le code suivant :
+### (2.4) ajoutez le code suivant :
 
 <ComponentSource
   name="flip-sentences"
@@ -61,11 +61,11 @@ const EXAMPLE_SENTENCES = [
   showLineNumbers
 />
 
-## (2.5) petite astuce :
+### (2.5) petite astuce :
 
 Mettez à jour les chemins d'import de vos dépendances pour correspondre à la structure de votre projet et ainsi le faire fonctionner correctement.
 
-# 3. Utilisation
+## 3. Utilisation
 
 ```tsx
 "use client";
@@ -75,7 +75,7 @@ import { FlipSentences } from "@/components/flip-sentences";
 <FlipSentences sentences={EXAMPLE_SENTENCES} />;
 ```
 
-# 4. Références
+## 4. Références
 
 - https://ui.shadcn.com/docs/registry
 - https://motion.dev/docs/react-motion-component
