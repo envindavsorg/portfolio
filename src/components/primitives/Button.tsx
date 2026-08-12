@@ -10,6 +10,7 @@ import { Check } from "@/components/motion/Check";
 import { Copy } from "@/components/motion/Copy";
 import { X } from "@/components/motion/X";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 export const buttonVariants = cva(
   [
@@ -112,7 +113,7 @@ export const CopyButton = ({
   variant = "outline",
   size = "icon",
   className,
-  label = "copier le texte dans le presse-papier",
+  label,
   timeout = 2000,
   ...props
 }: CopyButtonProps) => {
@@ -160,7 +161,7 @@ export const CopyButton = ({
   return (
     <Button
       {...props}
-      aria-label={label}
+      aria-label={label ?? m.copy_button_default_aria()}
       className={cn(
         className,
         variant === "ghost" && "hover:bg-background!"

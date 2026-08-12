@@ -1,0 +1,68 @@
+---
+title: Text comparison
+description: Compare two texts line by line and spot additions and removals at a glance
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["diff", "git", "text"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<DiffViewerUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Usage
+
+Paste two versions of the same text: the comparison shows up line by line, with
+line numbers on each side. Added lines appear in green, removed ones in red,
+unchanged ones stay neutral.
+
+Handy for comparing two API responses, two config files, or two drafts of the
+same paragraph — without going through a Git repository.
+
+# How the comparison is computed
+
+The tool relies on the **longest common subsequence** (LCS), the same principle
+as `git diff`. The idea: find the largest set of lines present in both texts, in
+the same order. Everything left over is an addition or a removal.
+
+That is why a line that was merely moved shows up as a removal _then_ an
+addition: LCS reasons about sequences, not about moves.
+
+Line endings are normalised: a `CRLF` (Windows) text and the same text in `LF`
+(Unix) are not reported as different.
+
+# A deliberate limit
+
+The LCS table takes space proportional to the product of both lengths. For two
+2,000-line texts that is already four million cells. Beyond that size the tool
+declines the comparison rather than freezing your tab.
+
+# Comparing two files on the command line
+
+```bash
+# classic comparison, unified format
+diff -u old.txt new.txt
+
+# ignoring whitespace
+diff -u -w old.txt new.txt
+
+# with git's colouring, outside any repository
+git diff --no-index old.txt new.txt
+```
+
+# Comparing two objects in JavaScript
+
+For data structures rather than text, comparing _normalised_ JSON avoids false
+positives caused by key ordering:
+
+```javascript
+const normalize = (value) =>
+  JSON.stringify(value, Object.keys(value).sort(), 2);
+
+const identical = normalize(a) === normalize(b);
+```

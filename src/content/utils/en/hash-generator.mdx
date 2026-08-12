@@ -1,0 +1,90 @@
+---
+title: Hashes and UUIDs
+description: Compute SHA-1 to SHA-512 digests and generate UUID v4 identifiers, entirely in your browser
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["hash", "sha256", "uuid", "crypto"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<HashGeneratorUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Usage
+
+Type some text to get its digest in the algorithm of your choice, or generate
+UUID v4 identifiers in one click. Everything is computed locally through the
+browser's **Web Crypto API**: nothing travels over the network.
+
+# Picking an algorithm
+
+| Algorithm | Size     | When to use it                           |
+| --------- | -------- | ---------------------------------------- |
+| SHA-1     | 160 bits | only for existing systems (Git, legacy)  |
+| SHA-256   | 256 bits | today's default choice                   |
+| SHA-384   | 384 bits | when extra margin is required            |
+| SHA-512   | 512 bits | often faster than SHA-256 on 64-bit CPUs |
+
+**SHA-1 is broken** for any use where collision resistance matters: practical
+collisions were produced back in 2017. It sticks around because Git and many
+older systems use it, but no new project should rely on it.
+
+# What these digests are not for
+
+A SHA digest is **not** a way to store a password. It is designed to be fast,
+which is exactly the weakness a brute-force attack exploits: a GPU computes
+billions of SHA-256 per second.
+
+For passwords you need a slow, tunable function — **Argon2id** preferably, or
+**scrypt** or **bcrypt** — with a unique salt per user.
+
+# Computing a digest in JavaScript
+
+```javascript
+const digest = async (text, algorithm = "SHA-256") => {
+  const bytes = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest(algorithm, bytes);
+
+  return Array.from(new Uint8Array(hash), (byte) =>
+    byte.toString(16).padStart(2, "0")
+  ).join("");
+};
+```
+
+Encoding goes through `TextEncoder`: we hash **UTF-8 bytes**, not UTF-16 code
+units. Without that, "é" would not produce the same digest as in other
+languages.
+
+# Computing a digest in Node.js
+
+```javascript
+import { createHash } from "node:crypto";
+
+const hash = createHash("sha256")
+  .update("Hello, world!")
+  .digest("hex");
+```
+
+# Generating a UUID
+
+```javascript
+// secure context (https or localhost)
+const id = crypto.randomUUID();
+```
+
+`crypto.randomUUID` is unavailable outside a secure context — over HTTP on a
+local network, for instance. The fallback must stay cryptographic:
+
+```javascript
+const bytes = new Uint8Array(16);
+crypto.getRandomValues(bytes);
+bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
+bytes[8] = (bytes[8] & 0x3f) | 0x80; // RFC 4122 variant
+```
+
+Never `Math.random()` for an identifier: its output is predictable.

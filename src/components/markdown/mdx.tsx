@@ -22,7 +22,10 @@ import {
 import { ArticleBanner } from "@/components/utils/ArticleBannerGenerator";
 import { Base64 } from "@/components/utils/Base64";
 import { ColorGenerator } from "@/components/utils/ColorGenerator";
+import { DiffViewer } from "@/components/utils/DiffViewer";
+import { HashGenerator } from "@/components/utils/HashGenerator";
 import { JSONFormatter } from "@/components/utils/JSONFormatter";
+import { JwtDecoder } from "@/components/utils/JwtDecoder";
 import { LoremIpsumGenerator } from "@/components/utils/LoremIpsumGenerator";
 import { SpeedTest } from "@/components/utils/SpeedTest";
 import { rehypeAddQueryParams } from "@/lib/rehype-add-query-params";
@@ -78,8 +81,11 @@ const components: MDXRemoteProps["components"] = {
   ColorGeneratorUtils: ColorGenerator,
   ComponentPreview,
   ComponentSource,
+  DiffViewerUtils: DiffViewer,
+  HashGeneratorUtils: HashGenerator,
   InternetSpeedTestUtils: SpeedTest,
   JSONFormatterUtils: JSONFormatter,
+  JwtDecoderUtils: JwtDecoder,
   LoremIpsumGeneratorUtils: LoremIpsumGenerator,
   code: Code,
   figcaption: ({

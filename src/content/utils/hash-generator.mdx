@@ -1,0 +1,92 @@
+---
+title: Empreintes et UUID
+description: Calculez des empreintes SHA-1 à SHA-512 et générez des UUID v4, entièrement dans votre navigateur
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["hash", "sha256", "uuid", "crypto"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<HashGeneratorUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Utilisation
+
+Saisissez un texte pour obtenir son empreinte dans l'algorithme choisi, ou
+générez des UUID v4 d'un clic. Tout est calculé localement via la **Web Crypto
+API** du navigateur : rien ne transite sur le réseau.
+
+# Choisir son algorithme
+
+| Algorithme | Taille   | Quand l'utiliser                                     |
+| ---------- | -------- | ---------------------------------------------------- |
+| SHA-1      | 160 bits | seulement pour de l'existant (Git, anciens systèmes) |
+| SHA-256    | 256 bits | le choix par défaut aujourd'hui                      |
+| SHA-384    | 384 bits | quand une marge supplémentaire est exigée            |
+| SHA-512    | 512 bits | souvent plus rapide que SHA-256 en 64 bits           |
+
+**SHA-1 est cassé** pour tout usage où la résistance aux collisions compte : des
+collisions concrètes ont été produites dès 2017. Il reste présent parce que Git
+et beaucoup de systèmes plus anciens l'utilisent, mais aucun nouveau projet ne
+devrait s'appuyer dessus.
+
+# Ce que ces empreintes ne font pas
+
+Une empreinte SHA n'est **pas** un moyen de stocker un mot de passe. Elle est
+conçue pour être rapide, ce qui est exactement le défaut recherché par une
+attaque par force brute : un GPU calcule des milliards de SHA-256 par seconde.
+
+Pour des mots de passe, il faut une fonction lente et paramétrable — **Argon2id**
+de préférence, sinon **scrypt** ou **bcrypt** — avec un sel unique par
+utilisateur.
+
+# Calculer une empreinte en JavaScript
+
+```javascript
+const digest = async (text, algorithm = "SHA-256") => {
+  const bytes = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest(algorithm, bytes);
+
+  return Array.from(new Uint8Array(hash), (byte) =>
+    byte.toString(16).padStart(2, "0")
+  ).join("");
+};
+```
+
+L'encodage passe par `TextEncoder` : on hache les **octets UTF-8**, pas les
+unités de code UTF-16. Sans cela, « é » ne produirait pas la même empreinte que
+dans les autres langages.
+
+# Calculer une empreinte en Node.js
+
+```javascript
+import { createHash } from "node:crypto";
+
+const hash = createHash("sha256")
+  .update("Hello, world!")
+  .digest("hex");
+```
+
+# Générer un UUID
+
+```javascript
+// contexte sécurisé (https ou localhost)
+const id = crypto.randomUUID();
+```
+
+`crypto.randomUUID` est indisponible hors contexte sécurisé — en HTTP sur un
+réseau local, par exemple. Le repli doit rester cryptographique :
+
+```javascript
+const bytes = new Uint8Array(16);
+crypto.getRandomValues(bytes);
+bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
+bytes[8] = (bytes[8] & 0x3f) | 0x80; // variante RFC 4122
+```
+
+Jamais `Math.random()` pour un identifiant : sa sortie est prévisible.
