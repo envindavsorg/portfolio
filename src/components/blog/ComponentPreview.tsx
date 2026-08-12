@@ -11,11 +11,14 @@ import { Button } from "@/components/primitives/Button";
 import { TabsAnimated } from "@/components/primitives/Tabs";
 import { Code as CodeInline } from "@/components/primitives/Typography";
 import { V0Icon } from "@/components/svgs/stack/V0";
+import { toPlaygroundName } from "@/lib/playground";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
+import { PLAYGROUNDS } from "@/registry/playgrounds";
 
 import { CodeCollapsibleWrapper } from "./CodeCollapsibleWrapper";
+import { ComponentPlayground } from "./ComponentPlayground";
 
 type ComponentPreviewProps = ComponentProps<"div"> & {
   name: string;
@@ -78,6 +81,9 @@ export const ComponentPreview = ({
             <div className="flex justify-end gap-x-3">
               {canReplay && (
                 <Button
+                  // un bouton à icône seule sans nom : un lecteur d'écran
+                  // n'annonçait que « bouton »
+                  aria-label={m.writings_component_preview_replay_aria()}
                   onClick={() => {
                     setReplay((v) => v + 1);
                     iconRef.current?.startAnimation();
@@ -139,11 +145,32 @@ export const ComponentPreview = ({
     },
   ];
 
+  // un composant sans prop réglable n'a pas d'onglet : proposer un bac à sable
+  // vide serait pire que ne rien proposer
+  const playgroundName = toPlaygroundName(name);
+  const definition = PLAYGROUNDS[playgroundName];
+
+  if (definition) {
+    tabs.push({
+      content: (
+        <ComponentPlayground
+          definition={definition}
+          name={playgroundName}
+        />
+      ),
+      id: 2,
+      label: m.writings_component_preview_tab_playground(),
+    });
+  }
+
   return (
     <div className={cn(notProse && "not-prose")} {...props}>
       <TabsAnimated
         after={false}
-        className="ms-auto max-w-sm pt-0"
+        className={cn(
+          "ms-auto max-w-sm pt-0",
+          tabs.length > 2 && "max-w-md grid-cols-3"
+        )}
         tabs={tabs}
       />
     </div>

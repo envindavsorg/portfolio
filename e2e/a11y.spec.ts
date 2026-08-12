@@ -1,4 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
+import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 
 /**
@@ -24,6 +25,7 @@ const PAGES = [
   "/articles/how-i-write-css",
   "/components",
   "/components/theme-switcher-component",
+  "/components/flip-sentences-component",
   "/utils",
   "/utils/regex-tester",
   "/utils/contrast-checker",
@@ -70,40 +72,67 @@ const isKnownDebt = (message: string): boolean =>
       message.includes(foreground) && message.includes(background)
   );
 
+const scan = async (page: Page) => {
+  const builder = new AxeBuilder({ page }).withTags([
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa",
+  ]);
+
+  for (const selector of DELIBERATE_EXCLUSIONS) {
+    builder.exclude(selector);
+  }
+
+  const { violations } = await builder.analyze();
+
+  return violations.flatMap((violation) =>
+    violation.nodes
+      .filter(
+        (node) =>
+          !node.any.some((check) => isKnownDebt(check.message))
+      )
+      .map(
+        (node) =>
+          `${violation.id} · ${node.target.join(" ")} · ${node.any
+            .map((check) => check.message)
+            .join(" | ")}`
+      )
+  );
+};
+
 test.describe("accessibilité automatique", () => {
+  /**
+   * Un onglet fermé n'est pas rendu : le scan d'une page de composant ne voyait
+   * donc jamais le bac à sable, avec ses cases à cocher et ses champs. Cet état
+   * mérite le même contrôle que le reste.
+   */
+  test("le bac à sable ouvert est conforme", async ({ page }) => {
+    await page.goto("/components/flip-sentences-component");
+    await page.waitForLoadState("networkidle");
+    await page.getByRole("tab", { name: "bac à sable" }).click();
+
+    // attendre le bouton de copie, pas seulement le conteneur : le panneau est
+    // visible dès qu'il entre dans le DOM, alors que le composant et le bouton
+    // arrivent encore. Scanner à cet instant faisait remonter un bouton sans nom
+    // qui, une fois monté, en a bien un.
+    await expect(
+      page.getByRole("button", {
+        name: "copier le code du bac à sable",
+      })
+    ).toBeVisible();
+
+    expect(await scan(page)).toEqual([]);
+  });
+
   for (const path of PAGES) {
     test(`aucune violation axe sur ${path}`, async ({ page }) => {
       await page.goto(path);
       await page.waitForLoadState("networkidle");
 
-      const builder = new AxeBuilder({ page }).withTags([
-        "wcag2a",
-        "wcag2aa",
-        "wcag21a",
-        "wcag21aa",
-      ]);
-
-      for (const selector of DELIBERATE_EXCLUSIONS) {
-        builder.exclude(selector);
-      }
-
-      const { violations } = await builder.analyze();
-
-      const unexpected = violations.flatMap((violation) =>
-        violation.nodes
-          .filter(
-            (node) =>
-              !node.any.some((check) => isKnownDebt(check.message))
-          )
-          .map(
-            (node) =>
-              `${violation.id} · ${node.target.join(" ")} · ${node.any
-                .map((check) => check.message)
-                .join(" | ")}`
-          )
+      expect(await scan(page), `violations axe sur ${path}`).toEqual(
+        []
       );
-
-      expect(unexpected, `violations axe sur ${path}`).toEqual([]);
     });
   }
 });
