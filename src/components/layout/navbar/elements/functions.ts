@@ -1,5 +1,5 @@
 import type { SearchDoc } from "@/lib/search";
-import { normalize, searchableText } from "@/lib/search";
+import { scoreText, searchableText } from "@/lib/search";
 
 import { CATEGORY, COMMANDS } from "./content";
 import type {
@@ -59,11 +59,6 @@ export const buildPostGroups = (
   return grouped;
 };
 
-const EXACT_TITLE_SCORE = 1;
-const TITLE_MATCH_SCORE = 0.9;
-const CONTENT_MATCH_SCORE = 0.5;
-const NO_MATCH = 0;
-
 /**
  * Filtre de la palette ⌘K.
  *
@@ -71,32 +66,15 @@ const NO_MATCH = 0;
  * uniquement le titre. On étend la correspondance au texte indexé (description,
  * tags, titres de sections, extrait) tout en gardant les titres en tête du
  * classement, et en ignorant les accents.
+ *
+ * Le calcul lui-même vit dans `lib/search.ts`, partagé avec la page /search :
+ * deux classements différents pour la même requête seraient déroutants.
  */
 export const commandFilter = (
   value: string,
   search: string,
   keywords?: string[]
-): number => {
-  const query = normalize(search.trim());
-  if (!query) {
-    return EXACT_TITLE_SCORE;
-  }
-
-  const title = normalize(value);
-  if (title === query) {
-    return EXACT_TITLE_SCORE;
-  }
-  if (title.includes(query)) {
-    return TITLE_MATCH_SCORE;
-  }
-
-  const haystack = keywords?.join(" ") ?? "";
-  if (haystack && normalize(haystack).includes(query)) {
-    return CONTENT_MATCH_SCORE;
-  }
-
-  return NO_MATCH;
-};
+): number => scoreText(value, keywords?.join(" ") ?? "", search);
 
 export const getFilteredGroups = (
   pathname: string

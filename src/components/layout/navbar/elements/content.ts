@@ -7,6 +7,7 @@ import { Home } from "@/components/motion/Home";
 import { IdCard } from "@/components/motion/IdCard";
 import { Keyboard } from "@/components/motion/Keyboard";
 import { Layers } from "@/components/motion/Layers";
+import { Search } from "@/components/motion/Search";
 import { User } from "@/components/motion/User";
 import GLOBAL_DATA from "@/data/global";
 import { m } from "@/paraglide/messages";
@@ -56,6 +57,12 @@ export const COMMANDS: CommandGroupDef[] = [
         kind: "page",
         title: m.nav_command_tags,
         url: "/tags",
+      },
+      {
+        icon: Search,
+        kind: "page",
+        title: m.nav_command_search_page,
+        url: "/search",
       },
     ],
   },

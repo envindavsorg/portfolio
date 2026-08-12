@@ -91,6 +91,11 @@ const sitemap = (): MetadataRoute.Sitemap => {
       lastModified: getLatestDate(allPosts),
       priority: 0.6,
     }),
+    ...localizedEntries("/search", {
+      changeFrequency: "weekly",
+      lastModified: getLatestDate(allPosts),
+      priority: 0.4,
+    }),
   ];
 
   // les pages de sujet sont la principale surface de découverte transversale :

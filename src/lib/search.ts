@@ -96,3 +96,71 @@ export const searchableText = (doc: SearchDoc): string =>
       doc.excerpt,
     ].join(" ")
   );
+
+export const SCORES = {
+  /** la requête apparaît dans le texte indexé */
+  content: 0.5,
+  /** le titre est exactement la requête */
+  exactTitle: 1,
+  none: 0,
+  /** la requête apparaît dans le titre */
+  title: 0.9,
+} as const;
+
+/**
+ * Pertinence d'un document pour une requête.
+ *
+ * Les titres passent devant le contenu : trouver un mot dans le corps d'un
+ * article est utile, mais quand le titre correspond c'est presque toujours le
+ * résultat attendu. La comparaison est insensible aux accents des deux côtés.
+ *
+ * Cette fonction est le point de partage entre la palette ⌘K et la page de
+ * recherche : deux classements différents pour la même requête seraient
+ * déroutants, et la palette perdrait sa raison d'être de raccourci.
+ */
+export const scoreText = (
+  title: string,
+  haystack: string,
+  query: string
+): number => {
+  const needle = normalize(query.trim());
+  if (!needle) {
+    return SCORES.exactTitle;
+  }
+
+  const normalizedTitle = normalize(title);
+  if (normalizedTitle === needle) {
+    return SCORES.exactTitle;
+  }
+  if (normalizedTitle.includes(needle)) {
+    return SCORES.title;
+  }
+
+  return haystack && normalize(haystack).includes(needle)
+    ? SCORES.content
+    : SCORES.none;
+};
+
+export const scoreDoc = (doc: SearchDoc, query: string): number =>
+  scoreText(doc.title, searchableText(doc), query);
+
+export interface SearchHit {
+  doc: SearchDoc;
+  score: number;
+}
+
+/**
+ * Documents correspondant à la requête, du plus pertinent au moins pertinent.
+ *
+ * À score égal l'ordre d'entrée est conservé — `getAllContent` trie par date
+ * décroissante, donc le plus récent sort en premier, ce qui est le bon
+ * départage par défaut.
+ */
+export const searchDocs = (
+  docs: SearchDoc[],
+  query: string
+): SearchHit[] =>
+  docs
+    .map((doc) => ({ doc, score: scoreDoc(doc, query) }))
+    .filter(({ score }) => score > SCORES.none)
+    .toSorted((left, right) => right.score - left.score);

@@ -1,7 +1,14 @@
 import { describe, expect, it } from "vitest";
 
 import type { SearchDoc } from "./search";
-import { normalize, searchableText, toPlainText } from "./search";
+import {
+  normalize,
+  SCORES,
+  scoreText,
+  searchableText,
+  searchDocs,
+  toPlainText,
+} from "./search";
 
 describe("toPlainText", () => {
   it("drops fenced code blocks entirely", () => {
@@ -88,5 +95,103 @@ describe("searchableText", () => {
   it("is searchable without accents", () => {
     // « j'écris » doit se trouver en tapant « ecris »
     expect(searchableText(doc)).toContain("ecris");
+  });
+});
+
+describe("scoreText", () => {
+  it("classe un titre exact au-dessus d'un titre partiel", () => {
+    expect(scoreText("css", "", "css")).toBe(SCORES.exactTitle);
+    expect(scoreText("le css moderne", "", "css")).toBe(SCORES.title);
+  });
+
+  it("classe le contenu en dessous du titre", () => {
+    expect(scoreText("un titre", "du css dedans", "css")).toBe(
+      SCORES.content
+    );
+  });
+
+  it("ne renvoie rien sans correspondance", () => {
+    expect(scoreText("un titre", "du contenu", "rust")).toBe(
+      SCORES.none
+    );
+  });
+
+  it("ignore les accents des deux côtés", () => {
+    expect(scoreText("Comment j'écris du CSS", "", "ecris")).toBe(
+      SCORES.title
+    );
+    expect(scoreText("un titre", "réseau local", "reseau")).toBe(
+      SCORES.content
+    );
+  });
+
+  it("accepte tout pour une requête vide", () => {
+    // sinon la palette n'afficherait rien à l'ouverture
+    expect(scoreText("un titre", "", "")).toBe(SCORES.exactTitle);
+    expect(scoreText("un titre", "", "   ")).toBe(SCORES.exactTitle);
+  });
+});
+
+const makeDoc = (
+  slug: string,
+  title: string,
+  excerpt = ""
+): SearchDoc => ({
+  category: "articles",
+  description: "",
+  excerpt,
+  headings: [],
+  slug,
+  tags: [],
+  title,
+});
+
+describe("searchDocs", () => {
+  it("écarte les documents sans correspondance", () => {
+    const hits = searchDocs(
+      [
+        makeDoc("a", "Le CSS moderne"),
+        makeDoc("b", "Rust en production"),
+      ],
+      "css"
+    );
+
+    expect(hits.map((hit) => hit.doc.slug)).toEqual(["a"]);
+  });
+
+  it("place les correspondances de titre avant celles de contenu", () => {
+    const hits = searchDocs(
+      [
+        makeDoc("contenu", "Autre sujet", "il y a du css ici"),
+        makeDoc("titre", "Le CSS moderne"),
+      ],
+      "css"
+    );
+
+    expect(hits.map((hit) => hit.doc.slug)).toEqual([
+      "titre",
+      "contenu",
+    ]);
+  });
+
+  it("conserve l'ordre d'entrée à score égal", () => {
+    // getAllContent trie par date décroissante : le plus récent doit rester devant
+    const hits = searchDocs(
+      [
+        makeDoc("recent", "CSS et grilles"),
+        makeDoc("ancien", "CSS et flexbox"),
+      ],
+      "css"
+    );
+
+    expect(hits.map((hit) => hit.doc.slug)).toEqual([
+      "recent",
+      "ancien",
+    ]);
+  });
+
+  it("renvoie tout pour une requête vide", () => {
+    const docs = [makeDoc("a", "Un"), makeDoc("b", "Deux")];
+    expect(searchDocs(docs, "")).toHaveLength(2);
   });
 });
