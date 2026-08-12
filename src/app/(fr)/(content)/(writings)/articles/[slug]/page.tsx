@@ -17,7 +17,7 @@ import {
   getContentBySlug,
 } from "@/lib/content";
 import { getPageJsonLd } from "@/lib/json-ld";
-import { createMetadata } from "@/lib/metadata";
+import { createContentMetadata } from "@/lib/metadata";
 import { getContentToc } from "@/lib/toc";
 
 interface Props {
@@ -38,13 +38,7 @@ export const generateMetadata = async ({
     return notFound();
   }
 
-  const { title, description, category } = article.metadata;
-  return createMetadata({
-    description,
-    ogImageParams: { description, title, type: "blogArticle" },
-    path: `/${category}/${slug}`,
-    title,
-  });
+  return createContentMetadata(article);
 };
 
 export const ArticleView = ({

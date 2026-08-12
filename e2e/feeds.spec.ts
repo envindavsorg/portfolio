@@ -119,12 +119,25 @@ test.describe("miroir texte brut", () => {
     expect(text).toContain("/articles/how-i-write-css");
   });
 
+  /**
+   * Un message Paraglide interpolé au lieu d'être appelé.
+   *
+   * `${message}` compile sans bruit et rend le CODE SOURCE de la fonction. La
+   * version compilée est reconnaissable à coup sûr : elle lit
+   * `experimentalStaticLocale` et se termine par un ternaire sur la locale.
+   */
+  const STRINGIFIED_MESSAGE =
+    /experimentalStaticLocale|\(\w*=\{\},\s*\w*=\{\}\)\s*=>/u;
+
   for (const path of [
     "/about.md",
     "/experience.md",
     "/projects.md",
+    "/certifications.md",
   ]) {
-    test(`${path} est servi en markdown`, async ({ request }) => {
+    test(`${path} est servi en markdown, sans code source`, async ({
+      request,
+    }) => {
       const response = await request.get(path);
 
       expect(response.status()).toBe(200);
@@ -133,8 +146,36 @@ test.describe("miroir texte brut", () => {
       );
       const body = await response.text();
       expect(body.length).toBeGreaterThan(100);
+
+      // l'assertion qui manquait : /projects.md et /experience.md ont servi des
+      // fonctions compilées à la place de chaque intitulé pendant tout ce temps,
+      // et un `length > 100` passe au vert dessus sans broncher
+      expect(body).not.toMatch(STRINGIFIED_MESSAGE);
     });
   }
+
+  test("le miroir publie les vrais libellés traduits", async ({
+    request,
+  }) => {
+    const experience = await request.get("/experience.md");
+    const projects = await request.get("/projects.md");
+
+    // des valeurs prises dans messages/fr.json : elles ne peuvent apparaître que
+    // si le message a réellement été appelé, dans la locale du miroir
+    expect(await experience.text()).toContain(
+      "Lead Développeur Front-End"
+    );
+
+    const projectsText = await projects.text();
+    expect(projectsText).toContain("ts-safe-path");
+    // le lien publié pointait vers …/cuzeacflorin.fr, un dépôt qui n'existe pas
+    expect(projectsText).toContain(
+      "https://github.com/envindavsorg/portfolio"
+    );
+    expect(projectsText).not.toContain(
+      "github.com/envindavsorg/cuzeacflorin.fr"
+    );
+  });
 
   test("la source .mdx d'un article est servie dans les deux langues", async ({
     request,

@@ -1,17 +1,18 @@
+import type { Message } from "@/lib/i18n";
 import { m } from "@/paraglide/messages";
 
 export interface Experience {
   id: string;
   company: string;
-  type?: () => string;
-  title: () => string;
+  type?: Message;
+  title: Message;
   link?: string;
   period: {
     start: string;
     end?: string;
   };
   skills?: string[];
-  description?: (() => string)[];
+  description?: Message[];
   isCurrentEmployer?: boolean;
 }
 

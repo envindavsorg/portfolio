@@ -6,7 +6,6 @@ import type React from "react";
 import { TooltipProvider } from "@/components/base/Tooltip";
 import { LocaleProvider } from "@/components/providers/modules/LocaleProvider";
 import { Providers } from "@/components/providers/Providers";
-import GLOBAL_DATA from "@/data/global";
 import { META_THEME_COLORS } from "@/data/theme";
 import {
   PixelCircle,
@@ -17,32 +16,8 @@ import {
 } from "@/fonts/pixel";
 import type { AppLocale } from "@/lib/i18n";
 import { setServerLocale } from "@/lib/i18n";
+import { getSiteJsonLd } from "@/lib/json-ld";
 import { cn } from "@/lib/utils";
-
-const getJsonLd = (locale: AppLocale) => ({
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      alternateName: [GLOBAL_DATA.USER.username],
-      description: GLOBAL_DATA.USER.bio,
-      inLanguage: locale === "fr" ? "fr-FR" : "en-US",
-      name: GLOBAL_DATA.USER.fullName,
-      url: GLOBAL_DATA.SOCIAL.portfolio,
-    },
-    {
-      "@type": "Person",
-      jobTitle: GLOBAL_DATA.WORK.title,
-      knowsAbout: ["React", "Next.js", "TypeScript"],
-      name: GLOBAL_DATA.USER.fullName,
-      sameAs: [
-        GLOBAL_DATA.SOCIAL.github,
-        GLOBAL_DATA.SOCIAL.linkedin,
-      ].filter(Boolean),
-      url: GLOBAL_DATA.SOCIAL.portfolio,
-    },
-  ],
-});
 
 const darkModeScript = `
 	try {
@@ -103,7 +78,7 @@ export const RootDocument = ({
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(getJsonLd(locale)).replaceAll(
+            __html: JSON.stringify(getSiteJsonLd(locale)).replaceAll(
               "<",
               "\\u003c"
             ),

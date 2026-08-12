@@ -6,7 +6,7 @@ import {
   UtilView,
 } from "@/app/(fr)/(content)/(writings)/utils/[slug]/page";
 import { getContentBySlug } from "@/lib/content";
-import { createMetadata } from "@/lib/metadata";
+import { createContentMetadata } from "@/lib/metadata";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -23,14 +23,7 @@ export const generateMetadata = async ({
     return notFound();
   }
 
-  const { title, description, category } = util.metadata;
-  return createMetadata({
-    description,
-    locale: "en",
-    ogImageParams: { description, title, type: "utilsArticle" },
-    path: `/${category}/${slug}`,
-    title,
-  });
+  return createContentMetadata(util, "en");
 };
 
 const Page = async ({ params }: Props) => {

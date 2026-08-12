@@ -6,7 +6,7 @@ import {
   generateStaticParams,
 } from "@/app/(fr)/(content)/(writings)/articles/[slug]/page";
 import { getContentBySlug } from "@/lib/content";
-import { createMetadata } from "@/lib/metadata";
+import { createContentMetadata } from "@/lib/metadata";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -23,14 +23,7 @@ export const generateMetadata = async ({
     return notFound();
   }
 
-  const { title, description, category } = article.metadata;
-  return createMetadata({
-    description,
-    locale: "en",
-    ogImageParams: { description, title, type: "blogArticle" },
-    path: `/${category}/${slug}`,
-    title,
-  });
+  return createContentMetadata(article, "en");
 };
 
 const Page = async ({ params }: Props) => {

@@ -10,15 +10,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/base/Breadcrumb";
+import type { BreadcrumbEntry } from "@/lib/breadcrumb-json-ld";
+import { getBreadcrumbJsonLd } from "@/lib/breadcrumb-json-ld";
 import { cn } from "@/lib/utils";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { ChevronRight } from "../motion/ChevronRight";
-
-interface BreadcrumbEntry {
-  label: string;
-  href?: string;
-}
 
 interface WritingsBreadcrumbProps {
   items: BreadcrumbEntry[];
@@ -39,6 +36,23 @@ export const WritingsBreadcrumb = ({
 
   return (
     <div className="screen-line-after px-3 py-1">
+      {/* le fil d'Ariane était rendu à l'écran sans son équivalent structuré :
+          un moteur ne voyait donc pas la hiérarchie du site, alors que la liste
+          est déjà là. Les href sont localisés comme ceux des liens visibles. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getBreadcrumbJsonLd(
+              items.map((item) => ({
+                ...item,
+                ...(item.href && { href: localizeHref(item.href) }),
+              }))
+            )
+          ).replaceAll("<", "\\u003c"),
+        }}
+        type="application/ld+json"
+      />
+
       <Breadcrumb>
         <BreadcrumbList>
           {items.map(({ label, href }, idx) => {

@@ -195,6 +195,8 @@
   "search_result_count": "{count} résultat(s)",
   "search_shareable": "l'adresse de cette page contient votre recherche : elle se partage telle quelle.",
   "skip_to_content": "aller au contenu principal",
+  "user_bio": "crée, code, innove. les petits détails comptent.",
+  "user_description": "en tant que développeur front-end spécialisé dans l'écosystème moderne, je conçois des applications web performantes. j'utilise Next.js et React.js pour la structure, couplés à Tailwind CSS pour un design responsive et élégant. Mon workflow inclut Git pour le versioning et Node.js pour gérer l'environnement serveur, garantissant un code propre et optimisé pour le SEO.",
   "user_job_title": "développeur Full-Stack Senior",
   "user_overview_1": "-- imagine, code, crée, inspire --",
   "user_overview_2": "-- chaque petit pixel compte --",
