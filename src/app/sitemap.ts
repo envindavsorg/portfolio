@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { getAllContent } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
+import { getSeriesIndex } from "@/lib/series";
 import { getContentByTagSlug, getTagIndex } from "@/lib/tags";
 
 const BASE_URL = "https://cuzeacflorin.fr";
@@ -96,7 +97,24 @@ const sitemap = (): MetadataRoute.Sitemap => {
       lastModified: getLatestDate(allPosts),
       priority: 0.4,
     }),
+    ...localizedEntries("/series", {
+      changeFrequency: "weekly",
+      lastModified: getLatestDate(allPosts),
+      priority: 0.6,
+    }),
   ];
+
+  // la date de la série est celle de sa partie la plus récente : une série
+  // complétée doit ressortir comme mise à jour
+  const seriesUrls: MetadataRoute.Sitemap = getSeriesIndex(
+    allPosts
+  ).flatMap((series) =>
+    localizedEntries(`/series/${series.slug}`, {
+      changeFrequency: "weekly",
+      lastModified: getLatestDate(series.parts),
+      priority: 0.6,
+    })
+  );
 
   // les pages de sujet sont la principale surface de découverte transversale :
   // sans elles au sitemap, elles ne seraient atteignables que par navigation
@@ -140,6 +158,7 @@ const sitemap = (): MetadataRoute.Sitemap => {
     ...componentUrls,
     ...utilUrls,
     ...tagUrls,
+    ...seriesUrls,
   ];
 };
 

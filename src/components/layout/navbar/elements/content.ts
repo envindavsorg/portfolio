@@ -64,6 +64,12 @@ export const COMMANDS: CommandGroupDef[] = [
         title: m.nav_command_search_page,
         url: "/search",
       },
+      {
+        icon: Book,
+        kind: "page",
+        title: m.nav_command_series,
+        url: "/series",
+      },
     ],
   },
   {

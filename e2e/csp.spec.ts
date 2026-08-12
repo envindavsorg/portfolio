@@ -76,6 +76,8 @@ const PAGES = [
   "/articles/how-i-write-css",
   "/components",
   "/search",
+  "/series",
+  "/series/parcours",
   "/tags",
   "/tags/retour-d-experience",
   "/utils",

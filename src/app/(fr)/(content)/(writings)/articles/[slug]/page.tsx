@@ -5,6 +5,7 @@ import { ArticleTitle } from "@/components/blog/ArticleTitle";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
 import { WritingsReadingAids } from "@/components/features/WritingsReadingAids";
 import { WritingsRelated } from "@/components/features/WritingsRelated";
+import { WritingsSeries } from "@/components/features/WritingsSeries";
 import { WritingsTagLinks } from "@/components/features/WritingsTagLinks";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
@@ -74,6 +75,7 @@ export const ArticleView = ({
       )}
       <WritingsTopBar item={article} items={articles} slug={slug} />
       <ArticleTitle title={metadata.title} />
+      <WritingsSeries all={getAllContent(locale)} current={article} />
       <WritingsToC items={getContentToc(content)} />
       <WritingsReadingAids />
       <Mdx code={content} />

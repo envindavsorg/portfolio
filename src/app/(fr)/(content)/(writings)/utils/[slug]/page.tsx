@@ -7,6 +7,7 @@ import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
 import { WritingsReadingAids } from "@/components/features/WritingsReadingAids";
 import { WritingsRelated } from "@/components/features/WritingsRelated";
+import { WritingsSeries } from "@/components/features/WritingsSeries";
 import { WritingsTagLinks } from "@/components/features/WritingsTagLinks";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
@@ -90,6 +91,7 @@ export const UtilView = ({
 
       <Divider border={false} type="half" />
 
+      <WritingsSeries all={getAllContent(locale)} current={item} />
       <WritingsToC items={getContentToc(content)} />
       <WritingsReadingAids />
 
