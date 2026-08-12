@@ -8,7 +8,7 @@ import {
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
 import type { Content } from "@/lib/content";
-import { getSeriesNavigation, seriesSlug } from "@/lib/series";
+import { getSeriesNavigation } from "@/lib/series";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
@@ -123,9 +123,12 @@ export const WritingsSeries = ({
           <Button asChild size="sm" variant="ghost">
             <Link
               className="ms-auto"
-              href={localizeHref(
-                `/series/${seriesSlug(series.name)}`
-              )}
+              // `series.slug` est déjà dérivé de la CLÉ de série. Recalculer un
+              // slug depuis `series.name` — le libellé TRADUIT — produisait
+              // /series/mon-parcours et /en/series/my-journey, deux 404, alors
+              // que la seule route prérendue est /series/parcours. C'est
+              // exactement le piège que la clé partagée existe pour éviter.
+              href={localizeHref(`/series/${series.slug}`)}
             >
               {m.writings_series_all()}
             </Link>

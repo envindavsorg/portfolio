@@ -27,16 +27,27 @@ const matchAll = (xml: string, pattern: RegExp): string[] => {
 const toLocalPath = (url: string): string =>
   url.replace("https://cuzeacflorin.fr", "") || "/";
 
-const expectAllOk = async (
+/**
+ * Deux contrats différents, volontairement.
+ *
+ * Une URL de SITEMAP doit répondre 200 directement : annoncer une URL qui
+ * redirige revient à demander à un moteur d'indexer une adresse qui n'est pas la
+ * canonique. Un lien RENDU, lui, a le droit de rediriger — `localizeHref("/")`
+ * produit `/en/`, que Next renvoie en 308 vers `/en`, et c'est le comportement
+ * attendu du framework, pas un défaut du site.
+ */
+const expectAllReachable = async (
   request: APIRequestContext,
-  paths: string[]
+  paths: string[],
+  { canonical }: { canonical: boolean }
 ) => {
   const broken: string[] = [];
 
   for (const path of paths) {
-    const response = await request.get(path, {
-      maxRedirects: 0,
-    });
+    const response = await request.get(
+      path,
+      canonical ? { maxRedirects: 0 } : {}
+    );
 
     if (response.status() !== 200) {
       broken.push(`${path} → ${response.status()}`);
@@ -57,7 +68,7 @@ test.describe("intégrité du sitemap", () => {
     // garde-fou sur la garde : un sitemap vide passerait au vert
     expect(paths.length).toBeGreaterThan(50);
 
-    await expectAllOk(request, paths);
+    await expectAllReachable(request, paths, { canonical: true });
   });
 
   test("chaque hreflang déclaré existe vraiment", async ({
@@ -75,7 +86,9 @@ test.describe("intégrité du sitemap", () => {
     // pas en anglais et étaient donc prérendus en 404
     expect(alternates.length).toBeGreaterThan(50);
 
-    await expectAllOk(request, alternates);
+    await expectAllReachable(request, alternates, {
+      canonical: true,
+    });
   });
 });
 
@@ -116,7 +129,9 @@ test.describe("intégrité des liens rendus", () => {
 
       expect(internal.length).toBeGreaterThan(3);
 
-      await expectAllOk(request, internal);
+      await expectAllReachable(request, internal, {
+        canonical: false,
+      });
     });
   }
 });
