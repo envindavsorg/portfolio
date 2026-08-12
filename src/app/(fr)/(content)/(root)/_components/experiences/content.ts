@@ -3,6 +3,14 @@ import { m } from "@/paraglide/messages";
 
 export interface Experience {
   id: string;
+  /**
+   * Poste ou formation.
+   *
+   * La distinction n'était déductible que par l'ABSENCE de `skills`, de
+   * `description` et de `link` : un futur poste sans puces aurait donc basculé
+   * silencieusement du côté « formation » sur le CV. Ce champ la rend explicite.
+   */
+  kind: "job" | "education";
   company: string;
   type?: Message;
   title: Message;
@@ -31,6 +39,7 @@ export const EXPERIENCES: Experience[] = [
     ],
     id: "wefix-by-fnac",
     isCurrentEmployer: true,
+    kind: "job",
     link: "https://wefix.net/",
     period: {
       start: "2020",
@@ -65,6 +74,7 @@ export const EXPERIENCES: Experience[] = [
     ],
     id: "spinalcom",
     isCurrentEmployer: false,
+    kind: "job",
     link: "https://www.spinalcom.com/",
     period: {
       end: "2020",
@@ -95,6 +105,7 @@ export const EXPERIENCES: Experience[] = [
     ],
     id: "economat-des-armees",
     isCurrentEmployer: false,
+    kind: "job",
     link: "https://www.economat-armees.com/",
     period: {
       end: "2019",
@@ -117,6 +128,7 @@ export const EXPERIENCES: Experience[] = [
   {
     company: "ETNA (École des Technologies Numériques Avancées)",
     id: "etna-master",
+    kind: "education",
     period: {
       end: "2020",
       start: "2016",
@@ -127,6 +139,7 @@ export const EXPERIENCES: Experience[] = [
     company:
       "Licence Scientifique - Université des Sciences UM2 Montpellier",
     id: "um2-licence",
+    kind: "education",
     period: {
       end: "2016",
       start: "2013",
@@ -136,6 +149,7 @@ export const EXPERIENCES: Experience[] = [
   {
     company: " Lycée Jean Moulin (Pézenas)",
     id: "bac-s-jean-moulin",
+    kind: "education",
     period: {
       end: "2013",
       start: "2010",

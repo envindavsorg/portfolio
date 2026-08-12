@@ -21,6 +21,8 @@ import { expect, test } from "@playwright/test";
 const PAGES = [
   "/",
   "/en",
+  "/cv",
+  "/en/cv",
   "/articles",
   "/articles/how-i-write-css",
   "/components",
