@@ -22,6 +22,10 @@ import {
 import { rehypeAddQueryParams } from "@/lib/rehype-add-query-params";
 import { rehypeComponent } from "@/lib/rehype-component";
 import { rehypeNpmCommand } from "@/lib/rehype-npm-command";
+import {
+  CODE_BLOCK_BACKGROUND,
+  rehypeShikiContrast,
+} from "@/lib/rehype-shiki-contrast";
 import { remarkCodeImport } from "@/lib/remark-code-import";
 import { cn } from "@/lib/utils";
 
@@ -206,6 +210,9 @@ const options: MDXRemoteProps["options"] = {
           },
         },
       ],
+      // APRÈS rehypePretty, qui crée les spans porteurs de --shiki-light /
+      // --shiki-dark : c'est là que se corrige la dernière dette de contraste
+      [rehypeShikiContrast, { backgrounds: CODE_BLOCK_BACKGROUND }],
       () => (tree) => {
         visit(tree, (node) => {
           if (

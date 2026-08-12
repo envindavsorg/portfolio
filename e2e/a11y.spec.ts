@@ -11,11 +11,11 @@ import { expect, test } from "@playwright/test";
  * il attrape la moitié mécanique du problème (contrastes, noms accessibles,
  * rôles, ordre des titres) et laisse le reste au jugement.
  *
- * Seul le thème CLAIR est scanné. Forcer le thème sombre via localStorage donne
- * des mesures qu'axe lui-même ne résout pas correctement : il rapporte un fond
- * blanc alors que le document porte bien la classe `dark`. Un test à deux thèmes
- * dont la moitié mesure faux vaut moins qu'un test à un thème fiable. Le
- * contraste du thème sombre reste donc à vérifier à la main.
+ * Les DEUX thèmes sont scannés. Le thème sombre est resté longtemps hors de
+ * portée : axe rapportait un fond blanc sur un document portant la classe
+ * `dark`. La cause était que ni html ni body ne peignaient de background-color —
+ * le fond venait du canevas de l'agent utilisateur, qui n'est pas un style
+ * calculé. Depuis que body peint `--canvas`, la mesure est fiable.
  */
 
 const PAGES = [
@@ -37,41 +37,11 @@ const PAGES = [
   "/series/parcours",
 ];
 
-/**
- * Dette de contraste connue, mesurée et assumée.
- *
- * Il n'en reste qu'UNE. La couleur de marque a été fermée : #306fdc donnait
- * 4,4995:1 sur le fond des cartes là où 4,5 est requis, et #306fdb donne
- * 4,5102:1 — une unité de bleu, invisible à l'œil. L'argument « c'est la couleur
- * de marque » ne tenait donc pas ; il a été vérifié en exécutant le module de
- * contraste du site lui-même.
- *
- * Celle qui reste vient du thème de coloration syntaxique, pas du balisage :
- * la corriger demande un plugin rehype qui repasse sur les variables
- * --shiki-light émises par rehype-pretty-code. Elle est listée ici pour rester
- * visible plutôt que d'être noyée dans un scan rouge — et toute NOUVELLE
- * violation fait échouer le test.
- */
-const KNOWN_CONTRAST_DEBT = [
-  {
-    background: "#ffffff",
-    foreground: "#e36209",
-    reason:
-      "jeton orange du thème Shiki clair dans les blocs de code, 3.48:1 — corriger demande un rehype qui relève les jetons sous le seuil",
-  },
-];
-
 /** Le composant est là pour DÉMONTRER un contraste insuffisant : son aperçu ne
  * peut pas être conforme, puisqu'il affiche la paire de couleurs saisie. */
 const DELIBERATE_EXCLUSIONS = [
   "[data-slot='utils-contrast-checker'] [style]",
 ];
-
-const isKnownDebt = (message: string): boolean =>
-  KNOWN_CONTRAST_DEBT.some(
-    ({ foreground, background }) =>
-      message.includes(foreground) && message.includes(background)
-  );
 
 const scan = async (page: Page) => {
   const builder = new AxeBuilder({ page }).withTags([
@@ -87,18 +57,21 @@ const scan = async (page: Page) => {
 
   const { violations } = await builder.analyze();
 
+  /**
+   * Plus aucune dette n'est tolérée.
+   *
+   * Les deux entrées listées ici sont fermées : la couleur de marque est passée
+   * de 4,4995:1 à 4,5102:1, et le jeton orange du thème Shiki est relevé au
+   * build par `rehype-shiki-contrast`. TOUTE violation de contraste fait donc
+   * échouer ce test, sans exception à lire.
+   */
   return violations.flatMap((violation) =>
-    violation.nodes
-      .filter(
-        (node) =>
-          !node.any.some((check) => isKnownDebt(check.message))
-      )
-      .map(
-        (node) =>
-          `${violation.id} · ${node.target.join(" ")} · ${node.any
-            .map((check) => check.message)
-            .join(" | ")}`
-      )
+    violation.nodes.map(
+      (node) =>
+        `${violation.id} · ${node.target.join(" ")} · ${node.any
+          .map((check) => check.message)
+          .join(" | ")}`
+    )
   );
 };
 
