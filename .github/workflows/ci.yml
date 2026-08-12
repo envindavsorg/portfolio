@@ -1,0 +1,98 @@
+# Vérifications automatiques : types, lint, format, tests unitaires, build et
+# tests de bout en bout.
+#
+# Les suites Vitest et Playwright existaient sans que rien ne les exécute : des
+# tests qui ne tournent jamais ne protègent de rien.
+
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  cancel-in-progress: true
+  group: ci-${{ github.ref }}
+
+env:
+  # le build interroge l'API GitHub ; en CI le jeton est volontairement factice.
+  # Les actions serveur retombent sur des valeurs par défaut en cas d'échec, donc
+  # le build passe — et ce job vérifie au passage que cette tolérance tient.
+  GITHUB_API_TOKEN: ci-placeholder
+
+jobs:
+  checks:
+    name: types, lint, tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      # pas de `cache: pnpm` : l'action calcule sa clé depuis pnpm-lock.yaml,
+      # absent du dépôt, et échoue sans lui
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # `--frozen-lockfile` demanderait un pnpm-lock.yaml, or il est ignoré par
+      # git dans ce dépôt : l'installation résout donc les versions à chaque run
+      - run: pnpm install --no-frozen-lockfile
+
+      # `pnpm types` ne déclenche pas la compilation i18n, et src/paraglide/ est
+      # généré : sans cette étape, tsc échoue sur des imports introuvables
+      - name: Compile i18n messages
+        run: pnpm i18n:compile
+
+      - name: Type check
+        run: pnpm types
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format
+        run: pnpm format
+
+      - name: Unit tests
+        run: pnpm test
+
+  e2e:
+    name: end-to-end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      # pas de `cache: pnpm` : l'action calcule sa clé depuis pnpm-lock.yaml,
+      # absent du dépôt, et échoue sans lui
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # `--frozen-lockfile` demanderait un pnpm-lock.yaml, or il est ignoré par
+      # git dans ce dépôt : l'installation résout donc les versions à chaque run
+      - run: pnpm install --no-frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Playwright démarre lui-même `pnpm preview` (build + serve), mais un build
+      # séparé donne un échec lisible quand c'est la compilation qui casse
+      - name: Build
+        run: pnpm build
+
+      - name: End-to-end tests
+        env:
+          # le build vient d'être fait : inutile de le refaire dans le webServer
+          PLAYWRIGHT_WEB_SERVER: pnpm exec next start -p 1408
+        run: pnpm test:e2e
+
+      - if: ${{ !cancelled() }}
+        name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

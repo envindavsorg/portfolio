@@ -1,55 +1,76 @@
 # Configuration de actions/labeler, référencée par .github/workflows/label.yml.
-# Le fichier manquait : l'action échouait donc sur « HttpError: Not Found » à
-# chaque pull request depuis la mise en place du workflow.
 #
-# Syntaxe de actions/labeler@v4 (liste de globs par étiquette) — à convertir si
-# l'action est un jour passée en v5, qui attend `changed-files`/`any-glob-to-any-file`.
+# Syntaxe v5 : chaque étiquette porte une liste de règles, et un glob se déclare
+# via `changed-files` / `any-glob-to-any-file`. La v4 acceptait une simple liste
+# de globs — les deux formats ne sont pas interchangeables.
+#
+# Rappel : le workflow est déclenché par `pull_request_target`, donc l'action lit
+# CE fichier depuis la branche de base. Une modification n'a d'effet qu'une fois
+# fusionnée dans master.
 
 contenu:
-  - "src/content/**"
+  - changed-files:
+      - any-glob-to-any-file: "src/content/**"
 
 i18n:
-  - "messages/**"
-  - "project.inlang/**"
-  - "src/scripts/compile-i18n.mts"
-  - "src/lib/i18n.ts"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "messages/**"
+          - "project.inlang/**"
+          - "src/scripts/compile-i18n.mts"
+          - "src/lib/i18n.ts"
 
 app:
-  - "src/app/**"
+  - changed-files:
+      - any-glob-to-any-file: "src/app/**"
 
 ui:
-  - "src/components/**"
-  - "src/hooks/**"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/components/**"
+          - "src/hooks/**"
 
 registry:
-  - "src/registry/**"
-  - "src/scripts/build-registry.mts"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/registry/**"
+          - "src/scripts/build-registry.mts"
 
 tests:
-  - "e2e/**"
-  - "src/**/*.test.ts"
-  - "vitest.config.ts"
-  - "vitest.setup.ts"
-  - "playwright.config.ts"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "e2e/**"
+          - "src/**/*.test.ts"
+          - "vitest.config.ts"
+          - "vitest.setup.ts"
+          - "playwright.config.ts"
 
 dépendances:
-  - "package.json"
-  - "pnpm-lock.yaml"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "pnpm-lock.yaml"
 
 configuration:
-  - "next.config.ts"
-  - "tsconfig.json"
-  - "tsconfig.scripts.json"
-  - "oxlint.config.ts"
-  - "oxfmt.config.ts"
-  - "postcss.config.mjs"
-  - "knip.json"
-  - "lefthook.yml"
-  - "components.json"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "next.config.ts"
+          - "tsconfig.json"
+          - "tsconfig.scripts.json"
+          - "oxlint.config.ts"
+          - "oxfmt.config.ts"
+          - "postcss.config.mjs"
+          - "knip.json"
+          - "lefthook.yml"
+          - "components.json"
 
 ci:
-  - ".github/**"
+  - changed-files:
+      - any-glob-to-any-file: ".github/**"
 
 documentation:
-  - "*.md"
-  - "docs/**"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "*.md"
+          - "docs/**"
+          - ".planning/**"
