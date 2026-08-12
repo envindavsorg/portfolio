@@ -40,23 +40,24 @@ const PAGES = [
 /**
  * Dette de contraste connue, mesurée et assumée.
  *
- * Les deux entrées viennent de jetons de design, pas du balisage : les corriger
- * change l'apparence du site partout, ce qui appartient à son auteur. Elles sont
- * listées ici pour rester visibles plutôt que d'être noyées dans un scan rouge —
- * et toute NOUVELLE violation fait échouer le test.
+ * Il n'en reste qu'UNE. La couleur de marque a été fermée : #306fdc donnait
+ * 4,4995:1 sur le fond des cartes là où 4,5 est requis, et #306fdb donne
+ * 4,5102:1 — une unité de bleu, invisible à l'œil. L'argument « c'est la couleur
+ * de marque » ne tenait donc pas ; il a été vérifié en exécutant le module de
+ * contraste du site lui-même.
+ *
+ * Celle qui reste vient du thème de coloration syntaxique, pas du balisage :
+ * la corriger demande un plugin rehype qui repasse sur les variables
+ * --shiki-light émises par rehype-pretty-code. Elle est listée ici pour rester
+ * visible plutôt que d'être noyée dans un scan rouge — et toute NOUVELLE
+ * violation fait échouer le test.
  */
 const KNOWN_CONTRAST_DEBT = [
-  {
-    background: "#faf9f6",
-    foreground: "#306fdc",
-    reason:
-      "couleur de thème sur fond clair, 4.49:1 pour 4.5 requis — il manque 0.01, mais c'est la couleur de marque du site",
-  },
   {
     background: "#ffffff",
     foreground: "#e36209",
     reason:
-      "jeton orange du thème Shiki clair dans les blocs de code, 3.48:1 — corriger demande de remplacer le thème de coloration",
+      "jeton orange du thème Shiki clair dans les blocs de code, 3.48:1 — corriger demande un rehype qui relève les jetons sous le seuil",
   },
 ];
 
@@ -133,6 +134,51 @@ test.describe("accessibilité automatique", () => {
       expect(await scan(page), `violations axe sur ${path}`).toEqual(
         []
       );
+    });
+  }
+});
+
+/**
+ * Le thème sombre, enfin scannable.
+ *
+ * Les tentatives précédentes donnaient des mesures qu'axe ne pouvait pas
+ * résoudre : il rapportait un fond BLANC alors que le document portait la classe
+ * `dark`. La cause vient d'être trouvée — ni html ni body ne peignaient de
+ * background-color, le fond venait du canevas de l'agent utilisateur via
+ * `color-scheme`, et un canevas n'est pas un style calculé. Maintenant que body
+ * peint `--canvas`, `colorScheme: "dark"` suffit : next-themes est en
+ * `defaultTheme: system`, donc la préférence émulée pilote réellement le thème.
+ *
+ * La liste est plus courte que celle du thème clair : ce sont les pages où la
+ * couleur porte de l'information, pas les 16 types de pages.
+ */
+test.describe("accessibilité en thème sombre", () => {
+  test.use({ colorScheme: "dark" });
+
+  for (const path of [
+    "/",
+    "/articles",
+    "/articles/how-i-write-css",
+    "/tags",
+    "/utils/contrast-checker",
+    "/search",
+    "/en",
+  ]) {
+    test(`aucune violation axe sur ${path} en sombre`, async ({
+      page,
+    }) => {
+      await page.goto(path);
+      await page.waitForLoadState("networkidle");
+
+      // garde-fou sur la garde : si le document ne bascule pas réellement en
+      // sombre, le test scannerait le thème clair une seconde fois et passerait
+      // au vert sans rien vérifier de neuf
+      await expect(page.locator("html")).toHaveClass(/dark/u);
+
+      expect(
+        await scan(page),
+        `violations axe en sombre sur ${path}`
+      ).toEqual([]);
     });
   }
 });

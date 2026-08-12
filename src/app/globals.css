@@ -78,7 +78,24 @@
 :root {
   color-scheme: light dark;
 
-  --theme: #306fdc;
+  /**
+   * Le fond réellement peint par le document.
+   *
+   * Ni html ni body ne portaient de background-color : le fond venait du canevas
+   * de l'agent utilisateur via color-scheme. Conséquence, axe ne peut PAS
+   * résoudre le fond en thème sombre — il rapporte du blanc alors que le
+   * document porte la classe `dark`, ce qui rend tout scan de contraste en
+   * sombre inexploitable. C'est le symptôme décrit sans explication en tête de
+   * e2e/a11y.spec.ts.
+   *
+   * La valeur reprend EXACTEMENT les couleurs de canevas actuelles plutôt que
+   * `--background` : peindre le jeton du site changerait le fond clair de
+   * #ffffff au beige #faf9f6 et ferait disparaître les cartes `bg-background`
+   * qui s'en détachent. Débloquer une mesure ne doit pas redessiner le site.
+   */
+  --canvas: #ffffff;
+
+  --theme: #306fdb;
   --background: oklch(0.982 0.004 91.446);
   --foreground: oklch(0.191 0.002 106.586);
   --primary: oklch(0.191 0.002 106.586);
@@ -151,6 +168,9 @@
 
 .dark {
   color-scheme: dark;
+
+  /* le canevas sombre de Chromium, repris tel quel */
+  --canvas: #121212;
 }
 
 .light {
@@ -189,6 +209,9 @@
   }
 
   body {
+    /* peint explicitement : sans cela le fond n'existe que dans le canevas de
+       l'agent utilisateur, invisible pour un outil d'audit */
+    background-color: var(--canvas);
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -255,6 +278,21 @@
 
   .dark::view-transition-new(root) {
     animation-name: reveal-dark;
+  }
+
+  /**
+   * Le balayage de thème dure 0,8 s et couvre tout l'écran.
+   *
+   * MotionConfig ne voit pas les transitions de vue : elles sont pilotées par le
+   * navigateur, pas par Motion. Sans cette règle, la seule animation vraiment
+   * envahissante du site restait la seule à ignorer la préférence.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(root),
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none !important;
+    }
   }
 
   @keyframes reveal-dark {
