@@ -265,3 +265,45 @@ test.describe("onglets", () => {
     );
   });
 });
+
+/**
+ * La chaîne MDX elle-même.
+ *
+ * rehype-pretty-code émettait déjà `data-highlighted-line` et le titre de bloc,
+ * mais AUCUNE règle CSS ne les consommait et aucun test ne couvrait la chaîne :
+ * la fonctionnalité était payée et invisible. Ces assertions portent sur le
+ * rendu réel, pas sur la configuration du plugin.
+ */
+test.describe("rendu des blocs de code", () => {
+  test("une clôture avec {2-5} met les lignes en évidence", async ({
+    page,
+  }) => {
+    await page.goto("/components/flip-sentences-component");
+
+    const highlighted = page.locator("[data-highlighted-line]");
+    await expect(highlighted).toHaveCount(4);
+
+    // la règle doit peindre quelque chose : un jeton défini et jamais appliqué
+    // est exactement l'état d'où l'on vient
+    const background = await highlighted
+      .first()
+      .evaluate((node) => getComputedStyle(node).backgroundColor);
+
+    expect(background).not.toBe("rgba(0, 0, 0, 0)");
+  });
+
+  test("le titre de la clôture est rendu", async ({ page }) => {
+    await page.goto("/components/flip-sentences-component");
+
+    // et NON `.first()` : la page contient déjà des blocs <ComponentSource> qui
+    // portent leur propre titre, et le premier est `lib/utils.ts`
+    await expect(
+      page
+        .locator("[data-rehype-pretty-code-title]", {
+          hasText: "sentences.ts",
+        })
+        // le bloc est émis une fois par thème : les deux portent le même titre
+        .first()
+    ).toBeVisible();
+  });
+});
