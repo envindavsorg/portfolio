@@ -481,6 +481,7 @@
   "writings_component_preview_tab_preview": "composant",
   "writings_components_heading": "composants React réutilisables",
   "writings_components_terminal_file_created": "1 fichier crée :",
+  "writings_heading_anchor": "lien vers la section « {title} »",
   "writings_pagination_next_aria": "Suivant",
   "writings_pagination_next_sr": "Suivant",
   "writings_pagination_previous_aria": "Précédent",

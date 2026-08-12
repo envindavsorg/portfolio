@@ -3,6 +3,7 @@ import type React from "react";
 import type { ReactElement } from "react";
 
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 const PROSE_CLASSNAME = cn(
   "prose prose-sm prose-zinc dark:prose-invert max-w-none",
@@ -102,9 +103,38 @@ export const Heading = <T extends HeadingTypes = "h1">({
     return <Comp className={className} {...props} />;
   }
 
+  /**
+   * Une ancre cliquable, quand le titre porte un identifiant.
+   *
+   * Les deux branches de ce composant rendaient exactement le même élément : le
+   * `if (!props.id)` était du code mort, vestige d'une ancre jamais écrite.
+   * Pourtant `rehypeSlug` est câblé depuis le début et le sommaire prouve que
+   * les identifiants résolvent — partager une section demandait donc d'ouvrir
+   * les outils de développement pour aller lire l'id à la main.
+   *
+   * Trois contraintes tenues :
+   * - l'`id` reste sur l'élément de TITRE et non sur l'ancre : `useActiveItem`
+   *   fait un `querySelector("[id=…]")`, et le déplacer casserait le suivi de
+   *   section pendant le défilement ;
+   * - le lien porte un nom accessible explicite plutôt qu'un « # » nu, qu'un
+   *   lecteur d'écran énoncerait « lien dièse » ;
+   * - il n'apparaît qu'au survol ou au focus, mais reste dans le flux — le faire
+   *   surgir en `absolute` décalerait le titre au premier survol.
+   */
+  const anchor = `#${props.id}`;
+  const title =
+    typeof props.children === "string" ? props.children : anchor;
+
   return (
-    <Comp className={className} {...props}>
-      {props.children}
+    <Comp className={cn("group/heading", className)} {...props}>
+      {props.children}{" "}
+      <a
+        aria-label={m.writings_heading_anchor({ title })}
+        className="ms-1 align-middle text-base text-muted-foreground no-underline opacity-0 transition-opacity focus-visible:opacity-100 group-hover/heading:opacity-100"
+        href={anchor}
+      >
+        #
+      </a>
     </Comp>
   );
 };
