@@ -6,6 +6,8 @@ import type {
   HTMLMotionProps,
   Transition,
 } from "motion/react";
+import Image from "next/image";
+import type { ImageProps } from "next/image";
 import {
   createContext,
   forwardRef,
@@ -278,14 +280,55 @@ export const PortalImageWrapper = forwardRef<
   }
 );
 
+/**
+ * next/image, animable par Motion.
+ *
+ * `PortalImage` était un `motion.img` brut : les vignettes de /articles étaient
+ * donc servies en 6016 px de large, sans `srcset`, soit 881 Kio pour cinq
+ * images — alors que la page d'accueil affiche LES MÊMES fichiers avec un srcset
+ * de neuf entrées, parce qu'elle passe par next/image.
+ *
+ * `motion.create` et non `motion()` : cette dernière a disparu en v12. Créé au
+ * niveau du MODULE, sinon chaque rendu produirait un nouveau composant et
+ * remonterait l'image, ce qui casserait net la transition d'élément partagé.
+ */
+const MotionImage = motion.create(Image);
+
+/** valeur par défaut : une colonne pleine largeur, plafonnée par max-w-3xl */
+const DEFAULT_SIZES = "(max-width: 768px) 100vw, 768px";
+
+/**
+ * React et Motion déclarent les mêmes noms de gestionnaires avec des signatures
+ * incompatibles : `onAnimationStart` reçoit un `AnimationEvent` du DOM d'un côté,
+ * une `AnimationDefinition` de l'autre. Les retirer d'`ImageProps` laisse la
+ * version Motion gagner — c'est celle qu'on utilise ici.
+ */
+type ConflictingHandlers =
+  | "onAnimationStart"
+  | "onAnimationEnd"
+  | "onAnimationIteration"
+  | "onDrag"
+  | "onDragStart"
+  | "onDragEnd";
+
+type PortalImageProps = Omit<
+  ImageProps,
+  "ref" | "style" | ConflictingHandlers
+> &
+  Pick<
+    HTMLMotionProps<"img">,
+    "whileHover" | "transition" | "layout" | "style"
+  >;
+
 export const PortalImage = forwardRef<
   HTMLImageElement,
-  Omit<HTMLMotionProps<"img">, "layoutId">
+  PortalImageProps
 >(
   (
     {
       children: _children,
       className: _className,
+      sizes = DEFAULT_SIZES,
       whileHover,
       transition,
       ...props
@@ -301,7 +344,7 @@ export const PortalImage = forwardRef<
     const wrapperLayoutId = useDialogImageLayoutId();
 
     return (
-      <motion.img
+      <MotionImage
         className="relative w-full rounded-md object-cover object-center ring-1 ring-border ring-offset-3 ring-offset-background sm:min-h-40"
         data-open={dataOpen}
         data-slot="dialog-image"
@@ -310,6 +353,7 @@ export const PortalImage = forwardRef<
         // `loading="eager"` faisait telecharger toutes les vignettes de la liste
         // des le chargement ; `rel` n'est de toute facon pas valide sur <img>.
         loading="lazy"
+        sizes={sizes}
         transition={{ ...transitionDialog, ...transition }}
         whileHover={animatedOpen || dataOpen ? undefined : whileHover}
         {...props}

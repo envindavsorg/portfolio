@@ -12,6 +12,7 @@ import { WritingsTagLinks } from "@/components/features/WritingsTagLinks";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
 import { Mdx } from "@/components/markdown/mdx";
+import { getUtilWidgets } from "@/components/markdown/utils-widgets";
 import type { ContentLocale } from "@/lib/content";
 import {
   getAllContent,
@@ -91,7 +92,7 @@ export const UtilView = ({
 
       <Divider border={false} after={false} type="half" />
 
-      <Mdx code={content} />
+      <Mdx code={content} components={getUtilWidgets(slug)} />
 
       <script
         dangerouslySetInnerHTML={{
