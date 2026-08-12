@@ -67,6 +67,8 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
               "select-none rounded-md ring-1 ring-border ring-offset-3 ring-offset-background"
             )}
             height={1826}
+            // sans sizes, le navigateur retient le plus grand candidat du srcset
+            sizes="(max-width: 768px) 100vw, 768px"
             src={coverImageURL}
             width={3000}
           />

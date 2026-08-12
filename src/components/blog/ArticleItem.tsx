@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 import { formatDate } from "@/lib/functions";
+import { toPlainText } from "@/lib/search";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { Divider } from "../base/Divider";
-import { Mdx } from "../markdown/mdx";
 import { Button } from "../primitives/Button";
 import {
   Portal,
@@ -166,10 +166,12 @@ export const ArticleItem = ({
             </div>
 
             <div className="space-y-6 pt-6 [&_.prose]:m-0! [&_.prose]:p-0!">
-              <Mdx
-                code={`${content.slice(0, 300)}...`}
-                isDivider={false}
-              />
+              {/* un extrait de 300 caracteres ne justifie pas de compiler
+                  tout le pipeline MDX par article : le texte brut suffit et
+                  n'entraine pas le graphe client de MDX dans la page de liste */}
+              <p className="text-muted-foreground text-sm leading-relaxed sm:text-base">
+                {`${toPlainText(content).slice(0, 300)}…`}
+              </p>
 
               <div className="space-y-2 border-t pt-3">
                 <p className="text-muted-foreground text-sm leading-relaxed sm:text-base">

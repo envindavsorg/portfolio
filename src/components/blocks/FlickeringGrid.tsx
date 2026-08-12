@@ -25,8 +25,11 @@ export const FlickeringGrid = ({
   gridGap = 4,
   flickerChance = 0.1,
   color = "#6B7280",
-  width = 800,
-  height = 800,
+  // pas de valeur par defaut : `width || container.clientWidth` ne mesurait
+  // jamais le conteneur, donc la grille dessinait 800x800 (soit 10 000 carres
+  // par image) dans une bande d'en-tete de quelques dizaines de pixels.
+  width,
+  height,
   className: _className,
   maxOpacity = 0.4,
   ...props

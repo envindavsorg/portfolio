@@ -1,6 +1,7 @@
 import { FileIcon } from "@phosphor-icons/react/ssr";
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import dynamic from "next/dynamic";
 import type React from "react";
 import rehypeExternalLinks from "rehype-external-links";
 import type { LineElement } from "rehype-pretty-code";
@@ -19,15 +20,6 @@ import {
   Heading,
   Prose,
 } from "@/components/primitives/Typography";
-import { ArticleBanner } from "@/components/utils/ArticleBannerGenerator";
-import { Base64 } from "@/components/utils/Base64";
-import { ColorGenerator } from "@/components/utils/ColorGenerator";
-import { DiffViewer } from "@/components/utils/DiffViewer";
-import { HashGenerator } from "@/components/utils/HashGenerator";
-import { JSONFormatter } from "@/components/utils/JSONFormatter";
-import { JwtDecoder } from "@/components/utils/JwtDecoder";
-import { LoremIpsumGenerator } from "@/components/utils/LoremIpsumGenerator";
-import { SpeedTest } from "@/components/utils/SpeedTest";
 import { rehypeAddQueryParams } from "@/lib/rehype-add-query-params";
 import { rehypeComponent } from "@/lib/rehype-component";
 import { rehypeNpmCommand } from "@/lib/rehype-npm-command";
@@ -48,6 +40,53 @@ import { JavaScriptIcon } from "../svgs/stack/JavaScript";
 import { JSONIcon } from "../svgs/stack/JSON";
 import { ReactIcon } from "../svgs/stack/React";
 import { TypeScriptIcon } from "../svgs/stack/TypeScript";
+
+/**
+ * Widgets d'outils chargés à la demande.
+ *
+ * La table de composants MDX est partagée par TOUTES les pages de contenu :
+ * en import statique, @cloudflare/speedtest, poline et le générateur de
+ * bannière sur canvas atterrissaient dans le bundle de chaque page MDX, même
+ * celles qui n'utilisent aucun outil. Chaque widget a désormais son propre
+ * chunk, chargé seulement si le contenu l'invoque.
+ */
+const ArticleBanner = dynamic(async () => {
+  const mod =
+    await import("@/components/utils/ArticleBannerGenerator");
+  return mod.ArticleBanner;
+});
+const Base64 = dynamic(async () => {
+  const mod = await import("@/components/utils/Base64");
+  return mod.Base64;
+});
+const ColorGenerator = dynamic(async () => {
+  const mod = await import("@/components/utils/ColorGenerator");
+  return mod.ColorGenerator;
+});
+const DiffViewer = dynamic(async () => {
+  const mod = await import("@/components/utils/DiffViewer");
+  return mod.DiffViewer;
+});
+const HashGenerator = dynamic(async () => {
+  const mod = await import("@/components/utils/HashGenerator");
+  return mod.HashGenerator;
+});
+const JSONFormatter = dynamic(async () => {
+  const mod = await import("@/components/utils/JSONFormatter");
+  return mod.JSONFormatter;
+});
+const JwtDecoder = dynamic(async () => {
+  const mod = await import("@/components/utils/JwtDecoder");
+  return mod.JwtDecoder;
+});
+const LoremIpsumGenerator = dynamic(async () => {
+  const mod = await import("@/components/utils/LoremIpsumGenerator");
+  return mod.LoremIpsumGenerator;
+});
+const SpeedTest = dynamic(async () => {
+  const mod = await import("@/components/utils/SpeedTest");
+  return mod.SpeedTest;
+});
 
 const getIconForLanguageExtension = (language: string) => {
   switch (language) {

@@ -235,10 +235,6 @@ export const ColorPicker = ({
               focusable et pilotable aux fleches */}
           <motion.div
             aria-label={m.color_picker_area_label()}
-            aria-valuetext={m.color_picker_area_value({
-              lightness: hsl[2],
-              saturation: hsl[1],
-            })}
             className="relative h-40 w-full cursor-crosshair overflow-hidden rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             onClick={handleSaturationLightnessChange}
             onKeyDown={handleAreaKeyDown}
@@ -258,6 +254,17 @@ export const ColorPicker = ({
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
             />
+
+            <span
+              aria-live="polite"
+              className="sr-only"
+              role="status"
+            >
+              {m.color_picker_area_value({
+                lightness: hsl[2],
+                saturation: hsl[1],
+              })}
+            </span>
           </motion.div>
 
           <motion.input

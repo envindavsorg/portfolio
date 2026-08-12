@@ -226,6 +226,7 @@ export const PixelHeading = ({
 
   const [msElapsed, setMsElapsed] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(
     null
   );
@@ -258,15 +259,60 @@ export const PixelHeading = ({
 
     setIsActive(true);
     setMsElapsed(0);
-    intervalRef.current = setInterval(() => {
-      setMsElapsed((prev) => prev + TICK_MS);
-    }, TICK_MS);
 
-    return () => {
+    const stop = () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
+    };
+
+    const start = () => {
+      if (intervalRef.current) {
+        return;
+      }
+      intervalRef.current = setInterval(() => {
+        setMsElapsed((prev) => prev + TICK_MS);
+      }, TICK_MS);
+    };
+
+    // le minuteur tournait indéfiniment, y compris onglet en arrière-plan et
+    // titre hors de l'écran : vingt rendus par seconde pour rien.
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        stop();
+      } else {
+        start();
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && !document.hidden) {
+          start();
+        } else {
+          stop();
+        }
+      },
+      { threshold: 0 }
+    );
+
+    const element = containerRef.current;
+    if (element) {
+      observer.observe(element);
+    } else {
+      start();
+    }
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      stop();
+      observer.disconnect();
+      document.removeEventListener(
+        "visibilitychange",
+        onVisibilityChange
+      );
     };
   }, [autoPlay, prefersReducedMotion]);
 
@@ -404,6 +450,7 @@ export const PixelHeading = ({
     <div
       className="inline-flex flex-col items-start gap-2"
       data-slot="pixel-heading"
+      ref={containerRef}
     >
       <Tag
         aria-label={prefix ? `${prefix} ${text}` : text}

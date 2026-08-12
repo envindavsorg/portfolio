@@ -41,8 +41,10 @@ export const ArticleItem = ({
             alt={metadata.title}
             className="w-full rounded-md object-cover object-center ring-1 ring-border ring-offset-3 ring-offset-background sm:min-h-40"
             height={1280}
-            priority
             quality={90}
+            // pas de `priority` : ces cartes sont sous la ligne de flottaison,
+            // et cinq preloads prioritaires concurrents retardaient le LCP
+            sizes="(max-width: 640px) 100vw, 50vw"
             src={metadata.image}
             width={2800}
           />
