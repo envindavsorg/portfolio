@@ -81,6 +81,14 @@
 - Impact: a section that throws renders its `SectionBoundary` fallback and reports
   nothing off-platform. Failures are only visible in Vercel logs, if someone looks.
 
+**Service worker version is bumped by hand**
+
+- Files: `public/sw.js`
+- `VERSION` gates cache names, and nothing forces it to change on deploy.
+  Correctness does not depend on it — HTML is network-first and static assets are
+  content-hashed, so a stale cache holds unused entries rather than wrong ones —
+  but old caches survive longer than needed.
+
 ---
 
 ## Performance Bottlenecks
@@ -142,6 +150,13 @@
 - A `document`-level ←/→ listener changes page. It now bails on
   `event.defaultPrevented` and inside form fields, but any future widget with arrow
   semantics must call `preventDefault()` or it will eject the visitor from the page.
+
+**Two contrast debts remain, listed in `a11y.spec.ts`**
+
+- The theme colour reaches 4.49:1 against the light background where 4.5 is
+  required, and a Shiki light-theme token reaches 3.48:1 inside code blocks. Both
+  are design tokens: fixing them changes the site's appearance everywhere. They are
+  enumerated in the spec so any NEW violation still fails.
 
 **Content pages have several `<h1>`**
 

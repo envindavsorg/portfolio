@@ -77,17 +77,18 @@ src/app/
 │   └── (content)/
 │       ├── layout.tsx             # Site chrome: NavBar, Footer, Particles
 │       ├── (root)/page.tsx        # Homepage (/) + _components/ sections
-│       └── (writings)/            # /articles, /components, /utils (+ [slug])
 ├── en/                            # ENGLISH tree — thin wrappers re-exporting the FR pages
 │   ├── layout.tsx                 # Root layout EN (html lang="en")
 │   └── (content)/...              # Same shape; pages define EN metadata + reuse FR defaults
+│       └── (writings)/            # /articles, /components, /utils, /tags, /series, /search (+ [slug])
 ├── (llms)/                        # Plain-text mirror for AI ingestion
 │   ├── llms.txt/route.ts          # /llms.txt - markdown index
 │   ├── (content)/about.md/...     # /about.md, /experience.md, /projects.md, /certifications.md
 │   ├── (content)/blog.mdx/[slug]/ # Served at /<category>/<slug>.mdx via rewrites (FR)
 │   └── (content)/blog.en.mdx/…    # Served at /en/<category>/<slug>.mdx (EN)
 ├── api/                           # og (ImageResponse), rss, rss/[category],
-│                                  # feed.json (JSON Feed 1.1), vcard, health
+│                                  # rss/tag/[tag], feed.json (JSON Feed 1.1),
+│                                  # vcard, health
 ├── global-not-found.tsx           # 404 for unmatched URLs (own <html>)
 ├── sitemap.ts                     # FR + EN URLs with hreflang alternates
 ├── manifest.ts / robots.ts
@@ -173,7 +174,14 @@ Syntax highlighting via `shiki`.
 
 Tag filtering on list pages is client-side (`WritingsTagFilter` context +
 `history.replaceState`) so `/articles`, `/components`, `/utils` stay fully
-static. Do NOT reintroduce `searchParams` in these pages.
+static. Do NOT reintroduce `searchParams` in these pages. `/search` follows the
+same rule with the URL **fragment**: a query parameter would make the page
+dynamic, a fragment never reaches the server.
+
+Content can also declare a **series** (`series` key + `seriesName` label +
+`seriesOrder`). `series` must be identical across locales — it is the identifier
+behind the URL — while `seriesName` is translated. Reading order is `seriesOrder`,
+then `createdAt`, then slug, so a duplicated order still renders deterministically.
 
 ### Global Data
 
@@ -209,9 +217,10 @@ sibling `*.test.ts`, so it can be tested without dragging in the MDX pipeline or
 the component registry:
 
 - `search.ts` - `SearchDoc` index (title, description, tags, headings, 400-char
-  excerpt), `toPlainText`, `normalize` (diacritic-insensitive), `searchableText`.
-  Type-only imports on purpose: importing `content.ts` values would pull the whole
-  MDX graph into the test run.
+  excerpt), `toPlainText`, `normalize` (diacritic-insensitive), `searchableText`,
+  plus `scoreText` / `searchDocs`, the single ranking shared by the ⌘K palette and
+  the `/search` page. Type-only imports on purpose: importing `content.ts` values
+  would pull the whole MDX graph into the test run.
 - `related.ts` - related-post scoring by shared tags
 - `feed.ts` / `feed-routes.ts` - RSS 2.0 + JSON Feed 1.1 serialisation and the
   shared response helpers
@@ -220,6 +229,19 @@ the component registry:
   window
 - `jwt.ts`, `diff.ts`, `hash.ts` - the logic behind the `/utils` tools
 - `llms.ts` - markdown rendering shared by the plain-text mirror
+- `tags.ts` - tag slugs, cross-category aggregation, per-tag lookup. `slugifyTag`
+  delegates to `case.ts`'s `slugify`: two transliterations would drift and the
+  tag URLs would stop matching
+- `series.ts` - reading order of a series. `series` frontmatter is a KEY shared by
+  every locale (it drives the slug); `seriesName` is the translatable label
+- `case.ts` - word splitting and the ten case conversions, plus `slugify`
+- `contrast.ts` - WCAG relative luminance and contrast ratio
+- `cron.ts` - five-field cron parsing and next runs, in UTC, including Vixie
+  cron's OR rule between day-of-month and day-of-week
+- `datetime.ts` - Unix/ISO detection and time-zone formatting. Every function takes
+  its reference instant as a parameter, so nothing reads the clock while rendering
+- `regex-tester.ts` - regex execution returning segments rather than HTML
+- `playground.ts` - JSX code generation for the component playground
 - `zod-config.ts` - re-exports `z` with `jitless: true`. Client-side schemas MUST
   import `z` from here: Zod 4 compiles object validators with `new Function` and
   probes for it in a try/catch, which a strict `script-src` reports as a
@@ -270,7 +292,16 @@ End-to-end tests (Playwright, `e2e/`):
   plain-text mirror in both languages
 - `reading.spec.ts` - related posts, ToC, ←/→ navigation, progress bar, back to
   top, tablist keyboard contract
-- `utils-tools.spec.ts` - JWT decoder, hash generator, diff viewer
+- `utils-tools.spec.ts` / `utils-tools-2.spec.ts` - the eight `/utils` tools
+- `tags.spec.ts` / `series.spec.ts` - tag and series pages, both language trees
+- `search-page.spec.ts` - the `/search` page and its agreement with the palette
+- `playground.spec.ts` - the component playground and its generated code
+- `offline.spec.ts` - the service worker, with the network genuinely cut
+- `a11y.spec.ts` - axe-core over 16 page types plus the open playground. Two known
+  contrast debts are listed in the file with their measurement; any new violation
+  fails. Light theme only — forcing dark gives measurements axe cannot resolve
+- `budget.spec.ts` - JS, font and CSS weight ceilings measured in the browser, plus
+  the font-preload count
 
 Watch out for two selector traps: Next.js always mounts an empty
 `<div role="alert">` route announcer (scope to `p[role="alert"]`), and MDX bodies
@@ -314,4 +345,15 @@ falling back to zeroed GitHub widgets rather than failing.
   must be migrated, not trusted
 - **Arrow-key shortcuts**: `WritingsShortcuts` moves between posts with ←/→ and
   bails on `event.defaultPrevented`, so widgets with their own arrow semantics
-  (a `role="tablist"`, a combobox) don't also change the page
+  (a `role="tablist"`, a combobox) don't also change the page. They follow
+  chronological order, NOT the series order — the series has its own explicit
+  previous/next links
+- **Offline**: `public/sw.js` caches `/_next/static/**`, fonts and images
+  cache-first (their URLs are content-hashed), and HTML **network-first**. Never
+  serve HTML from cache while the network answers: a stale document references
+  chunks that no longer exist and loads without any JavaScript, silently.
+  `public/offline.html` is the fallback and carries no script and no external
+  stylesheet on purpose — it can sit in a cache for months
+- **Playground**: props declared in `src/registry/playgrounds.ts`, which also holds
+  the component reference. Do NOT read it from `Index`: `registry:component`
+  entries have no `component` field, only `registry:example` ones do

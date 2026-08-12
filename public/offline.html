@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1"
+      name="viewport"
+    />
+    <meta content="noindex" name="robots" />
+    <title>Hors ligne — Cuzeac Florin</title>
+    <!--
+      Page volontairement sans JavaScript et sans ressource externe.
+
+      C'est le seul document servi depuis le cache, et il peut y rester des mois.
+      S'il chargeait un script ou une feuille de style du site, il pointerait vers
+      des fichiers empreintés qui n'existent plus après un déploiement — et la
+      page de secours serait elle-même cassée. Tout est donc en ligne, ici.
+    -->
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #faf9f6;
+        --fg: #18181b;
+        --muted: #52525b;
+        --border: #e4e4e7;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #09090b;
+          --fg: #fafafa;
+          --muted: #a1a1aa;
+          --border: #27272a;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 1.5rem;
+        background: var(--bg);
+        color: var(--fg);
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        line-height: 1.6;
+      }
+
+      main {
+        max-width: 34rem;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+      }
+
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.25rem;
+      }
+
+      p {
+        margin: 0 0 0.75rem;
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+
+      hr {
+        margin: 1.25rem 0;
+        border: 0;
+        border-top: 1px solid var(--border);
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 1.25rem;
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+
+      [lang="en"] {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>-- pas de réseau --</h1>
+
+      <p>
+        Cette page n'a pas pu être chargée, et elle n'était pas encore
+        en cache.
+      </p>
+
+      <ul>
+        <li>Les pages déjà visitées restent lisibles hors ligne.</li>
+        <li>
+          Réessayez une fois la connexion revenue : le site se
+          rechargera normalement.
+        </li>
+      </ul>
+
+      <hr />
+
+      <div lang="en">
+        <h1>-- no network --</h1>
+        <p>
+          This page could not be loaded, and it was not cached yet.
+          Pages you have already visited remain readable offline.
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
