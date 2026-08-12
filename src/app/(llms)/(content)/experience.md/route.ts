@@ -1,22 +1,35 @@
 import { EXPERIENCES } from "@/app/(fr)/(content)/(root)/_components/experiences/content";
+import type { AppLocale } from "@/lib/i18n";
+
+/** Voir projects.md/route.ts : locale explicite, pas de `getLocale()` implicite. */
+const MIRROR_LOCALE: AppLocale = "fr";
+
+const options = { locale: MIRROR_LOCALE } as const;
 
 const content = `
 # Mes expériences professionnelles
 
 ${EXPERIENCES.map((item) => {
   const skills = item.skills?.join(", ") || "N/A";
-  const description = Array.isArray(item.description)
-    ? item.description.map((desc) => `- ${desc}`).join("\n")
-    : item.description || "";
+  // titre, type et puces sont tous des MESSAGES, pas des chaînes : sans l'appel,
+  // le miroir publiait `(e={},l={})=>"en"===(t.experimentalStaticLocale??…` à la
+  // place de chaque intitulé de poste et de chaque puce
+  const description = item.description
+    ?.map((desc) => `- ${desc(undefined, options)}`)
+    .join("\n");
   const period = `${item.period.start} - ${item.period.end || "Maintenant"}`;
+  const type = item.type
+    ? ` | **Type:** ${item.type(undefined, options)}`
+    : "";
+  const link = item.link ? `\n**Lien:** ${item.link}` : "";
 
-  return `## ${item.title} | ${item.company}
+  return `## ${item.title(undefined, options)} | ${item.company}
 
-**Durée:** ${period}${item.type ? ` | **Type:** ${item.type}` : ""}${item.link ? `\n**Lien:** ${item.link}` : ""}
+**Durée:** ${period}${type}${link}
 
 **Compétences:** ${skills}
 
-${description}`;
+${description ?? ""}`;
 }).join("\n\n---\n\n")}
 `;
 

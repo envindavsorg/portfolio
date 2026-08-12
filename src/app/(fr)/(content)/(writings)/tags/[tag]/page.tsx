@@ -22,13 +22,28 @@ import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 /**
- * Les slugs sont calculés depuis le contenu français : ce sont les mêmes tags
- * dans les deux arbres (le frontmatter anglais reprend les tags FR quand il
- * n'en définit pas), et un slug qui n'existerait que dans une locale donnerait
- * une page orpheline sans équivalent hreflang.
+ * Les slugs d'une locale sont calculés depuis le contenu de CETTE locale.
+ *
+ * L'ancienne version dérivait les deux arbres du seul index français, sur la foi
+ * d'un commentaire qui affirmait que « le frontmatter anglais reprend les tags
+ * FR ». C'est faux : le frontmatter EN traduit une partie de ses tags. Les deux
+ * sujets FR sans équivalent — `carriere` et `retour-d-experience` — étaient donc
+ * PRÉRENDUS EN 404 sous /en, tout en étant annoncés au sitemap, et les quatre
+ * slugs EN réellement liés depuis les articles anglais (`career`,
+ * `lessons-learned`, `text`, `colors`) n'étaient prérendus nulle part.
+ *
+ * Conséquence assumée : un sujet propre à une locale n'a pas d'équivalent
+ * hreflang, et le sitemap ne lui en déclare aucun (voir src/app/sitemap.ts).
+ * Le jour où les sujets devront exister dans les deux langues, le motif est déjà
+ * dans le dépôt : `series` est une CLÉ partagée doublée d'un `seriesName`
+ * traduit. L'appliquer aux tags est une migration de contenu, pas un correctif.
  */
-export const generateStaticParams = () =>
-  getTagIndex(getAllContent()).map((tag) => ({ tag: tag.slug }));
+export const tagStaticParams = (locale: ContentLocale) =>
+  getTagIndex(getAllContent(locale)).map((tag) => ({
+    tag: tag.slug,
+  }));
+
+export const generateStaticParams = () => tagStaticParams("fr");
 
 export const buildTagMetadata = async ({
   locale = "fr",

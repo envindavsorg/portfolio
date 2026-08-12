@@ -2,7 +2,15 @@
 
 import { useRender } from "@base-ui/react/use-render";
 import type { ComponentProps, ReactElement } from "react";
-import { createContext, useContext, useId } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from "react";
 import type {
   ControllerProps,
   FieldPath,
@@ -45,6 +53,9 @@ export const FormField = <
 
 interface FormItemContextValue {
   id: string;
+  /** vrai quand une <FormDescription> est réellement rendue dans cet item */
+  hasDescription: boolean;
+  registerDescription: () => void;
 }
 
 const FormItemContext = createContext<FormItemContextValue>(
@@ -62,14 +73,16 @@ export const useFormField = () => {
     throw new Error("useFormField should be used within <FormField>");
   }
 
-  const { id } = itemContext;
+  const { id, hasDescription, registerDescription } = itemContext;
 
   return {
     formDescriptionId: `${id}-form-item-description`,
     formItemId: `${id}-form-item`,
     formMessageId: `${id}-form-item-message`,
+    hasDescription,
     id,
     name: fieldContext.name,
+    registerDescription,
     ...fieldState,
   };
 };
@@ -79,9 +92,20 @@ export const FormItem = ({
   ...props
 }: ComponentProps<"div">) => {
   const id = useId();
+  const [hasDescription, setHasDescription] = useState(false);
+
+  const registerDescription = useCallback(
+    () => setHasDescription(true),
+    []
+  );
+
+  const value = useMemo(
+    () => ({ hasDescription, id, registerDescription }),
+    [hasDescription, id, registerDescription]
+  );
 
   return (
-    <FormItemContext.Provider value={{ id }}>
+    <FormItemContext.Provider value={value}>
       <div
         className={cn("grid gap-2", className)}
         data-slot="form-item"
@@ -115,14 +139,30 @@ export const FormControl = ({
   children,
   ...props
 }: ComponentProps<"div"> & { children: ReactElement }) => {
-  const { error, formItemId, formDescriptionId, formMessageId } =
-    useFormField();
+  const {
+    error,
+    formItemId,
+    formDescriptionId,
+    formMessageId,
+    hasDescription,
+  } = useFormField();
 
   return useRender({
     props: {
-      "aria-describedby": error
-        ? `${formDescriptionId} ${formMessageId}`
-        : `${formDescriptionId}`,
+      /**
+       * `formDescriptionId` n'est référencé que si une <FormDescription> est
+       * réellement rendue. Les deux champs du formulaire de CV pointaient vers un
+       * id inexistant : axe classe un IDREF manquant en `incomplete`, et le scan
+       * ne lit que `violations` — le défaut était donc invisible par
+       * construction, en plus d'être inutile pour un lecteur d'écran.
+       */
+      "aria-describedby":
+        [
+          hasDescription ? formDescriptionId : null,
+          error ? formMessageId : null,
+        ]
+          .filter(Boolean)
+          .join(" ") || undefined,
       "aria-invalid": !!error,
       "data-slot": "form-control",
       id: formItemId,
@@ -136,7 +176,13 @@ export const FormDescription = ({
   className,
   ...props
 }: ComponentProps<"p">) => {
-  const { formDescriptionId } = useFormField();
+  const { formDescriptionId, registerDescription } = useFormField();
+
+  // la description s'annonce elle-même : sans cela, FormControl référence un id
+  // qui n'existe pas dès qu'aucune description n'est rendue
+  useEffect(() => {
+    registerDescription();
+  }, [registerDescription]);
 
   return (
     <p
@@ -160,10 +206,18 @@ export const FormMessage = ({
   }
 
   return (
+    /**
+     * `role="alert"` et `aria-live` : les huit outils /utils annoncent déjà leurs
+     * messages, mais le SEUL formulaire qui envoie réellement quelque chose — la
+     * demande de CV — ne disait rien. Une erreur de saisie apparaissait à l'écran
+     * sans aucun retour pour qui n'y a pas les yeux.
+     */
     <p
+      aria-live="polite"
       className={cn("font-light text-destructive text-xs", className)}
       data-slot="form-message"
       id={formMessageId}
+      role="alert"
       {...props}
     >
       {body}

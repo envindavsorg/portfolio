@@ -18,6 +18,6 @@ export const metadata: Metadata = createMetadata({
   title: "Search",
 });
 
-const Page = () => <SearchPage locale="en" />;
+const Page = () => <SearchPage />;
 
 export default Page;

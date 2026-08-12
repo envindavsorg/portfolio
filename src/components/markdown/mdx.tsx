@@ -1,7 +1,6 @@
 import { FileIcon } from "@phosphor-icons/react/ssr";
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import dynamic from "next/dynamic";
 import type React from "react";
 import rehypeExternalLinks from "rehype-external-links";
 import type { LineElement } from "rehype-pretty-code";
@@ -41,73 +40,6 @@ import { JSONIcon } from "../svgs/stack/JSON";
 import { ReactIcon } from "../svgs/stack/React";
 import { TypeScriptIcon } from "../svgs/stack/TypeScript";
 
-/**
- * Widgets d'outils chargés à la demande.
- *
- * La table de composants MDX est partagée par TOUTES les pages de contenu :
- * en import statique, @cloudflare/speedtest, poline et le générateur de
- * bannière sur canvas atterrissaient dans le bundle de chaque page MDX, même
- * celles qui n'utilisent aucun outil. Chaque widget a désormais son propre
- * chunk, chargé seulement si le contenu l'invoque.
- */
-const ArticleBanner = dynamic(async () => {
-  const mod =
-    await import("@/components/utils/ArticleBannerGenerator");
-  return mod.ArticleBanner;
-});
-const Base64 = dynamic(async () => {
-  const mod = await import("@/components/utils/Base64");
-  return mod.Base64;
-});
-const ColorGenerator = dynamic(async () => {
-  const mod = await import("@/components/utils/ColorGenerator");
-  return mod.ColorGenerator;
-});
-const CaseConverter = dynamic(async () => {
-  const mod = await import("@/components/utils/CaseConverter");
-  return mod.CaseConverter;
-});
-const ContrastChecker = dynamic(async () => {
-  const mod = await import("@/components/utils/ContrastChecker");
-  return mod.ContrastChecker;
-});
-const CronExplainer = dynamic(async () => {
-  const mod = await import("@/components/utils/CronExplainer");
-  return mod.CronExplainer;
-});
-const DateConverter = dynamic(async () => {
-  const mod = await import("@/components/utils/DateConverter");
-  return mod.DateConverter;
-});
-const RegexTester = dynamic(async () => {
-  const mod = await import("@/components/utils/RegexTester");
-  return mod.RegexTester;
-});
-const DiffViewer = dynamic(async () => {
-  const mod = await import("@/components/utils/DiffViewer");
-  return mod.DiffViewer;
-});
-const HashGenerator = dynamic(async () => {
-  const mod = await import("@/components/utils/HashGenerator");
-  return mod.HashGenerator;
-});
-const JSONFormatter = dynamic(async () => {
-  const mod = await import("@/components/utils/JSONFormatter");
-  return mod.JSONFormatter;
-});
-const JwtDecoder = dynamic(async () => {
-  const mod = await import("@/components/utils/JwtDecoder");
-  return mod.JwtDecoder;
-});
-const LoremIpsumGenerator = dynamic(async () => {
-  const mod = await import("@/components/utils/LoremIpsumGenerator");
-  return mod.LoremIpsumGenerator;
-});
-const SpeedTest = dynamic(async () => {
-  const mod = await import("@/components/utils/SpeedTest");
-  return mod.SpeedTest;
-});
-
 const getIconForLanguageExtension = (language: string) => {
   switch (language) {
     case "json": {
@@ -134,23 +66,9 @@ const getIconForLanguageExtension = (language: string) => {
 };
 
 const components: MDXRemoteProps["components"] = {
-  ArticleBannerUtils: ArticleBanner,
-  Base64Utils: Base64,
-  CaseConverterUtils: CaseConverter,
   CodeCollapsibleWrapper,
-  ColorGeneratorUtils: ColorGenerator,
   ComponentPreview,
   ComponentSource,
-  ContrastCheckerUtils: ContrastChecker,
-  CronExplainerUtils: CronExplainer,
-  DateConverterUtils: DateConverter,
-  DiffViewerUtils: DiffViewer,
-  HashGeneratorUtils: HashGenerator,
-  InternetSpeedTestUtils: SpeedTest,
-  JSONFormatterUtils: JSONFormatter,
-  JwtDecoderUtils: JwtDecoder,
-  LoremIpsumGeneratorUtils: LoremIpsumGenerator,
-  RegexTesterUtils: RegexTester,
   code: Code,
   figcaption: ({
     children,
@@ -321,13 +239,26 @@ const options: MDXRemoteProps["options"] = {
 interface MDXProps {
   code: string;
   isDivider?: boolean;
+  /**
+   * Composants supplémentaires, ajoutés à la table de base.
+   *
+   * Les widgets d'outils passent par ici et non par la table partagée : celle-ci
+   * est un module unique, donc y déclarer les quatorze widgets faisait
+   * référencer les quatorze chunks par CHAQUE page de contenu, y compris les
+   * articles. Voir `utils-widgets.ts`.
+   */
+  components?: MDXRemoteProps["components"];
 }
 
-export const Mdx = ({ code, isDivider = true }: MDXProps) => (
+export const Mdx = ({
+  code,
+  components: extra,
+  isDivider = true,
+}: MDXProps) => (
   <>
     <Prose className="px-2 sm:px-4">
       <MDXRemote
-        components={components}
+        components={extra ? { ...components, ...extra } : components}
         options={options}
         source={code}
       />

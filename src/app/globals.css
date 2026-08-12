@@ -78,7 +78,24 @@
 :root {
   color-scheme: light dark;
 
-  --theme: #306fdc;
+  /**
+   * Le fond réellement peint par le document.
+   *
+   * Ni html ni body ne portaient de background-color : le fond venait du canevas
+   * de l'agent utilisateur via color-scheme. Conséquence, axe ne peut PAS
+   * résoudre le fond en thème sombre — il rapporte du blanc alors que le
+   * document porte la classe `dark`, ce qui rend tout scan de contraste en
+   * sombre inexploitable. C'est le symptôme décrit sans explication en tête de
+   * e2e/a11y.spec.ts.
+   *
+   * La valeur reprend EXACTEMENT les couleurs de canevas actuelles plutôt que
+   * `--background` : peindre le jeton du site changerait le fond clair de
+   * #ffffff au beige #faf9f6 et ferait disparaître les cartes `bg-background`
+   * qui s'en détachent. Débloquer une mesure ne doit pas redessiner le site.
+   */
+  --canvas: #ffffff;
+
+  --theme: #306fdb;
   --background: oklch(0.982 0.004 91.446);
   --foreground: oklch(0.191 0.002 106.586);
   --primary: oklch(0.191 0.002 106.586);
@@ -151,6 +168,9 @@
 
 .dark {
   color-scheme: dark;
+
+  /* le canevas sombre de Chromium, repris tel quel */
+  --canvas: #121212;
 }
 
 .light {
@@ -189,6 +209,9 @@
   }
 
   body {
+    /* peint explicitement : sans cela le fond n'existe que dans le canevas de
+       l'agent utilisateur, invisible pour un outil d'audit */
+    background-color: var(--canvas);
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -257,6 +280,21 @@
     animation-name: reveal-dark;
   }
 
+  /**
+   * Le balayage de thème dure 0,8 s et couvre tout l'écran.
+   *
+   * MotionConfig ne voit pas les transitions de vue : elles sont pilotées par le
+   * navigateur, pas par Motion. Sans cette règle, la seule animation vraiment
+   * envahissante du site restait la seule à ignorer la préférence.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(root),
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none !important;
+    }
+  }
+
   @keyframes reveal-dark {
     from {
       clip-path: polygon(50% -71%, -50% 71%, -50% 71%, 50% -71%);
@@ -319,6 +357,67 @@
 
   [data-line] span {
     @apply text-(--shiki-light) dark:text-(--shiki-dark);
+  }
+
+  /**
+   * Mise en évidence des lignes de code.
+   *
+   * rehype-pretty-code émet DÉJÀ `data-highlighted-line`,
+   * `data-highlighted-chars` et les identifiants de diff : il comprend `{1,3-4}`,
+   * `// [!code highlight]`, `// [!code ++]`, `// [!code --]` et `/mot/` dans la
+   * clôture. Rien ne les consommait — tout se rendait en code ordinaire.
+   *
+   * Que la fonctionnalité ait été amorcée puis abandonnée se lit dans le code :
+   * `--code-highlight` est défini pour les deux thèmes et exporté en
+   * `--color-code-highlight`, et AUCUNE règle ne l'utilisait.
+   *
+   * Tout est en CSS pur, dans le calque `components` existant. La barre d'accent
+   * à gauche est ce qui distingue une ligne mise en évidence quand le fond seul
+   * ne suffit pas — en impression, ou pour qui distingue mal les teintes.
+   */
+  [data-highlighted-line] {
+    @apply bg-code-highlight;
+    box-shadow: inset 2px 0 0 0 var(--color-theme);
+  }
+
+  [data-highlighted-chars] {
+    @apply rounded-sm bg-code-highlight px-1 py-0.5;
+  }
+
+  /* les diffs : la couleur ne porte JAMAIS l'information seule, le marqueur
+     +/- reste lisible en niveaux de gris comme pour un daltonien */
+  [data-line][class*="diff"]::before {
+    @apply inline-block w-3 select-none;
+  }
+
+  [data-line].diff.add {
+    @apply bg-emerald-500/12;
+  }
+
+  [data-line].diff.add::before {
+    content: "+";
+    @apply text-emerald-700 dark:text-emerald-400;
+  }
+
+  [data-line].diff.remove {
+    @apply bg-rose-500/12;
+  }
+
+  [data-line].diff.remove::before {
+    content: "−";
+    @apply text-rose-700 dark:text-rose-400;
+  }
+
+  /* `[!code focus]` : le reste du bloc s'atténue, et redevient net au survol,
+     sinon un extrait long devient illisible pour qui veut le contexte */
+  [data-rehype-pretty-code-figure]:has([data-focused])
+    [data-line]:not([data-focused]) {
+    @apply opacity-40 transition-opacity;
+  }
+
+  [data-rehype-pretty-code-figure]:hover
+    [data-line]:not([data-focused]) {
+    @apply opacity-100;
   }
 
   [data-rehype-pretty-code-title] {

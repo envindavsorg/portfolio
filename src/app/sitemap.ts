@@ -37,6 +37,20 @@ const localizedEntries = (
   ];
 };
 
+/**
+ * Une entrée pour UNE seule locale, sans `alternates`.
+ *
+ * Déclarer un `hreflang` vers une URL qui n'existe pas est pire que de ne rien
+ * déclarer. Le sitemap annonçait un équivalent anglais pour CHAQUE sujet
+ * français, dont deux (`carriere`, `retour-d-experience`) étaient prérendus en
+ * 404 sous /en parce que le vocabulaire de tags diverge entre les locales.
+ */
+const singleEntry = (
+  path: string,
+  locale: "fr" | "en",
+  entry: Omit<MetadataRoute.Sitemap[number], "url" | "alternates">
+): MetadataRoute.Sitemap => [{ ...entry, url: toUrl(path, locale) }];
+
 const getLatestDate = (posts: ReturnType<typeof getAllContent>) => {
   if (posts.length === 0) {
     return dayjs().toISOString();
@@ -117,18 +131,43 @@ const sitemap = (): MetadataRoute.Sitemap => {
   );
 
   // les pages de sujet sont la principale surface de découverte transversale :
-  // sans elles au sitemap, elles ne seraient atteignables que par navigation
-  const tagUrls: MetadataRoute.Sitemap = getTagIndex(
-    allPosts
-  ).flatMap((tag) =>
-    localizedEntries(`/tags/${tag.slug}`, {
-      changeFrequency: "weekly",
-      lastModified: getLatestDate(
-        getContentByTagSlug(allPosts, tag.slug)
+  // sans elles au sitemap, elles ne seraient atteignables que par navigation.
+  // Chaque locale a son propre vocabulaire de tags, donc chaque index est calculé
+  // sur son contenu, et la paire hreflang n'est émise que si le slug existe
+  // réellement des deux côtés.
+  const enPosts = getAllContent("en");
+  const frTagIndex = getTagIndex(allPosts);
+  const enTagIndex = getTagIndex(enPosts);
+  const frTagSlugs = new Set(frTagIndex.map((tag) => tag.slug));
+  const enTagSlugs = new Set(enTagIndex.map((tag) => tag.slug));
+
+  const tagEntry = (posts: typeof allPosts) => ({
+    changeFrequency: "weekly" as const,
+    lastModified: getLatestDate(posts),
+    priority: 0.5,
+  });
+
+  const tagUrls: MetadataRoute.Sitemap = [
+    ...frTagIndex.flatMap((tag) => {
+      const path = `/tags/${tag.slug}`;
+      const entry = tagEntry(getContentByTagSlug(allPosts, tag.slug));
+
+      return enTagSlugs.has(tag.slug)
+        ? localizedEntries(path, entry)
+        : singleEntry(path, "fr", entry);
+    }),
+    // les sujets propres à l'anglais n'apparaissaient dans aucun sitemap, et
+    // n'étaient prérendus nulle part, alors que les articles EN les lient
+    ...enTagIndex
+      .filter((tag) => !frTagSlugs.has(tag.slug))
+      .flatMap((tag) =>
+        singleEntry(
+          `/tags/${tag.slug}`,
+          "en",
+          tagEntry(getContentByTagSlug(enPosts, tag.slug))
+        )
       ),
-      priority: 0.5,
-    })
-  );
+  ];
 
   const mapPostsToSitemap = (
     posts: typeof allPosts,

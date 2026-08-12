@@ -8,6 +8,7 @@ import consola from "consola";
 import { PNG } from "pngjs";
 import { launch } from "puppeteer-core";
 import type { Browser, ElementHandle, Page } from "puppeteer-core";
+import sharp from "sharp";
 
 const executablePath =
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -201,11 +202,26 @@ const captureComponent = async ({
       return;
     }
 
+    // le GIF n'est qu'un INTERMÉDIAIRE : l'encodeur image par image fonctionne,
+    // mais son format pesait 2 827 351 octets pour quatre démos. La conversion en
+    // WebP animé les ramène à 204 866 octets (−92,8 %) à durée, dimensions et
+    // rendu identiques — libwebp fusionne simplement les images consécutives
+    // identiques en cumulant leur délai.
     const gifPath = join(componentDir, `${theme}.gif`);
+    const webpPath = join(
+      componentDir,
+      `${theme}.webp`
+    ) as `${string}.webp`;
 
     await captureGif(page, remountedElement, duration, gifPath);
 
-    consola.success(`GIF saved: ${gifPath}`);
+    await sharp(gifPath, { animated: true })
+      .webp({ effort: 6, quality: 90 })
+      .toFile(webpPath);
+
+    await promises.unlink(gifPath);
+
+    consola.success(`Animated WebP saved: ${webpPath}`);
   } else {
     const filePath = join(
       componentDir,

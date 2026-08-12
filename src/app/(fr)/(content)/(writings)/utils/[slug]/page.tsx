@@ -12,6 +12,7 @@ import { WritingsTagLinks } from "@/components/features/WritingsTagLinks";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
 import { Mdx } from "@/components/markdown/mdx";
+import { getUtilWidgets } from "@/components/markdown/utils-widgets";
 import type { ContentLocale } from "@/lib/content";
 import {
   getAllContent,
@@ -19,7 +20,7 @@ import {
   getContentBySlug,
 } from "@/lib/content";
 import { getPageJsonLd } from "@/lib/json-ld";
-import { createMetadata } from "@/lib/metadata";
+import { createContentMetadata } from "@/lib/metadata";
 import { getContentToc } from "@/lib/toc";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
@@ -40,13 +41,7 @@ export const generateMetadata = async ({
     return notFound();
   }
 
-  const { title, description, category } = util.metadata;
-  return createMetadata({
-    description,
-    ogImageParams: { description, title, type: "utilsArticle" },
-    path: `/${category}/${slug}`,
-    title,
-  });
+  return createContentMetadata(util);
 };
 
 export const UtilView = ({
@@ -97,7 +92,7 @@ export const UtilView = ({
 
       <Divider border={false} after={false} type="half" />
 
-      <Mdx code={content} />
+      <Mdx code={content} components={getUtilWidgets(slug)} />
 
       <script
         dangerouslySetInnerHTML={{

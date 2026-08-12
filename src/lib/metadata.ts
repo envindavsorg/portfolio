@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import GLOBAL_DATA from "@/data/global";
+import type { Content, ContentCategory } from "@/lib/content";
 import type { AppLocale } from "@/lib/i18n";
 
 interface OpenGraphImageParams {
@@ -11,6 +12,13 @@ interface OpenGraphImageParams {
   locale?: AppLocale;
 }
 
+interface ArticleParams {
+  /** date de publication, en ISO 8601 */
+  publishedTime: string;
+  modifiedTime?: string;
+  tags?: string[];
+}
+
 interface MetadataConfig {
   description: string;
   locale?: AppLocale;
@@ -18,9 +26,73 @@ interface MetadataConfig {
   /** chemin SANS préfixe de locale, ex. "/articles" */
   path?: string;
   title: string;
+  /** présent = la page est un article : `og:type` bascule et les dates sortent */
+  article?: ArticleParams;
 }
 
 export const BASE_URL = "https://cuzeacflorin.fr";
+
+const FEED_LABELS: Record<
+  AppLocale,
+  { all: string; articles: string; components: string; utils: string }
+> = {
+  en: {
+    all: "all content",
+    articles: "articles",
+    components: "components",
+    utils: "tools",
+  },
+  fr: {
+    all: "tous les contenus",
+    articles: "articles",
+    components: "composants",
+    utils: "outils",
+  },
+};
+
+/**
+ * Autodécouverte des flux, à réémettre sur CHAQUE page.
+ *
+ * Next.js ne fusionne pas les objets imbriqués de `metadata` : dès qu'une page
+ * déclare son propre `alternates`, celui du layout racine est remplacé en entier,
+ * pas complété. Les `<link rel="alternate">` des flux ne sortaient donc sur
+ * AUCUNE page du site — vérifié sur le build : zéro occurrence de
+ * `application/rss` dans les documents servis, alors que les quatre flux
+ * existent et fonctionnent.
+ */
+const feedAlternates = (
+  locale: AppLocale
+): NonNullable<Metadata["alternates"]>["types"] => {
+  const name = GLOBAL_DATA.USER.fullName;
+  const labels = FEED_LABELS[locale];
+
+  return {
+    "application/feed+json": [
+      {
+        title: `${name} — JSON Feed`,
+        url: `${BASE_URL}/api/feed.json`,
+      },
+    ],
+    "application/rss+xml": [
+      {
+        title: `${name} — ${labels.all}`,
+        url: `${BASE_URL}/api/rss`,
+      },
+      {
+        title: `${name} — ${labels.articles}`,
+        url: `${BASE_URL}/api/rss/articles`,
+      },
+      {
+        title: `${name} — ${labels.components}`,
+        url: `${BASE_URL}/api/rss/components`,
+      },
+      {
+        title: `${name} — ${labels.utils}`,
+        url: `${BASE_URL}/api/rss/utils`,
+      },
+    ],
+  };
+};
 
 const localizePath = (path: string, locale: AppLocale): string => {
   if (locale === "fr") {
@@ -52,6 +124,7 @@ export const openGraphImage = ({
 };
 
 export const createMetadata = ({
+  article,
   description,
   locale = "fr",
   ogImageParams,
@@ -63,30 +136,46 @@ export const createMetadata = ({
     ? openGraphImage({ locale, ...ogImageParams })
     : undefined;
 
+  // le tronc commun aux deux formes d'`og:type` : le construire une fois évite
+  // que la variante « article » dérive de la variante « website »
+  const openGraphBase = {
+    description,
+    ...(imageUrl && {
+      images: [
+        { alt: title, height: 630, url: imageUrl, width: 1200 },
+      ],
+    }),
+    locale: locale === "fr" ? "fr_FR" : "en_US",
+    siteName: GLOBAL_DATA.USER.fullName,
+    title,
+    ...(url && { url }),
+  };
+
   return {
-    ...(path && {
-      alternates: {
+    alternates: {
+      // `types` n'est PAS conditionné par `path` : une page sans canonical a
+      // quand même besoin d'annoncer les flux
+      types: feedAlternates(locale),
+      ...(path && {
         canonical: url,
         languages: {
           en: absoluteUrl(path, "en"),
           fr: absoluteUrl(path, "fr"),
           "x-default": absoluteUrl(path, "fr"),
         },
-      },
-    }),
-    description,
-    openGraph: {
-      description,
-      ...(imageUrl && {
-        images: [
-          { alt: title, height: 630, url: imageUrl, width: 1200 },
-        ],
       }),
-      locale: locale === "fr" ? "fr_FR" : "en_US",
-      title,
-      type: "website",
-      ...(url && { url }),
     },
+    description,
+    openGraph: article
+      ? {
+          ...openGraphBase,
+          authors: [GLOBAL_DATA.USER.fullName],
+          modifiedTime: article.modifiedTime ?? article.publishedTime,
+          publishedTime: article.publishedTime,
+          ...(article.tags?.length && { tags: article.tags }),
+          type: "article",
+        }
+      : { ...openGraphBase, type: "website" },
     title,
     twitter: {
       card: "summary_large_image",
@@ -97,6 +186,45 @@ export const createMetadata = ({
   };
 };
 
+const OG_TYPE_BY_CATEGORY: Record<ContentCategory, string> = {
+  articles: "blogArticle",
+  components: "componentsArticle",
+  utils: "utilsArticle",
+};
+
+/**
+ * Métadonnées d'une page de contenu, pour les DEUX arbres de routes.
+ *
+ * Les six pages de détail (trois catégories × deux locales) construisaient le
+ * même objet à la main. C'est précisément la forme de duplication qui produit la
+ * dérive FR/EN documentée dans ce dépôt : les dates `og:article` ajoutées ici
+ * n'auraient été posées que sur l'arbre qu'on aurait pensé à modifier.
+ */
+export const createContentMetadata = (
+  content: Content,
+  locale: AppLocale = "fr"
+): Metadata => {
+  const { category, createdAt, description, tags, title, updatedAt } =
+    content.metadata;
+
+  return createMetadata({
+    article: {
+      modifiedTime: updatedAt.toISOString(),
+      publishedTime: createdAt.toISOString(),
+      tags,
+    },
+    description,
+    locale,
+    ogImageParams: {
+      description,
+      title,
+      type: category ? OG_TYPE_BY_CATEGORY[category] : undefined,
+    },
+    ...(category && { path: `/${category}/${content.slug}` }),
+    title,
+  });
+};
+
 const TITLE_TEMPLATES: Record<AppLocale, string> = {
   en: "%s - Full-Stack Developer – Personal portfolio",
   fr: "%s - Développeur Full-Stack – Portfolio personnel",
@@ -105,34 +233,10 @@ const TITLE_TEMPLATES: Record<AppLocale, string> = {
 // metadata du layout racine de chaque arbre de routes ((fr)/ et en/)
 export const createRootMetadata = (locale: AppLocale): Metadata => ({
   // autodécouverte des flux : sans ces <link rel="alternate">, un lecteur RSS
-  // ne trouve pas le flux depuis l'URL du site
+  // ne trouve pas le flux depuis l'URL du site. Même constructeur que
+  // `createMetadata`, qui doit les réémettre page par page (voir feedAlternates)
   alternates: {
-    types: {
-      "application/feed+json": [
-        {
-          title: `${GLOBAL_DATA.USER.fullName} — JSON Feed`,
-          url: `${BASE_URL}/api/feed.json`,
-        },
-      ],
-      "application/rss+xml": [
-        {
-          title: `${GLOBAL_DATA.USER.fullName} — tous les contenus`,
-          url: `${BASE_URL}/api/rss`,
-        },
-        {
-          title: `${GLOBAL_DATA.USER.fullName} — articles`,
-          url: `${BASE_URL}/api/rss/articles`,
-        },
-        {
-          title: `${GLOBAL_DATA.USER.fullName} — composants`,
-          url: `${BASE_URL}/api/rss/components`,
-        },
-        {
-          title: `${GLOBAL_DATA.USER.fullName} — outils`,
-          url: `${BASE_URL}/api/rss/utils`,
-        },
-      ],
-    },
+    types: feedAlternates(locale),
   },
   authors: [
     {

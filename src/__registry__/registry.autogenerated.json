@@ -1,6 +1,5 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "ncdai",
   "homepage": "https://cuzeacflorin.fr/components",
   "items": [
     {
@@ -68,5 +67,6 @@
       "docs": "https://cuzeacflorin.fr/components/flip-sentences",
       "type": "registry:component"
     }
-  ]
+  ],
+  "name": "ncdai"
 }

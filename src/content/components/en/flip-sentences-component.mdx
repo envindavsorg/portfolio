@@ -1,8 +1,8 @@
 ---
 title: Flip Sentences
 description: An animated React component built with motion/react that automatically cycles through a list of sentences with a smooth transition
-bannerDark: /images/blog/flip-sentences-demo/dark.gif
-bannerLight: /images/blog/flip-sentences-demo/light.gif
+bannerDark: /images/blog/flip-sentences-demo/dark.webp
+bannerLight: /images/blog/flip-sentences-demo/light.webp
 category: components
 createdAt: 2025-03-10
 updatedAt: 2025-03-10
@@ -44,7 +44,7 @@ npm install motion clsx tailwind-merge
 
 ## (2.3) create the array with the sentences you want to cycle through:
 
-```ts
+```ts title="sentences.ts" {2-5}
 const EXAMPLE_SENTENCES = [
   "Imagine, code, crée, inspire.",
   "Chaque petit pixel compte !",

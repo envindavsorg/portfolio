@@ -1,13 +1,14 @@
+import type { Message } from "@/lib/i18n";
 import { m } from "@/paraglide/messages";
 
 export interface Project {
   id: string;
   name: string;
-  type: () => string;
+  type: Message;
   link: string;
   skills: string[];
-  title: () => string;
-  description: (() => string)[];
+  title: Message;
+  description: Message[];
 }
 
 export const PROJECTS: Project[] = [
@@ -50,14 +51,19 @@ export const PROJECTS: Project[] = [
       m.home_proj_portfolio_desc_8,
     ],
     id: "portfolio",
-    link: "https://github.com/envindavsorg/cuzeacflorin.fr",
+    // le dépôt s'appelle « portfolio » : l'ancienne URL (…/cuzeacflorin.fr)
+    // renvoyait un 404 GitHub, sur la fiche du projet ET dans /projects.md
+    link: "https://github.com/envindavsorg/portfolio",
     name: "cuzeacflorin.fr",
+    // la stack annoncée doit rester vraie : « React 18, Next.js 15, Radix UI »
+    // contredisait package.json (19.2, 16.2) et le choix explicite de Base UI,
+    // radix ayant justement été retiré parce que son Slot casse l'hydratation
     skills: [
       "Open Source",
-      "React 18",
-      "Next.js 15",
+      "React 19",
+      "Next.js 16",
       "Tailwind CSS v4",
-      "Radix UI",
+      "Base UI",
       "Motion",
       "shadcn/ui",
       "Component Registry",

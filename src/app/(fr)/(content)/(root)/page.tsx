@@ -22,6 +22,7 @@ import { Divider } from "@/components/base/Divider";
 import { SectionBoundary } from "@/components/layout/SectionBoundary";
 import GLOBAL_DATA from "@/data/global";
 import { dayjs } from "@/lib/functions";
+import { PERSON_ID } from "@/lib/json-ld";
 import { createMetadata } from "@/lib/metadata";
 
 const About = dynamic(async () => {
@@ -48,12 +49,9 @@ const getPageJsonLd = (): WithContext<PageSchema> => ({
   "@type": "ProfilePage",
   dateCreated: dayjs("2025-09-01").toISOString(),
   dateModified: dayjs().toISOString(),
-  mainEntity: {
-    "@type": "Person",
-    identifier: GLOBAL_DATA.USER.username,
-    image: GLOBAL_DATA.USER.avatar,
-    name: GLOBAL_DATA.USER.firstName,
-  },
+  // référence au nœud Person du graphe racine, au lieu d'une TROISIÈME personne
+  // anonyme nommée « florin » — le graphe en déclarait déjà deux différentes
+  mainEntity: { "@id": PERSON_ID },
 });
 
 const Page = () => (

@@ -8,14 +8,10 @@ import { Label } from "@/components/base/Label";
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
 import { Input } from "@/components/primitives/Input";
-import type { SearchDoc } from "@/lib/search";
+import { useSearchIndex } from "@/hooks/useSearchIndex";
 import { SCORES, searchDocs } from "@/lib/search";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
-
-interface SearchResultsProps {
-  docs: SearchDoc[];
-}
 
 const QUERY_KEY = "q";
 
@@ -43,8 +39,12 @@ const writeQuery = (query: string) => {
   window.history.replaceState(null, "", hash);
 };
 
-export const SearchResults = ({ docs }: SearchResultsProps) => {
+export const SearchResults = () => {
   const [query, setQuery] = useState("");
+
+  // l'index arrive par fetch et non plus en prop : la page l'embarquait DEUX
+  // fois dans son payload, une pour la navbar et une pour les résultats
+  const { docs, failed, loading } = useSearchIndex();
 
   /**
    * La requête initiale est lue après l'hydratation : le fragment n'existe pas
@@ -120,7 +120,16 @@ export const SearchResults = ({ docs }: SearchResultsProps) => {
           : m.search_prompt()}
       </p>
 
-      {trimmed && hits.length === 0 && (
+      {/* distinguer les trois cas : « rien trouvé » affiché pendant le
+          chargement, ou pire à la place d'une panne, ferait croire à une requête
+          sans résultat alors que rien n'a encore été cherché */}
+      {trimmed && hits.length === 0 && (loading || failed) && (
+        <p className="px-3 text-sm">
+          {failed ? m.search_unavailable() : m.search_loading()}
+        </p>
+      )}
+
+      {trimmed && hits.length === 0 && !(loading || failed) && (
         <p className="px-3 text-sm">
           {m.search_empty({ query: trimmed })}
         </p>
