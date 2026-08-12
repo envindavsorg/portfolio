@@ -218,4 +218,39 @@ test.describe("aucune image hors de l'optimiseur", () => {
       ).toEqual([]);
     });
   }
+
+  /**
+   * Le srcset, vérifié dans le DOM et non dans le HTML.
+   *
+   * React 19 sérialise l'attribut en `srcSet` (camelCase, écrit verbatim : sa
+   * table de renommage ne couvre que class, http-equiv et consorts). Un
+   * `grep srcset` sur le HTML construit renvoie donc ZÉRO alors que l'attribut
+   * est bien là — j'ai moi-même conclu à tort à un srcset manquant sur cette
+   * base. Une assertion DOM est immunisée : le parseur HTML normalise la casse.
+   */
+  test("les vignettes proposent bien plusieurs tailles", async ({
+    page,
+  }) => {
+    await page.goto("/articles");
+    await page.waitForLoadState("networkidle");
+
+    const candidates = await page
+      .locator('img[data-slot="dialog-image"]')
+      .evaluateAll((nodes) =>
+        nodes.map(
+          (node) =>
+            (node.getAttribute("srcset") ?? "")
+              .split(",")
+              .filter(Boolean).length
+        )
+      );
+
+    expect(candidates.length).toBeGreaterThan(0);
+
+    // une vignette sans srcset est servie en pleine résolution : c'est la
+    // régression qui a coûté 881 Kio sur cette page
+    for (const count of candidates) {
+      expect(count).toBeGreaterThanOrEqual(8);
+    }
+  });
 });
