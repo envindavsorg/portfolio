@@ -70,8 +70,18 @@ export const WritingsActions = ({
   const [origin, setOrigin] = useState("");
   useEffect(() => setOrigin(window.location.origin), []);
 
-  const handleCopyPageUrl = useCallback(() => {
-    copyText(url);
+  const handleCopyPageUrl = useCallback(async () => {
+    const copied = await copyText(url);
+
+    if (!copied) {
+      toast.error("", {
+        description: m.writings_actions_toast_link_error(),
+        duration: 3000,
+        id: "copy-hint",
+      });
+      return;
+    }
+
     toast.success("", {
       description: m.writings_actions_toast_link_copied(),
       duration: 3000,

@@ -8,12 +8,10 @@ import {
   useRef,
   useState,
 } from "react";
-import { toast } from "sonner";
 
 import { Divider } from "@/components/base/Divider";
 import { useTagFilter } from "@/components/features/WritingsTagFilter";
 import { matchesTag } from "@/lib/tags";
-import { m } from "@/paraglide/messages";
 
 import { getRecentSlugs, RECENT_KEY } from "./lib";
 import type { UtilsItem, UtilsSortMode } from "./types";
@@ -80,13 +78,6 @@ export const Utils = ({ contents }: UtilsProps) => {
   const handleRetry = useCallback(() => {
     setQuery("");
     inputRef.current?.focus();
-
-    // test
-    toast.info(m.utils_toast_test_title(), {
-      description: m.utils_toast_test_description(),
-      duration: Number.POSITIVE_INFINITY,
-      id: "command-hint",
-    });
   }, []);
 
   const clearRecent = useCallback(() => {
