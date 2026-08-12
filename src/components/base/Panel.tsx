@@ -43,84 +43,97 @@ interface PanelHeaderProps extends ComponentProps<"div"> {
 export const PanelHeader = forwardRef<
   HTMLDivElement,
   PanelHeaderProps
->(({ className, sticky, title, ...props }, forwardedRef) => {
-  const internalRef = useRef<HTMLDivElement | null>(null);
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const [isStuck, setIsStuck] = useState(false);
+>(
+  (
+    { children, className, sticky, title, ...props },
+    forwardedRef
+  ) => {
+    const internalRef = useRef<HTMLDivElement | null>(null);
+    const sentinelRef = useRef<HTMLDivElement>(null);
+    const [isStuck, setIsStuck] = useState(false);
 
-  useImperativeHandle(
-    forwardedRef,
-    () => internalRef.current as HTMLDivElement
-  );
+    useImperativeHandle(
+      forwardedRef,
+      () => internalRef.current as HTMLDivElement
+    );
 
-  const setRef = useCallback((element: HTMLDivElement | null) => {
-    internalRef.current = element;
-  }, []);
+    const setRef = useCallback((element: HTMLDivElement | null) => {
+      internalRef.current = element;
+    }, []);
 
-  useEffect(() => {
-    if (!(sticky && sentinelRef.current)) {
-      return;
+    useEffect(() => {
+      if (!(sticky && sentinelRef.current)) {
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        ([entry]) => setIsStuck(!entry.isIntersecting),
+        { rootMargin: "-57px 0px 0px 0px", threshold: 0 }
+      );
+      observer.observe(sentinelRef.current);
+      return () => observer.disconnect();
+    }, [sticky]);
+
+    if (!sticky) {
+      return (
+        <div
+          className={cn("screen-line-after px-3", className)}
+          data-slot="panel-header"
+          ref={setRef}
+          {...props}
+        >
+          {/* `title` était ignoré hors mode collant : un appelant qui le
+            fournissait sans `sticky` obtenait un en-tête vide, donc une section
+            sans intitulé — visuellement et pour un lecteur d'écran. */}
+          {title ? <PanelTitle>{title}</PanelTitle> : null}
+          {children}
+        </div>
+      );
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsStuck(!entry.isIntersecting),
-      { rootMargin: "-57px 0px 0px 0px", threshold: 0 }
-    );
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [sticky]);
-
-  if (!sticky) {
     return (
-      <div
-        className={cn("screen-line-after px-3", className)}
-        data-slot="panel-header"
-        ref={setRef}
-        {...props}
-      />
+      <>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none invisible -mt-px h-px w-full"
+          ref={sentinelRef}
+        />
+        <div
+          className={cn(
+            "screen-line-after sticky top-14 z-20 px-3 transition-colors duration-300",
+            isStuck
+              ? "bg-background text-theme"
+              : "bg-background text-foreground",
+            className
+          )}
+          data-slot="panel-header"
+          ref={setRef}
+          {...props}
+        >
+          <PanelTitle
+            className={cn(
+              isStuck && "text-center text-xl sm:text-2xl"
+            )}
+          >
+            {isStuck ? (
+              <TextAnimate animation="slideLeft" by="character">
+                {`-- ${title} --`}
+              </TextAnimate>
+            ) : (
+              <TextAnimate
+                animation="slideLeft"
+                by="character"
+                delay={0.2}
+              >
+                {title ?? ""}
+              </TextAnimate>
+            )}
+          </PanelTitle>
+        </div>
+      </>
     );
   }
-
-  return (
-    <>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none invisible -mt-px h-px w-full"
-        ref={sentinelRef}
-      />
-      <div
-        className={cn(
-          "screen-line-after sticky top-14 z-20 px-3 transition-colors duration-300",
-          isStuck
-            ? "bg-background text-theme"
-            : "bg-background text-foreground",
-          className
-        )}
-        data-slot="panel-header"
-        ref={setRef}
-        {...props}
-      >
-        <PanelTitle
-          className={cn(isStuck && "text-center text-xl sm:text-2xl")}
-        >
-          {isStuck ? (
-            <TextAnimate animation="slideLeft" by="character">
-              {`-- ${title} --`}
-            </TextAnimate>
-          ) : (
-            <TextAnimate
-              animation="slideLeft"
-              by="character"
-              delay={0.2}
-            >
-              {title ?? ""}
-            </TextAnimate>
-          )}
-        </PanelTitle>
-      </div>
-    </>
-  );
-});
+);
 
 export const PanelContent = ({
   className,

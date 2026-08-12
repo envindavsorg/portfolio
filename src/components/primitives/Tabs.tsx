@@ -249,6 +249,15 @@ export const TabsAnimated = ({
       }
 
       event.preventDefault();
+
+      // `handleTabClick` refuse de changer d'onglet pendant l'animation : sans
+      // ce garde, le focus partait quand même sur l'onglet suivant et se
+      // désynchronisait de la sélection — exactement ce qu'un tablist
+      // automatique promet de ne jamais faire.
+      if (isAnimating) {
+        return;
+      }
+
       const currentIndex = tabs.findIndex(
         (tab) => tab.id === activeTab
       );
@@ -264,7 +273,7 @@ export const TabsAnimated = ({
           ?.[nextIndex]?.focus();
       }
     },
-    [activeTab, handleTabClick, tabs]
+    [activeTab, handleTabClick, isAnimating, tabs]
   );
 
   const handleAnimationStart = useCallback(
