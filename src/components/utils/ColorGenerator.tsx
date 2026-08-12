@@ -175,6 +175,12 @@ export const ColorGenerator = () => {
                     id: "color-hint",
                   });
                 }}
+                aria-label={
+                  lockedColor === key
+                    ? m.utils_color_unlock_aria()
+                    : m.utils_color_lock_aria()
+                }
+                aria-pressed={lockedColor === key}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 size="icon"

@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -27,7 +28,13 @@ import { m } from "@/paraglide/messages";
 import { CvError } from "./CvError";
 import { CvForm } from "./CvForm";
 import { CvModal } from "./CvModal";
-import { CvSuccess } from "./CvSuccess";
+
+// react-confetti n'est utile qu'apres un envoi reussi : inutile de le charger
+// avec la page d'accueil pour une modale fermee.
+const CvSuccess = dynamic(async () => {
+  const mod = await import("./CvSuccess");
+  return mod.CvSuccess;
+});
 
 export const CvFooter = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)");

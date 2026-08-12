@@ -4,6 +4,7 @@ import type {
 } from "schema-dts";
 
 import GLOBAL_DATA from "@/data/global";
+import type { AppLocale } from "@/lib/i18n";
 
 import type { Content } from "./content";
 import { dayjs } from "./functions";
@@ -15,10 +16,11 @@ const CATEGORY_OG_TYPES: Record<string, PageType> = {
   utils: "utilsArticle",
 };
 
-export const getPageJsonLd = ({
-  metadata,
-  slug,
-}: Content): WithContext<PageSchema> => ({
+export const getPageJsonLd = (
+  { metadata, slug }: Content,
+  /** locale de la PAGE, pas du fichier servi : /en peut afficher du contenu FR */
+  locale: AppLocale = "fr"
+): WithContext<PageSchema> => ({
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   author: {
@@ -35,8 +37,10 @@ export const getPageJsonLd = ({
     ? `${BASE_URL}${metadata.image}`
     : openGraphImage({
         description: metadata.description,
+        locale,
         title: metadata.title,
         type: CATEGORY_OG_TYPES[metadata.category ?? "articles"],
       }),
-  url: `${BASE_URL}/${metadata.category}/${slug}`,
+  inLanguage: locale === "en" ? "en-US" : "fr-FR",
+  url: `${BASE_URL}${locale === "en" ? "/en" : ""}/${metadata.category}/${slug}`,
 });

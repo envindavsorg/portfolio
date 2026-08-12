@@ -8,7 +8,7 @@ import {
 } from "@/components/base/Panel";
 import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
-import { getContentByCategory } from "@/lib/content";
+import { getContentByCategory, toContentLocale } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
 import { m } from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
@@ -16,7 +16,10 @@ import { getLocale, localizeHref } from "@/paraglide/runtime";
 import { ArticleItem } from "./ArticleItem";
 
 export const Articles = () => {
-  const articles = getContentByCategory("articles").toSorted((a, b) =>
+  const articles = getContentByCategory(
+    "articles",
+    toContentLocale(getLocale())
+  ).toSorted((a, b) =>
     dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
   );
 

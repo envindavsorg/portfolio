@@ -98,10 +98,9 @@ export const UtilView = ({
 
       <script
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPageJsonLd(item)).replaceAll(
-            "<",
-            "\\u003c"
-          ),
+          __html: JSON.stringify(
+            getPageJsonLd(item, locale)
+          ).replaceAll("<", "\\u003c"),
         }}
         type="application/ld+json"
       />

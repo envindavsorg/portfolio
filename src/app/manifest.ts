@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
 
 import GLOBAL_DATA from "@/data/global";
+import { META_THEME_COLORS } from "@/data/theme";
 
 const manifest = (): MetadataRoute.Manifest => ({
+  background_color: META_THEME_COLORS.light,
   description: GLOBAL_DATA.USER.bio,
   display: "standalone",
   icons: [
@@ -31,7 +33,7 @@ const manifest = (): MetadataRoute.Manifest => ({
     {
       form_factor: "narrow",
       sizes: "440x956",
-      src: "/meta/mobile-dark.webp",
+      src: "/images/meta/mobile-dark.webp",
       type: "image/webp",
     },
     {
@@ -54,6 +56,9 @@ const manifest = (): MetadataRoute.Manifest => ({
     },
   ],
   short_name: GLOBAL_DATA.USER.firstName,
+  // sans start_url, le lanceur ouvre l'URL courante au moment de l'installation
+  start_url: "/",
+  theme_color: META_THEME_COLORS.light,
 });
 
 export default manifest;

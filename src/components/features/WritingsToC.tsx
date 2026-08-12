@@ -149,6 +149,12 @@ export const WritingsToC = ({
   const groups = groupTocItems(items);
   const activeUrl = activeId ? `#${activeId}` : null;
 
+  // un contenu sans titre de section (ex. /utils/color-generator) affichait un
+  // panneau dépliable définitivement vide
+  if (groups.length === 0) {
+    return null;
+  }
+
   return (
     <CollapsibleWithContext {...props}>
       <CollapsibleTrigger

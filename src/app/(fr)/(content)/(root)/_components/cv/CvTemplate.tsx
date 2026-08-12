@@ -11,9 +11,20 @@ import {
   Text,
 } from "@react-email/components";
 
+import type { AppLocale } from "@/lib/i18n";
+import { m } from "@/paraglide/messages";
+
 interface CvTemplateProps {
   firstName: string;
   recipientEmail: string;
+  /**
+   * Locale transmise explicitement par le formulaire.
+   *
+   * `getLocale()` ne convient pas ici : l'action serveur s'exécute hors du
+   * rendu de la page, donc sans le contexte de locale posé par RootDocument —
+   * elle retomberait toujours sur le français.
+   */
+  locale?: AppLocale;
 }
 
 const main = {
@@ -60,7 +71,10 @@ const reportLink = {
   fontSize: "14px",
 };
 
-export const CvTemplate = ({ firstName }: CvTemplateProps) => (
+export const CvTemplate = ({
+  firstName,
+  locale = "fr",
+}: CvTemplateProps) => (
   <Html>
     <Head />
 
@@ -76,12 +90,12 @@ export const CvTemplate = ({ firstName }: CvTemplateProps) => (
           width="42"
         />
 
-        <Heading style={heading}>Bonjour {firstName} !</Heading>
+        <Heading style={heading}>
+          {m.home_cv_email_heading({ firstName }, { locale })}
+        </Heading>
 
         <Text style={paragraph}>
-          Merci de votre intérêt pour mon profil. Vous trouverez en
-          pièce jointe mon CV au format PDF. N'hésitez pas à me
-          contacter si vous avez des questions.
+          {m.home_cv_email_body({}, { locale })}
         </Text>
 
         <Hr style={hr} />

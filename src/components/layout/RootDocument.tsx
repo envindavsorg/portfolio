@@ -1,11 +1,4 @@
 import { GeistMono } from "geist/font/mono";
-import {
-  GeistPixelCircle,
-  GeistPixelGrid,
-  GeistPixelLine,
-  GeistPixelSquare,
-  GeistPixelTriangle,
-} from "geist/font/pixel";
 import { GeistSans } from "geist/font/sans";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
@@ -15,6 +8,13 @@ import { LocaleProvider } from "@/components/providers/modules/LocaleProvider";
 import { Providers } from "@/components/providers/Providers";
 import GLOBAL_DATA from "@/data/global";
 import { META_THEME_COLORS } from "@/data/theme";
+import {
+  PixelCircle,
+  PixelGrid,
+  PixelLine,
+  PixelSquare,
+  PixelTriangle,
+} from "@/fonts/pixel";
 import type { AppLocale } from "@/lib/i18n";
 import { setServerLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -85,11 +85,13 @@ export const RootDocument = ({
         "no-scrollbar h-full antialiased",
         GeistSans.variable,
         GeistMono.variable,
-        GeistPixelSquare.variable,
-        GeistPixelGrid.variable,
-        GeistPixelCircle.variable,
-        GeistPixelTriangle.variable,
-        GeistPixelLine.variable
+        PixelSquare.variable,
+        // déclarées sans preload : décoratives, elles ne servent qu'à l'effet
+        // de défilement de PixelHeading
+        PixelGrid.variable,
+        PixelCircle.variable,
+        PixelTriangle.variable,
+        PixelLine.variable
       )}
       lang={locale}
       suppressHydrationWarning

@@ -26,7 +26,7 @@ export const About = () => {
   const handleMouseLeave = () => iconRef.current?.stopAnimation();
 
   return (
-    <Panel>
+    <Panel id="about-me">
       <PanelHeader sticky title={m.home_about_panel_title()} />
 
       <AboutContent expanded={isExpanded} />

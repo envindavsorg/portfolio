@@ -66,10 +66,9 @@ export const ComponentView = ({
     <>
       <script
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPageJsonLd(component)).replaceAll(
-            "<",
-            "\\u003c"
-          ),
+          __html: JSON.stringify(
+            getPageJsonLd(component, locale)
+          ).replaceAll("<", "\\u003c"),
         }}
         type="application/ld+json"
       />

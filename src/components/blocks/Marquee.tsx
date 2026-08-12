@@ -5,6 +5,7 @@ import type { HTMLAttributes } from "react";
 import type { MarqueeProps as FastMarqueeProps } from "react-fast-marquee";
 import FastMarquee from "react-fast-marquee";
 
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 
 export const Marquee = memo(
@@ -20,15 +21,28 @@ export const MarqueeContent = ({
   loop = 0,
   autoFill = true,
   pauseOnHover = true,
+  pauseOnClick = true,
+  play = true,
   ...props
-}: FastMarqueeProps) => (
-  <FastMarquee
-    autoFill={autoFill}
-    loop={loop}
-    pauseOnHover={pauseOnHover}
-    {...props}
-  />
-);
+}: FastMarqueeProps) => {
+  // WCAG 2.2.2 : un mouvement automatique de plus de cinq secondes doit pouvoir
+  // être arrêté. `pauseOnHover` ne sert qu'à la souris, d'où l'arrêt complet
+  // quand le visiteur demande moins d'animations, et `pauseOnClick` au toucher.
+  const prefersReducedMotion = useMediaQuery(
+    "(prefers-reduced-motion: reduce)"
+  );
+
+  return (
+    <FastMarquee
+      autoFill={autoFill}
+      loop={loop}
+      pauseOnClick={pauseOnClick}
+      pauseOnHover={pauseOnHover}
+      play={play && !prefersReducedMotion}
+      {...props}
+    />
+  );
+};
 
 export const MarqueeFade = ({
   className,

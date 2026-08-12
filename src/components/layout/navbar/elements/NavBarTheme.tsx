@@ -10,7 +10,7 @@ import { Button } from "@/components/primitives/Button";
 import { META_THEME_COLORS } from "@/data/theme";
 import useMetaColor from "@/hooks/useMetaColor";
 import { soundManager } from "@/lib/sound-manager";
-import { getLocale } from "@/paraglide/runtime";
+import { m } from "@/paraglide/messages";
 
 export const NavBarTheme = () => {
   const { resolvedTheme, setTheme } = useTheme();
@@ -46,7 +46,7 @@ export const NavBarTheme = () => {
     moonIconRef.current?.stopAnimation();
   };
 
-  useHotkeys("d", handleClick);
+  useHotkeys("alt+d", handleClick);
 
   return (
     <Button
@@ -61,9 +61,7 @@ export const NavBarTheme = () => {
         ref={moonIconRef}
       />
       <Sun className="hidden [html.light_&]:block" ref={sunIconRef} />
-      <span className="sr-only">
-        {getLocale() === "en" ? "toggle theme" : "Changer de thème"}
-      </span>
+      <span className="sr-only">{m.nav_theme_toggle()}</span>
     </Button>
   );
 };

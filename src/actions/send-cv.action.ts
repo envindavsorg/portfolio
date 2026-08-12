@@ -12,7 +12,7 @@ import GLOBAL_DATA from "@/data/global";
 import { env } from "@/env";
 import { logger } from "@/lib/logger";
 import { RateLimiter } from "@/lib/rate-limit";
-import { emailSchema } from "@/schemas/emailSchema";
+import { sendCvInputSchema } from "@/schemas/emailSchema";
 
 /**
  * `new Resend(undefined)` lève « Missing API key » dès l'évaluation du module.
@@ -80,9 +80,9 @@ const getCvAttachment = async (): Promise<string> => {
 };
 
 export const sendCvAction = actionClient
-  .inputSchema(emailSchema)
+  .inputSchema(sendCvInputSchema)
   .action(async ({ parsedInput }) => {
-    const { firstName, recipientEmail } = parsedInput;
+    const { firstName, recipientEmail, locale } = parsedInput;
 
     const apiKey = env.RESEND_API_KEY;
     if (!apiKey) {
@@ -117,7 +117,7 @@ export const sendCvAction = actionClient
     const { error } = await getResend(apiKey).emails.send({
       attachments: [{ content, filename: GLOBAL_DATA.CV.name }],
       from: `${GLOBAL_DATA.USER.fullName} <${GLOBAL_DATA.USER.emailAddress}>`,
-      react: CvTemplate({ firstName, recipientEmail }),
+      react: CvTemplate({ firstName, locale, recipientEmail }),
       subject: `CV - ${GLOBAL_DATA.USER.fullName} | ${GLOBAL_DATA.SOCIAL.portfolio}`,
       to: [recipientEmail],
     });

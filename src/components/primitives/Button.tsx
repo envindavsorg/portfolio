@@ -173,6 +173,12 @@ export const CopyButton = ({
       variant={variant}
     >
       <Icon ref={iconRef} size={22} />
+      {/* le changement d'icône est purement visuel : sans région live, un
+          lecteur d'écran n'apprend jamais si la copie a réussi */}
+      <span aria-live="polite" className="sr-only" role="status">
+        {state === "success" && m.copy_button_success()}
+        {state === "fail" && m.copy_button_failure()}
+      </span>
     </Button>
   );
 };

@@ -180,6 +180,7 @@ export const WritingsActions = ({
         <TooltipTrigger
           render={
             <Button
+              aria-label={m.writings_actions_copy_link_aria()}
               onMouseEnter={link.handleMouseEnter}
               onMouseLeave={link.handleMouseLeave}
               onClick={handleCopyPageUrl}
@@ -215,14 +216,15 @@ export const WritingsActions = ({
         <TooltipTrigger
           render={
             <Button
+              asChild
               onMouseEnter={twitter.handleMouseEnter}
               onMouseLeave={twitter.handleMouseLeave}
               size="icon"
               variant="outline"
             >
               <Link
-                href={shareUrls.x}
                 aria-label={m.writings_actions_share_x_aria()}
+                href={shareUrls.x}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -240,14 +242,15 @@ export const WritingsActions = ({
         <TooltipTrigger
           render={
             <Button
+              asChild
               onMouseEnter={linkedin.handleMouseEnter}
               onMouseLeave={linkedin.handleMouseLeave}
               size="icon"
               variant="outline"
             >
               <Link
-                href={shareUrls.linkedin}
                 aria-label={m.writings_actions_share_linkedin_aria()}
+                href={shareUrls.linkedin}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -265,6 +268,7 @@ export const WritingsActions = ({
         <DropdownMenuTrigger
           render={
             <Button
+              aria-label={m.writings_actions_open_in_aria()}
               className="group/toggle"
               onMouseEnter={handleBotEnter}
               onMouseLeave={handleBotLeave}
@@ -288,34 +292,24 @@ export const WritingsActions = ({
               {m.writings_actions_dropdown_open_in()}
             </DropdownMenuLabel>
             {viewOptions.map(({ title, href, icon: Icon }) => (
-              <Link
-                href={href}
-                rel="noreferrer noopener"
-                target="_blank"
+              <DropdownMenuItem
+                className="cursor-pointer items-center gap-x-2 py-1.5"
                 key={href}
+                render={
+                  <Link
+                    href={href}
+                    rel="noreferrer noopener"
+                    target="_blank"
+                  />
+                }
               >
-                <DropdownMenuItem className="gap-x-2 items-center py-1.5 cursor-pointer">
-                  <Icon className="size-4" />
-                  {title}
-                </DropdownMenuItem>
-              </Link>
+                <Icon className="size-4" />
+                {title}
+              </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      {/*<DropdownMenu>
-        <DropdownMenuTrigger asChild>
-
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="start"
-          className="w-fit py-2 *:cursor-pointer"
-
-        >
-
-        </DropdownMenuContent>
-      </DropdownMenu>*/}
     </div>
   );
 };

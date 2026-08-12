@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
 import type { Content } from "@/lib/content";
+import { localizeHref } from "@/paraglide/runtime";
 
 interface WritingsShortcutsProps {
   basePath: string;
@@ -21,7 +22,7 @@ export const WritingsShortcuts = ({
   const navigate = useCallback(
     (post: Content | null) => {
       if (post) {
-        router.push(`${basePath}/${post.slug}`);
+        router.push(localizeHref(`${basePath}/${post.slug}`));
       }
     },
     [router, basePath]

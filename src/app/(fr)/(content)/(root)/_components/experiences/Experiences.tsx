@@ -27,7 +27,7 @@ export const Experiences = () => {
   const hasHidden = hiddenContent.length > 0;
 
   return (
-    <Panel>
+    <Panel id="my-experiences">
       <PanelHeader sticky title={m.home_experiences_panel_title()} />
 
       <PanelContent>

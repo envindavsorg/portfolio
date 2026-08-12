@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { WritingsShortcuts } from "@/components/features/WritingsShortcuts";
 import type { Content } from "@/lib/content";
 import { getAbsoluteUrl } from "@/lib/functions";
+import { localizeHref } from "@/paraglide/runtime";
 
 import { PanelContent } from "../base/Panel";
 import { WritingsActions } from "./WritingsActions";
@@ -57,7 +58,7 @@ export const WritingsTopBar = ({
         <WritingsActions
           isComponent={category === "components"}
           url={absoluteUrl}
-          markdownUrl={`/${category}/${item.slug}.mdx`}
+          markdownUrl={localizeHref(`/${category}/${item.slug}.mdx`)}
         />
       </PanelContent>
     </>

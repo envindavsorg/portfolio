@@ -7,6 +7,8 @@ interface OpenGraphImageParams {
   description?: string;
   title: string;
   type?: string;
+  /** locale du badge de la carte ; le défaut reste le français */
+  locale?: AppLocale;
 }
 
 interface MetadataConfig {
@@ -34,12 +36,17 @@ const absoluteUrl = (path: string, locale: AppLocale): string => {
 
 export const openGraphImage = ({
   description,
+  locale,
   title,
   type = "homepage",
 }: OpenGraphImageParams): string => {
   const params = new URLSearchParams({ title: title.trim(), type });
   if (description?.trim()) {
     params.set("description", description.trim());
+  }
+  // les cartes des pages /en portaient un badge en français
+  if (locale === "en") {
+    params.set("locale", "en");
   }
   return `${BASE_URL}/api/og?${params}`;
 };
@@ -53,7 +60,7 @@ export const createMetadata = ({
 }: MetadataConfig): Metadata => {
   const url = path ? absoluteUrl(path, locale) : undefined;
   const imageUrl = ogImageParams
-    ? openGraphImage(ogImageParams)
+    ? openGraphImage({ locale, ...ogImageParams })
     : undefined;
 
   return {

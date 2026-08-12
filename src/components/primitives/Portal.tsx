@@ -27,6 +27,7 @@ import { RemoveScroll } from "react-remove-scroll";
 
 import useDelay, { useFnDelay } from "@/hooks/useDelay";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 import { TextAnimate } from "../blocks/TextAnimate";
 import { Eye } from "../motion/Eye";
@@ -304,9 +305,11 @@ export const PortalImage = forwardRef<
         className="relative w-full rounded-md object-cover object-center ring-1 ring-border ring-offset-3 ring-offset-background sm:min-h-40"
         data-open={dataOpen}
         data-slot="dialog-image"
+        decoding="async"
         layoutId={`dialog-image-${id}-${wrapperLayoutId}`}
-        loading="eager"
-        rel="preload"
+        // `loading="eager"` faisait telecharger toutes les vignettes de la liste
+        // des le chargement ; `rel` n'est de toute facon pas valide sur <img>.
+        loading="lazy"
         transition={{ ...transitionDialog, ...transition }}
         whileHover={animatedOpen || dataOpen ? undefined : whileHover}
         {...props}
@@ -618,6 +621,7 @@ export const PortalDialogClose = forwardRef<
 
   return (
     <Button
+      aria-label={m.portal_close_aria()}
       className="absolute top-4 right-4 z-50"
       onClick={() => setIsOpen(false)}
       onMouseEnter={() => iconRef.current?.startAnimation()}
