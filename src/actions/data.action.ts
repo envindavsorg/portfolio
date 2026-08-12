@@ -23,6 +23,7 @@ const FALLBACK: GitHubData = {
   following: 0,
   login: GLOBAL_DATA.USER.username,
   name: GLOBAL_DATA.USER.fullName,
+  repositories: [],
   stars: 0,
 };
 
@@ -53,6 +54,16 @@ const fetchGitHubData = async (): Promise<GitHubData> => {
 	                nodes {
 	                    stargazers {
 	                        totalCount
+	                    }
+	                    isFork
+	                    languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
+	                        edges {
+	                            size
+	                            node {
+	                                name
+	                                color
+	                            }
+	                        }
 	                    }
 	                }
 	            }
@@ -93,6 +104,7 @@ const fetchGitHubData = async (): Promise<GitHubData> => {
     following: user.following.totalCount,
     login: user.login,
     name: user.name,
+    repositories: user.repositories.nodes,
     stars: user.repositories.nodes.reduce(
       (total, repo) => total + repo.stargazers.totalCount,
       0

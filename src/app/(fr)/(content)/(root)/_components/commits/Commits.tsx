@@ -6,46 +6,37 @@ import {
 } from "@/components/base/Panel";
 import { Badge } from "@/components/primitives/Badge";
 import { Prose } from "@/components/primitives/Typography";
+import {
+  aggregateLanguages,
+  getContributionStats,
+} from "@/lib/github-stats";
 import { m } from "@/paraglide/messages";
-import { getLocale } from "@/paraglide/runtime";
 
 import { CommitsContent } from "./CommitsContent";
+import { CommitsLanguages } from "./CommitsLanguages";
+import { CommitsStats } from "./CommitsStats";
 
 export const Commits = async () => {
-  const { stars, followers, following, contributions } =
+  const { stars, followers, following, contributions, repositories } =
     await getGitHubData();
+
+  const stats = getContributionStats(contributions);
+  const languages = aggregateLanguages(repositories);
 
   return (
     <Panel>
       <PanelHeader sticky title={m.home_commits_panel_title()} />
 
       <PanelContent>
-        {getLocale() === "en" ? (
-          <>
-            <Prose>
-              -- find here <span>the complete history</span> of my
-              open source contributions on GitHub --
-            </Prose>
-            <Prose>
-              -- each commit represents a <i>step</i> in my journey as
-              a developer --
-            </Prose>
-          </>
-        ) : (
-          <>
-            <Prose>
-              -- retrouvez ici <span>l'historique complet</span> de
-              mes contributions open source sur GitHub --
-            </Prose>
-            <Prose>
-              -- chaque commit représente une <i>étape</i> de mon
-              parcours en tant que développeur --
-            </Prose>
-          </>
-        )}
+        <Prose>{m.home_commits_prose_1()}</Prose>
+        <Prose>{m.home_commits_prose_2()}</Prose>
       </PanelContent>
 
       <CommitsContent contributions={contributions} />
+
+      <CommitsStats stats={stats} />
+
+      <CommitsLanguages languages={languages} />
 
       <div className="screen-line-before flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
         <span className="text-theme">---</span>

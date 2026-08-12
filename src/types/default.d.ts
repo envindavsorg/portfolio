@@ -32,6 +32,18 @@ interface ContributionDay {
   level: number;
 }
 
+/** répartition des langages d'un dépôt, telle que renvoyée par l'API GraphQL */
+interface GitHubLanguageNode {
+  /** un fork fausserait les statistiques avec du code écrit par d'autres */
+  isFork?: boolean;
+  languages?: {
+    edges: ({
+      size: number;
+      node: { name: string; color: string | null };
+    } | null)[];
+  } | null;
+}
+
 interface GitHubData {
   login: string;
   name: string;
@@ -40,6 +52,8 @@ interface GitHubData {
   following: number;
   stars: number;
   contributions: ContributionDay[];
+  /** dépôts publics, pour agréger les langages */
+  repositories: GitHubLanguageNode[];
 }
 
 interface GitHubDataResponse {
@@ -50,7 +64,9 @@ interface GitHubDataResponse {
     followers: { totalCount: number };
     following: { totalCount: number };
     repositories: {
-      nodes: { stargazers: { totalCount: number } }[];
+      nodes: ({
+        stargazers: { totalCount: number };
+      } & GitHubLanguageNode)[];
     };
     contributionsCollection: {
       contributionCalendar: {
