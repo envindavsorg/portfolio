@@ -1,249 +1,168 @@
 # External Integrations
 
-**Analysis Date:** 2026-02-16
+**Analysis Date:** 2026-08-12
+
+> Superseded the 2026-02-16 snapshot: the `/api/send` route and the Vercel Blob
+> follower count it documented no longer exist.
 
 ## APIs & External Services
 
-**GitHub:**
-- Service: GitHub GraphQL API for user data
-- What it's used for: Fetching repository data, contributions calendar, followers, stars, commits
-  - SDK/Client: `octokit` v5.0.5
-  - Configuration: `src/lib/octokit.ts`
-  - Auth: `GITHUB_API_TOKEN` environment variable
-  - Usage:
-    - `src/actions/github/data.action.ts` - Fetch user profile, repos, contributions (cached 1 hour)
-    - `src/actions/github/commit.action.ts` - Get commit history
-    - `src/features/(homepage)/7_commits/Commits.tsx` - Display recent commits
-    - `src/components/ui/contribution-graph/ContributionGraph.tsx` - Render contribution calendar
-  - Query file: `src/queries/github/data.query` (GraphQL queries)
+**GitHub (GraphQL)**
 
-**Resend:**
-- Service: Transactional email service
-- What it's used for: Sending CV/resume via email with PDF attachment
-  - SDK/Client: `resend` v6.9.1
-  - Auth: `RESEND_API_KEY` environment variable
-  - Endpoint: `src/app/api/send/route.ts`
-  - Features:
-    - React component email templates via `@react-email/components`
-    - PDF attachment from `public/documents/resume.pdf`
-    - Sender: Portfolio owner email (configured in `src/content/data/global`)
-    - Validation: Zod schema in `src/schemas/email.schema`
-  - Email template: `src/features/(homepage)/4_cv/CvTemplate` (React component)
+- Used for: contribution calendar, stars, followers/following, per-repo language
+  breakdown, and the latest commit on the widget repo
+- Client: `octokit` 5, wrapped in `src/lib/octokit.ts` (exports the bound
+  `graphql` function, not the whole client)
+- Auth: `GITHUB_API_TOKEN`
+- Callers: `src/actions/data.action.ts`, `src/actions/commit.action.ts`
+- Caching: `unstable_cache`, 1 h revalidate, around the fetch **only**
+- Failure mode: typed zeroed fallback and a logged error. Nothing throws, so an
+  expired token degrades the widgets instead of breaking the build — which is what
+  allows CI to build with a placeholder token
+- Forks are excluded from the language statistics: they would attribute other
+  people's code
 
-**Cloudflare:**
-- Service: Cloudflare Speed Test
-- What it's used for: Network speed measurement widget
-  - SDK/Client: `@cloudflare/speedtest` v1.7.0
-  - Usage: `src/features/(writings)/utils/SpeedTest.tsx`
-  - Embedded in blog/content pages
+**Resend (transactional email)**
+
+- Used for: emailing the CV as a PDF attachment
+- Client: `resend` 6 with `@react-email/components` / `@react-email/render` for the
+  template
+- Auth: `RESEND_API_KEY`, optional
+- Caller: `src/actions/send-cv.action.ts` (next-safe-action)
+- The client is built lazily via `getResend()`. `new Resend(undefined)` throws at
+  module scope, which would fire before any in-action guard could check the key
+- Protected by three sliding-window limiters: per IP (3 / 10 min), per recipient
+  (2 / 24 h) and global (60 / h). The PDF is read once and cached
+
+**Cloudflare Speed Test**
+
+- Used for: the `/utils/internet-speed-test` tool
+- Client: `@cloudflare/speedtest`, entirely client-side
+- The only cross-origin destination in the CSP: `connect-src` allows
+  `https://speed.cloudflare.com`
+
+**Vercel Analytics & Speed Insights**
+
+- `@vercel/analytics`, `@vercel/speed-insights`, mounted lazily in
+  `src/components/providers/analytics/Analytics.tsx` and only in production
+- Their scripts are served from `/_vercel/*`, i.e. same-origin, so they need no CSP
+  exception. Off-platform they 404, which the e2e CSP spec explicitly tolerates
 
 ## Data Storage
 
-**Databases:**
-- Type: None (static site)
-- Content storage: Markdown/MDX files in `src/content/`
-  - Blog posts in content directory with YAML frontmatter
-  - Static data in `src/content/data/global.ts`
+There is no database. State lives in three places:
 
-**File Storage:**
-- Service: Vercel Blob (for media/data files)
-  - Client: `@vercel/blob` v2.2.0
-  - Auth: `BLOB_READ_WRITE_TOKEN` environment variable
-  - Usage: `src/actions/linkedin/followers.action.ts` - Stores LinkedIn follower count as JSON
-  - Filename: `linkedin-followers.json`
-  - Cached for 1 hour with tag-based revalidation
-  - Static files: `public/documents/resume.pdf`, `public/assets/greeting-messages/`
+- **MDX files on disk** (`src/content/`) — the content, read at build time
+- **`src/data/global.ts`** — personal data, the single source of truth for it
+- **`localStorage`** via persisted Zustand stores in `src/hooks/`. Stores are
+  versioned and carry a `migrate` (see `useConfig.ts`): a stored shape that no
+  longer matches the code must be migrated, not trusted
 
-**Caching:**
-- Strategy: Next.js `unstable_cache` with revalidation
-  - GitHub data cache: 1 hour (`src/actions/github/data.action.ts`)
-  - LinkedIn data cache: 1 hour (`src/actions/linkedin/followers.action.ts`)
-- Edge Cache: HTTP headers set in routes (300 seconds default on health endpoint)
+`BLOB_READ_WRITE_TOKEN` is still declared in `src/env.ts` but nothing reads it —
+the Vercel Blob integration it belonged to was removed. Rate-limit state is
+in-process, which is a real constraint on serverless (see CONCERNS.md).
 
 ## Authentication & Identity
 
-**Auth Provider:**
-- Type: Custom GitHub token authentication
-  - Implementation: Token-based (not OAuth user login)
-  - Use: Server-side API calls only
-  - Token stored in: `GITHUB_API_TOKEN` environment variable
-  - Scope: Public GitHub API queries (read-only)
-
-**Tracking & Consent:**
-- Service: c15t Consent Manager
-  - Client: `@c15t/nextjs` v1.8.3
-  - Components:
-    - `src/components/manager/ConsentManager.tsx` (server)
-    - `src/components/manager/ConsentManagerClient.tsx` (client-side options)
-  - Purpose: GDPR compliance for analytics and tracking
-
-**LinkedIn:**
-- Service: LinkedIn (indirect via Vercel Blob storage)
-- What it's used for: Display follower count
-  - Implementation: Manual data sync to Vercel Blob (not API integration)
-  - Data format: JSON with count and updatedAt timestamp
-  - Fallback: Returns count: 0 if no data available
+There is no user authentication; the site is public and read-only. `API_TOKEN` is
+declared as an optional internal secret. All privileged calls happen server-side
+with server-only credentials, never exposed to the client — only
+`NEXT_PUBLIC_APP_URL` crosses that line, and it holds no secret.
 
 ## Monitoring & Observability
 
-**Analytics:**
-- Service: Vercel Analytics
-  - Client: `@vercel/analytics/react` v1.6.1
-  - Integration: `src/providers/analytics/Analytics.tsx`
-  - Mode: Auto (tracks Core Web Vitals, page views)
-  - Debug mode enabled
-  - Lazy-loaded via dynamic import for performance
+- **Logging:** `src/lib/logger.ts` (`tslog`), `minLevel` 3 in production and 0
+  otherwise. Server-side failures — especially GitHub ones — are logged rather than
+  swallowed
+- **Analytics:** Vercel Analytics and Speed Insights, production only
+- **No error tracker** (no Sentry or equivalent). A failing section renders its
+  fallback and reports nothing off-platform
 
-**Performance Monitoring:**
-- Service: Vercel Speed Insights
-  - Client: `@vercel/speed-insights/react` v1.3.1
-  - Integration: `src/providers/analytics/Analytics.tsx`
-  - Tracks: Real user performance metrics
-  - Debug enabled in development only
+## Health Checks
 
-**Error Tracking:**
-- Type: Not detected (no Sentry, Rollbar, or similar)
-- Logging: Custom `tslog` v4.10.2 for server-side logging
-  - Utility: `src/lib/logger.ts`
-  - Used in: Error handling, data fetch failures
-  - Example: LinkedIn data fetch error logging in `src/actions/linkedin/followers.action.ts`
-
-**Logging:**
-- Framework: `tslog` with `consola` v3.4.2
-- Pattern: Server-side logging for data actions and API routes
-- Example usage: `logger.error()` for fetch failures
-
-## Health Checks & Monitoring
-
-**Health Endpoint:**
-- Route: `src/app/api/health/route.ts`
-- Runtime: Edge function
-- Status: Always returns `200 OK` with "OK" body
-- Headers: Cache-Control 300s, security headers, health status header
-- Purpose: Deployment and uptime monitoring
+`GET /api/health` returns `200 OK` as `text/plain` with an `X-Health-Status: OK`
+header and a 5-minute cache. It is a liveness probe only: it does not check GitHub,
+Resend or the filesystem, so it stays green while a dependency is down.
 
 ## CI/CD & Deployment
 
-**Hosting:**
-- Platform: Vercel (inferred from Vercel SDK integrations)
-- Environment: `VERCEL_URL` available in production
-- Image domains allowed: `avatars.githubusercontent.com`, `cuzeacflorin.fr`
-
-**Build Pipeline:**
-- Build command: `next build`
-- Start command: `next start`
-- Environment validation: Zod schema in `next.config.ts` runs at build time
-- Errors: Build fails if required env vars missing
-
-**Performance Optimization:**
-- Dynamic imports for heavy components (Analytics, Speed Insights)
-- Image optimization: AVIF, WebP formats with multiple sizes
-- CSS optimization: Tailwind CSS v4 with Rust oxide engine
-- Bundle splitting: Next.js App Router with code splitting
+- **Hosting:** Vercel. `next build` output, mostly prerendered
+- **CI:** `.github/workflows/ci.yml` — types, lint, format and unit tests in one
+  job; build and e2e in another, with the Playwright report uploaded as an artifact
+- **Other workflows:** `label.yml` (`actions/labeler@v5`, config in
+  `.github/labeler.yml`), `stale.yml`, `greetings.yml`, `summary.yml`
+  (`actions/ai-inference`)
+- `label.yml` is triggered by `pull_request_target`, so the action reads both the
+  workflow **and** `.github/labeler.yml` from the base branch. A change to either
+  only takes effect once merged into `master`
 
 ## Environment Configuration
 
-**Required env vars:**
-- `GITHUB_API_TOKEN` - GitHub GraphQL authentication
-- `GITHUB_USERNAME` - GitHub username for data fetching
-- `GITHUB_REPO_NAME` - Repository name for contribution data
+Declared exclusively in `src/env.ts` (`@t3-oss/env-nextjs`), which `next.config.ts`
+imports so validation runs at startup. `SKIP_ENV_VALIDATION` bypasses it.
 
-**Optional env vars:**
-- `RESEND_API_KEY` - Email service (for CV sending)
-- `BLOB_READ_WRITE_TOKEN` - Vercel Blob storage (for LinkedIn data)
-- `NEXT_PUBLIC_APP_URL` - Public app URL (falls back to `VERCEL_URL`)
-- `NODE_ENV` - development/production (default: development)
-- `ENV_TYPE` - capture/normal (for screenshot/demo mode)
-- `API_TOKEN` - Generic API token (optional)
-- `TURBO_TOKEN` - Turbo Cache auth (optional)
-- `TURBO_TEAM` - Turbo Cache team (optional)
+| Variable | Required | Purpose |
+|---|---|---|
+| `GITHUB_API_TOKEN` | yes | GitHub GraphQL (presence only — an invalid value degrades gracefully) |
+| `GITHUB_USERNAME` | no | account queried by the widgets |
+| `GITHUB_REPO_NAME` | no | repository for the commit widget |
+| `RESEND_API_KEY` | no | CV delivery; without it the action refuses cleanly |
+| `BLOB_READ_WRITE_TOKEN` | no | declared, currently unused |
+| `API_TOKEN` | no | internal secret |
+| `NEXT_PUBLIC_APP_URL` | no | absolute URL base (falls back to `VERCEL_URL`, then the production domain) |
+| `TURBO_TEAM` / `TURBO_TOKEN` | no | remote cache |
 
-**Secrets location:**
-- `.env.local` - Local development secrets (not committed)
-- Vercel dashboard - Production secrets at deployment
-
-**Environment Validation:**
-- Location: `next.config.ts` (runs at build time)
-- Schema: Zod validation object
-- Behavior: Exits with error code 1 if validation fails
-- Output: Human-readable tree error messages via `z.treeifyError()`
+Never read `process.env` directly in application code.
 
 ## Webhooks & Callbacks
 
-**Incoming Webhooks:**
-- None detected - Portfolio is read-only from external services
-
-**Outgoing Webhooks:**
-- Email webhooks: Resend service sends emails on-demand (not webhook-based)
-- No background job processing detected
-
-**API Routes:**
-- `POST /api/send` - Email endpoint (accepts firstName, recipientEmail)
-- `GET /api/health` - Health check
-- `GET /api/rss` - RSS feed generation
-- `GET /api/vcard` - vCard contact export
-- `GET /api/og` - Open Graph image generation
+None. Nothing external calls into the site; every integration is outbound.
 
 ## Image Processing & Screenshots
 
-**OG Image Generation:**
-- Route: `src/app/api/og/route.tsx`
-- Engine: Headless browser via `puppeteer-core` v24.37.2
-- GIF encoding: `@skyra/gifenc` v1.0.1
-- Image processing: `sharp` v0.34.5
-- Usage: Dynamic social media preview images
-
-**Component Screenshots:**
-- Script: `src/scripts/capture-components.ts`
-- Mode: `ENV_TYPE=capture` flag
-- Port: 1409 (separate from main dev server on 1408)
-- Tools: Puppeteer for rendering, sharp for processing
+- **OG images:** `GET /api/og?type=…&title=…` via `ImageResponse`, with fonts under
+  `app/api/og/fonts/`. Helpers `openGraphImage` and `BASE_URL` live in
+  `src/lib/metadata.ts`
+- **Optimisation:** `sharp`, AVIF and WebP, `remotePatterns` limited to
+  `cuzeacflorin.fr`, `images.unsplash.com` and `picsum.photos` — the same hosts the
+  CSP's `img-src` allows. SVG is allowed but sandboxed by a dedicated
+  `images.contentSecurityPolicy`
+- **Capture scripts:** `pnpm capture:*` drive `puppeteer-core` against `/og` and
+  `/components/<slug>` on port 1409 to regenerate files in `public/images/`
+  (`@skyra/gifenc` and `pngjs` handle encoding)
 
 ## vCard & Contact Export
 
-**vCard Service:**
-- Route: `src/app/api/vcard/route.ts`
-- Library: `vcard-creator` v0.7.2
-- Data source: `src/content/data/global` (profile info)
-- Format: Standard vCard 3.0/4.0
-- Use case: Contact import to phone/address book
+`GET /api/vcard` builds a vCard with `vcard-creator` from `GLOBAL_DATA`, including
+the embedded `PHOTO`.
 
-## RSS Feed
+## Feeds
 
-**RSS Generation:**
-- Route: `src/app/api/rss/route.ts`
-- Content: Blog posts from `src/content/` with metadata
-- Format: Standard RSS 2.0
-- Caching: Server-generated per request (no caching specified)
+- `GET /api/rss` — every category
+- `GET /api/rss/[category]` — one feed per category, prerendered through
+  `generateStaticParams`, 404 on an unknown category
+- `GET /api/feed.json` — JSON Feed 1.1
+
+All three go through `src/lib/feed.ts` (serialisation) and `src/lib/feed-routes.ts`
+(shared metadata and response headers), so RSS and JSON Feed always describe the
+same content. Responses are `force-static` with `Cache-Control` and
+`stale-while-revalidate`.
 
 ## Third-Party Component Registries
 
-**shadcn Registry:**
-- Location: `src/registry/` directory
-- Custom components distributed via:
-  ```bash
-  npx shadcn@latest add @envindavsorg/theme-switcher
-  npx shadcn@latest add @envindavsorg/apple-hello-effect
-  ```
-- Registry config: `src/config/registry.ts`
-- Auto-generated index: `src/__registry__/registry.autogenerated.json` (via `pnpm registry:build`)
+`src/registry/` publishes theme-switcher, apple-hello-effect and flip-sentences.
+`pnpm registry:build` runs the internal generator then `shadcn build`, producing
+`src/__registry__/` and `public/r/registry.json`. Paths are configured in
+`components.json`.
 
-## Data Sources
+## Data Sources Summary
 
-**Blog Content:**
-- Location: Markdown/MDX files (exact path: `src/content/blog/` or similar)
-- Processing: Custom MDX pipeline with remark/rehype
-- Plugins:
-  - `rehype-component.ts` - Inject custom components
-  - `rehype-npm-command.ts` - Render package manager commands
-  - `remark-code-import.ts` - Import code from files
-- Syntax highlighting: Shiki 3.22.0
-
-**Static Content:**
-- Profile data: `src/content/data/global.ts` (TypeScript object)
-- Skills, experience, social links defined as data structures
-- Greeting files: `public/assets/` (multilingual messages)
-
----
-
-*Integration audit: 2026-02-16*
+| Source | Kind | When |
+|---|---|---|
+| `src/content/**/*.mdx` | filesystem | build |
+| `src/data/global.ts` | module | build |
+| `messages/{fr,en}.json` | compiled by Paraglide | build |
+| GitHub GraphQL | HTTP | request, cached 1 h |
+| Cloudflare Speed Test | HTTP | client, on demand |
+| Resend | HTTP | server action |
+| `localStorage` | browser | client |
