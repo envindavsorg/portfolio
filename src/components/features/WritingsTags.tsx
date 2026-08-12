@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 
-import { isActiveTag } from "@/lib/tags";
+import { ALL_TAG, isActiveTag } from "@/lib/tags";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 
@@ -41,7 +41,9 @@ const TagButton = ({
       size="sm"
       variant="outline"
     >
-      {tag}
+      {/* ALL_TAG reste la valeur interne (clé de comptage et état d'URL) :
+          seul son libellé visible est traduit */}
+      {tag === ALL_TAG ? m.writings_tags_all() : tag}
       {count !== undefined && count > 0 && (
         <span className="font-medium text-xs">({count})</span>
       )}

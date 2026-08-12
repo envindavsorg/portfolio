@@ -62,10 +62,9 @@ export const ArticleView = ({
     <>
       <script
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPageJsonLd(article)).replaceAll(
-            "<",
-            "\\u003c"
-          ),
+          __html: JSON.stringify(
+            getPageJsonLd(article, locale)
+          ).replaceAll("<", "\\u003c"),
         }}
         type="application/ld+json"
       />

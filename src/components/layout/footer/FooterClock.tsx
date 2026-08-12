@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import { Button } from "@/components/primitives/Button";
+import { getIntlLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 interface FooterClockProps {
@@ -62,7 +63,7 @@ export const FooterClock = ({
       return "";
     }
 
-    return time.toLocaleDateString("fr-FR", {
+    return time.toLocaleDateString(getIntlLocale(), {
       day: "numeric",
       month: isActionnable ? "short" : "long",
       weekday: isActionnable ? "short" : "long",

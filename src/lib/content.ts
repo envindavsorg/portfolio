@@ -31,6 +31,16 @@ export type ContentCategory = NonNullable<
 >;
 export type ContentLocale = "fr" | "en";
 
+/**
+ * Réduit une locale Paraglide au domaine des locales de contenu.
+ *
+ * Sans cela il est trop facile d'appeler `getContentByCategory(cat)` en oubliant
+ * la locale : le défaut est « fr », et la page /en sert alors du contenu
+ * français sans le moindre avertissement.
+ */
+export const toContentLocale = (locale: string): ContentLocale =>
+  locale === "en" ? "en" : "fr";
+
 export interface Content {
   metadata: ContentMetadata;
   slug: string;
@@ -221,8 +231,19 @@ export const getLLMText = async (
   const processed = await processor.process({
     value: content.content,
   });
+  const updated = dayjs(content.metadata.updatedAt)
+    .locale(content.locale)
+    .format("dddd DD MMMM YYYY");
+
+  // la locale du contenu servi, pas celle du site : un contenu EN sans
+  // traduction retombe sur le FR et doit garder sa mention française
+  const footer =
+    content.locale === "en"
+      ? `Last updated on ${updated}`
+      : `Dernière mise à jour le ${updated}`;
+
   return `# ${content.metadata.title}
 ${content.metadata.description}
 ${processed.value}
-Dernière mise à jour le ${dayjs(content.metadata.updatedAt).format("dddd DD MMMM YYYY")}`;
+${footer}`;
 };

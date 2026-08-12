@@ -29,6 +29,17 @@ const PAGE_BADGES = {
 
 type PageType = keyof typeof PAGE_BADGES;
 
+// les cartes sociales des pages /en portaient un badge français
+const PAGE_BADGES_EN: Record<PageType, string> = {
+  blog: "Blog",
+  blogArticle: "Blog article",
+  components: "Components",
+  componentsArticle: "Component",
+  homepage: "Homepage",
+  utils: "Tools",
+  utilsArticle: "Tool",
+};
+
 const isValidPageType = (value: string): value is PageType =>
   value in PAGE_BADGES;
 
@@ -45,11 +56,13 @@ const loadFont = async (): Promise<Buffer> => {
   return fontCache;
 };
 
-const getBadge = (type: PageType): string => {
+const getBadge = (type: PageType, isEnglish: boolean): string => {
+  const badges = isEnglish ? PAGE_BADGES_EN : PAGE_BADGES;
+
   if (type === "homepage") {
-    return PAGE_BADGES.homepage;
+    return badges.homepage;
   }
-  return `portfolio | ${GLOBAL_DATA.USER.fullName} | ${PAGE_BADGES[type].toLowerCase()}`;
+  return `portfolio | ${GLOBAL_DATA.USER.fullName} | ${badges[type].toLowerCase()}`;
 };
 
 const OG_DIMENSIONS = { height: 630, width: 1200 } as const;
@@ -148,7 +161,7 @@ export const GET = async (req: NextRequest) => {
     );
 
     const font = await loadFont();
-    const badge = getBadge(type);
+    const badge = getBadge(type, searchParams.get("locale") === "en");
 
     return new ImageResponse(
       renderLayout(

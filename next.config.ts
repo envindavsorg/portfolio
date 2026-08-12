@@ -87,6 +87,20 @@ const nextConfig: NextConfig = {
         destination: "/blog.mdx/:slug",
         source: "/utils/:slug.mdx",
       },
+      // pendants anglais : sans eux, « Copy Markdown » sur /en renvoyait la
+      // source française
+      {
+        destination: "/blog.en.mdx/:slug",
+        source: "/en/articles/:slug.mdx",
+      },
+      {
+        destination: "/blog.en.mdx/:slug",
+        source: "/en/components/:slug.mdx",
+      },
+      {
+        destination: "/blog.en.mdx/:slug",
+        source: "/en/utils/:slug.mdx",
+      },
     ];
   },
   transpilePackages: ["next-mdx-remote"],

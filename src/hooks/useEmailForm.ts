@@ -2,6 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 
+import { getLocale } from "@/paraglide/runtime";
+
 import { sendCvAction } from "../actions/send-cv.action";
 import { emailSchema } from "../schemas/emailSchema";
 import type { EmailFormData } from "../schemas/emailSchema";
@@ -32,7 +34,10 @@ const useEmailForm = () => {
   const sendEmail = useCallback(
     async (data: EmailFormData): Promise<SendCvOutcome> => {
       try {
-        const result = await sendCvAction(data);
+        const result = await sendCvAction({
+          ...data,
+          locale: getLocale() === "en" ? "en" : "fr",
+        });
 
         if (!result?.data?.sent) {
           return {

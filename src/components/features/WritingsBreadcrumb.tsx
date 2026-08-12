@@ -11,6 +11,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/base/Breadcrumb";
 import { cn } from "@/lib/utils";
+import { localizeHref } from "@/paraglide/runtime";
 
 import { ChevronRight } from "../motion/ChevronRight";
 
@@ -50,7 +51,7 @@ export const WritingsBreadcrumb = ({
                     <BreadcrumbPage>{label}</BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink
-                      href={href}
+                      href={href ? localizeHref(href) : href}
                       aria-label={label}
                       onMouseEnter={handleMouseEnter}
                       onMouseLeave={handleMouseLeave}
