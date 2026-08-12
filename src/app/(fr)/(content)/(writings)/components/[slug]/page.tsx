@@ -3,16 +3,20 @@ import { notFound } from "next/navigation";
 
 import { ArticleTitle } from "@/components/blog/ArticleTitle";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
+import { WritingsReadingAids } from "@/components/features/WritingsReadingAids";
+import { WritingsRelated } from "@/components/features/WritingsRelated";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
 import { Mdx } from "@/components/markdown/mdx";
 import type { ContentLocale } from "@/lib/content";
 import {
+  getAllContent,
   getContentByCategory,
   getContentBySlug,
 } from "@/lib/content";
 import { getPageJsonLd } from "@/lib/json-ld";
 import { createMetadata } from "@/lib/metadata";
+import { getContentToc } from "@/lib/toc";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -78,8 +82,14 @@ export const ComponentView = ({
         slug={slug}
       />
       <ArticleTitle title={metadata.title} />
-      <WritingsToC content={content} />
+      <WritingsToC items={getContentToc(content)} />
+      <WritingsReadingAids />
       <Mdx code={content} />
+
+      <WritingsRelated
+        all={getAllContent(locale)}
+        current={component}
+      />
     </>
   );
 };

@@ -38,15 +38,16 @@ import {
 import { Kbd, KbdGroup } from "@/components/primitives/Kbd";
 import { Separator } from "@/components/primitives/Separator";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import type { Content } from "@/lib/content";
+import type { SearchDoc } from "@/lib/search";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
-import { getLocale, localizeHref } from "@/paraglide/runtime";
+import { localizeHref } from "@/paraglide/runtime";
 
 import { CATEGORY, LABELS } from "./content";
 import {
   buildKindMap,
   buildPostGroups,
+  commandFilter,
   getFilteredGroups,
 } from "./functions";
 import type { CommandItemProps, CommandKind } from "./types";
@@ -74,7 +75,7 @@ const CommandFooter = memo(({ kindMap }: CommandFooterProps) => {
 
       <KbdGroup>
         <span className="font-medium text-xs">
-          {getLocale() === "en" ? "close" : "fermer"}
+          {m.nav_command_close()}
         </span>
         <Kbd>␛</Kbd>
       </KbdGroup>
@@ -138,10 +139,10 @@ const CommandLinkGroup = memo(
 );
 
 interface NavBarCommandProps {
-  posts?: Content[];
+  posts?: SearchDoc[];
 }
 
-const EMPTY_POSTS: Content[] = [];
+const EMPTY_POSTS: SearchDoc[] = [];
 
 export const NavBarCommand = ({
   posts = EMPTY_POSTS,
@@ -166,7 +167,14 @@ export const NavBarCommand = ({
         event.key === "/"
       ) {
         event.preventDefault();
-        setOpen((prev) => !prev);
+        setOpen((prev) => {
+          // fermer au clavier ne déclenche pas onOpenChange : sans ça le toast
+          // à durée infinie posé par handleOpen restait affiché pour toujours
+          if (prev) {
+            toast.dismiss("command-hint");
+          }
+          return !prev;
+        });
       }
     };
 
@@ -259,7 +267,7 @@ export const NavBarCommand = ({
             </Description>
           </div>
 
-          <Command>
+          <Command filter={commandFilter}>
             <CommandInput
               className={cn(
                 "border-input sm:border-b",

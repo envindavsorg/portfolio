@@ -9,7 +9,13 @@ const robots = (): MetadataRoute.Robots => ({
       // robots.txt (Twitterbot) ne pouvaient plus récupérer les images
       // OpenGraph, et /api/rss n'était pas explorable. On ne masque donc que
       // les endpoints réellement non publics.
-      allow: ["/api/og", "/api/rss", "/api/vcard"],
+      allow: [
+        "/api/og",
+        "/api/rss",
+        "/api/rss/*",
+        "/api/feed.json",
+        "/api/vcard",
+      ],
       disallow: ["/api/health", "/ingest/*", "/og"],
       userAgent: "*",
     },

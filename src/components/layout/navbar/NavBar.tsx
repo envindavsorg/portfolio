@@ -1,5 +1,6 @@
-import type { Content } from "@/lib/content";
 import { getAllContent } from "@/lib/content";
+import type { SearchDoc } from "@/lib/search";
+import { toSearchDoc } from "@/lib/search";
 import { getLocale } from "@/paraglide/runtime";
 
 import { NavBarCommand } from "./elements/NavBarCommand";
@@ -16,9 +17,12 @@ import { NavBarTheme } from "./elements/NavBarTheme";
 import { NavBarWrapper } from "./elements/NavBarWrapper";
 
 export const NavBar = () => {
-  const posts: Content[] = getAllContent(
+  // index compact : la navbar est dans le chrome du site, donc ces données
+  // partent dans le payload RSC de CHAQUE page. Sérialiser les objets Content
+  // complets y embarquait le corps MDX intégral de tous les articles.
+  const posts: SearchDoc[] = getAllContent(
     getLocale() === "en" ? "en" : "fr"
-  );
+  ).map(toSearchDoc);
 
   return (
     <NavBarProvider>

@@ -97,6 +97,36 @@ const TITLE_TEMPLATES: Record<AppLocale, string> = {
 
 // metadata du layout racine de chaque arbre de routes ((fr)/ et en/)
 export const createRootMetadata = (locale: AppLocale): Metadata => ({
+  // autodécouverte des flux : sans ces <link rel="alternate">, un lecteur RSS
+  // ne trouve pas le flux depuis l'URL du site
+  alternates: {
+    types: {
+      "application/feed+json": [
+        {
+          title: `${GLOBAL_DATA.USER.fullName} — JSON Feed`,
+          url: `${BASE_URL}/api/feed.json`,
+        },
+      ],
+      "application/rss+xml": [
+        {
+          title: `${GLOBAL_DATA.USER.fullName} — tous les contenus`,
+          url: `${BASE_URL}/api/rss`,
+        },
+        {
+          title: `${GLOBAL_DATA.USER.fullName} — articles`,
+          url: `${BASE_URL}/api/rss/articles`,
+        },
+        {
+          title: `${GLOBAL_DATA.USER.fullName} — composants`,
+          url: `${BASE_URL}/api/rss/components`,
+        },
+        {
+          title: `${GLOBAL_DATA.USER.fullName} — outils`,
+          url: `${BASE_URL}/api/rss/utils`,
+        },
+      ],
+    },
+  },
   authors: [
     {
       name: "envindavsorg",
