@@ -16,6 +16,28 @@ interface ArticleItemProps {
   noMetadata?: boolean;
 }
 
+/**
+ * Les bannières animées contournent l'optimiseur d'images.
+ *
+ * Les quatre démos étaient des GIF non optimisés : 2 827 351 octets à eux seuls
+ * sur la page qui vitrine le registre, et les DEUX variantes de thème sont dans
+ * le DOM (`hidden [html.light_&]:block`), donc la seconde moitié se télécharge au
+ * premier basculement. En WebP animé — même durée, mêmes dimensions, images
+ * identiques dédupliquées — les quatre pèsent 204 866 octets, soit −92,8 %.
+ *
+ * `unoptimized` reste posé : l'optimiseur rendrait une image FIXE d'un fichier
+ * animé, remplaçant la démo par sa première image. Le gain vient du format, pas
+ * du redimensionnement, et il est déjà entièrement acquis.
+ *
+ * Le test porte sur le DOSSIER, pas sur l'extension : les bannières d'articles
+ * sont aussi des .webp, mais fixes, et les exclure de l'optimiseur leur ferait
+ * perdre leur srcset. C'est le script de capture qui écrit dans `*-demo/`.
+ */
+const ANIMATED_BANNER = /-demo\/[^/]+\.(?:gif|webp)$/u;
+
+const isAnimated = (src: string): boolean =>
+  ANIMATED_BANNER.test(src);
+
 export const ArticleItem = ({
   article,
   noTitle = false,
@@ -62,7 +84,7 @@ export const ArticleItem = ({
             quality={75}
             sizes="(max-width: 640px) 100vw, 50vw"
             src={metadata.bannerLight}
-            unoptimized={metadata.bannerLight.endsWith(".gif")}
+            unoptimized={isAnimated(metadata.bannerLight)}
             width={1200}
           />
         )}
@@ -79,7 +101,7 @@ export const ArticleItem = ({
             quality={75}
             sizes="(max-width: 640px) 100vw, 50vw"
             src={metadata.bannerDark}
-            unoptimized={metadata.bannerDark.endsWith(".gif")}
+            unoptimized={isAnimated(metadata.bannerDark)}
             width={1200}
           />
         )}

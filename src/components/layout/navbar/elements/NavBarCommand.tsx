@@ -38,7 +38,10 @@ import {
 import { Kbd, KbdGroup } from "@/components/primitives/Kbd";
 import { Separator } from "@/components/primitives/Separator";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import type { SearchDoc } from "@/lib/search";
+import {
+  prefetchSearchIndex,
+  useSearchIndex,
+} from "@/hooks/useSearchIndex";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
@@ -138,20 +141,18 @@ const CommandLinkGroup = memo(
   )
 );
 
-interface NavBarCommandProps {
-  posts?: SearchDoc[];
-}
-
-const EMPTY_POSTS: SearchDoc[] = [];
-
-export const NavBarCommand = ({
-  posts = EMPTY_POSTS,
-}: NavBarCommandProps) => {
+export const NavBarCommand = () => {
   const router = useRouter();
   const pathname = usePathname();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
+
+  // l'index n'est plus une prop : il était sérialisé dans le payload RSC de
+  // chaque page du site, pour une palette que la plupart des visiteurs
+  // n'ouvrent jamais. Il se charge à la première ouverture, et au survol du
+  // déclencheur — donc il est déjà là au moment du clic.
+  const { docs: posts } = useSearchIndex(open);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -251,6 +252,10 @@ export const NavBarCommand = ({
     <>
       <Button
         onClick={handleOpen}
+        // le temps d'amener la souris jusqu'au bouton puis de cliquer, l'index
+        // est déjà chargé : le focus couvre le même besoin au clavier
+        onFocus={prefetchSearchIndex}
+        onPointerEnter={prefetchSearchIndex}
         ref={triggerRef}
         size="icon"
         variant="outline"
