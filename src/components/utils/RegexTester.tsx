@@ -31,10 +31,17 @@ const FLAG_LABELS: Record<RegexFlag, () => string> = {
   y: m.utils_regex_flag_y,
 };
 
-/** couleurs alternées : deux correspondances voisines doivent rester distinctes */
+/**
+ * Couleurs alternées : deux correspondances voisines doivent rester distinctes.
+ *
+ * Seul le fond change, le texte garde la couleur courante. Colorer aussi le
+ * texte faisait tomber le contraste à 3,63:1 et 4,44:1 sur ces fonds clairs —
+ * sous le seuil AA, alors que c'est du texte de 12 px. L'alternance ne porte
+ * aucun sens, elle ne sert qu'à séparer : elle n'a donc pas besoin du texte.
+ */
 const HIGHLIGHTS = [
-  "bg-theme/20 text-theme",
-  "bg-emerald-500/20 text-emerald-700 dark:text-emerald-400",
+  "bg-theme/25",
+  "bg-emerald-500/25 dark:bg-emerald-400/25",
 ];
 
 export const RegexTester = () => {

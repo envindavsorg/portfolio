@@ -467,6 +467,7 @@
   "writings_breadcrumb_series": "series",
   "writings_breadcrumb_tags": "tags",
   "writings_code_collapsible_show_all": "show all code",
+  "writings_code_collapsible_toggle": "show or hide the whole code block",
   "writings_component_preview_not_found": "-- the <code>{name}</code> component doesn't exist in the registry --",
   "writings_component_preview_open_in": "open in",
   "writings_component_preview_open_v0_aria": "open in v0",
