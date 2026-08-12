@@ -11,7 +11,7 @@ import { STACK_ICONS } from "./content";
 import { StackContent } from "./StackContent";
 
 export const TechStack = () => (
-  <Panel>
+  <Panel id="my-stack">
     <PanelHeader sticky title={m.home_stack_panel_title()} />
 
     <PanelContent>

@@ -1,37 +1,47 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+
 import { NextResponse } from "next/server";
 import { VCard } from "vcard-creator";
 
 import GLOBAL_DATA from "@/data/global";
+import { logger } from "@/lib/logger";
 import { convertImageToJpeg } from "@/lib/server";
 
 export const dynamic = "force-static";
 
-const getVCardPhoto = async (url: string) => {
+/**
+ * Lit l'avatar depuis `public/` plutôt que par HTTP.
+ *
+ * La route est `force-static` : elle s'exécute au build, où aucun serveur
+ * n'écoute. `fetch("/images/avatar.webp")` sur une URL relative lève donc
+ * systématiquement, et le `catch` avalait l'erreur — la vCard n'a jamais pu
+ * contenir de photo.
+ */
+const getVCardPhoto = async (publicPath: string) => {
   try {
-    const res = await fetch(url);
+    const filePath = join(
+      process.cwd(),
+      "public",
+      // le chemin déclaré est une URL publique : on retire le / initial
+      publicPath.replace(/^\//u, "").split("?")[0]
+    );
 
-    if (!res.ok) {
-      return null;
-    }
-
-    const buffer = Buffer.from(await res.arrayBuffer());
+    const buffer = await readFile(filePath);
     if (buffer.length === 0) {
       return null;
     }
 
-    const contentType = res.headers.get("Content-Type") || "";
-    if (!contentType.startsWith("image/")) {
-      return null;
-    }
-
     const jpegBuffer = await convertImageToJpeg(buffer);
-    const image = jpegBuffer.toString("base64");
 
     return {
-      image,
+      image: jpegBuffer.toString("base64"),
       mime: "jpeg",
     };
-  } catch {
+  } catch (error) {
+    logger.warn(
+      `vCard photo unavailable (${publicPath}): ${(error as Error).message}`
+    );
     return null;
   }
 };

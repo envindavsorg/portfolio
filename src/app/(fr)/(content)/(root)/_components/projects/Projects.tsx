@@ -27,7 +27,7 @@ export const Projects = () => {
   const hasHidden = hiddenContent.length > 0;
 
   return (
-    <Panel>
+    <Panel id="my-projects">
       <PanelHeader sticky title={m.home_projects_panel_title()} />
 
       <PanelContent>

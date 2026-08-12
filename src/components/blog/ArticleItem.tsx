@@ -120,7 +120,7 @@ export const ArticleItem = ({
               "data-[open=true]:delay-(--dialog-duration-80)",
               "data-[open=true]:duration-(--dialog-duration-40)",
               "data-[open=false]:opacity-0",
-              "data-[open=false]:duration-(--dialog-duration-80"
+              "data-[open=false]:duration-(--dialog-duration-80)"
             )}
           >
             <PortalDialogTitle
