@@ -7,6 +7,7 @@ import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
 import { WritingsReadingAids } from "@/components/features/WritingsReadingAids";
 import { WritingsRelated } from "@/components/features/WritingsRelated";
+import { WritingsTagLinks } from "@/components/features/WritingsTagLinks";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
 import { Mdx } from "@/components/markdown/mdx";
@@ -107,6 +108,8 @@ export const UtilView = ({
       {locale === "en" && item.locale === "fr" && (
         <WritingsLocaleNotice />
       )}
+
+      <WritingsTagLinks current={item} />
 
       <WritingsRelated all={getAllContent(locale)} current={item} />
     </>

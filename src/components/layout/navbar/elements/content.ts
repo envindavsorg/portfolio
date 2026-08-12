@@ -51,6 +51,12 @@ export const COMMANDS: CommandGroupDef[] = [
         title: m.nav_command_dev_tools,
         url: "/utils",
       },
+      {
+        icon: Layers,
+        kind: "page",
+        title: m.nav_command_tags,
+        url: "/tags",
+      },
     ],
   },
   {

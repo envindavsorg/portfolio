@@ -75,6 +75,8 @@ const PAGES = [
   "/articles",
   "/articles/how-i-write-css",
   "/components",
+  "/tags",
+  "/tags/retour-d-experience",
   "/utils",
   "/utils/hash-generator",
   "/utils/color-generator",
