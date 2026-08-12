@@ -38,6 +38,7 @@
   "home_cv_error_button": "je comprends !",
   "home_cv_error_log": "erreur survenue à {time}",
   "home_cv_error_message": "oups, veuillez réessayer plus tard.",
+  "home_cv_error_rate_limited": "trop de demandes envoyées depuis cet appareil. réessayez dans quelques minutes.",
   "home_cv_error_title": "une erreur est survenue !",
   "home_cv_form_close_button": "fermer",
   "home_cv_form_description": "entrez votre prénom et votre adresse e-mail pour recevoir immédiatement mon CV.",

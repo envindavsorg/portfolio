@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/base/Tooltip";
 import { getMonthLabels } from "@/lib/commits";
-import { dayjs } from "@/lib/functions";
+import { formatDate } from "@/lib/functions";
 import { m } from "@/paraglide/messages";
 
 import { BLOCK_MARGIN, BLOCK_SIZE } from "./config";
@@ -39,7 +39,7 @@ const formatContribution = (count: number, date: string) => {
           plural: count > 1 ? "s" : "",
         });
   return m.home_commits_tooltip_full({
-    date: dayjs(date).format("ddd DD MMM"),
+    date: formatDate(date, "ddd DD MMM"),
     label,
   });
 };

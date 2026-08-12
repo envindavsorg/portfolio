@@ -54,6 +54,15 @@ const getBadge = (type: PageType): string => {
 
 const OG_DIMENSIONS = { height: 630, width: 1200 } as const;
 
+// au-delà, le texte débordait déjà de la carte : tronquer ne dégrade rien
+const MAX_TITLE_LENGTH = 90;
+const MAX_DESCRIPTION_LENGTH = 180;
+
+const truncate = (value: string, max: number): string =>
+  value.length > max
+    ? `${value.slice(0, max - 1).trimEnd()}…`
+    : value;
+
 const renderLayout = (
   content: JSX.Element,
   fontFamily = "sans-serif"
@@ -127,10 +136,16 @@ export const GET = async (req: NextRequest) => {
     const type: PageType = isValidPageType(rawType)
       ? rawType
       : "homepage";
-    const title =
-      searchParams.get("title") || GLOBAL_DATA.USER.fullName;
-    const description =
-      searchParams.get("description") || GLOBAL_DATA.USER.bio;
+    // l'endpoint est public : sans plafond, un title de 100 ko fait rendre à
+    // Satori un texte géant (CPU/mémoire) et pollue le cache CDN par URL.
+    const title = truncate(
+      searchParams.get("title") || GLOBAL_DATA.USER.fullName,
+      MAX_TITLE_LENGTH
+    );
+    const description = truncate(
+      searchParams.get("description") || GLOBAL_DATA.USER.bio,
+      MAX_DESCRIPTION_LENGTH
+    );
 
     const font = await loadFont();
     const badge = getBadge(type);

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { dayjs } from "@/lib/functions";
+import { formatDate } from "@/lib/functions";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
@@ -34,7 +34,8 @@ interface ArticleItemProps {
     words: number;
   };
   author?: string;
-  createdAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
   tags: string[] | undefined;
   content: string;
 }
@@ -49,6 +50,7 @@ export const ArticleItem = ({
   reading,
   author,
   createdAt,
+  updatedAt,
   tags,
   content,
 }: ArticleItemProps) => (
@@ -134,9 +136,7 @@ export const ArticleItem = ({
                 </p>
                 <p className="font-medium text-muted-foreground text-xs sm:text-sm">
                   {m.writings_article_written_on({
-                    date: dayjs(createdAt).format(
-                      "dddd, DD MMMM YYYY"
-                    ),
+                    date: formatDate(createdAt, "dddd, DD MMMM YYYY"),
                   })}
                 </p>
               </div>
@@ -146,7 +146,7 @@ export const ArticleItem = ({
                   <span className="mr-1 text-muted-foreground">
                     {m.writings_article_updated_label()}
                   </span>
-                  {dayjs(createdAt).format("dddd, DD MMMM YYYY")}
+                  {formatDate(updatedAt, "dddd, DD MMMM YYYY")}
                 </p>
                 <p className="text-theme">
                   <span className="mr-1 text-muted-foreground">

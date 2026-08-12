@@ -1,8 +1,17 @@
 import GLOBAL_DATA from "@/data/global";
 import { getAllContent } from "@/lib/content";
-import { dayjs } from "@/lib/functions";
+import { BASE_URL } from "@/lib/metadata";
 
 export const dynamic = "force-static";
+
+/**
+ * RSS 2.0 impose des dates RFC-822 en anglais. `dayjs` étant verrouillé sur la
+ * locale FR, `format("ddd, DD MMM YYYY …")` produisait « mer., 12 août 2026 »,
+ * que `Date.parse` — et donc les lecteurs de flux — rejette.
+ * `toUTCString()` donne exactement le format attendu.
+ */
+const toRfc822 = (value: Date | number | string): string =>
+  new Date(value).toUTCString();
 
 const escapeXml = (unsafe: string): string =>
   unsafe
@@ -15,9 +24,17 @@ const escapeXml = (unsafe: string): string =>
 export const GET = () => {
   const allPosts = getAllContent();
 
+  // date du contenu le plus récent plutôt que l'heure du build : la valeur
+  // reste stable d'un déploiement à l'autre si rien n'a été publié.
+  const lastBuildDate =
+    allPosts
+      .map((post) => new Date(post.metadata.updatedAt).getTime())
+      .toSorted((a, b) => b - a)
+      .at(0) ?? Date.now();
+
   const itemsXml = allPosts
     .map((post) => {
-      const postUrl = `https://cuzeacflorin.fr/${post.metadata.category}/${post.slug}`;
+      const postUrl = `${BASE_URL}/${post.metadata.category}/${post.slug}`;
 
       return `
     <item>
@@ -26,7 +43,7 @@ export const GET = () => {
       <link>${postUrl}</link>
       <guid isPermaLink="false">${postUrl}</guid>
       <dc:creator><![CDATA[ ${GLOBAL_DATA.USER.firstName} ]]></dc:creator>
-      <pubDate>${dayjs(post.metadata.createdAt).format("ddd, DD MMM YYYY HH:mm:ss [GMT]")}</pubDate>
+      <pubDate>${toRfc822(post.metadata.createdAt)}</pubDate>
       <content:encoded>
         <p>${escapeXml(post.metadata.description || "")}</p>
         <div style="margin-top: 50px; font-style: italic;">
@@ -44,10 +61,11 @@ export const GET = () => {
   <channel>
     <title><![CDATA[ Le coin de ${GLOBAL_DATA.USER.firstName} ]]></title>
     <description><![CDATA[ ${GLOBAL_DATA.USER.bio} ]]></description>
-    <link>https://cuzeacflorin.fr/</link>
+    <link>${BASE_URL}/</link>
     <generator>RSS for Node</generator>
-    <lastBuildDate>${dayjs().format("ddd, DD MMM YYYY HH:mm:ss [GMT]")}</lastBuildDate>
-    <atom:link href="https://cuzeacflorin.fr/rss.xml" rel="self" type="application/rss+xml"/>
+    <language>fr</language>
+    <lastBuildDate>${toRfc822(lastBuildDate)}</lastBuildDate>
+    <atom:link href="${BASE_URL}/api/rss" rel="self" type="application/rss+xml"/>
     ${itemsXml}
   </channel>
 </rss>`;

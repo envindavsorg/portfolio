@@ -38,6 +38,7 @@
   "home_cv_error_button": "i understand!",
   "home_cv_error_log": "error occurred at {time}",
   "home_cv_error_message": "oops, please try again later.",
+  "home_cv_error_rate_limited": "too many requests from this device. please try again in a few minutes.",
   "home_cv_error_title": "something went wrong!",
   "home_cv_form_close_button": "close",
   "home_cv_form_description": "enter your first name and email address to receive my resume immediately.",

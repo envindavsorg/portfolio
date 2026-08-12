@@ -43,7 +43,45 @@ export interface Content {
   };
 }
 
-const parseFrontmatter = (body: string) => {
+const DATE_FIELD = /^\s*(createdAt|updatedAt):\s*(\S+)\s*$/gmu;
+const ISO_DAY = /^(\d{4})-(\d{2})-(\d{2})$/u;
+
+/**
+ * YAML accepte `2026-26-02` et le fait DÉBORDER silencieusement en
+ * 2028-02-02 (mois 26). La date fausse se propage ensuite au tri, au sitemap
+ * (`lastModified` dans le futur) et au flux RSS, sans aucune erreur.
+ *
+ * On valide donc la chaîne brute du frontmatter avant que gray-matter ne la
+ * convertisse en `Date`.
+ */
+const assertValidDates = (raw: string, source: string) => {
+  const [, frontmatter = ""] = raw.split("---");
+
+  for (const [, field, value] of frontmatter.matchAll(DATE_FIELD)) {
+    const match = ISO_DAY.exec(value);
+    if (!match) {
+      throw new Error(
+        `${source}: ${field} « ${value} » n'est pas une date YYYY-MM-DD.`
+      );
+    }
+
+    const [, year, month, day] = match;
+    const parsed = new Date(`${year}-${month}-${day}T00:00:00Z`);
+    const overflowed =
+      parsed.getUTCFullYear() !== Number(year) ||
+      parsed.getUTCMonth() + 1 !== Number(month) ||
+      parsed.getUTCDate() !== Number(day);
+
+    if (Number.isNaN(parsed.getTime()) || overflowed) {
+      throw new Error(
+        `${source}: ${field} « ${value} » n'existe pas dans le calendrier (jour et mois inversés ?).`
+      );
+    }
+  }
+};
+
+const parseFrontmatter = (body: string, source: string) => {
+  assertValidDates(body, source);
   const { data, content } = matter(body);
   return { content, metadata: contentMetadataSchema.parse(data) };
 };
@@ -53,7 +91,7 @@ const getMDXFiles = (dir: string) =>
 
 const readMDXFile = (path: string) => {
   const raw = readFileSync(path, "utf-8");
-  return parseFrontmatter(raw);
+  return parseFrontmatter(raw, path);
 };
 
 const WORDS_PER_MINUTE = 150;
@@ -84,6 +122,11 @@ const CONTENT_CATEGORIES = [
   "components",
 ] as const;
 
+const isMissingDirectory = (error: unknown): boolean =>
+  typeof error === "object" &&
+  error !== null &&
+  (error as { code?: string }).code === "ENOENT";
+
 const readCategory = (
   dir: string,
   category: ContentCategory,
@@ -94,8 +137,18 @@ const readCategory = (
       ...content,
       metadata: { ...content.metadata, category },
     }));
-  } catch {
-    return [];
+  } catch (error) {
+    // un dossier <categorie>/en/ absent est normal : la locale retombe sur le FR
+    if (isMissingDirectory(error)) {
+      return [];
+    }
+
+    // tout le reste (frontmatter invalide, date impossible, fichier illisible)
+    // faisait disparaître la catégorie entière sans un mot : on échoue au build
+    throw new Error(
+      `Contenu illisible dans « ${dir} » : ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error }
+    );
   }
 };
 

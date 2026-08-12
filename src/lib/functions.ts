@@ -3,13 +3,34 @@ import "dayjs/locale/fr";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 
+import { getLocale } from "@/paraglide/runtime";
+
 import { logger } from "./logger";
 
 dayjsLib.extend(relativeTime);
 dayjsLib.extend(utc);
+// locale par défaut FR (source des routes non localisées : llms, RSS, OG)
 dayjsLib.locale("fr");
 
 export const dayjs = dayjsLib;
+
+type DateInput = Date | number | string;
+
+/**
+ * Formate une date dans la locale courante.
+ *
+ * `dayjs.locale("fr")` est global : sans cela, chaque date affichée sur /en
+ * sortait en français (« mer. 12 août » au lieu de « Wed 12 Aug »). L'anglais
+ * est la locale intégrée de dayjs, il n'y a donc rien de plus à importer.
+ */
+export const formatDate = (
+  value: DateInput,
+  template: string
+): string => dayjsLib(value).locale(getLocale()).format(template);
+
+/** distance relative (« il y a 3 jours ») dans la locale courante */
+export const formatFromNow = (value: DateInput): string =>
+  dayjsLib(value).locale(getLocale()).fromNow();
 
 export const copyText = async (text: string): Promise<boolean> => {
   if (!navigator?.clipboard) {

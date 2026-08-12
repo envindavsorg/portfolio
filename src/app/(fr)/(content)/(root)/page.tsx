@@ -19,6 +19,7 @@ import { Projects } from "@/app/(fr)/(content)/(root)/_components/projects/Proje
 import { TechStack } from "@/app/(fr)/(content)/(root)/_components/stack/Stack";
 import { Tools } from "@/app/(fr)/(content)/(root)/_components/tools/Tools";
 import { Divider } from "@/components/base/Divider";
+import { SectionBoundary } from "@/components/layout/SectionBoundary";
 import GLOBAL_DATA from "@/data/global";
 import { dayjs } from "@/lib/functions";
 import { createMetadata } from "@/lib/metadata";
@@ -78,9 +79,11 @@ const Page = () => (
       <Divider />
       <About />
       <Divider />
-      <Suspense>
-        <Commits />
-      </Suspense>
+      <SectionBoundary>
+        <Suspense>
+          <Commits />
+        </Suspense>
+      </SectionBoundary>
       <Divider />
       <TechStack />
       <Divider />

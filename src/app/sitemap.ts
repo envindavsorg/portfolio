@@ -23,6 +23,9 @@ const localizedEntries = (
     languages: {
       en: toUrl(path, "en"),
       fr: toUrl(path, "fr"),
+      // aligné sur createMetadata() : sans x-default, Google choisit lui-même
+      // la version servie aux locales non couvertes
+      "x-default": toUrl(path, "fr"),
     },
   };
 

@@ -110,6 +110,7 @@ export const ArticlesIndex = ({
                 cover,
                 author,
                 createdAt,
+                updatedAt,
                 tags: itemTags,
               } = itemMetadata;
               return (
@@ -127,6 +128,7 @@ export const ArticlesIndex = ({
                       slug={slug}
                       tags={itemTags}
                       title={title}
+                      updatedAt={updatedAt}
                     />
                   </div>
                 </WritingsFilterItem>
