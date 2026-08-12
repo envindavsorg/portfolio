@@ -1,0 +1,55 @@
+# Configuration de actions/labeler, référencée par .github/workflows/label.yml.
+# Le fichier manquait : l'action échouait donc sur « HttpError: Not Found » à
+# chaque pull request depuis la mise en place du workflow.
+#
+# Syntaxe de actions/labeler@v4 (liste de globs par étiquette) — à convertir si
+# l'action est un jour passée en v5, qui attend `changed-files`/`any-glob-to-any-file`.
+
+contenu:
+  - "src/content/**"
+
+i18n:
+  - "messages/**"
+  - "project.inlang/**"
+  - "src/scripts/compile-i18n.mts"
+  - "src/lib/i18n.ts"
+
+app:
+  - "src/app/**"
+
+ui:
+  - "src/components/**"
+  - "src/hooks/**"
+
+registry:
+  - "src/registry/**"
+  - "src/scripts/build-registry.mts"
+
+tests:
+  - "e2e/**"
+  - "src/**/*.test.ts"
+  - "vitest.config.ts"
+  - "vitest.setup.ts"
+  - "playwright.config.ts"
+
+dépendances:
+  - "package.json"
+  - "pnpm-lock.yaml"
+
+configuration:
+  - "next.config.ts"
+  - "tsconfig.json"
+  - "tsconfig.scripts.json"
+  - "oxlint.config.ts"
+  - "oxfmt.config.ts"
+  - "postcss.config.mjs"
+  - "knip.json"
+  - "lefthook.yml"
+  - "components.json"
+
+ci:
+  - ".github/**"
+
+documentation:
+  - "*.md"
+  - "docs/**"

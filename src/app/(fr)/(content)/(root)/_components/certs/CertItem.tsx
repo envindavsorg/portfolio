@@ -11,7 +11,7 @@ import { Divider } from "@/components/base/Divider";
 import { DotPattern } from "@/components/blocks/DotPattern";
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
-import { dayjs } from "@/lib/functions";
+import { formatDate } from "@/lib/functions";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
@@ -94,7 +94,7 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
           </Badge>
           <Badge className="lowercase">
             {getLocale() === "en" ? "issued:" : "obtenu:"}{" "}
-            <span>{dayjs(issueDate).format("ddd DD MMMM YYYY")}</span>
+            <span>{formatDate(issueDate, "ddd DD MMMM YYYY")}</span>
           </Badge>
         </div>
       </div>

@@ -7,6 +7,7 @@ import type { ComponentProps } from "react";
 import { Frown } from "@/components/motion/Frown";
 import { Search } from "@/components/motion/Search";
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 export const Command = ({
   className,
@@ -42,7 +43,7 @@ export const CommandInput = ({
       <CommandPrimitive.Input
         className="flex-1 outline-hidden placeholder:text-foreground placeholder:text-sm"
         data-slot="command-input"
-        placeholder="tapez une commande ..."
+        placeholder={m.command_input_placeholder()}
         {...props}
       />
     </div>
@@ -90,9 +91,11 @@ export const CommandEmpty = ({
     >
       <Frown className="text-theme" ref={iconRef} />
       <div className="space-y-1 text-center">
-        <h3 className="font-semibold text-sm">Aucun résultat ...</h3>
+        <h3 className="font-semibold text-sm">
+          {m.command_empty_title()}
+        </h3>
         <p className="text-muted-foreground text-xs">
-          Essayez un autre terme de recherche.
+          {m.command_empty_hint()}
         </p>
       </div>
     </CommandPrimitive.Empty>

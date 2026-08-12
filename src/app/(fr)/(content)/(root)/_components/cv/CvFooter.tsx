@@ -16,7 +16,10 @@ import {
   DrawerTitle,
 } from "@/components/primitives/Drawer";
 import GLOBAL_DATA from "@/data/global";
-import type { EmailFormData } from "@/hooks/useEmailForm";
+import type {
+  EmailFormData,
+  SendCvFailureReason,
+} from "@/hooks/useEmailForm";
 import useEmailForm from "@/hooks/useEmailForm";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { m } from "@/paraglide/messages";
@@ -32,6 +35,8 @@ export const CvFooter = () => {
   const [formState, setFormState] = useState<
     "form" | "success" | "error"
   >("form");
+  const [failureReason, setFailureReason] =
+    useState<SendCvFailureReason>(null);
 
   const { form, isLoading, sendEmail } = useEmailForm();
   const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -40,6 +45,7 @@ export const CvFooter = () => {
     if (!open) {
       resetTimeoutRef.current = setTimeout(() => {
         setFormState("form");
+        setFailureReason(null);
         form.reset();
       }, 600);
     }
@@ -55,16 +61,16 @@ export const CvFooter = () => {
 
   const handleSubmit = useCallback(
     async (data: EmailFormData) => {
-      const success = await sendEmail(data);
-      setFormState(success ? "success" : "error");
+      const { sent, reason } = await sendEmail(data);
+      setFailureReason(reason);
+      setFormState(sent ? "success" : "error");
     },
-    [sendEmail, isDesktop]
+    [sendEmail]
   );
 
   const renderContent = () => {
     if (formState === "success" || formState === "error") {
       const isSuccess = formState === "success";
-      const FeedbackComponent = isSuccess ? CvSuccess : CvError;
       const title = isSuccess
         ? m.home_cv_success_title()
         : m.home_cv_error_title();
@@ -72,16 +78,28 @@ export const CvFooter = () => {
         ? m.home_cv_success_button()
         : m.home_cv_error_button();
       const HeaderComp = isDesktop ? DialogTitle : DrawerTitle;
+      const action = (
+        <Button className="mt-4" onClick={handleClose}>
+          {buttonText}
+        </Button>
+      );
 
       return (
         <>
           <HeaderComp className="sr-only">{title}</HeaderComp>
 
-          <FeedbackComponent dateCreated={new Date().toISOString()}>
-            <Button className="mt-4" onClick={handleClose}>
-              {buttonText}
-            </Button>
-          </FeedbackComponent>
+          {isSuccess ? (
+            <CvSuccess dateCreated={new Date().toISOString()}>
+              {action}
+            </CvSuccess>
+          ) : (
+            <CvError
+              dateCreated={new Date().toISOString()}
+              reason={failureReason}
+            >
+              {action}
+            </CvError>
+          )}
         </>
       );
     }

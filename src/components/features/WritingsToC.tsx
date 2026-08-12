@@ -1,6 +1,5 @@
 "use client";
 
-import { getTableOfContents } from "fumadocs-core/content/toc";
 import type { TOCItemType } from "fumadocs-core/toc";
 import Link from "next/link";
 import type { ComponentProps } from "react";
@@ -115,18 +114,18 @@ const Content = ({ groups, activeUrl }: ContentProps) => {
 };
 
 type WritingsToCProps = ComponentProps<typeof Collapsible> & {
-  content: string;
+  /** sommaire calculé côté serveur (voir getContentToc) */
+  items: TOCItemType[];
 };
 
 export const WritingsToC = ({
-  content,
+  items,
   ...props
 }: WritingsToCProps) => {
   const iconGalleryRef = useRef<AnimatedIconHandle>(null);
   const iconChevronRef = useRef<AnimatedIconHandle>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
-  const items = getTableOfContents(content);
   const activeId = useActiveItem(items);
 
   const startAnimations = useCallback(() => {

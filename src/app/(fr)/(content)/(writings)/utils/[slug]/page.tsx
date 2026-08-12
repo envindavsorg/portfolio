@@ -5,16 +5,20 @@ import { Divider } from "@/components/base/Divider";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
+import { WritingsReadingAids } from "@/components/features/WritingsReadingAids";
+import { WritingsRelated } from "@/components/features/WritingsRelated";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
 import { Mdx } from "@/components/markdown/mdx";
 import type { ContentLocale } from "@/lib/content";
 import {
+  getAllContent,
   getContentByCategory,
   getContentBySlug,
 } from "@/lib/content";
 import { getPageJsonLd } from "@/lib/json-ld";
 import { createMetadata } from "@/lib/metadata";
+import { getContentToc } from "@/lib/toc";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
@@ -85,7 +89,8 @@ export const UtilView = ({
 
       <Divider border={false} type="half" />
 
-      <WritingsToC content={content} />
+      <WritingsToC items={getContentToc(content)} />
+      <WritingsReadingAids />
 
       <Divider border={false} after={false} type="half" />
 
@@ -103,6 +108,8 @@ export const UtilView = ({
       {locale === "en" && item.locale === "fr" && (
         <WritingsLocaleNotice />
       )}
+
+      <WritingsRelated all={getAllContent(locale)} current={item} />
     </>
   );
 };

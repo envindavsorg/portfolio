@@ -1,0 +1,95 @@
+---
+title: JWT decoder
+description: Inspect the header, payload and dates of a JWT without the token ever leaving your browser
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["jwt", "auth", "base64"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<JwtDecoderUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Usage
+
+Paste a JWT to read its header and payload straight away. The `iat`, `nbf` and
+`exp` claims are converted to readable dates, and an expired token is flagged.
+
+Everything is decoded in your browser: the token is never sent over the network.
+That matters, because a JWT is an authentication credential — pasting it into an
+online tool that ships it to a server is equivalent to leaking a session ID.
+
+# Decoding is not verifying
+
+A JWT has three dot-separated parts:
+
+```
+<header>.<payload>.<signature>
+```
+
+The first two are **base64url** — an encoding, not encryption. Anyone can read
+them. The third is the signature, and it alone guarantees the token has not been
+tampered with.
+
+This tool does **not** verify the signature: that would require the secret key,
+which has no business being in a browser. In other words, what you see here is
+what the token _claims_ to be. On the server, always validate the signature
+before trusting a single claim.
+
+# Standard claims
+
+| Claim | Meaning                                  |
+| ----- | ---------------------------------------- |
+| `iss` | token issuer                             |
+| `sub` | subject, usually the user ID             |
+| `aud` | intended audience                        |
+| `exp` | expiration date                          |
+| `nbf` | date before which the token is not valid |
+| `iat` | issued-at date                           |
+| `jti` | unique token ID                          |
+
+Dates are expressed in **seconds** since the Unix epoch, not milliseconds.
+Mixing the two up yields expiry dates in 1970 or several millennia from now.
+
+# Decoding a JWT in JavaScript
+
+```javascript
+const [header, payload] = token
+  .split(".")
+  .slice(0, 2)
+  .map((part) => {
+    const base64 = part.replaceAll("-", "+").replaceAll("_", "/");
+    const padded = base64.padEnd(
+      base64.length + ((4 - (base64.length % 4)) % 4),
+      "="
+    );
+    return JSON.parse(atob(padded));
+  });
+```
+
+The padding has to be restored: JWTs omit trailing `=` characters, while `atob`
+expects them.
+
+# Verifying a JWT in Node.js
+
+```javascript
+import { createHmac, timingSafeEqual } from "node:crypto";
+
+const [rawHeader, rawPayload, signature] = token.split(".");
+const expected = createHmac("sha256", secret)
+  .update(`${rawHeader}.${rawPayload}`)
+  .digest("base64url");
+
+const valid = timingSafeEqual(
+  Buffer.from(signature),
+  Buffer.from(expected)
+);
+```
+
+The comparison goes through `timingSafeEqual`: a plain `===` short-circuits on
+the first differing byte, which leaks exploitable timing information.

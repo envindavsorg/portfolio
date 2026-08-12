@@ -1,6 +1,7 @@
 import type { Dayjs } from "dayjs";
 
 import { dayjs } from "@/lib/functions";
+import { getLocale } from "@/paraglide/runtime";
 
 const DEFAULT_MONTH_LABELS = [
   "jan.",
@@ -121,9 +122,18 @@ export const groupByWeeks = (
   );
 };
 
+/**
+ * Noms de mois abrégés dans la locale courante. Les libellés du calendrier
+ * étaient codés en dur en français et s'affichaient donc aussi sur /en.
+ */
+export const getLocalizedMonthLabels = (): string[] =>
+  Array.from({ length: 12 }, (_, month) =>
+    dayjs().locale(getLocale()).month(month).format("MMM")
+  );
+
 export const getMonthLabels = (
   weeks: Week[],
-  monthNames: string[] = DEFAULT_MONTH_LABELS
+  monthNames: string[] = getLocalizedMonthLabels()
 ): MonthLabel[] => {
   const monthLabels: MonthLabel[] = [];
 

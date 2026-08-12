@@ -11,7 +11,7 @@ const USER = {
   location: {
     city: "Paris, France",
   },
-  og: "/images/og-image-dark.png?t=1755355653",
+  og: "/images/og/og-image-dark.png?t=1755355653",
   phoneNumber: "+33 6 58 05 86 65",
   photo: "/images/photo.webp",
   pronouns: "il/lui",

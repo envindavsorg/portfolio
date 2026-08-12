@@ -45,8 +45,12 @@ export const Graph = ({ data, children, ...props }: GraphProps) => {
       (sum, activity) => sum + activity.count,
       0
     );
-    const width =
-      weeks.length * (BLOCK_SIZE + BLOCK_MARGIN) - BLOCK_MARGIN;
+    // sans semaine (API GitHub indisponible), la soustraction de la marge
+    // donnerait une largeur négative — invalide pour un <svg>
+    const width = Math.max(
+      0,
+      weeks.length * (BLOCK_SIZE + BLOCK_MARGIN) - BLOCK_MARGIN
+    );
     const height =
       LABEL_HEIGHT + (BLOCK_SIZE + BLOCK_MARGIN) * 7 - BLOCK_MARGIN;
     return { height, totalCount, weeks, width, year };

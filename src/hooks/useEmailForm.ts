@@ -8,6 +8,18 @@ import type { EmailFormData } from "../schemas/emailSchema";
 
 export type { EmailFormData };
 
+/** raison d'échec renvoyée par l'action, pour afficher un message adapté */
+export type SendCvFailureReason =
+  | "rate_limited"
+  | "send_failed"
+  | "unavailable"
+  | null;
+
+export interface SendCvOutcome {
+  sent: boolean;
+  reason: SendCvFailureReason;
+}
+
 const useEmailForm = () => {
   const form = useForm<EmailFormData>({
     defaultValues: {
@@ -18,18 +30,21 @@ const useEmailForm = () => {
   });
 
   const sendEmail = useCallback(
-    async (data: EmailFormData) => {
+    async (data: EmailFormData): Promise<SendCvOutcome> => {
       try {
         const result = await sendCvAction(data);
 
         if (!result?.data?.sent) {
-          return false;
+          return {
+            reason: result?.data?.reason ?? null,
+            sent: false,
+          };
         }
 
         form.reset();
-        return true;
+        return { reason: null, sent: true };
       } catch {
-        return false;
+        return { reason: null, sent: false };
       }
     },
     [form]

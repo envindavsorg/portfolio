@@ -1,0 +1,98 @@
+---
+title: Décodeur de JWT
+description: Inspectez l'en-tête, la charge utile et les dates d'un jeton JWT, sans qu'il quitte votre navigateur
+category: utils
+createdAt: 2026-08-12
+updatedAt: 2026-08-12
+tags: ["jwt", "auth", "base64"]
+author: Florin Cuzeac
+isNew: true
+---
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+<JwtDecoderUtils />
+
+<div className="screen-line-before w-full border-edge border-b" />
+
+# Utilisation
+
+Collez un JWT pour lire immédiatement son en-tête et sa charge utile. Les dates
+`iat`, `nbf` et `exp` sont converties en dates lisibles, et un jeton expiré est
+signalé.
+
+Tout le décodage se fait dans votre navigateur : le jeton n'est jamais envoyé
+sur le réseau. C'est important, car un JWT est une donnée d'authentification —
+le coller dans un outil en ligne qui l'envoie à un serveur revient à divulguer
+un identifiant de session.
+
+# Décoder n'est pas vérifier
+
+Un JWT se compose de trois parties séparées par des points :
+
+```
+<en-tête>.<charge utile>.<signature>
+```
+
+Les deux premières sont du **base64url**, un simple encodage — pas un
+chiffrement. N'importe qui peut les lire. La troisième est la signature, et
+c'est elle seule qui garantit que le jeton n'a pas été modifié.
+
+Cet outil ne vérifie **pas** la signature : cela exigerait la clé secrète, qui
+n'a rien à faire dans un navigateur. Autrement dit, le contenu affiché ici est
+ce que le jeton _prétend_ être. Côté serveur, il faut toujours valider la
+signature avant de faire confiance au moindre claim.
+
+# Les claims standards
+
+| Claim | Signification                                    |
+| ----- | ------------------------------------------------ |
+| `iss` | émetteur du jeton                                |
+| `sub` | sujet, en général l'identifiant de l'utilisateur |
+| `aud` | destinataire attendu                             |
+| `exp` | date d'expiration                                |
+| `nbf` | date avant laquelle le jeton n'est pas valide    |
+| `iat` | date d'émission                                  |
+| `jti` | identifiant unique du jeton                      |
+
+Les dates sont exprimées en **secondes** depuis l'epoch Unix, pas en
+millisecondes. Une confusion entre les deux donne des expirations situées en
+1970 ou dans plusieurs millénaires.
+
+# Décoder un JWT en JavaScript
+
+```javascript
+const [header, payload] = token
+  .split(".")
+  .slice(0, 2)
+  .map((part) => {
+    const base64 = part.replaceAll("-", "+").replaceAll("_", "/");
+    const padded = base64.padEnd(
+      base64.length + ((4 - (base64.length % 4)) % 4),
+      "="
+    );
+    return JSON.parse(atob(padded));
+  });
+```
+
+Le padding doit être reconstitué : les JWT omettent les `=` finaux, alors
+qu'`atob` les attend.
+
+# Vérifier un JWT en Node.js
+
+```javascript
+import { createHmac, timingSafeEqual } from "node:crypto";
+
+const [rawHeader, rawPayload, signature] = token.split(".");
+const expected = createHmac("sha256", secret)
+  .update(`${rawHeader}.${rawPayload}`)
+  .digest("base64url");
+
+const valid = timingSafeEqual(
+  Buffer.from(signature),
+  Buffer.from(expected)
+);
+```
+
+La comparaison passe par `timingSafeEqual` : un `===` classique s'arrête au
+premier octet différent, ce qui laisse fuir de l'information exploitable.

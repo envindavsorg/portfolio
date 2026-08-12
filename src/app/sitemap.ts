@@ -23,6 +23,9 @@ const localizedEntries = (
     languages: {
       en: toUrl(path, "en"),
       fr: toUrl(path, "fr"),
+      // aligné sur createMetadata() : sans x-default, Google choisit lui-même
+      // la version servie aux locales non couvertes
+      "x-default": toUrl(path, "fr"),
     },
   };
 
@@ -37,7 +40,15 @@ const getLatestDate = (posts: ReturnType<typeof getAllContent>) => {
     return dayjs().toISOString();
   }
 
-  return dayjs(posts[0].metadata.updatedAt).toISOString();
+  // getAllContent trie par createdAt : le premier élément n'est pas forcément
+  // le plus récemment mis à jour, il faut chercher le maximum
+  const latest = Math.max(
+    ...posts.map((post) =>
+      new Date(post.metadata.updatedAt).getTime()
+    )
+  );
+
+  return dayjs(latest).toISOString();
 };
 
 const sitemap = (): MetadataRoute.Sitemap => {

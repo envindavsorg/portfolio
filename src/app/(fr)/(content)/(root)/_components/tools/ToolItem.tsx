@@ -7,7 +7,7 @@ import { Badge } from "@/components/primitives/Badge";
 import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Prose } from "@/components/primitives/Typography";
 import type { Content } from "@/lib/content";
-import { dayjs } from "@/lib/functions";
+import { formatDate } from "@/lib/functions";
 import { m } from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
@@ -81,11 +81,11 @@ export const ToolItem = memo(
             </Badge>
             <Badge className="lowercase max-sm:hidden">
               {m.home_tools_item_created_label()}{" "}
-              {dayjs(metadata.createdAt).format("DD MMM YYYY")}
+              {formatDate(metadata.createdAt, "DD MMM YYYY")}
             </Badge>
             <Badge className="lowercase">
               {m.home_tools_item_updated_label()}{" "}
-              {dayjs(metadata.updatedAt).format("DD MMM YYYY")}
+              {formatDate(metadata.updatedAt, "DD MMM YYYY")}
             </Badge>
           </div>
         </div>

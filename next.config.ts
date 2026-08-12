@@ -12,7 +12,13 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   experimental: {
     globalNotFound: true,
-    optimizePackageImports: ["@phosphor-icons/react", "radix-ui"],
+    // radix-ui a été retiré des dépendances (migration Base UI) : le garder
+    // ici n'optimisait plus rien
+    optimizePackageImports: [
+      "@phosphor-icons/react",
+      "@base-ui/react",
+      "motion",
+    ],
   },
   async headers() {
     return [

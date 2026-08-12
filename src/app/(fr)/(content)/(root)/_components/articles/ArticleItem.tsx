@@ -5,7 +5,7 @@ import { Badge } from "@/components/primitives/Badge";
 import { Separator } from "@/components/primitives/Separator";
 import { Prose } from "@/components/primitives/Typography";
 import type { Content } from "@/lib/content";
-import { dayjs } from "@/lib/functions";
+import { formatDate } from "@/lib/functions";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
@@ -104,7 +104,7 @@ export const ArticleItem = ({
         {!noMetadata && (
           <div className="mt-4 flex items-center justify-end gap-2 border-edge border-t pt-4 sm:gap-4">
             <Badge variant="primary">
-              {dayjs(metadata.createdAt).format("ddd DD MMM")}
+              {formatDate(metadata.createdAt, "ddd DD MMM")}
             </Badge>
             <Badge variant="primary">{reading?.time}</Badge>
             <Badge variant="primary">

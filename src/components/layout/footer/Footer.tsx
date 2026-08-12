@@ -7,7 +7,7 @@ import { getCommitData } from "@/actions/commit.action";
 import { Divider } from "@/components/base/Divider";
 import { Panel } from "@/components/base/Panel";
 import { Heart } from "@/components/motion/Heart";
-import { dayjs } from "@/lib/functions";
+import { formatDate, formatFromNow } from "@/lib/functions";
 import { m } from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
@@ -35,10 +35,20 @@ export const Footer = async () => {
             </div>
             <div className="w-full flex-1 border-edge border-l p-3 text-start">
               <p className="mt-0.5 flex items-baseline gap-x-1 text-balance font-bold text-sm">
-                {dayjs(updated).format("dddd DD MMM")}
-                <span className="font-light text-[10px] text-theme">
-                  ({dayjs(updated).fromNow()})
-                </span>
+                {/* `updated` est absent si l'API GitHub a échoué : afficher la
+                    date du jour ferait passer le build pour le dernier commit */}
+                {updated ? (
+                  <>
+                    {formatDate(updated, "dddd DD MMM")}
+                    <span className="font-light text-[10px] text-theme">
+                      ({formatFromNow(updated)})
+                    </span>
+                  </>
+                ) : (
+                  <span className="font-light text-muted-foreground">
+                    —
+                  </span>
+                )}
               </p>
             </div>
           </div>

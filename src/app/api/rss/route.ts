@@ -1,60 +1,15 @@
 import GLOBAL_DATA from "@/data/global";
 import { getAllContent } from "@/lib/content";
-import { dayjs } from "@/lib/functions";
+import { feedMeta, rssResponse } from "@/lib/feed-routes";
 
 export const dynamic = "force-static";
 
-const escapeXml = (unsafe: string): string =>
-  unsafe
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
-
-export const GET = () => {
-  const allPosts = getAllContent();
-
-  const itemsXml = allPosts
-    .map((post) => {
-      const postUrl = `https://cuzeacflorin.fr/${post.metadata.category}/${post.slug}`;
-
-      return `
-    <item>
-      <title><![CDATA[ ${post.metadata.title} ]]></title>
-      <description><![CDATA[ ${post.metadata.description || ""} ]]></description>
-      <link>${postUrl}</link>
-      <guid isPermaLink="false">${postUrl}</guid>
-      <dc:creator><![CDATA[ ${GLOBAL_DATA.USER.firstName} ]]></dc:creator>
-      <pubDate>${dayjs(post.metadata.createdAt).format("ddd, DD MMM YYYY HH:mm:ss [GMT]")}</pubDate>
-      <content:encoded>
-        <p>${escapeXml(post.metadata.description || "")}</p>
-        <div style="margin-top: 50px; font-style: italic;">
-          <strong><a href="${postUrl}">Continuer la lecture</a>.</strong>
-        </div>
-        <br />
-        <br />
-      </content:encoded>
-    </item>`;
+export const GET = (): Response =>
+  rssResponse(
+    getAllContent(),
+    feedMeta({
+      description: GLOBAL_DATA.USER.bio,
+      path: "/api/rss",
+      title: `Le coin de ${GLOBAL_DATA.USER.firstName}`,
     })
-    .join("\n");
-
-  const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-  <channel>
-    <title><![CDATA[ Le coin de ${GLOBAL_DATA.USER.firstName} ]]></title>
-    <description><![CDATA[ ${GLOBAL_DATA.USER.bio} ]]></description>
-    <link>https://cuzeacflorin.fr/</link>
-    <generator>RSS for Node</generator>
-    <lastBuildDate>${dayjs().format("ddd, DD MMM YYYY HH:mm:ss [GMT]")}</lastBuildDate>
-    <atom:link href="https://cuzeacflorin.fr/rss.xml" rel="self" type="application/rss+xml"/>
-    ${itemsXml}
-  </channel>
-</rss>`;
-
-  return new Response(rssFeed, {
-    headers: {
-      "Content-Type": "text/xml; charset=utf-8",
-    },
-  });
-};
+  );

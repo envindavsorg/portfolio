@@ -58,6 +58,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             "flex h-10 w-full px-3 py-2",
             Icon && "pl-9",
             "rounded-md border border-input bg-transparent outline-none",
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
             "font-pixel-square lowercase",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "file:border-0 file:bg-transparent file:font-medium file:text-foreground file:text-sm",

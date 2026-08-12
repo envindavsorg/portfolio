@@ -11,8 +11,9 @@ export const GraphFooter = () => {
     <div className="screen-line-before flex gap-y-2 px-3 py-2 max-sm:flex-col-reverse sm:items-center sm:justify-between">
       <p className="text-muted-foreground text-xs max-sm:ms-auto sm:text-sm">
         <span className="font-medium text-theme">
-          <Counter value={Number(totalCount.toLocaleString("en"))} />{" "}
-          contributions
+          {/* pas de toLocaleString ici : "1,234" repasse en Number() -> NaN,
+              et NumberFlow met déjà en forme la valeur */}
+          <Counter value={totalCount} /> contributions
         </span>{" "}
         {getLocale() === "en" ? "made in" : "effectuées en"}{" "}
         <span className="font-medium text-theme">{year}</span>
