@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import type { SearchDoc } from "./search";
 import {
+  editDistance,
+  fuzzyMatches,
   normalize,
   SCORES,
   scoreText,
@@ -193,5 +195,125 @@ describe("searchDocs", () => {
   it("renvoie tout pour une requête vide", () => {
     const docs = [makeDoc("a", "Un"), makeDoc("b", "Deux")];
     expect(searchDocs(docs, "")).toHaveLength(2);
+  });
+});
+
+describe("editDistance", () => {
+  /**
+   * Valeurs de référence calculées hors de ce code : distances de
+   * Damerau-Levenshtein restreinte (alignement optimal), vérifiables à la main
+   * sur des chaînes aussi courtes.
+   */
+  it("vaut zéro pour deux chaînes identiques", () => {
+    expect(editDistance("tailwind", "tailwind")).toBe(0);
+    expect(editDistance("", "")).toBe(0);
+  });
+
+  it("compte une chaîne vide comme la longueur de l'autre", () => {
+    expect(editDistance("", "css")).toBe(3);
+    expect(editDistance("css", "")).toBe(3);
+  });
+
+  it("compte une substitution, une insertion, une suppression", () => {
+    expect(editDistance("chat", "chut")).toBe(1);
+    expect(editDistance("chat", "chats")).toBe(1);
+    expect(editDistance("chats", "chat")).toBe(1);
+  });
+
+  /** le cas qui motive l'algorithme : deux lettres inversées */
+  it("compte une transposition pour UNE faute, pas deux", () => {
+    expect(editDistance("tailwnid", "tailwind")).toBe(1);
+    expect(editDistance("recherche", "rehcerche")).toBe(1);
+  });
+
+  it("est symétrique", () => {
+    expect(editDistance("tailwnid", "tailwind")).toBe(
+      editDistance("tailwind", "tailwnid")
+    );
+  });
+
+  it("compte deux fautes indépendantes", () => {
+    expect(editDistance("tialwnid", "tailwind")).toBe(2);
+  });
+});
+
+describe("fuzzyMatches", () => {
+  it("rapproche une faute de frappe d'un mot long", () => {
+    expect(fuzzyMatches("un article sur tailwind", "tailwnid")).toBe(
+      true
+    );
+  });
+
+  it("ne tolère aucune faute sur un mot court", () => {
+    // sinon « css » couvrirait « csv », « cs », « css »… et noierait la liste
+    expect(fuzzyMatches("un fichier csv", "css")).toBe(false);
+    expect(fuzzyMatches("du code css", "css")).toBe(true);
+  });
+
+  it("ignore l'ordre des mots", () => {
+    expect(fuzzyMatches("tailwind et css", "css tailwind")).toBe(
+      true
+    );
+  });
+
+  it("exige que TOUS les mots de la requête se retrouvent", () => {
+    expect(fuzzyMatches("tailwind et css", "css tailwind zig")).toBe(
+      false
+    );
+  });
+
+  it("reste insensible aux accents et à la casse", () => {
+    expect(fuzzyMatches("Retour d'Expérience", "experience")).toBe(
+      true
+    );
+  });
+
+  it("rend faux sur une requête ou un texte vide", () => {
+    expect(fuzzyMatches("un texte", "")).toBe(false);
+    expect(fuzzyMatches("", "tailwind")).toBe(false);
+    expect(fuzzyMatches("un texte", "   ")).toBe(false);
+  });
+});
+
+const doc = (title: string, excerpt: string): SearchDoc => ({
+  category: "articles",
+  description: "",
+  excerpt,
+  headings: [],
+  slug: title.toLowerCase().replaceAll(" ", "-"),
+  tags: [],
+  title,
+});
+
+describe("tolérance aux fautes dans le classement", () => {
+  it("trouve un document malgré une faute de frappe", () => {
+    const hits = searchDocs([doc("Tailwind", "du css")], "tailwnid");
+
+    expect(hits).toHaveLength(1);
+    expect(hits[0].score).toBe(SCORES.fuzzyTitle);
+  });
+
+  /**
+   * La garantie qui rend la recherche prévisible : l'approximatif ne déplace
+   * jamais l'exact, quel que soit le champ touché.
+   */
+  it("classe toute correspondance exacte devant toute correspondance approchée", () => {
+    const exact = doc("Notes", "il est question de tailwind ici");
+    const approximate = doc("Tailwnid", "rien à voir");
+
+    const hits = searchDocs([approximate, exact], "tailwind");
+
+    expect(hits.map((hit) => hit.doc.title)).toEqual([
+      "Notes",
+      "Tailwnid",
+    ]);
+    expect(SCORES.content).toBeGreaterThan(SCORES.fuzzyTitle);
+    expect(SCORES.fuzzyTitle).toBeGreaterThan(SCORES.fuzzyContent);
+  });
+
+  it("ne rend rien pour une requête qui ne ressemble à rien", () => {
+    expect(
+      searchDocs([doc("Tailwind", "du css")], "zzzzzzzz")
+    ).toEqual([]);
   });
 });

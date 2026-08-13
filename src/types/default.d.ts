@@ -115,6 +115,8 @@ type ThemeType = "light" | "dark" | "system";
 // types for page layout and OG image generation
 type PageType =
   | "homepage"
+  | "project"
+  | "experience"
   | "blog"
   | "blogArticle"
   | "components"

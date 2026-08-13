@@ -46,6 +46,7 @@ export const WritingsTopBar = ({
       />
 
       <PanelContent
+        data-print="hide"
         reset
         className="flex items-center md:justify-between px-3 py-2"
       >

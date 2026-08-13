@@ -118,10 +118,146 @@ export const SCORES = {
   content: 0.5,
   /** le titre est exactement la requête */
   exactTitle: 1,
+  /** correspondance approchée dans le texte indexé */
+  fuzzyContent: 0.2,
+  /** correspondance approchée dans le titre */
+  fuzzyTitle: 0.45,
   none: 0,
   /** la requête apparaît dans le titre */
   title: 0.9,
 } as const;
+
+/** tout ce qui n'est ni lettre ni chiffre sépare deux mots */
+const WORD_SEPARATOR = /[^\p{L}\p{N}]+/u;
+
+const words = (value: string): string[] =>
+  normalize(value).split(WORD_SEPARATOR).filter(Boolean);
+
+/**
+ * Nombre de fautes tolérées selon la longueur du mot cherché.
+ *
+ * En dessous de quatre caractères, AUCUNE : à une faute près, « css » couvre
+ * « cs », « css », « csv », « css » et une dizaine d'autres mots courts du
+ * texte. La tolérance sur un mot court ne rapproche pas le bon résultat, elle
+ * noie la liste.
+ */
+const tolerance = (length: number): number => {
+  if (length >= 8) {
+    return 2;
+  }
+
+  return length >= 4 ? 1 : 0;
+};
+
+/**
+ * Distance d'édition avec TRANSPOSITION (alignement optimal de chaînes).
+ *
+ * La transposition n'est pas un raffinement théorique : c'est la faute de frappe
+ * la plus courante, celle de deux lettres inversées. « tailwnid » pour
+ * « tailwind » est à une transposition — mais à DEUX opérations pour une
+ * Levenshtein classique, qui devrait supprimer puis réinsérer. Avec un seuil de
+ * une faute, la variante classique ne rapprocherait donc pas le mot que
+ * l'utilisateur croit avoir tapé.
+ */
+export const editDistance = (left: string, right: string): number => {
+  const rows = left.length;
+  const columns = right.length;
+
+  if (rows === 0) {
+    return columns;
+  }
+  if (columns === 0) {
+    return rows;
+  }
+
+  let beforePrevious: number[] = [];
+  let previous: number[] = Array.from(
+    { length: columns + 1 },
+    (_, index) => index
+  );
+
+  for (let row = 1; row <= rows; row += 1) {
+    const current: number[] = Array.from({
+      length: columns + 1,
+    });
+    current[0] = row;
+
+    for (let column = 1; column <= columns; column += 1) {
+      const substitution =
+        left[row - 1] === right[column - 1] ? 0 : 1;
+
+      current[column] = Math.min(
+        previous[column] + 1,
+        current[column - 1] + 1,
+        previous[column - 1] + substitution
+      );
+
+      const isTransposition =
+        row > 1 &&
+        column > 1 &&
+        left[row - 1] === right[column - 2] &&
+        left[row - 2] === right[column - 1];
+
+      if (isTransposition) {
+        current[column] = Math.min(
+          current[column],
+          beforePrevious[column - 2] + 1
+        );
+      }
+    }
+
+    beforePrevious = previous;
+    previous = current;
+  }
+
+  return previous[columns];
+};
+
+const matchesWord = (
+  candidates: string[],
+  token: string
+): boolean => {
+  const max = tolerance(token.length);
+
+  return candidates.some((candidate) => {
+    if (candidate.includes(token)) {
+      return true;
+    }
+
+    // l'écart de longueur borne la distance par le bas : le test évite la
+    // majorité des calculs, qui sont quadratiques
+    return (
+      max > 0 &&
+      Math.abs(candidate.length - token.length) <= max &&
+      editDistance(candidate, token) <= max
+    );
+  });
+};
+
+/**
+ * Correspondance approchée : chaque mot de la requête doit se retrouver, à une
+ * ou deux fautes près, dans le texte.
+ *
+ * Le découpage en mots a un second effet, assumé : l'ORDRE des mots cesse de
+ * compter. « css tailwind » ne trouvait rien sur un texte disant « tailwind et
+ * css », parce que la requête entière était cherchée comme sous-chaîne. Ces
+ * correspondances tombent dans le même palier que les fautes de frappe — elles
+ * sont utiles, mais moins sûres qu'une correspondance exacte.
+ */
+export const fuzzyMatches = (
+  haystack: string,
+  query: string
+): boolean => {
+  const tokens = words(query);
+
+  if (tokens.length === 0 || !haystack) {
+    return false;
+  }
+
+  const candidates = words(haystack);
+
+  return tokens.every((token) => matchesWord(candidates, token));
+};
 
 /**
  * Pertinence d'un document pour une requête.
@@ -152,8 +288,26 @@ export const scoreText = (
     return SCORES.title;
   }
 
-  return haystack && normalize(haystack).includes(needle)
-    ? SCORES.content
+  if (haystack && normalize(haystack).includes(needle)) {
+    return SCORES.content;
+  }
+
+  /**
+   * Les paliers approchés viennent APRÈS, et valent moins que n'importe quelle
+   * correspondance exacte.
+   *
+   * L'ordre est le contrat : une correspondance tolérante ne déplace jamais un
+   * résultat exact. Sans cette garantie, une faute de frappe sur un mot du titre
+   * d'un article pourrait faire remonter cet article devant celui qui contient
+   * réellement le mot cherché — et la recherche deviendrait imprévisible pour
+   * gagner sur un cas rare.
+   */
+  if (fuzzyMatches(title, query)) {
+    return SCORES.fuzzyTitle;
+  }
+
+  return fuzzyMatches(haystack, query)
+    ? SCORES.fuzzyContent
     : SCORES.none;
 };
 

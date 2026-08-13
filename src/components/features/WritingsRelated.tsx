@@ -29,7 +29,7 @@ export const WritingsRelated = ({
   }
 
   return (
-    <Panel>
+    <Panel data-print="hide">
       <PanelHeader title={m.writings_related_title()} />
 
       <PanelContent reset>

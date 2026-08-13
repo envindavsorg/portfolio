@@ -56,7 +56,16 @@ interface BuildCvInput {
   presentLabel: string;
 }
 
-const toEntry = (
+/**
+ * Projette une expérience dans sa forme affichable, dans une locale donnée.
+ *
+ * Exportée parce que les fiches d'expérience (`/experience/[slug]`) ont besoin
+ * exactement de cette projection : titre, société, période, compétences et
+ * puces, résolus avec une locale explicite. Une seconde implémentation
+ * finirait par diverger de celle du CV — et c'est le CV qui sert de source au
+ * PDF envoyé par courriel.
+ */
+export const toExperienceEntry = (
   experience: Experience,
   locale: AppLocale,
   presentLabel: string
@@ -90,7 +99,7 @@ export const buildCv = ({
   presentLabel,
 }: BuildCvInput): CvDocument => {
   const entries = experiences.map((experience) =>
-    toEntry(experience, locale, presentLabel)
+    toExperienceEntry(experience, locale, presentLabel)
   );
 
   const jobs = experiences

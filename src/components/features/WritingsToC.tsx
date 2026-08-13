@@ -75,7 +75,7 @@ const Content = ({ groups, activeUrl }: ContentProps) => {
   }, [setOpen]);
 
   return (
-    <div className="flex flex-col px-3 pt-1 pb-3">
+    <div data-print="hide" className="flex flex-col px-3 pt-1 pb-3">
       {groups.map((group, groupIndex) => {
         const isParentActive = group.parent.url === activeUrl;
         const hasChildren = group.children.length > 0;

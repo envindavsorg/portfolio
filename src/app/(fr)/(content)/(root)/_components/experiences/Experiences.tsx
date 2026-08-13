@@ -1,4 +1,5 @@
 import { CaretDownIcon } from "@phosphor-icons/react/ssr";
+import Link from "next/link";
 
 import {
   Collapsible,
@@ -14,7 +15,7 @@ import {
 import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import { m } from "@/paraglide/messages";
-import { getLocale } from "@/paraglide/runtime";
+import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { EXPERIENCES } from "./content";
 import { ExperienceItem } from "./ExperienceItem";
@@ -107,8 +108,17 @@ export const Experiences = () => {
           </CollapsibleContent>
         )}
 
-        {hasHidden && (
-          <PanelFooter>
+        {/* le pied est rendu même sans contenu replié : c'est lui qui porte le
+          lien vers les fiches de poste, et une section dont toutes les entrées
+          sont visibles n'aurait alors plus aucun lien vers /experience */}
+        <PanelFooter>
+          <Button asChild variant="outline">
+            <Link href={localizeHref("/experience")}>
+              {m.showcase_all_experience()}
+            </Link>
+          </Button>
+
+          {hasHidden && (
             <CollapsibleTrigger asChild>
               <Button
                 className="group flex items-center gap-2"
@@ -126,8 +136,8 @@ export const Experiences = () => {
                 />
               </Button>
             </CollapsibleTrigger>
-          </PanelFooter>
-        )}
+          )}
+        </PanelFooter>
       </Collapsible>
     </Panel>
   );

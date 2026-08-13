@@ -16,6 +16,10 @@ const content = `
 
 - [Mes certifications](https://cuzeacflorin.fr/certifications.md): Les certifications que j'ai obtenues.
 
+- [Ce que j'utilise](https://cuzeacflorin.fr/uses.md): Les outils, langages et services avec lesquels je travaille.
+
+- [En ce moment](https://cuzeacflorin.fr/now.md): Ce sur quoi je travaille actuellement, dérivé du dépôt lui-même.
+
 ## Blog et registre de composants
 
 Je partage régulièrement des articles sur le développement front-end, les meilleures pratiques, et des tutoriels sur mon blog.
