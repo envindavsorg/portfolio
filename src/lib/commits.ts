@@ -171,3 +171,42 @@ export const getMonthLabels = (
     return true;
   });
 };
+
+/** 52 semaines, comme le calendrier que GitHub affiche lui-même */
+const CONTRIBUTION_WEEKS = 52;
+const DAYS_PER_WEEK = 7;
+const MS_PER_DAY = 86_400_000;
+
+export interface ContributionWindow {
+  from: Date;
+  to: Date;
+}
+
+/**
+ * La fenêtre du graphe de contributions : 52 semaines GLISSANTES.
+ *
+ * Elle était calculée sur l'année CIVILE — `${année}-01-01` à `${année}-12-31`.
+ * Le graphe se vidait donc chaque 1er janvier et mettait douze mois à se
+ * reremplir : au matin du Nouvel An, le widget vedette de la page d'accueil
+ * n'affichait plus qu'une seule journée de contributions. Le défaut n'était
+ * visible qu'un jour par an, ce qui explique qu'il ait survécu.
+ *
+ * Le début est ramené au dimanche : GitHub renvoie des semaines commençant un
+ * dimanche, et sans cet alignement la première colonne de la grille serait
+ * tronquée et tout le calendrier décalé d'autant.
+ *
+ * L'instant de référence est un PARAMÈTRE et non `new Date()` : c'est ce qui
+ * rend la fonction testable, et c'est la convention des modules purs de ce
+ * dépôt (voir `datetime.ts`).
+ */
+export const contributionWindow = (now: Date): ContributionWindow => {
+  const from = new Date(
+    now.getTime() -
+      (CONTRIBUTION_WEEKS * DAYS_PER_WEEK - 1) * MS_PER_DAY
+  );
+
+  from.setUTCHours(0, 0, 0, 0);
+  from.setUTCDate(from.getUTCDate() - from.getUTCDay());
+
+  return { from, to: now };
+};

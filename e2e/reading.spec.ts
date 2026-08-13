@@ -345,3 +345,46 @@ test.describe("plan du document", () => {
     });
   }
 });
+
+/**
+ * Les encarts d'avertissement.
+ *
+ * `remark-gfm` ne transforme PAS `> [!NOTE]` : il rend un blockquote contenant
+ * le texte littéral `[!NOTE]`. Les mises en garde des articles se lisaient donc
+ * comme des paragraphes ordinaires.
+ */
+test.describe("encarts d'avertissement", () => {
+  for (const [path, label] of [
+    ["/articles/how-i-write-css", "attention"],
+    ["/en/articles/how-i-write-css", "warning"],
+  ] as const) {
+    test(`${path} rend l'encart et son libellé traduit`, async ({
+      page,
+    }) => {
+      await page.goto(path);
+
+      const callout = page.locator('[data-callout="warning"]');
+      await expect(callout).toBeVisible();
+
+      // le genre est porté par du TEXTE : la couleur ne doit jamais être le
+      // seul véhicule de l'information
+      await expect(callout).toContainText(label);
+
+      // et le marqueur brut ne doit plus apparaître à l'écran
+      await expect(callout).not.toContainText("[!WARNING]");
+    });
+  }
+
+  test("un blockquote ordinaire reste un blockquote", async ({
+    page,
+  }) => {
+    await page.goto("/articles/how-i-write-css");
+
+    // sinon le plugin transformerait toutes les citations en encarts
+    const quotes = await page.locator("blockquote").count();
+    const callouts = await page.locator("[data-callout]").count();
+
+    expect(callouts).toBeGreaterThan(0);
+    expect(quotes).not.toBe(callouts);
+  });
+});

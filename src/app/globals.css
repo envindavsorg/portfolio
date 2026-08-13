@@ -25,6 +25,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-info: var(--info);
+  --color-warning: var(--warning);
   --color-success: var(--success);
   --color-destructive: var(--destructive);
   --color-link: var(--link);
@@ -121,6 +122,15 @@
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.705 0.015 286.067);
   --info: oklch(0.67 0.17 244.98);
+  /**
+   * `--warning` n'existait pas, et `--info` n'était déclaré qu'ici — donc en
+   * thème sombre l'encart « à noter » aurait hérité de la valeur claire.
+   *
+   * Ces accents ne colorent qu'une bordure et une icône, jamais du texte
+   * porteur d'information : le seuil applicable est celui d'un composant
+   * d'interface, 3:1, et non 4,5:1.
+   */
+  --warning: oklch(0.68 0.16 62);
   --success: oklch(0.723 0.219 149.579);
   --destructive: var(--color-red-600);
   --link: oklch(0.488 0.243 264.376);
@@ -154,6 +164,8 @@
   --border: oklch(0.274 0.006 286.033);
   --input: oklch(0.274 0.006 286.033);
   --ring: oklch(0.552 0.016 285.938);
+  --info: oklch(0.75 0.14 244.98);
+  --warning: oklch(0.79 0.14 62);
   --success: oklch(0.723 0.219 149.579);
   --destructive: var(--color-red-300);
   --link: oklch(0.623 0.214 259.815);

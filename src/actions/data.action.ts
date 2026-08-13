@@ -4,7 +4,10 @@ import { unstable_cache } from "next/cache";
 
 import GLOBAL_DATA from "@/data/global";
 import { env } from "@/env";
-import { contributionLevelToNumber } from "@/lib/commits";
+import {
+  contributionLevelToNumber,
+  contributionWindow,
+} from "@/lib/commits";
 import { logger } from "@/lib/logger";
 import { octokit } from "@/lib/octokit";
 
@@ -33,11 +36,18 @@ const fetchGitHubData = async (): Promise<GitHubData> => {
     throw new Error("GITHUB_USERNAME is not configured");
   }
 
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const from = new Date(`${currentYear}-01-01T00:00:00Z`);
-  const to = new Date(`${currentYear}-12-31T23:59:59Z`);
+  // fenêtre GLISSANTE : sur l'année civile, le graphe se vidait chaque
+  // 1er janvier et mettait douze mois à se reremplir
+  const { from, to } = contributionWindow(new Date());
 
+  // `privacy: PUBLIC` : le token voit AUSSI les dépôts privés de l'employeur.
+  // Le filtrage est demandé à GitHub plutôt que fait après coup — un filtre
+  // oublié côté client publierait des noms de dépôts privés sur la page
+  // d'accueil, et rien dans l'interface ne le signalerait.
+  //
+  // `orderBy: PUSHED_AT` : `first: 100` tronque, et sans ordre explicite la
+  // troncature porte sur une centaine ARBITRAIRE de dépôts. Avec l'ordre, ce
+  // sont les cent derniers poussés — un sous-ensemble qu'on peut nommer.
   const { user } = await octokit<GitHubDataResponse>(
     `query ($owner: String!, $from: DateTime!, $to: DateTime!) {
 	        user(login: $owner) {
@@ -50,12 +60,27 @@ const fetchGitHubData = async (): Promise<GitHubData> => {
 	            following {
 	                totalCount
 	            }
-	            repositories(ownerAffiliations: OWNER, first: 100) {
+	            repositories(ownerAffiliations: OWNER, privacy: PUBLIC, first: 100, orderBy: { field: PUSHED_AT, direction: DESC }) {
 	                nodes {
-	                    stargazers {
-	                        totalCount
-	                    }
+	                    name
+	                    description
+	                    url
+	                    stargazerCount
+	                    forkCount
+	                    pushedAt
 	                    isFork
+	                    isArchived
+	                    primaryLanguage {
+	                        name
+	                        color
+	                    }
+	                    repositoryTopics(first: 6) {
+	                        nodes {
+	                            topic {
+	                                name
+	                            }
+	                        }
+	                    }
 	                    languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
 	                        edges {
 	                            size
@@ -106,7 +131,7 @@ const fetchGitHubData = async (): Promise<GitHubData> => {
     name: user.name,
     repositories: user.repositories.nodes,
     stars: user.repositories.nodes.reduce(
-      (total, repo) => total + repo.stargazers.totalCount,
+      (total, repo) => total + (repo.stargazerCount ?? 0),
       0
     ),
   };

@@ -13,6 +13,7 @@ import { CodeBlockCommand } from "@/components/blog/CodeBlockCommand";
 import { CodeCollapsibleWrapper } from "@/components/blog/CodeCollapsibleWrapper";
 import { ComponentPreview } from "@/components/blog/ComponentPreview";
 import { ComponentSource } from "@/components/blog/ComponentSource";
+import { Callout } from "@/components/markdown/Callout";
 import { CopyButton } from "@/components/primitives/Button";
 import {
   Code,
@@ -26,6 +27,7 @@ import {
   CODE_BLOCK_BACKGROUND,
   rehypeShikiContrast,
 } from "@/lib/rehype-shiki-contrast";
+import { remarkAlert } from "@/lib/remark-alert";
 import { remarkCodeImport } from "@/lib/remark-code-import";
 import { cn } from "@/lib/utils";
 
@@ -70,6 +72,7 @@ const getIconForLanguageExtension = (language: string) => {
 };
 
 const components: MDXRemoteProps["components"] = {
+  Callout,
   CodeCollapsibleWrapper,
   ComponentPreview,
   ComponentSource,
@@ -245,7 +248,9 @@ const options: MDXRemoteProps["options"] = {
       rehypeNpmCommand,
       [rehypeAddQueryParams],
     ],
-    remarkPlugins: [remarkGfm, remarkCodeImport],
+    // APRÈS remarkGfm, qui produit le blockquote que remarkAlert repose en
+    // Callout — remark-gfm ne transforme pas les alertes GitHub lui-même
+    remarkPlugins: [remarkGfm, remarkCodeImport, remarkAlert],
   },
 };
 

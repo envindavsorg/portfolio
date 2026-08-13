@@ -16,6 +16,7 @@ import { Experiences } from "@/app/(fr)/(content)/(root)/_components/experiences
 import { Header } from "@/app/(fr)/(content)/(root)/_components/header/Header";
 import { Overview } from "@/app/(fr)/(content)/(root)/_components/overview/Overview";
 import { Projects } from "@/app/(fr)/(content)/(root)/_components/projects/Projects";
+import { Repos } from "@/app/(fr)/(content)/(root)/_components/repos/Repos";
 import { TechStack } from "@/app/(fr)/(content)/(root)/_components/stack/Stack";
 import { Tools } from "@/app/(fr)/(content)/(root)/_components/tools/Tools";
 import { Divider } from "@/components/base/Divider";
@@ -80,6 +81,15 @@ const Page = () => (
       <SectionBoundary>
         <Suspense>
           <Commits />
+        </Suspense>
+      </SectionBoundary>
+      <Divider />
+      {/* juste après les statistiques : les deux sections lisent la même
+        réponse GitHub, et les lire d'affilée évite au lecteur de revenir en
+        arrière pour relier un graphe de contributions à ce qui l'a produit */}
+      <SectionBoundary>
+        <Suspense>
+          <Repos />
         </Suspense>
       </SectionBoundary>
       <Divider />

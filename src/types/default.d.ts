@@ -44,6 +44,28 @@ interface GitHubLanguageNode {
   } | null;
 }
 
+/**
+ * un dépôt public, tel qu'il est affiché en carte sur la page d'accueil
+ *
+ * Tout est optionnel : ces champs viennent d'une API distante, et un `null`
+ * inattendu ne doit pas casser le rendu de la page d'accueil. `src/lib/repos.ts`
+ * écarte les nœuds inexploitables.
+ */
+interface GitHubRepoNode extends GitHubLanguageNode {
+  name?: string | null;
+  description?: string | null;
+  url?: string | null;
+  stargazerCount?: number | null;
+  forkCount?: number | null;
+  /** date ISO du dernier push */
+  pushedAt?: string | null;
+  isArchived?: boolean;
+  primaryLanguage?: { name: string; color: string | null } | null;
+  repositoryTopics?: {
+    nodes: ({ topic: { name: string } } | null)[] | null;
+  } | null;
+}
+
 interface GitHubData {
   login: string;
   name: string;
@@ -52,8 +74,8 @@ interface GitHubData {
   following: number;
   stars: number;
   contributions: ContributionDay[];
-  /** dépôts publics, pour agréger les langages */
-  repositories: GitHubLanguageNode[];
+  /** dépôts publics : agrégat des langages et cartes de la page d'accueil */
+  repositories: GitHubRepoNode[];
 }
 
 interface GitHubDataResponse {
@@ -64,9 +86,7 @@ interface GitHubDataResponse {
     followers: { totalCount: number };
     following: { totalCount: number };
     repositories: {
-      nodes: ({
-        stargazers: { totalCount: number };
-      } & GitHubLanguageNode)[];
+      nodes: GitHubRepoNode[];
     };
     contributionsCollection: {
       contributionCalendar: {

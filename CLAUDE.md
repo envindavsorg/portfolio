@@ -127,7 +127,7 @@ src/app/
 
 - Homepage sections live in `src/app/(fr)/(content)/(root)/_components/`
   (about, articles, branding, certs, commits, cover, cv, experiences, header,
-  overview, projects, stack, tools). Static data co-located in `content.ts`
+  overview, projects, repos, stack, tools). Static data co-located in `content.ts`
   files next to their section.
 - Site chrome in `src/components/layout/` (navbar/, footer/, RootDocument,
   NotFoundContent).
@@ -224,7 +224,13 @@ the component registry:
 - `related.ts` - related-post scoring by shared tags
 - `feed.ts` / `feed-routes.ts` - RSS 2.0 + JSON Feed 1.1 serialisation and the
   shared response helpers
-- `github-stats.ts` - language aggregation across repos (forks excluded)
+- `github-stats.ts` - language aggregation across repos (forks excluded). Owns
+  `DEFAULT_LANGUAGE_COLOR`, shared with `repos.ts` so the same language never
+  gets two different dots
+- `repos.ts` - which public repos become homepage cards, and in what order.
+  Ranking is stars, then `pushedAt`, then name: personal repos are mostly at zero
+  stars, so ties are the rule and a single key would leave the order to whatever
+  the API happened to return
 - `rate-limit.ts` - sliding-window limiter; blocked attempts do NOT extend the
   window
 - `jwt.ts`, `diff.ts`, `hash.ts` - the logic behind the `/utils` tools
@@ -294,6 +300,11 @@ End-to-end tests (Playwright, `e2e/`):
   top, tablist keyboard contract
 - `utils-tools.spec.ts` / `utils-tools-2.spec.ts` - the eight `/utils` tools
 - `tags.spec.ts` / `series.spec.ts` - tag and series pages, both language trees
+- `repos.spec.ts` - the GitHub repo cards. Asserts the INVARIANT (exactly one of
+  cards / unavailable notice, never both, never neither) rather than the cards
+  themselves: CI builds with a placeholder token and never sees live repos, so a
+  test demanding cards would only ever fail. Card content is tested in
+  `src/lib/repos.test.ts`
 - `search-page.spec.ts` - the `/search` page and its agreement with the palette
 - `playground.spec.ts` - the component playground and its generated code
 - `offline.spec.ts` - the service worker, with the network genuinely cut

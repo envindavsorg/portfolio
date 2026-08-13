@@ -56,6 +56,11 @@ With Cursor, I can describe a component in natural language and get idiomatic JS
 
 Never. `@apply` creates a useless layer of indirection. If I need to reuse styles, I extract a React component. Reuse happens at the component level, not at the CSS level.
 
+> [!WARNING]
+> `@apply` also breaks readability: the class no longer says what it does, and
+> you have to open the stylesheet to find out. That is exactly what Tailwind was
+> supposed to remove.
+
 ### No custom CSS files
 
 My only CSS file is Tailwind v4's `globals.css` — the entry point with the `@import`s and the few unavoidable global variables (custom fonts, complex animations). Everything else is utility-based, directly in the JSX.

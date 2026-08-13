@@ -157,3 +157,49 @@ test.describe("accessibilité en thème sombre", () => {
     });
   }
 });
+
+/**
+ * Les surfaces INTERACTIVES.
+ *
+ * Le scan couvrait 18 URL et un seul état ouvert, le bac à sable. La palette ⌘K,
+ * la feuille de raccourcis et la modale d'envoi de CV n'étaient jamais auditées :
+ * un composant fermé n'est pas rendu, donc axe ne le voit pas. Ce sont pourtant
+ * les surfaces les plus riches en champs, en rôles et en pièges de focus.
+ */
+test.describe("accessibilité des surfaces interactives", () => {
+  test("la palette de commandes ouverte est conforme", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    await page.keyboard.press("ControlOrMeta+k");
+    await expect(page.getByPlaceholder(/./u)).toBeVisible();
+
+    expect(await scan(page)).toEqual([]);
+  });
+
+  test("la feuille de raccourcis ouverte est conforme", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    await page.keyboard.press("?");
+    await expect(
+      page.locator('[data-slot="shortcuts-sheet"]')
+    ).toBeVisible();
+
+    expect(await scan(page)).toEqual([]);
+  });
+
+  /**
+   * Le formulaire d'envoi de CV n'a PAS de test dédié, volontairement.
+   *
+   * Il est rendu en permanence sur la page d'accueil, donc le scan de « / » le
+   * couvre déjà. Ce qui manquait, ce sont les surfaces qu'il faut ouvrir pour
+   * qu'elles existent : un composant fermé n'est pas dans le DOM, et axe ne peut
+   * rien en dire. (Ma première version cherchait un `<form>` sur « / » et
+   * échouait faute d'en trouver un — le formulaire n'utilise pas cette balise.)
+   */
+});
