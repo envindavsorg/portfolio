@@ -10,6 +10,14 @@ interface OpenGraphImageParams {
   type?: string;
   /** locale du badge de la carte ; le défaut reste le français */
   locale?: AppLocale;
+  /**
+   * Ligne de contexte de la carte, séparée par « · » ou par des virgules.
+   *
+   * Ce que chaque gabarit en fait lui appartient : la fiche de poste en tire sa
+   * période, le projet ses pastilles de stack, l'article sa date et son temps de
+   * lecture. L'appelant fournit l'information, pas la mise en forme.
+   */
+  meta?: string;
 }
 
 interface ArticleParams {
@@ -109,12 +117,16 @@ const absoluteUrl = (path: string, locale: AppLocale): string => {
 export const openGraphImage = ({
   description,
   locale,
+  meta,
   title,
   type = "homepage",
 }: OpenGraphImageParams): string => {
   const params = new URLSearchParams({ title: title.trim(), type });
   if (description?.trim()) {
     params.set("description", description.trim());
+  }
+  if (meta?.trim()) {
+    params.set("meta", meta.trim());
   }
   // les cartes des pages /en portaient un badge en français
   if (locale === "en") {
@@ -217,6 +229,14 @@ export const createContentMetadata = (
     locale,
     ogImageParams: {
       description,
+      /**
+       * La date et le temps de lecture, que la carte affiche en pied.
+       *
+       * Ils sont déjà calculés par `content.ts` et affichés sur la page : les
+       * porter jusqu'à l'aperçu ne coûte rien et répond à la question qu'on se
+       * pose devant un lien partagé — est-ce récent, et est-ce long.
+       */
+      meta: `${content.reading.time} · ${createdAt.toISOString().slice(0, 10)}`,
       title,
       type: category ? OG_TYPE_BY_CATEGORY[category] : undefined,
     },

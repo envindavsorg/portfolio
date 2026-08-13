@@ -243,6 +243,10 @@ the component registry:
 - `github-stats.ts` - language aggregation across repos (forks excluded). Owns
   `DEFAULT_LANGUAGE_COLOR`, shared with `repos.ts` so the same language never
   gets two different dots
+- `og.ts` - social-card identity per page type: family, palette, badge wording,
+  truncation and title sizing. Badge contrast is asserted with the site's own
+  `contrast.ts` — an OG image is never scanned by axe, which is precisely why the
+  pairs are measured (the first ones sat at 3.95:1)
 - `showcase.ts` - which projects and roles get their own page, in what order, and
   the previous/next pair. The `id` in the data IS the slug: it is identical in both
   locales, so a shared URL lands on the same item — the tag lesson applied. The
@@ -372,8 +376,16 @@ falling back to zeroed GitHub widgets rather than failing.
 ## Important Notes
 
 - **Port**: Dev server on 1408 (not 3000)
-- **OG Images**: Dynamic via `GET /api/og?type=blog&title=...`, helpers
-  (`openGraphImage`, `BASE_URL`) in `src/lib/metadata.ts`
+- **OG Images**: Dynamic via `GET /api/og?type=…&title=…&description=…&meta=…`,
+  helpers (`openGraphImage`, `BASE_URL`) in `src/lib/metadata.ts`. Six templates,
+  one per family, picked by `ogFamily()` in `src/lib/og.ts` (palettes, badges and
+  thresholds live there and are unit-tested; the route only composes JSX). Satori
+  constraints: flexbox only, explicit `display: flex` on every multi-child node —
+  and it does NOT decode the site's `.webp`, which crashed the homepage card with
+  `u2 is not iterable`, so cards use no raster image at all. A failed render falls
+  back to a card that IGNORES the requested title, so a broken font silently
+  serves one identical image for the whole site: `e2e/og.spec.ts` compares bytes
+  across titles and types to catch exactly that
 - **Sound**: `src/lib/sound-manager.ts` plays sounds on certain interactions
 - **CV delivery**: PDF emailed via Resend with React Email template
 - **Capture scripts**: `pnpm capture:*` drive Puppeteer against `/og` and

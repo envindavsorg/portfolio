@@ -55,6 +55,9 @@ export const buildProjectMetadata = async ({
     locale,
     ogImageParams: {
       description: entry.title,
+      // la stack en pastilles sur la carte : c'est ce qu'on regarde en premier
+      // sur un projet partagé
+      meta: entry.skills.slice(1, 5).join(", "),
       title: entry.name,
       type: "project",
     },
