@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -9,7 +9,7 @@ import { describe, expect, it } from "vitest";
  * `public/r/*.json` est ce que `npx shadcn add` télécharge. Les quatre payloads
  * avaient dérivé de leur source : `theme-switcher.json` distribuait encore
  * `SunIcon` alors que le composant importe `Sun`, et les trois autres portaient
- * un formatage antérieur à oxfmt.
+ * un formatage antérieur au formateur en place.
  *
  * Rien ne pouvait le voir. Le site lui-même n'utilise JAMAIS ces fichiers : les
  * blocs de code des pages /components sont lus sur le disque par

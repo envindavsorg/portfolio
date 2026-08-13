@@ -3,8 +3,8 @@
 import { useMotionValueEvent, useScroll } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { forwardRef, useEffect, useRef } from "react";
 import type { ComponentProps } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";

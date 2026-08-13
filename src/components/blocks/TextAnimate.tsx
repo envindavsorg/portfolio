@@ -1,9 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import type { MotionProps, Variants } from "motion/react";
-import { memo } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import type { ElementType } from "react";
+import { memo } from "react";
 
 import { cn } from "@/lib/utils";
 

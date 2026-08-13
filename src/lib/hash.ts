@@ -51,9 +51,9 @@ export const randomUuid = (): string => {
 
   // version 4 sur les 4 bits hauts de l'octet 6, variante RFC 4122 sur l'octet 8 :
   // la RFC impose ces masques, il n'y a pas d'équivalent non binaire
-  // oxlint-disable-next-line eslint/no-bitwise -- masques de bits imposés par la RFC 4122
+  // masques de bits imposés par la RFC 4122
   bytes[6] = (bytes[6] & 0x0f) | UUID_V4_VERSION;
-  // oxlint-disable-next-line eslint/no-bitwise -- masques de bits imposés par la RFC 4122
+  // masques de bits imposés par la RFC 4122
   bytes[8] = (bytes[8] & 0x3f) | UUID_V4_FALLBACK_VARIANT;
 
   const hex = Array.from(bytes, (byte) =>

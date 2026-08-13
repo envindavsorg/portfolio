@@ -11,65 +11,64 @@
 				}
 			}
 		},
-		"oxfmt": {
-			"initialization_options": {
-				"settings": {
-					"configPath": null,
-					"flags": {},
-					"fmt.configPath": null,
-					"fmt.experimental": true,
-					"run": "onSave",
-					"typeAware": false,
-					"unusedDisableDirectives": false
-				}
-			}
-		},
-		"oxlint": {
-			"initialization_options": {
-				"settings": {
-					"disableNestedConfig": false,
-					"fixKind": "safe_fix",
-					"run": "onType",
-					"typeAware": true,
-					"unusedDisableDirectives": "deny"
-				}
+		"biome": {
+			"settings": {
+				"require_config_file": true
 			}
 		}
 	},
 	"languages": {
+		"CSS": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
+		"JSON": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
+		"JSONC": {
+			"formatter": {
+				"language_server": {
+					"name": "biome"
+				}
+			}
+		},
 		"JavaScript": {
 			"code_actions_on_format": {
-				"source.fixAll.oxc": true,
-				"source.organizeImports.oxc": true,
-				"source.organizeImports": true
+				"source.fixAll.biome": true,
+				"source.organizeImports.biome": true
 			},
 			"formatter": {
 				"language_server": {
-					"name": "oxfmt"
+					"name": "biome"
 				}
 			}
 		},
 		"TSX": {
 			"code_actions_on_format": {
-				"source.fixAll.oxc": true,
-				"source.organizeImports.oxc": true,
-				"source.organizeImports": true
+				"source.fixAll.biome": true,
+				"source.organizeImports.biome": true
 			},
 			"formatter": {
 				"language_server": {
-					"name": "oxfmt"
+					"name": "biome"
 				}
 			}
 		},
 		"TypeScript": {
 			"code_actions_on_format": {
-				"source.fixAll.oxc": true,
-				"source.organizeImports.oxc": true,
-				"source.organizeImports": true
+				"source.fixAll.biome": true,
+				"source.organizeImports.biome": true
 			},
 			"formatter": {
 				"language_server": {
-					"name": "oxfmt"
+					"name": "biome"
 				}
 			}
 		}

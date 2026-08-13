@@ -17,8 +17,8 @@ import {
 } from "@/components/features/WritingsTagFilter";
 import { WritingsTags } from "@/components/features/WritingsTags";
 import { Prose } from "@/components/primitives/Typography";
-import { getContentByCategory } from "@/lib/content";
 import type { Content, ContentLocale } from "@/lib/content";
+import { getContentByCategory } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
 import { getTagData } from "@/lib/tags";
 import { m } from "@/paraglide/messages";

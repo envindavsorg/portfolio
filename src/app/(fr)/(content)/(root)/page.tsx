@@ -27,8 +27,9 @@ import { PERSON_ID } from "@/lib/json-ld";
 import { createMetadata } from "@/lib/metadata";
 
 const About = dynamic(async () => {
-  const mod =
-    await import("@/app/(fr)/(content)/(root)/_components/about/About");
+  const mod = await import(
+    "@/app/(fr)/(content)/(root)/_components/about/About"
+  );
   return mod.About;
 });
 

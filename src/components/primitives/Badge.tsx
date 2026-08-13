@@ -1,6 +1,6 @@
 import { useRender } from "@base-ui/react/use-render";
-import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import type { ComponentProps, ReactElement } from "react";
 
 import { cn } from "@/lib/utils";

@@ -6,10 +6,5 @@
     "src/paraglide/**",
     "src/registry/**"
   ],
-  "ignoreDependencies": [
-    "babel-plugin-react-compiler",
-    "sharp",
-    "oxfmt",
-    "oxlint"
-  ]
+  "ignoreDependencies": ["babel-plugin-react-compiler", "sharp"]
 }

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import {
   buildTagMetadata,
-  tagStaticParams,
   TagView,
+  tagStaticParams,
 } from "@/app/(fr)/(content)/(writings)/tags/[tag]/page";
 
 // calculé sur le contenu ANGLAIS. Le vocabulaire est désormais partagé — un tag

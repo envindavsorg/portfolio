@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, useCallback, useRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
+import { Fragment, useCallback, useRef, useState } from "react";
 
 import {
   Tooltip,

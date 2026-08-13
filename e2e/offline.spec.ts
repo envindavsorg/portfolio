@@ -163,7 +163,7 @@ test.describe("service worker", () => {
       const hydrated = await page.evaluate(() =>
         Boolean(
           document.querySelector("[data-slot='navbar-wrapper']") ??
-          document.querySelector("nav")
+            document.querySelector("nav")
         )
       );
 

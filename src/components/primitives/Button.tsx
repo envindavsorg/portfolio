@@ -95,10 +95,8 @@ const ICONS = {
   success: Check,
 } as const;
 
-interface CopyButtonProps extends Omit<
-  ComponentProps<"button">,
-  "size"
-> {
+interface CopyButtonProps
+  extends Omit<ComponentProps<"button">, "size"> {
   value?: string;
   getValueAction?: () => Promise<string>;
   variant?: "default" | "outline" | "link" | "ghost";

@@ -132,7 +132,6 @@ test.describe("budget de poids", () => {
        * ci-dessous met ces chiffres dans le journal de chaque exécution, ce qui
        * transforme la prochaine en mesure de référence.
        */
-      // biome-ignore lint/suspicious/noConsole: la trace est le but
       console.log(
         `POIDS ${path} js=${toKib(weights.js)} fonts=${toKib(
           weights.fonts

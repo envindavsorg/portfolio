@@ -1,7 +1,7 @@
 import { logger } from "@/lib/logger";
 
 const waitForEnded = (audio: HTMLAudioElement): Promise<void> =>
-  // oxlint-disable-next-line avoid-new -- bridging the DOM `ended` event into a promise requires the Promise constructor
+  // relier l'événement DOM `ended` à une promesse impose le constructeur Promise
   new Promise<void>((resolve) => {
     const handleEnded = () => {
       audio.removeEventListener("ended", handleEnded);

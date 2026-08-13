@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import {
   buildProjectMetadata,
-  projectStaticParams,
   ProjectView,
+  projectStaticParams,
 } from "@/app/(fr)/(content)/projects/[slug]/page";
 
 // le slug est l'`id` du projet, identique dans les deux langues : les paramètres

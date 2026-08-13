@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
 import type { TargetAndTransition } from "motion/react";
+import { motion } from "motion/react";
 import type { ComponentProps } from "react";
 
 const initial: TargetAndTransition = { opacity: 0, pathLength: 0 };

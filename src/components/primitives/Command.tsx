@@ -1,8 +1,8 @@
 "use client";
 
 import { Command as CommandPrimitive, useCommandState } from "cmdk";
-import { useEffect, useRef } from "react";
 import type { ComponentProps } from "react";
+import { useEffect, useRef } from "react";
 
 import { Frown } from "@/components/motion/Frown";
 import { Search } from "@/components/motion/Search";

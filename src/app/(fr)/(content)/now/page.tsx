@@ -9,7 +9,7 @@ import { PixelHeading } from "@/components/blocks/PixelHeading";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { Badge } from "@/components/primitives/Badge";
 import { Prose } from "@/components/primitives/Typography";
-import { toContentLocale, getContentByCategory } from "@/lib/content";
+import { getContentByCategory, toContentLocale } from "@/lib/content";
 import { toExperienceEntry } from "@/lib/cv";
 import { formatDate } from "@/lib/functions";
 import type { AppLocale } from "@/lib/i18n";

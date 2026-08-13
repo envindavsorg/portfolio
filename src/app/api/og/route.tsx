@@ -34,7 +34,7 @@ import {
 export const runtime = "nodejs";
 
 const FONT_PATH = join(
-  // oxlint-disable-next-line unicorn/prefer-import-meta-properties -- import.meta.dirname est undefined sous Turbopack
+  // `import.meta.dirname` est undefined sous Turbopack
   dirname(fileURLToPath(import.meta.url)),
   "fonts"
 );

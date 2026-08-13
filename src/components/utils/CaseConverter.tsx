@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import type { ChangeEvent } from "react";
+import { useMemo, useState } from "react";
 
 import { Label } from "@/components/base/Label";
 import { CopyButton } from "@/components/primitives/Button";

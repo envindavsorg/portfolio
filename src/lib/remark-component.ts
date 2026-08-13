@@ -131,7 +131,13 @@ export const remarkComponent = () => async (tree: UnistTree) => {
         handleComponentPreview(node, parent, index);
       }
     } catch (error) {
-      logger.error(error);
+      // tslog 5 exige une chaîne en premier argument : l'erreur passe en
+      // argument supplémentaire, ce qui garde sa pile plutôt que de la réduire
+      // à un `[object Object]` via une interpolation
+      logger.error(
+        `injection de composant impossible (${node.name})`,
+        error
+      );
     }
   });
 };

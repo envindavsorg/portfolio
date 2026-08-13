@@ -1,5 +1,5 @@
-import { getAllContent } from "@/lib/content";
 import type { Content } from "@/lib/content";
+import { getAllContent } from "@/lib/content";
 
 const allPosts: Content[] = getAllContent();
 

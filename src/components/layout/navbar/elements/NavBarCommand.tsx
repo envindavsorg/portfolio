@@ -1,8 +1,9 @@
 "use client";
 
 import { useCommandState } from "cmdk";
-import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import type { RefObject } from "react";
 import {
   memo,
   useCallback,
@@ -11,7 +12,6 @@ import {
   useRef,
   useState,
 } from "react";
-import type { RefObject } from "react";
 import { toast } from "sonner";
 
 import { Copy } from "@/components/motion/Copy";

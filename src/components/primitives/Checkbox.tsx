@@ -2,14 +2,14 @@
 
 import { Checkbox as Primitive } from "@base-ui/react/checkbox";
 import { CheckIcon } from "@phosphor-icons/react";
-import { motion } from "motion/react";
 import type { HTMLMotionProps } from "motion/react";
-import { forwardRef, useCallback, useEffect, useState } from "react";
+import { motion } from "motion/react";
 import type {
   ComponentProps,
   ComponentRef,
   ReactElement,
 } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
