@@ -4,7 +4,7 @@ import { UsesPage } from "@/app/(fr)/(content)/uses/page";
 import { createMetadata } from "@/lib/metadata";
 
 const pageDescription =
-  "The tools florin cuzeac works with: this site's stack, the languages, the tooling and the services it depends on.";
+  "The tools florin cuzeac works with: this site's stack, the languages, the tooling, the services it depends on and the development environment.";
 
 export const metadata: Metadata = createMetadata({
   description: pageDescription,

@@ -66,8 +66,27 @@ export const PanelHeader = forwardRef<
         return;
       }
 
+      /**
+       * Collé signifie AU-DESSUS du cadre, pas « hors du cadre ».
+       *
+       * La version précédente posait `isStuck = !entry.isIntersecting`. Or une
+       * sentinelle est hors du cadre dans DEUX cas opposés : quand on a défilé
+       * au-delà — le titre est bien collé — et quand on ne l'a pas encore
+       * atteinte. Tout titre sous la ligne de flottaison se croyait donc collé au
+       * chargement, affichait sa forme « -- titre -- », puis changeait de texte
+       * en entrant à l'écran. Ce changement de contenu en pleine vie du composant
+       * est ce qui laissait les titres à `opacity: 0`, c'est-à-dire des bandes
+       * vides à la place des intitulés de section.
+       *
+       * `boundingClientRect.top < 0` lève l'ambiguïté : la sentinelle est passée
+       * au-dessus du bord haut.
+       */
       const observer = new IntersectionObserver(
-        ([entry]) => setIsStuck(!entry.isIntersecting),
+        ([entry]) => {
+          setIsStuck(
+            !entry.isIntersecting && entry.boundingClientRect.top < 0
+          );
+        },
         { rootMargin: "-57px 0px 0px 0px", threshold: 0 }
       );
       observer.observe(sentinelRef.current);

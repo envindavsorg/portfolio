@@ -11,12 +11,17 @@ import { m } from "@/paraglide/messages";
  * `package.json`, les workflows ou les compétences déjà déclarées dans les
  * expériences — un lecteur peut donc les contrôler ligne par ligne.
  *
- * Ce qui n'est PAS ici, et qui ne peut pas l'être sans que le propriétaire du
- * site le renseigne lui-même : le matériel (machine, clavier, écran), l'éditeur,
- * le terminal, la police de l'éditeur, les extensions. Rien dans le dépôt ne
- * permet de les connaître, et les deviner produirait une page fausse — ce qui est
- * exactement le défaut que cette page est censée éviter. Le groupe existe
- * ci-dessous, vide : tant qu'il l'est, il n'est pas rendu.
+ * Le groupe « environnement » suit la même règle, et c'est le dépôt qui le
+ * remplit : `.zed/settings.json` est VERSIONNÉ (le `/.zed` du `.gitignore` ne
+ * couvre pas un fichier déjà suivi), tout comme `.node-version`, `.editorconfig`
+ * et `.claude/settings.json`. Chacune de ces entrées se contrôle en ouvrant le
+ * fichier correspondant.
+ *
+ * Ce qui n'y est toujours PAS, et ne peut pas y être sans que le propriétaire du
+ * site le renseigne lui-même : le matériel — machine, clavier, écran — et la
+ * police de l'éditeur. Aucun fichier n'en parle, et les deviner produirait une
+ * page fausse : exactement le défaut que cette page est censée éviter. Un groupe
+ * vide n'est de toute façon pas rendu (voir `usesGroups`).
  */
 
 export interface UsesItem {
@@ -96,6 +101,28 @@ export const USES: UsesGroup[] = [
     ],
     note: m.uses_group_services_note,
     title: m.uses_group_services,
+  },
+  {
+    id: "environment",
+    items: [
+      // `.zed/settings.json` : format à l'enregistrement, oxfmt et oxlint en LSP
+      { link: "https://zed.dev/", name: "Zed" },
+      {
+        link: "https://github.com/typescript-language-server/typescript-language-server",
+        name: "typescript-language-server",
+      },
+      // `.node-version`
+      { link: "https://nodejs.org/", name: "Node.js 25" },
+      // `.editorconfig` : tabulations, LF, UTF-8
+      { link: "https://editorconfig.org/", name: "EditorConfig" },
+      // `.claude/settings.json` : `pnpm fix` après chaque écriture
+      {
+        link: "https://claude.com/claude-code",
+        name: "Claude Code",
+      },
+    ],
+    note: m.uses_group_environment_note,
+    title: m.uses_group_environment,
   },
 ];
 

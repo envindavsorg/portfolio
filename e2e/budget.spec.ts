@@ -123,6 +123,24 @@ test.describe("budget de poids", () => {
       await page.goto(path);
       await page.waitForLoadState("networkidle");
 
+      /**
+       * La mesure est JOURNALISÉE, pas seulement comparée.
+       *
+       * Les plafonds ont été posés sur des mesures locales, faute de connaître
+       * celles de l'intégration continue : sans trace, resserrer davantage
+       * revenait à parier sur un environnement qu'on ne voit pas. La ligne
+       * ci-dessous met ces chiffres dans le journal de chaque exécution, ce qui
+       * transforme la prochaine en mesure de référence.
+       */
+      // biome-ignore lint/suspicious/noConsole: la trace est le but
+      console.log(
+        `POIDS ${path} js=${toKib(weights.js)} fonts=${toKib(
+          weights.fonts
+        )} css=${toKib(weights.css)} images=${toKib(
+          weights.images
+        )} document=${toKib(weights.document)}`
+      );
+
       // message explicite : un budget dépassé doit dire de combien, sinon la
       // première réaction est d'élargir le plafond au hasard
       expect(
