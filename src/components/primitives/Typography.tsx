@@ -3,15 +3,29 @@ import type React from "react";
 import type { ReactElement } from "react";
 
 import { cn } from "@/lib/utils";
+import { m } from "@/paraglide/messages";
 
 const PROSE_CLASSNAME = cn(
   "prose prose-sm prose-zinc dark:prose-invert max-w-none",
   // headings
   "prose-headings:text-balance prose-headings:font-pixel-square prose-headings:font-semibold prose-headings:text-foreground",
+  /**
+   * Échelle translatée d'un cran, pour que le décalage des titres MDX ne change
+   * RIEN à l'écran.
+   *
+   * Les corps MDX utilisaient `#` pour leurs sections : chaque page rendait donc
+   * un `<h1>` de titre plus un `<h1>` par section, soit un plan de document plat
+   * — une vraie faiblesse d'accessibilité et de référencement. Tout est descendu
+   * d'un niveau ; sans ce réajustement, chaque titre de section aurait rétréci.
+   *
+   * Les identifiants, eux, ne bougent pas : rehype-slug les dérive du TEXTE, le
+   * niveau ne servant que de garde booléenne. Les ancres partagées survivent.
+   */
   "prose-h1:mt-10 prose-h1:mb-4 prose-h1:text-xl",
-  "prose-h2:mt-8 prose-h2:mb-3 prose-h2:text-lg",
-  "prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-base",
-  "prose-h4:mt-5 prose-h4:mb-2 prose-h4:text-sm",
+  "prose-h2:mt-10 prose-h2:mb-4 prose-h2:text-xl",
+  "prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-lg",
+  "prose-h4:mt-6 prose-h4:mb-2 prose-h4:text-base",
+  "prose-h5:mt-5 prose-h5:mb-2 prose-h5:text-sm",
   // body text
   "prose-p:my-3 prose-p:leading-relaxed",
   "prose-lead:text-base prose-lead:text-muted-foreground",
@@ -102,9 +116,38 @@ export const Heading = <T extends HeadingTypes = "h1">({
     return <Comp className={className} {...props} />;
   }
 
+  /**
+   * Une ancre cliquable, quand le titre porte un identifiant.
+   *
+   * Les deux branches de ce composant rendaient exactement le même élément : le
+   * `if (!props.id)` était du code mort, vestige d'une ancre jamais écrite.
+   * Pourtant `rehypeSlug` est câblé depuis le début et le sommaire prouve que
+   * les identifiants résolvent — partager une section demandait donc d'ouvrir
+   * les outils de développement pour aller lire l'id à la main.
+   *
+   * Trois contraintes tenues :
+   * - l'`id` reste sur l'élément de TITRE et non sur l'ancre : `useActiveItem`
+   *   fait un `querySelector("[id=…]")`, et le déplacer casserait le suivi de
+   *   section pendant le défilement ;
+   * - le lien porte un nom accessible explicite plutôt qu'un « # » nu, qu'un
+   *   lecteur d'écran énoncerait « lien dièse » ;
+   * - il n'apparaît qu'au survol ou au focus, mais reste dans le flux — le faire
+   *   surgir en `absolute` décalerait le titre au premier survol.
+   */
+  const anchor = `#${props.id}`;
+  const title =
+    typeof props.children === "string" ? props.children : anchor;
+
   return (
-    <Comp className={className} {...props}>
-      {props.children}
+    <Comp className={cn("group/heading", className)} {...props}>
+      {props.children}{" "}
+      <a
+        aria-label={m.writings_heading_anchor({ title })}
+        className="ms-1 align-middle text-base text-muted-foreground no-underline opacity-0 transition-opacity focus-visible:opacity-100 group-hover/heading:opacity-100"
+        href={anchor}
+      >
+        #
+      </a>
     </Comp>
   );
 };

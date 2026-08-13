@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { Divider } from "@/components/base/Divider";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
+import { WritingsByline } from "@/components/features/WritingsByline";
 import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
 import { WritingsReadingAids } from "@/components/features/WritingsReadingAids";
@@ -83,6 +84,7 @@ export const UtilView = ({
       <Divider border={false} type="half" />
 
       <WritingsHeading title={title} description={description} />
+      <WritingsByline item={item} withDescription={false} />
 
       <Divider border={false} type="half" />
 

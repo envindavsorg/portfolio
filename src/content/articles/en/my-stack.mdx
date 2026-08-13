@@ -12,7 +12,7 @@ author: "Cuzeac Florin"
 
 People often ask me what tools I use. Here's my current stack — the one where I'm the fastest, the most confident, and the most dangerous when it comes to shipping.
 
-# 1. Framework (Next.js & React)
+## 1. Framework (Next.js & React)
 
 Next.js with the App Router is my foundation. Every one of my projects starts here, no exceptions.
 
@@ -24,7 +24,7 @@ Streaming with `Suspense` and `loading.tsx` files isn't optional in my projects.
 
 The latest AI models are excellent at React — that's a non-negligible advantage when you bring code agents into your workflow.
 
-# 2. Styling (Tailwind CSS)
+## 2. Styling (Tailwind CSS)
 
 Pure Tailwind CSS. No CSS modules, no `@apply`, no custom `.css` files except for ultra-specific animations or unavoidable global variables.
 
@@ -32,7 +32,7 @@ Utility classes live directly in the JSX. The colocation of styles and markup is
 
 On the component side, I favor composition over heavy overlays. If a need can be covered natively with Tailwind and semantic HTML, that's what I do. No extra dependency.
 
-# 3. TypeScript (strict: true, always)
+## 3. TypeScript (strict: true, always)
 
 TypeScript in strict mode, no compromise. The `any` type is formally banned in my projects. If a type is unknown, it's `unknown` with a type guard or Zod validation.
 
@@ -40,7 +40,7 @@ Interfaces for objects, types for unions and intersections. PascalCase for compo
 
 I barely comment anything. If you need a comment to understand what a function does, then the name is bad or the abstraction is shaky.
 
-# 4. Back-End (Express, Fastify & Nest.js)
+## 4. Back-End (Express, Fastify & Nest.js)
 
 On the server side, three tools depending on the context.
 
@@ -48,19 +48,19 @@ On the server side, three tools depending on the context.
 
 In all three cases, strict TypeScript, input validation with Zod, and zero stray `any`.
 
-# 5. Code Quality (Biome.js)
+## 5. Code Quality (Biome.js)
 
 ESLint + Prettier, I'm done with that. Biome.js does both in a single tool, faster, without config sprawl. Formatting, linting, ordered imports — everything goes through Biome.
 
 A single tool. A single source of truth. Less friction, more focus on the real problem.
 
-# 6. AI (Cursor & Agents)
+## 6. AI (Cursor & Agents)
 
 Cursor has become a natural extension of how I code. Editing, refactoring, debugging — code agents handle the repetitive tasks while I focus on architecture and product decisions.
 
 AI is all the more effective when your stack is mainstream and well structured. React + Tailwind + TypeScript is the most AI-friendly combo out there today. The models understand the context, generate idiomatic code, and slot into the flow without friction.
 
-# 7. Patterns & Convictions
+## 7. Patterns & Convictions
 
 Here are the rules I apply day to day — my personal `AGENTS.md`:
 

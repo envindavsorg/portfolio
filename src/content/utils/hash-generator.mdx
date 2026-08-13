@@ -15,13 +15,13 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Utilisation
+## Utilisation
 
 Saisissez un texte pour obtenir son empreinte dans l'algorithme choisi, ou
 générez des UUID v4 d'un clic. Tout est calculé localement via la **Web Crypto
 API** du navigateur : rien ne transite sur le réseau.
 
-# Choisir son algorithme
+## Choisir son algorithme
 
 | Algorithme | Taille   | Quand l'utiliser                                     |
 | ---------- | -------- | ---------------------------------------------------- |
@@ -35,7 +35,7 @@ collisions concrètes ont été produites dès 2017. Il reste présent parce que
 et beaucoup de systèmes plus anciens l'utilisent, mais aucun nouveau projet ne
 devrait s'appuyer dessus.
 
-# Ce que ces empreintes ne font pas
+## Ce que ces empreintes ne font pas
 
 Une empreinte SHA n'est **pas** un moyen de stocker un mot de passe. Elle est
 conçue pour être rapide, ce qui est exactement le défaut recherché par une
@@ -45,7 +45,7 @@ Pour des mots de passe, il faut une fonction lente et paramétrable — **Argon2
 de préférence, sinon **scrypt** ou **bcrypt** — avec un sel unique par
 utilisateur.
 
-# Calculer une empreinte en JavaScript
+## Calculer une empreinte en JavaScript
 
 ```javascript
 const digest = async (text, algorithm = "SHA-256") => {
@@ -62,7 +62,7 @@ L'encodage passe par `TextEncoder` : on hache les **octets UTF-8**, pas les
 unités de code UTF-16. Sans cela, « é » ne produirait pas la même empreinte que
 dans les autres langages.
 
-# Calculer une empreinte en Node.js
+## Calculer une empreinte en Node.js
 
 ```javascript
 import { createHash } from "node:crypto";
@@ -72,7 +72,7 @@ const hash = createHash("sha256")
   .digest("hex");
 ```
 
-# Générer un UUID
+## Générer un UUID
 
 ```javascript
 // contexte sécurisé (https ou localhost)

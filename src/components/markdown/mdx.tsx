@@ -22,6 +22,10 @@ import {
 import { rehypeAddQueryParams } from "@/lib/rehype-add-query-params";
 import { rehypeComponent } from "@/lib/rehype-component";
 import { rehypeNpmCommand } from "@/lib/rehype-npm-command";
+import {
+  CODE_BLOCK_BACKGROUND,
+  rehypeShikiContrast,
+} from "@/lib/rehype-shiki-contrast";
 import { remarkCodeImport } from "@/lib/remark-code-import";
 import { cn } from "@/lib/utils";
 
@@ -104,20 +108,26 @@ const components: MDXRemoteProps["components"] = {
       {...props}
     />
   ),
+  // les titres de SECTION sont désormais des h2 : la couleur de marque et le
+  // décalage d'ancre suivent le rôle sémantique, pas le niveau
   h2: (props: React.ComponentProps<"h2">) => (
-    <Heading as="h2" className="scroll-mt-32" {...props} />
+    <Heading
+      as="h2"
+      className="scroll-mt-32 text-theme!"
+      {...props}
+    />
   ),
   h3: (props: React.ComponentProps<"h3">) => (
-    <Heading as="h3" {...props} />
+    <Heading as="h3" className="scroll-mt-32" {...props} />
   ),
   h4: (props: React.ComponentProps<"h4">) => (
-    <Heading as="h4" {...props} />
+    <Heading as="h4" className="scroll-mt-32" {...props} />
   ),
   h5: (props: React.ComponentProps<"h5">) => (
-    <Heading as="h5" {...props} />
+    <Heading as="h5" className="scroll-mt-32" {...props} />
   ),
   h6: (props: React.ComponentProps<"h6">) => (
-    <Heading as="h6" {...props} />
+    <Heading as="h6" className="scroll-mt-32" {...props} />
   ),
   pre({
     __withMeta__,
@@ -206,6 +216,9 @@ const options: MDXRemoteProps["options"] = {
           },
         },
       ],
+      // APRÈS rehypePretty, qui crée les spans porteurs de --shiki-light /
+      // --shiki-dark : c'est là que se corrige la dernière dette de contraste
+      [rehypeShikiContrast, { backgrounds: CODE_BLOCK_BACKGROUND }],
       () => (tree) => {
         visit(tree, (node) => {
           if (

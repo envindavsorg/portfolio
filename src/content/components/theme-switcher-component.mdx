@@ -16,7 +16,7 @@ isNew: true
   openInV0Url="https://cuzeacflorin.fr/r/theme-switcher.json"
 />
 
-# 1. Installation avec le CLI de shadcn/ui
+## 1. Installation avec le CLI de shadcn/ui
 
 Copiez la commande ci-dessous dans votre terminal afin d'installer le composant
 
@@ -24,15 +24,15 @@ Copiez la commande ci-dessous dans votre terminal afin d'installer le composant
 npx shadcn@latest add @envindavsorg/theme-switcher
 ```
 
-# 2. Installation manuelle
+## 2. Installation manuelle
 
-## (2.1) installez les dépendances :
+### (2.1) installez les dépendances :
 
 ```bash
 npm install motion clsx tailwind-merge
 ```
 
-## (2.2) ajoutez le helper **cn** :
+### (2.2) ajoutez le helper **cn** :
 
 <ComponentSource
   src="src/lib/utils.ts"
@@ -41,7 +41,7 @@ npm install motion clsx tailwind-merge
   noCollapsible
 />
 
-## (2.3) ajoutez le code suivant :
+### (2.3) ajoutez le code suivant :
 
 <ComponentSource
   name="theme-switcher"
@@ -49,11 +49,11 @@ npm install motion clsx tailwind-merge
   showLineNumbers
 />
 
-## (2.4) petite astuce :
+### (2.4) petite astuce :
 
 Mettez à jour les chemins d'import de vos dépendances pour correspondre à la structure de votre projet et ainsi le faire fonctionner correctement.
 
-# 3. Utilisation
+## 3. Utilisation
 
 ```tsx
 "use client";
@@ -63,7 +63,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 <ThemeSwitcher />;
 ```
 
-# 4. Références
+## 4. Références
 
 - https://ui.shadcn.com/docs/registry
 - https://ui.shadcn.com/docs/dark-mode/next

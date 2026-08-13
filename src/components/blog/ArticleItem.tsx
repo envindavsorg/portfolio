@@ -38,6 +38,8 @@ interface ArticleItemProps {
   updatedAt: Date;
   tags: string[] | undefined;
   content: string;
+  /** vrai pour le PREMIER élément de la liste : candidat LCP de la page */
+  priority?: boolean;
 }
 
 export const ArticleItem = ({
@@ -53,6 +55,7 @@ export const ArticleItem = ({
   updatedAt,
   tags,
   content,
+  priority = false,
 }: ArticleItemProps) => {
   // next/image exige une source définie, là où un <img> acceptait `undefined` et
   // rendait simplement une image cassée. Le repli sur `cover` évite de perdre la
@@ -68,6 +71,13 @@ export const ArticleItem = ({
               <PortalImage
                 alt={title}
                 height={1280}
+                // seule la première vignette : elle est au-dessus de la ligne
+                // de flottaison et c'est très probablement l'élément LCP.
+                // react-dom refuse de hoister un préchargement tant que
+                // `loading="lazy"` est posé — et un `eager` inconditionnel
+                // retéléchargerait les cinq vignettes d'emblée, régression que
+                // le commentaire de Portal.tsx documente déjà.
+                priority={priority}
                 src={banner}
                 whileHover={{ scale: 1.05 }}
                 width={2800}
@@ -98,6 +108,11 @@ export const ArticleItem = ({
                 <PortalImage
                   alt={title}
                   height={1280}
+                  // l'image du dialogue est un élément DISTINCT de la vignette,
+                  // rendu à 920 px de large : le `sizes` par défaut plafonne à
+                  // 768 px, donc le navigateur retenait un candidat trop petit
+                  // et suréchantillonnait la couverture
+                  sizes="(max-width: 768px) 96vw, 920px"
                   src={cover ?? banner}
                   width={2800}
                 />

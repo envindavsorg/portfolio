@@ -15,7 +15,7 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Usage
+## Usage
 
 Paste two versions of the same text: the comparison shows up line by line, with
 line numbers on each side. Added lines appear in green, removed ones in red,
@@ -24,7 +24,7 @@ unchanged ones stay neutral.
 Handy for comparing two API responses, two config files, or two drafts of the
 same paragraph — without going through a Git repository.
 
-# How the comparison is computed
+## How the comparison is computed
 
 The tool relies on the **longest common subsequence** (LCS), the same principle
 as `git diff`. The idea: find the largest set of lines present in both texts, in
@@ -36,13 +36,13 @@ addition: LCS reasons about sequences, not about moves.
 Line endings are normalised: a `CRLF` (Windows) text and the same text in `LF`
 (Unix) are not reported as different.
 
-# A deliberate limit
+## A deliberate limit
 
 The LCS table takes space proportional to the product of both lengths. For two
 2,000-line texts that is already four million cells. Beyond that size the tool
 declines the comparison rather than freezing your tab.
 
-# Comparing two files on the command line
+## Comparing two files on the command line
 
 ```bash
 # classic comparison, unified format
@@ -55,7 +55,7 @@ diff -u -w old.txt new.txt
 git diff --no-index old.txt new.txt
 ```
 
-# Comparing two objects in JavaScript
+## Comparing two objects in JavaScript
 
 For data structures rather than text, comparing _normalised_ JSON avoids false
 positives caused by key ordering:

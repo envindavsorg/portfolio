@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ArticleTitle } from "@/components/blog/ArticleTitle";
+import { WritingsByline } from "@/components/features/WritingsByline";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
 import { WritingsReadingAids } from "@/components/features/WritingsReadingAids";
 import { WritingsRelated } from "@/components/features/WritingsRelated";
@@ -69,6 +70,7 @@ export const ArticleView = ({
       )}
       <WritingsTopBar item={article} items={articles} slug={slug} />
       <ArticleTitle title={metadata.title} />
+      <WritingsByline item={article} />
       <WritingsSeries all={getAllContent(locale)} current={article} />
       <WritingsToC items={getContentToc(content)} />
       <WritingsReadingAids />

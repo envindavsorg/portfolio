@@ -434,3 +434,65 @@
     @apply sticky left-0 inline-block w-8 pr-4 text-end text-sm text-code-number;
   }
 }
+
+/**
+ * Feuille d'impression.
+ *
+ * Le fichier n'en contenait AUCUNE : imprimer une page du site sortait la
+ * navbar, le pied de page, les particules et un fond sombre sur du papier. Le
+ * bloc est volontairement hors de tout `@layer` et en fin de fichier — les
+ * règles non calquées l'emportent sur `@layer base` et `@layer components`, et
+ * à spécificité égale la dernière gagne, y compris contre `.dark`.
+ */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  /* le thème sombre n'a pas de sens sur du papier : il vide les cartouches et
+     rend le texte illisible une fois imprimé en niveaux de gris */
+  :root,
+  .dark {
+    --canvas: #ffffff;
+    --background: #ffffff;
+    --foreground: #000000;
+    --muted-foreground: #333333;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* le chrome du site n'apporte rien sur papier */
+  [data-slot="navbar-wrapper"],
+  nav,
+  footer,
+  [data-slot="reading-progress"],
+  [data-slot="particles"],
+  canvas {
+    display: none !important;
+  }
+
+  /* une URL cliquable ne veut plus rien dire une fois imprimée : on la
+     développe à côté du libellé, mais seulement pour les liens du CV — le faire
+     partout noierait le texte sous des adresses */
+  [data-slot="cv-link"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    font-weight: 400;
+  }
+
+  /* une expérience coupée entre deux pages est exactement ce qu'un recruteur ne
+     doit pas avoir sous les yeux */
+  [data-slot="cv-entry"],
+  h2,
+  h3 {
+    break-inside: avoid;
+  }
+
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+}

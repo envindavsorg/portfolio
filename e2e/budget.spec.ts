@@ -25,14 +25,37 @@ const JS_BUDGET = 1000 * KIB;
 const FONT_BUDGET = 300 * KIB;
 /** CSS : 23 ko, une seule feuille pour tout le site */
 const CSS_BUDGET = 40 * KIB;
+/**
+ * Images : 10 ko au plus lourd (/articles), 4 ko sur l'accueil.
+ *
+ * `measure()` ne comptait que .js, .css et les polices : quatre GIF de démo de
+ * 2,7 Mio au total ont donc vécu des mois sous un budget « vert ». Le plafond est
+ * volontairement large par rapport aux 10 ko mesurés — il n'est pas là pour
+ * traquer le kilo-octet, mais pour qu'un fichier lourd redéposé se voie tout de
+ * suite.
+ */
+const IMAGE_BUDGET = 150 * KIB;
+/**
+ * Document HTML : 84 ko sur l'accueil, 17 à 46 ko ailleurs, en encodé.
+ *
+ * C'est le poids qui porte la charge RSC. L'index de recherche y a vécu jusqu'à
+ * récemment, invisible de toute mesure.
+ */
+const DOCUMENT_BUDGET = 120 * KIB;
 
 interface Weights {
   css: number;
+  document: number;
   fonts: number;
+  images: number;
   js: number;
 }
 
 const FONT_EXTENSION = /\.(?:woff2?|ttf|otf)(?:\?|$)/u;
+const IMAGE_EXTENSION = /\.(?:png|jpe?g|webp|avif|gif|svg)(?:\?|$)/u;
+
+/** l'optimiseur ne met pas d'extension : /_next/image?url=…&w=…&q=… */
+const OPTIMIZED_IMAGE = "/_next/image";
 
 /**
  * Additionne le poids par type de ressource.
@@ -41,7 +64,13 @@ const FONT_EXTENSION = /\.(?:woff2?|ttf|otf)(?:\?|$)/u;
  * répondent 404 hors production, leur poids local ne veut donc rien dire.
  */
 const measure = (page: Page): Weights => {
-  const weights: Weights = { css: 0, fonts: 0, js: 0 };
+  const weights: Weights = {
+    css: 0,
+    document: 0,
+    fonts: 0,
+    images: 0,
+    js: 0,
+  };
 
   page.on("response", async (response) => {
     const url = response.url();
@@ -64,6 +93,13 @@ const measure = (page: Page): Weights => {
       weights.css += bytes;
     } else if (FONT_EXTENSION.test(url)) {
       weights.fonts += bytes;
+    } else if (
+      url.includes(OPTIMIZED_IMAGE) ||
+      IMAGE_EXTENSION.test(url)
+    ) {
+      weights.images += bytes;
+    } else if (response.request().resourceType() === "document") {
+      weights.document += bytes;
     }
   });
 
@@ -113,6 +149,20 @@ test.describe("budget de poids", () => {
           CSS_BUDGET
         )} ko de budget`
       ).toBeLessThanOrEqual(CSS_BUDGET);
+
+      expect(
+        weights.images,
+        `images sur ${path} : ${toKib(weights.images)} ko pour ${toKib(
+          IMAGE_BUDGET
+        )} ko de budget`
+      ).toBeLessThanOrEqual(IMAGE_BUDGET);
+
+      expect(
+        weights.document,
+        `document sur ${path} : ${toKib(
+          weights.document
+        )} ko pour ${toKib(DOCUMENT_BUDGET)} ko de budget`
+      ).toBeLessThanOrEqual(DOCUMENT_BUDGET);
     });
   }
 
@@ -129,5 +179,78 @@ test.describe("budget de poids", () => {
       .count();
 
     expect(preloads).toBeLessThanOrEqual(3);
+  });
+});
+
+/**
+ * Aucune image ne doit contourner l'optimiseur.
+ *
+ * Les vignettes de /articles ont été servies en 6016 px bruts, sans srcset,
+ * parce qu'un composant rendait un `<img>` au lieu d'un next/image. Rien ne
+ * pouvait le signaler : le poids d'image n'était mesuré nulle part, et un
+ * `<img>` est parfaitement valide.
+ *
+ * Les bannières animées des démos du registre sont la seule exception assumée —
+ * l'optimiseur rendrait une image FIXE d'un fichier animé, remplaçant la démo
+ * par sa première image.
+ */
+test.describe("aucune image hors de l'optimiseur", () => {
+  const ANIMATED_DEMOS = "-demo/";
+
+  for (const path of ["/", "/articles", "/tags", "/en/articles"]) {
+    test(`${path} ne sert aucune image brute`, async ({ page }) => {
+      await page.goto(path);
+      await page.waitForLoadState("networkidle");
+
+      const raw = await page
+        .locator('img[src^="/images/"]')
+        .evaluateAll((nodes) =>
+          nodes.map((node) => node.getAttribute("src") ?? "")
+        );
+
+      const unexpected = raw.filter(
+        (src) => !src.includes(ANIMATED_DEMOS)
+      );
+
+      expect(
+        unexpected,
+        `images servies hors de l'optimiseur sur ${path}`
+      ).toEqual([]);
+    });
+  }
+
+  /**
+   * Le srcset, vérifié dans le DOM et non dans le HTML.
+   *
+   * React 19 sérialise l'attribut en `srcSet` (camelCase, écrit verbatim : sa
+   * table de renommage ne couvre que class, http-equiv et consorts). Un
+   * `grep srcset` sur le HTML construit renvoie donc ZÉRO alors que l'attribut
+   * est bien là — j'ai moi-même conclu à tort à un srcset manquant sur cette
+   * base. Une assertion DOM est immunisée : le parseur HTML normalise la casse.
+   */
+  test("les vignettes proposent bien plusieurs tailles", async ({
+    page,
+  }) => {
+    await page.goto("/articles");
+    await page.waitForLoadState("networkidle");
+
+    const candidates = await page
+      .locator('img[data-slot="dialog-image"]')
+      .evaluateAll((nodes) =>
+        nodes.map(
+          (node) =>
+            (node.getAttribute("srcset") ?? "")
+              .split(",")
+              .filter(Boolean).length
+        )
+      );
+
+    expect(candidates.length).toBeGreaterThan(0);
+
+    // une vignette sans srcset est servie en pleine résolution : c'est la
+    // régression qui a coûté 881 Kio sur cette page
+    for (const count of candidates) {
+      expect(count).toBeGreaterThanOrEqual(8);
+    }
   });
 });

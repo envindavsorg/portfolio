@@ -15,13 +15,13 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Usage
+## Usage
 
 Type some text to get its digest in the algorithm of your choice, or generate
 UUID v4 identifiers in one click. Everything is computed locally through the
 browser's **Web Crypto API**: nothing travels over the network.
 
-# Picking an algorithm
+## Picking an algorithm
 
 | Algorithm | Size     | When to use it                           |
 | --------- | -------- | ---------------------------------------- |
@@ -34,7 +34,7 @@ browser's **Web Crypto API**: nothing travels over the network.
 collisions were produced back in 2017. It sticks around because Git and many
 older systems use it, but no new project should rely on it.
 
-# What these digests are not for
+## What these digests are not for
 
 A SHA digest is **not** a way to store a password. It is designed to be fast,
 which is exactly the weakness a brute-force attack exploits: a GPU computes
@@ -43,7 +43,7 @@ billions of SHA-256 per second.
 For passwords you need a slow, tunable function — **Argon2id** preferably, or
 **scrypt** or **bcrypt** — with a unique salt per user.
 
-# Computing a digest in JavaScript
+## Computing a digest in JavaScript
 
 ```javascript
 const digest = async (text, algorithm = "SHA-256") => {
@@ -60,7 +60,7 @@ Encoding goes through `TextEncoder`: we hash **UTF-8 bytes**, not UTF-16 code
 units. Without that, "é" would not produce the same digest as in other
 languages.
 
-# Computing a digest in Node.js
+## Computing a digest in Node.js
 
 ```javascript
 import { createHash } from "node:crypto";
@@ -70,7 +70,7 @@ const hash = createHash("sha256")
   .digest("hex");
 ```
 
-# Generating a UUID
+## Generating a UUID
 
 ```javascript
 // secure context (https or localhost)

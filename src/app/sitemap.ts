@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { CERTS } from "@/app/(fr)/(content)/(root)/_components/certs/content";
 import { getAllContent } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
 import { getSeriesIndex } from "@/lib/series";
@@ -105,6 +106,18 @@ const sitemap = (): MetadataRoute.Sitemap => {
       changeFrequency: "weekly",
       lastModified: getLatestDate(allPosts),
       priority: 0.6,
+    }),
+    // la date du CV est celle de la certification la plus récente : ni
+    // `dayjs()`, qui changerait à chaque build et mentirait aux crawlers, ni la
+    // date d'un article, qui n'a rien à voir avec un parcours
+    ...localizedEntries("/cv", {
+      changeFrequency: "monthly",
+      lastModified: dayjs(
+        Math.max(
+          ...CERTS.map((cert) => new Date(cert.issueDate).getTime())
+        )
+      ).toISOString(),
+      priority: 0.7,
     }),
     ...localizedEntries("/search", {
       changeFrequency: "weekly",

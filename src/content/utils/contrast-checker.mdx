@@ -15,13 +15,13 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Utilisation
+## Utilisation
 
 Saisissez deux couleurs en hexadécimal ou en `rgb()`. L'outil calcule le rapport,
 teste les cinq seuils WCAG, et — si le contraste est insuffisant — propose la
 variante la plus proche de votre couleur qui atteint le niveau AA.
 
-# Les seuils
+## Les seuils
 
 | Critère | Cible                                        | Rapport minimal |
 | ------- | -------------------------------------------- | --------------- |
@@ -39,7 +39,7 @@ formulaire, l'état de focus, une icône qui porte une information doivent attei
 3:1 contre leur fond. Un `border-gray-200` sur du blanc est à 1.24:1 — bien en
 dessous.
 
-# La formule
+## La formule
 
 ```javascript
 const linearize = (channel) => {
@@ -69,7 +69,7 @@ division, c'est une courbe de gamma. Ensuite les **coefficients** : le vert pès
 L'approximation qu'on croise parfois — la moyenne des trois canaux — fait passer
 des paires qui échouent réellement.
 
-# La transparence n'est pas calculable seule
+## La transparence n'est pas calculable seule
 
 Un canal alpha est accepté par l'outil puis **ignoré**, et c'est un choix
 délibéré : composer `#1e40af80` demande de connaître ce qu'il y a derrière. Sur
@@ -79,7 +79,7 @@ totalement différents.
 Si votre couleur est semi-transparente, composez-la d'abord contre son fond réel,
 puis mesurez la couleur obtenue.
 
-# Quelques valeurs utiles
+## Quelques valeurs utiles
 
 | Couleur sur blanc | Rapport | Texte normal AA |
 | ----------------- | ------- | --------------- |
@@ -91,7 +91,7 @@ puis mesurez la couleur obtenue.
 `#767676` est la limite exacte du gris utilisable en texte normal sur blanc.
 Un cran plus clair et le critère tombe.
 
-# Ce que le contraste ne couvre pas
+## Ce que le contraste ne couvre pas
 
 Un rapport conforme ne rend pas une interface accessible. La couleur ne doit pas
 être **le seul** moyen de transmettre une information (critère 1.4.1) : un champ

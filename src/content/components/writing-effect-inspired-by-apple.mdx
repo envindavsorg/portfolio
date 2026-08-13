@@ -17,7 +17,7 @@ isNew: true
   canReplay
 />
 
-# 1. Installation avec le CLI de shadcn/ui
+## 1. Installation avec le CLI de shadcn/ui
 
 Copiez la commande ci-dessous dans votre terminal afin d'installer le composant
 
@@ -25,15 +25,15 @@ Copiez la commande ci-dessous dans votre terminal afin d'installer le composant
 npx shadcn@latest add @envindavsorg/apple-hello-effect
 ```
 
-# 2. Installation manuelle
+## 2. Installation manuelle
 
-## (2.1) installez les dépendances :
+### (2.1) installez les dépendances :
 
 ```bash
 npm install motion clsx tailwind-merge
 ```
 
-## (2.2) ajoutez le helper **cn** :
+### (2.2) ajoutez le helper **cn** :
 
 <ComponentSource
   src="src/lib/utils.ts"
@@ -42,7 +42,7 @@ npm install motion clsx tailwind-merge
   noCollapsible
 />
 
-## (2.3) ajoutez le code suivant :
+### (2.3) ajoutez le code suivant :
 
 <ComponentSource
   name="apple-hello-effect"
@@ -50,11 +50,11 @@ npm install motion clsx tailwind-merge
   showLineNumbers
 />
 
-## (2.4) petite astuce :
+### (2.4) petite astuce :
 
 Mettez à jour les chemins d'import de vos dépendances pour correspondre à la structure de votre projet et ainsi le faire fonctionner correctement.
 
-# 3. Utilisation
+## 3. Utilisation
 
 ```tsx
 'use client';
@@ -70,20 +70,20 @@ const AppleHelloEffectDemo = () => (
 export AppleHelloEffectDemo;
 ```
 
-# 4. Propriétés
+## 4. Propriétés
 
 | Prop                  | Type         | Default     | Description                                                                                               |
 | --------------------- | ------------ | ----------- | --------------------------------------------------------------------------------------------------------- |
 | `speed`               | `number`     | 1           | Un multiplicateur qui affecte la durée de l'animation. Des valeurs plus élevées ralentissent l'animation. |
 | `onAnimationComplete` | `() => void` | `undefined` | Fonction de rappel déclenchée lorsque l'animation se termine.                                             |
 
-# 5. Connaissances supplémentaires
+## 5. Connaissances supplémentaires
 
 - Documentation officielle pour l'effet, avec le SVG extrait de macOS Sonoma au format SVG : https://www.figma.com/community/file/1414773009964314315/official-apple-hello-lettering
 - Une bibliothèque d'animation moderne pour JavaScript et React : https://motion.dev
 - Hébergez votre propre registre de composants : https://ui.shadcn.com/docs/registry
 
-# 6. Références
+## 6. Références
 
 - https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pathLength
 - https://motion.dev/docs/react-motion-component

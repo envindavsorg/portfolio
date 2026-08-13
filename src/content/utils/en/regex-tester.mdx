@@ -15,13 +15,13 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# How to use it
+## How to use it
 
 Write a pattern, pick your flags, paste the text. Matches are highlighted in
 alternating colours, and every group — numbered or named — is listed with its
 value.
 
-# The flags
+## The flags
 
 | Flag | Effect                                              |
 | ---- | --------------------------------------------------- |
@@ -35,7 +35,7 @@ value.
 The tool forces `g` internally whatever you pick: without it, `exec` restarts from
 zero on every call and a search for all matches loops on the first one.
 
-# The `lastIndex` trap
+## The `lastIndex` trap
 
 A regex with `g` is **mutable**: it remembers its position between calls.
 
@@ -50,7 +50,7 @@ That is why a regex with `g` must never be declared as a shared constant and the
 reused with `test` or `exec`. Either recreate it, reset `lastIndex` to zero, or use
 `matchAll`, which works on a copy.
 
-# Empty matches
+## Empty matches
 
 ```javascript
 const regex = /a*/g;
@@ -66,7 +66,7 @@ You have to increment `lastIndex` by hand when the match is empty. That is exact
 what this tool does, and why `a*` against `bbb` returns four empty matches here
 instead of freezing the tab.
 
-# Named groups
+## Named groups
 
 ```javascript
 const { groups } = /(?<year>\d{4})-(?<month>\d{2})/.exec("2026-08");
@@ -85,7 +85,7 @@ In a replacement, `$<name>` has a surprising behaviour worth knowing:
 
 Neither case throws. A typo in a group name therefore goes completely unnoticed.
 
-# Catastrophic backtracking
+## Catastrophic backtracking
 
 ```javascript
 // avoid: exponential time in the length of the input

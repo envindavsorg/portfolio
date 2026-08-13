@@ -14,7 +14,7 @@ author: "Cuzeac Florin"
 
 Mais avoir du bon CSS natif ne suffit pas. Ce qui compte, c'est ce que l'utilisateur final reçoit. Et là, les outils font toute la différence.
 
-# 1. L'expérience utilisateur d'abord
+## 1. L'expérience utilisateur d'abord
 
 Avant de parler DX, je pars toujours de l'UX. Qu'est-ce qu'un bon chargement de styles ?
 
@@ -22,77 +22,77 @@ Les feuilles de style doivent être les plus légères possible. Elles ne doiven
 
 Tout le reste en découle. Si un outil de styling ne m'aide pas à atteindre ces objectifs, il ne fait pas partie de ma stack.
 
-# 2. Ce que j'attends de mes outils
+## 2. Ce que j'attends de mes outils
 
 Côté performance, mes outils doivent supprimer automatiquement les styles inutilisés, bundler les fichiers CSS, minifier et compresser la sortie, et générer des noms de fichiers hashés pour du caching immutable.
 
 Côté DX, je veux pouvoir supprimer des styles aussi facilement que le composant qui les utilise. Adhérer à un design system sans friction. Avoir de l'autocomplétion et du linting directement dans l'éditeur. Et surtout : ne jamais avoir de collision de noms.
 
-# 3. Pourquoi Tailwind CSS
+## 3. Pourquoi Tailwind CSS
 
 J'utilise Tailwind CSS v4, et je n'utilise que ça.
 
-## La colocation est tout
+### La colocation est tout
 
 Les classes utilitaires vivent directement dans le JSX. Le style et la structure sont au même endroit. Quand je supprime un composant, ses styles disparaissent avec. Quand je lis un composant, je comprends immédiatement à quoi il ressemble.
 
 Pas de fichier `.module.css` séparé. Pas de va-et-vient entre deux fichiers pour comprendre un bouton. Pas de `buttonWrapperContainer` à nommer.
 
-## Un budget CSS fixe
+### Un budget CSS fixe
 
 Tailwind utilise un compilateur qui ne génère que les classes utilisées. Peu importe combien de classes existent dans le framework — seules celles présentes dans le code finissent dans le bundle. Le résultat : une borne supérieure fixe sur la taille du CSS généré, qui est ensuite minifié, compressé et caché.
 
 En pratique, mon CSS final est minuscule. Et il ne grossit pas proportionnellement à la taille du projet.
 
-## Le plus AI-friendly
+### Le plus AI-friendly
 
 C'est un avantage que je sous-estimais au début. Quand un agent de code peut lire le style et le markup au même endroit, la génération et l'édition de code deviennent triviales. Tailwind est de loin la bibliothèque CSS la mieux comprise par les modèles actuels.
 
 Avec Cursor, je peux décrire un composant en langage naturel et obtenir du JSX + Tailwind idiomatique en quelques secondes. Ce n'est pas possible avec des approches où les styles vivent ailleurs.
 
-# 4. Mes règles
+## 4. Mes règles
 
-## Pas de `@apply`
+### Pas de `@apply`
 
 Jamais. `@apply` crée une couche d'indirection inutile. Si j'ai besoin de réutiliser des styles, j'extrais un composant React. La réutilisation se fait au niveau du composant, pas au niveau du CSS.
 
-## Pas de fichiers CSS custom
+### Pas de fichiers CSS custom
 
 Mon seul fichier CSS est le `globals.css` de Tailwind v4 — le point d'entrée avec les `@import` et les éventuelles variables globales inévitables (fonts custom, animations complexes). Tout le reste est utilitaire, directement dans le JSX.
 
-## Valeurs built-in d'abord
+### Valeurs built-in d'abord
 
 Je m'appuie sur le design system de Tailwind : `gap-4`, `text-sm`, `rounded-lg`. Les valeurs arbitraires (`w-[347px]`) sont un signal que quelque chose cloche dans le design ou dans mon approche. Je les utilise occasionnellement, mais c'est toujours un compromis conscient.
 
-## HTML sémantique, pas des `div` partout
+### HTML sémantique, pas des `div` partout
 
 Tailwind ne change rien à cette règle. `<nav>`, `<main>`, `<article>`, `<section>`, `<dialog>` — le bon élément HTML, avec les bons attributs `aria-*`. Les classes utilitaires stylent le composant, elles ne remplacent pas le sens du markup.
 
-## Responsive par design, pas en afterthought
+### Responsive par design, pas en afterthought
 
 Mobile-first. Toujours. Les breakpoints de Tailwind (`sm:`, `md:`, `lg:`) s'appliquent du plus petit au plus grand. Je commence par le mobile, j'ajoute les ajustements ensuite. Pas l'inverse.
 
-# 5. Ce que je n'utilise pas (et pourquoi)
+## 5. Ce que je n'utilise pas (et pourquoi)
 
-## CSS Modules
+### CSS Modules
 
 Ils résolvent le scoping et fonctionnent partout. Mais les styles vivent dans un fichier séparé, donc pas de colocation. Pas d'autocomplétion TypeScript. Et quand le projet grossit, naviguer entre le composant et son `.module.css` devient une friction constante.
 
-## CSS-in-JS runtime (styled-components, Emotion)
+### CSS-in-JS runtime (styled-components, Emotion)
 
 Injectent des styles au runtime, ce qui a un coût de performance mesurable. Incompatibles avec les React Server Components sans workarounds. C'est une génération d'outils qui a servi, mais qui n'a plus sa place dans une stack moderne RSC-first.
 
-## Librairies UI lourdes
+### Librairies UI lourdes
 
 Si le besoin peut être couvert nativement avec Tailwind et du HTML sémantique, c'est ce que je fais. Les surcouches UI ajoutent du poids, des opinions de design, et des abstractions à contourner. Quand j'ai besoin de composants accessibles, je pars de primitives headless et je style avec Tailwind.
 
-# 6. Le streaming et Tailwind
+## 6. Le streaming et Tailwind
 
 Avec Next.js et le streaming SSR, les styles doivent être scopés ou atomiques pour ne pas affecter le contenu déjà affiché quand un nouveau chunk arrive.
 
 Tailwind génère des classes atomiques compilées dans une seule feuille de style, chargée avant que n'importe quelle classe ne soit utilisée. Pas de flash, pas de layout shift au milieu du stream. C'est compatible par design avec le modèle de rendu de React et Next.js.
 
-# 7. Mon setup éditeur
+## 7. Mon setup éditeur
 
 L'extension Tailwind CSS IntelliSense dans VS Code (ou Cursor) est non négociable. Autocomplétion des classes, preview des couleurs, linting des conflits — c'est ce qui transforme Tailwind d'un framework "il faut tout retenir" en un framework "l'éditeur te guide."
 

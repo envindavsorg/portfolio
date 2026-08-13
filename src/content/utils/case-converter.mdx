@@ -15,13 +15,13 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Utilisation
+## Utilisation
 
 Collez une valeur, ou une liste avec une valeur par ligne. Chaque ligne est
 convertie séparément dans les dix formats : coller une colonne de noms de champs
 ne les fusionne pas en un seul identifiant.
 
-# Les formats
+## Les formats
 
 | Format        | Exemple            | Usage habituel                        |
 | ------------- | ------------------ | ------------------------------------- |
@@ -38,7 +38,7 @@ ne les fusionne pas en un seul identifiant.
 traite la ponctuation comme un **séparateur**, la conversion de casse la
 **supprime**. `a/b` devient donc `a-b` en slug et `ab` en kebab.
 
-# Le découpage est le vrai travail
+## Le découpage est le vrai travail
 
 Recoller des mots est trivial. Les découper correctement est là où tout se joue,
 et la plupart des implémentations naïves échouent sur trois cas.
@@ -58,7 +58,7 @@ Les accents ne doivent être retirés **qu'après** le découpage : normaliser
 d'abord fait perdre la majuscule initiale, et le mot devient indistinct de sa
 version minuscule.
 
-# Une conversion doit être idempotente
+## Une conversion doit être idempotente
 
 Réappliquer une conversion à son propre résultat doit donner le même résultat.
 
@@ -71,7 +71,7 @@ Sans cette propriété, un pipeline qui convertit deux fois — parce que deux c
 appliquent la même normalisation « au cas où » — produit des identifiants
 différents à chaque passage.
 
-# Conversion des clés d'un objet
+## Conversion des clés d'un objet
 
 Le cas concret le plus fréquent : une API en `snake_case`, un front en
 `camelCase`.

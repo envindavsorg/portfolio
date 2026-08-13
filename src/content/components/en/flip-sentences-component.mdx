@@ -17,7 +17,7 @@ isNew: true
   canReplay
 />
 
-# 1. Installation with the shadcn/ui CLI
+## 1. Installation with the shadcn/ui CLI
 
 Copy the command below into your terminal to install the component
 
@@ -25,15 +25,15 @@ Copy the command below into your terminal to install the component
 npx shadcn@latest add @envindavsorg/flip-sentences
 ```
 
-# 2. Manual installation
+## 2. Manual installation
 
-## (2.1) install the dependencies:
+### (2.1) install the dependencies:
 
 ```bash
 npm install motion clsx tailwind-merge
 ```
 
-## (2.2) add the **cn** helper:
+### (2.2) add the **cn** helper:
 
 <ComponentSource
   src="src/lib/utils.ts"
@@ -42,7 +42,7 @@ npm install motion clsx tailwind-merge
   noCollapsible
 />
 
-## (2.3) create the array with the sentences you want to cycle through:
+### (2.3) create the array with the sentences you want to cycle through:
 
 ```ts title="sentences.ts" {2-5}
 const EXAMPLE_SENTENCES = [
@@ -53,7 +53,7 @@ const EXAMPLE_SENTENCES = [
 ];
 ```
 
-## (2.4) add the following code:
+### (2.4) add the following code:
 
 <ComponentSource
   name="flip-sentences"
@@ -61,11 +61,11 @@ const EXAMPLE_SENTENCES = [
   showLineNumbers
 />
 
-## (2.5) a little tip:
+### (2.5) a little tip:
 
 Update the import paths of your dependencies to match your project's structure so it works correctly.
 
-# 3. Usage
+## 3. Usage
 
 ```tsx
 "use client";
@@ -75,7 +75,7 @@ import { FlipSentences } from "@/components/flip-sentences";
 <FlipSentences sentences={EXAMPLE_SENTENCES} />;
 ```
 
-# 4. References
+## 4. References
 
 - https://ui.shadcn.com/docs/registry
 - https://motion.dev/docs/react-motion-component

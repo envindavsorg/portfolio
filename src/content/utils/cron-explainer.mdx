@@ -15,12 +15,12 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Utilisation
+## Utilisation
 
 Saisissez une expression à cinq champs. L'outil valide chaque champ, indique
 lequel pose problème le cas échéant, et calcule les cinq prochaines exécutions.
 
-# Les cinq champs
+## Les cinq champs
 
 ```
 ┌───────────── minute (0-59)
@@ -44,7 +44,7 @@ lequel pose problème le cas échéant, et calcule les cinq prochaines exécutio
 `7` est accepté comme alias de dimanche, en plus de `0` : `crontab(5)` le
 documente explicitement.
 
-# Le piège du jour du mois et du jour de la semaine
+## Le piège du jour du mois et du jour de la semaine
 
 C'est **la** source de bug des expressions cron. Quand les deux champs de jour
 sont restreints — ni l'un ni l'autre à `*` — cron déclenche dès que **l'un des
@@ -66,7 +66,7 @@ date dans le script lui-même :
 Dès qu'un seul des deux champs est restreint, la règle redevient intuitive :
 `0 9 * * 1-5` signifie bien « à 9 h, du lundi au vendredi ».
 
-# Fuseau horaire
+## Fuseau horaire
 
 Cet outil interprète les champs en **UTC**, comme cron système, GitHub Actions et
 Vercel. Un ordonnanceur qui interprète en heure locale pose deux questions sans
@@ -77,7 +77,7 @@ D'où une règle simple : **planifiez en UTC** et convertissez à l'affichage. U
 tâche à 9 h heure de Paris se planifie à `0 8 * * *` l'hiver et `0 7 * * *` l'été
 — ou, mieux, se planifie à une heure où le décalage n'a pas d'importance.
 
-# Expressions valides qui ne se déclenchent jamais
+## Expressions valides qui ne se déclenchent jamais
 
 ```
 0 0 30 2 *
@@ -89,7 +89,7 @@ et le dit, au lieu de chercher indéfiniment.
 `0 0 29 2 *` est plus subtile : elle se déclenche, mais seulement les années
 bissextiles — donc une fois tous les quatre ans.
 
-# Vérifier un cron dans un projet
+## Vérifier un cron dans un projet
 
 ```javascript
 // GitHub Actions : les minutes exactes sont déconseillées, le planificateur

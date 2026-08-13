@@ -101,7 +101,10 @@ export const ArticlesIndex = ({
 
         <div className="flex flex-col">
           {contents.map(
-            ({ metadata: itemMetadata, slug, reading, content }) => {
+            (
+              { metadata: itemMetadata, slug, reading, content },
+              index
+            ) => {
               const {
                 category,
                 image,
@@ -124,6 +127,14 @@ export const ArticlesIndex = ({
                       createdAt={createdAt}
                       description={description}
                       image={image}
+                      // seule la PREMIÈRE vignette : elle est au-dessus de la
+                      // ligne de flottaison et c'est très probablement
+                      // l'élément LCP de la page. `loading="lazy"` empêche
+                      // react-dom de hoister son préchargement — un
+                      // `loading="eager"` inconditionnel, lui, retéléchargerait
+                      // les cinq vignettes d'emblée, ce que le commentaire de
+                      // Portal.tsx documente déjà comme une régression passée
+                      priority={index === 0}
                       reading={reading}
                       slug={slug}
                       tags={itemTags}

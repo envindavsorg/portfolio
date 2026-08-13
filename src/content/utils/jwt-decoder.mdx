@@ -15,7 +15,7 @@ isNew: true
 
 <div className="screen-line-before w-full border-edge border-b" />
 
-# Utilisation
+## Utilisation
 
 Collez un JWT pour lire immédiatement son en-tête et sa charge utile. Les dates
 `iat`, `nbf` et `exp` sont converties en dates lisibles, et un jeton expiré est
@@ -26,7 +26,7 @@ sur le réseau. C'est important, car un JWT est une donnée d'authentification �
 le coller dans un outil en ligne qui l'envoie à un serveur revient à divulguer
 un identifiant de session.
 
-# Décoder n'est pas vérifier
+## Décoder n'est pas vérifier
 
 Un JWT se compose de trois parties séparées par des points :
 
@@ -43,7 +43,7 @@ n'a rien à faire dans un navigateur. Autrement dit, le contenu affiché ici est
 ce que le jeton _prétend_ être. Côté serveur, il faut toujours valider la
 signature avant de faire confiance au moindre claim.
 
-# Les claims standards
+## Les claims standards
 
 | Claim | Signification                                    |
 | ----- | ------------------------------------------------ |
@@ -59,7 +59,7 @@ Les dates sont exprimées en **secondes** depuis l'epoch Unix, pas en
 millisecondes. Une confusion entre les deux donne des expirations situées en
 1970 ou dans plusieurs millénaires.
 
-# Décoder un JWT en JavaScript
+## Décoder un JWT en JavaScript
 
 ```javascript
 const [header, payload] = token
@@ -78,7 +78,7 @@ const [header, payload] = token
 Le padding doit être reconstitué : les JWT omettent les `=` finaux, alors
 qu'`atob` les attend.
 
-# Vérifier un JWT en Node.js
+## Vérifier un JWT en Node.js
 
 ```javascript
 import { createHmac, timingSafeEqual } from "node:crypto";
