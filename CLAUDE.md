@@ -87,7 +87,8 @@ src/app/
 │       └── (writings)/            # /articles, /components, /utils, /tags, /series, /search (+ [slug])
 ├── (llms)/                        # Plain-text mirror for AI ingestion
 │   ├── llms.txt/route.ts          # /llms.txt - markdown index
-│   ├── (content)/about.md/...     # /about.md, /experience.md, /projects.md, /certifications.md
+│   ├── (content)/about.md/...     # /about.md, /experience.md, /projects.md,
+│   │                              # /certifications.md, /uses.md, /now.md
 │   ├── (content)/blog.mdx/[slug]/ # Served at /<category>/<slug>.mdx via rewrites (FR)
 │   └── (content)/blog.en.mdx/…    # Served at /en/<category>/<slug>.mdx (EN)
 ├── api/                           # og (ImageResponse), rss, rss/[category],
@@ -189,6 +190,12 @@ Content can also declare a **series** (`series` key + `seriesName` label +
 behind the URL — while `seriesName` is translated. Reading order is `seriesOrder`,
 then `createdAt`, then slug, so a duplicated order still renders deterministically.
 
+`src/data/weights.ts` holds the measured page weights AND the CI ceilings, and is
+imported by both the `/weight` page and `e2e/budget.spec.ts` — a published number
+and a ceiling defined separately would drift apart. Do NOT sum
+`performance.getEntriesByType("resource")` to re-measure: a preloaded-then-executed
+chunk yields two entries for one transfer, which reported 1340 KiB instead of 654.
+
 ### Global Data
 
 `src/data/global.ts` exports `GLOBAL_DATA` — single source of truth for
@@ -225,7 +232,10 @@ the component registry:
 - `search.ts` - `SearchDoc` index (title, description, tags, headings, 400-char
   excerpt), `toPlainText`, `normalize` (diacritic-insensitive), `searchableText`,
   plus `scoreText` / `searchDocs`, the single ranking shared by the ⌘K palette and
-  the `/search` page. Type-only imports on purpose: importing `content.ts` values
+  the `/search` page. Typo tolerance uses `editDistance` (optimal string
+  alignment, so a TRANSPOSITION costs one edit — `tailwnid` for `tailwind` costs
+  two under plain Levenshtein and would be missed); tolerance is 0 below 4 chars,
+  1 up to 7, 2 beyond. An approximate hit NEVER outranks an exact one. Type-only imports on purpose: importing `content.ts` values
   would pull the whole MDX graph into the test run.
 - `related.ts` - related-post scoring by shared tags
 - `feed.ts` / `feed-routes.ts` - RSS 2.0 + JSON Feed 1.1 serialisation and the
@@ -233,6 +243,11 @@ the component registry:
 - `github-stats.ts` - language aggregation across repos (forks excluded). Owns
   `DEFAULT_LANGUAGE_COLOR`, shared with `repos.ts` so the same language never
   gets two different dots
+- `showcase.ts` - which projects and roles get their own page, in what order, and
+  the previous/next pair. The `id` in the data IS the slug: it is identical in both
+  locales, so a shared URL lands on the same item — the tag lesson applied. The
+  experience projection is `toExperienceEntry` from `cv.ts`, reused rather than
+  rewritten, because the CV is what goes out by email
 - `repos.ts` - which public repos become homepage cards, and in what order.
   Ranking is stars, then `pushedAt`, then name: personal repos are mostly at zero
   stars, so ties are the rule and a single key would leave the order to whatever
@@ -315,6 +330,11 @@ End-to-end tests (Playwright, `e2e/`):
   themselves: CI builds with a placeholder token and never sees live repos, so a
   test demanding cards would only ever fail. Card content is tested in
   `src/lib/repos.test.ts`
+- `showcase.spec.ts` - the project/role pages, `/uses`, `/now`, `/weight`, their
+  sitemap entries and their text mirrors
+- `widget-isolation.spec.ts` - no tool widget reaches a page that does not use one,
+  with a CONTROL case (the speed-test page must contain the marker) so that removing
+  the dependency cannot turn every absence assertion green for nothing
 - `search-page.spec.ts` - the `/search` page and its agreement with the palette
 - `playground.spec.ts` - the component playground and its generated code
 - `offline.spec.ts` - the service worker, with the network genuinely cut
@@ -362,6 +382,11 @@ falling back to zeroed GitHub widgets rather than failing.
   `geist/font/pixel` evaluates all five `localFont()` calls, so `preload: false`
   on the unused ones has no effect through that entry point — declaring them
   locally is what takes the preload count from 7 down to 3
+- **Print**: the `@media print` block in `globals.css` covers `/cv` AND content
+  pages. Anything tagged `data-print="hide"` is dropped (ToC, pagination, share
+  actions, tags, series, related). `pre` switches to `pre-wrap`: on paper there is
+  no horizontal scrolling, so an overflowing code block is silently CUT. The page
+  URL is rendered by `WritingsByline` because CSS cannot read `location`
 - **Persisted stores**: Zustand stores in `src/hooks/` carry a `version` and a
   `migrate` (see `useConfig.ts`). A stored shape that no longer matches the code
   must be migrated, not trusted

@@ -153,3 +153,40 @@ test.describe("page de recherche", () => {
     expect(href).toBe("/articles/how-i-write-css");
   });
 });
+
+/**
+ * Tolérance aux fautes de frappe.
+ *
+ * « tailwnid » ne renvoyait rien : la requête entière était cherchée comme
+ * sous-chaîne, et deux lettres inversées suffisaient à ne plus rien trouver.
+ */
+test.describe("fautes de frappe", () => {
+  test("la palette trouve malgré une faute", async ({ page }) => {
+    await page.goto("/");
+    await page.keyboard.press("ControlOrMeta+k");
+
+    const input = page.getByPlaceholder(/tapez une commande/iu);
+    await input.fill("tailwnid");
+
+    // au moins un résultat, et aucun message « aucun résultat »
+    await expect(
+      page.getByText(/aucun résultat/iu)
+    ).not.toBeVisible();
+    await expect(
+      page
+        .getByRole("option")
+        .first()
+        .or(page.locator("[cmdk-item]").first())
+    ).toBeVisible();
+  });
+
+  test("la page de recherche aussi", async ({ page }) => {
+    await page.goto("/search#q=tailwnid");
+    await page.waitForLoadState("networkidle");
+
+    const hits = page.locator(
+      "[data-slot='search-results'] a[href^='/']"
+    );
+    await expect(hits.first()).toBeVisible();
+  });
+});

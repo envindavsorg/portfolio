@@ -1,9 +1,12 @@
 import type { MetadataRoute } from "next";
 
 import { CERTS } from "@/app/(fr)/(content)/(root)/_components/certs/content";
+import { EXPERIENCES } from "@/app/(fr)/(content)/(root)/_components/experiences/content";
+import { PROJECTS } from "@/app/(fr)/(content)/(root)/_components/projects/content";
 import { getAllContent } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
 import { getSeriesIndex } from "@/lib/series";
+import { experiencePages, projectPages } from "@/lib/showcase";
 import { getContentByTagSlug, getTagIndex } from "@/lib/tags";
 
 const BASE_URL = "https://cuzeacflorin.fr";
@@ -87,6 +90,20 @@ const sitemap = (): MetadataRoute.Sitemap => {
     (p) => p.metadata.category === "utils"
   );
 
+  /**
+   * La date du parcours : celle de la certification la plus récente.
+   *
+   * Ni `dayjs()`, qui changerait à chaque build et mentirait aux crawlers, ni la
+   * date d'un article, qui n'a rien à voir avec un parcours. Calculée une fois et
+   * partagée par /cv, /experience et les fiches de poste : trois copies de ce
+   * `Math.max` finiraient par ne plus donner la même date.
+   */
+  const latestCertDate = dayjs(
+    Math.max(
+      ...CERTS.map((cert) => new Date(cert.issueDate).getTime())
+    )
+  ).toISOString();
+
   const staticRoutes: MetadataRoute.Sitemap = [
     ...localizedEntries("", {
       changeFrequency: "daily",
@@ -108,22 +125,44 @@ const sitemap = (): MetadataRoute.Sitemap => {
       lastModified: getLatestDate(utils),
       priority: 0.8,
     }),
+    ...localizedEntries("/projects", {
+      changeFrequency: "monthly",
+      lastModified: getLatestDate(allPosts),
+      priority: 0.7,
+    }),
+    // la date du parcours ne bouge pas avec les articles : c'est celle de la
+    // certification la plus récente, comme pour /cv
+    ...localizedEntries("/experience", {
+      changeFrequency: "monthly",
+      lastModified: latestCertDate,
+      priority: 0.7,
+    }),
     ...localizedEntries("/tags", {
       changeFrequency: "weekly",
       lastModified: getLatestDate(allPosts),
       priority: 0.6,
     }),
-    // la date du CV est celle de la certification la plus récente : ni
-    // `dayjs()`, qui changerait à chaque build et mentirait aux crawlers, ni la
-    // date d'un article, qui n'a rien à voir avec un parcours
     ...localizedEntries("/cv", {
       changeFrequency: "monthly",
-      lastModified: dayjs(
-        Math.max(
-          ...CERTS.map((cert) => new Date(cert.issueDate).getTime())
-        )
-      ).toISOString(),
+      lastModified: latestCertDate,
       priority: 0.7,
+    }),
+    // /weight, /uses et /now : trois pages statiques, dont deux dérivées du
+    // dépôt (le poids mesuré, le contenu de « en ce moment »)
+    ...localizedEntries("/weight", {
+      changeFrequency: "monthly",
+      lastModified: getLatestDate(allPosts),
+      priority: 0.4,
+    }),
+    ...localizedEntries("/uses", {
+      changeFrequency: "monthly",
+      lastModified: getLatestDate(allPosts),
+      priority: 0.5,
+    }),
+    ...localizedEntries("/now", {
+      changeFrequency: "weekly",
+      lastModified: getLatestDate(allPosts),
+      priority: 0.5,
     }),
     ...localizedEntries("/search", {
       changeFrequency: "weekly",
@@ -203,6 +242,30 @@ const sitemap = (): MetadataRoute.Sitemap => {
       })
     );
 
+  /**
+   * Les fiches de réalisation.
+   *
+   * L'`id` sert de slug et ne se traduit pas : les deux arbres exposent donc
+   * exactement les mêmes URL, et chaque fiche sort avec sa paire hreflang — pas
+   * de branche « une seule locale » à prévoir ici, contrairement aux sujets.
+   */
+  const showcaseUrls: MetadataRoute.Sitemap = [
+    ...projectPages(PROJECTS).flatMap((project) =>
+      localizedEntries(`/projects/${project.id}`, {
+        changeFrequency: "monthly",
+        lastModified: getLatestDate(allPosts),
+        priority: 0.6,
+      })
+    ),
+    ...experiencePages(EXPERIENCES).flatMap((experience) =>
+      localizedEntries(`/experience/${experience.id}`, {
+        changeFrequency: "yearly",
+        lastModified: latestCertDate,
+        priority: 0.6,
+      })
+    ),
+  ];
+
   const articleUrls = mapPostsToSitemap(
     articles,
     CATEGORY_ROUTES.articles
@@ -220,6 +283,7 @@ const sitemap = (): MetadataRoute.Sitemap => {
     ...utilUrls,
     ...tagUrls,
     ...seriesUrls,
+    ...showcaseUrls,
   ];
 };
 

@@ -507,4 +507,45 @@
   h3 {
     break-after: avoid;
   }
+
+  /* --- pages de contenu ---------------------------------------------------
+     Tout ce qui sert à NAVIGUER n'a pas de sens sur du papier : sommaire,
+     pagination, boutons de partage, sujets, série, articles liés. Restent le
+     titre, la signature, le corps — et l'adresse de la page, rendue par
+     `WritingsByline` puisqu'une feuille CSS ne peut pas lire l'URL courante. */
+  [data-print="hide"] {
+    display: none !important;
+  }
+
+  /* un bloc de code défile horizontalement à l'écran ; sur papier il n'y a pas
+     de défilement, et la partie qui dépasse est simplement PERDUE — sans que
+     rien ne l'indique. Le retour à la ligne forcé est le seul moyen de ne pas
+     imprimer du code tronqué. */
+  pre,
+  pre code {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+    overflow: visible !important;
+  }
+
+  pre,
+  figure,
+  [data-slot="callout"],
+  blockquote,
+  table {
+    break-inside: avoid;
+  }
+
+  /* une image ne doit pas dépasser la zone imprimable */
+  img,
+  svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* les pages de contenu occupent `min-h-svh` pour tenir la colonne à l'écran :
+     à l'impression, cette hauteur minimale ajoute une page blanche à la fin */
+  .min-h-svh {
+    min-height: 0 !important;
+  }
 }

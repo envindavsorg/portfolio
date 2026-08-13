@@ -1,6 +1,8 @@
 import type { Content } from "@/lib/content";
 import { formatDate } from "@/lib/functions";
+import { BASE_URL } from "@/lib/metadata";
 import { m } from "@/paraglide/messages";
+import { localizeHref } from "@/paraglide/runtime";
 
 interface WritingsBylineProps {
   item: Content;
@@ -81,6 +83,28 @@ export const WritingsByline = ({
         <span aria-hidden="true">·</span>
         <span>{m.writings_article_words_count({ words })}</span>
       </div>
+
+      {/**
+       * L'ADRESSE de la page, visible seulement à l'impression.
+       *
+       * Un article imprimé sans son URL est un cul-de-sac : on ne peut ni le
+       * retrouver, ni le partager, ni vérifier s'il a été mis à jour depuis. Une
+       * feuille CSS ne peut pas lire l'URL courante, elle est donc rendue ici.
+       *
+       * Sur les pages /en, `localizeHref` produit bien le préfixe : imprimer la
+       * version anglaise en donnant l'adresse française enverrait le lecteur sur
+       * un autre texte que celui qu'il a sous les yeux.
+       */}
+      {item.metadata.category && (
+        <p
+          className="hidden text-xs print:block"
+          data-slot="print-url"
+        >
+          {`${BASE_URL}${localizeHref(
+            `/${item.metadata.category}/${item.slug}`
+          )}`}
+        </p>
+      )}
     </div>
   );
 };

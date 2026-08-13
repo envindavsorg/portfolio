@@ -22,7 +22,9 @@ const PAGE_BADGES = {
   blogArticle: "Article de blog",
   components: "Composants",
   componentsArticle: "Composant",
+  experience: "Expérience",
   homepage: "Page d'accueil",
+  project: "Projet",
   utils: "Outils",
   utilsArticle: "Outil",
 } as const;
@@ -35,7 +37,9 @@ const PAGE_BADGES_EN: Record<PageType, string> = {
   blogArticle: "Blog article",
   components: "Components",
   componentsArticle: "Component",
+  experience: "Experience",
   homepage: "Homepage",
+  project: "Project",
   utils: "Tools",
   utilsArticle: "Tool",
 };

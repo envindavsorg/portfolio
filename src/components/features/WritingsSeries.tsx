@@ -43,7 +43,7 @@ export const WritingsSeries = ({
   const { series, position, total, previous, next } = navigation;
 
   return (
-    <Panel>
+    <Panel data-print="hide">
       <PanelHeader
         title={m.writings_series_title({ name: series.name })}
       />

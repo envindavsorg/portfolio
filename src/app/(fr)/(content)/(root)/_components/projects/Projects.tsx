@@ -1,4 +1,5 @@
 import { CaretDownIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 
 import {
   Collapsible,
@@ -14,7 +15,7 @@ import {
 import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import { m } from "@/paraglide/messages";
-import { getLocale } from "@/paraglide/runtime";
+import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { PROJECTS } from "./content";
 import { ProjectItem } from "./ProjectItem";
@@ -84,8 +85,16 @@ export const Projects = () => {
           </CollapsibleContent>
         )}
 
-        {hasHidden && (
-          <PanelFooter>
+        {/* rendu dans tous les cas : c'est le pied qui porte le lien vers les
+          fiches de projet */}
+        <PanelFooter>
+          <Button asChild variant="outline">
+            <Link href={localizeHref("/projects")}>
+              {m.showcase_all_projects()}
+            </Link>
+          </Button>
+
+          {hasHidden && (
             <CollapsibleTrigger asChild>
               <Button
                 className="group flex items-center gap-2"
@@ -103,8 +112,8 @@ export const Projects = () => {
                 />
               </Button>
             </CollapsibleTrigger>
-          </PanelFooter>
-        )}
+          )}
+        </PanelFooter>
       </Collapsible>
     </Panel>
   );

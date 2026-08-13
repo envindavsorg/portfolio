@@ -1,6 +1,13 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 
+import type { WeightMetric } from "../src/data/weights";
+import {
+  MEASURED_PAGES,
+  WEIGHT_BUDGETS,
+  WEIGHT_METRICS,
+} from "../src/data/weights";
+
 /**
  * Budgets de poids.
  *
@@ -9,39 +16,32 @@ import { expect, test } from "@playwright/test";
  * chunks partagés qui ne sont pas tous téléchargés, et n'a donc pas de rapport
  * direct avec ce que reçoit un visiteur.
  *
- * Les plafonds ne sont pas un objectif atteint mais un garde-fou : ils sont posés
- * environ 15 % au-dessus des valeurs mesurées le 12 août 2026, pour attraper une
- * régression sans échouer au moindre écart. Un plafond franchi est un signal à
- * examiner, pas un feu vert pour l'élargir.
+ * Les plafonds sont des GARDE-FOUS, pas des objectifs atteints : un plafond
+ * franchi est un signal à examiner, pas un feu vert pour l'élargir. Ils vivent
+ * désormais dans `src/data/weights.ts`, avec les valeurs mesurées que publie la
+ * page /weight.
  *
  * Tailles encodées (donc compressées), telles qu'elles passent sur le réseau.
  */
 
 const KIB = 1024;
 
-/** JS : 871 ko mesurés au plus lourd (/series/parcours, /utils/regex-tester) */
-const JS_BUDGET = 1000 * KIB;
-/** polices : 266 ko sur chaque page, trois fontes pixel plus Geist */
-const FONT_BUDGET = 300 * KIB;
-/** CSS : 23 ko, une seule feuille pour tout le site */
-const CSS_BUDGET = 40 * KIB;
 /**
- * Images : 10 ko au plus lourd (/articles), 4 ko sur l'accueil.
+ * Les plafonds viennent de `src/data/weights.ts`, la même source que la page
+ * /weight.
  *
- * `measure()` ne comptait que .js, .css et les polices : quatre GIF de démo de
- * 2,7 Mio au total ont donc vécu des mois sous un budget « vert ». Le plafond est
- * volontairement large par rapport aux 10 ko mesurés — il n'est pas là pour
- * traquer le kilo-octet, mais pour qu'un fichier lourd redéposé se voie tout de
- * suite.
+ * Ils vivaient ici en constantes locales, à côté des valeurs mesurées recopiées
+ * dans un commentaire. Deux endroits pour un même chiffre : la page publiait donc
+ * un poids que ce test ne vérifiait pas, et rien n'aurait signalé qu'ils avaient
+ * cessé de parler du même site.
  */
-const IMAGE_BUDGET = 150 * KIB;
-/**
- * Document HTML : 84 ko sur l'accueil, 17 à 46 ko ailleurs, en encodé.
- *
- * C'est le poids qui porte la charge RSC. L'index de recherche y a vécu jusqu'à
- * récemment, invisible de toute mesure.
- */
-const DOCUMENT_BUDGET = 120 * KIB;
+const budget = (metric: WeightMetric) => WEIGHT_BUDGETS[metric] * KIB;
+
+const JS_BUDGET = budget("js");
+const FONT_BUDGET = budget("fonts");
+const CSS_BUDGET = budget("css");
+const IMAGE_BUDGET = budget("images");
+const DOCUMENT_BUDGET = budget("document");
 
 interface Weights {
   css: number;
@@ -106,16 +106,12 @@ const measure = (page: Page): Weights => {
   return weights;
 };
 
-const PAGES = [
-  "/",
-  "/en",
-  "/articles",
-  "/articles/how-i-write-css",
-  "/utils/regex-tester",
-  "/tags",
-  "/search",
-  "/series/parcours",
-];
+/**
+ * La liste vient elle aussi de `src/data/weights.ts` : la page /weight et ce test
+ * parcourent donc exactement le même ensemble. Une page publiée mais jamais
+ * mesurée, ou mesurée mais jamais publiée, n'est plus possible.
+ */
+const PAGES = MEASURED_PAGES.map((page) => page.path);
 
 const toKib = (bytes: number) => Math.round(bytes / KIB);
 
@@ -252,5 +248,43 @@ test.describe("aucune image hors de l'optimiseur", () => {
     for (const count of candidates) {
       expect(count).toBeGreaterThanOrEqual(8);
     }
+  });
+});
+
+/**
+ * Cohérence de ce qui est PUBLIÉ.
+ *
+ * La page /weight annonce des chiffres. Rien ne garantissait qu'ils soient
+ * cohérents avec les plafonds qu'ils côtoient, ni que les pages citées existent
+ * encore : une entrée recopiée à la main peut annoncer 400 Kio sur une URL
+ * supprimée depuis, et la page continuerait de l'afficher.
+ */
+test.describe("chiffres publiés", () => {
+  test("aucune valeur publiée ne dépasse son plafond", () => {
+    const offenders = MEASURED_PAGES.flatMap((page) =>
+      WEIGHT_METRICS.filter(
+        (metric) => page[metric] > WEIGHT_BUDGETS[metric]
+      ).map(
+        (metric) =>
+          `${page.path} · ${metric} ${page[metric]} > ${WEIGHT_BUDGETS[metric]}`
+      )
+    );
+
+    expect(offenders).toEqual([]);
+  });
+
+  test("les pages citées répondent toutes 200", async ({
+    request,
+  }) => {
+    const broken: string[] = [];
+
+    for (const page of MEASURED_PAGES) {
+      const response = await request.get(page.path);
+      if (response.status() !== 200) {
+        broken.push(`${page.path} → ${response.status()}`);
+      }
+    }
+
+    expect(broken).toEqual([]);
   });
 });

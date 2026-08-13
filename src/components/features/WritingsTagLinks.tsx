@@ -33,7 +33,7 @@ export const WritingsTagLinks = ({
   }
 
   return (
-    <Panel>
+    <Panel data-print="hide">
       <PanelHeader title={m.writings_tag_links_title()} />
 
       <PanelContent reset>

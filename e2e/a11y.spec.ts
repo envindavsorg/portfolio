@@ -37,6 +37,14 @@ const PAGES = [
   "/search",
   "/series",
   "/series/parcours",
+  "/projects",
+  "/projects/portfolio",
+  "/experience",
+  "/experience/wefix-by-fnac",
+  "/en/projects/portfolio",
+  "/uses",
+  "/now",
+  "/weight",
 ];
 
 /** Le composant est là pour DÉMONTRER un contraste insuffisant : son aperçu ne
@@ -45,7 +53,37 @@ const DELIBERATE_EXCLUSIONS = [
   "[data-slot='utils-contrast-checker'] [style]",
 ];
 
+/**
+ * Attend la fin des animations avant de mesurer.
+ *
+ * axe échantillonne la couleur CALCULÉE. Pendant un fondu d'ouverture, cette
+ * couleur est INTERMÉDIAIRE : un libellé qui finira noir sur blanc a été mesuré
+ * à #b2b2b3 sur #fbfafa, soit 2,03:1, et le scan a signalé une violation de
+ * contraste sur une couleur que personne n'a choisie et que personne ne voit.
+ *
+ * Attendre la visibilité du champ ne suffisait pas : le panneau est visible dès
+ * qu'il entre dans le DOM, alors que son fondu commence à peine. On attend donc
+ * les animations elles-mêmes — en ignorant celles qui bouclent à l'infini
+ * (particules, icônes animées), qui ne finiront jamais.
+ */
+const settleAnimations = async (page: Page) => {
+  await page.evaluate(async () => {
+    const finite = document.getAnimations().filter((animation) => {
+      const iterations = animation.effect?.getTiming().iterations;
+      return iterations !== Number.POSITIVE_INFINITY;
+    });
+
+    // une animation interrompue rejette : l'échec n'a pas d'intérêt ici, seul
+    // compte le fait qu'elle ne tourne plus
+    await Promise.allSettled(
+      finite.map((animation) => animation.finished)
+    );
+  });
+};
+
 const scan = async (page: Page) => {
+  await settleAnimations(page);
+
   const builder = new AxeBuilder({ page }).withTags([
     "wcag2a",
     "wcag2aa",
