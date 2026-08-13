@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "article_french_only": "cet article est rédigé en français.",
+  "callout_caution": "danger",
+  "callout_important": "important",
+  "callout_note": "à noter",
+  "callout_tip": "conseil",
+  "callout_warning": "attention",
   "color_picker_area_label": "saturation et luminosité — utilisez les flèches pour ajuster",
   "color_picker_area_value": "saturation {saturation} %, luminosité {lightness} %",
   "color_picker_hue_label": "teinte",

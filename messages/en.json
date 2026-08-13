@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "article_french_only": "this article is written in French.",
+  "callout_caution": "caution",
+  "callout_important": "important",
+  "callout_note": "note",
+  "callout_tip": "tip",
+  "callout_warning": "warning",
   "color_picker_area_label": "saturation and lightness — use the arrow keys to adjust",
   "color_picker_area_value": "saturation {saturation}%, lightness {lightness}%",
   "color_picker_hue_label": "hue",
