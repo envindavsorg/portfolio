@@ -17,6 +17,23 @@
  * `performance.getEntriesByType("resource")` DOUBLE le poids des scripts, parce
  * qu'un chunk préchargé puis exécuté produit deux entrées pour un seul transfert.
  * La première version de cette mesure annonçait 1340 Kio de JS au lieu de 654.
+ *
+ * D'OÙ VIENNENT CES VALEURS. De la CI, pas d'un poste de travail. C'était le but
+ * de la journalisation ajoutée à `budget.spec.ts`, et son premier passage a
+ * effectivement démenti les mesures locales sur deux points :
+ *
+ * - `/articles` : 518 Kio de JS mesurés en local, 707 en CI. Un tiers d'écart,
+ *   sur la page qui devient de loin la plus lourde du site. L'explication la
+ *   plus probable — non vérifiée — est le préchargement des liens d'articles
+ *   visibles, qui a le temps d'aboutir avant `networkidle` sur un runner et pas
+ *   forcément ailleurs.
+ * - `/` et `/en` : 4 Kio d'images en local, 32 en CI.
+ *
+ * Partout ailleurs l'écart est de 2 Kio au plus. Les chiffres retenus sont donc
+ * ceux de la CI : c'est l'environnement REPRODUCTIBLE, et c'est celui qui fait
+ * respecter les plafonds. Une page qui publierait 518 quand le seul
+ * environnement vérifiable en mesure 707 annoncerait un poids que rien ne
+ * confirme.
  */
 
 export type PageKind =
@@ -39,15 +56,15 @@ export interface MeasuredPage {
 }
 
 /** jour de la mesure, affiché à côté des chiffres */
-export const MEASURED_ON = "2026-08-14";
+export const MEASURED_ON = "2026-08-13";
 
 export const MEASURED_PAGES: MeasuredPage[] = [
   {
     css: 24,
     document: 85,
     fonts: 266,
-    images: 4,
-    js: 629,
+    images: 32,
+    js: 630,
     kind: "home",
     path: "/",
   },
@@ -55,7 +72,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     css: 24,
     document: 84,
     fonts: 266,
-    images: 4,
+    images: 32,
     js: 641,
     kind: "home",
     path: "/en",
@@ -65,7 +82,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 21,
     fonts: 266,
     images: 27,
-    js: 518,
+    js: 707,
     kind: "index",
     path: "/articles",
   },
@@ -119,7 +136,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 266,
     images: 0,
-    js: 498,
+    js: 499,
     kind: "showcase",
     path: "/projects",
   },
@@ -128,7 +145,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 266,
     images: 0,
-    js: 498,
+    js: 499,
     kind: "showcase",
     path: "/projects/portfolio",
   },
@@ -137,7 +154,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 19,
     fonts: 266,
     images: 0,
-    js: 498,
+    js: 499,
     kind: "showcase",
     path: "/experience/wefix-by-fnac",
   },
@@ -146,7 +163,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 23,
     fonts: 266,
     images: 0,
-    js: 499,
+    js: 497,
     kind: "resume",
     path: "/cv",
   },
@@ -159,26 +176,31 @@ export const MEASURED_PAGES: MeasuredPage[] = [
  * signal à examiner, pas une invitation à l'élargir.
  *
  * RESSERRÉS. Ils avaient été posés à 15 % au-dessus d'une mesure de 871 Kio de
- * JS ; la même méthode en donne 657. Un plafond à 1000 laissait donc passer une
- * régression de plus de 50 % sans rien dire — un garde-fou qui ne garde rien.
+ * JS. Un plafond à 1000 laissait passer une régression de plus de 50 % sans rien
+ * dire — un garde-fou qui ne garde rien.
  *
- * La marge retenue est d'environ 15 à 20 % au-dessus du pire cas mesuré, sauf
- * pour les images : leur plafond reste volontairement large par rapport aux
- * 27 Kio actuels, parce qu'il n'est pas là pour traquer le kilo-octet mais pour
- * qu'un fichier lourd redéposé se voie tout de suite. Il passe quand même de 150
- * à 60, ce qui le rend capable d'attraper une photo non optimisée.
+ * La marge est d'environ 15 à 20 % au-dessus du pire cas mesuré, sauf pour les
+ * images : leur plafond reste volontairement large par rapport aux 32 Kio
+ * actuels, parce qu'il n'est pas là pour traquer le kilo-octet mais pour qu'un
+ * fichier lourd redéposé se voie tout de suite. Il passe quand même de 150 à 60,
+ * ce qui le rend capable d'attraper une photo non optimisée.
  *
- * Ces valeurs viennent d'une mesure LOCALE. `budget.spec.ts` journalise
- * désormais ce qu'il mesure à chaque exécution : la prochaine trace de CI dira
- * si son environnement pèse comme celui-ci, et permettra de resserrer encore
- * sur des chiffres constatés plutôt que supposés.
+ * ⚠️ CALÉS SUR LA CI, pas sur un poste de travail. La première version de ces
+ * plafonds venait d'une mesure locale qui donnait 657 Kio pour le pire cas ;
+ * `budget.spec.ts` journalise désormais ce qu'il mesure, et son premier passage
+ * en CI a montré `/articles` à 707. Le plafond de 780 posé sur 657 n'offrait
+ * donc que 10 % de marge sur le vrai pire cas — sous la règle qu'on vient
+ * d'énoncer, et assez serré pour qu'un ajout légitime le franchisse. D'où 820.
+ *
+ * La leçon vaut plus que le chiffre : un plafond calculé sur une mesure qu'un
+ * seul environnement sait produire n'est pas un plafond, c'est une supposition.
  */
 export const WEIGHT_BUDGETS = {
   css: 30,
   document: 100,
   fonts: 300,
   images: 60,
-  js: 780,
+  js: 820,
 } as const;
 
 export type WeightMetric = keyof typeof WEIGHT_BUDGETS;
