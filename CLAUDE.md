@@ -60,7 +60,10 @@ pnpm registry:build       # Build component registry for distribution
   nor hashes can lock it down. `e2e/csp.spec.ts` loads every page type in a real
   browser and fails on any `securitypolicyviolation`
 - **Git hooks**: lefthook (`lefthook.yml`) — pre-commit `pnpm fix`, pre-push `pnpm types`
-- **Animation**: Motion (Framer Motion v12+)
+- **Animation**: Motion (Framer Motion v12+). `motion.create()` returns a NEW
+  component type per call — always call it at MODULE scope (or memoise per tag,
+  as `TextAnimate` does). Called inside a render it remounts the subtree on every
+  render, so animations restart forever and `memo` becomes useless
 - **Package Manager**: pnpm (v10+)
 - **React**: 19
 
@@ -189,6 +192,10 @@ Content can also declare a **series** (`series` key + `seriesName` label +
 `seriesOrder`). `series` must be identical across locales — it is the identifier
 behind the URL — while `seriesName` is translated. Reading order is `seriesOrder`,
 then `createdAt`, then slug, so a duplicated order still renders deterministically.
+
+`budget.spec.ts` logs every measurement it takes (`POIDS <path> js=… fonts=…`),
+so a CI run doubles as the reference measurement for its own environment — the
+ceilings were set from local numbers only.
 
 `src/data/weights.ts` holds the measured page weights AND the CI ceilings, and is
 imported by both the `/weight` page and `e2e/budget.spec.ts` — a published number

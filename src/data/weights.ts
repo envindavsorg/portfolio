@@ -39,7 +39,7 @@ export interface MeasuredPage {
 }
 
 /** jour de la mesure, affiché à côté des chiffres */
-export const MEASURED_ON = "2026-08-13";
+export const MEASURED_ON = "2026-08-14";
 
 export const MEASURED_PAGES: MeasuredPage[] = [
   {
@@ -47,7 +47,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 85,
     fonts: 266,
     images: 4,
-    js: 638,
+    js: 629,
     kind: "home",
     path: "/",
   },
@@ -56,7 +56,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 84,
     fonts: 266,
     images: 4,
-    js: 638,
+    js: 641,
     kind: "home",
     path: "/en",
   },
@@ -65,7 +65,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 21,
     fonts: 266,
     images: 27,
-    js: 516,
+    js: 518,
     kind: "index",
     path: "/articles",
   },
@@ -74,7 +74,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 39,
     fonts: 266,
     images: 0,
-    js: 590,
+    js: 593,
     kind: "article",
     path: "/articles/how-i-write-css",
   },
@@ -83,7 +83,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 45,
     fonts: 266,
     images: 0,
-    js: 654,
+    js: 657,
     kind: "tool",
     path: "/utils/regex-tester",
   },
@@ -92,7 +92,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 266,
     images: 0,
-    js: 491,
+    js: 494,
     kind: "index",
     path: "/tags",
   },
@@ -101,7 +101,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 16,
     fonts: 266,
     images: 0,
-    js: 506,
+    js: 509,
     kind: "index",
     path: "/search",
   },
@@ -110,7 +110,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 266,
     images: 0,
-    js: 499,
+    js: 502,
     kind: "index",
     path: "/series/parcours",
   },
@@ -119,7 +119,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 266,
     images: 0,
-    js: 496,
+    js: 498,
     kind: "showcase",
     path: "/projects",
   },
@@ -128,7 +128,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 266,
     images: 0,
-    js: 496,
+    js: 498,
     kind: "showcase",
     path: "/projects/portfolio",
   },
@@ -137,7 +137,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 19,
     fonts: 266,
     images: 0,
-    js: 496,
+    js: 498,
     kind: "showcase",
     path: "/experience/wefix-by-fnac",
   },
@@ -146,7 +146,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 23,
     fonts: 266,
     images: 0,
-    js: 494,
+    js: 499,
     kind: "resume",
     path: "/cv",
   },
@@ -158,20 +158,27 @@ export const MEASURED_PAGES: MeasuredPage[] = [
  * Ce sont des GARDE-FOUS, pas des objectifs atteints : un plafond franchi est un
  * signal à examiner, pas une invitation à l'élargir.
  *
- * ⚠️ Le plafond JS est aujourd'hui LARGE par rapport à la mesure : il a été posé
- * à 15 % au-dessus de 871 Kio, valeur mesurée le 12 août 2026, alors que la même
- * méthode donne 654 Kio le lendemain. Je n'ai pas resserré à l'aveugle : la CI
- * mesure dans son propre environnement, et un plafond calculé sur une mesure
- * locale peut la faire échouer pour une raison qui n'est pas une régression. Le
- * publier tel quel rend l'écart visible — c'est précisément ce que cette page
- * sert à ne plus cacher.
+ * RESSERRÉS. Ils avaient été posés à 15 % au-dessus d'une mesure de 871 Kio de
+ * JS ; la même méthode en donne 657. Un plafond à 1000 laissait donc passer une
+ * régression de plus de 50 % sans rien dire — un garde-fou qui ne garde rien.
+ *
+ * La marge retenue est d'environ 15 à 20 % au-dessus du pire cas mesuré, sauf
+ * pour les images : leur plafond reste volontairement large par rapport aux
+ * 27 Kio actuels, parce qu'il n'est pas là pour traquer le kilo-octet mais pour
+ * qu'un fichier lourd redéposé se voie tout de suite. Il passe quand même de 150
+ * à 60, ce qui le rend capable d'attraper une photo non optimisée.
+ *
+ * Ces valeurs viennent d'une mesure LOCALE. `budget.spec.ts` journalise
+ * désormais ce qu'il mesure à chaque exécution : la prochaine trace de CI dira
+ * si son environnement pèse comme celui-ci, et permettra de resserrer encore
+ * sur des chiffres constatés plutôt que supposés.
  */
 export const WEIGHT_BUDGETS = {
-  css: 40,
-  document: 120,
+  css: 30,
+  document: 100,
   fonts: 300,
-  images: 150,
-  js: 1000,
+  images: 60,
+  js: 780,
 } as const;
 
 export type WeightMetric = keyof typeof WEIGHT_BUDGETS;

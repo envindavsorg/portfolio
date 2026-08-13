@@ -269,6 +269,36 @@ const defaultItemAnimationVariants: Record<
   },
 };
 
+/**
+ * Les composants Motion sont créés UNE fois par balise, puis réutilisés.
+ *
+ * `motion.create()` rend un nouveau TYPE de composant à chaque appel. Appelé
+ * dans le corps du rendu, il en fabriquait donc un neuf à chaque fois — et pour
+ * React, un type différent n'est pas le même composant : il démontait l'arbre et
+ * le remontait. L'animation repartait de `hidden` sans jamais aboutir, les
+ * caractères restaient à `opacity: 0`, et le `memo` autour du composant ne
+ * servait plus à rien puisque son rendu produisait toujours du neuf.
+ *
+ * C'est la leçon déjà notée dans ce dépôt pour `motion.create(Image)` : au
+ * niveau MODULE, jamais dans le rendu.
+ */
+const motionComponents = new Map<ElementType, ElementType>();
+
+const getMotionComponent = (component: ElementType): ElementType => {
+  const cached = motionComponents.get(component);
+
+  if (cached) {
+    return cached;
+  }
+
+  const created = motion.create(
+    component as Parameters<typeof motion.create>[0]
+  ) as ElementType;
+  motionComponents.set(component, created);
+
+  return created;
+};
+
 const TextAnimateBase = ({
   children,
   delay = 0,
@@ -278,14 +308,25 @@ const TextAnimateBase = ({
   segmentClassName,
   as: Component = "p",
   startOnView = true,
-  once = false,
+  /**
+   * `true` par DÉFAUT : le texte s'anime une fois, puis reste visible.
+   *
+   * Avec `false`, Motion rejoue la variante `hidden` dès que l'élément quitte le
+   * cadre — donc un titre déjà lu redevenait INVISIBLE en remontant la page, et
+   * la mise en page gardait sa bande vide à la place. Ce n'était pas une
+   * animation qui manquait, c'était un titre absent.
+   *
+   * Un texte qui disparaît en défilant n'est utile à personne ; celui qui veut
+   * le comportement d'origine passe `once={false}` explicitement.
+   */
+  once = true,
   by = "word",
   animation = "fadeIn",
   accessible = true,
   themed = false,
   ...props
 }: TextAnimateProps) => {
-  const MotionComponent = motion.create(Component);
+  const MotionComponent = getMotionComponent(Component);
 
   let segments: string[] = [];
   switch (by) {
@@ -365,7 +406,17 @@ const TextAnimateBase = ({
 
   return (
     <AnimatePresence mode="popLayout">
+      {/**
+       * La CLÉ dépend du texte.
+       *
+       * Avec `once`, Motion cesse d'observer après la première entrée dans le
+       * cadre. Si les segments changent ensuite — un titre qui passe de
+       * « titre » à « -- titre -- » —, les nouveaux caractères montent en
+       * `hidden` et plus rien ne déclenche `show` : le texte reste invisible.
+       * Changer de clé remonte proprement le bloc, qui rejoue son entrée.
+       */}
       <MotionComponent
+        key={children}
         animate={startOnView ? undefined : "show"}
         aria-label={accessible ? children : undefined}
         className={cn("whitespace-pre-wrap", className)}
