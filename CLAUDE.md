@@ -47,8 +47,12 @@ pnpm registry:build       # Build component registry for distribution
 - **Tests**: Vitest (+ Testing Library, jsdom) for unit (`src/lib/*.test.ts`),
   Playwright for e2e (`e2e/*.spec.ts`)
 - **CI**: `.github/workflows/ci.yml` — types, lint, format, unit tests in one job,
-  build + e2e in another. Installs with `--no-frozen-lockfile` because
-  `pnpm-lock.yaml` is git-ignored in this repo (so CI resolves versions fresh)
+  build + e2e in another. Installs with `--frozen-lockfile` and caches the pnpm
+  store: `pnpm-lock.yaml` is COMMITTED. Do not re-ignore it — when it was ignored,
+  CI resolved every version fresh on each run, so an upstream release of a
+  transitive dependency could break (or silently fix) the build with no commit
+  changing. A dependency change must now update the lockfile in the same commit,
+  or CI fails on the mismatch
 - **Security headers**: CSP + HSTS built in `next.config.ts` (`CSP_DIRECTIVES`).
   `script-src` keeps `'unsafe-inline'` on purpose — the App Router streams the
   RSC payload through dozens of inline `<script>` tags that change per page and
@@ -118,7 +122,9 @@ src/app/
   route (e.g. `/articles`); locale handles the `/en` prefix.
 - MDX content is bilingual: FR files in `src/content/<category>/`, EN
   translations in `src/content/<category>/en/<slug>.mdx`. A missing EN file
-  falls back to FR and the page shows a `WritingsLocaleNotice`.
+  falls back to FR and the page shows a `WritingsLocaleNotice`. The `tags`
+  frontmatter is IDENTICAL in both locales — it is the key behind the URL
+  (see `tags.ts`); only the rendered label is translated.
 - The FR pages export locale-aware views (`ArticlesIndex`, `ArticleView`,
   `ComponentsIndex`, `ComponentView`, `UtilsIndex`, `UtilView`) that the thin
   `en/` pages reuse with `locale="en"`.
@@ -237,7 +243,11 @@ the component registry:
 - `llms.ts` - markdown rendering shared by the plain-text mirror
 - `tags.ts` - tag slugs, cross-category aggregation, per-tag lookup. `slugifyTag`
   delegates to `case.ts`'s `slugify`: two transliterations would drift and the
-  tag URLs would stop matching
+  tag URLs would stop matching. A tag is a **KEY**, written in French because FR
+  is the base locale and the key produces the slug; `tagLabel(tag, locale)`
+  translates only what is displayed — same contract as `series`/`seriesName`.
+  Never translate a tag in EN frontmatter: it forks the URL space (`/en/tags/colors`
+  and `/en/tags/couleurs` both existed, for the same topic, in the same tree)
 - `series.ts` - reading order of a series. `series` frontmatter is a KEY shared by
   every locale (it drives the slug); `seriesName` is the translatable label
 - `case.ts` - word splitting and the ten case conversions, plus `slugify`

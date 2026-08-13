@@ -30,15 +30,16 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      # pas de `cache: pnpm` : l'action calcule sa clé depuis pnpm-lock.yaml,
-      # absent du dépôt, et échoue sans lui
+      # `cache: pnpm` calcule sa clé depuis pnpm-lock.yaml, désormais versionné
       - uses: actions/setup-node@v4
         with:
+          cache: pnpm
           node-version: 22
 
-      # `--frozen-lockfile` demanderait un pnpm-lock.yaml, or il est ignoré par
-      # git dans ce dépôt : l'installation résout donc les versions à chaque run
-      - run: pnpm install --no-frozen-lockfile
+      # `--frozen-lockfile` : la CI installe EXACTEMENT ce que décrit le lockfile
+      # et échoue s'il ne correspond plus à package.json, au lieu de résoudre les
+      # versions à neuf et de tester autre chose que ce qui sera déployé
+      - run: pnpm install --frozen-lockfile
 
       # `pnpm types` ne déclenche pas la compilation i18n, et src/paraglide/ est
       # généré : sans cette étape, tsc échoue sur des imports introuvables
@@ -65,15 +66,16 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      # pas de `cache: pnpm` : l'action calcule sa clé depuis pnpm-lock.yaml,
-      # absent du dépôt, et échoue sans lui
+      # `cache: pnpm` calcule sa clé depuis pnpm-lock.yaml, désormais versionné
       - uses: actions/setup-node@v4
         with:
+          cache: pnpm
           node-version: 22
 
-      # `--frozen-lockfile` demanderait un pnpm-lock.yaml, or il est ignoré par
-      # git dans ce dépôt : l'installation résout donc les versions à chaque run
-      - run: pnpm install --no-frozen-lockfile
+      # `--frozen-lockfile` : la CI installe EXACTEMENT ce que décrit le lockfile
+      # et échoue s'il ne correspond plus à package.json, au lieu de résoudre les
+      # versions à neuf et de tester autre chose que ce qui sera déployé
+      - run: pnpm install --frozen-lockfile
 
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium

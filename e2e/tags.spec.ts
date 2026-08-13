@@ -172,3 +172,107 @@ test.describe("arbre anglais", () => {
     );
   });
 });
+
+/**
+ * Vocabulaire partagé entre les langues.
+ *
+ * Les tests ci-dessus utilisaient `react`, qui s'écrit pareil en français et en
+ * anglais : ils n'ont donc jamais touché le vrai problème. Le frontmatter
+ * anglais traduisait la CLÉ du tag, ce qui donnait deux jeux d'URL pour les mêmes
+ * sujets — et, dans le seul arbre anglais, `couleurs` ET `colors` selon le
+ * fichier qui avait été traduit.
+ *
+ * Ces tests portent sur un sujet dont le mot DIFFÈRE d'une langue à l'autre.
+ */
+test.describe("sujets traduits", () => {
+  test("le même slug sert les deux langues", async ({ request }) => {
+    for (const url of ["/tags/carriere", "/en/tags/carriere"]) {
+      const response = await request.get(url);
+      expect(response.status(), `${url} doit répondre 200`).toBe(200);
+    }
+  });
+
+  test("le libellé suit la langue, le slug ne bouge pas", async ({
+    page,
+  }) => {
+    await page.goto("/tags/carriere");
+    await expect(
+      page.getByRole("heading", { level: 1 })
+    ).toContainText(/carrière/iu);
+
+    await page.goto("/en/tags/carriere");
+    await expect(
+      page.getByRole("heading", { level: 1 })
+    ).toContainText(/career/iu);
+    // le mot français ne doit plus apparaître dans le titre anglais
+    await expect(
+      page.getByRole("heading", { level: 1 })
+    ).not.toContainText(/carrière/iu);
+  });
+
+  test("l'index anglais affiche les libellés anglais", async ({
+    page,
+  }) => {
+    await page.goto("/en/tags");
+
+    const links = page.locator("a[href^='/en/tags/']");
+    const labels = await links.allInnerTexts();
+    const texts = labels.join(" ").toLowerCase();
+
+    expect(texts).toContain("career");
+    expect(texts).toContain("lessons learned");
+    expect(texts).not.toContain("carrière");
+    expect(texts).not.toContain("retour d'expérience");
+  });
+
+  test("un sujet traduit déclare enfin ses deux langues", async ({
+    request,
+  }) => {
+    // avant l'unification, /tags/carriere n'avait AUCUN équivalent anglais :
+    // le slug EN était `career`, et le sitemap n'annonçait donc pas de paire
+    const response = await request.get("/tags/carriere");
+    const html = await response.text();
+
+    expect(html).toContain(
+      'href="https://cuzeacflorin.fr/tags/carriere"'
+    );
+    expect(html).toContain(
+      'href="https://cuzeacflorin.fr/en/tags/carriere"'
+    );
+  });
+
+  test("les anciens slugs anglais redirigent au lieu de disparaître", async ({
+    request,
+  }) => {
+    const moved: Record<string, string> = {
+      "/en/tags/career": "/en/tags/carriere",
+      "/en/tags/colors": "/en/tags/couleurs",
+      "/en/tags/lessons-learned": "/en/tags/retour-d-experience",
+      "/en/tags/text": "/en/tags/texte",
+    };
+
+    for (const [from, to] of Object.entries(moved)) {
+      const response = await request.get(from, {
+        maxRedirects: 0,
+      });
+
+      expect(response.status(), `${from} doit rediriger`).toBe(308);
+      expect(response.headers().location).toBe(to);
+    }
+  });
+
+  test("la recherche anglaise trouve un sujet par son mot anglais", async ({
+    request,
+  }) => {
+    const response = await request.get("/api/search/en");
+    const docs = (await response.json()) as {
+      tags: string[];
+    }[];
+
+    const allTags = docs.flatMap((doc) => doc.tags);
+
+    expect(allTags).toContain("career");
+    expect(allTags).toContain("lessons learned");
+    expect(allTags).not.toContain("carrière");
+  });
+});

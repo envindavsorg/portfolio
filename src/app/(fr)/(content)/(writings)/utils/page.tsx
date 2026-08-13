@@ -29,7 +29,7 @@ export const UtilsIndex = ({
   locale = "fr",
 }: Readonly<{ locale?: ContentLocale }>) => {
   const contents = getContentByCategory(pageType, locale);
-  const { tagCounts, tags } = getTagData(contents);
+  const { tagCounts, tagLabels, tags } = getTagData(contents, locale);
 
   return (
     <div className="screen-line-after min-h-svh">
@@ -50,7 +50,11 @@ export const UtilsIndex = ({
       <Divider border={false} type="half" />
 
       <WritingsTagFilter>
-        <WritingsTags tagCounts={tagCounts} tags={tags} />
+        <WritingsTags
+          labels={tagLabels}
+          tagCounts={tagCounts}
+          tags={tags}
+        />
 
         <Divider border={false} type="half" />
 

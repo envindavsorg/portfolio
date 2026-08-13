@@ -94,8 +94,11 @@ test.describe("intégrité du sitemap", () => {
 
 test.describe("intégrité des liens rendus", () => {
   /**
-   * Les sujets sont le cas qui a dérivé : les articles anglais lient des slugs
-   * traduits (`career`, `lessons-learned`) que le build FR ne connaît pas.
+   * Les sujets sont le cas qui a dérivé : les articles anglais liaient des slugs
+   * traduits (`career`, `lessons-learned`) que le build FR ne connaissait pas.
+   * Le tag est depuis une clé partagée, mais ce parcours reste la garde — c'est
+   * lui qui avait attrapé la divergence, et rien ne dit qu'une autre ne viendra
+   * pas d'ailleurs (une série, un fil d'Ariane, un lien écrit à la main).
    */
   for (const path of [
     "/articles/my-work-journey",

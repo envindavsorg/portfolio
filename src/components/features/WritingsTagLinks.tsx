@@ -6,7 +6,7 @@ import {
   PanelHeader,
 } from "@/components/base/Panel";
 import type { Content } from "@/lib/content";
-import { slugifyTag } from "@/lib/tags";
+import { slugifyTag, tagLabel } from "@/lib/tags";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
@@ -44,7 +44,9 @@ export const WritingsTagLinks = ({
                 className="flex items-center rounded-full border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme focus-visible:border-theme focus-visible:text-theme"
                 href={localizeHref(`/tags/${slugifyTag(tag)}`)}
               >
-                #{tag}
+                {/* le lien porte la CLÉ dans son URL et le libellé de la locale
+                    du contenu dans son texte */}
+                #{tagLabel(tag, current.locale)}
               </Link>
             </li>
           ))}

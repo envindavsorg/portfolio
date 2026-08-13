@@ -36,7 +36,7 @@ export const ArticlesIndex = ({
   locale = "fr",
 }: Readonly<{ locale?: ContentLocale }>) => {
   const contents = getContentByCategory("articles", locale);
-  const { tagCounts, tags } = getTagData(contents);
+  const { tagCounts, tagLabels, tags } = getTagData(contents, locale);
 
   return (
     <div className="screen-line-after min-h-svh">
@@ -95,7 +95,11 @@ export const ArticlesIndex = ({
       </PanelContent>
 
       <WritingsTagFilter>
-        <WritingsTags tagCounts={tagCounts} tags={tags} />
+        <WritingsTags
+          labels={tagLabels}
+          tagCounts={tagCounts}
+          tags={tags}
+        />
 
         <Divider before={false} border={false} type="half" />
 

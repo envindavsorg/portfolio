@@ -14,6 +14,7 @@ import { useTagFilter } from "./WritingsTagFilter";
 interface TagButtonProps {
   count?: number;
   isActive: boolean;
+  label?: string;
   onTagClick: (tag: string) => void;
   tag: string;
 }
@@ -21,6 +22,7 @@ interface TagButtonProps {
 const TagButton = ({
   count,
   isActive,
+  label,
   onTagClick,
   tag,
 }: TagButtonProps) => {
@@ -42,8 +44,9 @@ const TagButton = ({
       variant="outline"
     >
       {/* ALL_TAG reste la valeur interne (clé de comptage et état d'URL) :
-          seul son libellé visible est traduit */}
-      {tag === ALL_TAG ? m.writings_tags_all() : tag}
+          seul son libellé visible est traduit. Il en va de même des sujets — le
+          bouton porte la clé, l'utilisateur lit le libellé de sa langue. */}
+      {tag === ALL_TAG ? m.writings_tags_all() : (label ?? tag)}
       {count !== undefined && count > 0 && (
         <span className="font-medium text-xs">({count})</span>
       )}
@@ -52,11 +55,14 @@ const TagButton = ({
 };
 
 export interface WritingsTagsProps {
+  /** libellé affiché par tag ; la clé sert de repli */
+  labels?: Record<string, string>;
   tagCounts?: Record<string, number>;
   tags: string[];
 }
 
 export const WritingsTags = ({
+  labels,
   tagCounts,
   tags,
 }: WritingsTagsProps) => {
@@ -86,6 +92,7 @@ export const WritingsTags = ({
               count={tagCounts?.[tag]}
               isActive={isActiveTag(tag, activeTag)}
               key={tag}
+              label={labels?.[tag]}
               onTagClick={handleTagClick}
               tag={tag}
             />

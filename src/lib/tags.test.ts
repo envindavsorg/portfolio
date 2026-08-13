@@ -10,6 +10,7 @@ import {
   isActiveTag,
   matchesTag,
   slugifyTag,
+  tagLabel,
 } from "@/lib/tags";
 
 const makeContent = (
@@ -201,5 +202,127 @@ describe("getContentByTagSlug", () => {
     ];
 
     expect(getContentByTagSlug(contents, "next-js")).toHaveLength(2);
+  });
+});
+
+describe("tagLabel", () => {
+  it("rend la clé telle quelle en français", () => {
+    expect(tagLabel("carrière", "fr")).toBe("carrière");
+    expect(tagLabel("retour d'expérience", "fr")).toBe(
+      "retour d'expérience"
+    );
+  });
+
+  it("traduit en anglais les sujets dont le mot diffère", () => {
+    expect(tagLabel("carrière", "en")).toBe("career");
+    expect(tagLabel("retour d'expérience", "en")).toBe(
+      "lessons learned"
+    );
+    expect(tagLabel("couleurs", "en")).toBe("colors");
+    expect(tagLabel("texte", "en")).toBe("text");
+    expect(tagLabel("casse", "en")).toBe("case");
+    expect(tagLabel("contraste", "en")).toBe("contrast");
+  });
+
+  it("laisse intacts les sujets identiques dans les deux langues", () => {
+    for (const tag of [
+      "css",
+      "json",
+      "jwt",
+      "git",
+      "regex",
+      "uuid",
+    ]) {
+      expect(tagLabel(tag, "en")).toBe(tag);
+    }
+  });
+
+  it("est insensible à la casse de la clé", () => {
+    expect(tagLabel("Carrière", "en")).toBe("career");
+    expect(tagLabel("TEXTE", "en")).toBe("text");
+  });
+
+  it("rend un sujet inconnu tel quel plutôt que vide", () => {
+    expect(tagLabel("kubernetes", "en")).toBe("kubernetes");
+    expect(tagLabel("", "en")).toBe("");
+  });
+
+  it("suppose le français sans locale", () => {
+    expect(tagLabel("couleurs")).toBe("couleurs");
+  });
+});
+
+describe("clé partagée entre les locales", () => {
+  /**
+   * La propriété qui compte : un sujet a le MÊME slug dans les deux arbres, donc
+   * une URL de sujet partagée retombe sur le même contenu. C'est ce qui était
+   * faux quand le frontmatter anglais traduisait la clé.
+   */
+  it("produit les mêmes slugs en français et en anglais", () => {
+    const contents = [
+      makeContent(["carrière", "retour d'expérience"], "post"),
+    ];
+
+    const fr = getTagIndex(contents, "fr").map((tag) => tag.slug);
+    const en = getTagIndex(contents, "en").map((tag) => tag.slug);
+
+    expect(en).toEqual(fr);
+    expect(fr).toContain("carriere");
+  });
+
+  it("traduit le libellé sans toucher au slug", () => {
+    const contents = [makeContent(["carrière"], "post")];
+    const [entry] = getTagIndex(contents, "en");
+
+    expect(entry.slug).toBe("carriere");
+    expect(entry.label).toBe("career");
+    expect(entry.variants).toEqual(["career"]);
+  });
+
+  it("retrouve un sujet par son slug partagé dans les deux locales", () => {
+    const contents = [makeContent(["couleurs"], "post")];
+
+    expect(getTagBySlug(contents, "couleurs", "fr")?.label).toBe(
+      "couleurs"
+    );
+    expect(getTagBySlug(contents, "couleurs", "en")?.label).toBe(
+      "colors"
+    );
+    // le slug anglais de l'ancien vocabulaire ne doit plus rien désigner
+    expect(getTagBySlug(contents, "colors", "en")).toBeNull();
+  });
+
+  it("classe les sujets sur le libellé de la locale", () => {
+    /**
+     * Le couple est choisi pour que l'ordre CHANGE vraiment. La plupart des
+     * traductions gardent l'initiale (`carrière`/`career`, `texte`/`text`) et
+     * trieraient pareil dans les deux langues, ce qui ne prouverait rien : seul
+     * « retour d'expérience » → « lessons learned » traverse l'alphabet, de R
+     * vers L, et passe donc devant « mindset ».
+     */
+    const contents = [
+      makeContent(["retour d'expérience"], "a"),
+      makeContent(["mindset"], "b"),
+    ];
+
+    expect(
+      getTagData(contents, "fr").tags.filter((t) => t !== ALL_TAG)
+    ).toEqual(["mindset", "retour d'expérience"]);
+    expect(
+      getTagData(contents, "en").tags.filter((t) => t !== ALL_TAG)
+    ).toEqual(["retour d'expérience", "mindset"]);
+    expect(getTagData(contents, "fr").tags).toContain(ALL_TAG);
+  });
+
+  it("expose un libellé par clé, la clé restant la valeur du filtre", () => {
+    const { tagLabels, tags } = getTagData(
+      [makeContent(["couleurs", "css"], "post")],
+      "en"
+    );
+
+    expect(tags).toContain("couleurs");
+    expect(tags).not.toContain("colors");
+    expect(tagLabels.couleurs).toBe("colors");
+    expect(tagLabels.css).toBe("css");
   });
 });

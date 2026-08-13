@@ -1,9 +1,21 @@
 import { slugify } from "@/lib/case";
-import type { Content, ContentCategory } from "@/lib/content";
+import type {
+  Content,
+  ContentCategory,
+  ContentLocale,
+} from "@/lib/content";
 
 interface TagData {
   tagCounts: Record<string, number>;
   tags: string[];
+  /**
+   * Libellé à afficher pour chaque tag.
+   *
+   * Le filtre des pages d'index garde la CLÉ comme valeur — c'est elle qui est
+   * comptée et écrite dans l'URL. Seul l'affichage est traduit, d'où une table
+   * séparée plutôt qu'une traduction de `tags`.
+   */
+  tagLabels: Record<string, string>;
 }
 
 /** un tag tel qu'exposé par une page /tags/[tag] */
@@ -31,6 +43,42 @@ export interface TagEntry {
  * finiraient par divergent, et les URL des sujets cesseraient de correspondre.
  */
 export const slugifyTag = (tag: string): string => slugify(tag);
+
+/**
+ * Libellés anglais des sujets dont le mot diffère.
+ *
+ * Un tag est une CLÉ, écrite en français dans le frontmatter parce que le
+ * français est la locale de base : c'est cette clé qui produit le slug, donc
+ * l'URL. Seul le libellé AFFICHÉ est traduit. C'est le couple `series` /
+ * `seriesName` déjà en place pour les séries, appliqué aux sujets.
+ *
+ * L'état précédent traduisait la clé elle-même, à moitié : `/en` servait à la
+ * fois `couleurs` et `colors`, `texte` et `text` — le même sujet sur deux pages,
+ * dans le MÊME arbre de langue, selon le fichier qui avait été traduit. Et les
+ * deux sujets français sans équivalent anglais n'existaient pas du tout sous
+ * `/en`. Une clé partagée rend ces états impossibles au lieu de les corriger un
+ * par un : le slug d'un sujet est le même dans les deux arbres, donc un lien
+ * partagé retombe toujours sur la même page.
+ *
+ * Les sujets absents de cette table s'affichent tels quels — c'est le cas de la
+ * majorité (`css`, `json`, `jwt`, `git`, `regex`…), qui s'écrivent pareil dans
+ * les deux langues. Y ajouter une entrée identique à sa clé serait du bruit.
+ */
+const EN_TAG_LABELS: Record<string, string> = {
+  carrière: "career",
+  casse: "case",
+  contraste: "contrast",
+  couleurs: "colors",
+  "retour d'expérience": "lessons learned",
+  texte: "text",
+};
+
+/** le libellé d'un sujet dans une locale ; la clé elle-même à défaut */
+export const tagLabel = (
+  tag: string,
+  locale: ContentLocale = "fr"
+): string =>
+  locale === "en" ? (EN_TAG_LABELS[tag.toLowerCase()] ?? tag) : tag;
 
 export const ALL_TAG = "tout";
 
@@ -62,17 +110,29 @@ const buildTagCounts = (
   return counts;
 };
 
-export const getTagData = (contents: Content[]): TagData => {
+export const getTagData = (
+  contents: Content[],
+  locale: ContentLocale = "fr"
+): TagData => {
   const tagCounts = buildTagCounts(contents);
 
+  const keys = Object.keys(tagCounts).filter((k) => k !== ALL_TAG);
+  const tagLabels = Object.fromEntries(
+    keys.map((tag) => [tag, tagLabel(tag, locale)])
+  );
+
+  // trié sur le LIBELLÉ : en anglais, « lessons learned » ne se range pas là où
+  // se rangeait « retour d'expérience »
   const tags = [
     ALL_TAG,
-    ...Object.keys(tagCounts)
-      .filter((k) => k !== ALL_TAG)
-      .toSorted(),
+    ...keys.toSorted((left, right) =>
+      (tagLabels[left] ?? left).localeCompare(
+        tagLabels[right] ?? right
+      )
+    ),
   ];
 
-  return { tagCounts, tags };
+  return { tagCounts, tagLabels, tags };
 };
 
 interface TagAccumulator {
@@ -136,14 +196,21 @@ const pickLabel = (spellings: Map<string, number>): string => {
  * sujet peut relier un article, un composant et un outil, et c'est précisément
  * ce que le filtrage côté client ne pouvait pas montrer.
  */
-export const getTagIndex = (contents: Content[]): TagEntry[] =>
+export const getTagIndex = (
+  contents: Content[],
+  locale: ContentLocale = "fr"
+): TagEntry[] =>
   [...accumulate(contents)]
     .map(([slug, entry]) => ({
       categories: [...entry.categories].toSorted(),
       count: entry.slugs.size,
-      label: pickLabel(entry.spellings),
+      label: tagLabel(pickLabel(entry.spellings), locale),
       slug,
-      variants: [...entry.spellings.keys()].toSorted(),
+      // les variantes sont montrées au lecteur : elles suivent donc la locale,
+      // comme le libellé principal
+      variants: [...entry.spellings.keys()]
+        .map((spelling) => tagLabel(spelling, locale))
+        .toSorted(),
     }))
     .toSorted(
       (left, right) =>
@@ -154,9 +221,11 @@ export const getTagIndex = (contents: Content[]): TagEntry[] =>
 /** le tag correspondant à un slug d'URL, ou `null` s'il n'existe pas */
 export const getTagBySlug = (
   contents: Content[],
-  slug: string
+  slug: string,
+  locale: ContentLocale = "fr"
 ): TagEntry | null =>
-  getTagIndex(contents).find((tag) => tag.slug === slug) ?? null;
+  getTagIndex(contents, locale).find((tag) => tag.slug === slug) ??
+  null;
 
 /** contenus portant ce tag, dans l'ordre de `contents` (donc par date décroissante) */
 export const getContentByTagSlug = (

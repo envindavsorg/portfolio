@@ -134,6 +134,40 @@ const nextConfig: NextConfig = {
   pageExtensions: ["mdx", "ts", "tsx"],
   reactCompiler: true,
   reactStrictMode: true,
+  /**
+   * Anciens slugs de sujets anglais.
+   *
+   * Le frontmatter anglais traduisait la CLÉ du tag, ce qui produisait un second
+   * jeu d'URL pour les mêmes sujets. Le tag est devenu une clé partagée et le
+   * libellé seul est traduit — mais ces quatre URL ont été servies ET annoncées au
+   * sitemap. Les laisser tomber en 404 casserait des liens déjà publiés et
+   * indexés ; une redirection permanente transmet le peu d'autorité qu'elles ont
+   * à l'URL canonique.
+   */
+  async redirects() {
+    return [
+      {
+        destination: "/en/tags/carriere",
+        permanent: true,
+        source: "/en/tags/career",
+      },
+      {
+        destination: "/en/tags/retour-d-experience",
+        permanent: true,
+        source: "/en/tags/lessons-learned",
+      },
+      {
+        destination: "/en/tags/couleurs",
+        permanent: true,
+        source: "/en/tags/colors",
+      },
+      {
+        destination: "/en/tags/texte",
+        permanent: true,
+        source: "/en/tags/text",
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

@@ -42,7 +42,7 @@ export const ComponentsIndex = ({
   locale = "fr",
 }: Readonly<{ locale?: ContentLocale }>) => {
   const contents = getContentByCategory("components", locale);
-  const { tagCounts, tags } = getTagData(contents);
+  const { tagCounts, tagLabels, tags } = getTagData(contents, locale);
 
   return (
     <div className="screen-line-after min-h-svh">
@@ -145,7 +145,11 @@ export const ComponentsIndex = ({
       </PanelContent>
 
       <WritingsTagFilter>
-        <WritingsTags tagCounts={tagCounts} tags={tags} />
+        <WritingsTags
+          labels={tagLabels}
+          tagCounts={tagCounts}
+          tags={tags}
+        />
 
         <Divider
           after={false}

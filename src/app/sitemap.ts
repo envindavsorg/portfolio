@@ -44,7 +44,13 @@ const localizedEntries = (
  * Déclarer un `hreflang` vers une URL qui n'existe pas est pire que de ne rien
  * déclarer. Le sitemap annonçait un équivalent anglais pour CHAQUE sujet
  * français, dont deux (`carriere`, `retour-d-experience`) étaient prérendus en
- * 404 sous /en parce que le vocabulaire de tags diverge entre les locales.
+ * 404 sous /en, parce que le vocabulaire de tags divergeait alors entre les
+ * locales.
+ *
+ * Depuis que le tag est une clé partagée, plus aucun sujet n'emprunte ce chemin.
+ * Il reste parce que la garantie ne vient pas du contenu actuel : un futur
+ * article non traduit retomberait sur le FR et pourrait faire réapparaître un
+ * sujet dans une seule locale.
  */
 const singleEntry = (
   path: string,
@@ -145,12 +151,15 @@ const sitemap = (): MetadataRoute.Sitemap => {
 
   // les pages de sujet sont la principale surface de découverte transversale :
   // sans elles au sitemap, elles ne seraient atteignables que par navigation.
-  // Chaque locale a son propre vocabulaire de tags, donc chaque index est calculé
-  // sur son contenu, et la paire hreflang n'est émise que si le slug existe
-  // réellement des deux côtés.
+  //
+  // Le vocabulaire est désormais PARTAGÉ : un tag est une clé, seul son libellé
+  // est traduit, donc les deux index produisent les mêmes slugs et chaque sujet
+  // sort avec sa paire hreflang. Le calcul par locale et la comparaison des
+  // ensembles restent : ils ne coûtent rien et referment le trou tout seuls si un
+  // contenu non traduit réintroduit un jour un sujet propre à une langue.
   const enPosts = getAllContent("en");
-  const frTagIndex = getTagIndex(allPosts);
-  const enTagIndex = getTagIndex(enPosts);
+  const frTagIndex = getTagIndex(allPosts, "fr");
+  const enTagIndex = getTagIndex(enPosts, "en");
   const frTagSlugs = new Set(frTagIndex.map((tag) => tag.slug));
   const enTagSlugs = new Set(enTagIndex.map((tag) => tag.slug));
 
