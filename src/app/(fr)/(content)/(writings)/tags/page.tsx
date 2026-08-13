@@ -31,7 +31,7 @@ export const metadata: Metadata = createMetadata({
 export const TagsIndex = ({
   locale = "fr",
 }: Readonly<{ locale?: ContentLocale }>) => {
-  const tags = getTagIndex(getAllContent(locale));
+  const tags = getTagIndex(getAllContent(locale), locale);
 
   return (
     <div className="screen-line-after min-h-svh">

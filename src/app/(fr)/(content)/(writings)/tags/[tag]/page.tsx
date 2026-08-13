@@ -24,22 +24,25 @@ import { localizeHref } from "@/paraglide/runtime";
 /**
  * Les slugs d'une locale sont calculés depuis le contenu de CETTE locale.
  *
- * L'ancienne version dérivait les deux arbres du seul index français, sur la foi
- * d'un commentaire qui affirmait que « le frontmatter anglais reprend les tags
- * FR ». C'est faux : le frontmatter EN traduit une partie de ses tags. Les deux
- * sujets FR sans équivalent — `carriere` et `retour-d-experience` — étaient donc
- * PRÉRENDUS EN 404 sous /en, tout en étant annoncés au sitemap, et les quatre
- * slugs EN réellement liés depuis les articles anglais (`career`,
+ * Une version antérieure dérivait les deux arbres du seul index français, sur la
+ * foi d'un commentaire qui affirmait que « le frontmatter anglais reprend les
+ * tags FR ». C'était faux : le frontmatter EN traduisait une partie de ses tags.
+ * Les deux sujets FR sans équivalent — `carriere` et `retour-d-experience` —
+ * étaient PRÉRENDUS EN 404 sous /en tout en étant annoncés au sitemap, et les
+ * quatre slugs EN réellement liés depuis les articles anglais (`career`,
  * `lessons-learned`, `text`, `colors`) n'étaient prérendus nulle part.
  *
- * Conséquence assumée : un sujet propre à une locale n'a pas d'équivalent
- * hreflang, et le sitemap ne lui en déclare aucun (voir src/app/sitemap.ts).
- * Le jour où les sujets devront exister dans les deux langues, le motif est déjà
- * dans le dépôt : `series` est une CLÉ partagée doublée d'un `seriesName`
- * traduit. L'appliquer aux tags est une migration de contenu, pas un correctif.
+ * La migration annoncée ici est faite : un tag est désormais une CLÉ partagée,
+ * doublée d'un libellé traduit — le motif de `series` / `seriesName`. Les deux
+ * arbres produisent donc les mêmes slugs, chaque sujet a son équivalent
+ * hreflang, et une URL de sujet partagée retombe sur le même contenu dans les
+ * deux langues.
+ *
+ * Le calcul par locale reste néanmoins juste, et pas seulement par prudence : les
+ * COMPTES et les catégories d'un sujet dépendent du contenu de la locale servie.
  */
 export const tagStaticParams = (locale: ContentLocale) =>
-  getTagIndex(getAllContent(locale)).map((tag) => ({
+  getTagIndex(getAllContent(locale), locale).map((tag) => ({
     tag: tag.slug,
   }));
 
@@ -53,7 +56,7 @@ export const buildTagMetadata = async ({
   params: Promise<{ tag: string }>;
 }): Promise<Metadata> => {
   const { tag: slug } = await params;
-  const tag = getTagBySlug(getAllContent(locale), slug);
+  const tag = getTagBySlug(getAllContent(locale), slug, locale);
 
   if (!tag) {
     return {};
@@ -88,7 +91,7 @@ export const TagView = async ({
 }) => {
   const { tag: slug } = await params;
   const contents = getAllContent(locale);
-  const tag = getTagBySlug(contents, slug);
+  const tag = getTagBySlug(contents, slug, locale);
 
   if (!tag) {
     notFound();

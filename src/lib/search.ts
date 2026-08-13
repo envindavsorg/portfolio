@@ -1,6 +1,8 @@
-// import de TYPES uniquement : ce module doit rester pur (testable sans
-// entraîner le pipeline MDX ni le registre de composants)
+// import de TYPES uniquement depuis `content` : ce module doit rester pur
+// (testable sans entraîner le pipeline MDX ni le registre de composants).
+// `tags` n'entame pas cette propriété — il ne dépend que de `case`.
 import type { Content, ContentCategory } from "@/lib/content";
+import { tagLabel } from "@/lib/tags";
 
 /**
  * Entrée d'index de recherche : tout ce dont la palette ⌘K a besoin, et rien
@@ -69,7 +71,21 @@ export const toSearchDoc = (content: Content): SearchDoc => {
     excerpt: plain.slice(0, EXCERPT_LENGTH),
     headings: extractHeadings(content.content),
     slug: content.slug,
-    tags: content.metadata.tags ?? [],
+    /**
+     * Les LIBELLÉS, pas les clés.
+     *
+     * Un tag est une clé française (voir `tags.ts`). Indexer la clé telle quelle
+     * rendait le sujet introuvable dans sa propre langue : sur /en, chercher
+     * « career » ne rapprochait aucun tag, et la liste des résultats affichait
+     * « #carrière » à un lecteur anglophone.
+     *
+     * Sans risque de confusion avec les URL : ces tags ne sont qu'affichés et
+     * indexés, aucun slug n'en est dérivé — un slug calculé depuis « career »
+     * pointerait vers une page qui n'existe pas.
+     */
+    tags: (content.metadata.tags ?? []).map((tag) =>
+      tagLabel(tag, content.locale)
+    ),
     title: content.metadata.title,
   };
 };

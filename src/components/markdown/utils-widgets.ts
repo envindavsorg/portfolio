@@ -83,6 +83,29 @@ const SpeedTest = dynamic(async () => {
  * le sien à partir de son slug. Vérifié sur les 28 fichiers .mdx des deux
  * locales : chaque page n'invoque qu'un seul widget, celui qui correspond à son
  * slug.
+ *
+ * CE QUE CE MODULE NE FAIT PAS, mesuré dans un navigateur le 13 août 2026.
+ *
+ * Le gain est réel mais il porte sur les pages SANS outil : un article ou la page
+ * d'accueil ne reçoivent plus aucun code de widget (vérifié par
+ * `e2e/widget-isolation.spec.ts`, qui cherche une chaîne de @cloudflare/speedtest
+ * dans les scripts réellement téléchargés).
+ *
+ * Sur les pages d'outil, en revanche, les quatorze widgets arrivent TOUS, quel
+ * que soit le slug : /utils/case-converter télécharge le chunk du test de débit
+ * et celui du générateur de bannière. La différence symétrique entre les scripts
+ * de deux pages d'outil est toujours zéro. La raison est structurelle : les
+ * quatorze `dynamic()` sont déclarés dans ce module unique, importé par la route
+ * `[slug]`, et une route dynamique n'a qu'UN manifeste de références clientes,
+ * partagé par toutes ses tranches. Aucun agencement des `dynamic()` ne change
+ * cela.
+ *
+ * L'écart mesuré est de 64 Kio entre une page d'outil (644 Kio de JS) et un
+ * article (580 Kio) — et cet écart contient aussi le widget légitimement utilisé.
+ * Le récupérer demanderait soit `ssr: false` sur chaque widget, ce qui retire le
+ * rendu serveur du contenu principal de quatorze pages, soit quatorze routes
+ * statiques explicites à la place de `[slug]`. Moins de 10 % du JS de la page ne
+ * paie ni l'un ni l'autre ; c'est un arbitrage assumé, pas un oubli.
  */
 const WIDGET_BY_SLUG: Record<string, MDXRemoteProps["components"]> = {
   "article-banner-generator": { ArticleBannerUtils: ArticleBanner },

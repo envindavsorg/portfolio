@@ -26,8 +26,12 @@ CLAUDE.md
 
 # debug
 .pnpm-debug.log*
-pnpm-lock.yaml
 pnpm-workspace.yaml
+
+# pnpm-lock.yaml est VERSIONNÉ à dessein : c'est lui qui rend un build
+# reproductible. Ignoré, la CI résolvait les versions à neuf à chaque exécution,
+# donc une mise à jour amont d'une dépendance transitive pouvait casser — ou
+# réparer — le build sans qu'aucun commit ne change.
 
 # env files (can opt-in for committing if needed)
 .env.local
