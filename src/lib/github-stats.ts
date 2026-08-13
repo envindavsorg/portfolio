@@ -153,6 +153,15 @@ export const getContributionStats = (
 const PERCENT_PRECISION = 10;
 
 /**
+ * Couleur de repli d'un langage sans couleur déclarée chez GitHub.
+ *
+ * Exportée et partagée avec `repos.ts` : deux gris définis séparément finissent
+ * par diverger, et la même pastille n'aurait alors pas la même couleur selon la
+ * section de la page.
+ */
+export const DEFAULT_LANGUAGE_COLOR = "#8b8b8b";
+
+/**
  * Agrège les langages de tous les dépôts en parts triées.
  *
  * `topN` limite l'affichage ; le reste est regroupé par l'appelant si besoin.
@@ -178,7 +187,10 @@ export const aggregateLanguages = (
       const existing = totals.get(edge.node.name);
       totals.set(edge.node.name, {
         // GitHub renvoie parfois une couleur nulle pour un langage exotique
-        color: edge.node.color ?? existing?.color ?? "#8b8b8b",
+        color:
+          edge.node.color ??
+          existing?.color ??
+          DEFAULT_LANGUAGE_COLOR,
         size: (existing?.size ?? 0) + edge.size,
       });
       grandTotal += edge.size;
