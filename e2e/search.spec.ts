@@ -117,3 +117,81 @@ test.describe("palette ⌘K", () => {
     await expect(page).toHaveURL("/en/articles/how-i-write-css");
   });
 });
+
+/**
+ * Le mode COMMANDE de la palette.
+ *
+ * `kind: "command"` était déclaré dans types.ts et son libellé traduit dans les
+ * deux locales, mais aucun item ne s'en servait : la palette ne savait que
+ * naviguer. Ces items s'exécutent au lieu d'aller quelque part.
+ */
+test.describe("palette ⌘K : actions", () => {
+  test("bascule le thème sans changer de page", async ({ page }) => {
+    await page.goto("/articles");
+    await page.waitForLoadState("networkidle");
+
+    const before = await page.locator("html").getAttribute("class");
+
+    await page.keyboard.press("ControlOrMeta+k");
+    await page.getByPlaceholder(/./u).fill("thème");
+    await page.keyboard.press("Enter");
+
+    // le thème change ET l'adresse ne bouge pas : une action n'est pas un lien
+    await expect
+      .poll(() => page.locator("html").getAttribute("class"))
+      .not.toBe(before);
+    await expect(page).toHaveURL("/articles");
+  });
+
+  test("change de langue en restant sur la même page", async ({
+    page,
+  }) => {
+    await page.goto("/articles");
+    await page.waitForLoadState("networkidle");
+
+    await page.keyboard.press("ControlOrMeta+k");
+    await page.getByPlaceholder(/./u).fill("langue");
+    await page.keyboard.press("Enter");
+
+    await expect(page).toHaveURL("/en/articles");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  });
+
+  test("la touche ? ouvre la feuille de raccourcis", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    await page.keyboard.press("?");
+
+    const sheet = page.locator('[data-slot="shortcuts-sheet"]');
+    await expect(sheet).toBeVisible();
+
+    // les cinq raccourcis du site étaient documentés nulle part : alt+D bascule
+    // le thème depuis toujours et n'apparaissait dans aucune interface
+    await expect(
+      sheet.getByText("alt", { exact: true })
+    ).toBeVisible();
+    await expect(sheet.locator("kbd")).not.toHaveCount(0);
+
+    await page.keyboard.press("Escape");
+    await expect(sheet).toBeHidden();
+  });
+
+  test("le raccourci ? est neutre dans un champ de saisie", async ({
+    page,
+  }) => {
+    await page.goto("/utils/hash-generator");
+    await page.waitForLoadState("networkidle");
+
+    const field = page.getByLabel("texte à hacher");
+    await field.fill("a?b");
+
+    // sinon taper un point d'interrogation ouvrirait l'aide au lieu d'écrire
+    await expect(field).toHaveValue("a?b");
+    await expect(
+      page.locator('[data-slot="shortcuts-sheet"]')
+    ).toBeHidden();
+  });
+});

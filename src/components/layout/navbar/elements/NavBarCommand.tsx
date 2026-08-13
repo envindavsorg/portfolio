@@ -1,6 +1,7 @@
 "use client";
 
 import { useCommandState } from "cmdk";
+import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
 import {
   memo,
@@ -13,6 +14,10 @@ import {
 import type { RefObject } from "react";
 import { toast } from "sonner";
 
+import { Copy } from "@/components/motion/Copy";
+import { Keyboard } from "@/components/motion/Keyboard";
+import { Link } from "@/components/motion/Link";
+import { Moon } from "@/components/motion/Moon";
 import { Search } from "@/components/motion/Search";
 import { Button } from "@/components/primitives/Button";
 import {
@@ -42,9 +47,10 @@ import {
   prefetchSearchIndex,
   useSearchIndex,
 } from "@/hooks/useSearchIndex";
+import { copyText } from "@/lib/functions";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
-import { localizeHref } from "@/paraglide/runtime";
+import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { CATEGORY, LABELS } from "./content";
 import {
@@ -53,6 +59,7 @@ import {
   commandFilter,
   getFilteredGroups,
 } from "./functions";
+import { NavBarShortcuts } from "./NavBarShortcuts";
 import type { CommandItemProps, CommandKind } from "./types";
 
 interface CommandFooterProps {
@@ -89,7 +96,7 @@ const CommandFooter = memo(({ kindMap }: CommandFooterProps) => {
 interface CommandRowProps {
   item: CommandItemProps;
   index: number;
-  onSelect: (url: string, newTab?: boolean) => void;
+  onSelect: (item: CommandItemProps) => void;
 }
 
 const CommandRow = memo(
@@ -103,7 +110,7 @@ const CommandRow = memo(
         keywords={item.keywords}
         onMouseEnter={() => iconRef.current?.startAnimation?.()}
         onMouseLeave={() => iconRef.current?.stopAnimation?.()}
-        onSelect={() => onSelect(item.url, item.openInNewTab)}
+        onSelect={() => onSelect(item)}
         value={title}
       >
         {Icon ? (
@@ -123,7 +130,7 @@ const CommandRow = memo(
 interface CommandLinkGroupProps {
   heading: string;
   items: CommandItemProps[];
-  onSelect: (url: string, newTab?: boolean) => void;
+  onSelect: (item: CommandItemProps) => void;
 }
 
 const CommandLinkGroup = memo(
@@ -146,7 +153,9 @@ export const NavBarCommand = () => {
   const pathname = usePathname();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [open, setOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const { resolvedTheme, setTheme } = useTheme();
 
   // l'index n'est plus une prop : il était sérialisé dans le payload RSC de
   // chaque page du site, pour une palette que la plupart des visiteurs
@@ -161,6 +170,14 @@ export const NavBarCommand = () => {
         target.isContentEditable ||
         target.matches("input, textarea, select")
       ) {
+        return;
+      }
+
+      // « ? » ouvre l'aide : c'est la convention, et c'était le seul moyen de
+      // rendre découvrables cinq raccourcis dont aucun n'était documenté
+      if (event.key === "?") {
+        event.preventDefault();
+        setShortcutsOpen((prev) => !prev);
         return;
       }
 
@@ -192,11 +209,89 @@ export const NavBarCommand = () => {
     [pathname]
   );
 
+  /**
+   * Les ACTIONS de la palette.
+   *
+   * `kind: "command"` était déclaré dans types.ts et son libellé traduit dans
+   * les deux locales, mais aucun item ne s'en servait : la palette ne savait que
+   * naviguer. Ces items s'exécutent au lieu d'aller quelque part.
+   *
+   * Ils vivent ici et non dans `content.ts`, qui est un module de DONNÉES : une
+   * action a besoin des hooks de thème et de route.
+   */
+  const actions = useMemo<CommandItemProps[]>(
+    () => [
+      {
+        // une icône pour CHAQUE action : sans elle, `CommandRow` retombe sur
+        // un `<span>` numéroté que la table de styles peint en bleu gras, soit
+        // 2,6:1 sur l'élément sélectionné. Mes items étaient les seuls du site
+        // sans icône, donc les seuls à emprunter ce chemin — et c'est le scan
+        // des surfaces interactives, ajouté dans ce même lot, qui l'a vu.
+        icon: Moon,
+        keywords: ["theme", "thème", "dark", "sombre", "clair"],
+        kind: "command",
+        run: () =>
+          setTheme(resolvedTheme === "dark" ? "light" : "dark"),
+        title: m.nav_command_action_theme,
+      },
+      {
+        icon: Link,
+        keywords: ["langue", "language", "locale", "fr", "en"],
+        kind: "command",
+        run: () => {
+          const target = getLocale() === "fr" ? "en" : "fr";
+          // même chemin que NavBarLocale : une seconde façon de changer de
+          // langue finirait par diverger de la première
+          const href =
+            localizeHref(pathname, { locale: target }).replace(
+              /\/$/u,
+              ""
+            ) || "/";
+          router.push(href);
+        },
+        title: m.nav_command_action_language,
+      },
+      {
+        icon: Copy,
+        keywords: ["copier", "copy", "lien", "link", "url"],
+        kind: "command",
+        run: () => {
+          void (async () => {
+            if (await copyText(window.location.href)) {
+              toast.success(m.writings_actions_toast_link_copied());
+            }
+          })();
+        },
+        title: m.nav_command_action_copy_link,
+      },
+      {
+        icon: Keyboard,
+        keywords: ["raccourcis", "shortcuts", "clavier", "keyboard"],
+        kind: "command",
+        run: () => setShortcutsOpen(true),
+        title: m.nav_command_action_shortcuts,
+      },
+    ],
+    [pathname, resolvedTheme, router, setTheme]
+  );
+
   const handleSelect = useCallback(
-    (href: string, openInNewTab = false) => {
+    (item: CommandItemProps) => {
       setOpen(false);
 
-      if (openInNewTab) {
+      // une ACTION s'exécute au lieu de naviguer : c'est ce que le
+      // `kind: "command"` déclaré dans types.ts désignait depuis le début
+      if (item.run) {
+        item.run();
+        return;
+      }
+
+      const href = item.url;
+      if (!href) {
+        return;
+      }
+
+      if (item.openInNewTab) {
         window.open(href, "_blank", "noopener");
         return;
       }
@@ -250,6 +345,11 @@ export const NavBarCommand = () => {
 
   return (
     <>
+      <NavBarShortcuts
+        onOpenChange={setShortcutsOpen}
+        open={shortcutsOpen}
+      />
+
       <Button
         onClick={handleOpen}
         // le temps d'amener la souris jusqu'au bouton puis de cliquer, l'index
@@ -294,6 +394,12 @@ export const NavBarCommand = () => {
               <CommandEmpty />
 
               <div className="max-sm:mx-2">
+                <CommandLinkGroup
+                  heading={m.nav_command_group_actions()}
+                  items={actions}
+                  onSelect={handleSelect}
+                />
+
                 {filteredGroups.map(({ heading, items }) => (
                   <CommandLinkGroup
                     heading={heading()}
