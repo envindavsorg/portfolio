@@ -61,7 +61,10 @@ export const buildExperienceMetadata = async ({
     description: locale === "en" ? descriptionEn : description,
     locale,
     ogImageParams: {
-      description: `${entry.company} · ${entry.period}`,
+      description: entry.company,
+      // la période passe en tête : le gabarit de fiche de poste l'affiche en
+      // grand, c'est l'information qu'on cherche sur un parcours
+      meta: [entry.period, entry.type].filter(Boolean).join(" · "),
       title: entry.title,
       type: "experience",
     },
