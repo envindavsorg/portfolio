@@ -211,6 +211,16 @@ hardcode personal data elsewhere. French display strings shown in the UI go
 through Paraglide messages; `global.ts` stays the FR source for
 metadata/OG/llms routes.
 
+`src/data/uses.ts` backs `/uses` and its text mirror, under one rule: **only
+what the repository proves**. Every entry lines up with `package.json`, a
+workflow, or a versioned config file — the `environment` group reads
+`.zed/settings.json`, `.node-version`, `.editorconfig` and
+`.claude/settings.json` (all tracked, the `/.zed` ignore rule never applied to a
+file already followed). Hardware stays OUT: nothing here reveals it, and a
+guessed machine is exactly the kind of decorative claim this page exists to
+avoid. `src/data/uses.test.ts` re-reads those files, so a bumped Node version
+fails a test instead of quietly leaving the page lying.
+
 ### Server Actions
 
 Actions live flat in `src/actions/`:

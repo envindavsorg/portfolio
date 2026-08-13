@@ -12,7 +12,7 @@ import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const pageDescription =
-  "Les outils avec lesquels florin cuzeac travaille : la stack de ce site, les langages, l'outillage et les services dont il dépend.";
+  "Les outils avec lesquels florin cuzeac travaille : la stack de ce site, les langages, l'outillage, les services dont il dépend et l'environnement de développement.";
 
 export const metadata: Metadata = createMetadata({
   description: pageDescription,

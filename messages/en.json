@@ -275,6 +275,8 @@
   "user_overview_4": "-- every little detail counts --",
   "user_work_experience": "with 7 years of experience",
   "uses_breadcrumb": "tools",
+  "uses_group_environment": "environment",
+  "uses_group_environment_note": "What I actually write the code with, configured in files versioned right here. Hardware is not listed: the repository says nothing about it, and this page does not guess.",
   "uses_group_languages": "languages",
   "uses_group_languages_note": "The ones I write in, most frequent first.",
   "uses_group_services": "services",
