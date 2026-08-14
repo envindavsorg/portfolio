@@ -381,11 +381,23 @@ End-to-end tests (Playwright, `e2e/`):
 - `budget.spec.ts` - JS, font and CSS weight ceilings measured in the browser, plus
   the font-preload count
 
-Watch out for two selector traps: Next.js always mounts an empty
-`<div role="alert">` route announcer (scope to `p[role="alert"]`), and an article
-body brings its own `<pre>` and `<li>` elements. MDX section headings used to be
-`#`, giving every content page several `<h1>`; they are now `##`, so a content
-page has exactly ONE `<h1>` — the page title rendered outside MDX.
+Watch out for three selector traps: Next.js always mounts an empty
+`<div role="alert">` route announcer (scope to `p[role="alert"]`), an article
+body brings its own `<pre>` and `<li>` elements, and a `/components/<slug>` page
+carries THREE `role="tablist"` — the preview tabs plus the two npm/pnpm/yarn/bun
+command blocks. A page-wide `[aria-selected='true']` therefore matches three
+tabs, which looks like an a11y defect and is not; scope to one tablist. MDX
+section headings used to be `#`, giving every content page several `<h1>`; they
+are now `##`, so a content page has exactly ONE `<h1>` — the page title rendered
+outside MDX.
+
+`TabsAnimated` refuses to switch tabs while a transition is animating, and
+`onAnimationStart` also fires for the FIRST panel's entrance — so `isAnimating`
+was true from mount and every click in the first ~0.4s was dropped in silence
+(measured: 0/100/250/400ms did nothing, 600ms worked). A `hasTransitioned` ref
+now limits the guard to real transitions. `e2e/playground.spec.ts` clicks at
+exactly those delays; do not "simplify" it into a single click after
+`networkidle`, which is what hid the bug in the first place.
 
 ## Environment Variables
 

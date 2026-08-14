@@ -8,6 +8,7 @@ import {
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import useMeasure from "react-use-measure";
@@ -214,6 +215,27 @@ export const TabsAnimated = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [ref, bounds] = useMeasure();
 
+  /**
+   * Une TRANSITION a-t-elle déjà eu lieu ?
+   *
+   * `onAnimationStart` se déclenche aussi à l'ENTRÉE du premier panneau, qui part
+   * de `initial` pour aller vers `active` comme les suivants. `isAnimating`
+   * passait donc à `true` dès le montage, et le garde de `handleTabClick` jetait
+   * en silence tout clic pendant les 0,4 s du ressort.
+   *
+   * Mesuré : un clic sur un onglet 0, 100, 250 ou 400 ms après le chargement ne
+   * faisait RIEN — `aria-selected` restait à `false`, le panneau ne s'ouvrait
+   * jamais, sans le moindre retour à l'utilisateur. À 600 ms, ça marchait. Sur un
+   * appareil lent la fenêtre est plus large, et c'est le premier geste que fait
+   * quelqu'un qui arrive sur la page.
+   *
+   * Le garde reste en place là où il sert : une transition en cours ne doit pas
+   * être bousculée, sinon le focus se désynchronise de la sélection dans le
+   * tablist. Mais une animation d'entrée n'interrompt rien — il n'y a rien à
+   * protéger avant le premier changement d'onglet.
+   */
+  const hasTransitioned = useRef(false);
+
   const content = useMemo(
     () => tabs.find((tab) => tab.id === activeTab)?.content ?? null,
     [activeTab, tabs]
@@ -225,6 +247,7 @@ export const TabsAnimated = ({
         return;
       }
 
+      hasTransitioned.current = true;
       setDirection(newTabId > activeTab ? 1 : -1);
       setActiveTab(newTabId);
       onChangeAction?.();
@@ -276,10 +299,12 @@ export const TabsAnimated = ({
     [activeTab, handleTabClick, isAnimating, tabs]
   );
 
-  const handleAnimationStart = useCallback(
-    () => setIsAnimating(true),
-    []
-  );
+  const handleAnimationStart = useCallback(() => {
+    // pas l'entrée du premier panneau : voir `hasTransitioned`
+    if (hasTransitioned.current) {
+      setIsAnimating(true);
+    }
+  }, []);
   const handleAnimationComplete = useCallback(
     () => setIsAnimating(false),
     []

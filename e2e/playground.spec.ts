@@ -11,18 +11,88 @@ import { expect, test } from "@playwright/test";
 
 const playground = "[data-slot='component-playground']";
 
-/**
- * Ouvre l'onglet, après hydratation.
- *
- * L'attente n'est pas décorative : le bouton existe dans le HTML servi, mais son
- * gestionnaire React n'est attaché qu'après l'hydratation. Cliquer avant réussit
- * du point de vue du DOM et ne change rien — le panneau n'apparaît jamais.
- */
+/** ouvre l'onglet du bac à sable */
 const openPlayground = async (page: Page, label = "bac à sable") => {
   await page.waitForLoadState("networkidle");
   await page.getByRole("tab", { name: label }).click();
   await expect(page.locator(playground)).toBeVisible();
 };
+
+/**
+ * Un onglet répond TOUT DE SUITE.
+ *
+ * Ce test vient d'une instabilité de `a11y.spec.ts` en intégration continue : le
+ * bouton de copie du bac à sable n'était « pas trouvé », par intermittence. La
+ * cause était dans `TabsAnimated`, pas dans le test.
+ *
+ * `handleTabClick` refuse de changer d'onglet pendant une animation. Or
+ * `onAnimationStart` se déclenche aussi à l'ENTRÉE du premier panneau : chaque
+ * clic était donc jeté en silence pendant les 0,4 s du ressort après le montage.
+ * Mesuré avant correction : clic à 0, 100, 250 et 400 ms ⇒ `aria-selected` reste
+ * à `false` et le panneau ne s'ouvre jamais ; à 600 ms ⇒ ça marche.
+ *
+ * ⚠️ La note qui vivait ici auparavant attribuait ça à l'hydratation, et c'était
+ * FAUX : le même clic à 0 ms fonctionne dès que le garde ne s'applique plus à
+ * l'animation d'entrée. L'attente `networkidle` d'`openPlayground` n'était donc
+ * pas ce qui rendait ces tests fiables — elle passait juste assez de temps pour
+ * que le ressort se termine.
+ *
+ * Les délais testés sont ceux de la mesure, à dessein : ils échouent tous si le
+ * garde revient couvrir le montage.
+ */
+test.describe("réactivité des onglets", () => {
+  for (const delay of [0, 100, 250, 400]) {
+    test(`l'onglet répond à un clic ${delay} ms après le chargement`, async ({
+      page,
+    }) => {
+      await page.goto("/components/flip-sentences-component");
+
+      if (delay > 0) {
+        await page.waitForTimeout(delay);
+      }
+
+      const tab = page.getByRole("tab", { name: "bac à sable" });
+      await tab.click();
+
+      await expect(tab).toHaveAttribute("aria-selected", "true");
+      await expect(page.locator(playground)).toBeVisible();
+    });
+  }
+
+  /**
+   * Le garde garde toujours : deux clics à la suite ne doivent pas laisser la
+   * sélection et le panneau affiché en désaccord.
+   *
+   * ⚠️ Piège de sélecteur, à ajouter à la liste du dépôt : une page de composant
+   * porte TROIS `role="tablist"` — l'aperçu, plus les deux blocs de commande
+   * npm/pnpm/yarn/bun. Un `[aria-selected='true']` à l'échelle de la page en
+   * trouve donc trois, ce qui ressemble à un défaut d'accessibilité et n'en est
+   * pas. On se limite au premier tablist.
+   */
+  test("deux changements d'onglet enchaînés restent cohérents", async ({
+    page,
+  }) => {
+    await page.goto("/components/flip-sentences-component");
+    await page.waitForLoadState("networkidle");
+
+    const tablist = page.locator("[role='tablist']").first();
+
+    await tablist.getByRole("tab", { name: "bac à sable" }).click();
+    await tablist.getByRole("tab", { name: "composant" }).click();
+
+    const selected = tablist.locator(
+      "[role='tab'][aria-selected='true']"
+    );
+    await expect(selected).toHaveCount(1);
+
+    // le panneau affiché doit désigner l'onglet réellement sélectionné
+    const panel = page.locator("[role='tabpanel']").first();
+    await expect(panel).toHaveAttribute(
+      "aria-labelledby",
+      (await selected.getAttribute("id")) ?? ""
+    );
+  });
+});
 
 test.describe("bac à sable", () => {
   test("l'onglet n'existe que pour un composant réglable", async ({
