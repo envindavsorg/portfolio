@@ -2,6 +2,7 @@ import type { SVGProps } from "react";
 
 export const MarkdownIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
+    aria-hidden="true"
     height="1em"
     viewBox="0 0 208 128"
     width="1em"

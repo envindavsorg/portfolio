@@ -31,6 +31,12 @@ export const Utils = ({ contents }: UtilsProps) => {
   const pathname = usePathname();
   const { activeTag } = useTagFilter();
 
+  /**
+   * `pathname` est une dépendance-DÉCLENCHEUR : le corps ne le lit pas, mais on
+   * veut relire les slugs récents à chaque changement de route. Biome ne voit
+   * qu'une dépendance non utilisée.
+   */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `pathname` déclenche la relecture, il n'est pas lu
   useEffect(() => {
     setRecentSlugs(getRecentSlugs());
   }, [pathname]);

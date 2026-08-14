@@ -48,7 +48,8 @@ export const GraphCalendar = ({
   children,
   ...props
 }: GraphCalendarProps) => {
-  const { weeks, width, height } = useContributionGraph();
+  const { weeks, width, height, totalCount, year } =
+    useContributionGraph();
   const containerRef = useRef<HTMLDivElement>(null);
   const anchorRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<HoveredBlock | null>(null);
@@ -98,11 +99,30 @@ export const GraphCalendar = ({
   return (
     <div className="relative p-3" ref={containerRef} {...props}>
       <div className="no-scrollbar max-w-full overflow-x-auto overflow-y-hidden">
+        {/*
+          UNE image nommée, et non 365 rectangles anonymes.
+          Le graphe est une redite visuelle : ses chiffres sont déjà dans le DOM
+          en texte juste en dessous (total de l'année, jours actifs, séries).
+          `role="img"` + `aria-label` annoncent donc ce que c'est une seule fois
+          et empêchent l'exploration case par case, qui n'apporterait rien.
+        */}
+        {/*
+          Pas de `onFocus` en pendant du survol, et c'est volontaire : le SVG est
+          une seule image pour les technologies d'assistance (voir `role="img"`
+          ci-dessous). Rendre chaque jour focusable ajouterait 365 arrêts de
+          tabulation, et un `onFocus` sur le SVG entier annoncerait l'infobulle
+          du jour survolé — ce qui n'a aucun sens au clavier. Le détail reste
+          accessible : les totaux, les jours actifs et les séries sont rendus en
+          TEXTE juste en dessous par `GraphFooter`.
+        */}
+        {/* biome-ignore lint/a11y/useKeyWithMouseEvents: infobulle de confort sur une image nommée, dont les chiffres sont déjà en texte */}
         <svg
+          aria-label={m.home_commits_graph_aria({ totalCount, year })}
           className="block overflow-visible"
           height={height}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseOver}
+          role="img"
           viewBox={`0 0 ${width} ${height}`}
           width={width}
         >
@@ -124,7 +144,7 @@ export const GraphCalendar = ({
                 return null;
               }
               return (
-                <Fragment key={`${weekIndex}-${dayIndex}`}>
+                <Fragment key={activity.date}>
                   {children({ activity, dayIndex, weekIndex })}
                 </Fragment>
               );

@@ -61,6 +61,7 @@
   "home_commits_badge_following": "{following} suivis",
   "home_commits_badge_stars": "{stars} étoiles",
   "home_commits_footer_total": "{totalCount} contributions effectuées en {year}",
+  "home_commits_graph_aria": "graphique des {totalCount} contributions GitHub de {year}, jour par jour",
   "home_commits_languages_title": "-- langages les plus utilisés sur mes dépôts publics --",
   "home_commits_legend_less": "moins",
   "home_commits_legend_more": "plus",

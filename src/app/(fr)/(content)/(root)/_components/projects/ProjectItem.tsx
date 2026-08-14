@@ -87,8 +87,8 @@ export const ProjectItem = ({
       <div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in">
         {project.skills.length > 0 && (
           <ul className="flex flex-wrap gap-1.5">
-            {project.skills.map((skill, index) => (
-              <li className="flex" key={index + skill}>
+            {project.skills.map((skill) => (
+              <li className="flex" key={skill}>
                 <Tag>{skill}</Tag>
               </li>
             ))}

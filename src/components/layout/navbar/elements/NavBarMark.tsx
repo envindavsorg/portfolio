@@ -12,6 +12,7 @@ import { localizeHref } from "@/paraglide/runtime";
 const StaticMark = forwardRef<SVGSVGElement, ComponentProps<"svg">>(
   (props, ref) => (
     <svg
+      aria-hidden="true"
       fill="none"
       height="26"
       ref={ref}

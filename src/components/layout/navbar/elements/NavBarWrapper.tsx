@@ -2,20 +2,26 @@
 
 import { useMotionValueEvent, useScroll } from "motion/react";
 import type { ComponentProps } from "react";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export const NavBarWrapper = (props: ComponentProps<"header">) => {
   const { scrollY } = useScroll();
   const headerRef = useRef<HTMLHeadElement>(null);
 
-  const updateAffix = (y: number) =>
-    headerRef.current?.toggleAttribute("data-affix", y >= 8);
+  // stabilisé : la fonction ne lit qu'une ref, et elle est passée à DEUX hooks.
+  // Recréée à chaque rendu, elle forçait à omettre la dépendance pour éviter que
+  // l'effet ne se rejoue en boucle — omission que le linteur signalait à raison.
+  const updateAffix = useCallback(
+    (y: number) =>
+      headerRef.current?.toggleAttribute("data-affix", y >= 8),
+    []
+  );
 
   useMotionValueEvent(scrollY, "change", updateAffix);
 
   useEffect(() => {
     updateAffix(scrollY.get());
-  }, [scrollY]);
+  }, [scrollY, updateAffix]);
 
   return (
     <header

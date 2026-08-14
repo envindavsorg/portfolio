@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 export const Yarn = (props: SVGProps<SVGSVGElement>) => (
-  <svg {...props} viewBox="0 0 518 518">
+  <svg aria-hidden="true" {...props} viewBox="0 0 518 518">
     <path
       d="M259 0c143 0 259 116 259 259S402 518 259 518 0 402 0 259 116 0 259 0z"
       fill="#2C8EBB"

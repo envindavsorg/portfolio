@@ -1,3 +1,22 @@
+/**
+ * biome-ignore-all lint/correctness/useExhaustiveDependencies: dépendances de
+ * champ délibérées, voir ci-dessous
+ *
+ * Les effets dépendent de `sequence?.activeIndex` et `sequence?.sequenceStarted`
+ * plutôt que de l'objet `sequence`. Biome y voit deux défauts — « dépendance
+ * plus spécifique que ses captures » et « dépendance manquante sur sequence ».
+ * Les deux sont des faux positifs ici, et c'est vérifiable :
+ *
+ * - `contextValue` est mémorisé sur `[sequence, activeIndex, sequenceHasStarted]`,
+ *   donc son identité change à chaque avancée de la séquence. Dépendre de
+ *   l'objet déclencherait exactement les mêmes exécutions, en disant moins.
+ * - `completeItem` est recréé avec lui, mais il appelle `setActiveIndex` sous sa
+ *   forme FONCTIONNELLE — il lit l'état courant, jamais une valeur capturée. Il
+ *   ne peut donc pas être obsolète, ce que la règle n'a aucun moyen de vérifier.
+ *
+ * Dépendre des champs lus est ici plus précis que dépendre de l'objet.
+ */
+
 "use client";
 
 import type { MotionProps } from "motion/react";

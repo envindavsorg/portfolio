@@ -76,34 +76,50 @@
         // idem `jsx-a11y/heading-has-content`
         "useHeadingContent": "off",
 
-        // Ci-dessous : des règles que Biome applique et qu'oxlint ne signalait
-        // qu'en avertissement, ou pas du tout. Elles restent AFFICHÉES à chaque
-        // exécution, mais ne cassent pas la CI — le dépôt n'a jamais adopté ce
-        // niveau d'exigence, et l'adopter d'un coup, c'est 60 fichiers à revoir
-        // dans une PR qui parle de dépendances.
+        // Ci-dessous : des règles qu'oxlint ne signalait qu'en avertissement, ou
+        // pas du tout, et qui sont désormais BLOQUANTES.
         //
-        // Elles sont réelles pour autant : `a11y.spec.ts` passe axe sur 16
-        // types de page, donc rien de ce qui est ci-dessous n'est une violation
-        // constatée par un audit — ce sont des motifs à risque.
-        "noAriaHiddenOnFocusable": "warn",
-        "noStaticElementInteractions": "warn",
-        "noSvgWithoutTitle": "warn",
-        "useKeyWithMouseEvents": "warn",
-        "useSemanticElements": "warn"
+        // Elles ont d'abord été posées en `warn` le temps d'instruire les 116
+        // signalements du passage à Biome. Ce travail est fait : ce qui était un
+        // vrai défaut est corrigé, ce qui n'en était pas un porte une suppression
+        // datée et argumentée à son emplacement, ou une exception de répertoire
+        // ci-dessous. Un avertissement que personne ne lit ne garde rien —
+        // laisser ces règles en `warn` aurait juste reconstitué la situation
+        // qu'on venait de quitter.
+        "noAriaHiddenOnFocusable": "error",
+        "noStaticElementInteractions": "error",
+        "noSvgWithoutTitle": "error",
+        "useKeyWithMouseEvents": "error",
+
+        /**
+         * `role="group"` + `aria-label` est un motif ARIA VALIDE, pas un défaut.
+         *
+         * Les cinq sites sont des groupes nommés de boutons bascules (drapeaux de
+         * regex, algorithme de hachage, préréglages cron) et le primitif
+         * générique `Field`. Biome propose `<fieldset>`, qui serait faux ici :
+         * `<fieldset>` groupe des CHAMPS de formulaire, attend un `<legend>` pour
+         * son nom, et impose une mise en forme par défaut qu'un primitif de mise
+         * en page ne peut pas porter.
+         *
+         * La seule liste qui gagnait à changer a changé : les rubriques d'une
+         * page de tag sont devenues un vrai `<ul>`/`<li>`, ce qui annonce leur
+         * nombre — un groupe ne le fait pas.
+         */
+        "useSemanticElements": "off"
       },
 
       "complexity": {
-        "noImportantStyles": "warn"
+        "noImportantStyles": "error"
       },
 
       "correctness": {
         // `react-hooks/exhaustive-deps` était déjà en avertissement sous oxlint
-        "useExhaustiveDependencies": "warn"
+        "useExhaustiveDependencies": "error"
       },
 
       "performance": {
         // `next/no-img-element` : avertissement sous oxlint
-        "noImgElement": "warn"
+        "noImgElement": "error"
       },
 
       "security": {
@@ -113,14 +129,14 @@
       },
 
       "style": {
-        "noDescendingSpecificity": "warn",
+        "noDescendingSpecificity": "error",
         // `next/no-head-element` : `RootDocument` rend son propre <head>, c'est
         // le patron « multiple root layouts » de l'App Router
         "noHeadElement": "off"
       },
 
       "suspicious": {
-        "noArrayIndexKey": "warn",
+        "noArrayIndexKey": "error",
         // `console.error` et `console.warn` restent permis : ce sont les deux
         // seuls usages du dépôt, dans un `componentDidCatch` et un `catch`
         // autour de la lecture audio. La règle est là pour le `console.log`
@@ -145,6 +161,86 @@
   },
 
   "overrides": [
+    {
+      // Icônes animées : 43 signalements, UN seul motif.
+      //
+      // Chaque icône enveloppe son `<svg aria-hidden>` dans un `<div>` qui porte
+      // `onMouseEnter`/`onMouseLeave`. Ces gestionnaires ne déclenchent RIEN
+      // d'autre qu'une animation décorative — il n'y a aucune action à exposer,
+      // donc rien qu'un utilisateur au clavier puisse manquer.
+      //
+      // Mesuré en cherchant à satisfaire la règle proprement : `role="presentation"`
+      // et `aria-hidden="true"` ne la satisfont PAS, `role="none"` oui — une
+      // incohérence de Biome, ces deux rôles étant synonymes, sur laquelle on ne
+      // va pas s'appuyer. `role="img"` la satisfait aussi, mais exigerait un nom
+      // accessible que des icônes décoratives ne doivent justement pas avoir :
+      // ce serait moins accessible, pas plus.
+      //
+      // La règle reste ACTIVE partout ailleurs, où un div interactif est un vrai
+      // défaut.
+      "includes": [
+        "src/components/motion/**",
+        "src/components/primitives/Input.tsx",
+        "src/components/primitives/Command.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "a11y": { "noStaticElementInteractions": "off" }
+        }
+      }
+    },
+    {
+      // Rendu CARACTÈRE par caractère, jeton par jeton, ou liste figée.
+      //
+      // Là où une clé stable existait, elle a été posée : `key={skill}`,
+      // `key={activity.date}`, `key={d}` pour un tracé, `key={match.index}`.
+      // Ce qui reste est d'une autre nature — l'index n'y est pas un pis-aller,
+      // il DISTINGUE des contenus identiques :
+      //
+      // - `PixelHeading`, `TextAnimate` : un même caractère ou segment revient
+      //   plusieurs fois dans un titre, les clés collisionneraient sans l'index ;
+      // - `JSONFormatter`, `DiffViewer` : les jetons de coloration et les lignes
+      //   vides se répètent ;
+      // - `RegexTester` : l'index d'un groupe de capture EST son identité, c'est
+      //   le `$1` affiché ;
+      // - `OverviewContent`, `GraphLegend` : tableaux constants, jamais réordonnés.
+      "includes": [
+        "src/components/blocks/PixelHeading.tsx",
+        "src/components/blocks/TextAnimate.tsx",
+        "src/components/utils/DiffViewer.tsx",
+        "src/components/utils/JSONFormatter.tsx",
+        "src/components/utils/RegexTester.tsx",
+        "src/app/(fr)/(content)/(root)/_components/overview/OverviewContent.tsx",
+        "src/app/(fr)/(content)/(root)/_components/commits/graph/GraphLegend.tsx",
+        "src/app/(fr)/(content)/(root)/_components/experiences/ExperienceItem.tsx",
+        "src/app/(fr)/(content)/(root)/_components/projects/ProjectItem.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": { "noArrayIndexKey": "off" }
+        }
+      }
+    },
+    {
+      // `!important` dans une feuille d'impression et sous
+      // `prefers-reduced-motion` : les deux cas où c'est la pratique correcte.
+      //
+      // Les 12 occurrences sont là pour battre des utilitaires Tailwind qu'aucune
+      // spécificité ne surpasse (`.min-h-svh`, `[data-print="hide"]`), pour
+      // couper net les animations de transition de vue, et pour reprendre la main
+      // sur le greffon `@tailwindcss/typography` dans `.prose`. Les retirer
+      // casserait l'impression — dont le dépôt teste le rendu.
+      //
+      // `noDescendingSpecificity` vise les mêmes blocs : une feuille
+      // d'impression réécrit délibérément des sélecteurs déclarés plus haut.
+      "includes": ["src/app/globals.css"],
+      "linter": {
+        "rules": {
+          "complexity": { "noImportantStyles": "off" },
+          "style": { "noDescendingSpecificity": "off" }
+        }
+      }
+    },
     {
       // Un script de build et un test de bout en bout écrivent sur stdout par
       // CONSTRUCTION : `compile-i18n.mts` annonce le nombre de messages

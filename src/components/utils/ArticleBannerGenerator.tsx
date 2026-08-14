@@ -344,6 +344,9 @@ export const ArticleBanner = () => {
     };
   }, []);
 
+  // `config.fontIndex` est un déclencheur : changer de police impose de
+  // réattendre `document.fonts.ready` avant de redessiner
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dépendance-déclencheur du changement de police
   useEffect(() => {
     let cancelled = false;
 
@@ -361,6 +364,10 @@ export const ArticleBanner = () => {
     };
   }, [config.fontIndex]);
 
+  // `fontsReady` est un déclencheur : le corps ne le lit pas, mais la
+  // prévisualisation doit être redessinée dès que les polices sont chargées,
+  // sinon elle mesure du texte dans une fonte de repli
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dépendance-déclencheur du chargement des polices
   useEffect(() => {
     cancelAnimationFrame(rafRef.current);
 
@@ -523,6 +530,7 @@ export const ArticleBanner = () => {
                 htmlFor="custom-image-upload"
               >
                 {loadedImages[-1] ? (
+                  // biome-ignore lint/performance/noImgElement: URL de blob créée dans le navigateur, hors de portée de l'optimiseur
                   <img
                     aria-label={m.utils_banner_custom_image_aria()}
                     className="m-0! block h-full w-full object-cover"

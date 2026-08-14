@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/primitives/Button";
 import { getIntlLocale } from "@/lib/i18n";
@@ -58,18 +52,28 @@ export const FooterClock = ({
     localStorage.setItem("clock-format", use24h ? "24h" : "12h");
   }, []);
 
-  const formattedDate = useMemo(() => {
-    if (!time) {
-      return "";
-    }
-
-    return time.toLocaleDateString(getIntlLocale(), {
-      day: "numeric",
-      month: isActionnable ? "short" : "long",
-      weekday: isActionnable ? "short" : "long",
-      year: "numeric",
-    });
-  }, [time?.getDate(), time?.getMonth(), time?.getFullYear()]);
+  /**
+   * Calculé à chaque rendu, sans `useMemo`.
+   *
+   * Le mémo précédent était mémorisé sur `[time?.getDate(), time?.getMonth(),
+   * time?.getFullYear()]` — l'intention étant de ne pas reformater à chaque tic
+   * de seconde. Mais il LIT aussi `isActionnable`, qui n'était pas dans les
+   * dépendances : un changement de cette prop ne changeait pas la date affichée,
+   * qui restait au format précédent jusqu'au lendemain. Latent en pratique
+   * (c'est une prop fixée par l'appelant), faux quand même.
+   *
+   * Le mémo n'économisait de toute façon qu'un `toLocaleDateString` par seconde,
+   * sur un composant qui se rerend à chaque seconde par construction — l'horloge
+   * change. Le retirer supprime le piège sans rien coûter.
+   */
+  const formattedDate = time
+    ? time.toLocaleDateString(getIntlLocale(), {
+        day: "numeric",
+        month: isActionnable ? "short" : "long",
+        weekday: isActionnable ? "short" : "long",
+        year: "numeric",
+      })
+    : "";
 
   if (!time) {
     return (

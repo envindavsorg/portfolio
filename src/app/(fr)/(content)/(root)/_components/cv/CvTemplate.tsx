@@ -1,3 +1,22 @@
+/**
+ * `@react-email/components` est DÉPRÉCIÉ en amont, et il n'y a nulle part où aller.
+ *
+ * Vérifié paquet par paquet : `1.0.12` est la dernière version publiée, et les
+ * paquets individuels le sont aussi (`@react-email/html`, `/body`,
+ * `/container`, `/heading`… tous « no longer supported »). `react-email@6` n'est
+ * pas un remplaçant : c'est l'outil de développement — esbuild, socket.io,
+ * chokidar — pas la bibliothèque de composants. Seul `@react-email/render`, qui
+ * transforme cet arbre en HTML, reste maintenu, et le dépôt continue de
+ * l'utiliser.
+ *
+ * On garde donc le paquet, sciemment. Les dix composants importés ici ne sont
+ * pas de simples alias : `Html` pose la langue, `Head` les métadonnées, `Preview`
+ * le pré-en-tête masqué, `Img` les attributs qu'Outlook exige. Les réécrire à la
+ * main, c'est reprendre à sa charge la compatibilité des clients de messagerie —
+ * et ce site n'a aucun moyen de la tester, faute de clé Resend en CI. Un avis de
+ * dépréciation cosmétique ne vaut pas ce risque sur le seul artefact du dépôt
+ * qui part par courriel.
+ */
 import {
   Body,
   Container,

@@ -45,7 +45,7 @@ export const Rss = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
               animate={controls}
               d={level.d}
               initial={{ opacity: level.initialOpacity }}
-              key={index}
+              key={level.d}
               variants={{
                 fadeIn: {
                   opacity: 1,

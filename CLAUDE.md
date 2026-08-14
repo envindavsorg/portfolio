@@ -42,10 +42,15 @@ pnpm registry:build       # Build component registry for distribution
   137 files with no commit in this repo changing. Every severity now lives in
   `biome.jsonc`, with the reason next to it — that is why the config is
   `.jsonc` and not `.json`. Rules the old `oxlint.config.ts` had switched off
-  are switched off here too; rules Biome adds that this repo never adopted are
-  `warn`, so they stay visible without failing CI. `css.parser.tailwindDirectives`
-  is REQUIRED: without it `globals.css` throws 26 parse errors on `@plugin`,
-  `@theme` and `@utility`
+  are switched off here too. `css.parser.tailwindDirectives` is REQUIRED: without
+  it `globals.css` throws 26 parse errors on `@plugin`, `@theme` and `@utility`.
+  Every rule is now `error` — **`pnpm check` must report zero warnings**, so a new
+  warning means a decision has not been recorded yet. The 116 findings the
+  migration surfaced were resolved one by one: real defects fixed, everything else
+  carrying a per-site `biome-ignore` with its reason, or a directory override in
+  `biome.jsonc`. Do NOT downgrade a rule to `warn` to get a build through — a
+  warning nobody reads guards nothing, which is exactly the state the ultracite
+  bump had produced
 - **Content**: MDX via `next-mdx-remote` + `fumadocs-core` for TOC, FR + EN
 - **State**: Zustand (persisted stores in `src/hooks/`), nuqs for URL state,
   React Hook Form + Zod for forms
@@ -432,7 +437,16 @@ falling back to zeroed GitHub widgets rather than failing.
   serves one identical image for the whole site: `e2e/og.spec.ts` compares bytes
   across titles and types to catch exactly that
 - **Sound**: `src/lib/sound-manager.ts` plays sounds on certain interactions
-- **CV delivery**: PDF emailed via Resend with React Email template
+- **CV delivery**: PDF emailed via Resend with React Email template.
+  `@react-email/components` is DEPRECATED upstream with nowhere to migrate to —
+  `1.0.12` is the last published version, the individual packages
+  (`@react-email/html`, `/body`, `/container`…) are deprecated too, and
+  `react-email@6` is the dev tool, not the component library. Only
+  `@react-email/render` is still maintained. It is kept deliberately: those ten
+  components carry email-client compatibility (`Html` sets the language, `Preview`
+  the hidden preheader, `Img` the attributes Outlook needs) that this repo cannot
+  test — there is no Resend key in CI. Do not hand-roll them to silence a
+  deprecation notice
 - **Capture scripts**: `pnpm capture:*` drive Puppeteer against `/og` and
   `/components/<slug>` to refresh images in `public/images/`
 - **Fonts**: declare every pixel font locally in `src/fonts/pixel.ts`. Importing

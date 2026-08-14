@@ -1,7 +1,12 @@
 import type { SVGProps } from "react";
 
 export const Markdown = (props: SVGProps<SVGSVGElement>) => (
-  <svg {...props} fill="none" viewBox="0 0 208 128">
+  <svg
+    aria-hidden="true"
+    {...props}
+    fill="none"
+    viewBox="0 0 208 128"
+  >
     <g className="fill-foreground">
       <path
         clipRule="evenodd"

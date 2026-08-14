@@ -2,6 +2,7 @@ import type { SVGProps } from "react";
 
 export const Pnpm = (props: SVGProps<SVGSVGElement>) => (
   <svg
+    aria-hidden="true"
     {...props}
     viewBox="76.58987244897958 44 164.00775510204068 164"
     xmlnsXlink="http://www.w3.org/1999/xlink"
