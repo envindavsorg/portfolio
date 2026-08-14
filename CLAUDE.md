@@ -449,6 +449,17 @@ comparing values order-independently: the serialiser imposes a canonical field
 order on purpose (the corpus is inconsistent today), so six files will show a
 one-time reordering diff with no value change.
 
+`messages.ts` guards the two failure modes a hand-edited translation produces
+without breaking anything loudly: a **lost interpolation** (`{words} mots` →
+`words` renders a sentence with no number, silently) and a key added **in English
+only** (`compile-i18n.mts` counts FRENCH keys and would fail the build; the
+reverse is the normal untranslated case). Both are refused before writing, which
+is what makes it safe for the action to commit the two files as two separate
+commits rather than going through the Trees API. Its test round-trips both real
+message files **byte for byte** — a serialiser that differs from the repo's
+format would produce a 627-line diff on the first save with no value change — and
+asserts the live repo has no placeholder mismatch.
+
 Setup: create a GitHub OAuth app (callback
 `https://<domain>/api/auth/callback/github`), a Neon project, run
 `psql "$DATABASE_URL" -f migrations/0001_better_auth.sql`, then set

@@ -117,3 +117,24 @@ test.describe("éditeur de contenu", () => {
     expect(html).not.toContain("retour à la liste");
   });
 });
+
+test.describe("éditeur de traductions", () => {
+  test("exige une session et ne fuit aucun message", async ({
+    page,
+    request,
+  }) => {
+    await page.goto("/admin/messages");
+    await expect(page).toHaveURL(/\/admin\/signin$/u);
+
+    const response = await request.get("/admin/messages", {
+      maxRedirects: 0,
+    });
+
+    expect([307, 308]).toContain(response.status());
+
+    const html = await response.text();
+    // les 627 messages ne doivent pas partir dans le payload d'une redirection
+    expect(html).not.toContain("traductions");
+    expect(html).not.toContain("sans traduction anglaise");
+  });
+});

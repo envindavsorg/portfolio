@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 const LINKS: { href: string; label: string }[] = [
   { href: "/admin", label: "tableau de bord" },
   { href: "/admin/content", label: "contenu" },
+  { href: "/admin/messages", label: "traductions" },
 ];
 
 interface AdminNavProps {
