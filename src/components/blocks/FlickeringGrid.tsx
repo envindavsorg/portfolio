@@ -235,6 +235,16 @@ export const FlickeringGrid = ({
         ref={containerRef}
         {...props}
       >
+        {/*
+          Fond animé purement décoratif, et `pointer-events-none`.
+
+          Biome range `<canvas>` parmi les éléments focusables, ce qu'il n'est
+          pas : la spec HTML ne lui donne aucun mode de focus par défaut, sans
+          `tabindex` ni contenu de repli focusable. Son correctif automatique
+          consiste à RETIRER `aria-hidden`, ce qui exposerait un canvas sans nom
+          aux lecteurs d'écran — strictement pire que la situation actuelle.
+        */}
+        {/* biome-ignore lint/a11y/noAriaHiddenOnFocusable: un canvas décoratif sans tabindex n'est pas focusable */}
         <canvas
           aria-hidden="true"
           className="pointer-events-none"

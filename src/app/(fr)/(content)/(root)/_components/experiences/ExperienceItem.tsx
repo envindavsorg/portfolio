@@ -117,8 +117,8 @@ export const ExperienceItem = ({
           <div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in">
             {experience.skills.length > 0 && (
               <ul className="flex flex-wrap gap-1.5">
-                {experience.skills.map((skill, index) => (
-                  <li className="flex" key={index + skill}>
+                {experience.skills.map((skill) => (
+                  <li className="flex" key={skill}>
                     <Tag>{skill}</Tag>
                   </li>
                 ))}

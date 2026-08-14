@@ -1,5 +1,6 @@
 export const BrandingAssetMark = () => (
   <svg
+    aria-hidden="true"
     fill="none"
     height="26"
     viewBox="0 0 39 26"

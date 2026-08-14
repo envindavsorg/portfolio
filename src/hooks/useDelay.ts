@@ -65,6 +65,14 @@ export const useFnDelay = <T>(
         currentAbortController.abort();
       }
     };
+    /**
+     * Les dépendances sont un PARAMÈTRE du hook, transmis tel quel.
+     *
+     * Biome exige un littéral de tableau pour vérifier la liste. C'est
+     * impossible pour un hook générique dont tout l'intérêt est de laisser
+     * l'appelant décider quand relancer sa fabrique.
+     */
+    // biome-ignore lint/correctness/useExhaustiveDependencies: liste transmise par l'appelant, non analysable statiquement
   }, deps);
 
   useEffect(

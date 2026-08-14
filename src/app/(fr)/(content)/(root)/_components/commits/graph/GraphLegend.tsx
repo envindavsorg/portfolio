@@ -16,9 +16,18 @@ export const GraphLegend = (
     <span className="font-medium text-muted-foreground text-xs sm:text-sm">
       {m.home_commits_legend_less()}
     </span>
+    {/*
+      L'échelle est encadrée par « moins » et « plus » en texte : les pastilles
+      elles-mêmes n'ajoutent rien pour un lecteur d'écran.
+    */}
     <div className="flex items-center gap-x-1">
       {Array.from({ length: MAX_LEVEL + 1 }, (_, level) => (
-        <svg height={BLOCK_SIZE} key={level} width={BLOCK_SIZE}>
+        <svg
+          aria-hidden="true"
+          height={BLOCK_SIZE}
+          key={`niveau-${level}`}
+          width={BLOCK_SIZE}
+        >
           <rect
             className={LEVEL_FILLS[level]}
             height={BLOCK_SIZE}

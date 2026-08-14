@@ -234,10 +234,10 @@ export const RegexTester = () => {
             <div className="flex flex-col gap-y-2">
               <Label>{m.utils_regex_groups_title()}</Label>
               <ol className="flex flex-col divide-y divide-input rounded-md border border-input">
-                {run.matches.map((match, rank) => (
+                {run.matches.map((match) => (
                   <li
                     className="flex flex-col gap-y-1 p-3"
-                    key={`${match.index}-${rank}`}
+                    key={match.index}
                   >
                     <div className="flex items-center justify-between gap-x-2">
                       <span className="break-all font-mono text-xs">

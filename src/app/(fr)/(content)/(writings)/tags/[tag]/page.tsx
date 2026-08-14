@@ -142,17 +142,21 @@ export const TagView = async ({
           </Prose>
         )}
 
-        <div
+        {/*
+          Une LISTE, pas un `role="group"`. Ce sont des rubriques énumérées, pas
+          un groupe de contrôles : un lecteur d'écran annonce ainsi leur nombre
+          et permet de les parcourir, ce qu'un groupe ne fait pas.
+        */}
+        <ul
           aria-label={m.writings_tag_categories_aria()}
           className="flex flex-wrap items-center gap-2 pt-1"
-          role="group"
         >
           {tag.categories.map((category) => (
-            <Badge className="lowercase" key={category}>
-              {category}
-            </Badge>
+            <li key={category}>
+              <Badge className="lowercase">{category}</Badge>
+            </li>
           ))}
-        </div>
+        </ul>
       </PanelContent>
 
       <WritingsContentList items={items} />

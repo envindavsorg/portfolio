@@ -33,6 +33,7 @@ const UNIT_LABELS: Record<GenerationUnit, () => string> = {
 
 const LoremIpsumGeneratorContent = () => {
   // état synchronisé dans l'URL (nuqs) — configuration partageable
+  const [seed, setSeed] = useState(0);
   const [inputAmount, setInputAmount] = useQueryState(
     "count",
     parseAsInteger.withDefault(2)
@@ -43,7 +44,6 @@ const LoremIpsumGeneratorContent = () => {
   );
   const [asHTML, setAsHTML] = useState(false);
   const [startWithStandard, setStartWithStandard] = useState(false);
-  const [seed, setSeed] = useState(0);
   const { handleCopy } = useCopyToClipboard();
 
   const generationOptions: {
@@ -61,6 +61,15 @@ const LoremIpsumGeneratorContent = () => {
     []
   );
 
+  /**
+   * `seed` ne sert PAS au calcul : il n'apparaît pas dans le corps du mémo.
+   *
+   * C'est une dépendance-DÉCLENCHEUR. Le bouton « régénérer » l'incrémente, et
+   * c'est ce changement qui fait recalculer un texte différent — la génération
+   * étant aléatoire, un mémo sans lui rendrait le bouton inerte. Biome ne voit
+   * qu'une dépendance non lue et la signale comme superflue.
+   */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `seed` déclenche la régénération, il n'est pas lu
   const output = useMemo(
     () =>
       generateLoremIpsum({

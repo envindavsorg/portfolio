@@ -58,7 +58,9 @@ export const readAlertKind = (
 ): AlertKind | null => {
   const [paragraph] = blockquote.children ?? [];
 
-  if (!paragraph || paragraph.type !== "paragraph") {
+  // `paragraph?.type` vaut `undefined` sur un tableau vide, donc la
+  // comparaison couvre l'absence comme le mauvais type
+  if (paragraph?.type !== "paragraph") {
     return null;
   }
 

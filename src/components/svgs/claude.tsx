@@ -2,6 +2,7 @@ import type { SVGProps } from "react";
 
 export const Claude = (props: SVGProps<SVGSVGElement>) => (
   <svg
+    aria-hidden="true"
     {...props}
     preserveAspectRatio="xMidYMid"
     viewBox="0 0 256 257"
