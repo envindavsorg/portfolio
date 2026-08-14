@@ -83,3 +83,37 @@ test.describe("espace d'administration", () => {
     expect(sitemap).not.toContain("/admin");
   });
 });
+
+test.describe("éditeur de contenu", () => {
+  /**
+   * L'action serveur est un point d'entrée HTTP à part entière : elle est
+   * atteignable sans jamais charger l'écran. Protéger la page ne protège donc
+   * pas l'écriture, et c'est ce que ce test vérifie.
+   */
+  test("la liste et l'éditeur exigent une session", async ({
+    page,
+  }) => {
+    for (const path of [
+      "/admin/content",
+      "/admin/content/fr/articles/how-i-write-css",
+    ]) {
+      await page.goto(path);
+      await expect(page).toHaveURL(/\/admin\/signin$/u);
+    }
+  });
+
+  test("l'éditeur ne fuit pas le contenu dans le HTML servi", async ({
+    request,
+  }) => {
+    const response = await request.get(
+      "/admin/content/fr/articles/how-i-write-css",
+      { maxRedirects: 0 }
+    );
+
+    expect([307, 308]).toContain(response.status());
+
+    const html = await response.text();
+    expect(html).not.toContain("corps (MDX)");
+    expect(html).not.toContain("retour à la liste");
+  });
+});

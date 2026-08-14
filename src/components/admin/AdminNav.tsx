@@ -8,15 +8,10 @@ import type { AdminSession } from "@/lib/admin/auth";
 import { signOut } from "@/lib/admin/auth-client";
 import { cn } from "@/lib/utils";
 
-/**
- * Seules les routes qui EXISTENT.
- *
- * Les éditeurs de contenu et de traductions arrivent avec la couche d'écriture
- * GitHub ; les annoncer ici avant qu'ils existent produirait des 404 dans un
- * espace censé être un outil de travail.
- */
+/** seules les routes qui EXISTENT : un lien mort dans un outil de travail est pire qu'un menu court */
 const LINKS: { href: string; label: string }[] = [
   { href: "/admin", label: "tableau de bord" },
+  { href: "/admin/content", label: "contenu" },
 ];
 
 interface AdminNavProps {
