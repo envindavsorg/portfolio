@@ -75,7 +75,7 @@ export const USES: UsesGroup[] = [
     id: "tools",
     items: [
       { link: "https://pnpm.io/", name: "pnpm" },
-      { link: "https://oxc.rs/", name: "oxlint + oxfmt" },
+      { link: "https://biomejs.dev/", name: "Biome" },
       { link: "https://vitest.dev/", name: "Vitest" },
       { link: "https://playwright.dev/", name: "Playwright" },
       { link: "https://www.deque.com/axe/", name: "axe-core" },
@@ -105,7 +105,7 @@ export const USES: UsesGroup[] = [
   {
     id: "environment",
     items: [
-      // `.zed/settings.json` : format à l'enregistrement, oxfmt et oxlint en LSP
+      // `.zed/settings.json` : format à l'enregistrement, Biome en LSP
       { link: "https://zed.dev/", name: "Zed" },
       {
         link: "https://github.com/typescript-language-server/typescript-language-server",

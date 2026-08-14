@@ -10,8 +10,8 @@ import { Analytics } from "./analytics/Analytics";
 import ProgressProvider from "./modules/ProgressProvider";
 import { ServiceWorker } from "./modules/ServiceWorker";
 import ThemeProvider from "./modules/ThemeProvider";
-import { Compose } from "./utils/Compose";
 import type { Provider } from "./utils/Compose";
+import { Compose } from "./utils/Compose";
 
 const Toaster = dynamic(
   async () => {

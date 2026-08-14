@@ -11,11 +11,11 @@ pnpm build                # Production build (compiles i18n first)
 pnpm preview              # Build + serve on port 1408
 pnpm types                # Type checking (tsc --noEmit) — needs `pnpm i18n:compile` first
                           # on a fresh clone: src/paraglide/ is generated
-pnpm lint                 # oxlint (config: oxlint.config.ts)
-pnpm lint:fix             # oxlint --fix + oxfmt --write
-pnpm format               # oxfmt --check
-pnpm format:fix           # oxfmt --write
-pnpm check / pnpm fix     # Aliases of lint / lint:fix
+pnpm lint                 # biome lint (config: biome.jsonc)
+pnpm lint:fix             # biome check --write (lint + format + assists)
+pnpm format               # biome format
+pnpm format:fix           # biome format --write
+pnpm check / pnpm fix     # biome check / biome check --write
 pnpm test                 # Vitest unit tests (src/**/*.test.ts)
 pnpm test:e2e             # Playwright e2e (e2e/, needs `playwright install chromium`)
                           # webServer runs `pnpm preview`; override with
@@ -36,7 +36,16 @@ pnpm registry:build       # Build component registry for distribution
   client-side) — never reintroduce radix primitives; `src/components/base/Collapsible.tsx`
   is the reference for wrapping Base UI while keeping an `asChild`-compatible API.
 - **i18n**: Paraglide JS (inlang) — FR (default, root URLs) + EN (under `/en`)
-- **Linting**: Ultracite (oxlint + oxfmt). Biome is gone.
+- **Linting**: Biome (`biome.jsonc`) — lint, format and assists in one tool.
+  oxlint/oxfmt/ultracite are gone. The trigger was severity ownership: an
+  ultracite bump from 7.8.1 to 7.10.3 turned 276 warnings into errors across
+  137 files with no commit in this repo changing. Every severity now lives in
+  `biome.jsonc`, with the reason next to it — that is why the config is
+  `.jsonc` and not `.json`. Rules the old `oxlint.config.ts` had switched off
+  are switched off here too; rules Biome adds that this repo never adopted are
+  `warn`, so they stay visible without failing CI. `css.parser.tailwindDirectives`
+  is REQUIRED: without it `globals.css` throws 26 parse errors on `@plugin`,
+  `@theme` and `@utility`
 - **Content**: MDX via `next-mdx-remote` + `fumadocs-core` for TOC, FR + EN
 - **State**: Zustand (persisted stores in `src/hooks/`), nuqs for URL state,
   React Hook Form + Zod for forms
@@ -321,7 +330,10 @@ which generates `src/__registry__/` and `public/r/registry.json`.
 
 ## Code Style
 
-- **Formatting**: oxfmt (via Ultracite). Run `pnpm fix` before committing.
+- **Formatting**: Biome, `lineWidth: 70`. Run `pnpm fix` before committing.
+  That width is inherited from the old oxfmt `printWidth` and is what gives the
+  repo its short lines — keeping it is what held the Biome switch to 10
+  reformatted files instead of the whole tree.
 - **Imports**: Use `@/*` alias for `src/`
 - **Class Names**: Use `cn()` from `@/lib/utils` for merging Tailwind classes
 - **Components**: PascalCase, named exports

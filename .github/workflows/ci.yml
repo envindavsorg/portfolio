@@ -49,11 +49,10 @@ jobs:
       - name: Type check
         run: pnpm types
 
-      - name: Lint
-        run: pnpm lint
-
-      - name: Format
-        run: pnpm format
+      # `biome check` couvre lint, formatage et assistants en une passe : deux
+      # étapes séparées relanceraient l'analyse pour rien
+      - name: Lint & format
+        run: pnpm check
 
       - name: Unit tests
         run: pnpm test

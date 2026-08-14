@@ -1,12 +1,5 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
 import type {
   ComponentProps,
   FocusEvent,
@@ -14,6 +7,13 @@ import type {
   MouseEvent,
   ReactElement,
   ReactNode,
+} from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 
 import { cn } from "@/lib/utils";
@@ -59,7 +59,7 @@ const goldenBase = (index: number): number =>
   Math.floor((index * PHI * FONT_COUNT) % FONT_COUNT);
 
 const pseudoRandom = (tick: number, index: number): number =>
-  // oxlint-disable-next-line no-bitwise, prefer-math-trunc -- intentional uint32 wraparound for deterministic hash
+  // débordement uint32 volontaire : c'est ce qui rend le hachage déterministe
   ((tick * 2_654_435_761 + index * 340_573_321) >>> 0) % FONT_COUNT;
 
 const extractText = (children: ReactNode): string => {

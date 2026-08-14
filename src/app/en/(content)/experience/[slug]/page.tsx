@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import {
   buildExperienceMetadata,
-  experienceStaticParams,
   ExperienceView,
+  experienceStaticParams,
 } from "@/app/(fr)/(content)/experience/[slug]/page";
 
 // mêmes slugs que l'arbre français : l'`id` d'un poste ne se traduit pas

@@ -3,11 +3,14 @@
   "name": "utils",
   "title": "Fonctions utilitaires",
   "author": "envindavsorg <contact@cuzeacflorin.fr>",
-  "dependencies": ["clsx", "tailwind-merge"],
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
   "files": [
     {
       "path": "src/lib/utils.ts",
-      "content": "import { clsx } from \"clsx\";\nimport type { ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport const cn = (...inputClasses: ClassValue[]): string =>\n  twMerge(clsx(inputClasses));\n",
+      "content": "import type { ClassValue } from \"clsx\";\nimport { clsx } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport const cn = (...inputClasses: ClassValue[]): string =>\n  twMerge(clsx(inputClasses));\n",
       "type": "registry:lib"
     }
   ],

@@ -151,8 +151,10 @@ const tokenize = (json: string): Token[] => {
 
       const keyMatch = remaining.match(/^("(?:[^"\\]|\\.)*")\s*:/u);
       if (keyMatch) {
-        tokens.push({ type: "key", value: keyMatch[1] });
-        tokens.push({ type: "punctuation", value: ": " });
+        tokens.push(
+          { type: "key", value: keyMatch[1] },
+          { type: "punctuation", value: ": " }
+        );
         remaining = remaining.slice(keyMatch[0].length).trimStart();
         continue;
       }

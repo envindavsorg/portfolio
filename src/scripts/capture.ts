@@ -4,8 +4,8 @@ import { setTimeout as sleep } from "node:timers/promises";
 
 import { green, red, yellow } from "colorette";
 import consola from "consola";
-import { launch } from "puppeteer-core";
 import type { Browser, Page } from "puppeteer-core";
+import { launch } from "puppeteer-core";
 
 type FilePath = `${string}.webp` | `${string}.png` | `${string}.jpeg`;
 

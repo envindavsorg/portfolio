@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import type { DependencyList } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { logger } from "@/lib/logger";
 
@@ -23,7 +23,8 @@ export const useFnDelay = <T>(
     const currentAbortController = abortControllerRef.current;
 
     const delayFn = (timeMs: number): Promise<void> =>
-      // oxlint-disable-next-line avoid-new -- bridging setTimeout + abort signal to a promise requires the Promise constructor
+      // relier setTimeout et un signal d'annulation à une promesse impose
+      // le constructeur Promise
       new Promise((resolve, reject) => {
         const timeoutId = setTimeout(() => {
           if (!currentAbortController.signal.aborted) {

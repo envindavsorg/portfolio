@@ -4,8 +4,14 @@
   "title": "Theme Switcher",
   "author": "envindavsorg <contact@cuzeacflorin.fr>",
   "description": "Un composant de sélection de thème pour les applications Next.js avec next-themes et Tailwind CSS, supportant les modes système, clair et sombre.",
-  "dependencies": ["next-themes", "@phosphor-icons/react", "motion"],
-  "registryDependencies": ["@envindavsorg/utils"],
+  "dependencies": [
+    "next-themes",
+    "@phosphor-icons/react",
+    "motion"
+  ],
+  "registryDependencies": [
+    "@envindavsorg/utils"
+  ],
   "files": [
     {
       "path": "src/registry/theme-switcher/ThemeSwitcher.tsx",

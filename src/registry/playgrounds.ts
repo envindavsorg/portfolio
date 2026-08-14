@@ -42,8 +42,9 @@ export interface PlaygroundDefinition {
 export const PLAYGROUNDS: Record<string, PlaygroundDefinition> = {
   "apple-hello-effect": {
     component: lazy(async () => {
-      const mod =
-        await import("@/registry/apple-hello-effect/AppleHelloEffect");
+      const mod = await import(
+        "@/registry/apple-hello-effect/AppleHelloEffect"
+      );
       return { default: mod.AppleHelloEffect };
     }) as unknown as PlaygroundComponent,
     controls: [
@@ -67,8 +68,9 @@ export const PLAYGROUNDS: Record<string, PlaygroundDefinition> = {
   },
   "flip-sentences": {
     component: lazy(async () => {
-      const mod =
-        await import("@/registry/flip-sentences/FlipSentences");
+      const mod = await import(
+        "@/registry/flip-sentences/FlipSentences"
+      );
       return { default: mod.FlipSentences };
     }) as unknown as PlaygroundComponent,
     controls: [

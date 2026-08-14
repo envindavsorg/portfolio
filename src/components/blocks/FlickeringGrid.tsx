@@ -1,5 +1,6 @@
 "use client";
 
+import type { HTMLAttributes } from "react";
 import {
   useCallback,
   useEffect,
@@ -7,7 +8,6 @@ import {
   useRef,
   useState,
 } from "react";
-import type { HTMLAttributes } from "react";
 
 interface FlickeringGridProps extends HTMLAttributes<HTMLDivElement> {
   squareSize?: number;

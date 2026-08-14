@@ -64,10 +64,6 @@ const CV = {
 
 const GLOBAL_DATA = {
   CV,
-  OVERVIEW,
-  SOCIAL,
-  USER,
-  WORK,
 
   // keywords for better SEO
   keywords: [
@@ -153,6 +149,10 @@ const GLOBAL_DATA = {
     "wireframing",
     "pixel perfect",
   ],
+  OVERVIEW,
+  SOCIAL,
+  USER,
+  WORK,
 };
 
 export default GLOBAL_DATA;

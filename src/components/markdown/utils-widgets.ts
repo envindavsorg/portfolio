@@ -1,5 +1,5 @@
-import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import dynamic from "next/dynamic";
+import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 
 /**
  * Widgets d'outils chargés à la demande.
@@ -11,8 +11,9 @@ import dynamic from "next/dynamic";
  * chunk, chargé seulement si le contenu l'invoque.
  */
 const ArticleBanner = dynamic(async () => {
-  const mod =
-    await import("@/components/utils/ArticleBannerGenerator");
+  const mod = await import(
+    "@/components/utils/ArticleBannerGenerator"
+  );
   return mod.ArticleBanner;
 });
 const Base64 = dynamic(async () => {

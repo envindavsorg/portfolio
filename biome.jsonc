@@ -1,0 +1,173 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
+
+  // Biome remplace oxlint + oxfmt + ultracite : un seul outil, une seule
+  // version, et surtout un seul endroit où le niveau d'exigence est décidé.
+  //
+  // C'est ce dernier point qui a motivé le retour. Avec ultracite, la sévérité
+  // des règles venait d'un préréglage amont : passer de 7.8.1 à 7.10.3 a
+  // transformé 276 avertissements en erreurs sur 137 fichiers, sans qu'aucun
+  // commit du dépôt ne change. Un standard qu'on ne contrôle pas n'est pas un
+  // standard, c'est une dépendance de plus.
+  //
+  // Le fichier est en `.jsonc` justement pour porter ces raisons.
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    // `.gitignore` fait déjà le tri : node_modules, .next, src/paraglide…
+    "useIgnoreFile": true
+  },
+
+  "files": {
+    "includes": [
+      "**",
+      "!next-env.d.ts",
+      "!src/__registry__",
+      "!public/r",
+      "!pnpm-lock.yaml"
+    ]
+  },
+
+  // `lineWidth: 70` reprend le `printWidth` d'oxfmt. Ce n'est pas un détail :
+  // c'est ce qui donne au dépôt ses lignes courtes, et le reprendre tel quel
+  // fait que la bascule vers Biome ne reformate que 10 fichiers au lieu des
+  // 150 qu'un oxfmt 0.63 aurait touchés.
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 70
+  },
+
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "jsxQuoteStyle": "double",
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "es5"
+    }
+  },
+
+  "json": {
+    "formatter": { "enabled": true }
+  },
+
+  "css": {
+    "formatter": { "enabled": true },
+    // Sans ça, `globals.css` produit 26 erreurs de syntaxe : `@plugin`,
+    // `@theme`, `@custom-variant` et `@utility` ne sont pas du CSS standard.
+    // Biome sait les lire, c'est juste éteint par défaut — l'exclure du
+    // périmètre aurait laissé la feuille sans relecture du tout.
+    "parser": { "tailwindDirectives": true }
+  },
+
+  "linter": {
+    "enabled": true,
+    "rules": {
+      // `preset` remplace `recommended`, déprécié en 2.5 et supprimé au
+      // prochain majeur
+      "preset": "recommended",
+
+      "a11y": {
+        // Décisions REPRISES de l'ancien oxlint.config.ts, pas inventées ici :
+        // `jsx-a11y/label-has-associated-control` y était déjà désactivée.
+        "noLabelWithoutControl": "off",
+        // idem `jsx-a11y/heading-has-content`
+        "useHeadingContent": "off",
+
+        // Ci-dessous : des règles que Biome applique et qu'oxlint ne signalait
+        // qu'en avertissement, ou pas du tout. Elles restent AFFICHÉES à chaque
+        // exécution, mais ne cassent pas la CI — le dépôt n'a jamais adopté ce
+        // niveau d'exigence, et l'adopter d'un coup, c'est 60 fichiers à revoir
+        // dans une PR qui parle de dépendances.
+        //
+        // Elles sont réelles pour autant : `a11y.spec.ts` passe axe sur 16
+        // types de page, donc rien de ce qui est ci-dessous n'est une violation
+        // constatée par un audit — ce sont des motifs à risque.
+        "noAriaHiddenOnFocusable": "warn",
+        "noStaticElementInteractions": "warn",
+        "noSvgWithoutTitle": "warn",
+        "useKeyWithMouseEvents": "warn",
+        "useSemanticElements": "warn"
+      },
+
+      "complexity": {
+        "noImportantStyles": "warn"
+      },
+
+      "correctness": {
+        // `react-hooks/exhaustive-deps` était déjà en avertissement sous oxlint
+        "useExhaustiveDependencies": "warn"
+      },
+
+      "performance": {
+        // `next/no-img-element` : avertissement sous oxlint
+        "noImgElement": "warn"
+      },
+
+      "security": {
+        // reprise de `react/no-danger: off` : le rendu MDX passe par du HTML
+        // déjà assaini en amont
+        "noDangerouslySetInnerHtml": "off"
+      },
+
+      "style": {
+        "noDescendingSpecificity": "warn",
+        // `next/no-head-element` : `RootDocument` rend son propre <head>, c'est
+        // le patron « multiple root layouts » de l'App Router
+        "noHeadElement": "off"
+      },
+
+      "suspicious": {
+        "noArrayIndexKey": "warn",
+        // `console.error` et `console.warn` restent permis : ce sont les deux
+        // seuls usages du dépôt, dans un `componentDidCatch` et un `catch`
+        // autour de la lecture audio. La règle est là pour le `console.log`
+        // oublié, pas pour museler un rapport d'erreur.
+        "noConsole": {
+          "level": "error",
+          "options": { "allow": ["error", "warn"] }
+        }
+      }
+    }
+  },
+
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on",
+        // reprend le tri de clés qu'oxlint appliquait aux objets
+        "useSortedKeys": "on"
+      }
+    },
+    "enabled": true
+  },
+
+  "overrides": [
+    {
+      // Un script de build et un test de bout en bout écrivent sur stdout par
+      // CONSTRUCTION : `compile-i18n.mts` annonce le nombre de messages
+      // compilés, `budget.spec.ts` journalise chaque poids mesuré — et cette
+      // trace est précisément ce qui a permis de découvrir que /articles pesait
+      // 707 Kio en CI contre 518 en local. Interdire la console ici reviendrait
+      // à supprimer le résultat.
+      "includes": ["src/scripts/**", "e2e/**"],
+      "linter": {
+        "rules": {
+          "suspicious": { "noConsole": "off" }
+        }
+      }
+    },
+    {
+      // Le tri de clés n'a pas de sens dans un fichier de configuration, où
+      // l'ordre est conventionnel : il voulait réordonner `tsconfig.json`.
+      "includes": ["**/*.json", "**/*.jsonc"],
+      "assist": {
+        "actions": {
+          "source": { "useSortedKeys": "off" }
+        }
+      }
+    }
+  ]
+}

@@ -3,8 +3,8 @@ import path from "node:path";
 
 import consola from "consola";
 import { rimraf } from "rimraf";
-import { registrySchema } from "shadcn/schema";
 import type { Registry } from "shadcn/schema";
+import { registrySchema } from "shadcn/schema";
 
 const { registry } = await import("../registry/index");
 

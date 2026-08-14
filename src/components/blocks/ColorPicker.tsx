@@ -56,7 +56,7 @@ const formatHsl = (h: number, s: number, l: number) =>
 
 const hexToRgb = (hex: string): [number, number, number] => {
   const n = Number.parseInt(hex.slice(1), 16);
-  // oxlint-disable-next-line no-bitwise -- intentional bit extraction of RGB channels from a packed hex integer
+  // extraction des canaux RVB d'un entier hexadécimal compacté
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 };
 

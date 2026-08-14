@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, useMemo } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 import { groupByWeeks } from "@/lib/commits";
 import { dayjs } from "@/lib/functions";

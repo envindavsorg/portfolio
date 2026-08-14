@@ -6,8 +6,8 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { GifEncoder } from "@skyra/gifenc";
 import consola from "consola";
 import { PNG } from "pngjs";
-import { launch } from "puppeteer-core";
 import type { Browser, ElementHandle, Page } from "puppeteer-core";
+import { launch } from "puppeteer-core";
 import sharp from "sharp";
 
 const executablePath =

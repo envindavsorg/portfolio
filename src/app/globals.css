@@ -423,7 +423,7 @@
   /* `[!code focus]` : le reste du bloc s'atténue, et redevient net au survol,
      sinon un extrait long devient illisible pour qui veut le contexte */
   [data-rehype-pretty-code-figure]:has([data-focused])
-    [data-line]:not([data-focused]) {
+  [data-line]:not([data-focused]) {
     @apply opacity-40 transition-opacity;
   }
 

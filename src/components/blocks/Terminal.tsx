@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "motion/react";
 import type { MotionProps } from "motion/react";
+import { motion, useInView } from "motion/react";
 import type React from "react";
 import {
   Children,

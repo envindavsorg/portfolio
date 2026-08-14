@@ -61,9 +61,9 @@ test.describe("page CV", () => {
        * conteneur du CV n'en contient aucun, ce qui a été vérifié, donc la
        * lecture est sûre ici.
        *
-       * (`oxlint --fix` réécrit de toute façon tout `.innerText` en
-       * `.textContent`, y compris à l'intérieur d'un `evaluate` : inutile de
-       * lutter contre la règle quand le cadrage suffit.)
+       * (le correcteur automatique réécrit de toute façon tout `.innerText`
+       * en `.textContent`, y compris à l'intérieur d'un `evaluate` : inutile
+       * de lutter contre la règle quand le cadrage suffit.)
        */
       const text = await page
         .locator('[data-slot="cv"]')

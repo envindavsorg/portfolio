@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { getLocale } from "@/paraglide/runtime";
 
 import { sendCvAction } from "../actions/send-cv.action";
-import { emailSchema } from "../schemas/emailSchema";
 import type { EmailFormData } from "../schemas/emailSchema";
+import { emailSchema } from "../schemas/emailSchema";
 
 export type { EmailFormData };
 

@@ -1,13 +1,18 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import type {
   Easing,
   HTMLMotionProps,
   Transition,
 } from "motion/react";
-import Image from "next/image";
+import { AnimatePresence, motion } from "motion/react";
 import type { ImageProps } from "next/image";
+import Image from "next/image";
+import type {
+  ComponentPropsWithoutRef,
+  HTMLAttributes,
+  PropsWithChildren,
+} from "react";
 import {
   createContext,
   forwardRef,
@@ -18,11 +23,6 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import type {
-  ComponentPropsWithoutRef,
-  HTMLAttributes,
-  PropsWithChildren,
 } from "react";
 import { createPortal } from "react-dom";
 import { RemoveScroll } from "react-remove-scroll";

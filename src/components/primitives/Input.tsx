@@ -75,10 +75,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-export interface InputNumberProps extends Omit<
-  NumericFormatProps,
-  "value" | "onValueChange"
-> {
+export interface InputNumberProps
+  extends Omit<NumericFormatProps, "value" | "onValueChange"> {
   stepper?: number;
   thousandSeparator?: string;
   placeholder?: string;
