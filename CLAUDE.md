@@ -404,6 +404,70 @@ now limits the guard to real transitions. `e2e/playground.spec.ts` clicks at
 exactly those delays; do not "simplify" it into a single click after
 `networkidle`, which is what hid the bug in the first place.
 
+### Admin space (`/admin`)
+
+A **third root layout** next to `(fr)/` and `en/`, GitHub-only sign-in via
+better-auth, restricted to a single account. Everything lives under
+`src/lib/admin/` + `src/app/admin/`.
+
+**The authorisation rule is a pure module**: `access.ts` decides, with no DB,
+network or better-auth import — so the one decision whose failure grants a
+stranger write access to this repo is unit-tested in isolation. Two properties
+matter and are tested: it **fails closed** (no `ADMIN_GITHUB_ID` ⇒ nobody gets
+in, owner included), and it keys on the **numeric GitHub id, never the login** —
+a login can be renamed and re-registered by someone else, which would turn a
+rename into an admin takeover. The test also caught a hole in the first version:
+`String(["42424242"])` is `"42424242"`, so a one-element array passed the numeric
+check; the type is now verified before conversion.
+
+**Three independent barriers**, none assuming another is correct:
+1. a `databaseHooks.user.create.before` hook, so a foreign account is never
+   created and no session ever exists for it;
+2. `requireAdminSession()` at the top of every protected page;
+3. the same check again in the `(protected)` layout.
+
+⚠️ **A guard in the layout is NOT enough**, and this is counter-intuitive: Next
+renders layout and page **in parallel**, so a `redirect()` thrown by the layout
+does not stop the page — it computes its data and its JSX lands in the RSC
+payload of the redirect response. Measured here: `curl /admin` with no session
+returned a 307 whose **body contained the whole content inventory and the weight
+table**. `e2e/admin.spec.ts` reads that body and fails on it. Always call
+`requireAdminSession()` before touching data in a protected page.
+
+**Lazy construction**, same lesson as `getResend()`: `betterAuth()` and
+`new Pool()` are built on first request, never at module scope — CI has none of
+the variables and would otherwise fail the build. Every admin env var is
+`optional()` in `src/env.ts` for the same reason; the runtime check is what
+closes the door, not the schema.
+
+`frontmatter.ts` rewrites MDX without `gray-matter.stringify` nor js-yaml: both
+reformat everything, and a `createdAt: 2026-03-03` read back through
+`z.coerce.date()` would be rewritten as an ISO timestamp that `assertValidDates`
+then refuses — a save from the admin would produce files the site can no longer
+read. Its test round-trips **all 44 real content files** through `gray-matter`,
+comparing values order-independently: the serialiser imposes a canonical field
+order on purpose (the corpus is inconsistent today), so six files will show a
+one-time reordering diff with no value change.
+
+`messages.ts` guards the two failure modes a hand-edited translation produces
+without breaking anything loudly: a **lost interpolation** (`{words} mots` →
+`words` renders a sentence with no number, silently) and a key added **in English
+only** (`compile-i18n.mts` counts FRENCH keys and would fail the build; the
+reverse is the normal untranslated case). Both are refused before writing, which
+is what makes it safe for the action to commit the two files as two separate
+commits rather than going through the Trees API. Its test round-trips both real
+message files **byte for byte** — a serialiser that differs from the repo's
+format would produce a 627-line diff on the first save with no value change — and
+asserts the live repo has no placeholder mismatch.
+
+Setup: create a GitHub OAuth app (callback
+`https://<domain>/api/auth/callback/github`), a Neon project, run
+`psql "$DATABASE_URL" -f migrations/0001_better_auth.sql`, then set
+`DATABASE_URL`, `BETTER_AUTH_SECRET`, `GITHUB_CLIENT_ID`,
+`GITHUB_CLIENT_SECRET` and `ADMIN_GITHUB_ID` (find it with
+`curl https://api.github.com/users/<login> | jq .id`). Missing any of them makes
+`/admin/signin` say which, and keeps the door shut.
+
 ## Environment Variables
 
 Required in `.env.local` (no `.env.example` exists):
@@ -417,6 +481,11 @@ Required in `.env.local` (no `.env.example` exists):
 | `RESEND_API_KEY` | No | Email delivery for CV |
 | `API_TOKEN` | No | Internal API auth |
 | `NEXT_PUBLIC_APP_URL` | No | Absolute URL base (falls back to VERCEL_URL, then prod domain) |
+| `DATABASE_URL` | No | Neon Postgres, for better-auth sessions (`/admin`) |
+| `BETTER_AUTH_SECRET` | No | Session signing secret (`/admin`) |
+| `GITHUB_CLIENT_ID` | No | GitHub OAuth app (`/admin`) |
+| `GITHUB_CLIENT_SECRET` | No | GitHub OAuth app (`/admin`) |
+| `ADMIN_GITHUB_ID` | No | **Numeric** GitHub id allowed into `/admin` — absent means nobody |
 
 Env validation runs at startup via the Zod schema in `src/env.ts`, which
 `next.config.ts` imports. Only `GITHUB_API_TOKEN` is strictly required, and only
