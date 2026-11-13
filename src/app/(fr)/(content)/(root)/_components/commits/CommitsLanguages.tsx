@@ -20,7 +20,7 @@ export const CommitsLanguages = ({
   }
 
   return (
-    <div className="screen-line-before flex flex-col gap-y-2 px-2 py-3 sm:px-4">
+    <div className="screen-line-before flex flex-col gap-y-2 p-3">
       <p className="text-muted-foreground text-xs lowercase">
         {m.home_commits_languages_title()}
       </p>

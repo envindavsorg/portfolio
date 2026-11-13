@@ -69,6 +69,71 @@ const hiddenTitles = async (page: Page) =>
       .filter(Boolean);
   });
 
+interface StickyReport {
+  /** en-têtes dont la forme rendue contredit la position mesurée */
+  mismatches: string[];
+  /** en-têtes posés sur la ligne d'accroche à cet instant */
+  pinned: number;
+}
+
+/**
+ * Compare, pour chaque en-tête collant, sa forme à sa position.
+ *
+ * La ligne d'accroche est LUE dans le style calculé (`top-14`), comme le fait
+ * le composant : une valeur recopiée ici dériverait le jour où elle change.
+ * Entre la ligne et deux pixels plus bas, rien n'est affirmé — c'est la marge
+ * de l'observateur, et un test qui l'exigerait au pixel serait instable.
+ */
+const stickyReport = async (page: Page): Promise<StickyReport> =>
+  await page.evaluate(() => {
+    const states = [
+      ...document.querySelectorAll("[data-slot='panel-header']"),
+    ]
+      .filter(
+        (header) => getComputedStyle(header).position === "sticky"
+      )
+      .map((header) => {
+        const line = Number.parseFloat(getComputedStyle(header).top);
+        const { top } = header.getBoundingClientRect();
+        const text = (
+          header.querySelector("[data-slot='panel-title']")
+            ?.textContent ?? ""
+        ).trim();
+
+        return {
+          above: top <= line + 0.5,
+          below: top >= line + 2,
+          pinned: Math.abs(top - line) <= 0.5,
+          stuck: text.startsWith("--"),
+          text: text.slice(0, 24),
+          top: Math.round(top),
+        };
+      });
+
+    return {
+      mismatches: states
+        .filter(
+          ({ above, below, stuck }) =>
+            (above && !stuck) || (below && stuck)
+        )
+        .map(
+          ({ stuck, text, top }) =>
+            `« ${text} » à ${top}px : forme ${stuck ? "collée" : "au repos"}`
+        ),
+      pinned: states.filter(({ pinned }) => pinned).length,
+    };
+  });
+
+/** un cran de molette : assez petit pour que l'ancien observateur ne voie rien */
+const WHEEL_DELTA = 40;
+const WHEEL_STEPS = 60;
+const WHEEL_CHECK_EVERY = 5;
+
+const WHEEL_RUNS: { delta: number; sens: string }[] = [
+  { delta: WHEEL_DELTA, sens: "en descendant" },
+  { delta: -WHEEL_DELTA, sens: "en remontant" },
+];
+
 const DESCENTE = [0, 900, 1500, 2400, 3600, 4600];
 
 /**
@@ -144,5 +209,56 @@ test.describe("titres de section", () => {
         timeout: SETTLE_TIMEOUT,
       })
       .toEqual([]);
+  });
+
+  /**
+   * La forme « -- titre -- » suit la GÉOMÉTRIE, à la molette comme au saut.
+   *
+   * Les tests ci-dessus se déplacent par `scrollTo` instantané, et c'est ce qui
+   * cachait le défaut. L'ancien observateur ne rappelait qu'une fois, quand sa
+   * sentinelle franchissait la ligne d'accroche — à un instant où sa condition
+   * (`top < 0`) était encore fausse. Au défilement normal, par crans de 20 ou
+   * 50 px, AUCUN titre épinglé ne prenait sa forme collée ; à 100 ou 300 px,
+   * certains oui et d'autres non. Sur un parcours mixte : 269 observations
+   * épinglées sur 328 sans la forme collée, et des titres restés « collés » une
+   * fois revenu en haut de page. D'où des intitulés tantôt à gauche, tantôt
+   * centrés, sans règle visible.
+   *
+   * On avance donc à la molette, par petits crans, et on compare à chaque arrêt
+   * l'état rendu à la position mesurée — dans les DEUX sens : au-dessus de la
+   * ligne d'accroche le titre doit être collé, en dessous il ne doit pas l'être.
+   * Le second sens garde aussi le tout premier défaut, celui des titres encore
+   * sous la ligne de flottaison qui se croyaient collés.
+   */
+  test("la forme collée suit le défilement à la molette", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await page.mouse.move(640, 450);
+
+    let pinnedSeen = 0;
+
+    for (const { delta, sens } of WHEEL_RUNS) {
+      for (let step = 1; step <= WHEEL_STEPS; step++) {
+        await page.mouse.wheel(0, delta);
+
+        if (step % WHEEL_CHECK_EVERY === 0) {
+          await expect
+            .poll(async () => (await stickyReport(page)).mismatches, {
+              message: `forme du titre contraire à sa position, ${sens}, cran ${step}`,
+              timeout: SETTLE_TIMEOUT,
+            })
+            .toEqual([]);
+
+          pinnedSeen += (await stickyReport(page)).pinned;
+        }
+      }
+    }
+
+    // TÉMOIN : sans titre réellement épinglé pendant le parcours, la boucle
+    // ci-dessus ne comparerait que des titres au repos et passerait pour rien
+    expect(pinnedSeen).toBeGreaterThan(0);
   });
 });

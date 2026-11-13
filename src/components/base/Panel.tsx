@@ -24,16 +24,41 @@ export const Panel = ({
   />
 );
 
+/**
+ * Sous 360 px, le titre perd deux pixels de corps.
+ *
+ * `TextAnimate` rend chaque lettre dans son propre `inline-block` : un titre
+ * trop long ne passe pas à la ligne entre deux mots, il se coupe AU MILIEU
+ * d'un mot. Mesuré à 320 px : « outils pour développeurs » fait 282 px pour
+ * 278 disponibles, et s'affichait « développeur / s ». À 22 px il en fait 259.
+ * La forme collée, plus longue de ses deux ornements, descend à 18 px pour la
+ * même raison (295 px à 20 px, 265 à 18).
+ */
 export const PanelTitle = ({
   className,
   ...props
 }: ComponentProps<"h2">) => (
   <h2
-    className={cn("text-2xl sm:text-3xl", className)}
+    className={cn(
+      "text-2xl max-[359px]:text-[1.375rem] sm:text-3xl",
+      className
+    )}
     data-slot="panel-title"
     {...props}
   />
 );
+
+/** `top-14`, pour le cas où le style calculé ne se laisse pas lire */
+const DEFAULT_STICKY_LINE = 56;
+
+/**
+ * La barre de titre respire, collante ou non.
+ *
+ * Elle n'avait AUCUN remplissage vertical : 36 px de haut pour un titre de
+ * 30/36 px, soit le plus gros texte de la page coincé entre la bande hachurée
+ * et son filet, pendant que le texte courant juste dessous a droit à 12 px.
+ */
+const HEADER_PADDING = "px-3 py-1 sm:py-1.5";
 
 interface PanelHeaderProps extends ComponentProps<"div"> {
   sticky?: boolean;
@@ -49,7 +74,6 @@ export const PanelHeader = forwardRef<
     forwardedRef
   ) => {
     const internalRef = useRef<HTMLDivElement | null>(null);
-    const sentinelRef = useRef<HTMLDivElement>(null);
     const [isStuck, setIsStuck] = useState(false);
 
     useImperativeHandle(
@@ -62,41 +86,79 @@ export const PanelHeader = forwardRef<
     }, []);
 
     useEffect(() => {
-      if (!(sticky && sentinelRef.current)) {
+      const header = internalRef.current;
+
+      if (!(sticky && header)) {
         return;
       }
 
       /**
-       * Collé signifie AU-DESSUS du cadre, pas « hors du cadre ».
+       * Collé signifie AU-DESSUS de la ligne d'accroche, pas « hors du cadre ».
        *
-       * La version précédente posait `isStuck = !entry.isIntersecting`. Or une
-       * sentinelle est hors du cadre dans DEUX cas opposés : quand on a défilé
-       * au-delà — le titre est bien collé — et quand on ne l'a pas encore
-       * atteinte. Tout titre sous la ligne de flottaison se croyait donc collé au
+       * Deux versions ont raté cette définition, chacune par un bord.
+       *
+       * La première posait `isStuck = !entry.isIntersecting` sur une sentinelle.
+       * Or une sentinelle est hors du cadre dans DEUX cas opposés : quand on a
+       * défilé au-delà — le titre est bien collé — et quand on ne l'a pas encore
+       * atteinte. Tout titre sous la ligne de flottaison se croyait collé au
        * chargement, affichait sa forme « -- titre -- », puis changeait de texte
-       * en entrant à l'écran. Ce changement de contenu en pleine vie du composant
-       * est ce qui laissait les titres à `opacity: 0`, c'est-à-dire des bandes
-       * vides à la place des intitulés de section.
+       * en entrant à l'écran : c'est ce qui laissait des bandes vides à la place
+       * des intitulés.
        *
-       * `boundingClientRect.top < 0` lève l'ambiguïté : la sentinelle est passée
-       * au-dessus du bord haut.
+       * La seconde ajoutait `boundingClientRect.top < 0`. Mais le rappel ne part
+       * qu'UNE fois, quand la sentinelle franchit la ligne — et à cet instant
+       * son haut vaut 56, pas moins de 0. Au défilement normal l'état collé
+       * n'arrivait donc jamais ; il n'apparaissait que sur un saut assez long
+       * pour que la sentinelle soit déjà au-dessus de l'écran. Mesuré sur un
+       * parcours mixte (molette lente, puis sauts) : 269 observations épinglées
+       * sur 328 sans la forme collée à 1440 px, 365 sur 417 à 390 px. D'où des
+       * intitulés tantôt à gauche, tantôt centrés, sans règle visible.
+       *
+       * Ici on observe l'en-tête LUI-MÊME, contre un cadre dont le haut passe un
+       * pixel sous la ligne d'accroche : épinglé, il dépasse d'un pixel, donc
+       * son ratio tombe sous 1 — et seulement à ce moment-là.
+       *
+       * La marge basse démesurée n'est pas une coquetterie : sans elle, un
+       * en-tête sous l'écran est « non visible », comme un en-tête défilé. Un
+       * saut de l'un à l'autre ne change alors rien pour l'observateur, qui ne
+       * rappelle pas (20 à 25 écarts persistants mesurés). Avec elle, tout ce
+       * qui est sous l'écran compte comme entièrement visible. Même parcours
+       * après correctif : 0 titre épinglé sans sa forme collée, sur 104
+       * observations à 1440 px et 105 à 390 px.
+       *
+       * L'accroche est LUE et non recopiée : `top-14` est en rem, donc 70 px
+       * chez qui a réglé son navigateur sur 20 px — un `-57px` écrit en dur y
+       * laisserait l'en-tête entièrement dans le cadre, jamais collé.
        */
+      const stickyLine =
+        Number.parseFloat(getComputedStyle(header).top) ||
+        DEFAULT_STICKY_LINE;
+
       const observer = new IntersectionObserver(
         ([entry]) => {
           setIsStuck(
-            !entry.isIntersecting && entry.boundingClientRect.top < 0
+            entry.intersectionRatio < 1 &&
+              entry.boundingClientRect.top <
+                (entry.rootBounds?.top ?? stickyLine + 1)
           );
         },
-        { rootMargin: "-57px 0px 0px 0px", threshold: 0 }
+        {
+          rootMargin: `-${stickyLine + 1}px 0px 100000px 0px`,
+          threshold: 1,
+        }
       );
-      observer.observe(sentinelRef.current);
+      observer.observe(header);
       return () => observer.disconnect();
     }, [sticky]);
 
     if (!sticky) {
       return (
         <div
-          className={cn("screen-line-after px-3", className)}
+          className={cn(
+            "screen-line-after",
+            HEADER_PADDING,
+            className
+          )}
           data-slot="panel-header"
           ref={setRef}
           {...props}
@@ -111,45 +173,35 @@ export const PanelHeader = forwardRef<
     }
 
     return (
-      <>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none invisible -mt-px h-px w-full"
-          ref={sentinelRef}
-        />
-        <div
+      <div
+        className={cn(
+          "screen-line-after sticky top-14 z-20 bg-background transition-colors duration-300",
+          HEADER_PADDING,
+          isStuck ? "text-theme" : "text-foreground",
+          className
+        )}
+        data-slot="panel-header"
+        ref={setRef}
+        {...props}
+      >
+        {/* l'interligne de la forme collée est celui de la forme au repos : le
+          corps passe de 30 à 24 px, pas la barre. Sinon elle perd 4 px à chaque
+          bascule, et tout ce qui suit dans la page remonte d'autant */}
+        <PanelTitle
           className={cn(
-            "screen-line-after sticky top-14 z-20 px-3 transition-colors duration-300",
-            isStuck
-              ? "bg-background text-theme"
-              : "bg-background text-foreground",
-            className
+            isStuck &&
+              "text-center text-xl leading-8 max-[359px]:text-lg sm:text-2xl sm:leading-9"
           )}
-          data-slot="panel-header"
-          ref={setRef}
-          {...props}
         >
-          <PanelTitle
-            className={cn(
-              isStuck && "text-center text-xl sm:text-2xl"
-            )}
+          <TextAnimate
+            animation="slideLeft"
+            by="character"
+            delay={isStuck ? 0 : 0.2}
           >
-            {isStuck ? (
-              <TextAnimate animation="slideLeft" by="character">
-                {`-- ${title} --`}
-              </TextAnimate>
-            ) : (
-              <TextAnimate
-                animation="slideLeft"
-                by="character"
-                delay={0.2}
-              >
-                {title ?? ""}
-              </TextAnimate>
-            )}
-          </PanelTitle>
-        </div>
-      </>
+            {isStuck ? `-- ${title} --` : (title ?? "")}
+          </TextAnimate>
+        </PanelTitle>
+      </div>
     );
   }
 );

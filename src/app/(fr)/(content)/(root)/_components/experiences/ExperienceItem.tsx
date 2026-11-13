@@ -8,10 +8,15 @@ import { Divider } from "@/components/base/Divider";
 import { Badge } from "@/components/primitives/Badge";
 import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Tag } from "@/components/primitives/Tag";
-import { Prose } from "@/components/primitives/Typography";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 
+import { DescriptionCards } from "../shared/DescriptionCards";
+import {
+  ROW_CHEVRON,
+  ROW_META,
+  ROW_TITLE_HOVER,
+} from "../shared/row";
 import type { Experience } from "./content";
 
 interface ExperienceItemProps {
@@ -23,46 +28,66 @@ export const ExperienceItem = ({
   experience,
   isLast = false,
 }: ExperienceItemProps) => {
+  const { description, skills } = experience;
   const { start, end } = experience.period;
   const isOngoing = !end;
+  /**
+   * Une formation n'a ni puces ni compétences : rien à déplier.
+   *
+   * Elle passait pourtant par `CollapsibleTrigger` — un `<button>` portant
+   * `aria-expanded`, sans chevron, qui prenait le fond de survol et dont le clic
+   * ouvrait un repli vide. Trois arrêts de tabulation pour rien. La rangée n'est
+   * un bouton que si elle a quelque chose à montrer.
+   */
+  const details =
+    description && skills ? { description, skills } : null;
+
+  const heading = (
+    <div className="flex items-center gap-x-3">
+      {experience.isCurrentEmployer && <PulsatingCircle />}
+      <h2
+        className={cn(
+          "text-start font-pixel-square text-base lowercase sm:text-xl",
+          details && ROW_TITLE_HOVER
+        )}
+      >
+        {experience.company}
+      </h2>
+    </div>
+  );
 
   return (
     <CollapsibleWithContext>
-      <article className="screen-line-before flex items-center hover:bg-accent2">
-        <CollapsibleTrigger
-          className={cn(
-            "w-full",
-            experience.link && "cursor-pointer"
-          )}
-        >
-          <div className="flex w-full flex-1 items-center justify-between">
-            <div className="w-full select-none border-edge border-r p-4">
-              <div className="flex items-center gap-x-3 [&_h2]:font-pixel-square [&_h2]:lowercase">
-                {experience.isCurrentEmployer && <PulsatingCircle />}
-                <h2 className="text-start text-base sm:text-xl">
-                  {experience.company}
-                </h2>
+      {details ? (
+        <article className="group/row screen-line-before flex items-center hover:bg-accent2">
+          <CollapsibleTrigger className="w-full cursor-pointer -outline-offset-2">
+            <div className="flex w-full flex-1 items-center justify-between">
+              <div className="w-full select-none border-edge border-r px-3 py-4">
+                {heading}
+              </div>
+              <div className={ROW_CHEVRON}>
+                <CollapsibleChevronsIcon />
               </div>
             </div>
-            {experience.link && (
-              <div className="relative m-4 flex size-6 shrink-0 items-center justify-center sm:size-8">
-                {experience.description && experience.skills && (
-                  <CollapsibleChevronsIcon />
-                )}
-              </div>
-            )}
-          </div>
-        </CollapsibleTrigger>
-      </article>
+          </CollapsibleTrigger>
+        </article>
+      ) : (
+        <article className="screen-line-before px-3 py-4">
+          {heading}
+        </article>
+      )}
 
-      <div className="screen-line-before flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
-        <span className="text-theme">---</span>
-        <div className="flex items-center gap-2 sm:gap-4">
+      {/* sous `sm` l'ornement cède sa place : l'intitulé du poste — le fait le
+        plus utile de la rangée — y était masqué faute de largeur, et il ne
+        restait que « cdi » et les dates */}
+      <div className={ROW_META}>
+        <span className="shrink-0 text-theme max-sm:hidden">---</span>
+        <div className="flex flex-1 flex-wrap items-center justify-end gap-2 sm:gap-x-4">
           {experience.type && (
             <Badge className="lowercase">{experience.type()}</Badge>
           )}
           {experience.title && (
-            <Badge className="text-theme lowercase max-sm:hidden">
+            <Badge className="text-theme lowercase">
               {experience.title()}
             </Badge>
           )}
@@ -73,51 +98,19 @@ export const ExperienceItem = ({
         </div>
       </div>
 
-      {experience.description && experience.skills && (
+      {details && (
         <CollapsibleContent
           className={cn(
             "group overflow-hidden duration-300",
             "data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down"
           )}
         >
-          <div
-            className={cn(
-              "grid auto-rows-[120px] grid-cols-1 gap-4 border-edge border-t p-4 duration-300 md:grid-cols-3",
-              "group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in"
-            )}
-          >
-            {experience.description.map((text, idx) => {
-              const isWide =
-                idx === 0 || idx === 3 || idx === 4 || idx === 7;
+          <DescriptionCards items={details.description} />
 
-              return (
-                <div
-                  className={cn(
-                    "group relative flex flex-col justify-between overflow-hidden rounded-xl border border-input bg-background p-4",
-                    isWide ? "md:col-span-2" : "md:col-span-1"
-                  )}
-                  key={idx}
-                >
-                  <span className="absolute -top-2 -right-1 select-none font-bold text-[3rem] text-theme leading-none tracking-tighter opacity-[0.3] transition-opacity duration-300">
-                    {idx + 1}
-                  </span>
-                  <div className="z-10 flex items-center gap-2">
-                    <span className="flex h-6 items-center justify-center rounded-full bg-theme/10 px-2.5 font-bold text-[10px] text-theme">
-                      {(idx + 1).toString().padStart(2, "0")}
-                    </span>
-                    <div className="h-px w-8 bg-theme" />
-                  </div>
-                  <Prose className="z-10">{text()}</Prose>
-                  <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in">
-            {experience.skills.length > 0 && (
+          <div className="border-edge border-t p-3 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in">
+            {details.skills.length > 0 && (
               <ul className="flex flex-wrap gap-1.5">
-                {experience.skills.map((skill) => (
+                {details.skills.map((skill) => (
                   <li className="flex" key={skill}>
                     <Tag>{skill}</Tag>
                   </li>

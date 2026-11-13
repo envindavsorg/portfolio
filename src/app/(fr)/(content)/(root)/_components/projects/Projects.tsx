@@ -6,6 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/base/Collapsible";
+import { Divider } from "@/components/base/Divider";
 import {
   Panel,
   PanelContent,
@@ -75,6 +76,9 @@ export const Projects = () => {
 
         {hasHidden && (
           <CollapsibleContent>
+            {/* même raison que dans `Experiences` : la bande hachurée continue
+              à travers le pli */}
+            <Divider after={false} border={false} type="half" />
             {hiddenContent.map((item, idx) => (
               <ProjectItem
                 isLast={idx === hiddenContent.length - 1}

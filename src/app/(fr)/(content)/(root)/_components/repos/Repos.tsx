@@ -55,7 +55,7 @@ export const Repos = async () => {
 
       {repos.length > 0 ? (
         <ul
-          className="screen-line-before grid grid-cols-1 gap-4 p-4 sm:grid-cols-2"
+          className="screen-line-before grid grid-cols-1 gap-3 p-3 sm:grid-cols-2"
           data-slot="repo-cards"
         >
           {repos.map((repo) => (
@@ -66,7 +66,7 @@ export const Repos = async () => {
         </ul>
       ) : (
         <div
-          className="screen-line-before px-2 py-3 sm:px-4"
+          className="screen-line-before p-3"
           data-slot="repos-unavailable"
         >
           <Prose>{m.home_repos_unavailable()}</Prose>

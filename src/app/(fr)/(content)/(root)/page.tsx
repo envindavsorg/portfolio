@@ -74,8 +74,9 @@ const Page = () => (
       <Header />
       <Divider />
       <Overview />
-      <Divider />
-      <Cv />
+      {/* pas de séparateur ici : les deux boutons du CV ferment le bloc de
+        contact. Le panneau complet, avec son titre, est en bas de page */}
+      <Cv compact />
       <Divider />
       <About />
       <Divider />

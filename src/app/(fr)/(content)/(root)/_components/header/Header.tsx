@@ -46,7 +46,9 @@ export const Header = ({
           />
           {!capture && (
             <HeaderPronounce
-              className="absolute right-1 bottom-1 sm:hidden"
+              // fond plein : posé sur la photo, le bouton transparent dessinait
+              // son icône blanche sur la chemise blanche
+              className="absolute right-1 bottom-1 bg-background sm:hidden"
               pronunciation={USER.pronunciation}
             />
           )}

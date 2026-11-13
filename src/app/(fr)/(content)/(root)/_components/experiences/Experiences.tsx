@@ -6,6 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/base/Collapsible";
+import { Divider } from "@/components/base/Divider";
 import {
   Panel,
   PanelContent,
@@ -98,6 +99,9 @@ export const Experiences = () => {
 
         {hasHidden && (
           <CollapsibleContent>
+            {/* `isLast` se calcule par groupe : sans cette bande, la seule
+              paire d'entrées sans hachures était celle que sépare le pli */}
+            <Divider after={false} border={false} type="half" />
             {hiddenContent.map((item, idx) => (
               <ExperienceItem
                 experience={item}

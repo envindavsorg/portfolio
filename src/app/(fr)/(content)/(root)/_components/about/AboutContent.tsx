@@ -89,7 +89,9 @@ export const AboutContent = memo(
         {expanded && (
           <motion.div
             animate={{ height: "auto", opacity: 1 }}
-            className="space-y-3 overflow-hidden"
+            // même pas que `PanelContent` : à 12 px, la suite dépliée
+            // changeait de rythme par rapport aux trois phrases du dessus (6 px)
+            className="space-y-1.5 overflow-hidden"
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}
             key="about-expanded"
