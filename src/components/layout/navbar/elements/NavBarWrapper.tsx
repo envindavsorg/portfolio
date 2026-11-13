@@ -25,7 +25,12 @@ export const NavBarWrapper = (props: ComponentProps<"header">) => {
 
   return (
     <header
-      className="sticky top-0 z-50 w-full overflow-x-hidden px-2 pt-2 backdrop-blur-lg transition-all"
+      // `data-affix` était posé au défilement sans qu'aucun style ne le lise :
+      // le flou seul laissait titres et bannières transparaître sous les liens.
+      // Le fond est `--canvas`, la couleur que la page peint réellement, et à
+      // 90 % plutôt que 80 : le lien actif ne tient que 4,75:1 sur le canevas
+      // clair, il n'a presque aucune marge à céder à ce qui défile dessous.
+      className="sticky top-0 z-50 w-full overflow-x-hidden px-2 pt-2 backdrop-blur-lg transition-colors duration-300 data-affix:bg-canvas/90"
       ref={headerRef}
       {...props}
     />
