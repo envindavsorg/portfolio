@@ -84,6 +84,7 @@ test.describe("service worker", () => {
   });
 
   test("s'enregistre et prend le contrôle de la page", async ({
+    baseURL,
     page,
   }) => {
     await page.goto("/");
@@ -94,7 +95,14 @@ test.describe("service worker", () => {
       return registration.scope;
     });
 
-    expect(scope).toContain("localhost:1408/");
+    // l'origine vient de la configuration, pas d'un port écrit en dur : la
+    // suite tourne aussi contre un serveur lancé ailleurs que sur 1408, et
+    // échouait alors ici pour une raison sans rapport avec le service worker
+    expect(
+      baseURL,
+      "baseURL absent de la configuration"
+    ).toBeDefined();
+    expect(scope).toBe(new URL("/", baseURL).href);
   });
 
   test("une page déjà visitée reste lisible hors ligne", async ({

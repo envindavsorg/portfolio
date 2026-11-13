@@ -22,10 +22,38 @@
  * de la journalisation ajoutée à `budget.spec.ts`, et son premier passage a
  * démenti les mesures locales sur deux points : `/articles` à 518 Kio de JS en
  * local contre 707 en CI — un tiers d'écart, sur la page la plus lourde du site
- * — et `/` et `/en` à 4 Kio d'images en local contre 32. L'explication la plus
- * probable, non vérifiée, est le préchargement des liens visibles, qui a le
- * temps d'aboutir avant `networkidle` sur un runner et pas forcément ailleurs.
- * Partout ailleurs l'écart était de 2 Kio au plus.
+ * — et `/` et `/en` à 4 Kio d'images en local contre 32.
+ *
+ * L'EXPLICATION DONNÉE ICI ÉTAIT FAUSSE. Ce commentaire attribuait l'écart au
+ * préchargement des liens visibles, « non vérifié ». Ce qui a été vérifié
+ * depuis, sur un build servi en local : `public/sw.js` prend la main pendant le
+ * chargement (`clients.claim()`) et sert lui-même `/_next/static/**` ; pour une
+ * réponse passée par lui, Playwright rapporte une taille NÉGATIVE, d'environ
+ * −1 Kio. Chaque chunk arrivé après l'activation perdait donc son poids ET
+ * retirait 1 Kio au total : 14 à 18 scripts par page, `/articles` annoncé à
+ * 390 Kio pour 582 reçus. Service worker bloqué, plus une seule taille
+ * négative. Le nombre de chunks touchés dépend de l'instant où le service
+ * worker s'active, donc de la machine : c'est l'explication retenue pour
+ * l'écart entre le poste et la CI, et seule la prochaine trace CI la
+ * confirmera. L'écart sur les images, lui, n'est toujours pas expliqué.
+ *
+ * `budget.spec.ts` bloque désormais le service worker. La mesure est celle
+ * d'une PREMIÈRE visite, tous les octets comptés, et elle échoue si une réponse
+ * revient sans taille lisible au lieu de l'additionner.
+ *
+ * ⚠️ LES VALEURS CI-DESSOUS DATENT D'AVANT CE CORRECTIF, ET SOUS-COMPTENT LE JS.
+ * Relevé du 13 novembre sur une même machine, service worker bloqué et fond de
+ * particules compris, avant puis après les allègements livrés avec ce
+ * correctif : `/` 637 → 582 Kio, `/articles` 637 → 582,
+ * `/articles/how-i-write-css` 706 → 650, `/utils/regex-tester` 774 → 718. La
+ * colonne des polices est périmée elle aussi : Geist Sans n'est plus
+ * préchargée, 266 est devenu 198. Ces chiffres restent pourtant publiés tels
+ * quels, parce que la règle de ce module n'a pas changé — une valeur publiée
+ * vient d'une trace `POIDS` de la CI, jamais d'un poste. À REFAIRE depuis la
+ * première trace CI qui suit ce correctif : les valeurs, `MEASURED_ON`, puis
+ * les plafonds. Celui du JS reste à 760 et n'a pas été relevé : la page
+ * d'outil, vrai pire cas, y passe à 718 sur ce relevé — 5,5 % de marge, et non
+ * les 17 % annoncés sur un pire cas sous-compté à 648.
  *
  * Les chiffres retenus sont donc ceux de la CI : c'est l'environnement
  * REPRODUCTIBLE, et c'est celui qui fait respecter les plafonds. Une page qui
@@ -171,6 +199,21 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     kind: "resume",
     path: "/cv",
   },
+];
+
+/**
+ * Pages que `budget.spec.ts` mesure et journalise, sans plafond ni publication.
+ *
+ * Elles manquaient au relevé : les listes /components et /utils, et la vue d'un
+ * composant, qui porte un aperçu et trois blocs d'onglets. Elles ne peuvent pas
+ * entrer dans `MEASURED_PAGES` sans chiffre de CI — c'est la règle de ce module
+ * — et n'auront pas de chiffre de CI tant qu'elles ne sont pas mesurées. Cette
+ * liste casse le cercle : à verser dans `MEASURED_PAGES` dès la première trace.
+ */
+export const LOGGED_PAGES: string[] = [
+  "/components",
+  "/components/theme-switcher-component",
+  "/utils",
 ];
 
 /**
