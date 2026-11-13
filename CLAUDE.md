@@ -131,8 +131,11 @@ src/app/
 
 - Config: `project.inlang/settings.json` (baseLocale `fr`, locales `fr`/`en`),
   messages in `messages/{fr,en}.json`.
-- Compilation: `src/scripts/compile-i18n.mts` (programmatic API — needed for
-  `urlPatterns`: fr at root, `/en` prefix). Runs via `predev`/`prebuild`.
+- Compilation: `src/scripts/compile-i18n.mts` (programmatic API — kept for the
+  message-count guard below). It passes NO `urlPatterns`: Paraglide's default
+  routing already is "base locale at the root, `/en` prefix", and custom
+  patterns shipped a URLPattern polyfill on every page. `src/lib/i18n-routing.test.ts`
+  pins that routing. Runs via `predev`/`prebuild`.
   Output `src/paraglide/` is generated and git-ignored — never edit it.
   The script fails fast: it compares the number of compiled messages with the keys
   in `messages/fr.json` and exits 1 on a mismatch. Without that guard a plugin
@@ -471,7 +474,9 @@ End-to-end tests (Playwright, `e2e/`):
 - `titles.spec.ts` - homepage section titles stay visible, and their sticky form
   follows the scroll position by wheel steps in both directions
 - `budget.spec.ts` - JS, font and CSS weight ceilings measured in the browser, plus
-  the font-preload count
+  the font-preload count. It runs with service workers BLOCKED: a response
+  served through the site's own service worker reports a negative body size to
+  Playwright, so every lazily loaded chunk was being subtracted from the total
 
 Watch out for three selector traps: Next.js always mounts an empty
 `<div role="alert">` route announcer (scope to `p[role="alert"]`), an article
@@ -608,7 +613,11 @@ falling back to zeroed GitHub widgets rather than failing.
 - **Fonts**: declare every pixel font locally in `src/fonts/pixel.ts`. Importing
   `geist/font/pixel` evaluates all five `localFont()` calls, so `preload: false`
   on the unused ones has no effect through that entry point — declaring them
-  locally is what takes the preload count from 7 down to 3
+  locally is what took the preload count from 7 down to 3. Geist Sans and Geist
+  Mono are declared locally too (`src/fonts/sans.ts`, `src/fonts/mono.ts`; the
+  `geist` package is gone): Sans is drawn on one page and no longer preloaded,
+  which brings the count to 2. Mono stays preloaded on purpose — see the note in
+  `mono.ts` before changing it
 - **Print**: the `@media print` block in `globals.css` covers `/cv` AND content
   pages. Anything tagged `data-print="hide"` is dropped (ToC, pagination, share
   actions, tags, series, related). `pre` switches to `pre-wrap`: on paper there is
