@@ -59,7 +59,12 @@ export const TagsIndex = ({
 
       <PanelContent className="screen-line-after screen-line-before">
         <Prose>{m.writings_tags_intro()}</Prose>
-        <Prose>{m.writings_tags_count({ count: tags.length })}</Prose>
+        <Prose>
+          {m.writings_tags_count({
+            count: tags.length,
+            plural: tags.length > 1 ? "s" : "",
+          })}
+        </Prose>
       </PanelContent>
 
       <ul className="flex flex-wrap gap-2 p-3">
@@ -68,6 +73,9 @@ export const TagsIndex = ({
             <Link
               className="flex items-center gap-x-2 rounded-full border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme focus-visible:border-theme focus-visible:text-theme"
               href={localizeHref(`/tags/${tag.slug}`)}
+              // 27 sujets à l'écran, donc 27 pages préchargées d'un coup :
+              // 136 Kio de RSC mesurés pour des liens dont on n'ouvre qu'un seul
+              prefetch={false}
             >
               {tag.label}
               <span className="text-muted-foreground text-xs">

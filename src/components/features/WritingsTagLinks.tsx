@@ -1,14 +1,12 @@
 import Link from "next/link";
 
-import {
-  Panel,
-  PanelContent,
-  PanelHeader,
-} from "@/components/base/Panel";
+import { Divider } from "@/components/base/Divider";
 import type { Content } from "@/lib/content";
 import { slugifyTag, tagLabel } from "@/lib/tags";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
+
+import { WritingsPanel } from "./WritingsPanel";
 
 interface WritingsTagLinksProps {
   current: Content;
@@ -33,16 +31,18 @@ export const WritingsTagLinks = ({
   }
 
   return (
-    <Panel data-print="hide">
-      <PanelHeader title={m.writings_tag_links_title()} />
-
-      <PanelContent reset>
+    <>
+      <WritingsPanel title={m.writings_tag_links_title()}>
         <ul className="flex flex-wrap gap-2 p-3">
           {tags.map((tag) => (
             <li key={tag}>
               <Link
                 className="flex items-center rounded-full border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme focus-visible:border-theme focus-visible:text-theme"
                 href={localizeHref(`/tags/${slugifyTag(tag)}`)}
+                // une pastille par sujet, chacune préchargée dès qu'elle entre
+                // à l'écran : des pages que presque personne n'ouvre, payées
+                // par tous ceux qui finissent l'article
+                prefetch={false}
               >
                 {/* le lien porte la CLÉ dans son URL et le libellé de la locale
                     du contenu dans son texte */}
@@ -51,7 +51,9 @@ export const WritingsTagLinks = ({
             </li>
           ))}
         </ul>
-      </PanelContent>
-    </Panel>
+      </WritingsPanel>
+
+      <Divider border={false} type="half" />
+    </>
   );
 };

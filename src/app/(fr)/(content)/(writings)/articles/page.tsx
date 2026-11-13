@@ -131,6 +131,7 @@ export const ArticlesIndex = ({
                       createdAt={createdAt}
                       description={description}
                       image={image}
+                      locale={locale}
                       // seule la PREMIÈRE vignette : elle est au-dessus de la
                       // ligne de flottaison et c'est très probablement
                       // l'élément LCP de la page. `loading="lazy"` empêche

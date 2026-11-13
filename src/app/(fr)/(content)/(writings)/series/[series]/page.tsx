@@ -107,6 +107,7 @@ export const SeriesView = async ({
         <Prose>
           {m.writings_series_index_parts({
             count: series.parts.length,
+            plural: series.parts.length > 1 ? "s" : "",
           })}
         </Prose>
       </PanelContent>

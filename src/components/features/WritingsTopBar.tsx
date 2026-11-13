@@ -48,7 +48,10 @@ export const WritingsTopBar = ({
       <PanelContent
         data-print="hide"
         reset
-        className="flex items-center md:justify-between px-3 py-2"
+        // `justify-between` et un `gap` à toutes les largeurs : sous 768 px
+        // les deux groupes se suivaient sans écart, la flèche « suivant »
+        // collée à « copier le lien » (0 px, contre 12 entre tous les autres)
+        className="flex items-center justify-between gap-x-2 px-3 py-2"
       >
         <WritingsPagination
           category={category}

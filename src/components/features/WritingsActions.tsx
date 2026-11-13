@@ -175,7 +175,7 @@ export const WritingsActions = ({
   }, []);
 
   return (
-    <div className="flex items-center gap-x-3">
+    <div className="flex items-center gap-x-2 sm:gap-x-3">
       <Tooltip>
         <TooltipTrigger
           render={

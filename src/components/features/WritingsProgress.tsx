@@ -60,7 +60,10 @@ export const WritingsProgress = () => {
     // noierait un lecteur d'écran sans rien lui apprendre d'utile.
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-x-0 top-12 z-40 h-0.5"
+      // `top-14` : l'en-tête fait 56 px (8 de marge + la rangée de 48). À
+      // `top-12` la barre passait 8 px PLUS HAUT, à travers la rangée de
+      // navigation et derrière son flou ; ici elle se pose sur son filet bas
+      className="pointer-events-none fixed inset-x-0 top-14 z-40 h-0.5"
       // aucune prise accessible sur un élément décoratif : ce `data-slot` est
       // le seul point d'accroche des tests de bout en bout
       data-slot="reading-progress"

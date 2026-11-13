@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useId } from "react";
 
 import { ALL_TAG, isActiveTag } from "@/lib/tags";
 import { cn } from "@/lib/utils";
@@ -8,7 +8,6 @@ import { m } from "@/paraglide/messages";
 
 import { PanelContent } from "../base/Panel";
 import { Button } from "../primitives/Button";
-import { Field } from "../primitives/Field";
 import { useTagFilter } from "./WritingsTagFilter";
 
 interface TagButtonProps {
@@ -33,11 +32,14 @@ const TagButton = ({
 
   return (
     <Button
+      // l'état actif n'était porté que par la couleur
+      aria-pressed={isActive}
       className={cn(
         "flex items-center gap-x-1",
-        "rounded-md bg-transparent px-2",
-        "hover:bg-transparent hover:text-foreground",
-        isActive && "border-theme text-theme hover:text-theme"
+        "bg-transparent px-2.5 transition-colors",
+        "hover:border-foreground/60 hover:bg-transparent",
+        isActive &&
+          "border-theme text-theme hover:border-theme hover:text-theme"
       )}
       onClick={handleClick}
       size="sm"
@@ -67,6 +69,7 @@ export const WritingsTags = ({
   tags,
 }: WritingsTagsProps) => {
   const { activeTag, setTag } = useTagFilter();
+  const labelId = useId();
 
   const handleTagClick = useCallback(
     (tag: string) => {
@@ -75,18 +78,39 @@ export const WritingsTags = ({
     [setTag]
   );
 
-  if (tags.length <= 1) {
+  // Un sujet porté par TOUS les contenus ne filtre rien : sur /components,
+  // « react (3) » à côté de « tout (3) » proposait deux fois la même liste.
+  // La rangée n'apparaît que si au moins un sujet réduit la sélection.
+  const total = tagCounts?.[ALL_TAG];
+  const narrows = tags.some(
+    (tag) =>
+      tag !== ALL_TAG &&
+      (total === undefined || (tagCounts?.[tag] ?? 0) < total)
+  );
+
+  if (!narrows) {
     return null;
   }
 
   return (
     <PanelContent>
-      <Field className="flex flex-col md:flex-row items-center">
-        <p className="text-xs sm:text-sm text-theme">
+      {/* `Field` imposait `w-full` à ses deux enfants : le libellé tombait à sa
+          largeur minimale (trois lignes) et les pastilles, sans retour à la
+          ligne dès 768 px, sortaient de la colonne — sept sujets de /utils
+          étaient hors écran à 1440 px, dans un `main` qui ne défile pas. */}
+      <div
+        aria-labelledby={labelId}
+        className="flex flex-col gap-2 md:flex-row md:items-baseline md:gap-3"
+        role="group"
+      >
+        <p
+          className="shrink-0 whitespace-nowrap text-theme text-xs sm:text-sm"
+          id={labelId}
+        >
           {m.writings_tags_by_category()}
         </p>
 
-        <div className="flex max-md:flex-wrap gap-2 sm:gap-3">
+        <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <TagButton
               count={tagCounts?.[tag]}
@@ -98,7 +122,7 @@ export const WritingsTags = ({
             />
           ))}
         </div>
-      </Field>
+      </div>
     </PanelContent>
   );
 };

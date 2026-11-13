@@ -54,15 +54,23 @@ export const WritingsBreadcrumb = ({
       />
 
       <Breadcrumb>
-        <BreadcrumbList>
+        {/* Une seule ligne. La liste passait à la ligne : sur une page de
+            détail à 390 px, le titre tombait seul sous un chevron orphelin.
+            Les liens gardent leur largeur ; c'est la page courante — répétée
+            en h1 juste dessous — qui se tronque. */}
+        <BreadcrumbList className="flex-nowrap">
           {items.map(({ label, href }, idx) => {
             const isLast = idx === items.length - 1;
 
             return (
               <Fragment key={label}>
-                <BreadcrumbItem>
+                <BreadcrumbItem
+                  className={isLast ? "min-w-0" : "shrink-0"}
+                >
                   {isLast ? (
-                    <BreadcrumbPage>{label}</BreadcrumbPage>
+                    <BreadcrumbPage className="truncate">
+                      {label}
+                    </BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink
                       href={href ? localizeHref(href) : href}
@@ -76,7 +84,7 @@ export const WritingsBreadcrumb = ({
                 </BreadcrumbItem>
 
                 {!isLast && (
-                  <BreadcrumbSeparator>
+                  <BreadcrumbSeparator className="shrink-0">
                     <ChevronRight
                       className={cn(!isLast && "text-theme")}
                       ref={iconRef}

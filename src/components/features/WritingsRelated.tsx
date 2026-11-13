@@ -1,15 +1,13 @@
 import Link from "next/link";
 
-import {
-  Panel,
-  PanelContent,
-  PanelHeader,
-} from "@/components/base/Panel";
+import { Divider } from "@/components/base/Divider";
 import { Badge } from "@/components/primitives/Badge";
 import type { Content } from "@/lib/content";
 import { getRelatedContent } from "@/lib/related";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
+
+import { WritingsPanel } from "./WritingsPanel";
 
 interface WritingsRelatedProps {
   current: Content;
@@ -29,10 +27,8 @@ export const WritingsRelated = ({
   }
 
   return (
-    <Panel data-print="hide">
-      <PanelHeader title={m.writings_related_title()} />
-
-      <PanelContent reset>
+    <>
+      <WritingsPanel title={m.writings_related_title()}>
         <ul className="divide-y divide-edge">
           {related.map(({ content, shared }) => {
             const { category, title, description, tags } =
@@ -60,6 +56,7 @@ export const WritingsRelated = ({
                   <span className="sr-only">
                     {m.writings_related_shared_tags({
                       count: shared,
+                      plural: shared > 1 ? "s" : "",
                       tags: (tags ?? [])
                         .filter((tag) =>
                           (current.metadata.tags ?? []).some(
@@ -75,7 +72,12 @@ export const WritingsRelated = ({
             );
           })}
         </ul>
-      </PanelContent>
-    </Panel>
+      </WritingsPanel>
+
+      {/* la bande hachurée sépare les sections partout ailleurs sur le site :
+          sans elle, le dernier contenu lié touchait le widget de commit du pied
+          de page */}
+      <Divider border={false} type="half" />
+    </>
   );
 };

@@ -59,8 +59,17 @@ export const SeriesIndex = ({
 
       <PanelContent className="screen-line-after screen-line-before">
         <Prose>{m.writings_series_index_intro()}</Prose>
+        {/* Deux messages et non le `{plural}` des autres compteurs : « series »
+            est invariable en anglais, et un suffixe injecté y écrirait
+            « seriess ». */}
         <Prose>
-          {m.writings_series_index_count({ count: series.length })}
+          {series.length > 1
+            ? m.writings_series_index_count_plural({
+                count: series.length,
+              })
+            : m.writings_series_index_count_singular({
+                count: series.length,
+              })}
         </Prose>
       </PanelContent>
 
@@ -83,6 +92,7 @@ export const SeriesIndex = ({
                   <Badge className="shrink-0 lowercase">
                     {m.writings_series_index_parts({
                       count: entry.parts.length,
+                      plural: entry.parts.length > 1 ? "s" : "",
                     })}
                   </Badge>
                 </span>

@@ -129,7 +129,10 @@ export const TagView = async ({
 
       <PanelContent className="screen-line-after screen-line-before">
         <Prose>
-          {m.writings_tag_content_count({ count: tag.count })}
+          {m.writings_tag_content_count({
+            count: tag.count,
+            plural: tag.count > 1 ? "s" : "",
+          })}
         </Prose>
 
         {/* deux orthographes peuvent produire le même slug ; le dire évite de
