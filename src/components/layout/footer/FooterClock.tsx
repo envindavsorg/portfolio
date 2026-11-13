@@ -106,7 +106,9 @@ export const FooterClock = ({
         "mx-auto flex items-center max-sm:flex-col max-sm:gap-y-3",
         !isActionnable && "justify-center",
         isActionnable && "justify-between",
-        "w-full border-edge border-x p-2 md:max-w-3xl"
+        // `px-3` : la gouttière de la colonne, celle des titres et des lignes.
+        // `p-2` faisait démarrer l'heure 4 px trop à gauche.
+        "w-full border-edge border-x px-3 py-2 md:max-w-3xl"
       )}
     >
       <time

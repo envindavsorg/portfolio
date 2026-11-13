@@ -57,8 +57,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             "flex h-10 w-full px-3 py-2",
             Icon && "pl-9",
-            "rounded-md border border-input bg-transparent outline-none",
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+            // aucune classe d'outline : `outline-none` posait
+            // `--tw-outline-style: none`, que `focus-visible:outline-2` relit —
+            // le champ n'avait donc AUCUN indicateur de focus (calculé :
+            // `outline: none 2px`). L'anneau vient de globals.css.
+            "rounded-md border border-input bg-transparent",
             "font-pixel-square lowercase",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "file:border-0 file:bg-transparent file:font-medium file:text-foreground file:text-sm",
