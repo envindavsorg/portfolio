@@ -3,8 +3,6 @@
 import type { DependencyList } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import { logger } from "@/lib/logger";
-
 export const useFnDelay = <T>(
   asyncFactory: (
     delay: (timeMs: number) => Promise<void>
@@ -53,7 +51,8 @@ export const useFnDelay = <T>(
           error instanceof Error &&
           error.message !== "Delay aborted"
         ) {
-          logger.error("Error in useFnDelay factory:", error);
+          // console et non `logger` : tslog pèse 27 Kio dans un bundle client
+          console.error("Error in useFnDelay factory:", error);
         }
       }
     };

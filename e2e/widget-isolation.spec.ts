@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 
@@ -51,7 +53,8 @@ const collectScripts = (page: Page) => {
 
 const findMarker = async (
   page: Page,
-  urls: Set<string>
+  urls: Set<string>,
+  marker: string = MARKER
 ): Promise<string[]> => {
   const hits: string[] = [];
 
@@ -59,7 +62,7 @@ const findMarker = async (
     const response = await page.request.get(url);
     const body = await response.text();
 
-    if (body.includes(MARKER)) {
+    if (body.includes(marker)) {
       hits.push(url.split("/").pop() ?? url);
     }
   }
@@ -90,6 +93,60 @@ test.describe("isolation des widgets d'outils", () => {
       expect(
         await findMarker(page, scripts),
         `@cloudflare/speedtest est arrivé sur ${path}`
+      ).toEqual([]);
+    });
+  }
+});
+
+/**
+ * tslog reste côté serveur.
+ *
+ * `src/lib/logger.ts` était importé par quatre modules qui atteignent le
+ * navigateur — dont `functions.ts`, que la barre de navigation et le pied de
+ * page utilisent. tslog fait référence à `Buffer`, Turbopack ajoutait donc un
+ * polyfill : 86 Ko, 27 Kio gzip, dans un chunk chargé par les 47 routes, pour
+ * quatre appels que `console.warn` et `console.error` remplacent.
+ *
+ * Même faiblesse que pour les widgets : réimporter `logger` dans un composant
+ * client est une ligne, ne casse rien, et remet 27 Kio sur chaque page.
+ *
+ * `TslogConfigError` est le nom d'une classe d'erreur de tslog : une chaîne
+ * littérale, que la minification conserve. Le TÉMOIN ne peut pas être une page —
+ * aucune ne doit plus contenir tslog — il lit donc le paquet installé. Si tslog
+ * renomme cette classe ou quitte les dépendances, c'est lui qui échoue, au lieu
+ * de laisser les assertions d'absence passer pour une bonne nouvelle.
+ */
+const TSLOG_MARKER = "TslogConfigError";
+
+const SANS_TSLOG = [
+  "/",
+  "/articles",
+  "/articles/how-i-write-css",
+  "/utils/regex-tester",
+];
+
+test.describe("tslog hors du navigateur", () => {
+  test("le marqueur existe bien dans le paquet installé (témoin)", () => {
+    const browserBuild = readFileSync(
+      "node_modules/tslog/browser/index.js",
+      "utf-8"
+    );
+
+    expect(
+      browserBuild.includes(TSLOG_MARKER),
+      "sans ce témoin, les assertions d'absence ne prouvent plus rien"
+    ).toBe(true);
+  });
+
+  for (const path of SANS_TSLOG) {
+    test(`aucune trace de tslog sur ${path}`, async ({ page }) => {
+      const scripts = collectScripts(page);
+      await page.goto(path);
+      await page.waitForLoadState("networkidle");
+
+      expect(
+        await findMarker(page, scripts, TSLOG_MARKER),
+        `tslog est arrivé dans le navigateur sur ${path}`
       ).toEqual([]);
     });
   }

@@ -1,5 +1,3 @@
-import { logger } from "@/lib/logger";
-
 const waitForEnded = (audio: HTMLAudioElement): Promise<void> =>
   // relier l'événement DOM `ended` à une promesse impose le constructeur Promise
   new Promise<void>((resolve) => {
@@ -37,7 +35,8 @@ class SoundManager {
     try {
       await audio.play();
     } catch (error) {
-      logger.warn(`Audio play failed for ${url}:`, error);
+      // console et non `logger` : tslog pèse 27 Kio dans un bundle client
+      console.warn(`Audio play failed for ${url}:`, error);
       return;
     }
     await waitForEnded(audio);

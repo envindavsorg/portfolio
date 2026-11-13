@@ -6,7 +6,14 @@ import utc from "dayjs/plugin/utc";
 
 import { getLocale } from "@/paraglide/runtime";
 
-import { logger } from "./logger";
+/**
+ * PAS de `logger` (tslog) dans ce module : il est importé par des composants
+ * client — barre de navigation, pied de page, actions d'article — et tslog
+ * arrivait donc dans le navigateur avec un polyfill de `Buffer`, 27 Kio sur
+ * chacune des 47 routes pour deux appels. `console.warn` et `console.error`
+ * sont les deux méthodes que Biome autorise, et suffisent ici.
+ * `e2e/widget-isolation.spec.ts` vérifie que tslog ne revient pas.
+ */
 
 // `LL` (« 3 mars 2026 », « March 3, 2026 ») n'existe QUE par ce greffon. Sans
 // lui dayjs ne lève rien : il recopie le jeton tel quel, et la signature des
@@ -40,7 +47,7 @@ export const formatFromNow = (value: DateInput): string =>
 
 export const copyText = async (text: string): Promise<boolean> => {
   if (!navigator?.clipboard) {
-    logger.warn("Clipboard not supported in this browser !");
+    console.warn("Clipboard not supported in this browser !");
     return false;
   }
 
@@ -48,7 +55,7 @@ export const copyText = async (text: string): Promise<boolean> => {
     await navigator.clipboard.writeText(text);
     return true;
   } catch (error) {
-    logger.error("Copy failed !", error);
+    console.error("Copy failed !", error);
     return false;
   }
 };

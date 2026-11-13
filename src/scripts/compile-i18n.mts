@@ -4,26 +4,32 @@ import { join } from "node:path";
 import { compile } from "@inlang/paraglide-js";
 
 // Compile les messages inlang vers src/paraglide/ (runtime généré, non commité).
-// Utilise l'API programmatique : la CLI ne permet pas de passer urlPatterns,
-// nécessaires pour la stratégie URL « fr à la racine, /en préfixé ».
+// L'API programmatique reste nécessaire pour le garde-fou en bas de fichier
+// (compter les messages et faire échouer le build), plus pour le routage.
 
 const OUTDIR = "./src/paraglide";
 const MESSAGES_DIR = "./messages";
 const BASE_LOCALE = "fr";
 
+/**
+ * PAS de `urlPatterns` : le routage par défaut de Paraglide EST « locale de base
+ * à la racine, les autres sous leur préfixe », donc `fr` à `/` et `en` sous
+ * `/en`. Le déclarer à la main donnait exactement les mêmes URL, mais faisait
+ * importer `urlpattern-polyfill` par le runtime généré : 18 Ko (6 Kio gzip)
+ * servis sur chaque page, pour réécrire un comportement déjà fourni.
+ *
+ * `src/lib/i18n-routing.test.ts` fige ce contrat, y compris le cas qui trahit
+ * un préfixe comparé trop vite : `/english` n'est pas de l'anglais.
+ *
+ * Une route qui sortirait de ce schéma — domaine par langue, segment traduit —
+ * redemanderait `urlPatterns`, et le polyfill reviendrait avec. Ne pas passer
+ * par `lazyUrlPatternPolyfill` : il met un `await` de premier niveau dans
+ * `runtime.js`.
+ */
 await compile({
   outdir: OUTDIR,
   project: "./project.inlang",
   strategy: ["url", "cookie", "baseLocale"],
-  urlPatterns: [
-    {
-      localized: [
-        ["en", "/en/:path(.*)?"],
-        ["fr", "/:path(.*)?"],
-      ],
-      pattern: "/:path(.*)?",
-    },
-  ],
 });
 
 /**

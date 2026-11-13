@@ -4,6 +4,7 @@ import { MotionConfig } from "motion/react";
 import dynamic from "next/dynamic";
 import type React from "react";
 
+import { TooltipProvider } from "@/components/base/Tooltip";
 import { FaviconSwitcher } from "@/components/composites/FaviconSwitcher";
 
 import { Analytics } from "./analytics/Analytics";
@@ -38,7 +39,15 @@ export const Providers = ({ children }: ProvidersProps) => (
     <ThemeProvider>
       <ProgressProvider>
         <FaviconSwitcher />
-        {children}
+        {/*
+         * TooltipProvider est posé ICI, dans un module client, et non dans
+         * RootDocument. `base/Tooltip.tsx` n'a pas de "use client" : importé
+         * depuis un composant serveur, chaque export de @base-ui/react/tooltip
+         * devenait une référence client à part entière, y compris l'outil de
+         * débogage StoreInspector (8,7 Ko) dans le chunk partagé par toutes
+         * les pages.
+         */}
+        <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
 
         {process.env.NODE_ENV === "production" && (

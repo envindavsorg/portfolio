@@ -1,7 +1,6 @@
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 
-import { TooltipProvider } from "@/components/base/Tooltip";
 import { LocaleProvider } from "@/components/providers/modules/LocaleProvider";
 import { Providers } from "@/components/providers/Providers";
 import { META_THEME_COLORS } from "@/data/theme";
@@ -90,9 +89,7 @@ export const RootDocument = ({
       <body className="font-pixel-square">
         <NuqsAdapter>
           <LocaleProvider locale={locale}>
-            <Providers>
-              <TooltipProvider>{children}</TooltipProvider>
-            </Providers>
+            <Providers>{children}</Providers>
           </LocaleProvider>
         </NuqsAdapter>
       </body>
