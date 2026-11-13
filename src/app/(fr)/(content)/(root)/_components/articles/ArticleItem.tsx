@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 
+import { CardLink } from "@/components/base/CardLink";
 import { Badge } from "@/components/primitives/Badge";
 import { Separator } from "@/components/primitives/Separator";
 import { Prose } from "@/components/primitives/Typography";
@@ -44,23 +44,23 @@ export const ArticleItem = ({
   noMetadata = false,
 }: ArticleItemProps) => {
   const { slug, metadata, reading } = article;
+  const href = localizeHref(`/${metadata.category}/${slug}`);
 
   return (
-    <Link
-      aria-label={m.home_articles_item_aria_label({
-        title: metadata.title,
-      })}
+    <article
       className={cn(
-        "flex flex-col hover:bg-accent2",
+        "relative flex flex-col hover:bg-accent2",
         "max-sm:screen-line-before max-sm:screen-line-after",
         "sm:nth-[2n+1]:screen-line-before sm:nth-[2n+1]:screen-line-after"
       )}
-      href={localizeHref(`/${metadata.category}/${slug}`)}
     >
+      {/* `alt=""` sur les trois bannières : elles illustrent un titre écrit
+          juste dessous, et ne sont plus DANS le lien — un `alt` égal au titre
+          le ferait annoncer deux fois de suite */}
       <div className="p-4">
         {metadata.image && (
           <Image
-            alt={metadata.title}
+            alt=""
             className="w-full rounded-md object-cover object-center ring-1 ring-border ring-offset-3 ring-offset-background sm:min-h-40"
             height={1280}
             quality={90}
@@ -74,7 +74,7 @@ export const ArticleItem = ({
 
         {metadata.bannerLight && (
           <Image
-            alt={metadata.title}
+            alt=""
             className={cn(
               "hidden [html.light_&]:block",
               "w-full rounded-md object-cover object-center sm:aspect-video",
@@ -91,7 +91,7 @@ export const ArticleItem = ({
 
         {metadata.bannerDark && (
           <Image
-            alt={metadata.title}
+            alt=""
             className={cn(
               "hidden [html.dark_&]:block",
               "w-full rounded-md object-cover object-center sm:aspect-video",
@@ -112,12 +112,12 @@ export const ArticleItem = ({
       <div className="flex-1 p-4">
         {noTitle ? (
           <h2 className="text-balance text-sm lowercase sm:text-base">
-            {metadata.description}
+            <CardLink href={href}>{metadata.description}</CardLink>
           </h2>
         ) : (
           <div className="flex flex-col gap-y-1">
             <h2 className="text-base lowercase sm:text-xl">
-              {metadata.title}
+              <CardLink href={href}>{metadata.title}</CardLink>
             </h2>
             <Prose className="lowercase">
               -- {metadata.description} --
@@ -137,6 +137,6 @@ export const ArticleItem = ({
           </div>
         )}
       </div>
-    </Link>
+    </article>
   );
 };

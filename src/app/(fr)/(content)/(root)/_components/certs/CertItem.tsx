@@ -11,6 +11,7 @@ import { Divider } from "@/components/base/Divider";
 import { DotPattern } from "@/components/blocks/DotPattern";
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
+import { accessibleName } from "@/lib/accessible-name";
 import { formatDate } from "@/lib/functions";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
@@ -76,7 +77,12 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
         <div className="screen-line-before flex justify-between gap-3 px-3 py-2 max-sm:flex-col sm:justify-end">
           <Button asChild variant="outline">
             <Link
-              aria-label={title}
+              // le titre reste dans le nom : tous ces liens affichent le même
+              // texte et mènent chacun à une certification différente
+              aria-label={accessibleName(
+                m.home_certs_item_view_button(),
+                title
+              )}
               href={credentialURL}
               rel="noopener"
               target="_blank"

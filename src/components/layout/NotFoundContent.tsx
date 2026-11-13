@@ -54,10 +54,7 @@ export const NotFoundContent = () => (
 
       <PanelFooter>
         <Button asChild variant="outline">
-          <Link
-            aria-label={m.notfound_back_aria()}
-            href={localizeHref("/")}
-          >
+          <Link href={localizeHref("/")}>
             {m.notfound_back_label()}
           </Link>
         </Button>

@@ -23,6 +23,7 @@ import type {
 } from "@/hooks/useEmailForm";
 import useEmailForm from "@/hooks/useEmailForm";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { accessibleName } from "@/lib/accessible-name";
 import { m } from "@/paraglide/messages";
 
 import { CvError } from "./CvError";
@@ -142,7 +143,10 @@ export const CvFooter = () => {
     <PanelFooter className="flex max-sm:flex-col max-sm:gap-y-2">
       <Button asChild variant="outline">
         <Link
-          aria-label={GLOBAL_DATA.CV.name}
+          aria-label={accessibleName(
+            m.home_cv_view_button(),
+            GLOBAL_DATA.CV.name
+          )}
           href={GLOBAL_DATA.CV.url}
           rel="noopener noreferrer"
           target="_blank"

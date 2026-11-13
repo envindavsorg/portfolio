@@ -169,10 +169,7 @@ export const TagView = async ({
         </Button>
 
         <Button asChild size="sm" variant="outline">
-          <Link
-            aria-label={m.writings_tag_feed_aria({ tag: tag.label })}
-            href={`/api/rss/tag/${tag.slug}`}
-          >
+          <Link href={`/api/rss/tag/${tag.slug}`}>
             {m.writings_tag_feed()}
           </Link>
         </Button>

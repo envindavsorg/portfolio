@@ -241,3 +241,81 @@ test.describe("accessibilité des surfaces interactives", () => {
    * échouait faute d'en trouver un — le formulaire n'utilise pas cette balise.)
    */
 });
+
+/**
+ * Le libellé dans le nom (WCAG 2.5.3), là où il faut OUVRIR pour le voir.
+ *
+ * axe ne juge un lien que s'il est rendu. Trois liens portaient un `aria-label`
+ * étranger à leur texte dans des états qu'aucun scan n'atteint : celui d'une
+ * certification repliée, celui du dialogue d'un article, et le retour de la
+ * page 404. Les 26 URL pouvaient donc passer au vert en les laissant en défaut
+ * — qui dicte « voir la certification » n'activait rien.
+ *
+ * Une seule règle est exécutée ici, pas le scan complet. Ces états n'ont jamais
+ * été audités et le dialogue d'article a une dette de contraste (4,39:1 et
+ * 4,47:1 mesurés sur son fond) : la fermer est un autre chantier, et la mêler à
+ * ce test ferait échouer une garde pour une raison qui n'est pas la sienne.
+ */
+const scanLabelInName = async (page: Page) => {
+  const { violations } = await new AxeBuilder({ page })
+    .withRules(["label-content-name-mismatch"])
+    .analyze();
+
+  return violations.flatMap((violation) =>
+    violation.nodes.map(
+      (node) => `${violation.id} · ${node.target.join(" ")}`
+    )
+  );
+};
+
+test.describe("libellé dans le nom, états à ouvrir", () => {
+  test("le lien d'une certification dépliée", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const panel = page
+      .getByRole("heading", { name: /mes certifications/iu })
+      .locator("xpath=ancestor::*[@data-slot='panel'][1]");
+    const link = panel.getByRole("link", {
+      name: /voir la certification/iu,
+    });
+
+    // repliée, la certification n'expose aucun lien : c'est bien ce qui la
+    // rendait invisible au scan de « / »
+    await expect(link).toHaveCount(0);
+
+    await panel.getByRole("button").first().click();
+    await expect(link).toBeVisible();
+
+    expect(await scanLabelInName(page)).toEqual([]);
+  });
+
+  test("le lien du dialogue d'un article", async ({ page }) => {
+    await page.goto("/articles");
+    await page.waitForLoadState("networkidle");
+
+    await page
+      .locator('[data-slot="dialog-trigger-anchor"]')
+      .first()
+      .click();
+
+    await expect(
+      page
+        .getByRole("dialog")
+        .getByRole("link", { name: /lire l'article/iu })
+    ).toBeVisible();
+
+    expect(await scanLabelInName(page)).toEqual([]);
+  });
+
+  test("le lien de retour de la page 404", async ({ page }) => {
+    await page.goto("/cette-page-n-existe-pas");
+    await page.waitForLoadState("networkidle");
+
+    await expect(
+      page.getByRole("link", { name: /revenir en arrière/iu })
+    ).toBeVisible();
+
+    expect(await scanLabelInName(page)).toEqual([]);
+  });
+});

@@ -73,10 +73,7 @@ export const Tools = () => {
 
       <PanelFooter>
         <Button asChild variant="outline">
-          <Link
-            aria-label={m.home_tools_footer_aria_label()}
-            href={localizeHref("/utils")}
-          >
+          <Link href={localizeHref("/utils")}>
             {m.home_tools_footer_button()}
           </Link>
         </Button>

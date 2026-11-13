@@ -81,8 +81,10 @@ test.describe("page d'un sujet", () => {
   }) => {
     await page.goto("/tags/retour-d-experience");
 
+    // cherché par son texte AFFICHÉ : c'est aussi son nom accessible, sans
+    // `aria-label` qui dirait autre chose que ce qu'on lit (WCAG 2.5.3)
     const feed = page.getByRole("link", {
-      name: /flux rss du sujet/iu,
+      name: /flux rss de ce sujet/iu,
     });
     await expect(feed).toHaveAttribute(
       "href",

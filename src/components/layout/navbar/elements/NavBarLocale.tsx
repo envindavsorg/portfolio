@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/primitives/Button";
+import { accessibleName } from "@/lib/accessible-name";
 import { m } from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
@@ -17,14 +18,19 @@ export const NavBarLocale = () => {
   return (
     <Button asChild size="icon" variant="outline">
       <a
-        aria-label={m.locale_switcher_label()}
+        // le code de langue OUVRE le nom : c'est le seul texte affiché, donc
+        // ce qu'on dicte pour activer le lien. En capitales comme à l'écran —
+        // `uppercase` ne change que le rendu, pas le texte du document
+        aria-label={accessibleName(
+          target.toUpperCase(),
+          m.locale_switcher_label()
+        )}
         href={href}
         hrefLang={target}
       >
         <span className="font-medium text-xs uppercase">
           {target}
         </span>
-        <span className="sr-only">{m.locale_switcher_label()}</span>
       </a>
     </Button>
   );

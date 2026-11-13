@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { accessibleName } from "@/lib/accessible-name";
 import { formatDate } from "@/lib/functions";
 import { toPlainText } from "@/lib/search";
 import { cn } from "@/lib/utils";
@@ -96,7 +97,10 @@ export const ArticleItem = ({
                 variant="outline"
               >
                 <Link
-                  aria-label={title}
+                  aria-label={accessibleName(
+                    m.writings_article_read_link(),
+                    title
+                  )}
                   href={localizeHref(`/${category}/${slug}`)}
                   prefetch
                 >
