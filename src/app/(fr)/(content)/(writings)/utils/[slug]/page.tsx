@@ -20,9 +20,9 @@ import {
   getContentByCategory,
   getContentBySlug,
 } from "@/lib/content";
+import { getContentToc } from "@/lib/content-toc";
 import { getPageJsonLd } from "@/lib/json-ld";
 import { createContentMetadata } from "@/lib/metadata";
-import { getContentToc } from "@/lib/toc";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 

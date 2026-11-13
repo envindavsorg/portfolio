@@ -17,9 +17,9 @@ import {
   getContentByCategory,
   getContentBySlug,
 } from "@/lib/content";
+import { getContentToc } from "@/lib/content-toc";
 import { getPageJsonLd } from "@/lib/json-ld";
 import { createContentMetadata } from "@/lib/metadata";
-import { getContentToc } from "@/lib/toc";
 
 interface Props {
   params: Promise<{ slug: string }>;
