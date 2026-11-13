@@ -12,6 +12,9 @@ import { localizeHref } from "@/paraglide/runtime";
 import { NAVIGATION_DATA } from "../data";
 import { isRouteActive } from "./functions";
 import { useNavBar } from "./NavBarContext";
+import { NavBarGitHub } from "./NavBarGitHub";
+import { NavBarLlm } from "./NavBarLlm";
+import { NavBarRss } from "./NavBarRss";
 
 export const NavBarSecondaryMenu = () => {
   const pathname = usePathname();
@@ -61,6 +64,14 @@ export const NavBarSecondaryMenu = () => {
             </Link>
           );
         })}
+      </div>
+
+      {/* les trois liens que la barre ne peut pas loger sous `sm` : sans
+          cette rangée ils seraient inatteignables sur téléphone */}
+      <div className="flex items-center justify-center gap-x-2 border-edge border-t py-2 sm:hidden">
+        <NavBarGitHub />
+        <NavBarRss />
+        <NavBarLlm />
       </div>
     </nav>
   );

@@ -22,9 +22,14 @@ export const NavBar = () => (
           <NavBarCommand />
           <NavBarTheme />
           <NavBarLocale />
-          <NavBarGitHub />
-          <NavBarRss />
-          <NavBarLlm />
+          {/* sept boutons font 272px, plus le logo, pour 278px utiles à
+              320px de large : le bouton du menu sortait de l'écran. Sous
+              `sm` ces trois liens vivent dans NavBarSecondaryMenu */}
+          <div className="hidden items-center gap-x-2 sm:flex">
+            <NavBarGitHub />
+            <NavBarRss />
+            <NavBarLlm />
+          </div>
           <NavBarMenuToggle />
         </div>
       </div>
