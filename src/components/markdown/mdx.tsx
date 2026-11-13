@@ -10,9 +10,6 @@ import remarkGfm from "remark-gfm";
 import { visit } from "unist-util-visit";
 
 import { CodeBlockCommand } from "@/components/blog/CodeBlockCommand";
-import { CodeCollapsibleWrapper } from "@/components/blog/CodeCollapsibleWrapper";
-import { ComponentPreview } from "@/components/blog/ComponentPreview";
-import { ComponentSource } from "@/components/blog/ComponentSource";
 import { Callout } from "@/components/markdown/Callout";
 import { CopyButton } from "@/components/primitives/Button";
 import {
@@ -71,11 +68,11 @@ const getIconForLanguageExtension = (language: string) => {
   }
 };
 
+// `ComponentPreview`, `ComponentSource` et `CodeCollapsibleWrapper` ne sont PAS
+// ici : seules les pages /components s'en servent, et les déclarer dans cette
+// table les faisait télécharger par chaque article. Voir `component-docs.ts`.
 const components: MDXRemoteProps["components"] = {
   Callout,
-  CodeCollapsibleWrapper,
-  ComponentPreview,
-  ComponentSource,
   code: Code,
   figcaption: ({
     children,
@@ -177,7 +174,31 @@ const components: MDXRemoteProps["components"] = {
   },
   table: Table,
   tbody: TableBody,
-  td: TableCell,
+  /**
+   * Les cellules d'un tableau MDX reviennent à la ligne.
+   *
+   * `TableCell` pose `whitespace-nowrap` sur chaque cellule, ce qui convient au
+   * tableau de chiffres de /weight. Dans un contenu, la colonne « description »
+   * est une phrase : le tableau des props de l'effet Apple mesurait 1109px dans
+   * un conteneur de 734px, la phrase coupée net ; à 390px la troisième colonne
+   * de /utils/contrast-checker était entièrement hors champ, derrière une barre
+   * de défilement presque invisible.
+   *
+   * La première colonne (le nom) et le code en ligne restent insécables : un
+   * `() => void` coupé en deux ne se lit plus. `align-baseline` aligne les
+   * premières lignes entre elles quand une cellule en compte plusieurs.
+   *
+   * Corrigé ici et non dans la primitive, pour ne pas toucher /weight.
+   */
+  td: ({ className, ...props }: React.ComponentProps<"td">) => (
+    <TableCell
+      className={cn(
+        "whitespace-normal align-baseline first:whitespace-nowrap [&_code]:whitespace-nowrap",
+        className
+      )}
+      {...props}
+    />
+  ),
   th: TableHead,
   thead: TableHeader,
   tr: TableRow,
@@ -207,6 +228,17 @@ const options: MDXRemoteProps["options"] = {
       [
         rehypePretty,
         {
+          /**
+           * Une clôture SANS langage (un schéma en ASCII, une expression cron)
+           * n'était pas prise en charge du tout : pas de figure, donc le `pre`
+           * recevait le fond sombre par défaut du plugin typography — une dalle
+           * noire en thème clair — et son `code`, sans `data-language`, était
+           * habillé comme du code en ligne, une pastille par ligne. Huit blocs
+           * concernés, sur /utils/cron-explainer et /utils/jwt-decoder.
+           * `plaintext` les fait passer par le même rendu que les autres, sans
+           * rien colorer. Les blocs seulement : le code en ligne reste tel quel.
+           */
+          defaultLang: { block: "plaintext" },
           keepBackground: false,
           onVisitLine(node: LineElement) {
             if (node.children.length === 0) {
@@ -268,13 +300,43 @@ interface MDXProps {
   components?: MDXRemoteProps["components"];
 }
 
+/**
+ * Le corps de lecture, distinct des courtes lignes d'introduction `-- … --`
+ * qui partagent `Prose`.
+ *
+ * Mesuré avant : 14px, 106 caractères par ligne à 1440, et 4,83:1 en thème
+ * clair. `prose-sm` et la couleur atténuée conviennent à une phrase d'accroche,
+ * pas à huit minutes de lecture.
+ *
+ * - le `!` sur la taille est nécessaire : tailwind-merge ne connaît pas
+ *   `prose-sm` et ne peut donc pas l'écarter ;
+ * - l'interligne est sans unité (1.7) pour suivre les deux tailles, 15px sur
+ *   mobile et 16px au-delà ;
+ * - `max-w-[72ch]` ne borne QUE le texte courant (paragraphes, listes,
+ *   citations). Code, tableaux et encarts gardent toute la colonne : un bloc de
+ *   code raccourci déborderait pour rien ;
+ * - h2 et h3 ne différaient que de 2px (20 et 18) et se distinguaient surtout
+ *   par la couleur.
+ *
+ * La couleur du corps vit dans globals.css (`.prose[data-longform]`) : la règle
+ * `.prose` y est `!important` dans `@layer base`, une utilité ne la bat pas.
+ */
+const LONGFORM_CLASSNAME = cn(
+  "px-2 text-[15px]! sm:px-4 sm:text-base!",
+  "prose-p:my-4 prose-p:max-w-[72ch] prose-p:leading-[1.7]",
+  "prose-li:max-w-[72ch] prose-li:leading-[1.7]",
+  "prose-blockquote:max-w-[72ch]",
+  "prose-h2:mt-12 prose-h2:text-[22px] sm:prose-h2:text-2xl",
+  "prose-h3:mt-9 prose-h3:text-lg sm:prose-h3:text-xl"
+);
+
 export const Mdx = ({
   code,
   components: extra,
   isDivider = true,
 }: MDXProps) => (
   <>
-    <Prose className="px-2 sm:px-4">
+    <Prose className={LONGFORM_CLASSNAME} data-longform>
       <MDXRemote
         components={extra ? { ...components, ...extra } : components}
         options={options}

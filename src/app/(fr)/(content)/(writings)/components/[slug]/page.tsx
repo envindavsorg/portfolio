@@ -10,6 +10,7 @@ import { WritingsSeries } from "@/components/features/WritingsSeries";
 import { WritingsTagLinks } from "@/components/features/WritingsTagLinks";
 import { WritingsToC } from "@/components/features/WritingsToC";
 import { WritingsTopBar } from "@/components/features/WritingsTopBar";
+import { COMPONENT_DOCS } from "@/components/markdown/component-docs";
 import { Mdx } from "@/components/markdown/mdx";
 import type { ContentLocale } from "@/lib/content";
 import {
@@ -81,7 +82,7 @@ export const ComponentView = ({
       />
       <WritingsToC items={getContentToc(content)} />
       <WritingsReadingAids />
-      <Mdx code={content} />
+      <Mdx code={content} components={COMPONENT_DOCS} />
 
       <WritingsTagLinks current={component} />
 

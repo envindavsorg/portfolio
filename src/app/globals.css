@@ -405,6 +405,27 @@
     color: var(--muted-foreground) !important;
   }
 
+  /**
+   * Le corps de lecture (`Mdx`) porte une couleur plus dense que les lignes
+   * d'accroche, qui gardent `--muted-foreground`.
+   *
+   * `--muted-foreground` mesure 4,83:1 sur le fond clair : conforme, mais c'est
+   * la teinte d'une légende, pas celle d'un texte de plusieurs minutes. Le
+   * mélange reste en retrait des titres (`--foreground`) et passe à plus de
+   * 10:1 dans les deux thèmes. Il se mélange à `--canvas`, le fond réellement
+   * peint, et non à `--background`.
+   *
+   * La règle vit ICI et non en utilité : celle du dessus est `!important` dans
+   * `@layer base`, et un `!important` d'un calque plus tardif perd contre elle.
+   */
+  .prose[data-longform] {
+    color: color-mix(
+      in oklab,
+      var(--foreground) 78%,
+      var(--canvas)
+    ) !important;
+  }
+
   .prose,
   .prose span,
   .prose i {
@@ -434,8 +455,11 @@
       @apply overflow-x-auto p-3;
     }
 
+    /* 13/14px : le code était à 16px sous un corps à 14px. Geist Mono à 14px
+       tient ~84 colonnes dans les 708px utiles, de quoi couvrir les 70 du dépôt
+       sans défilement horizontal. */
     code {
-      @apply text-sm sm:text-base normal-case;
+      @apply text-[13px] sm:text-sm normal-case;
     }
   }
 
@@ -443,8 +467,17 @@
     @apply py-0.5;
   }
 
+  /**
+   * `font-mono` ICI, et pas seulement sur `code` : la règle `.prose span` du
+   * calque `base` atteint les spans de jetons de Shiki, et le `not-prose` de la
+   * figure n'arrête pas un sélecteur descendant ordinaire. Le code coloré
+   * sortait donc en PixelSquare, police proportionnelle (i = 6px, m = 12px) —
+   * alors que le code en ligne et les blocs de commande, sans span, restaient
+   * en Geist Mono. Deux polices de code sur la même page, et plus aucun
+   * alignement de colonnes. Le calque `components` l'emporte sur `base`.
+   */
   [data-line] span {
-    @apply text-(--shiki-light) dark:text-(--shiki-dark);
+    @apply font-mono text-(--shiki-light) dark:text-(--shiki-dark);
   }
 
   /**

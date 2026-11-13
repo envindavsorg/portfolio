@@ -37,7 +37,7 @@ export const DiffViewer = () => {
   const hasInput = left.length > 0 || right.length > 0;
 
   return (
-    <div className="flex w-full flex-col gap-y-4 py-4">
+    <div className="not-prose flex w-full flex-col gap-y-4 py-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-y-2">
           <Label htmlFor="diff-left">

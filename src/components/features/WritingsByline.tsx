@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import type { Content } from "@/lib/content";
 import { formatDate } from "@/lib/functions";
 import { BASE_URL } from "@/lib/metadata";
@@ -12,6 +14,21 @@ interface WritingsBylineProps {
    */
   withDescription?: boolean;
 }
+
+/**
+ * Une information suivie de SON séparateur, insécables l'un de l'autre.
+ *
+ * Les « · » étaient des enfants directs du conteneur flex : à 390px la ligne se
+ * coupait où elle pouvait, et la suivante commençait par un point orphelin
+ * (« · 1077 mots »). Attaché à l'élément qui le précède, le point reste en fin
+ * de ligne — jamais en tête.
+ */
+const BylineItem = ({ children }: { children: ReactNode }) => (
+  <span className="flex items-center gap-x-3">
+    {children}
+    <span aria-hidden="true">·</span>
+  </span>
+);
 
 /**
  * Les informations d'un contenu : description, dates, temps de lecture.
@@ -57,30 +74,31 @@ export const WritingsByline = ({
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-xs">
         {/* <time> et non un <span> : la date reste lisible par une machine, et
             le format lisible par un humain est celui de la locale courante */}
-        <time dateTime={createdAt.toISOString()}>
-          {m.writings_article_written_on({
-            date: formatDate(createdAt, "LL"),
-          })}
-        </time>
+        <BylineItem>
+          <time dateTime={createdAt.toISOString()}>
+            {m.writings_article_written_on({
+              date: formatDate(createdAt, "LL"),
+            })}
+          </time>
+        </BylineItem>
 
         {isUpdated && (
-          <>
-            <span aria-hidden="true">·</span>
+          <BylineItem>
             <span>
               {m.writings_article_updated_label()}{" "}
               <time dateTime={updatedAt.toISOString()}>
                 {formatDate(updatedAt, "LL")}
               </time>
             </span>
-          </>
+          </BylineItem>
         )}
 
-        <span aria-hidden="true">·</span>
-        <span>
-          {m.writings_article_reading_time_label()} {time}
-        </span>
+        <BylineItem>
+          <span>
+            {m.writings_article_reading_time_label()} {time}
+          </span>
+        </BylineItem>
 
-        <span aria-hidden="true">·</span>
         <span>{m.writings_article_words_count({ words })}</span>
       </div>
 

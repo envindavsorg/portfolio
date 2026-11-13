@@ -56,7 +56,7 @@ export const JwtDecoder = () => {
   const value = decoded.ok ? decoded.value : null;
 
   return (
-    <div className="flex w-full flex-col gap-y-4 py-4">
+    <div className="not-prose flex w-full flex-col gap-y-4 py-4">
       <div className="flex flex-col gap-y-2">
         <div className="flex items-center justify-between gap-x-2">
           <Label htmlFor="jwt-input">

@@ -40,7 +40,7 @@ export const CaseConverter = () => {
 
   return (
     <div
-      className="flex w-full flex-col gap-y-6 py-4"
+      className="not-prose flex w-full flex-col gap-y-6 py-4"
       data-slot="utils-case-converter"
     >
       <div className="flex flex-col gap-y-2">
