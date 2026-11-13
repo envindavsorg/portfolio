@@ -30,7 +30,11 @@ pnpm registry:build       # Build component registry for distribution
 ## Tech Stack
 
 - **Framework**: Next.js 16 with App Router, Turbopack and React Compiler (`reactCompiler: true`)
-- **Styling**: Tailwind CSS v4
+- **Styling**: Tailwind CSS v4. `@custom-variant dark` in `globals.css` binds
+  `dark:` to the `.dark` class set by next-themes. Do not remove it: Tailwind 4
+  compiles `dark:` to `prefers-color-scheme` by default, so every `dark:` utility
+  followed the OS instead of the theme toggle (Shiki tokens at 1.28:1 when the
+  two differ — `e2e/csp.spec.ts` loads both mismatches)
 - **UI Components**: Base UI (`@base-ui/react`). The radix `Slot`/`asChild`
   pattern BREAKS hydration with React 19.2 in dev (trigger silently vanishes
   client-side) — never reintroduce radix primitives; `src/components/base/Collapsible.tsx`
@@ -58,8 +62,12 @@ pnpm registry:build       # Build component registry for distribution
   e.g. `send-cv.action.ts` replaces the old `/api/send` route)
 - **Env**: @t3-oss/env-nextjs in `src/env.ts` (imported by next.config.ts) —
   add new variables there, never read `process.env` directly in app code
-- **Tests**: Vitest (+ Testing Library, jsdom) for unit (`src/lib/*.test.ts`),
-  Playwright for e2e (`e2e/*.spec.ts`)
+- **Tests**: Vitest (`vitest.config.mts`) for unit tests, Playwright for e2e
+  (`e2e/*.spec.ts`). The unit environment is `node` by default — no test touches
+  the DOM, and creating a jsdom per file was 51 % of the suite's time. A
+  component test asks for the DOM itself, at the top of its file:
+  `// @vitest-environment jsdom` (Testing Library and jsdom stay installed for
+  that)
 - **CI**: `.github/workflows/ci.yml` — types, lint, format, unit tests in one job,
   build + e2e in another. Installs with `--frozen-lockfile` and caches the pnpm
   store: `pnpm-lock.yaml` is COMMITTED. Do not re-ignore it — when it was ignored,
@@ -100,8 +108,11 @@ src/app/
 │       ├── (root)/page.tsx        # Homepage (/) + _components/ sections
 ├── en/                            # ENGLISH tree — thin wrappers re-exporting the FR pages
 │   ├── layout.tsx                 # Root layout EN (html lang="en")
-│   └── (content)/...              # Same shape; pages define EN metadata + reuse FR defaults
-│       └── (writings)/            # /articles, /components, /utils, /tags, /series, /search (+ [slug])
+│   ├── (content)/...              # Same shape; pages define EN metadata + reuse FR defaults
+│   │   └── (writings)/            # /articles, /components, /utils, /tags, /series, /search (+ [slug])
+│   └── [...rest]/page.tsx         # Catch-all that only calls notFound(): an unknown /en URL
+│                                  # otherwise falls to global-not-found.tsx, which is French.
+│                                  # No generateStaticParams on purpose (unbounded cache)
 ├── (llms)/                        # Plain-text mirror for AI ingestion
 │   ├── llms.txt/route.ts          # /llms.txt - markdown index
 │   ├── (content)/about.md/...     # /about.md, /experience.md, /projects.md,
@@ -132,6 +143,11 @@ src/app/
   is a single point of failure (a 403 there is what silently emptied the bundle).
 - Usage: `import { m } from "@/paraglide/messages"` everywhere;
   `localizeHref()` for internal links; `getLocale()` for the current locale.
+- Counts agree: messages take a `{plural}` suffix (`"{count} sujet{plural}"`)
+  rather than printing `sujet(s)`. A word that is invariable in one locale gets
+  two messages instead (`writings_series_index_count_singular` / `_plural` —
+  "series" would become "seriess").
+- A key no code reads any more is removed from BOTH files in the same commit.
 - Server locale: `src/lib/i18n.ts` (`setServerLocale` + `overwriteGetLocale`
   with React `cache()`), set by `RootDocument` in each root layout. Official
   workaround — Next.js RSC has no AsyncLocalStorage for Paraglide.
@@ -167,6 +183,30 @@ src/app/
   ALL built on Base UI (radix has been fully migrated out; see Tech Stack).
   `src/components/blocks/` (visual blocks), `src/components/motion/`
   (animated icons).
+- Cards use the stretched link of `src/components/base/CardLink.tsx`: the anchor
+  wraps ONLY the title — its accessible name IS its text — and a pseudo-element
+  extends the click to the whole card. Never wrap a card in an anchor carrying an
+  `aria-label`: axe 4.14 runs `label-content-name-mismatch` (WCAG 2.5.3) in
+  `a11y.spec.ts`. When a label must say more than the visible words, build it
+  with `accessibleName()` (`src/lib/accessible-name.ts`).
+- `src/components/base/LinkGrid.tsx` is the blueprint link grid of the footer and
+  the 404 (four cells per row, two on phones). The footer is the ONLY inbound
+  link to `/cv`, `/now`, `/uses` and `/weight` — `e2e/routes.spec.ts` fails if it
+  goes. The caller passes final hrefs (already through `localizeHref`) and an
+  `aria-label`: two unnamed `<nav>` are indistinguishable to a screen reader.
+- Homepage rows share `_components/shared/row.ts` (the 12px gutter of `Panel`,
+  the hover underline, the chevron nudge) and `shared/DescriptionCards.tsx`.
+  Hover is NOT carried by the background: `bg-accent2` alone measured 1.035:1,
+  and in light theme `--accent2` cannot darken — the brand blue sits at 4.51:1 on
+  it. Use the underline / border, never `hover:text-theme` on a hovered row.
+- End-of-content blocks (series, topics, related) go through `WritingsPanel`
+  (20px heading, no second side border); `WritingsPrevNext` is the bottom
+  previous/next, in the same order as the top-bar arrows and ←/→.
+- `PanelHeader sticky` switches to its centred `-- title --` form by observing
+  ITSELF against a root whose top sits one pixel below the sticky line (read
+  from the computed `top`, which is in rem). Two earlier sentinel-based versions
+  were each wrong by one edge; `e2e/titles.spec.ts` scrolls by wheel steps, both
+  ways, to keep it honest.
 
 **RSC boundary pattern**: `Feature.tsx` (async RSC shell fetching data) +
 `FeatureContent.tsx` (`'use client'` receiving data as props).
@@ -195,6 +235,23 @@ read component sources dynamically, which makes Turbopack emit a benign
 "unexpected file in NFT list" warning at build; known and accepted),
 `rehype-npm-command.ts`, `remark-code-import.ts`.
 Syntax highlighting via `shiki`.
+
+`Mdx` (`src/components/markdown/mdx.tsx`) renders the long-form body: 15/16px,
+line-height 1.7, running text capped at 72ch while code, tables and callouts keep
+the full column. Its colour lives in `globals.css` (`.prose[data-longform]`), not
+in a utility — the `.prose` rule there is `!important` inside `@layer base`. Code
+tokens need `font-mono` on `[data-line] span` (the `.prose span` rule reaches
+Shiki's spans despite `not-prose`), a fence WITHOUT a language is rendered as
+`plaintext`, and MDX table cells wrap (`/weight` keeps the nowrap primitive).
+Tool widgets carry `not-prose`, or list bullets land on their results.
+
+The base MDX table does NOT declare `ComponentPreview`, `ComponentSource` or
+`CodeCollapsibleWrapper`: only `/components` pages use them, so `ComponentView`
+passes `COMPONENT_DOCS` (`markdown/component-docs.ts`) through the `components`
+prop — otherwise every article downloads the playground. `component-docs.test.ts`
+fails if an article or a tool uses one of these tags. Reading time is produced in
+`content.ts` as `N min`, outside Paraglide: it never agrees and reads the same in
+both locales (the hard-coded plural printed "1 minutes").
 
 Tag filtering on list pages is client-side (`WritingsTagFilter` context +
 `history.replaceState`) so `/articles`, `/components`, `/utils` stay fully
@@ -312,10 +369,25 @@ the component registry:
   its reference instant as a parameter, so nothing reads the clock while rendering
 - `regex-tester.ts` - regex execution returning segments rather than HTML
 - `playground.ts` - JSX code generation for the component playground
-- `zod-config.ts` - re-exports `z` with `jitless: true`. Client-side schemas MUST
-  import `z` from here: Zod 4 compiles object validators with `new Function` and
-  probes for it in a try/catch, which a strict `script-src` reports as a
-  violation even though the throw is caught.
+- `zod-config.ts` - sets `jitless: true` and re-exports the `zod/mini` builders
+  ONE BY ONE — no `z`, no `export *`. Client-side schemas MUST take their
+  builders from here (`src/schemas/emailSchema.ts` is the reference). Two reasons:
+  a re-exported `z` namespace travels as a value and defeats tree-shaking
+  (125 KiB on the wire for a two-field form, 52 with named `zod/mini` functions),
+  and the classic `z.object()` probes `new Function` in a try/catch, which a
+  strict `script-src` reports as a violation even though the throw is caught.
+  `jitless` is read when a schema is BUILT, so importing the builders from here is
+  what guarantees the order. A schema that needs one more builder adds it to the
+  list. Server-only modules (`env.ts`, `content.ts`, the admin actions) import
+  `"zod"` directly: no CSP applies there and the chained API costs visitors nothing.
+- `toc.ts` / `content-toc.ts` - `toc.ts` only groups entries that were already
+  extracted (`groupTocItems`) and imports nothing but a TYPE from fumadocs, so the
+  client component `WritingsToC` can use it. The extraction (`getContentToc`)
+  lives in `content-toc.ts`, server-only: in one module, the whole markdown
+  parser shipped in the bundle of every content page.
+- `accessible-name.ts` - `accessibleName(visible, detail)` builds a label that
+  STARTS with the visible text (WCAG 2.5.3): `aria-label` replaces the content,
+  and someone driving the browser by voice says what they read.
 
 ### LLM Content Mirror
 
@@ -351,7 +423,12 @@ which generates `src/__registry__/` and `public/r/registry.json`.
 
 Unit tests (Vitest) cover `src/lib/` — the pure modules listed above. Reference
 values come from outside the code under test (Node's `crypto`, Python) so a test
-never re-implements the function it checks.
+never re-implements the function it checks. A few sit next to what they guard:
+`src/schemas/emailSchema.test.ts` (field bounds written by hand, plus a trap on
+the `Function` constructor for the CSP), `src/data/uses.test.ts`,
+`src/components/markdown/component-docs.test.ts`. In `src/lib/`,
+`functions.test.ts` pins the localized date format, `toc.test.ts` the grouping,
+`content.test.ts` the reading time over the whole corpus.
 
 End-to-end tests (Playwright, `e2e/`):
 
@@ -380,9 +457,19 @@ End-to-end tests (Playwright, `e2e/`):
 - `search-page.spec.ts` - the `/search` page and its agreement with the palette
 - `playground.spec.ts` - the component playground and its generated code
 - `offline.spec.ts` - the service worker, with the network genuinely cut
-- `a11y.spec.ts` - axe-core over 16 page types plus the open playground. Two known
-  contrast debts are listed in the file with their measurement; any new violation
-  fails. Light theme only — forcing dark gives measurements axe cannot resolve
+- `a11y.spec.ts` - axe-core (4.14, WCAG 2.0/2.1 A + AA) over 26 URLs, a dark-theme
+  pass, and the open playground, palette and shortcuts sheet. No debt is tolerated any more: any
+  violation fails. Three states axe cannot reach on its own (a collapsed
+  certification, the article dialog, the 404) are opened and checked for
+  `label-content-name-mismatch`
+- `cv-form.spec.ts` - the CV request dialog in both languages, and a check that
+  Zod's locale strings are NOT shipped on `/` and `/en` (with a control that the
+  marker exists in the package)
+- `routes.spec.ts` - every sitemap `<loc>` and hreflang answers, rendered internal
+  links answer, a 404 comes back in the language of its URL with one `<h1>` and no
+  horizontal overflow, and the footer leads to the pages nothing else links to
+- `titles.spec.ts` - homepage section titles stay visible, and their sticky form
+  follows the scroll position by wheel steps in both directions
 - `budget.spec.ts` - JS, font and CSS weight ceilings measured in the browser, plus
   the font-preload count
 
@@ -457,7 +544,7 @@ reverse is the normal untranslated case). Both are refused before writing, which
 is what makes it safe for the action to commit the two files as two separate
 commits rather than going through the Trees API. Its test round-trips both real
 message files **byte for byte** — a serialiser that differs from the repo's
-format would produce a 627-line diff on the first save with no value change — and
+format would produce a 622-line diff on the first save with no value change — and
 asserts the live repo has no placeholder mismatch.
 
 Setup: create a GitHub OAuth app (callback
@@ -527,6 +614,21 @@ falling back to zeroed GitHub widgets rather than failing.
   actions, tags, series, related). `pre` switches to `pre-wrap`: on paper there is
   no horizontal scrolling, so an overflowing code block is silently CUT. The page
   URL is rendered by `WritingsByline` because CSS cannot read `location`
+- **Dates**: `formatDate` (`src/lib/functions.ts`) loads dayjs's `localizedFormat`
+  plugin. `LL` is not a core dayjs token: without the plugin dayjs does not throw,
+  it prints the literal `LL` — which is what every byline showed
+- **Progress bar**: import `@bprogress/next` from its `/app` entry. The package
+  root also re-exports the Pages Router provider: 18 to 24 KiB of unused router on
+  every page
+- **Focus ring**: ONE `:focus-visible` rule in `@layer base` of `globals.css`
+  draws it for the whole site, in `--ring`, which is the theme colour (the grey
+  one measured 2.62:1, 1.55:1 on links). Do not add focus classes to primitives:
+  `outline-none` next to `focus-visible:outline-2` computes to `outline: none 2px`,
+  i.e. no indicator at all. A component that draws its own indicator opts out
+  with an `outline-*` utility, which always wins over the base layer. Base UI's
+  `Slider` focuses the hidden `<input>` INSIDE the thumb: use `has-[:focus-visible]`
+- **AGENTS.md**: `next dev` (16.4) writes one at the repo root and restores it when
+  deleted. It is git-ignored; this file is the documentation
 - **Persisted stores**: Zustand stores in `src/hooks/` carry a `version` and a
   `migrate` (see `useConfig.ts`). A stored shape that no longer matches the code
   must be migrated, not trusted
