@@ -1,5 +1,6 @@
 import dayjsLib from "dayjs";
 import "dayjs/locale/fr";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 
@@ -7,6 +8,11 @@ import { getLocale } from "@/paraglide/runtime";
 
 import { logger } from "./logger";
 
+// `LL` (« 3 mars 2026 », « March 3, 2026 ») n'existe QUE par ce greffon. Sans
+// lui dayjs ne lève rien : il recopie le jeton tel quel, et la signature des
+// articles, /now, /weight et /cv affichaient « écrit le LL » — rendu « ll » par
+// la mise en minuscules du site, donc lu comme un onze.
+dayjsLib.extend(localizedFormat);
 dayjsLib.extend(relativeTime);
 dayjsLib.extend(utc);
 // locale par défaut FR (source des routes non localisées : llms, RSS, OG)

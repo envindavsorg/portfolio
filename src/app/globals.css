@@ -2,6 +2,17 @@
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
+/**
+ * `dark:` suit la CLASSE posée par next-themes, pas le système.
+ *
+ * Tailwind 4 branche par défaut cette variante sur `prefers-color-scheme`. Le
+ * site, lui, bascule par la classe `.dark` : toutes les utilités `dark:`
+ * obéissaient donc au réglage de l'OS et ignoraient le bouton de thème. Thème
+ * sombre choisi sur un système clair, les jetons Shiki gardaient leur couleur
+ * claire sur fond sombre — 1,28:1 mesuré dans un bloc de code.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-theme: var(--theme);
   --color-background: var(--background);
