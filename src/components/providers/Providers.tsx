@@ -10,8 +10,6 @@ import { Analytics } from "./analytics/Analytics";
 import ProgressProvider from "./modules/ProgressProvider";
 import { ServiceWorker } from "./modules/ServiceWorker";
 import ThemeProvider from "./modules/ThemeProvider";
-import type { Provider } from "./utils/Compose";
-import { Compose } from "./utils/Compose";
 
 const Toaster = dynamic(
   async () => {
@@ -19,11 +17,6 @@ const Toaster = dynamic(
     return mod.Toaster;
   },
   { ssr: false }
-);
-
-const AppProviders: Provider = Compose(
-  ThemeProvider,
-  ProgressProvider
 );
 
 interface ProvidersProps {
@@ -42,17 +35,19 @@ export const Providers = ({ children }: ProvidersProps) => (
    * existantes restent en place, elles couvrent ce que Motion ne voit pas.
    */
   <MotionConfig reducedMotion="user">
-    <AppProviders>
-      <FaviconSwitcher />
-      {children}
-      <Toaster />
+    <ThemeProvider>
+      <ProgressProvider>
+        <FaviconSwitcher />
+        {children}
+        <Toaster />
 
-      {process.env.NODE_ENV === "production" && (
-        <>
-          <Analytics />
-          <ServiceWorker />
-        </>
-      )}
-    </AppProviders>
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Analytics />
+            <ServiceWorker />
+          </>
+        )}
+      </ProgressProvider>
+    </ThemeProvider>
   </MotionConfig>
 );
