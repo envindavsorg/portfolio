@@ -45,6 +45,8 @@ next-env.d.ts
 
 # agents
 /.agents
+# écrit par `next dev` (Next 16.4) et restauré s'il est supprimé ; ce dépôt se documente dans CLAUDE.md
+/AGENTS.md
 
 # artefacts Playwright
 test-results/
