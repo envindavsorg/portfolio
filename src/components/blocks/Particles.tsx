@@ -1,14 +1,12 @@
 "use client";
 
-import type { Engine, ISourceOptions } from "@tsparticles/engine";
-import type * as ParticlesReact from "@tsparticles/react";
+import type { ISourceOptions } from "@tsparticles/engine";
 import { useTheme } from "next-themes";
 import { memo, useEffect, useMemo, useState } from "react";
 
-type ParticlesModule = typeof ParticlesReact;
+import type { ParticlesEngine } from "@/components/providers/modules/ParticlesEngine";
 
-let Cached: ParticlesModule | null = null;
-let registerSlim: ((engine: Engine) => Promise<void>) | null = null;
+let Cached: typeof ParticlesEngine | null = null;
 
 const canRender = (): boolean => {
   if (typeof window === "undefined") {
@@ -33,7 +31,6 @@ const buildOptions = (
     modes: { push: { quantity: 2 } },
   },
   particles: {
-    color: { value: color },
     move: {
       direction: "none",
       enable: true,
@@ -48,6 +45,11 @@ const buildOptions = (
       animation: { enable: true, speed: 2, startValue: "random" },
       value: { max: 1, min: 0.1 },
     },
+    // `paint.color`, PAS `particles.color` : tsParticles 4 ne lit plus ce
+    // dernier et retombe en silence sur du blanc. Le thème clair animait donc
+    // un canevas plein écran de points blancs sur fond blanc — 0 pixel visible,
+    // mesuré, contre 190 en sombre.
+    paint: { color: { value: color } },
     shape: { type: "circle" },
     size: { value: { max: 1, min: 0.5 } },
   },
@@ -68,13 +70,12 @@ export const Particles = memo(({ density = 50 }: SparklesProps) => {
 
     let active = true;
     const timer = setTimeout(async () => {
-      const [reactModule, { loadSlim }] = await Promise.all([
-        import("@tsparticles/react"),
-        import("@tsparticles/slim"),
-      ]);
+      // un seul import() : voir ParticlesEngine pour ce que coûtent plusieurs
+      const engineModule = await import(
+        "@/components/providers/modules/ParticlesEngine"
+      );
       if (active) {
-        Cached = reactModule;
-        registerSlim = (engine: Engine) => loadSlim(engine);
+        Cached = engineModule.ParticlesEngine;
         setReady(true);
       }
     }, 1000);
@@ -94,21 +95,15 @@ export const Particles = memo(({ density = 50 }: SparklesProps) => {
     [density, resolvedTheme]
   );
 
-  if (!(ready && Cached && registerSlim)) {
+  if (!(ready && Cached)) {
     return null;
   }
 
-  const { Particles: ParticlesCanvas, ParticlesProvider } = Cached;
+  const Engine = Cached;
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 size-full overflow-hidden">
-      <ParticlesProvider init={registerSlim}>
-        <ParticlesCanvas
-          className="size-full"
-          id="tsparticles"
-          options={options}
-        />
-      </ParticlesProvider>
+      <Engine options={options} />
     </div>
   );
 });
