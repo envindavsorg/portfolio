@@ -352,7 +352,11 @@ export const PortalImage = forwardRef<
         layoutId={`dialog-image-${id}-${wrapperLayoutId}`}
         // `loading="eager"` faisait telecharger toutes les vignettes de la liste
         // des le chargement ; `rel` n'est de toute facon pas valide sur <img>.
-        loading="lazy"
+        // Pas de `lazy` quand l'appelant demande `priority` : next/image refuse
+        // les deux ensemble et LEVE en developpement — /articles repondait 500
+        // sous `pnpm dev`, alors que le build de production, qui saute ce
+        // controle, passait sans rien dire.
+        loading={props.priority ? undefined : "lazy"}
         sizes={sizes}
         transition={{ ...transitionDialog, ...transition }}
         whileHover={animatedOpen || dataOpen ? undefined : whileHover}
