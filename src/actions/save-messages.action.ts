@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 import { actionClient } from "@/actions/safe-action";
 import { requireAdminSession } from "@/lib/admin/auth";
@@ -10,7 +11,6 @@ import {
   isBlocking,
   serializeMessages,
 } from "@/lib/admin/messages";
-import { z } from "@/lib/zod-config";
 
 /**
  * Enregistrer les traductions.
