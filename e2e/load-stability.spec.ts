@@ -1,11 +1,13 @@
+import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 
 /**
  * Ce qui bouge — ou travaille — sans que le visiteur n'ait rien demandé, au
- * chargement. Une cause mesurée, une garde :
+ * chargement. Deux causes mesurées, une garde chacune :
  *
  * - les deux sections GitHub de l'accueil sortaient du flux HTML et revenaient
- *   300 ms après la première image, en poussant tout ce qui suit.
+ *   300 ms après la première image, en poussant tout ce qui suit ;
+ * - le titre pixel changeait de hauteur à l'arrivée de quatre polices.
  */
 
 const PHONE = { height: 844, width: 390 };
@@ -77,5 +79,59 @@ test.describe("lien profond sur téléphone", () => {
     );
     expect(top).toBeGreaterThanOrEqual(0);
     expect(top).toBeLessThan(PHONE.height / 2);
+  });
+});
+
+const LATE_PIXEL_FONTS =
+  /GeistPixel[-_](?:Grid|Circle|Triangle|Line)/u;
+
+const readTitle = async (page: Page) =>
+  await page
+    .locator("[data-slot='pixel-heading'] h1")
+    .first()
+    .evaluate(async (title) => {
+      await document.fonts.ready;
+      const box = title.getBoundingClientRect();
+      return {
+        height: box.height,
+        loaded: [...document.fonts]
+          .filter((font) => font.status === "loaded")
+          .map((font) => font.family.replaceAll('"', "")),
+        width: box.width,
+      };
+    });
+
+test.describe("titre pixel", () => {
+  test.use({ viewport: PHONE });
+
+  test("sa boîte ne dépend pas des quatre polices tardives", async ({
+    page,
+  }) => {
+    await page.route(LATE_PIXEL_FONTS, (route) => route.abort());
+    await page.goto("/articles/how-i-write-css", {
+      waitUntil: "load",
+    });
+    const without = await readTitle(page);
+
+    // TÉMOIN : les quatre polices manquent vraiment, Square est là
+    expect(without.loaded).toContain("PixelSquare");
+    expect(without.loaded).not.toContain("PixelGrid");
+
+    await page.unroute(LATE_PIXEL_FONTS);
+    await page.reload({ waitUntil: "load" });
+    await expect
+      .poll(async () => (await readTitle(page)).loaded)
+      .toEqual(
+        expect.arrayContaining([
+          "PixelGrid",
+          "PixelCircle",
+          "PixelTriangle",
+          "PixelLine",
+        ])
+      );
+    const loaded = await readTitle(page);
+
+    expect(without.height).toBeCloseTo(loaded.height, 1);
+    expect(without.width).toBeCloseTo(loaded.width, 1);
   });
 });
