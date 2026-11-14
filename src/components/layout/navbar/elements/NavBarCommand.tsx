@@ -374,7 +374,7 @@ export const NavBarCommand = () => {
           onPointerEnter={prefetchSearchIndex}
           ref={triggerRef}
           size="icon"
-          variant="outline"
+          variant="ghost"
         >
           <Search />
           <span className="sr-only">{m.nav_command_search()}</span>

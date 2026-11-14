@@ -19,7 +19,7 @@ export const NavBarLocale = () => {
 
   return (
     <NavBarTooltip label={m.locale_switcher_label()}>
-      <Button asChild size="icon" variant="outline">
+      <Button asChild size="icon" variant="ghost">
         <a
           // le code de langue OUVRE le nom : c'est le seul texte affiché, donc
           // ce qu'on dicte pour activer le lien. En capitales comme à l'écran

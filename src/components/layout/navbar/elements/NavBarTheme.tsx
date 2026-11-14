@@ -62,7 +62,7 @@ export const NavBarTheme = () => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         size="icon"
-        variant="outline"
+        variant="ghost"
       >
         <Moon
           className="hidden [html.dark_&]:block"

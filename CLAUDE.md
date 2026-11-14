@@ -257,7 +257,18 @@ src/app/
   REPLACES them, which is how the `link` variant drops them. The shine is the
   button's `::after` (only `translate` animates, under `motion-safe`), so a
   caller must not put its own `after:` on a `Button`. The outline border keeps
-  its two strengths (30 % then 60 %): it still carries the hover.
+  its two strengths (30 % then 60 %): it still carries the hover. The dialog
+  and popover panels carry the same brackets, with
+  `[--bracket-origin:padding-box]`: a background is painted UNDER the border,
+  so on a box whose border is opaque the brackets were invisible (dark theme);
+  inside the padding box they always show. The navbar's icon buttons are
+  `ghost` — six bracketed squares in a row out-shouted the menu next to them.
+- Corners are square site-wide, and at the source: the radius scale
+  (`--radius-xs` to `--radius-3xl`) is zeroed in the `@theme` block of
+  `globals.css`, so `rounded-md` and friends draw square without touching a
+  component. Only `rounded-full` stays round — tags, the portrait, dots,
+  sliders. Reach for `rounded-full` when something must be round; a
+  `rounded-lg` no longer rounds anything.
 - Cards use the stretched link of `src/components/base/CardLink.tsx`: the anchor
   wraps ONLY the title — its accessible name IS its text — and a pseudo-element
   extends the click to the whole card. Never wrap a card in an anchor carrying an

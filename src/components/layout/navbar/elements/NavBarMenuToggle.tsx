@@ -19,7 +19,7 @@ export const NavBarMenuToggle = () => {
       onClick={toggleSecondaryMenu}
       ref={toggleRef}
       size="icon"
-      variant="outline"
+      variant="ghost"
     >
       <MenuIcon isOpen={isSecondaryMenuOpen} />
     </Button>

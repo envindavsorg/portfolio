@@ -190,7 +190,7 @@ export const DialogContent = ({
           // le fond est posé ICI : sans lui, une modale dont l'appelant ne passe
           // pas de `bg-*` (la feuille de raccourcis) était transparente, son texte
           // posé à même la page floutée
-          "rounded-md border border-popover-border bg-popover p-5 text-popover-foreground shadow-popover outline-none focus:outline-none",
+          "corner-brackets rounded-md border border-popover-border bg-popover p-5 text-popover-foreground shadow-popover outline-none [--bracket-origin:padding-box] [--bracket:10px] focus:outline-none",
           "z-50 hidden w-full max-w-[calc(100%-2rem)] sm:grid sm:max-w-100",
           "transition-[opacity,transform,scale] duration-600 ease-out",
           "data-[ending-style]:fade-out-0 data-[ending-style]:zoom-out-95 data-[ending-style]:duration-300",
