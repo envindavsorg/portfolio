@@ -15,12 +15,7 @@ export const FooterClock = ({
 }: FooterClockProps) => {
   const [time, setTime] = useState<Date | null>(null);
   const [is24Hour, setIs24Hour] = useState<boolean>(true);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(
-    null
-  );
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const savedPreference = localStorage.getItem("clock-format");
@@ -28,22 +23,67 @@ export const FooterClock = ({
       setIs24Hour(savedPreference === "24h");
     }
 
+    let timeout: ReturnType<typeof setTimeout> | null = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
+    let isIntersecting = false;
+
     const tick = () => setTime(new Date());
+
+    const stop = () => {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    };
+
+    const start = () => {
+      stop();
+      // l'heure a continué sans nous : la remettre juste avant de repartir
+      tick();
+      timeout = setTimeout(
+        () => {
+          tick();
+          interval = setInterval(tick, 1000);
+        },
+        1000 - (Date.now() % 1000)
+      );
+    };
+
+    /**
+     * L'horloge ne bat que si on peut la LIRE.
+     *
+     * Elle est tout en bas de chaque page et se rerendait chaque seconde quoi
+     * qu'il arrive — pied de page hors de l'écran, onglet en arrière-plan.
+     * C'était la seule activité qui restait sur un article au repos.
+     */
+    const sync = () => {
+      if (isIntersecting && !document.hidden) {
+        start();
+      } else {
+        stop();
+      }
+    };
+
+    // remplace tout de suite le gabarit, même si le pied de page est loin
     tick();
 
-    const msUntilNextSecond = 1000 - (Date.now() % 1000);
-    timeoutRef.current = setTimeout(() => {
-      tick();
-      intervalRef.current = setInterval(tick, 1000);
-    }, msUntilNextSecond);
+    const observer = new IntersectionObserver(([entry]) => {
+      isIntersecting = entry?.isIntersecting ?? false;
+      sync();
+    });
+    if (rootRef.current) {
+      observer.observe(rootRef.current);
+    }
+    document.addEventListener("visibilitychange", sync);
 
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      stop();
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
     };
   }, []);
 
@@ -83,6 +123,7 @@ export const FooterClock = ({
           isActionnable && "text-sm tracking-tight",
           !isActionnable && "text-base"
         )}
+        ref={rootRef}
       >
         00:00:00, dim. 00 janv. 0000
       </div>
@@ -110,6 +151,7 @@ export const FooterClock = ({
         // `p-2` faisait démarrer l'heure 4 px trop à gauche.
         "w-full border-edge border-x px-3 py-2 md:max-w-3xl"
       )}
+      ref={rootRef}
     >
       <time
         className={cn(
