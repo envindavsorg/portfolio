@@ -93,7 +93,7 @@ export const ArticleView = ({
       <WritingsSeries all={getAllContent(locale)} current={article} />
       <WritingsToC items={getContentToc(content)} />
       <WritingsReadingAids />
-      <Mdx code={content} />
+      <Mdx code={content} locale={article.locale} />
 
       <WritingsPrevNext item={article} items={articles} />
 

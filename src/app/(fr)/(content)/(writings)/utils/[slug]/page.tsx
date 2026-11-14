@@ -91,7 +91,11 @@ export const UtilView = ({
 
       <Divider border={false} after={false} type="half" />
 
-      <Mdx code={content} components={getUtilWidgets(slug)} />
+      <Mdx
+        code={content}
+        components={getUtilWidgets(slug)}
+        locale={item.locale}
+      />
 
       <script
         dangerouslySetInnerHTML={{

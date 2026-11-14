@@ -99,7 +99,11 @@ export const ComponentView = ({
       />
       <WritingsToC items={getContentToc(content)} />
       <WritingsReadingAids />
-      <Mdx code={content} components={COMPONENT_DOCS} />
+      <Mdx
+        code={content}
+        components={COMPONENT_DOCS}
+        locale={component.locale}
+      />
 
       <WritingsPrevNext item={component} items={components} />
 
