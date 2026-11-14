@@ -491,3 +491,41 @@ test.describe("conversion de casse", () => {
     ).toBeHidden();
   });
 });
+
+/**
+ * Le générateur de lorem ipsum est le seul outil dont la configuration vit dans
+ * l'URL (nuqs), et son adaptateur n'enveloppe plus que lui : sans adaptateur,
+ * `useQueryState` lève une erreur et l'outil entier disparaît. Les deux sens
+ * sont donc vérifiés — une URL partagée restaure la configuration, et la
+ * modifier réécrit l'URL.
+ */
+test.describe("générateur de lorem ipsum", () => {
+  test("la configuration se lit et s'écrit dans l'URL", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/utils/lorem-ipsum-generator?count=3&unit=words"
+    );
+
+    const amount = page.locator("#lorem-amount");
+    const output = page.locator("#lorem-output");
+
+    await expect(amount).toHaveValue("3");
+    await expect
+      .poll(async () => {
+        const text = await output.inputValue();
+        return text.trim().split(/\s+/u).length;
+      })
+      .toBe(3);
+
+    await amount.fill("5");
+    await expect(page).toHaveURL(/[?&]count=5(?:&|$)/u);
+    await expect(page).toHaveURL(/[?&]unit=words(?:&|$)/u);
+    await expect
+      .poll(async () => {
+        const text = await output.inputValue();
+        return text.trim().split(/\s+/u).length;
+      })
+      .toBe(5);
+  });
+});

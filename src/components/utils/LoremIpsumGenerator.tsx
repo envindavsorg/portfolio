@@ -5,6 +5,7 @@ import {
   parseAsStringLiteral,
   useQueryState,
 } from "nuqs";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Suspense, useMemo, useState } from "react";
 
 import { Label } from "@/components/base/Label";
@@ -178,9 +179,18 @@ const LoremIpsumGeneratorContent = () => {
   );
 };
 
-// useQueryState (nuqs) requiert une frontière Suspense sur les pages statiques
+/**
+ * L'adaptateur nuqs vit ICI et non dans `RootDocument` : cet outil est le seul
+ * à lire l'URL par nuqs, et autour de toute l'application l'adaptateur partait
+ * dans le JavaScript de chaque page.
+ *
+ * `useQueryState` requiert en plus une frontière Suspense sur les pages
+ * statiques.
+ */
 export const LoremIpsumGenerator = () => (
-  <Suspense>
-    <LoremIpsumGeneratorContent />
-  </Suspense>
+  <NuqsAdapter>
+    <Suspense>
+      <LoremIpsumGeneratorContent />
+    </Suspense>
+  </NuqsAdapter>
 );

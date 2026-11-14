@@ -57,7 +57,10 @@ pnpm registry:build       # Build component registry for distribution
   bump had produced
 - **Content**: MDX via `next-mdx-remote` + `fumadocs-core` for TOC, FR + EN
 - **State**: Zustand (persisted stores in `src/hooks/`), nuqs for URL state,
-  React Hook Form + Zod for forms
+  React Hook Form + Zod for forms. `NuqsAdapter` wraps ONLY the Lorem Ipsum
+  generator (`LoremIpsumGenerator.tsx`), the one component that calls
+  `useQueryState` — around the root layout it put nuqs in the JavaScript of
+  every page. A second nuqs consumer brings its own adapter the same way
 - **Server actions**: next-safe-action (`src/actions/safe-action.ts` client,
   e.g. `send-cv.action.ts` replaces the old `/api/send` route)
 - **Env**: @t3-oss/env-nextjs in `src/env.ts` (imported by next.config.ts) —

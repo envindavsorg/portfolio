@@ -1,4 +1,3 @@
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 
 import { LocaleProvider } from "@/components/providers/modules/LocaleProvider";
@@ -87,11 +86,9 @@ export const RootDocument = ({
       </head>
 
       <body className="font-pixel-square">
-        <NuqsAdapter>
-          <LocaleProvider locale={locale}>
-            <Providers>{children}</Providers>
-          </LocaleProvider>
-        </NuqsAdapter>
+        <LocaleProvider locale={locale}>
+          <Providers>{children}</Providers>
+        </LocaleProvider>
       </body>
     </html>
   );
