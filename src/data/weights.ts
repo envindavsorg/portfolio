@@ -81,6 +81,18 @@
  * l'accueil, 519 à 520 sur `/articles`. Les valeurs sont arrondies au
  * kibioctet, et la trace ne dit pas quel commit l'apporte. Polices, CSS,
  * images et documents sont identiques au kibioctet près.
+ *
+ * TROISIÈME TRACE DU 14 NOVEMBRE, sur la PR #20 (fluidité sur téléphone).
+ * Seul le JS bouge, et dans les deux sens. L'accueil perd 4 Kio, 562 à 558 ;
+ * chacune des dix autres pages publiées en gagne 3 — 520 à 523 sur
+ * `/articles`, 533 à 536 sur la page d'outil, 536 à 539 sur
+ * `/series/parcours`. Ces 3 Kio sont le prix des titres collants animés en
+ * CSS : la ligne de temps commune et les états du titre voyagent dans un
+ * chunk que toutes les pages reçoivent. L'accueil les paie aussi, mais sa
+ * couverture n'embarque plus de carrousel. La trace ne sépare pas ces deux
+ * effets ; les relevés locaux, commit par commit, donnaient 7 Kio de moins
+ * pour le carrousel. LE PIRE CAS RESTE L'ACCUEIL, à 558. Polices, CSS, images
+ * et documents sont identiques au kibioctet près.
  */
 
 export type PageKind =
@@ -111,7 +123,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 85,
     fonts: 198,
     images: 23,
-    js: 562,
+    js: 558,
     kind: "home",
     path: "/",
   },
@@ -120,7 +132,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 83,
     fonts: 198,
     images: 23,
-    js: 562,
+    js: 558,
     kind: "home",
     path: "/en",
   },
@@ -129,7 +141,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 23,
     fonts: 198,
     images: 27,
-    js: 520,
+    js: 523,
     kind: "index",
     path: "/articles",
   },
@@ -138,7 +150,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 41,
     fonts: 198,
     images: 0,
-    js: 520,
+    js: 523,
     kind: "article",
     path: "/articles/how-i-write-css",
   },
@@ -147,7 +159,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 47,
     fonts: 198,
     images: 0,
-    js: 533,
+    js: 536,
     kind: "tool",
     path: "/utils/regex-tester",
   },
@@ -156,7 +168,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 198,
     images: 0,
-    js: 486,
+    js: 489,
     kind: "index",
     path: "/tags",
   },
@@ -165,7 +177,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 17,
     fonts: 198,
     images: 0,
-    js: 494,
+    js: 497,
     kind: "index",
     path: "/search",
   },
@@ -174,7 +186,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 198,
     images: 0,
-    js: 536,
+    js: 539,
     kind: "index",
     path: "/series/parcours",
   },
@@ -183,7 +195,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 198,
     images: 0,
-    js: 486,
+    js: 489,
     kind: "showcase",
     path: "/projects",
   },
@@ -192,7 +204,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 19,
     fonts: 198,
     images: 0,
-    js: 486,
+    js: 489,
     kind: "showcase",
     path: "/projects/portfolio",
   },
@@ -201,7 +213,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 19,
     fonts: 198,
     images: 0,
-    js: 486,
+    js: 489,
     kind: "showcase",
     path: "/experience/wefix-by-fnac",
   },
@@ -210,7 +222,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 23,
     fonts: 198,
     images: 0,
-    js: 474,
+    js: 477,
     kind: "resume",
     path: "/cv",
   },
@@ -292,6 +304,10 @@ export const LOGGED_PAGES: string[] = [
  * - CSS, 26 : 30 est à 15,4 %, dans la bande. Inchangé ;
  * - document, 85 sur l'accueil : 100 est à 17,6 %, dans la bande. Inchangé ;
  * - images, 27 sur /articles : 60 reste large à dessein. Inchangé.
+ *
+ * RELUS SUR LA TRACE DE LA PR #20 : le pire cas de JS passe de 562 à 558,
+ * toujours sur l'accueil. 660 est à 18,3 % (660 / 558 = 1,183), dans la
+ * bande de 642 à 670. Inchangé, comme les quatre autres.
  */
 export const WEIGHT_BUDGETS = {
   css: 30,
