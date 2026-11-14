@@ -6,5 +6,9 @@
     "src/paraglide/**",
     "src/registry/**"
   ],
-  "ignoreDependencies": ["babel-plugin-react-compiler", "sharp"]
+  "ignoreDependencies": [
+    "babel-plugin-react-compiler",
+    "server-only",
+    "sharp"
+  ]
 }

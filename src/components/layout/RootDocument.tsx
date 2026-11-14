@@ -14,7 +14,7 @@ import {
 } from "@/fonts/pixel";
 import { GeistSans } from "@/fonts/sans";
 import type { AppLocale } from "@/lib/i18n";
-import { setServerLocale } from "@/lib/i18n";
+import { setServerLocale } from "@/lib/i18n-server";
 import { getSiteJsonLd } from "@/lib/json-ld";
 import { cn } from "@/lib/utils";
 

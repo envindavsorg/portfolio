@@ -1,11 +1,8 @@
-import { cache } from "react";
+import { getLocale } from "@/paraglide/runtime";
 
-import {
-  assertIsLocale,
-  baseLocale,
-  getLocale,
-  overwriteGetLocale,
-} from "@/paraglide/runtime";
+// Module partagé par les Server Components ET les composants client : il ne
+// doit porter AUCUN effet de bord. Le scope de la locale côté serveur vit dans
+// `i18n-server.ts`, qui explique ce qu'il en coûtait de le laisser ici.
 
 export type AppLocale = "fr" | "en";
 
@@ -42,16 +39,3 @@ const INTL_LOCALES: Record<AppLocale, string> = {
  */
 export const getIntlLocale = (): string =>
   INTL_LOCALES[getLocale() as AppLocale] ?? INTL_LOCALES.fr;
-
-// Workaround officiel Paraglide pour Next.js : pas d'AsyncLocalStorage en RSC,
-// le locale de la requête est scopé via React cache() et posé par le layout
-// racine de chaque arbre de routes ((fr)/ ou en/).
-const ssrLocale = cache(() => ({ locale: baseLocale as string }));
-
-if (typeof window === "undefined") {
-  overwriteGetLocale(() => assertIsLocale(ssrLocale().locale));
-}
-
-export const setServerLocale = (locale: AppLocale) => {
-  ssrLocale().locale = assertIsLocale(locale);
-};
