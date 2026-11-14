@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
 import type {
   ProfilePage as PageSchema,
   WithContext,
@@ -92,19 +91,25 @@ const Page = () => (
       <Divider />
       <About />
       <Divider />
+      {/* PAS de `<Suspense>` autour des deux sections GitHub. La page est
+        statique : leur contenu est déjà dans le HTML, mais React sort du flux
+        toute frontière de plus de 500 octets une fois la page au-delà de
+        12,8 Ko, puis ne la révèle que 300 ms après la première image. Les
+        deux sections arrivaient donc APRÈS le premier rendu et poussaient
+        tout ce qui suit de 554 px (656 sur téléphone) : un lien vers
+        `/#my-experiences` sautait une à cinq fois sur dix selon le réseau et
+        la machine (CLS 0,25 à 0,78). La frontière ne protégeait rien en
+        échange — une section qui jette pendant le prérendu fait échouer le
+        build, avec ou sans elle. */}
       <SectionBoundary>
-        <Suspense>
-          <Commits />
-        </Suspense>
+        <Commits />
       </SectionBoundary>
       <Divider />
       {/* juste après les statistiques : les deux sections lisent la même
         réponse GitHub, et les lire d'affilée évite au lecteur de revenir en
         arrière pour relier un graphe de contributions à ce qui l'a produit */}
       <SectionBoundary>
-        <Suspense>
-          <Repos />
-        </Suspense>
+        <Repos />
       </SectionBoundary>
       <Divider />
       <TechStack />
