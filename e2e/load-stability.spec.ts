@@ -3,11 +3,13 @@ import { expect, test } from "@playwright/test";
 
 /**
  * Ce qui bouge — ou travaille — sans que le visiteur n'ait rien demandé, au
- * chargement. Trois causes mesurées, une garde chacune :
+ * chargement. Quatre causes mesurées, une garde chacune :
  *
  * - les deux sections GitHub de l'accueil sortaient du flux HTML et revenaient
  *   300 ms après la première image, en poussant tout ce qui suit ;
  * - le titre pixel changeait de hauteur à l'arrivée de quatre polices ;
+ * - le thème était réappliqué au montage, ce qui invalidait le style de tout
+ *   le document en pleine hydratation ;
  * - le titre pixel pouvait rester à battre une fois hors de l'écran.
  */
 
@@ -16,8 +18,15 @@ const PHONE = { height: 844, width: 390 };
 /** 0,29 à 0,78 quand le saut avait lieu, 0,001 à 0,003 depuis */
 const MAX_SHIFT = 0.05;
 
+const THEME_TOGGLE = /changer de thème|toggle theme/u;
+
+/** posé par l'effet de `PixelHeading` : la page est hydratée */
+const HYDRATED = "[data-slot='pixel-heading'] [data-state='active']";
+
 interface Probe {
+  __classLog?: string[];
   __shift?: number;
+  __styleLog?: string[];
 }
 
 test.describe("sections GitHub dans le flux", () => {
@@ -134,6 +143,164 @@ test.describe("titre pixel", () => {
 
     expect(without.height).toBeCloseTo(loaded.height, 1);
     expect(without.width).toBeCloseTo(loaded.width, 1);
+  });
+});
+
+/**
+ * Journal des écritures sur `<html class>` (l'ANCIENNE valeur de chacune) et
+ * des feuilles `*{transition:none}` ajoutées à `<head>` — celle qui coupe les
+ * transitions le temps d'un changement de thème, pas celles de sonner.
+ */
+const watchTheme = async (page: Page) => {
+  await page.addInitScript(() => {
+    const probe = window as unknown as Probe;
+    probe.__classLog = [];
+    probe.__styleLog = [];
+    new MutationObserver((records) => {
+      for (const record of records) {
+        if (
+          record.type === "attributes" &&
+          record.target === document.documentElement
+        ) {
+          probe.__classLog?.push(record.oldValue ?? "");
+        }
+        for (const node of record.addedNodes) {
+          if (
+            node.nodeName === "STYLE" &&
+            node.textContent?.startsWith("*,*::before,*::after{")
+          ) {
+            probe.__styleLog?.push(node.textContent);
+          }
+        }
+      }
+    }).observe(document, {
+      attributeFilter: ["class"],
+      attributeOldValue: true,
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+  });
+};
+
+const THEME_CLASS = /\b(?:light|dark)\b/u;
+
+/** vrai si la classe du thème a été RETIRÉE après avoir été posée */
+const themeWasDropped = (oldValues: string[]) => {
+  let hadTheme = false;
+  for (const oldValue of oldValues) {
+    if (THEME_CLASS.test(oldValue)) {
+      hadTheme = true;
+    } else if (hadTheme) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const readThemeLog = async (page: Page) =>
+  await page.evaluate(() => {
+    const probe = window as unknown as Probe;
+    return {
+      classLog: probe.__classLog ?? [],
+      styleLog: probe.__styleLog ?? [],
+    };
+  });
+
+test.describe("thème", () => {
+  test.use({ colorScheme: "light" });
+
+  for (const path of ["/", "/en", "/articles/how-i-write-css"]) {
+    test(`n'est pas réappliqué au montage sur ${path}`, async ({
+      page,
+    }) => {
+      await watchTheme(page);
+      await page.goto(path, { waitUntil: "load" });
+      await expect(page.locator(HYDRATED).first()).toBeAttached();
+      await page.waitForTimeout(1000);
+
+      // TÉMOIN : le thème est bien posé, par le script en ligne
+      await expect(page.locator("html")).toHaveClass(/\blight\b/u);
+
+      const { classLog, styleLog } = await readThemeLog(page);
+      expect(themeWasDropped(classLog)).toBe(false);
+      expect(styleLog).toEqual([]);
+    });
+  }
+
+  test("le bouton bascule la classe, sans transition, et s'en souvient", async ({
+    page,
+  }) => {
+    await watchTheme(page);
+    await page.goto("/", { waitUntil: "load" });
+    const html = page.locator("html");
+    const toggle = page
+      .getByRole("button", { name: THEME_TOGGLE })
+      .first();
+
+    await expect(page.locator(HYDRATED).first()).toBeAttached();
+    await expect(html).toHaveClass(/\blight\b/u);
+    await toggle.click();
+
+    await expect(html).toHaveClass(/\bdark\b/u);
+    await expect(html).not.toHaveClass(/\blight\b/u);
+    await expect(html).toHaveCSS("color-scheme", "dark");
+    expect(
+      await page.evaluate(() => localStorage.getItem("theme"))
+    ).toBe("dark");
+
+    // les transitions ont été coupées le temps de la bascule, puis rendues
+    expect((await readThemeLog(page)).styleLog).toHaveLength(1);
+    await expect
+      .poll(
+        async () =>
+          await page.evaluate(
+            () =>
+              [...document.head.querySelectorAll("style")].filter(
+                (style) =>
+                  style.textContent?.startsWith(
+                    "*,*::before,*::after{"
+                  )
+              ).length
+          )
+      )
+      .toBe(0);
+
+    await toggle.click();
+    await expect(html).toHaveClass(/\blight\b/u);
+    await expect(html).not.toHaveClass(/\bdark\b/u);
+    await expect(html).toHaveCSS("color-scheme", "light");
+  });
+
+  test("le thème « système » suit le système", async ({ page }) => {
+    await page.goto("/", { waitUntil: "load" });
+    const html = page.locator("html");
+    await expect(page.locator(HYDRATED).first()).toBeAttached();
+    await expect(html).toHaveClass(/\blight\b/u);
+
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect(html).toHaveClass(/\bdark\b/u);
+    await expect(html).not.toHaveClass(/\blight\b/u);
+
+    await page.emulateMedia({ colorScheme: "light" });
+    await expect(html).toHaveClass(/\blight\b/u);
+  });
+
+  test("un thème enregistré l'emporte sur le système au rechargement", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem("theme", "dark");
+    });
+    await watchTheme(page);
+    await page.goto("/", { waitUntil: "load" });
+
+    await expect(page.locator("html")).toHaveClass(/\bdark\b/u);
+    await expect(page.locator(HYDRATED).first()).toBeAttached();
+    await page.waitForTimeout(1000);
+    const { classLog, styleLog } = await readThemeLog(page);
+    expect(themeWasDropped(classLog)).toBe(false);
+    expect(styleLog).toEqual([]);
   });
 });
 

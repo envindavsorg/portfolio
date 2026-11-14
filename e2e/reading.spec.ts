@@ -232,7 +232,14 @@ test.describe("sommaire", () => {
 });
 
 test.describe("raccourcis clavier de navigation", () => {
-  test("les flèches passent à l'article précédent et suivant", async ({
+  // Un test par touche, donc un contexte neuf pour chacune. Réunies dans un
+  // seul test, la seconde rechargeait la page déjà visitée : ses
+  // préchargements RSC y reviennent comme des requêtes que Chromium laisse
+  // ouvertes puis abandonne (`net::ERR_ABORTED`), et `networkidle` les
+  // attendait — 28 s mesurées pour un délai de 30, 34 à 36 s dès que le
+  // chargement change de rythme. Le test tenait à deux secondes près, pour
+  // une raison étrangère aux flèches.
+  test("la flèche droite passe à l'article suivant", async ({
     page,
   }) => {
     await page.goto(ARTICLE);
@@ -240,7 +247,11 @@ test.describe("raccourcis clavier de navigation", () => {
 
     await page.keyboard.press("ArrowRight");
     await expect(page).toHaveURL(OLDER);
+  });
 
+  test("la flèche gauche passe à l'article précédent", async ({
+    page,
+  }) => {
     await page.goto(ARTICLE);
     await page.waitForLoadState("networkidle");
 
