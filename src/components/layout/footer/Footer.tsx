@@ -45,8 +45,8 @@ const getFooterLinks = (): LinkGridItem[] => [
     kind: "page",
     label: m.now_breadcrumb(),
   },
-  // `uses_heading` et non `uses_breadcrumb` : ce dernier vaut « outils », déjà
-  // le libellé de `/utils` dans la barre de navigation
+  // `uses_heading`, le titre de la page : « outils » est déjà le libellé de
+  // `/utils` dans la barre de navigation
   {
     href: localizeHref("/uses"),
     kind: "page",
