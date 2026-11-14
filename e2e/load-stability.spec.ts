@@ -11,7 +11,8 @@ import { expect, test } from "@playwright/test";
  * - le thème était réappliqué au montage, ce qui invalidait le style de tout
  *   le document en pleine hydratation ;
  * - le titre pixel pouvait rester à battre une fois hors de l'écran ;
- * - la phrase de l'en-tête changeait toutes les quatre secondes, vue ou non.
+ * - la phrase de l'en-tête changeait toutes les quatre secondes et les halos
+ *   battaient, vus ou non.
  */
 
 const PHONE = { height: 844, width: 390 };
@@ -370,10 +371,24 @@ test.describe("titre pixel hors écran", () => {
 /** la phrase de l'en-tête : le `<p>` posé à côté du gabarit invisible */
 const SENTENCE = "div:has(> span.invisible[aria-hidden='true']) > p";
 
+/** les halos `animate-ping` de `PulsatingCircle` */
+const HALO = "span.motion-safe\\:animate-ping";
+
+/** l'état de l'animation de chaque halo de la page */
+const readHalos = async (page: Page) =>
+  await page.locator(HALO).evaluateAll((halos) =>
+    halos.map((halo) =>
+      halo
+        .getAnimations()
+        .map((animation) => animation.playState)
+        .join()
+    )
+  );
+
 test.describe("au repos hors écran", () => {
   test.use({ viewport: PHONE });
 
-  test("la phrase de l'en-tête attend qu'on revienne", async ({
+  test("la phrase attend qu'on revienne, les halos sont en pause", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "load" });
@@ -382,6 +397,11 @@ test.describe("au repos hors écran", () => {
     // TÉMOIN : à l'écran, la phrase change toutes les quatre secondes
     const first = (await sentence.textContent()) ?? "";
     await expect(sentence).not.toHaveText(first, { timeout: 8000 });
+
+    // les halos sont plusieurs écrans plus bas : aucun ne bat
+    const halos = await readHalos(page);
+    expect(halos.length).toBeGreaterThan(0);
+    expect(new Set(halos)).toEqual(new Set(["paused"]));
 
     // Hors écran, une seconde laisse finir une bascule déjà partie ; ensuite
     // plus rien ne bouge, alors qu'une échéance au moins tombe dans l'attente.
@@ -395,5 +415,11 @@ test.describe("au repos hors écran", () => {
     // au retour, la bascule retenue part sans attendre quatre secondes de plus
     await page.evaluate(() => window.scrollTo(0, 0));
     await expect(sentence).not.toHaveText(held, { timeout: 2000 });
+
+    // TÉMOIN : amené à l'écran, un halo bat
+    await page.locator(HALO).first().scrollIntoViewIfNeeded();
+    await expect
+      .poll(async () => (await readHalos(page))[0])
+      .toBe("running");
   });
 });
