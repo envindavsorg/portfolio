@@ -11,6 +11,7 @@ import * as m from "@/paraglide/messages";
 import type { Content } from "./content";
 import { dayjs } from "./functions";
 import { BASE_URL, openGraphImage } from "./metadata";
+import { tagLabel } from "./tags";
 
 const CATEGORY_OG_TYPES: Record<string, PageType> = {
   articles: "blogArticle",
@@ -130,8 +131,13 @@ export const getPageJsonLd = (
   // trompe autant un moteur qu'un lecteur d'écran (WCAG 3.1.2)
   inLanguage: localeTag(fileLocale),
   isPartOf: { "@id": WEBSITE_ID },
+  // le LIBELLÉ dans la langue du fichier servi, comme `article:tag` : un tag
+  // est une clé écrite en français, et les pages /en annonçaient
+  // « retour d'expérience » à côté d'un `article:tag` « lessons learned »
   ...(metadata.tags?.length && {
-    keywords: metadata.tags.join(", "),
+    keywords: metadata.tags
+      .map((tag) => tagLabel(tag, fileLocale))
+      .join(", "),
   }),
   url: `${BASE_URL}${locale === "en" ? "/en" : ""}/${metadata.category}/${slug}`,
 });

@@ -11,7 +11,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/base/Breadcrumb";
 import type { BreadcrumbEntry } from "@/lib/breadcrumb-json-ld";
-import { getBreadcrumbJsonLd } from "@/lib/breadcrumb-json-ld";
+import {
+  breadcrumbHref,
+  getBreadcrumbJsonLd,
+} from "@/lib/breadcrumb-json-ld";
 import { cn } from "@/lib/utils";
 import { localizeHref } from "@/paraglide/runtime";
 
@@ -73,7 +76,11 @@ export const WritingsBreadcrumb = ({
                     </BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink
-                      href={href ? localizeHref(href) : href}
+                      href={
+                        href
+                          ? breadcrumbHref(localizeHref(href))
+                          : href
+                      }
                       aria-label={label}
                       onMouseEnter={handleMouseEnter}
                       onMouseLeave={handleMouseLeave}

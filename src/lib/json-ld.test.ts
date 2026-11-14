@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
 
-import { getBreadcrumbJsonLd } from "@/lib/breadcrumb-json-ld";
-import { getSiteJsonLd, PERSON_ID, WEBSITE_ID } from "@/lib/json-ld";
+import {
+  breadcrumbHref,
+  getBreadcrumbJsonLd,
+} from "@/lib/breadcrumb-json-ld";
+import type { Content } from "@/lib/content";
+import {
+  getPageJsonLd,
+  getSiteJsonLd,
+  PERSON_ID,
+  WEBSITE_ID,
+} from "@/lib/json-ld";
 
 /** Le graphe est un tableau de nœuds : retrouver celui d'un type donné. */
 const node = (locale: "fr" | "en", type: string) => {
@@ -85,6 +94,42 @@ describe("getSiteJsonLd", () => {
   });
 });
 
+describe("getPageJsonLd", () => {
+  const article = (locale: Content["locale"]): Content => ({
+    content: "",
+    locale,
+    metadata: {
+      category: "articles",
+      createdAt: new Date("2026-03-03T00:00:00.000Z"),
+      description: "d",
+      tags: ["css", "retour d'expérience"],
+      title: "t",
+      updatedAt: new Date("2026-03-04T00:00:00.000Z"),
+    } as Content["metadata"],
+    reading: { time: "8 min", words: 1077 },
+    slug: "how-i-write-css",
+  });
+
+  // un tag est une CLÉ, écrite en français : `keywords` d'un article anglais
+  // annonçait « retour d'expérience » quand `article:tag` disait déjà
+  // « lessons learned »
+  it("publie le libellé des tags dans la langue du contenu", () => {
+    expect(getPageJsonLd(article("en"), "en").keywords).toBe(
+      "css, lessons learned"
+    );
+    expect(getPageJsonLd(article("fr"), "fr").keywords).toBe(
+      "css, retour d'expérience"
+    );
+  });
+
+  // un repli français servi sous /en reste étiqueté en français, comme le texte
+  it("garde les clés pour un repli français servi sous /en", () => {
+    expect(getPageJsonLd(article("fr"), "en").keywords).toBe(
+      "css, retour d'expérience"
+    );
+  });
+});
+
 const BREADCRUMB_ITEMS = [
   { href: "/", label: "accueil" },
   { href: "/tags", label: "sujets" },
@@ -111,5 +156,25 @@ describe("getBreadcrumbJsonLd", () => {
     // sans quoi la page se déclare comme un lien vers elle-même
     expect(list[2].item).toBeUndefined();
     expect(list[2].name).toBe("react");
+  });
+});
+
+describe("breadcrumbHref", () => {
+  // `localizeHref("/")` rend « /en/ », que le serveur redirige vers « /en »
+  it("retire la barre finale, sauf à la racine", () => {
+    expect(breadcrumbHref("/en/")).toBe("/en");
+    expect(breadcrumbHref("/")).toBe("/");
+    expect(breadcrumbHref("/en/tags")).toBe("/en/tags");
+  });
+
+  it("publie l'accueil anglais sous son URL canonique", () => {
+    const [home, tags] = getBreadcrumbJsonLd([
+      { href: "/en/", label: "home" },
+      { href: "/en/tags", label: "topics" },
+      { label: "react" },
+    ]).itemListElement as unknown as Record<string, unknown>[];
+
+    expect(home.item).toBe("https://cuzeacflorin.fr/en");
+    expect(tags.item).toBe("https://cuzeacflorin.fr/en/tags");
   });
 });
