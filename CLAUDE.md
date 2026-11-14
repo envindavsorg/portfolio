@@ -149,11 +149,29 @@ src/app/
 - Counts agree: messages take a `{plural}` suffix (`"{count} sujet{plural}"`)
   rather than printing `sujet(s)`. A word that is invariable in one locale gets
   two messages instead (`writings_series_index_count_singular` / `_plural` —
-  "series" would become "seriess").
+  "series" would become "seriess"), and so does a plural that is not a suffix
+  (`utils_regex_match_count_singular` / `_plural` — "match", "matches"). Where a
+  count can be ZERO, decide with `isPlural(count, locale)`
+  (`src/components/utils/plural.ts`, built on `Intl.PluralRules`) rather than
+  `count > 1`: French keeps zero singular ("0 ligne ajoutée"), English does not
+  ("0 lines added").
 - A key no code reads any more is removed from BOTH files in the same commit.
-- Server locale: `src/lib/i18n.ts` (`setServerLocale` + `overwriteGetLocale`
-  with React `cache()`), set by `RootDocument` in each root layout. Official
-  workaround — Next.js RSC has no AsyncLocalStorage for Paraglide.
+- Server locale: `src/lib/i18n-server.ts` (`setServerLocale` +
+  `overwriteGetLocale` with React `cache()`), set by `RootDocument` in each root
+  layout. Official workaround — Next.js RSC has no AsyncLocalStorage for
+  Paraglide. Its first statement is `import "server-only"`: Next's compiler
+  resolves it, the package is NOT installed on purpose, hence its entry in
+  `ignoreDependencies` of `knip.json`.
+- `src/lib/i18n.ts` (`AppLocale`, `Message`, `getIntlLocale`) is imported by
+  client components and must stay free of side effects. Next compiles a SECOND
+  copy of such a module, with its own Paraglide runtime, for the server render of
+  client components, and evaluates it mid-render: the `overwriteGetLocale` that
+  used to sit there at module scope reset the locale to French, so `/en` was
+  prerendered with French text in its client components and threw React #418 on
+  every load. One `overwriteGetLocale` owner per runtime copy —
+  `i18n-server.ts` for Server Components, `LocaleProvider` for the client graph.
+  `src/lib/i18n-server.test.ts` counts the callers, reading the modules as TEXT
+  (Vitest cannot resolve `server-only`).
 - Metadata: `createMetadata({ locale, path, ... })` in `src/lib/metadata.ts`
   builds canonical + hreflang alternates. `path` is ALWAYS the unprefixed
   route (e.g. `/articles`); locale handles the `/en` prefix.
@@ -173,7 +191,20 @@ src/app/
   overview, projects, repos, stack, tools). Static data co-located in `content.ts`
   files next to their section.
 - Site chrome in `src/components/layout/` (navbar/, footer/, RootDocument,
-  NotFoundContent).
+  NotFoundContent, PageColumn).
+- `PageColumn` is THE 768px column of the site (`md:max-w-3xl` between the two
+  vertical rules — the width of the navbar and the footer). The writings layout
+  and every secondary page render inside it: `/projects`, `/experience` and their
+  detail pages (through `ShowcaseDetail`), `/uses`, `/now`, `/weight`, `/cv`.
+  Those pages live OUTSIDE the `(writings)` route group, so a new one must wrap
+  itself — without it the page spreads over the whole window, with no vertical
+  rules. `e2e/showcase.spec.ts` compares each of them to the column of
+  `/articles` rather than to a number. The column dissolves in print.
+- Secondary pages build their sections with `ShowcaseSection` (the 18px Geist
+  Pixel heading) and their `--` lists with `ShowcaseDashList` /
+  `ShowcaseDashItem`, both in `src/components/features/`. The bullet is
+  `shrink-0` (as a plain flex child it broke between its two dashes at 390px)
+  and the list stays a block, so a caller can set it in `columns-2`.
 - Writings UI in `src/components/features/` (`Writings*` components: TopBar,
   ToC, Tags, TagFilter, Breadcrumb, Pagination, Actions, Shortcuts, Related,
   ReadingAids = Progress + BackToTop…) and `src/components/features/utils/` for
@@ -198,13 +229,21 @@ src/app/
   goes. The caller passes final hrefs (already through `localizeHref`) and an
   `aria-label`: two unnamed `<nav>` are indistinguishable to a screen reader.
 - Homepage rows share `_components/shared/row.ts` (the 12px gutter of `Panel`,
-  the hover underline, the chevron nudge) and `shared/DescriptionCards.tsx`.
+  the hover underline, the chevron nudge) and `shared/DescriptionCards.tsx`; the
+  rows of `/projects` and `/experience` reuse its `ROW_TITLE_HOVER`.
   Hover is NOT carried by the background: `bg-accent2` alone measured 1.035:1,
   and in light theme `--accent2` cannot darken — the brand blue sits at 4.51:1 on
   it. Use the underline / border, never `hover:text-theme` on a hovered row.
 - End-of-content blocks (series, topics, related) go through `WritingsPanel`
   (20px heading, no second side border); `WritingsPrevNext` is the bottom
   previous/next, in the same order as the top-bar arrows and ←/→.
+- `WritingsToC` renders ONE table of contents per width: the collapsible panel
+  under `xl`, and from `xl` (1280px) a permanent rail in the right margin — the
+  column is 768px, so 256px are free on each side. No `fixed`, no measuring: a
+  zero-height `sticky` anchor carries the rail in `absolute`. It fades out once
+  the article body is passed (an IntersectionObserver on `[data-longform]`),
+  otherwise the full-width rules of the end blocks and the footer cut through
+  it. Both forms mark the current section with `aria-current="location"`.
 - `PanelHeader sticky` switches to its centred `-- title --` form by observing
   ITSELF against a root whose top sits one pixel below the sticky line (read
   from the computed `top`, which is in rem). Two earlier sentinel-based versions
@@ -247,6 +286,17 @@ tokens need `font-mono` on `[data-line] span` (the `.prose span` rule reaches
 Shiki's spans despite `not-prose`), a fence WITHOUT a language is rendered as
 `plaintext`, and MDX table cells wrap (`/weight` keeps the nowrap primitive).
 Tool widgets carry `not-prose`, or list bullets land on their results.
+
+French spacing is applied at RENDER by `src/lib/remark-french-spacing.ts`: a
+no-break space before `:` and inside `« »`, a narrow one before `?`, `!` and `;`.
+The sources keep ordinary spaces, so the text mirror, the search index and the
+reading time — which all read the source — do not move. It is registered for
+FRENCH content only: `Mdx` takes a `locale` prop (default: the page's) and the
+three `[slug]` pages pass the CONTENT's locale, so a French fallback served under
+`/en` keeps its spacing. Headings are skipped on purpose: their anchor is
+computed twice, by `rehype-slug` at render and by fumadocs from the source, and
+github-slugger turns a space into a dash but DROPS a no-break space — touching
+them would break every ToC link and every anchor already shared.
 
 The base MDX table does NOT declare `ComponentPreview`, `ComponentSource` or
 `CodeCollapsibleWrapper`: only `/components` pages use them, so `ComponentView`
@@ -429,13 +479,18 @@ values come from outside the code under test (Node's `crypto`, Python) so a test
 never re-implements the function it checks. A few sit next to what they guard:
 `src/schemas/emailSchema.test.ts` (field bounds written by hand, plus a trap on
 the `Function` constructor for the CSP), `src/data/uses.test.ts`,
-`src/components/markdown/component-docs.test.ts`. In `src/lib/`,
+`src/components/markdown/component-docs.test.ts`,
+`src/components/utils/plural.test.ts`. In `src/lib/`,
 `functions.test.ts` pins the localized date format, `toc.test.ts` the grouping,
 `content.test.ts` the reading time over the whole corpus.
 
 End-to-end tests (Playwright, `e2e/`):
 
-- `i18n.spec.ts` - both trees render in the right language, no hydration errors
+- `i18n.spec.ts` - both trees render in the right language. Nine page types are
+  loaded in both languages and ANY `pageerror` fails: a production build reports
+  a hydration mismatch as "Minified React error #418", which the old filter on
+  the development wording never matched. It also reads the SERVED English HTML
+  for labels only client components render, with the French page as a control
 - `csp.spec.ts` - headers, plus every page type loaded in a real browser with a
   `securitypolicyviolation` listener. It also asserts no `.js` request failed —
   a page whose scripts never load reports no violations and would otherwise pass
@@ -443,8 +498,8 @@ End-to-end tests (Playwright, `e2e/`):
   diacritic-insensitivity, navigation, EN index
 - `feeds.spec.ts` - RSS/JSON Feed shape, per-category filtering, escaping, and the
   plain-text mirror in both languages
-- `reading.spec.ts` - related posts, ToC, ←/→ navigation, progress bar, back to
-  top, tablist keyboard contract
+- `reading.spec.ts` - related posts, ToC (the panel under 1280px, the rail
+  above), ←/→ navigation, progress bar, back to top, tablist keyboard contract
 - `utils-tools.spec.ts` / `utils-tools-2.spec.ts` - the eight `/utils` tools
 - `tags.spec.ts` / `series.spec.ts` - tag and series pages, both language trees
 - `repos.spec.ts` - the GitHub repo cards. Asserts the INVARIANT (exactly one of
@@ -619,8 +674,9 @@ falling back to zeroed GitHub widgets rather than failing.
   which brings the count to 2. Mono stays preloaded on purpose — see the note in
   `mono.ts` before changing it
 - **Print**: the `@media print` block in `globals.css` covers `/cv` AND content
-  pages. Anything tagged `data-print="hide"` is dropped (ToC, pagination, share
-  actions, tags, series, related). `pre` switches to `pre-wrap`: on paper there is
+  pages. The chrome goes by element (`header`, `nav`, `footer`) and anything
+  tagged `data-print="hide"` is dropped (ToC, pagination, share actions, tags,
+  series, related). `pre` switches to `pre-wrap`: on paper there is
   no horizontal scrolling, so an overflowing code block is silently CUT. The page
   URL is rendered by `WritingsByline` because CSS cannot read `location`
 - **Dates**: `formatDate` (`src/lib/functions.ts`) loads dayjs's `localizedFormat`
@@ -646,6 +702,22 @@ falling back to zeroed GitHub widgets rather than failing.
   (a `role="tablist"`, a combobox) don't also change the page. They follow
   chronological order, NOT the series order — the series has its own explicit
   previous/next links
+- **Navbar** (`src/components/layout/navbar/elements/`): the logo and the
+  desktop « accueil » link go through `NavBarIntentLink`, which prefetches the
+  homepage on intent only — hover or focus. It is the heaviest page of the site
+  and was downloaded on every page view (54 KiB of RSC, then its chunks). RSS
+  and llms.txt are plain `<a>`: their targets are route handlers.
+  `NavBarTooltip` labels the icon-only buttons with their accessible name, never
+  a second wording. `isRouteActive(link, pathname)` takes the UNPREFIXED route
+  and `isHomePath` recognises `/` and `/en` — never compare `pathname === "/"`.
+  The scrolled bar is `bg-canvas/98` in light and `/90` in dark: the active link
+  (#306fdb) holds 4.75:1 on the canvas and 4.55:1 through 98 % over black, 97 %
+  falls under 4.5; in dark the peach stays above 10:1 at 90 %, so the blur is
+  kept. Its bottom rule is a border, not `screen-line-after` (a 0.5px block at
+  `bottom: 0` rounds to zero height). Escape closes the mobile menu and returns
+  focus to its toggle — unless a layer above it (palette, shortcuts sheet) has
+  already consumed the key (`event.defaultPrevented`). Under 768px both of those
+  layers are drawers
 - **Offline**: `public/sw.js` caches `/_next/static/**`, fonts and images
   cache-first (their URLs are content-hashed), and HTML **network-first**. Never
   serve HTML from cache while the network answers: a stale document references
