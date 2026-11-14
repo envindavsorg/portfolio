@@ -16,9 +16,10 @@ import { ComponentSource } from "@/components/blog/ComponentSource";
  *
  * Même remède que pour les widgets d'outils (`utils-widgets.ts`) : la table de
  * base ne les connaît plus, et `ComponentView` les passe par la prop
- * `components` de `Mdx`. À la différence des quatorze widgets, le découpage
- * prend ici réellement effet : articles, outils et composants sont trois routes
- * distinctes, donc trois manifestes de références clientes.
+ * `components` de `Mdx`. Le découpage prend effet parce que articles, outils et
+ * composants sont trois routes distinctes, donc trois manifestes de références
+ * clientes. Entre les quatorze widgets d'UNE même route, cela ne suffisait pas :
+ * il a fallu une frontière cliente, voir `utils-widgets.ts`.
  *
  * Contrepartie : un article qui écrirait `<ComponentPreview>` afficherait le nom
  * de la balise en clair. `component-docs.test.ts` relit les contenus et échoue

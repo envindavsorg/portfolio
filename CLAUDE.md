@@ -314,6 +314,24 @@ fails if an article or a tool uses one of these tags. Reading time is produced i
 `content.ts` as `N min`, outside Paraglide: it never agrees and reads the same in
 both locales (the hard-coded plural printed "1 minutes").
 
+A tool page downloads ONE widget, the one of its slug. `getUtilWidgets(slug)`
+(`markdown/utils-widgets.ts`) adds a single client boundary to the MDX table,
+`UtilWidget` (`markdown/UtilWidget.tsx`), which holds the fourteen `import()`.
+That is the whole point: Turbopack puts every client reference of a page in ONE
+chunk group, and a `dynamic()` written in a SERVER module does not split it
+(Next's lazy-loading guide says so) — the fourteen widgets shipped on every tool
+page, 613 KiB of JS whatever the slug. An `import()` only splits where it is
+written in client code. The boundary AWAITS the widget of the current URL at
+module level, which makes it an async module: React waits for it before the
+reference resolves, as it does for any chunk, and the widget then renders
+synchronously. Do NOT move that wait into the render (`next/dynamic`, `lazy`):
+the widget would load while the page hydrates, and until it has, React cannot
+hydrate synchronously on the first keystroke or click and DROPS the event — 90
+of 123 runs of the two `utils-tools` specs failed that way. Do NOT give each
+widget its own async module either: prefetching the link to the neighbouring
+tool evaluates it and brings that widget along. A new tool is one line in
+`UtilWidget.tsx` and one in `utils-widgets.ts`, tied by a type.
+
 Tag filtering on list pages is client-side (`WritingsTagFilter` context +
 `history.replaceState`) so `/articles`, `/components`, `/utils` stay fully
 static. Do NOT reintroduce `searchParams` in these pages. `/search` follows the
@@ -518,8 +536,10 @@ End-to-end tests (Playwright, `e2e/`):
 - `showcase.spec.ts` - the project/role pages, `/uses`, `/now`, `/weight`, their
   sitemap entries and their text mirrors
 - `widget-isolation.spec.ts` - no tool widget reaches a page that does not use one,
-  with a CONTROL case (the speed-test page must contain the marker) so that removing
-  the dependency cannot turn every absence assertion green for nothing
+  NOR the page of another tool (`/utils/regex-tester` receives neither the speed
+  test nor nuqs), with a CONTROL case per marker (the speed-test page must contain
+  `speed.cloudflare.com`, the lorem ipsum page `__nuqs__`) so that removing the
+  dependency cannot turn every absence assertion green for nothing
 - `search-page.spec.ts` - the `/search` page and its agreement with the palette
 - `playground.spec.ts` - the component playground and its generated code
 - `offline.spec.ts` - the service worker, with the network genuinely cut
