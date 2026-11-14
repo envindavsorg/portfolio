@@ -3,14 +3,15 @@ import { expect, test } from "@playwright/test";
 
 /**
  * Ce qui bouge — ou travaille — sans que le visiteur n'ait rien demandé, au
- * chargement. Quatre causes mesurées, une garde chacune :
+ * chargement. Cinq causes mesurées, une garde chacune :
  *
  * - les deux sections GitHub de l'accueil sortaient du flux HTML et revenaient
  *   300 ms après la première image, en poussant tout ce qui suit ;
  * - le titre pixel changeait de hauteur à l'arrivée de quatre polices ;
  * - le thème était réappliqué au montage, ce qui invalidait le style de tout
  *   le document en pleine hydratation ;
- * - le titre pixel pouvait rester à battre une fois hors de l'écran.
+ * - le titre pixel pouvait rester à battre une fois hors de l'écran ;
+ * - la phrase de l'en-tête changeait toutes les quatre secondes, vue ou non.
  */
 
 const PHONE = { height: 844, width: 390 };
@@ -363,5 +364,36 @@ test.describe("titre pixel hors écran", () => {
       page.locator("[data-slot='pixel-heading']").first()
     ).not.toBeInViewport();
     expect(await countTitleTicks(page, 1000)).toBe(0);
+  });
+});
+
+/** la phrase de l'en-tête : le `<p>` posé à côté du gabarit invisible */
+const SENTENCE = "div:has(> span.invisible[aria-hidden='true']) > p";
+
+test.describe("au repos hors écran", () => {
+  test.use({ viewport: PHONE });
+
+  test("la phrase de l'en-tête attend qu'on revienne", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "load" });
+    const sentence = page.locator(SENTENCE).first();
+
+    // TÉMOIN : à l'écran, la phrase change toutes les quatre secondes
+    const first = (await sentence.textContent()) ?? "";
+    await expect(sentence).not.toHaveText(first, { timeout: 8000 });
+
+    // Hors écran, une seconde laisse finir une bascule déjà partie ; ensuite
+    // plus rien ne bouge, alors qu'une échéance au moins tombe dans l'attente.
+    await page.evaluate(() => window.scrollTo(0, 4000));
+    await page.waitForTimeout(1000);
+    const held = (await sentence.textContent()) ?? "";
+    await page.waitForTimeout(4500);
+    await expect(sentence).not.toBeInViewport();
+    expect(await sentence.textContent()).toBe(held);
+
+    // au retour, la bascule retenue part sans attendre quatre secondes de plus
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(sentence).not.toHaveText(held, { timeout: 2000 });
   });
 });

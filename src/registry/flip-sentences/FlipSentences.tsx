@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -29,6 +29,7 @@ export const FlipSentences = ({
   interval = 4000,
   disableAnimation = false,
 }: FlipSentencesProps) => {
+  const rootRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const sentenceCount = sentences.length;
 
@@ -51,20 +52,68 @@ export const FlipSentences = ({
     const advance = () =>
       setCurrentIndex((prev) => (prev + 1) % sentenceCount);
 
-    let timer = setInterval(advance, interval);
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let isOnScreen = true;
+    let isFlipHeld = false;
 
-    const handleVisibility = () => {
+    const isWatched = () => isOnScreen && !document.hidden;
+
+    const stop = () => {
       clearInterval(timer);
-      if (!document.hidden) {
+      timer = undefined;
+    };
+
+    // Une bascule qui arrive à échéance sans personne pour la voir est
+    // RETENUE, et le minuteur s'arrête : hors de l'écran, la phrase changeait
+    // toutes les quatre secondes pour rien. À l'écran, le rythme est intact.
+    const start = () => {
+      stop();
+      timer = setInterval(() => {
+        if (isWatched()) {
+          advance();
+          return;
+        }
+
+        isFlipHeld = true;
+        stop();
+      }, interval);
+    };
+
+    // au retour, la bascule retenue part tout de suite et le rythme reprend
+    const resume = () => {
+      if (isFlipHeld && isWatched()) {
+        isFlipHeld = false;
         advance();
-        timer = setInterval(advance, interval);
+        start();
       }
     };
 
+    const handleVisibility = () => {
+      if (document.hidden) {
+        stop();
+        isFlipHeld = true;
+        return;
+      }
+
+      resume();
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      // plusieurs changements peuvent arriver dans un seul rappel : seul le
+      // dernier dit où en est le composant
+      isOnScreen = entries.at(-1)?.isIntersecting ?? true;
+      resume();
+    });
+
+    if (rootRef.current) {
+      observer.observe(rootRef.current);
+    }
     document.addEventListener("visibilitychange", handleVisibility);
+    start();
 
     return () => {
-      clearInterval(timer);
+      stop();
+      observer.disconnect();
       document.removeEventListener(
         "visibilitychange",
         handleVisibility
@@ -86,7 +135,10 @@ export const FlipSentences = ({
   }
 
   return (
-    <div className={cn("relative overflow-hidden", className)}>
+    <div
+      className={cn("relative overflow-hidden", className)}
+      ref={rootRef}
+    >
       <AnimatePresence mode="wait">
         <motion.p
           animate="animate"
