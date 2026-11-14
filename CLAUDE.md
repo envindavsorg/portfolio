@@ -107,7 +107,7 @@ src/app/
 │   ├── not-found.tsx
 │   ├── og/page.tsx                # Capture page for OG images (noindex, used by capture scripts)
 │   └── (content)/
-│       ├── layout.tsx             # Site chrome: NavBar, Footer, Particles
+│       ├── layout.tsx             # Site chrome: NavBar, Footer, Particles (from 768px)
 │       ├── (root)/page.tsx        # Homepage (/) + _components/ sections
 ├── en/                            # ENGLISH tree — thin wrappers re-exporting the FR pages
 │   ├── layout.tsx                 # Root layout EN (html lang="en")
@@ -122,9 +122,9 @@ src/app/
 │   │                              # /certifications.md, /uses.md, /now.md
 │   ├── (content)/blog.mdx/[slug]/ # Served at /<category>/<slug>.mdx via rewrites (FR)
 │   └── (content)/blog.en.mdx/…    # Served at /en/<category>/<slug>.mdx (EN)
-├── api/                           # og (ImageResponse), rss, rss/[category],
-│                                  # rss/tag/[tag], feed.json (JSON Feed 1.1),
-│                                  # vcard, health
+├── api/                           # og (ImageResponse), rss, rss/en, rss/[category],
+│                                  # rss/tag/[tag], feed.json + feed.en.json
+│                                  # (JSON Feed 1.1), vcard, health
 ├── global-not-found.tsx           # 404 for unmatched URLs (own <html>)
 ├── sitemap.ts                     # FR + EN URLs with hreflang alternates
 ├── manifest.ts / robots.ts
@@ -183,6 +183,19 @@ src/app/
 - Metadata: `createMetadata({ locale, path, ... })` in `src/lib/metadata.ts`
   builds canonical + hreflang alternates. `path` is ALWAYS the unprefixed
   route (e.g. `/articles`); locale handles the `/en` prefix.
+- Titles go through ONE template, `TITLE_TEMPLATE` in `metadata.ts`
+  (`%s — <full name>`), set by `createRootMetadata` for both trees — the name is
+  not translated. NO nested layout may declare its own `title`: a layout-level
+  template REPLACES the root one. The two writings layouts did, and 134 of the
+  136 sitemap titles ended with a generic suffix instead of the name. A page
+  passes its bare title; only the homepage leaves the template, through
+  `absoluteTitle` (it would read "florin cuzeac — florin cuzeac"), while
+  `og:title` and `twitter:title` keep `title`. `homeIdentity(jobTitle, bio)`
+  composes the homepage title and description from strings the page already
+  shows. The EN homepage reads its messages with an explicit `{ locale: "en" }`:
+  `metadata` is evaluated at module load, before the layout has set the locale
+  of the request. `authors` and `creator` are the full name, not the GitHub
+  username.
 - MDX content is bilingual: FR files in `src/content/<category>/`, EN
   translations in `src/content/<category>/en/<slug>.mdx`. A missing EN file
   falls back to FR and the page shows a `WritingsLocaleNotice`. The `tags`
@@ -242,6 +255,27 @@ src/app/
   Hover is NOT carried by the background: `bg-accent2` alone measured 1.035:1,
   and in light theme `--accent2` cannot darken — the brand blue sits at 4.51:1 on
   it. Use the underline / border, never `hover:text-theme` on a hovered row.
+- The cover (`cover/Cover.tsx`, `src/hooks/useGreetingsCarousel.ts`) advances its
+  greeting loop only while it is on screen and the tab is visible; a step that
+  falls due off-screen is HELD and runs on return. `autoPlay` is separate from
+  embla's `loop` on purpose: under `prefers-reduced-motion` the greeting is
+  rendered already written (the `capture` path, remounted by key) and does not
+  advance by itself, while previous/next still cycle — `MotionConfig
+  reducedMotion="user"` does NOT cover `pathLength`. The three `CarouselItem`
+  share one box (`h-20 sm:h-30`): the greetings differ in height, and a viewport
+  resized per greeting shifted the layout every five seconds.
+- What hydrates late reserves its box first. `Marquee` carries `min-h-12` (the
+  size of a `MarqueeItem`): react-fast-marquee renders nothing on the server, and
+  the stack section grew 96px after hydration (CLS 0.111 on a deep link to
+  `/#my-experiences`). The homepage article cards declare the REAL 6016×3388 of
+  the banner files, as `components/blog/ArticleItem.tsx` does (2800×1280
+  reserved a box 33px too low per row), and their `sizes` is
+  `(max-width: 640px) 100vw, 372px`: the column caps the card, not the window.
+- `DotPattern` without `glow` is ONE SVG `<pattern>` (three nodes, present in the
+  server HTML, no measuring, no resize listener). The Motion circle per dot
+  exists only in the `glow` branch, which no caller uses today — do not go back
+  to one component per dot for a static grid (close to 900 circles on the
+  homepage).
 - End-of-content blocks (series, topics, related) go through `WritingsPanel`
   (20px heading, no second side border); `WritingsPrevNext` is the bottom
   previous/next, in the same order as the top-bar arrows and ←/→.
@@ -256,7 +290,12 @@ src/app/
   ITSELF against a root whose top sits one pixel below the sticky line (read
   from the computed `top`, which is in rem). Two earlier sentinel-based versions
   were each wrong by one edge; `e2e/titles.spec.ts` scrolls by wheel steps, both
-  ways, to keep it honest.
+  ways, to keep it honest. The swap itself measures nothing: `TextAnimate` takes
+  `presenceMode` (`popLayout` by default, `sync` here), and `TITLE_SWAP` in
+  `Panel.tsx` takes every child of the `<h2>` but the last out of flow with CSS.
+  `popLayout` measured the outgoing copy and injected a `<style>` into `<head>`
+  on every swap, mid-scroll, for eleven headers. Both copies are still mounted
+  together during the swap — the converging wait of the spec relies on it.
 
 **RSC boundary pattern**: `Feature.tsx` (async RSC shell fetching data) +
 `FeatureContent.tsx` (`'use client'` receiving data as props).
@@ -363,7 +402,10 @@ chunk yields two entries for one transfer, which reported 1340 KiB instead of 65
 personal data (name, bio, social links, work history, CV info). Never
 hardcode personal data elsewhere. French display strings shown in the UI go
 through Paraglide messages; `global.ts` stays the FR source for
-metadata/OG/llms routes.
+metadata/OG/llms routes. Employers in structured data are NOT read from
+`GLOBAL_DATA.WORK.jobs` but from `EXPERIENCES` (the homepage `content.ts`):
+only the latter carries periods, and it already is the source of the CV.
+`WORK.jobs` is read by the vCard route alone.
 
 `src/data/uses.ts` backs `/uses` and its text mirror, under one rule: **only
 what the repository proves**. Every entry lines up with `package.json`, a
@@ -410,14 +452,45 @@ the component registry:
   would pull the whole MDX graph into the test run.
 - `related.ts` - related-post scoring by shared tags
 - `feed.ts` / `feed-routes.ts` - RSS 2.0 + JSON Feed 1.1 serialisation and the
-  shared response helpers
+  shared response helpers. The English tree has its OWN feeds, `/api/rss/en` (a
+  static segment, which wins over `[category]`) and `/api/feed.en.json`; there
+  are no per-category English feeds, and `feedAlternates("en")` advertises only
+  those two. `FeedMeta.language` is what prefixes the item links with `/en` —
+  not a second parameter, so a feed declared `en` cannot link to French pages —
+  and `homeUrl` is `/en` WITHOUT a trailing slash (`/en/` is a 308). Feed tags
+  are labels (`tagLabel`) in the language of the file served. JSON Feed items
+  carry `content_text` (1.1 requires it or `content_html`) and `image` when the
+  frontmatter has one; the feed declares `icon` and `favicon`.
+  `feedTitle(locale, feed)` in `metadata.ts` is the title both the `<head>` and
+  the feed itself use
+- `feed-path.ts` - `rssFeedPath(locale)`, the "all content" feed of the language
+  on screen. The navbar icon and the footer link both read it: the footer
+  hard-coded `/api/rss` and opened the French feed from `/en`. A module of its
+  own because the navbar is a client component and `feed.ts` imports the tags
+- `content-dates.ts` - `latestUpdate`, shared by `sitemap.ts` and the homepage
+  `ProfilePage.dateModified`, so both give the same date. Never date structured
+  data with `dayjs()` on a revalidated page: the value moved every hour with no
+  content changing, and contradicted the `lastmod` of the same URL
+- `json-ld.ts` / `breadcrumb-json-ld.ts` - the site graph and the node of a
+  content page. `getPageJsonLd` gives that node an `@id` (`<url>#article`),
+  `mainEntityOfPage`, `publisher`, `wordCount` and `timeRequired`; a component
+  is a `TechArticle`, articles and tools are `BlogPosting`. `keywords` are
+  `tagLabel(tag, fileLocale)`, and the fallback image is the SAME URL as
+  `og:image` (both from `contentOgImageParams` in `metadata.ts`). In the Person
+  node a job without `period.end` goes under `worksFor`, the others under
+  `alumniOf`. The breadcrumb has its own module because a CLIENT component
+  emits it; `breadcrumbHref` strips the trailing slash `localizeHref("/")`
+  produces (`/en/`, a 308) — `next/link` does that itself, a bare `<a>` does not
 - `github-stats.ts` - language aggregation across repos (forks excluded). Owns
   `DEFAULT_LANGUAGE_COLOR`, shared with `repos.ts` so the same language never
   gets two different dots
 - `og.ts` - social-card identity per page type: family, palette, badge wording,
   truncation and title sizing. Badge contrast is asserted with the site's own
   `contrast.ts` — an OG image is never scanned by axe, which is precisely why the
-  pairs are measured (the first ones sat at 3.95:1)
+  pairs are measured (the first ones sat at 3.95:1). A tenth page type, `page`
+  (badge "page", the writing family and palette), serves the pages that belong
+  to no section: `/cv`, `/uses`, `/now`, `/weight`, `/search`, tags and series.
+  Only the articles index is `blog` — the CV card used to carry the "blog" badge
 - `showcase.ts` - which projects and roles get their own page, in what order, and
   the previous/next pair. The `id` in the data IS the slug: it is identical in both
   locales, so a shared URL lands on the same item — the tag lesson applied. The
@@ -508,7 +581,8 @@ the `Function` constructor for the CSP), `src/data/uses.test.ts`,
 `src/components/markdown/component-docs.test.ts`,
 `src/components/utils/plural.test.ts`. In `src/lib/`,
 `functions.test.ts` pins the localized date format, `toc.test.ts` the grouping,
-`content.test.ts` the reading time over the whole corpus.
+`content.test.ts` the reading time over the whole corpus, `metadata.test.ts`
+the title template in both locales and the homepage's way out of it.
 
 End-to-end tests (Playwright, `e2e/`):
 
@@ -523,7 +597,15 @@ End-to-end tests (Playwright, `e2e/`):
 - `search.spec.ts` - ⌘K palette: shortcuts, full-text match on body-only words,
   diacritic-insensitivity, navigation, EN index
 - `feeds.spec.ts` - RSS/JSON Feed shape, per-category filtering, escaping, and the
-  plain-text mirror in both languages
+  plain-text mirror in both languages. Its English block starts from the
+  `<link rel="alternate">` a `/en` page DECLARES, then reads what is served
+  behind them: the language, `/en` links, the same items as the French feed
+- `seo.spec.ts` - what the site says about itself to machines, read in the
+  SERVED HTML: every sitemap URL carries the name exactly once in its `<title>`,
+  the homepage introduces itself in the language of its tree, its `ProfilePage`
+  date equals the sitemap `lastmod`, the Person has a single current employer,
+  an English article publishes English `keywords`, the English breadcrumb
+  reaches `/en` without a redirect, and `/favicon.ico` is an icon
 - `reading.spec.ts` - related posts, ToC (the panel under 1280px, the rail
   above), ←/→ navigation, progress bar, back to top, tablist keyboard contract
 - `utils-tools.spec.ts` / `utils-tools-2.spec.ts` - the eight `/utils` tools
@@ -553,13 +635,16 @@ End-to-end tests (Playwright, `e2e/`):
   marker exists in the package)
 - `routes.spec.ts` - every sitemap `<loc>` and hreflang answers, rendered internal
   links answer, a 404 comes back in the language of its URL with one `<h1>` and no
-  horizontal overflow, and the footer leads to the pages nothing else links to
+  horizontal overflow, the footer leads to the pages nothing else links to, and
+  its RSS link — like the navbar's — opens the feed of the page's language
 - `titles.spec.ts` - homepage section titles stay visible, and their sticky form
   follows the scroll position by wheel steps in both directions
 - `budget.spec.ts` - JS, font and CSS weight ceilings measured in the browser, plus
   the font-preload count. It runs with service workers BLOCKED: a response
   served through the site's own service worker reports a negative body size to
-  Playwright, so every lazily loaded chunk was being subtracted from the total
+  Playwright, so every lazily loaded chunk was being subtracted from the total.
+  Its `waitForBackdrop` COPIES the mount condition of `Particles.tsx` — change
+  both together — and each `POIDS` line ends with `particules=oui|non`
 
 Watch out for three selector traps: Next.js always mounts an empty
 `<div role="alert">` route announcer (scope to `p[role="alert"]`), an article
@@ -578,6 +663,14 @@ was true from mount and every click in the first ~0.4s was dropped in silence
 now limits the guard to real transitions. `e2e/playground.spec.ts` clicks at
 exactly those delays; do not "simplify" it into a single click after
 `networkidle`, which is what hid the bug in the first place.
+
+What a page does when nobody touches it is measured with CDP
+`Performance.getMetrics` (`TaskDuration` over 5-second windows) plus
+instrumented `requestAnimationFrame` / interval counts. On a shared machine only
+the COUNTS are reliable, and a saturated scroll cannot show a time gain. One
+loop is left running on purpose: `PixelHeading` ticks every 50 ms (`autoPlay`)
+for as long as a title is on screen — that is the heading's design, and
+changing it is the owner's call, not a performance fix.
 
 ### Admin space (`/admin`)
 
@@ -679,7 +772,32 @@ falling back to zeroed GitHub widgets rather than failing.
   `u2 is not iterable`, so cards use no raster image at all. A failed render falls
   back to a card that IGNORES the requested title, so a broken font silently
   serves one identical image for the whole site: `e2e/og.spec.ts` compares bytes
-  across titles and types to catch exactly that
+  across titles and types to catch exactly that. The footer of the homepage card
+  falls back to `m.user_job_title` in the REQUESTED locale; the fallback is
+  decided in the route's `GET`, not in `HomeCard` — a route has no ambient locale
+- **Favicon**: `public/favicon.ico` is a copy of
+  `public/favicons/favicon-light.ico`, for clients that never read the `<head>`
+  (a feed reader, a tab opened on a feed or a text mirror): `/favicon.ico`
+  answered 404 with a 40 KB page. The per-theme `<link>` icons are unchanged.
+  `apple-touch-icon.png` is 512×512 and declared as such
+- **Images**: in Next 16, `priority` on `next/image` only emits the preload. An
+  LCP image needs `fetchPriority="high"` written explicitly (`Header.tsx`;
+  `PortalImage` sets it whenever `priority` is passed)
+- **Particles** (`src/components/blocks/Particles.tsx`): the canvas is NOT
+  mounted under 768px. It mounts only while
+  `(min-width: 768px) and (prefers-reduced-motion: no-preference)` matches — the
+  query is followed, not read once — and on a device with more than two cores.
+  Under 768px the column fills the screen: a full-screen DPR-3 canvas was
+  repainted sixty times a second for about ten one-pixel dots. Never wait for
+  `#tsparticles` at phone width. The count is capped: `particles.number.limit`
+  in `delete` mode at `CLICK_HEADROOM` (3) times the density — a click pushes
+  two particles and `outModes: "out"` recycled them forever. tsParticles scales
+  the limit by the same area factor as `value`, and a limit BELOW `value`
+  reduces the initial count: keep the multiple above 1
+- **Footer clock**: `FooterClock` ticks only while its root is on screen and the
+  document is visible, and sets the time once before it resumes. It re-rendered
+  every second on every page, footer off-screen or tab in the background. The
+  server placeholder is still replaced at mount
 - **Sound**: `src/lib/sound-manager.ts` plays sounds on certain interactions
 - **CV delivery**: PDF emailed via Resend with React Email template.
   `@react-email/components` is DEPRECATED upstream with nowhere to migrate to —
@@ -734,7 +852,9 @@ falling back to zeroed GitHub widgets rather than failing.
   desktop « accueil » link go through `NavBarIntentLink`, which prefetches the
   homepage on intent only — hover or focus. It is the heaviest page of the site
   and was downloaded on every page view (54 KiB of RSC, then its chunks). RSS
-  and llms.txt are plain `<a>`: their targets are route handlers.
+  and llms.txt are plain `<a>`: their targets are route handlers. The RSS one
+  opens the feed of the current language, through `rssFeedPath` — the rule the
+  footer link shares.
   `NavBarTooltip` labels the icon-only buttons with their accessible name, never
   a second wording. `isRouteActive(link, pathname)` takes the UNPREFIXED route
   and `isHomePath` recognises `/` and `/en` — never compare `pathname === "/"`.
