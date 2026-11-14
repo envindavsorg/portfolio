@@ -17,6 +17,7 @@ import {
   Heading,
   Prose,
 } from "@/components/primitives/Typography";
+import type { ContentLocale } from "@/lib/content";
 import { rehypeAddQueryParams } from "@/lib/rehype-add-query-params";
 import { rehypeComponent } from "@/lib/rehype-component";
 import { rehypeNpmCommand } from "@/lib/rehype-npm-command";
@@ -26,7 +27,9 @@ import {
 } from "@/lib/rehype-shiki-contrast";
 import { remarkAlert } from "@/lib/remark-alert";
 import { remarkCodeImport } from "@/lib/remark-code-import";
+import { remarkFrenchSpacing } from "@/lib/remark-french-spacing";
 import { cn } from "@/lib/utils";
+import { getLocale } from "@/paraglide/runtime";
 
 import { Divider } from "../base/Divider";
 import {
@@ -286,6 +289,25 @@ const options: MDXRemoteProps["options"] = {
   },
 };
 
+/**
+ * Les mêmes options, plus les espaces insécables du français.
+ *
+ * Deux objets et non un plugin qui lirait la locale : `options` est construit
+ * une fois au niveau du module, alors que la locale n'existe que le temps d'une
+ * requête. En dernier, pour passer après `remarkAlert` qui lit encore le
+ * marqueur `[!NOTE]` dans le texte.
+ */
+const frenchOptions: MDXRemoteProps["options"] = {
+  ...options,
+  mdxOptions: {
+    ...options?.mdxOptions,
+    remarkPlugins: [
+      ...(options?.mdxOptions?.remarkPlugins ?? []),
+      remarkFrenchSpacing,
+    ],
+  },
+};
+
 interface MDXProps {
   code: string;
   isDivider?: boolean;
@@ -298,6 +320,12 @@ interface MDXProps {
    * articles. Voir `utils-widgets.ts`.
    */
   components?: MDXRemoteProps["components"];
+  /**
+   * La langue du CONTENU, quand elle diffère de celle de la page : un article
+   * sans traduction est servi en français sous /en. Par défaut, celle de la
+   * page — dans l'arbre français, le contenu est toujours français.
+   */
+  locale?: ContentLocale;
 }
 
 /**
@@ -334,12 +362,13 @@ export const Mdx = ({
   code,
   components: extra,
   isDivider = true,
+  locale = getLocale(),
 }: MDXProps) => (
   <>
     <Prose className={LONGFORM_CLASSNAME} data-longform>
       <MDXRemote
         components={extra ? { ...components, ...extra } : components}
-        options={options}
+        options={locale === "fr" ? frenchOptions : options}
         source={code}
       />
     </Prose>

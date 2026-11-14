@@ -7,9 +7,11 @@ import { Label } from "@/components/base/Label";
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
 import { Textarea } from "@/components/primitives/Textarea";
+import { isPlural } from "@/components/utils/plural";
 import type { DiffLine } from "@/lib/diff";
 import { diffLines, MAX_LINES } from "@/lib/diff";
 import { m } from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 
 const ROW_STYLES: Record<DiffLine["type"], string> = {
   added: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
@@ -22,6 +24,9 @@ const ROW_SIGNS: Record<DiffLine["type"], string> = {
   equal: " ",
   removed: "-",
 };
+
+const pluralSuffix = (count: number): string =>
+  isPlural(count, getLocale()) ? "s" : "";
 
 export const DiffViewer = () => {
   const [left, setLeft] = useState("");
@@ -71,16 +76,21 @@ export const DiffViewer = () => {
       {hasInput && (
         <div className="flex flex-wrap items-center gap-2">
           <Badge className="lowercase" variant="primary">
-            {m.utils_diff_stat_added({ count: result.stats.added })}
+            {m.utils_diff_stat_added({
+              count: result.stats.added,
+              plural: pluralSuffix(result.stats.added),
+            })}
           </Badge>
           <Badge className="lowercase">
             {m.utils_diff_stat_removed({
               count: result.stats.removed,
+              plural: pluralSuffix(result.stats.removed),
             })}
           </Badge>
           <Badge className="lowercase">
             {m.utils_diff_stat_unchanged({
               count: result.stats.unchanged,
+              plural: pluralSuffix(result.stats.unchanged),
             })}
           </Badge>
 

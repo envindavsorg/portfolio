@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 
 import { CardLink } from "@/components/base/CardLink";
-import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Prose } from "@/components/primitives/Typography";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
@@ -44,8 +43,18 @@ export const UtilsCard = ({
         </h2>
         {item.metadata.isNew && (
           <div className="flex items-center gap-x-2">
-            <PulsatingCircle />
-            <span className="text-sm text-theme max-md:hidden">
+            {/* Un point fixe, et non `PulsatingCircle` : neuf outils sur
+                quatorze portent ce badge, donc neuf animations infinies sur
+                une seule page, que `prefers-reduced-motion` n'arrêtait pas.
+                Le battement reste à ce qui est « en cours » — le poste
+                actuel, un test de débit qui tourne. */}
+            <span
+              aria-hidden
+              className="size-2 shrink-0 rounded-full bg-theme"
+            />
+            {/* `sr-only` et non `hidden` sous md : un point seul ne dit rien
+                à un lecteur d'écran */}
+            <span className="text-sm text-theme max-md:sr-only">
               {m.utils_card_new_badge()}
             </span>
           </div>

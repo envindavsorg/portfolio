@@ -238,7 +238,9 @@ test.describe("testeur d'expressions régulières", () => {
       .fill("2026-08 puis 2027-01");
 
     await expect(
-      widget(page, "regex-tester").getByText("2 correspondance(s)")
+      widget(page, "regex-tester").getByText("2 correspondances", {
+        exact: true,
+      })
     ).toBeVisible();
 
     const marks = widget(page, "regex-tester").locator("mark");
@@ -275,7 +277,9 @@ test.describe("testeur d'expressions régulières", () => {
 
     // sans avancée forcée de lastIndex, la page figerait ici
     await expect(
-      widget(page, "regex-tester").getByText(/correspondance\(s\)/iu)
+      widget(page, "regex-tester").getByText(
+        /^\d+ correspondances?$/iu
+      )
     ).toBeVisible();
     await expect(
       widget(page, "regex-tester").locator("mark")
@@ -289,14 +293,18 @@ test.describe("testeur d'expressions régulières", () => {
     await page.getByLabel("texte à analyser").fill("ABC abc");
 
     await expect(
-      widget(page, "regex-tester").getByText("1 correspondance(s)")
+      widget(page, "regex-tester").getByText("1 correspondance", {
+        exact: true,
+      })
     ).toBeVisible();
 
     await page
       .getByRole("button", { exact: true, name: "i" })
       .click();
     await expect(
-      widget(page, "regex-tester").getByText("2 correspondance(s)")
+      widget(page, "regex-tester").getByText("2 correspondances", {
+        exact: true,
+      })
     ).toBeVisible();
   });
 

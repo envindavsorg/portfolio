@@ -2,18 +2,52 @@
 
 import Link from "next/link";
 import type { ChangeEvent } from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Label } from "@/components/base/Label";
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
 import { Input } from "@/components/primitives/Input";
 import { useSearchIndex } from "@/hooks/useSearchIndex";
+import type { SearchDoc } from "@/lib/search";
 import { SCORES, searchDocs } from "@/lib/search";
+import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const QUERY_KEY = "q";
+const MAX_TOPICS = 8;
+
+/**
+ * Les sujets les plus fréquents de l'index, pour l'état de départ.
+ *
+ * Ce sont les libellés déjà traduits que porte l'index, pas les clés : un clic
+ * lance une recherche sur le mot affiché, il ne mène pas à /tags/<slug>. À
+ * égalité, l'ordre alphabétique — sinon l'ordre dépendrait de celui de l'index.
+ */
+const topTopics = (docs: SearchDoc[]): string[] => {
+  const counts = new Map<string, number>();
+
+  for (const doc of docs) {
+    for (const tag of doc.tags) {
+      counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+  }
+
+  return [...counts]
+    .sort(
+      ([tagA, countA], [tagB, countB]) =>
+        countB - countA || tagA.localeCompare(tagB)
+    )
+    .slice(0, MAX_TOPICS)
+    .map(([tag]) => tag);
+};
 
 /**
  * Lit la requête depuis le fragment d'URL.
@@ -41,6 +75,7 @@ const writeQuery = (query: string) => {
 
 export const SearchResults = () => {
   const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // l'index arrive par fetch et non plus en prop : la page l'embarquait DEUX
   // fois dans son payload, une pour la navbar et une pour les résultats
@@ -76,9 +111,55 @@ export const SearchResults = () => {
   const handleClear = useCallback(() => {
     setQuery("");
     writeQuery("");
+    // le bouton disparaît avec la requête : sans cela le focus retomberait sur
+    // <body>, et il faudrait retraverser la page pour retaper quelque chose
+    inputRef.current?.focus();
   }, []);
 
+  const handleTopic = useCallback(
+    (topic: string, fromKeyboard: boolean) => {
+      setQuery(topic);
+      writeQuery(topic);
+      // au clavier seulement : sur un téléphone, rendre le focus au champ
+      // ouvrirait le clavier virtuel par-dessus les résultats demandés
+      if (fromKeyboard) {
+        inputRef.current?.focus();
+      }
+    },
+    []
+  );
+
+  const topics = useMemo(() => topTopics(docs), [docs]);
+
   const trimmed = query.trim();
+  const isEmpty = Boolean(trimmed) && hits.length === 0;
+
+  /**
+   * UN message par état, et dans la région live. « 0 résultat » était suivi
+   * d'un second paragraphe « aucun résultat pour… » : la même information deux
+   * fois à l'écran, et seule la moins utile des deux était annoncée.
+   *
+   * Les trois cas sans résultat restent distincts : « rien trouvé » affiché
+   * pendant le chargement, ou pire à la place d'une panne, ferait croire à une
+   * requête sans résultat alors que rien n'a encore été cherché.
+   */
+  const status = (() => {
+    if (!trimmed) {
+      return m.search_prompt();
+    }
+    if (hits.length > 0) {
+      return m.search_result_count({
+        count: hits.length,
+        plural: hits.length > 1 ? "s" : "",
+      });
+    }
+    if (failed) {
+      return m.search_unavailable();
+    }
+    return loading
+      ? m.search_loading()
+      : m.search_empty({ query: trimmed });
+  })();
 
   return (
     <div
@@ -94,13 +175,17 @@ export const SearchResults = () => {
             id="search-input"
             onChange={handleChange}
             placeholder={m.search_input_placeholder()}
+            ref={inputRef}
             spellCheck={false}
             type="search"
             value={query}
           />
-          <Button onClick={handleClear} size="sm" variant="outline">
-            {m.search_clear()}
-          </Button>
+          {/* rien à effacer dans un champ vide */}
+          {query && (
+            <Button onClick={handleClear} size="sm" variant="outline">
+              {m.search_clear()}
+            </Button>
+          )}
         </div>
 
         <p className="text-muted-foreground text-xs">
@@ -112,26 +197,47 @@ export const SearchResults = () => {
           une personne qui utilise un lecteur d'écran tape sans aucun retour */}
       <p
         aria-live="polite"
-        className="px-3 text-muted-foreground text-sm"
+        className={cn(
+          "px-3 text-sm",
+          !isEmpty && "text-muted-foreground"
+        )}
         role="status"
       >
-        {trimmed
-          ? m.search_result_count({ count: hits.length })
-          : m.search_prompt()}
+        {status}
       </p>
 
-      {/* distinguer les trois cas : « rien trouvé » affiché pendant le
-          chargement, ou pire à la place d'une panne, ferait croire à une requête
-          sans résultat alors que rien n'a encore été cherché */}
-      {trimmed && hits.length === 0 && (loading || failed) && (
-        <p className="px-3 text-sm">
-          {failed ? m.search_unavailable() : m.search_loading()}
-        </p>
+      {/* l'état de départ n'était qu'une phrase au-dessus d'une colonne vide.
+          Des boutons et non une liste de liens : `[data-slot] li` désigne les
+          résultats, dans la page comme dans ses tests */}
+      {!trimmed && topics.length > 0 && (
+        <fieldset className="flex flex-wrap items-center gap-2 px-3">
+          <legend className="mb-2 text-muted-foreground text-xs">
+            {m.writings_tag_links_title()}
+          </legend>
+          {topics.map((topic) => (
+            <button
+              className="cursor-pointer rounded-full border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme"
+              key={topic}
+              // `detail` vaut 0 quand le clic vient d'Entrée ou d'Espace
+              onClick={(event) =>
+                handleTopic(topic, event.detail === 0)
+              }
+              type="button"
+            >
+              {topic}
+            </button>
+          ))}
+        </fieldset>
       )}
 
-      {trimmed && hits.length === 0 && !(loading || failed) && (
+      {isEmpty && !(loading || failed) && (
         <p className="px-3 text-sm">
-          {m.search_empty({ query: trimmed })}
+          <Link
+            className="underline underline-offset-4 hover:text-theme"
+            href={localizeHref("/tags")}
+          >
+            {m.writings_tag_all_topics()}
+          </Link>
         </p>
       )}
 

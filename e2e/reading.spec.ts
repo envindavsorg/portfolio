@@ -65,36 +65,101 @@ test.describe("contenus liés", () => {
   });
 });
 
+/**
+ * Un sommaire par largeur : le panneau dépliable sous 1280px, un rail permanent
+ * dans la marge au-delà. Les deux mènent à la section choisie ; le rail montre
+ * en plus où l'on se trouve, ce que le panneau — refermé à chaque clic — ne
+ * pouvait pas faire.
+ */
+const TOC_NAME = /points importants sur cette page/iu;
+
+const followEntry = async (page: Page) => {
+  const entry = page.getByRole("link", {
+    name: /^4\. mes règles$/iu,
+  });
+  await expect(entry).toBeVisible();
+
+  const href = await entry.getAttribute("href");
+  expect(href).toMatch(/^#/u);
+
+  await entry.click();
+  // le navigateur encode les accents dans le fragment
+  await expect
+    .poll(() => decodeURIComponent(page.url()))
+    .toContain(href ?? "");
+
+  // sélecteur par attribut : l'ancre commence par un chiffre et contient un
+  // accent, ce qui n'est pas un sélecteur d'identifiant CSS valide
+  const target = page.locator(`[id="${(href ?? "").slice(1)}"]`);
+  await expect(target).toBeInViewport();
+
+  return entry;
+};
+
 test.describe("sommaire", () => {
-  test("liste les sections et amène à celle qu'on choisit", async ({
+  test.describe("sous 1280px", () => {
+    test.use({ viewport: { height: 800, width: 1024 } });
+
+    test("liste les sections et amène à celle qu'on choisit", async ({
+      page,
+    }) => {
+      await page.goto(NEWER);
+
+      // un seul sommaire à la fois : le rail n'existe pas à cette largeur
+      await expect(
+        page.getByRole("navigation", { name: TOC_NAME })
+      ).toHaveCount(0);
+
+      const trigger = page.getByRole("button", { name: TOC_NAME });
+      await expect(trigger).toBeVisible();
+      await trigger.click();
+
+      await followEntry(page);
+    });
+  });
+
+  test("reste dans la marge sur grand écran et suit la lecture", async ({
     page,
   }) => {
     await page.goto(NEWER);
 
-    const trigger = page.getByRole("button", {
-      name: /points importants sur cette page/iu,
-    });
-    await expect(trigger).toBeVisible();
-    await trigger.click();
+    // un seul sommaire à la fois : plus de panneau à déplier
+    await expect(
+      page.getByRole("button", { name: TOC_NAME })
+    ).toHaveCount(0);
 
-    const entry = page.getByRole("link", {
-      name: /^4\. mes règles$/iu,
-    });
-    await expect(entry).toBeVisible();
+    const rail = page.getByRole("navigation", { name: TOC_NAME });
+    await expect(rail).toBeVisible();
 
-    const href = await entry.getAttribute("href");
-    expect(href).toMatch(/^#/u);
+    // dans la marge, pas par-dessus la colonne de lecture
+    const railBox = await rail.boundingBox();
+    const bodyBox = await page
+      .locator("[data-longform]")
+      .boundingBox();
+    expect(railBox?.x ?? 0).toBeGreaterThanOrEqual(
+      (bodyBox?.x ?? 0) + (bodyBox?.width ?? 0)
+    );
 
-    await entry.click();
-    // le navigateur encode les accents dans le fragment
-    await expect
-      .poll(() => decodeURIComponent(page.url()))
-      .toContain(href ?? "");
+    const entry = await followEntry(page);
 
-    // sélecteur par attribut : l'ancre commence par un chiffre et contient un
-    // accent, ce qui n'est pas un sélecteur d'identifiant CSS valide
-    const target = page.locator(`[id="${(href ?? "").slice(1)}"]`);
-    await expect(target).toBeInViewport();
+    // la section atteinte est marquée, et le rail est toujours là
+    await expect(entry).toHaveAttribute("aria-current", "location");
+    await expect(rail).toBeVisible();
+    await expect(rail.locator("[aria-current]")).toHaveCount(1);
+  });
+
+  test("le rail s'efface une fois l'article passé", async ({
+    page,
+  }) => {
+    await page.goto(NEWER);
+
+    const rail = page.getByRole("navigation", { name: TOC_NAME });
+    await expect(rail).toBeVisible();
+
+    // le pied de page partage la colonne : sans cela le sommaire restait
+    // affiché à côté de lui, traversé par ses lignes
+    await page.getByRole("contentinfo").scrollIntoViewIfNeeded();
+    await expect(rail).toBeHidden();
   });
 });
 

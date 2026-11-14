@@ -69,10 +69,40 @@ test.describe("page de recherche", () => {
       "tailwind"
     );
 
-    await page.getByRole("button", { name: "effacer" }).click();
+    const clear = page.getByRole("button", { name: "effacer" });
+    await clear.click();
 
     await expect(page.getByLabel("votre recherche")).toHaveValue("");
     await expect.poll(() => page.url()).not.toContain("q=");
+
+    // le bouton n'existe que s'il y a quelque chose à effacer ; il disparaît
+    // sous le focus, qui doit donc revenir au champ et non tomber sur <body>
+    await expect(clear).toHaveCount(0);
+    await expect(page.getByLabel("votre recherche")).toBeFocused();
+  });
+
+  test("propose des sujets tant que le champ est vide", async ({
+    page,
+  }) => {
+    await page.goto("/search");
+
+    const topics = page
+      .getByRole("group", { name: "sujets abordés" })
+      .getByRole("button");
+    await expect(topics.first()).toBeVisible();
+    expect(await topics.count()).toBeLessThanOrEqual(8);
+
+    // textContent et non innerText : le libellé est mis en minuscules par CSS,
+    // le champ reçoit le mot tel qu'il est dans l'index
+    const topic = (await topics.first().textContent()) ?? "";
+    await topics.first().click();
+
+    await expect(page.getByLabel("votre recherche")).toHaveValue(
+      topic
+    );
+    await expect.poll(() => page.url()).toContain("q=");
+    await expect(page.locator(`${results} li`).first()).toBeVisible();
+    await expect(topics).toHaveCount(0);
   });
 
   test("annonce le nombre de résultats dans une région live", async ({
@@ -84,7 +114,8 @@ test.describe("page de recherche", () => {
     await expect(status).toContainText(/tapez quelque chose/iu);
 
     await page.getByLabel("votre recherche").fill("css");
-    await expect(status).toContainText(/résultat\(s\)/iu);
+    // le compteur s'accorde : plus de « résultat(s) »
+    await expect(status).toHaveText(/^\d+ résultats?$/iu);
   });
 
   test("le dit quand rien ne correspond", async ({ page }) => {
@@ -95,9 +126,17 @@ test.describe("page de recherche", () => {
       .fill("motclequinexistenullepart");
 
     await expect(page.locator(`${results} li`)).toHaveCount(0);
+    // une seule fois, et dans la région live : « 0 résultat » suivi d'un
+    // second « aucun résultat » disait deux fois la même chose
     await expect(
       page.getByText(/aucun résultat pour/iu)
     ).toBeVisible();
+    await expect(page.getByRole("status")).toHaveText(
+      /aucun résultat pour/iu
+    );
+    await expect(
+      page.getByRole("link", { name: "voir tous les sujets" })
+    ).toHaveAttribute("href", "/tags");
   });
 
   test("un résultat mène au contenu", async ({ page }) => {
@@ -184,8 +223,10 @@ test.describe("fautes de frappe", () => {
     await page.goto("/search#q=tailwnid");
     await page.waitForLoadState("networkidle");
 
+    // `li a` et non `a` : l'état « aucun résultat » porte désormais un lien
+    // vers /tags, qui aurait suffi à faire passer ce test sans aucun résultat
     const hits = page.locator(
-      "[data-slot='search-results'] a[href^='/']"
+      "[data-slot='search-results'] li a[href^='/']"
     );
     await expect(hits.first()).toBeVisible();
   });

@@ -8,6 +8,7 @@ import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
 import { Input } from "@/components/primitives/Input";
 import { Textarea } from "@/components/primitives/Textarea";
+import { isPlural } from "@/components/utils/plural";
 import type { RegexFlag } from "@/lib/regex-tester";
 import {
   applyReplacement,
@@ -21,6 +22,7 @@ import {
 } from "@/lib/regex-tester";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 
 const FLAG_LABELS: Record<RegexFlag, () => string> = {
   g: m.utils_regex_flag_g,
@@ -193,9 +195,15 @@ export const RegexTester = () => {
         <>
           <div className="flex flex-wrap items-center gap-2">
             <Badge className="lowercase" variant="primary">
-              {m.utils_regex_match_count({
-                count: run.matches.length,
-              })}
+              {/* deux messages : « match » fait « matches », un suffixe
+                  commun aux deux langues ne suffit pas */}
+              {isPlural(run.matches.length, getLocale())
+                ? m.utils_regex_match_count_plural({
+                    count: run.matches.length,
+                  })
+                : m.utils_regex_match_count_singular({
+                    count: run.matches.length,
+                  })}
             </Badge>
             {run.truncated && (
               <span className="text-destructive text-xs">
