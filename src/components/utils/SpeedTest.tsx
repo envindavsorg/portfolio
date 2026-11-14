@@ -10,6 +10,7 @@ import {
   ItemContent,
   ItemTitle,
 } from "@/components/primitives/Item";
+import { pauseOffScreen } from "@/lib/pause-off-screen";
 import { cn } from "@/lib/utils";
 import * as m from "@/paraglide/messages";
 
@@ -128,11 +129,14 @@ const PulsatingCircle = memo(({ status }: { status: TestStatus }) => {
 
   return (
     <span className="relative flex items-center justify-center">
+      {/* même règle que `PulsatingCircle` : le halo ne bat ni pour qui a
+          demandé moins d'animations, ni hors de l'écran */}
       <span
         className={cn(
-          "absolute inline-flex size-3 animate-ping rounded-full opacity-50",
+          "absolute inline-flex size-3 rounded-full opacity-50 motion-safe:animate-ping",
           color
         )}
+        ref={pauseOffScreen}
       />
       <span
         className={cn(
