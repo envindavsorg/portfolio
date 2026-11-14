@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import GLOBAL_DATA from "@/data/global";
-import { selectRepos } from "@/lib/repos";
+import { fullRows, selectRepos } from "@/lib/repos";
 import * as m from "@/paraglide/messages";
 
 import { RepoCard } from "./RepoCard";
@@ -40,7 +40,8 @@ import { RepoCard } from "./RepoCard";
  */
 export const Repos = async () => {
   const { repositories } = await getGitHubData();
-  const repos = selectRepos(repositories);
+  // deux colonnes dès `sm` : voir `sm:grid-cols-2` plus bas
+  const repos = fullRows(selectRepos(repositories), 2);
 
   return (
     <Panel id="my-repos">
