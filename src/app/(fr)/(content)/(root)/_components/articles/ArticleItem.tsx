@@ -40,6 +40,25 @@ const ANIMATED_BANNER = /-demo\/[^/]+\.(?:gif|webp)$/u;
 const isAnimated = (src: string): boolean =>
   ANIMATED_BANNER.test(src);
 
+/**
+ * Deux cartes par rangée dans une colonne plafonnée à 768 px : la bannière ne
+ * dépasse jamais 372 px (343 mesurés), quelle que soit la fenêtre. `50vw`
+ * faisait choisir la variante de 1920 px sur un écran de 1440 px en DPR 2, là
+ * où 686 px suffisent — 15 à 17 Ko par carte au lieu de 6.
+ */
+const CARD_SIZES = "(max-width: 640px) 100vw, 372px";
+
+/**
+ * Les dimensions RÉELLES des bannières d'articles, comme la carte de /articles
+ * (`blog/ArticleItem.tsx`). Le couple 2800 × 1280 (2,19:1) réservait ici aussi
+ * une boîte trop basse pour une image en 1,78:1 : chaque rangée de cartes
+ * grandissait de 33 px à l'arrivée de ses images, tardives par construction
+ * (`loading="lazy"`) — sur un lien direct vers `/#my-experiences`, 66 px de
+ * décalage après le défilement, une fois sur trois.
+ */
+const BANNER_WIDTH = 6016;
+const BANNER_HEIGHT = 3388;
+
 /** l'anneau de la bannière prend l'accent quand la carte est survolée */
 const BANNER_RING =
   "ring-1 ring-border ring-offset-3 ring-offset-background transition-shadow group-hover/row:ring-theme/60";
@@ -73,13 +92,13 @@ export const ArticleItem = ({
               "w-full rounded-md object-cover object-center sm:min-h-40",
               BANNER_RING
             )}
-            height={1280}
+            height={BANNER_HEIGHT}
             quality={90}
             // pas de `priority` : ces cartes sont sous la ligne de flottaison,
             // et cinq preloads prioritaires concurrents retardaient le LCP
-            sizes="(max-width: 640px) 100vw, 50vw"
+            sizes={CARD_SIZES}
             src={metadata.image}
-            width={2800}
+            width={BANNER_WIDTH}
           />
         )}
 
@@ -93,7 +112,7 @@ export const ArticleItem = ({
             )}
             height={630}
             quality={75}
-            sizes="(max-width: 640px) 100vw, 50vw"
+            sizes={CARD_SIZES}
             src={metadata.bannerLight}
             unoptimized={isAnimated(metadata.bannerLight)}
             width={1200}
@@ -110,7 +129,7 @@ export const ArticleItem = ({
             )}
             height={630}
             quality={75}
-            sizes="(max-width: 640px) 100vw, 50vw"
+            sizes={CARD_SIZES}
             src={metadata.bannerDark}
             unoptimized={isAnimated(metadata.bannerDark)}
             width={1200}

@@ -38,6 +38,10 @@ export const Header = ({
         >
           <Image
             alt={USER.fullName}
+            // `priority` ne pose plus que le préchargement (Next 16) : sans cet
+            // attribut, le portrait — l'élément LCP de l'accueil à 1440 px —
+            // attend derrière les polices et les scripts sur un vrai réseau
+            fetchPriority="high"
             height={1404}
             priority
             sizes="(max-width: 640px) 104px, (max-width: 1024px) 128px, 160px"

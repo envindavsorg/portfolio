@@ -349,6 +349,10 @@ export const PortalImage = forwardRef<
         data-open={dataOpen}
         data-slot="dialog-image"
         decoding="async"
+        // `priority` ne pose plus que le préchargement (Next 16) : la première
+        // vignette de /articles, élément LCP de la page, n'était marquée nulle
+        // part comme prioritaire
+        fetchPriority={props.priority ? "high" : undefined}
         layoutId={`dialog-image-${id}-${wrapperLayoutId}`}
         // `loading="eager"` faisait telecharger toutes les vignettes de la liste
         // des le chargement ; `rel` n'est de toute facon pas valide sur <img>.
