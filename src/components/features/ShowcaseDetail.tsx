@@ -4,12 +4,19 @@ import Link from "next/link";
 import { Divider } from "@/components/base/Divider";
 import { PanelContent } from "@/components/base/Panel";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
+import {
+  ShowcaseDashItem,
+  ShowcaseDashList,
+} from "@/components/features/ShowcaseDashList";
+import { ShowcaseSection } from "@/components/features/ShowcaseSection";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
+import { PageColumn } from "@/components/layout/PageColumn";
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
 import { Tag } from "@/components/primitives/Tag";
 import { Prose } from "@/components/primitives/Typography";
 import type { BreadcrumbEntry } from "@/lib/breadcrumb-json-ld";
+import { cn } from "@/lib/utils";
 
 /**
  * La fiche d'une réalisation : un projet ou un poste.
@@ -51,6 +58,24 @@ interface ShowcaseDetailProps {
   };
 }
 
+/**
+ * Les deux moitiés du précédent / suivant, sur le modèle de celui des écrits :
+ * une grille à filet plutôt que deux cartouches arrondis de la largeur de leur
+ * texte, qui flottaient chacun contre un bord de la colonne.
+ *
+ * Le survol souligne le titre d'un filet d'accent — pas de `text-theme` : en
+ * clair, le bleu sur le fond de survol est à la limite du seuil AA.
+ */
+const NEIGHBOUR_LINK = cn(
+  "group flex flex-col gap-y-1 px-3 py-4",
+  "transition-colors hover:bg-accent2 focus-visible:bg-accent2"
+);
+
+const NEIGHBOUR_TITLE = cn(
+  "text-balance font-medium text-sm sm:text-base",
+  "decoration-1 decoration-theme underline-offset-4 group-hover:underline"
+);
+
 export const ShowcaseDetail = ({
   breadcrumb,
   highlights,
@@ -61,134 +86,138 @@ export const ShowcaseDetail = ({
   skills,
   title,
 }: ShowcaseDetailProps) => (
-  <div className="screen-line-after min-h-svh">
-    <WritingsBreadcrumb items={breadcrumb} />
+  <PageColumn>
+    <div className="screen-line-after min-h-svh">
+      <WritingsBreadcrumb items={breadcrumb} />
 
-    <Divider before={false} border={false} type="half" />
+      <Divider before={false} border={false} type="half" />
 
-    <div className="flex w-full items-center justify-between gap-x-3 px-3">
-      <PixelHeading
-        autoPlay
-        className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
-        mode="multi"
-      >
-        {title}
-      </PixelHeading>
-    </div>
+      <div className="flex w-full items-center justify-between gap-x-3 px-3">
+        <PixelHeading
+          autoPlay
+          className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
+          mode="multi"
+        >
+          {title}
+        </PixelHeading>
+      </div>
 
-    <PanelContent className="screen-line-after screen-line-before">
-      <Prose>{lead}</Prose>
+      <PanelContent className="screen-line-after screen-line-before">
+        <Prose>{lead}</Prose>
 
-      {meta && meta.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          {meta.map((item) => (
-            <Badge className="lowercase" key={item}>
-              {item}
-            </Badge>
-          ))}
-        </div>
+        {meta && meta.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            {meta.map((item) => (
+              <Badge className="lowercase" key={item}>
+                {item}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </PanelContent>
+
+      {highlights.items.length > 0 && (
+        <ShowcaseSection title={highlights.title}>
+          <ShowcaseDashList>
+            {highlights.items.map((item) => (
+              <ShowcaseDashItem
+                className="text-muted-foreground"
+                key={item}
+              >
+                {item}
+              </ShowcaseDashItem>
+            ))}
+          </ShowcaseDashList>
+        </ShowcaseSection>
       )}
-    </PanelContent>
 
-    {highlights.items.length > 0 && (
-      <section className="screen-line-after px-3 py-4">
-        <h2 className="pb-2 font-semibold text-sm lowercase">
-          {highlights.title}
-        </h2>
+      {skills.items.length > 0 && (
+        <ShowcaseSection title={skills.title}>
+          <ul className="flex flex-wrap gap-1.5">
+            {skills.items.map((skill) => (
+              <li className="flex" key={skill}>
+                <Tag>{skill}</Tag>
+              </li>
+            ))}
+          </ul>
+        </ShowcaseSection>
+      )}
 
-        <ul className="space-y-1.5">
-          {highlights.items.map((item) => (
-            <li
-              className="flex gap-x-2 text-muted-foreground text-sm"
-              key={item}
+      <div className="screen-line-after flex flex-wrap items-center gap-2 p-3">
+        {link && (
+          <Button asChild size="sm" variant="outline">
+            <a
+              href={link.href}
+              rel="noopener noreferrer"
+              target="_blank"
             >
-              {/* la puce est décorative : l'élément de liste porte déjà la
-                  sémantique, la répéter à l'oral n'apprend rien */}
-              <span aria-hidden="true" className="text-theme">
-                --
-              </span>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
+              {link.label}
+              <ArrowSquareOutIcon aria-hidden="true" />
+            </a>
+          </Button>
+        )}
 
-    {skills.items.length > 0 && (
-      <section className="screen-line-after px-3 py-4">
-        <h2 className="pb-2 font-semibold text-sm lowercase">
-          {skills.title}
-        </h2>
-
-        <ul className="flex flex-wrap gap-1.5">
-          {skills.items.map((skill) => (
-            <li className="flex" key={skill}>
-              <Tag>{skill}</Tag>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    <div className="screen-line-before flex flex-wrap items-center gap-2 p-3">
-      {link && (
         <Button asChild size="sm" variant="outline">
-          <a
-            href={link.href}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {link.label}
-            <ArrowSquareOutIcon aria-hidden="true" />
-          </a>
+          <Link href={navigation.all.href}>
+            {navigation.all.label}
+          </Link>
         </Button>
+      </div>
+
+      {(navigation.previous || navigation.next) && (
+        <>
+          <nav
+            aria-label={navigation.all.label}
+            className="screen-line-after grid sm:grid-cols-2"
+          >
+            {navigation.previous && (
+              <Link
+                className={cn(
+                  NEIGHBOUR_LINK,
+                  "sm:border-edge sm:border-r"
+                )}
+                href={navigation.previous.href}
+              >
+                <span className="text-muted-foreground text-xs lowercase">
+                  <span aria-hidden="true">← </span>
+                  {navigation.previousLabel}
+                </span>
+                <span className={NEIGHBOUR_TITLE}>
+                  {navigation.previous.label}
+                </span>
+              </Link>
+            )}
+
+            {/* « suivant » garde la moitié droite même quand il est seul :
+                sans cela il saute à gauche sur la première fiche et le repère
+                de position disparaît */}
+            {navigation.next && (
+              <Link
+                className={cn(
+                  NEIGHBOUR_LINK,
+                  "sm:col-start-2 sm:items-end sm:text-right",
+                  // un seul filet entre les deux moitiés, quel que soit le
+                  // lien présent : vertical dès 640 px, horizontal en dessous
+                  navigation.previous
+                    ? "max-sm:border-edge max-sm:border-t"
+                    : "sm:border-edge sm:border-l"
+                )}
+                href={navigation.next.href}
+              >
+                <span className="text-muted-foreground text-xs lowercase">
+                  {navigation.nextLabel}
+                  <span aria-hidden="true"> →</span>
+                </span>
+                <span className={NEIGHBOUR_TITLE}>
+                  {navigation.next.label}
+                </span>
+              </Link>
+            )}
+          </nav>
+
+          <Divider before={false} border={false} type="half" />
+        </>
       )}
-
-      <Button asChild size="sm" variant="outline">
-        <Link href={navigation.all.href}>{navigation.all.label}</Link>
-      </Button>
     </div>
-
-    {(navigation.previous || navigation.next) && (
-      <nav
-        aria-label={navigation.all.label}
-        className="screen-line-before flex flex-wrap items-stretch justify-between gap-2 p-3"
-      >
-        {/* les deux extrémités gardent leur place même quand une seule fiche
-            voisine existe : sans cela, « suivant » saute à gauche sur la
-            dernière fiche et le repère de position disparaît */}
-        {navigation.previous ? (
-          <Link
-            className="group flex max-w-[48%] flex-col gap-y-0.5 rounded-xl border border-input px-3 py-2 transition-colors hover:border-theme"
-            href={navigation.previous.href}
-          >
-            <span className="text-muted-foreground text-xs lowercase">
-              {navigation.previousLabel}
-            </span>
-            <span className="truncate font-medium text-sm group-hover:text-theme">
-              {navigation.previous.label}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-
-        {navigation.next ? (
-          <Link
-            className="group flex max-w-[48%] flex-col items-end gap-y-0.5 rounded-xl border border-input px-3 py-2 text-right transition-colors hover:border-theme"
-            href={navigation.next.href}
-          >
-            <span className="text-muted-foreground text-xs lowercase">
-              {navigation.nextLabel}
-            </span>
-            <span className="truncate font-medium text-sm group-hover:text-theme">
-              {navigation.next.label}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-    )}
-  </div>
+  </PageColumn>
 );

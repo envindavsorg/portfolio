@@ -585,8 +585,12 @@
     color: #000000 !important;
   }
 
-  /* le chrome du site n'apporte rien sur papier */
+  /* le chrome du site n'apporte rien sur papier. `header` en toutes lettres :
+     aucun élément ne porte `data-slot="navbar-wrapper"`, donc seul le menu
+     (`nav`) partait — le logo et les six boutons de la barre s'imprimaient en
+     tête du CV */
   [data-slot="navbar-wrapper"],
+  header,
   nav,
   footer,
   [data-slot="reading-progress"],

@@ -89,6 +89,18 @@ test.describe("page CV", () => {
     expect(en).not.toContain("Lead Développeur Front-End");
   });
 
+  /**
+   * Le bouton de retour pointait sur `/` en dur : depuis /en/cv, un lecteur
+   * anglophone repartait sur l'accueil français.
+   */
+  test("/en/cv ramène à l'accueil anglais", async ({ page }) => {
+    await page.goto("/en/cv");
+
+    const cv = page.locator('[data-slot="cv"]');
+    await expect(cv.locator('a[href="/en"]')).toHaveCount(1);
+    await expect(cv.locator('a[href="/"]')).toHaveCount(0);
+  });
+
   test("le CV est annoncé au sitemap dans les deux langues", async ({
     request,
   }) => {
@@ -110,6 +122,9 @@ test.describe("page CV", () => {
     // globals.css ne contenait AUCUNE règle d'impression : la navbar, le pied de
     // page et les particules sortaient sur le papier
     await expect(page.locator("nav").first()).toBeHidden();
+    // `nav` seul ne suffisait pas : la règle visait un `data-slot` que la barre
+    // ne porte pas, et son logo et ses boutons s'imprimaient en tête du CV
+    await expect(page.locator("header").first()).toBeHidden();
     await expect(
       page.locator('[data-slot="cv-actions"]')
     ).toBeHidden();

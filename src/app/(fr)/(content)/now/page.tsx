@@ -6,7 +6,13 @@ import { EXPERIENCES } from "@/app/(fr)/(content)/(root)/_components/experiences
 import { Divider } from "@/components/base/Divider";
 import { PanelContent } from "@/components/base/Panel";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
+import {
+  ShowcaseDashItem,
+  ShowcaseDashList,
+} from "@/components/features/ShowcaseDashList";
+import { ShowcaseSection } from "@/components/features/ShowcaseSection";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
+import { PageColumn } from "@/components/layout/PageColumn";
 import { Badge } from "@/components/primitives/Badge";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory, toContentLocale } from "@/lib/content";
@@ -90,125 +96,113 @@ export const NowPage = ({
   );
 
   return (
-    <div className="screen-line-after min-h-svh">
-      <WritingsBreadcrumb
-        items={[
-          {
-            href: localizeHref("/"),
-            label: m.writings_breadcrumb_home(undefined, options),
-          },
-          { label: m.now_breadcrumb(undefined, options) },
-        ]}
-      />
+    <PageColumn>
+      <div className="screen-line-after min-h-svh">
+        <WritingsBreadcrumb
+          items={[
+            {
+              href: localizeHref("/"),
+              label: m.writings_breadcrumb_home(undefined, options),
+            },
+            { label: m.now_breadcrumb(undefined, options) },
+          ]}
+        />
 
-      <Divider before={false} border={false} type="half" />
+        <Divider before={false} border={false} type="half" />
 
-      <div className="flex w-full items-center justify-between gap-x-3 px-3">
-        <PixelHeading
-          autoPlay
-          className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
-          mode="multi"
-        >
-          {m.now_heading(undefined, options)}
-        </PixelHeading>
-      </div>
-
-      <PanelContent className="screen-line-after screen-line-before">
-        <Prose>{m.now_intro(undefined, options)}</Prose>
-        <Prose>{m.now_derived_note(undefined, options)}</Prose>
-        <div className="pt-1">
-          <Badge className="lowercase" variant="primary">
-            {m.now_updated_on(
-              { date: formatDate(freshness, "LL") },
-              options
-            )}
-          </Badge>
+        <div className="flex w-full items-center justify-between gap-x-3 px-3">
+          <PixelHeading
+            autoPlay
+            className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
+            mode="multi"
+          >
+            {m.now_heading(undefined, options)}
+          </PixelHeading>
         </div>
-      </PanelContent>
 
-      {role && (
-        <section className="screen-line-after px-3 py-4">
-          <h2 className="pb-2 font-semibold text-sm lowercase">
-            {m.now_section_work(undefined, options)}
-          </h2>
+        <PanelContent className="screen-line-after screen-line-before">
+          <Prose>{m.now_intro(undefined, options)}</Prose>
+          <Prose>{m.now_derived_note(undefined, options)}</Prose>
+          <div className="pt-1">
+            <Badge className="lowercase" variant="primary">
+              {m.now_updated_on(
+                { date: formatDate(freshness, "LL") },
+                options
+              )}
+            </Badge>
+          </div>
+        </PanelContent>
 
-          <p className="text-muted-foreground text-sm">
-            {m.now_current_role(
-              {
-                company: role.company,
-                start: role.period.split(" — ")[0],
-                title: role.title,
-              },
-              options
-            )}
-          </p>
+        {role && (
+          <ShowcaseSection
+            title={m.now_section_work(undefined, options)}
+          >
+            <p className="text-muted-foreground text-sm">
+              {m.now_current_role(
+                {
+                  company: role.company,
+                  start: role.period.split(" — ")[0],
+                  title: role.title,
+                },
+                options
+              )}
+            </p>
 
-          <p className="pt-2 text-sm">
-            <Link
-              className="underline decoration-dotted underline-offset-4 transition-colors hover:text-theme"
-              href={localizeHref(`/experience/${role.id}`)}
-            >
-              {m.showcase_all_experience(undefined, options)}
-            </Link>
-          </p>
-        </section>
-      )}
-
-      {articles.length > 0 && (
-        <section className="screen-line-after px-3 py-4">
-          <h2 className="pb-2 font-semibold text-sm lowercase">
-            {m.now_section_building(undefined, options)}
-          </h2>
-
-          <p className="pb-2 text-muted-foreground text-sm">
-            {m.now_latest_articles(undefined, options)}
-          </p>
-
-          <ul className="flex flex-col gap-y-1.5">
-            {articles.map((article) => (
-              <li
-                className="flex items-baseline gap-x-2 text-sm"
-                key={article.slug}
+            <p className="pt-2 text-sm">
+              <Link
+                className="underline decoration-dotted underline-offset-4 transition-colors hover:text-theme"
+                href={localizeHref(`/experience/${role.id}`)}
               >
-                <span aria-hidden="true" className="text-theme">
-                  --
-                </span>
+                {m.showcase_all_experience(undefined, options)}
+              </Link>
+            </p>
+          </ShowcaseSection>
+        )}
 
-                <Link
-                  className="underline decoration-dotted underline-offset-4 transition-colors hover:text-theme"
-                  href={localizeHref(`/articles/${article.slug}`)}
-                >
-                  {article.metadata.title}
-                </Link>
+        {articles.length > 0 && (
+          <ShowcaseSection
+            title={m.now_section_building(undefined, options)}
+          >
+            <p className="pb-2 text-muted-foreground text-sm">
+              {m.now_latest_articles(undefined, options)}
+            </p>
 
-                <span className="text-muted-foreground text-xs tabular-nums">
-                  {formatDate(article.metadata.createdAt, "LL")}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+            <ShowcaseDashList>
+              {articles.map((article) => (
+                <ShowcaseDashItem key={article.slug}>
+                  <Link
+                    className="underline decoration-dotted underline-offset-4 transition-colors hover:text-theme"
+                    href={localizeHref(`/articles/${article.slug}`)}
+                  >
+                    {article.metadata.title}
+                  </Link>{" "}
+                  <span className="ms-1 whitespace-nowrap text-muted-foreground text-xs tabular-nums">
+                    {formatDate(article.metadata.createdAt, "LL")}
+                  </span>
+                </ShowcaseDashItem>
+              ))}
+            </ShowcaseDashList>
+          </ShowcaseSection>
+        )}
 
-      {latestCert && (
-        <section className="screen-line-after px-3 py-4">
-          <h2 className="pb-2 font-semibold text-sm lowercase">
-            {m.now_section_learning(undefined, options)}
-          </h2>
-
-          <p className="text-muted-foreground text-sm">
-            {m.now_latest_cert(
-              {
-                date: formatDate(latestCert.issueDate, "LL"),
-                issuer: latestCert.issuer,
-                name: latestCert.title,
-              },
-              options
-            )}
-          </p>
-        </section>
-      )}
-    </div>
+        {latestCert && (
+          <ShowcaseSection
+            title={m.now_section_learning(undefined, options)}
+          >
+            <p className="text-muted-foreground text-sm">
+              {m.now_latest_cert(
+                {
+                  date: formatDate(latestCert.issueDate, "LL"),
+                  issuer: latestCert.issuer,
+                  name: latestCert.title,
+                },
+                options
+              )}
+            </p>
+          </ShowcaseSection>
+        )}
+      </div>
+    </PageColumn>
   );
 };
 

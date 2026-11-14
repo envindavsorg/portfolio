@@ -109,6 +109,58 @@ test.describe("fiches de projet et de poste", () => {
   });
 });
 
+/**
+ * Ces pages vivent hors du groupe de routes des écrits, donc hors de sa mise en
+ * page : elles s'étalaient sur toute la largeur de la fenêtre, sous une barre de
+ * navigation de 768 px, sans les deux filets verticaux de la grille.
+ *
+ * La référence est la colonne d'une page d'écrits, pas un nombre : si la
+ * colonne du site change de largeur, les deux bougent ensemble.
+ */
+test.describe("la colonne du site", () => {
+  test("les pages annexes tiennent dans la colonne des écrits", async ({
+    page,
+  }) => {
+    const column = async (path: string) => {
+      await page.goto(path);
+      const box = await page
+        .locator("main > :first-child")
+        .boundingBox();
+
+      return box
+        ? { width: Math.round(box.width), x: Math.round(box.x) }
+        : null;
+    };
+
+    const reference = await column("/articles");
+    const viewport = page.viewportSize();
+
+    // le témoin : une colonne aussi large que la fenêtre rendrait toutes les
+    // égalités qui suivent vraies pour rien
+    expect(reference?.width ?? 0).toBeGreaterThan(0);
+    expect(reference?.width ?? 0).toBeLessThan(
+      (viewport?.width ?? 0) - 100
+    );
+
+    for (const path of [
+      "/projects",
+      PROJECT,
+      "/experience",
+      ROLE,
+      "/uses",
+      "/now",
+      "/weight",
+      "/cv",
+      "/en/cv",
+    ]) {
+      expect(
+        await column(path),
+        `${path} sort de la colonne`
+      ).toEqual(reference);
+    }
+  });
+});
+
 test.describe("le poids de ce site", () => {
   test("publie une ligne par page mesurée", async ({ page }) => {
     await page.goto("/weight");
@@ -135,6 +187,55 @@ test.describe("le poids de ce site", () => {
     await expect(
       page.getByText(/JS.*Kio.*plafond.*Kio/u)
     ).toBeVisible();
+  });
+
+  // « Kio » est l'abréviation française : la page anglaise l'affichait au
+  // milieu d'une phrase anglaise
+  test("/en/weight compte en KiB", async ({ page }) => {
+    await page.goto("/en/weight");
+
+    await expect(
+      page.getByText(/JS.*KiB.*ceiling.*KiB/u)
+    ).toBeVisible();
+    await expect(page.getByText(/Kio/u)).toHaveCount(0);
+  });
+
+  /**
+   * Huit colonnes ne tiennent pas dans 390 px : le tableau défile dans son
+   * cadre, et le total — le chiffre qu'on vient chercher — partait hors champ
+   * sans que rien ne le signale.
+   */
+  test("à 390 px, la page et le total restent à l'écran", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 800, width: 390 });
+    await page.goto("/weight");
+
+    const frame = page.locator("[data-slot='table-container']");
+
+    // le témoin : si le tableau tenait dans son cadre, tout y serait visible
+    // et les assertions qui suivent ne prouveraient rien
+    expect(
+      await frame.evaluate(
+        (node) => node.scrollWidth > node.clientWidth
+      )
+    ).toBe(true);
+
+    const box = await frame.boundingBox();
+    const cells = page.locator("tbody tr:first-child td");
+    const path = await cells.first().boundingBox();
+    const total = await cells.last().boundingBox();
+
+    expect(box).not.toBeNull();
+    expect(path).not.toBeNull();
+    expect(total).not.toBeNull();
+
+    if (box && path && total) {
+      expect(path.x).toBeGreaterThanOrEqual(box.x - 1);
+      expect(total.x + total.width).toBeLessThanOrEqual(
+        box.x + box.width + 1
+      );
+    }
   });
 });
 

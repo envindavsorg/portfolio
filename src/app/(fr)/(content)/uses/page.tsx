@@ -3,7 +3,13 @@ import type { Metadata } from "next";
 import { Divider } from "@/components/base/Divider";
 import { PanelContent } from "@/components/base/Panel";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
+import {
+  ShowcaseDashItem,
+  ShowcaseDashList,
+} from "@/components/features/ShowcaseDashList";
+import { ShowcaseSection } from "@/components/features/ShowcaseSection";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
+import { PageColumn } from "@/components/layout/PageColumn";
 import { Prose } from "@/components/primitives/Typography";
 import { usesGroups } from "@/data/uses";
 import type { AppLocale } from "@/lib/i18n";
@@ -31,75 +37,72 @@ export const UsesPage = ({
   const options = { locale } as const;
 
   return (
-    <div className="screen-line-after min-h-svh">
-      <WritingsBreadcrumb
-        items={[
-          {
-            href: localizeHref("/"),
-            label: m.writings_breadcrumb_home(undefined, options),
-          },
-          { label: m.uses_breadcrumb(undefined, options) },
-        ]}
-      />
+    <PageColumn>
+      <div className="screen-line-after min-h-svh">
+        <WritingsBreadcrumb
+          items={[
+            {
+              href: localizeHref("/"),
+              label: m.writings_breadcrumb_home(undefined, options),
+            },
+            // le libellé du pied de page, seul lien entrant : « outils » était
+            // aussi celui de /utils dans la barre de navigation, juste au-dessus
+            { label: m.uses_heading(undefined, options) },
+          ]}
+        />
 
-      <Divider before={false} border={false} type="half" />
+        <Divider before={false} border={false} type="half" />
 
-      <div className="flex w-full items-center justify-between gap-x-3 px-3">
-        <PixelHeading
-          autoPlay
-          className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
-          mode="multi"
-        >
-          {m.uses_heading(undefined, options)}
-        </PixelHeading>
+        <div className="flex w-full items-center justify-between gap-x-3 px-3">
+          <PixelHeading
+            autoPlay
+            className="text-balance font-extrabold text-[28px] leading-snug sm:text-4xl"
+            mode="multi"
+          >
+            {m.uses_heading(undefined, options)}
+          </PixelHeading>
+        </div>
+
+        <PanelContent className="screen-line-after screen-line-before">
+          <Prose>{m.uses_intro(undefined, options)}</Prose>
+        </PanelContent>
+
+        {usesGroups().map((group) => (
+          <ShowcaseSection
+            data-slot="uses-group"
+            key={group.id}
+            title={group.title(undefined, options)}
+          >
+            <p className="pb-3 text-muted-foreground text-sm">
+              {group.note(undefined, options)}
+            </p>
+
+            {/* deux colonnes dès 640 px : trente noms d'un ou deux mots sur
+                une seule colonne laissaient les trois quarts de la largeur
+                vides. `columns` et non une grille : l'ordre se lit de haut en
+                bas, et celui des langages est un ordre de fréquence. */}
+            <ShowcaseDashList className="sm:columns-2 sm:gap-x-6">
+              {group.items.map((item) => (
+                <ShowcaseDashItem key={item.name}>
+                  {item.link ? (
+                    <a
+                      className="underline decoration-dotted underline-offset-4 transition-colors hover:text-theme"
+                      href={item.link}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    item.name
+                  )}
+                </ShowcaseDashItem>
+              ))}
+            </ShowcaseDashList>
+          </ShowcaseSection>
+        ))}
       </div>
-
-      <PanelContent className="screen-line-after screen-line-before">
-        <Prose>{m.uses_intro(undefined, options)}</Prose>
-      </PanelContent>
-
-      {usesGroups().map((group) => (
-        <section
-          className="screen-line-after px-3 py-4"
-          data-slot="uses-group"
-          key={group.id}
-        >
-          <h2 className="font-semibold text-sm lowercase">
-            {group.title(undefined, options)}
-          </h2>
-
-          <p className="pt-1 pb-3 text-muted-foreground text-sm">
-            {group.note(undefined, options)}
-          </p>
-
-          <ul className="flex flex-col gap-y-1.5">
-            {group.items.map((item) => (
-              <li
-                className="flex items-baseline gap-x-2 text-sm"
-                key={item.name}
-              >
-                <span aria-hidden="true" className="text-theme">
-                  --
-                </span>
-
-                {item.link ? (
-                  <a
-                    className="underline decoration-dotted underline-offset-4 transition-colors hover:text-theme"
-                    href={item.link}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {item.name}
-                  </a>
-                ) : (
-                  item.name
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </div>
+    </PageColumn>
   );
 };
 

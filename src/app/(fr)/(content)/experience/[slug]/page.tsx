@@ -117,7 +117,8 @@ export const ExperienceView = async ({
         items: entry.highlights,
         title: m.showcase_experience_highlights(undefined, options),
       }}
-      lead={`${entry.title} · ${entry.company}`}
+      // l'intitulé seul : l'entreprise est déjà le h1 juste au-dessus
+      lead={entry.title}
       {...(entry.link && {
         link: {
           href: entry.link,

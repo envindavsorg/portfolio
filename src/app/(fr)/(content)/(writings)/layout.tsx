@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type React from "react";
 
-import { Divider } from "@/components/base/Divider";
+import { PageColumn } from "@/components/layout/PageColumn";
 
 export const metadata: Metadata = {
   description:
@@ -17,11 +17,7 @@ type DocsLayoutProps = Readonly<{
 }>;
 
 const WritingsLayout = ({ children }: DocsLayoutProps) => (
-  <div className="mx-auto min-h-svh border-edge border-x md:max-w-3xl">
-    <Divider before={false} border={false} type="half" />
-
-    {children}
-  </div>
+  <PageColumn>{children}</PageColumn>
 );
 
 export default WritingsLayout;
