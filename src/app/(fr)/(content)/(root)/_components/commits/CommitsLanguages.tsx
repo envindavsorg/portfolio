@@ -1,5 +1,5 @@
 import type { LanguageShare } from "@/lib/github-stats";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface CommitsLanguagesProps {
   languages: LanguageShare[];

@@ -15,7 +15,7 @@ import {
 } from "@/components/base/Panel";
 import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { EXPERIENCES } from "./content";

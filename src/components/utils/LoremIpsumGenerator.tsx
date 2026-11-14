@@ -15,7 +15,7 @@ import { InputNumber } from "@/components/primitives/Input";
 import { Textarea } from "@/components/primitives/Textarea";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { generateLoremIpsum } from "@/lib/lorem-ipsum";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const GENERATION_UNITS = [
   "words",

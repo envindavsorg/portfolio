@@ -6,7 +6,7 @@ import type {
 import { CERTS } from "@/app/(fr)/(content)/(root)/_components/certs/content";
 import GLOBAL_DATA from "@/data/global";
 import type { AppLocale } from "@/lib/i18n";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import type { Content } from "./content";
 import { dayjs } from "./functions";

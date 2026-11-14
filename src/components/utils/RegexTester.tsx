@@ -21,7 +21,7 @@ import {
   toSegments,
 } from "@/lib/regex-tester";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 const FLAG_LABELS: Record<RegexFlag, () => string> = {

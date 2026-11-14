@@ -4,7 +4,7 @@ import { useRef } from "react";
 
 import { Rss } from "@/components/motion/Rss";
 import { Button } from "@/components/primitives/Button";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { NavBarTooltip } from "./NavBarTooltip";
 

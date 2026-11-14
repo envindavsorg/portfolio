@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { CardLink } from "@/components/base/CardLink";
 import { Prose } from "@/components/primitives/Typography";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { trackVisit } from "./lib";

@@ -11,7 +11,7 @@ import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import GLOBAL_DATA from "@/data/global";
 import { selectRepos } from "@/lib/repos";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { RepoCard } from "./RepoCard";
 

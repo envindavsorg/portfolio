@@ -9,7 +9,7 @@ import { ColorPicker } from "@/components/blocks/ColorPicker";
 import { Button, CopyButton } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { Lock } from "../motion/Lock";
 import { LockOpen } from "../motion/LockOpen";

@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { Frown } from "@/components/motion/Frown";
 import { Search } from "@/components/motion/Search";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 export const Command = ({
   className,

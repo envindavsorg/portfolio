@@ -9,7 +9,7 @@ import { Badge } from "@/components/primitives/Badge";
 import { PulsatingCircle } from "@/components/primitives/PulsatingCircle";
 import { Tag } from "@/components/primitives/Tag";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { DescriptionCards } from "../shared/DescriptionCards";
 import {

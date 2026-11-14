@@ -1,7 +1,7 @@
 import { InfoIcon } from "@phosphor-icons/react/ssr";
 
 import { PanelContent } from "@/components/base/Panel";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 // bandeau affiché sur les pages EN dont le contenu MDX reste en français
 export const WritingsLocaleNotice = () => (

@@ -11,7 +11,7 @@ import { Panel } from "@/components/base/Panel";
 import { Heart } from "@/components/motion/Heart";
 import GLOBAL_DATA from "@/data/global";
 import { formatDate, formatFromNow } from "@/lib/functions";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { FooterClock } from "./FooterClock";

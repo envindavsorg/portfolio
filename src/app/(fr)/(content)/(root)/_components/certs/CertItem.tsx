@@ -14,7 +14,7 @@ import { Button } from "@/components/primitives/Button";
 import { accessibleName } from "@/lib/accessible-name";
 import { formatDate } from "@/lib/functions";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 import {

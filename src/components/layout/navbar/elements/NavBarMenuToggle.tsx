@@ -2,7 +2,7 @@
 
 import { MenuIcon } from "@/components/layout/navbar/elements/NavBarMenuIcon";
 import { Button } from "@/components/primitives/Button";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { NAVBAR_MENU_ID, useNavBar } from "./NavBarContext";
 

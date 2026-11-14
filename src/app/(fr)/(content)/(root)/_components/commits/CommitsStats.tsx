@@ -1,7 +1,7 @@
 import { Badge } from "@/components/primitives/Badge";
 import { formatDate } from "@/lib/functions";
 import type { ContributionStats } from "@/lib/github-stats";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface CommitsStatsProps {
   stats: ContributionStats;

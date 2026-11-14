@@ -17,7 +17,7 @@ import {
   toHexColor,
 } from "@/lib/contrast";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 type LevelKey = keyof Omit<ContrastVerdict, "ratio">;
 

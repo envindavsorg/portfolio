@@ -10,7 +10,7 @@ import { Button } from "@/components/primitives/Button";
 import { META_THEME_COLORS } from "@/data/theme";
 import useMetaColor from "@/hooks/useMetaColor";
 import { soundManager } from "@/lib/sound-manager";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { NavBarTooltip } from "./NavBarTooltip";
 

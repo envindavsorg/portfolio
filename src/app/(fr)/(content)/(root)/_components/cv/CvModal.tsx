@@ -11,7 +11,7 @@ import {
   DrawerContent,
   DrawerTrigger,
 } from "@/components/primitives/Drawer";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface CvModalProps {
   children: React.ReactNode;

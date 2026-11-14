@@ -10,7 +10,7 @@ import {
 } from "@/components/base/Tooltip";
 import { getMonthLabels } from "@/lib/commits";
 import { formatDate } from "@/lib/functions";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { BLOCK_MARGIN, BLOCK_SIZE } from "./config";
 import { useContributionGraph } from "./Graph";

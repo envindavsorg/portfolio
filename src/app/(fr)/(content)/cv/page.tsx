@@ -22,7 +22,7 @@ import { buildCv } from "@/lib/cv";
 import { formatDate } from "@/lib/functions";
 import type { AppLocale } from "@/lib/i18n";
 import { createMetadata } from "@/lib/metadata";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const pageDescription =

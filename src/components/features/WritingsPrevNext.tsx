@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Divider } from "@/components/base/Divider";
 import type { Content } from "@/lib/content";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 interface WritingsPrevNextProps {

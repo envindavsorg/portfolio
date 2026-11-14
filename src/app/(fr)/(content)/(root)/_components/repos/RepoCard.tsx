@@ -7,7 +7,7 @@ import { Badge } from "@/components/primitives/Badge";
 import { Tag } from "@/components/primitives/Tag";
 import { formatDate } from "@/lib/functions";
 import type { RepoCard as Repo } from "@/lib/repos";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface RepoCardProps {
   repo: Repo;

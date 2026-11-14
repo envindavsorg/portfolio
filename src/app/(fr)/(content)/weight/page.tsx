@@ -33,7 +33,7 @@ import { formatDate } from "@/lib/functions";
 import type { AppLocale, Message } from "@/lib/i18n";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 /**

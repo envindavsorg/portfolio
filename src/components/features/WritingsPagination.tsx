@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import useAnimatedRef from "@/hooks/useAnimatedRef";
 import type { Content } from "@/lib/content";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import {

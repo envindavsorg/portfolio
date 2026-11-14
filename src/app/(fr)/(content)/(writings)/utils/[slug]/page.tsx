@@ -24,7 +24,7 @@ import {
 import { getContentToc } from "@/lib/content-toc";
 import { getPageJsonLd } from "@/lib/json-ld";
 import { createContentMetadata } from "@/lib/metadata";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 export const generateStaticParams = async () => {
   const utils = getContentByCategory("utils");

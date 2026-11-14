@@ -10,7 +10,7 @@ import { Textarea } from "@/components/primitives/Textarea";
 import { isPlural } from "@/components/utils/plural";
 import type { DiffLine } from "@/lib/diff";
 import { diffLines, MAX_LINES } from "@/lib/diff";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 const ROW_STYLES: Record<DiffLine["type"], string> = {

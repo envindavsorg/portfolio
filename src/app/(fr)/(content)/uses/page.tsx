@@ -14,7 +14,7 @@ import { Prose } from "@/components/primitives/Typography";
 import { usesGroups } from "@/data/uses";
 import type { AppLocale } from "@/lib/i18n";
 import { createMetadata } from "@/lib/metadata";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const pageDescription =

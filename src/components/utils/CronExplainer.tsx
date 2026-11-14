@@ -20,7 +20,7 @@ import {
   parseCron,
 } from "@/lib/cron";
 import { formatInZone } from "@/lib/datetime";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 const NEXT_RUN_COUNT = 5;

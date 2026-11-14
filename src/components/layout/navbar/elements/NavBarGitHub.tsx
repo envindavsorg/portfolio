@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { GitHub } from "@/components/motion/GitHub";
 import { Button } from "@/components/primitives/Button";
 import GLOBAL_DATA from "@/data/global";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { NavBarTooltip } from "./NavBarTooltip";
 

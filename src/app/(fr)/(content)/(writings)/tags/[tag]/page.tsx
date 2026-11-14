@@ -18,7 +18,7 @@ import {
   getTagBySlug,
   getTagIndex,
 } from "@/lib/tags";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 /**

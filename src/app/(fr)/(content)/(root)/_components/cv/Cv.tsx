@@ -4,7 +4,7 @@ import {
   PanelHeader,
 } from "@/components/base/Panel";
 import { Prose } from "@/components/primitives/Typography";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 import { CvFooter } from "./CvFooter";

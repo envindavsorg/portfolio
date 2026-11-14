@@ -4,7 +4,7 @@ import { memo } from "react";
 import { Prose } from "@/components/primitives/Typography";
 import type { SendCvFailureReason } from "@/hooks/useEmailForm";
 import { getIntlLocale } from "@/lib/i18n";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface CvErrorProps {
   children?: React.ReactNode;

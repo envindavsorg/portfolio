@@ -7,7 +7,7 @@ import { SearchResults } from "@/components/features/SearchResults";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { Prose } from "@/components/primitives/Typography";
 import { createMetadata } from "@/lib/metadata";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const pageDescription =

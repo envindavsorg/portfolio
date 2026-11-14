@@ -16,7 +16,7 @@ import { NextJSIcon } from "@/components/svgs/stack/Next";
 import { ReactIcon } from "@/components/svgs/stack/React";
 import { TailwindIcon } from "@/components/svgs/stack/Tailwind";
 import { TypeScriptIcon } from "@/components/svgs/stack/TypeScript";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 export interface Stack {

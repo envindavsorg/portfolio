@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Divider } from "@/components/base/Divider";
 import type { Content } from "@/lib/content";
 import { slugifyTag, tagLabel } from "@/lib/tags";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { WritingsPanel } from "./WritingsPanel";

@@ -17,7 +17,7 @@ import {
 } from "@/components/primitives/Drawer";
 import { Kbd, KbdGroup } from "@/components/primitives/Kbd";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface NavBarShortcutsProps {
   /**

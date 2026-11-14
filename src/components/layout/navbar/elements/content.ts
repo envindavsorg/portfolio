@@ -10,7 +10,7 @@ import { Layers } from "@/components/motion/Layers";
 import { Search } from "@/components/motion/Search";
 import { User } from "@/components/motion/User";
 import GLOBAL_DATA from "@/data/global";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import type {
   CommandGroupDef,

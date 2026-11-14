@@ -12,7 +12,7 @@ import {
 import { Particles } from "@/components/blocks/Particles";
 import { TextAnimate } from "@/components/blocks/TextAnimate";
 import { Button } from "@/components/primitives/Button";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 /**

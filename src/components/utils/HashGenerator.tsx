@@ -14,7 +14,7 @@ import {
   randomUuid,
 } from "@/lib/hash";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 export const HashGenerator = () => {
   const [text, setText] = useState("");

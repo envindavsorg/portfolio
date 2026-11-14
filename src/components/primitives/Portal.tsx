@@ -29,7 +29,7 @@ import { RemoveScroll } from "react-remove-scroll";
 
 import useDelay, { useFnDelay } from "@/hooks/useDelay";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { TextAnimate } from "../blocks/TextAnimate";
 import { Eye } from "../motion/Eye";

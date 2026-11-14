@@ -7,7 +7,7 @@ import { Divider } from "@/components/base/Divider";
 import { Label } from "@/components/base/Label";
 import { Button, CopyButton } from "@/components/primitives/Button";
 import { Textarea } from "@/components/primitives/Textarea";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { ArrowDownAtoZ } from "../motion/ArrowDownAtoZ";
 import { ArrowDownZtoA } from "../motion/ArrowDownZtoA";

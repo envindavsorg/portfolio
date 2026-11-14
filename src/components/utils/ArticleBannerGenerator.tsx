@@ -10,7 +10,7 @@ import { Input } from "@/components/primitives/Input";
 import { Slider } from "@/components/primitives/Slider";
 import { Spinner } from "@/components/primitives/Spinner";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 interface PresetBackground {

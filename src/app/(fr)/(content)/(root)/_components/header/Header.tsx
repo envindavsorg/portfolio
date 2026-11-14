@@ -5,7 +5,7 @@ import { FlickeringGrid } from "@/components/blocks/FlickeringGrid";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
 import GLOBAL_DATA from "@/data/global";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { FlipSentences } from "@/registry/flip-sentences";
 
 import { HeaderPronounce } from "./HeaderPronounce";

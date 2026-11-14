@@ -24,7 +24,7 @@ import type {
 import useEmailForm from "@/hooks/useEmailForm";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { accessibleName } from "@/lib/accessible-name";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { CvError } from "./CvError";
 import { CvForm } from "./CvForm";

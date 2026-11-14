@@ -10,7 +10,7 @@ import { Check } from "@/components/motion/Check";
 import { Copy } from "@/components/motion/Copy";
 import { X } from "@/components/motion/X";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 export const buttonVariants = cva(
   [

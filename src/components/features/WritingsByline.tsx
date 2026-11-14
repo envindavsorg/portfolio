@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { Content } from "@/lib/content";
 import { formatDate } from "@/lib/functions";
 import { BASE_URL } from "@/lib/metadata";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 interface WritingsBylineProps {

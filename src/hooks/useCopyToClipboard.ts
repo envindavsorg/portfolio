@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const useCopyToClipboard = (
   initialText = m.utils_copy_button_default()

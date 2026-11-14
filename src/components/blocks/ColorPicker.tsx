@@ -17,7 +17,7 @@ import {
   normalizeColor,
   trimColorString,
 } from "@/lib/palette";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { Check } from "../motion/Check";
 import { ChevronDown } from "../motion/ChevronDown";

@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/functions";
 import { toPlainText } from "@/lib/search";
 import { tagLabel } from "@/lib/tags";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { CardLink } from "../base/CardLink";

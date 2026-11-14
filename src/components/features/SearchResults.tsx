@@ -18,7 +18,7 @@ import { useSearchIndex } from "@/hooks/useSearchIndex";
 import type { SearchDoc } from "@/lib/search";
 import { SCORES, searchDocs } from "@/lib/search";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const QUERY_KEY = "q";

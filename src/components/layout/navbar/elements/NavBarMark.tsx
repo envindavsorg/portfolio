@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import type { ComponentProps } from "react";
 import { forwardRef, useEffect, useRef } from "react";
 
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { isHomePath } from "./functions";

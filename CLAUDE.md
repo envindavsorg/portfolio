@@ -144,7 +144,12 @@ src/app/
 - Plugins are resolved from `./node_modules/@inlang/...` in
   `project.inlang/settings.json`, not from jsdelivr: a network fetch at build time
   is a single point of failure (a 403 there is what silently emptied the bundle).
-- Usage: `import { m } from "@/paraglide/messages"` everywhere;
+- Usage: `import * as m from "@/paraglide/messages"` everywhere — NEVER
+  `import { m }`: that `m` is a namespace object travelling as a value, which
+  the bundler cannot prune, so all 619 messages in both languages shipped on
+  every page (16 to 20 KiB of JS per page; the `zod-config.ts` lesson again).
+  Call sites stay `m.key()`; never pass `m` around or index it (`m[key]`), which
+  defeats the pruning for the whole chunk.
   `localizeHref()` for internal links; `getLocale()` for the current locale.
 - Counts agree: messages take a `{plural}` suffix (`"{count} sujet{plural}"`)
   rather than printing `sujet(s)`. A word that is invariable in one locale gets

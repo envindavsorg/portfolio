@@ -5,7 +5,7 @@ import { Button } from "@/components/primitives/Button";
 import type { Content } from "@/lib/content";
 import { getSeriesNavigation } from "@/lib/series";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { WritingsPanel } from "./WritingsPanel";

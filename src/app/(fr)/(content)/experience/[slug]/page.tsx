@@ -11,7 +11,7 @@ import {
   findBySlug,
   neighbours,
 } from "@/lib/showcase";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 /**

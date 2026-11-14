@@ -12,7 +12,7 @@ import {
   FieldLabel,
 } from "@/components/primitives/Field";
 import { Input } from "@/components/primitives/Input";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 import { PanelContent } from "../../base/Panel";

@@ -10,7 +10,7 @@ import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory, toContentLocale } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { ArticleItem } from "./ArticleItem";

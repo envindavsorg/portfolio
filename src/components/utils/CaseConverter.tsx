@@ -8,7 +8,7 @@ import { CopyButton } from "@/components/primitives/Button";
 import { Textarea } from "@/components/primitives/Textarea";
 import type { CaseFormat } from "@/lib/case";
 import { CASE_FORMATS, convertLines } from "@/lib/case";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const FORMAT_LABELS: Record<CaseFormat, () => string> = {
   camel: m.utils_case_format_camel,

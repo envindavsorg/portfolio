@@ -10,7 +10,7 @@ import type { ContentLocale } from "@/lib/content";
 import { getContentByCategory } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
 import { getTagData } from "@/lib/tags";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { pageDescription, pageTitle, pageType } from "./_constants";
 

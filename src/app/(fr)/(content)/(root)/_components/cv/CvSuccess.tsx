@@ -6,7 +6,7 @@ import Confetti from "react-confetti";
 
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { getIntlLocale } from "@/lib/i18n";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface CvSuccessProps {
   children?: React.ReactNode;

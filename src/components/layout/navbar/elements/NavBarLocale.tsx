@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/primitives/Button";
 import { accessibleName } from "@/lib/accessible-name";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { NavBarTooltip } from "./NavBarTooltip";

@@ -18,7 +18,7 @@ import useActiveItem from "@/hooks/useActiveItem";
 import type { TocGroup } from "@/lib/toc";
 import { groupTocItems } from "@/lib/toc";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface ConnectorProps {
   direction: "up" | "down";

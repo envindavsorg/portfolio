@@ -10,7 +10,7 @@ import {
   aggregateLanguages,
   getContributionStats,
 } from "@/lib/github-stats";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { ROW_META } from "../shared/row";
 import { CommitsContent } from "./CommitsContent";

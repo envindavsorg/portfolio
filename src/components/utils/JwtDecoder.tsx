@@ -10,7 +10,7 @@ import { Textarea } from "@/components/primitives/Textarea";
 import { formatDate } from "@/lib/functions";
 import type { JwtErrorCode } from "@/lib/jwt";
 import { decodeJwt } from "@/lib/jwt";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const ERROR_MESSAGES: Record<JwtErrorCode, () => string> = {
   empty: () => "",

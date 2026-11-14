@@ -16,7 +16,7 @@ import { toExperienceEntry } from "@/lib/cv";
 import type { AppLocale } from "@/lib/i18n";
 import { createMetadata } from "@/lib/metadata";
 import { experiencePages } from "@/lib/showcase";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const pageDescription =

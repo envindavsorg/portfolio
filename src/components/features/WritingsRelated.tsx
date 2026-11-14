@@ -5,7 +5,7 @@ import { Badge } from "@/components/primitives/Badge";
 import type { Content } from "@/lib/content";
 import { getRelatedContent } from "@/lib/related";
 import { tagLabel } from "@/lib/tags";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { WritingsPanel } from "./WritingsPanel";

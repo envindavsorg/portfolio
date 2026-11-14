@@ -7,7 +7,7 @@ import { Prose } from "@/components/primitives/Typography";
 import type { Content } from "@/lib/content";
 import { formatDate } from "@/lib/functions";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import { ROW_TITLE_HOVER } from "../shared/row";

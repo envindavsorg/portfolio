@@ -9,7 +9,7 @@ import type { ComponentProps } from "react";
 
 import type { AlertKind } from "@/lib/remark-alert";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 /**
  * Un encart d'avertissement, produit par `remark-alert`.

@@ -14,7 +14,7 @@ import {
 } from "@/components/base/Empty";
 import { Frown } from "@/components/motion/Frown";
 import { Button } from "@/components/primitives/Button";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import type { UtilsItem } from "./types";
 import { UtilsCard } from "./UtilsCard";

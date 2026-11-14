@@ -2,7 +2,7 @@ import type { ComponentType } from "react";
 import { lazy } from "react";
 
 import type { PlaygroundControl } from "@/lib/playground";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 /**
  * Props réglables des composants du registre.

@@ -17,7 +17,7 @@ import {
   toUnixSeconds,
   zoneOffset,
 } from "@/lib/datetime";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 const KIND_LABELS: Partial<Record<TimestampKind, () => string>> = {

@@ -10,7 +10,7 @@ import {
 import { ChevronDown } from "@/components/motion/ChevronDown";
 import { ChevronUp } from "@/components/motion/ChevronUp";
 import { Button } from "@/components/primitives/Button";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { AboutContent } from "./AboutContent";
 

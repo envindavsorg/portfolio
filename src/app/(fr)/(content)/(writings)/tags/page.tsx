@@ -11,7 +11,7 @@ import type { ContentLocale } from "@/lib/content";
 import { getAllContent } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
 import { getTagIndex } from "@/lib/tags";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const pageDescription =

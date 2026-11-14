@@ -49,7 +49,7 @@ import {
 } from "@/hooks/useSearchIndex";
 import { copyText } from "@/lib/functions";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { CATEGORY, LABELS } from "./content";

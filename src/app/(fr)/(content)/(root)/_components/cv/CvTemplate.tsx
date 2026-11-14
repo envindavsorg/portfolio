@@ -31,7 +31,7 @@ import {
 } from "@react-email/components";
 
 import type { AppLocale } from "@/lib/i18n";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface CvTemplateProps {
   firstName: string;

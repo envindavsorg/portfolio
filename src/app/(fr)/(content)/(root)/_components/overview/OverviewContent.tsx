@@ -8,7 +8,7 @@ import {
 
 import GLOBAL_DATA from "@/data/global";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface OverviewItemProps {
   icon: Icon;

@@ -13,7 +13,7 @@ import { Code as CodeInline } from "@/components/primitives/Typography";
 import { V0Icon } from "@/components/svgs/stack/V0";
 import { toPlaygroundName } from "@/lib/playground";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 import { PLAYGROUNDS } from "@/registry/playgrounds";
 

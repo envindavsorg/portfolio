@@ -12,7 +12,7 @@ import {
   enum as oneOf,
   string,
 } from "@/lib/zod-config";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 /**
  * Les messages passent par une fonction `error` et non par une chaîne : Zod

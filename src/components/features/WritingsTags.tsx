@@ -4,7 +4,7 @@ import { useCallback, useId } from "react";
 
 import { ALL_TAG, isActiveTag } from "@/lib/tags";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { PanelContent } from "../base/Panel";
 import { Button } from "../primitives/Button";
