@@ -74,6 +74,8 @@
   "home_commits_tooltip_contribution_count": "{count} contribution{plural}",
   "home_commits_tooltip_full": "{label} on {date}",
   "home_commits_tooltip_no_contribution": "no contributions",
+  "home_cover_next_button": "Next slide",
+  "home_cover_previous_button": "Previous slide",
   "home_cv_email_body": "Thank you for your interest in my profile. You'll find my resume attached as a PDF. Feel free to contact me if you have any questions.",
   "home_cv_email_heading": "Hello {firstName}!",
   "home_cv_error_button": "i understand!",
