@@ -328,8 +328,8 @@ then `createdAt`, then slug, so a duplicated order still renders deterministical
 `budget.spec.ts` logs every measurement it takes (`POIDS <path> js=… fonts=…`),
 so a CI run doubles as the reference measurement. Both the published numbers and
 the ceilings now come from a CI trace, and that mattered: local measurement put
-`/articles` at 518 KiB of JS, CI at **707** — a third more, on what turns out to
-be the heaviest page of the site. Refresh both from a CI log, never from a
+`/articles` at 518 KiB of JS, CI at **707** — a third more, on what was then
+the heaviest page of the site. Refresh both from a CI log, never from a
 laptop; a ceiling derived from a number only one machine can reproduce is a
 guess wearing a guard's uniform.
 
