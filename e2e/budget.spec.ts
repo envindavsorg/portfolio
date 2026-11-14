@@ -237,10 +237,14 @@ const measure = (page: Page): Measure => {
  * selon la page ; c'est `quiet()`, appelé ensuite, qui attend vraiment.
  */
 const waitForBackdrop = async (page: Page): Promise<boolean> => {
+  // même condition que `Particles.tsx` : sous 768 px le fond n'est plus monté,
+  // et l'attendre coûterait cinq secondes par page pour rien
   const eligible = await page.evaluate(
     () =>
       (navigator.hardwareConcurrency ?? 2) > 2 &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      window.matchMedia(
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)"
+      ).matches
   );
   if (!eligible) {
     return false;

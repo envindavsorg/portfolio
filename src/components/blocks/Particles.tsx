@@ -5,18 +5,40 @@ import { useTheme } from "next-themes";
 import { memo, useEffect, useMemo, useState } from "react";
 
 import type { ParticlesEngine } from "@/components/providers/modules/ParticlesEngine";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 let Cached: typeof ParticlesEngine | null = null;
 
-const canRender = (): boolean => {
-  if (typeof window === "undefined") {
-    return false;
-  }
-  const reducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-  return !reducedMotion && (navigator.hardwareConcurrency ?? 2) > 2;
-};
+/**
+ * Le fond n'est monté que là où il se VOIT.
+ *
+ * Sous 768 px la colonne occupe tout l'écran : il restait une dizaine de points
+ * d'un pixel, dessinés entre les lignes du texte, pour un canevas plein écran
+ * repeint soixante fois par seconde — 1170 × 2532 px de mémoire sur un
+ * téléphone en DPR 3. À partir de 768 px les marges existent, et le fond avec.
+ * La requête est suivie, pas lue une fois : un téléphone chargé en paysage puis
+ * redressé garderait sinon son canevas.
+ *
+ * `e2e/budget.spec.ts` (`waitForBackdrop`) recopie cette condition : les deux
+ * bougent ensemble.
+ */
+const BACKDROP_QUERY =
+  "(min-width: 768px) and (prefers-reduced-motion: no-preference)";
+
+const hasSpareCores = (): boolean =>
+  (navigator.hardwareConcurrency ?? 2) > 2;
+
+/**
+ * Plafond des particules, en multiple de la densité demandée.
+ *
+ * Chaque clic en pousse deux et `outModes: "out"` les recycle : elles ne
+ * disparaissaient jamais. Après 300 clics, le script du canevas coûtait cinq
+ * fois plus, et pour toujours. En mode `delete`, une particule poussée
+ * au-delà du plafond remplace la plus ancienne. tsParticles multiplie ce
+ * plafond par le même facteur de surface que `value`, d'où un multiple : en
+ * dessous de 1, il réduirait le nombre de départ.
+ */
+const CLICK_HEADROOM = 3;
 
 const buildOptions = (
   density: number,
@@ -39,6 +61,7 @@ const buildOptions = (
     },
     number: {
       density: { enable: true, height: 1080, width: 1920 },
+      limit: { mode: "delete", value: density * CLICK_HEADROOM },
       value: density,
     },
     opacity: {
@@ -62,9 +85,10 @@ interface SparklesProps {
 export const Particles = memo(({ density = 50 }: SparklesProps) => {
   const { resolvedTheme } = useTheme();
   const [ready, setReady] = useState(!!Cached);
+  const isEligible = useMediaQuery(BACKDROP_QUERY);
 
   useEffect(() => {
-    if (Cached || !canRender()) {
+    if (Cached || !(isEligible && hasSpareCores())) {
       return;
     }
 
@@ -84,7 +108,7 @@ export const Particles = memo(({ density = 50 }: SparklesProps) => {
       active = false;
       clearTimeout(timer);
     };
-  }, []);
+  }, [isEligible]);
 
   const options = useMemo(
     () =>
@@ -95,7 +119,7 @@ export const Particles = memo(({ density = 50 }: SparklesProps) => {
     [density, resolvedTheme]
   );
 
-  if (!(ready && Cached)) {
+  if (!(isEligible && ready && Cached)) {
     return null;
   }
 
