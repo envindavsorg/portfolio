@@ -71,7 +71,7 @@ export const TagsIndex = ({
         {tags.map((tag) => (
           <li key={tag.slug}>
             <Link
-              className="flex items-center gap-x-2 rounded-full border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme focus-visible:border-theme focus-visible:text-theme"
+              className="flex items-center gap-x-2 border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme focus-visible:border-theme focus-visible:text-theme"
               href={localizeHref(`/tags/${tag.slug}`)}
               // 27 sujets à l'écran, donc 27 pages préchargées d'un coup :
               // 136 Kio de RSC mesurés pour des liens dont on n'ouvre qu'un seul

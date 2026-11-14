@@ -203,7 +203,7 @@ export const ColorPicker = ({
     <Popover onOpenChange={setIsOpen} open={isOpen}>
       <PopoverTrigger
         asChild
-        className="[&_span]:size-4 [&_span]:rounded-full [&_span]:border [&_span]:border-foreground"
+        className="[&_span]:size-4 [&_span]:border [&_span]:border-foreground"
       >
         <Button
           className="flex w-full items-center justify-start [&_p]:text-foreground"
@@ -245,7 +245,7 @@ export const ColorPicker = ({
             }}
           >
             <motion.div
-              className="absolute size-4 rounded-full border-2 border-white shadow-md"
+              className="absolute size-4 border-2 border-white shadow-md"
               style={{
                 backgroundColor: `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`,
                 left: `${hsl[1]}%`,
@@ -269,7 +269,7 @@ export const ColorPicker = ({
 
           <motion.input
             aria-label={m.color_picker_hue_label()}
-            className="h-3 w-full cursor-pointer appearance-none rounded-full"
+            className="h-3 w-full cursor-pointer appearance-none"
             max="360"
             min="0"
             onChange={(e) => handleHueChange(Number(e.target.value))}
@@ -311,7 +311,7 @@ export const ColorPicker = ({
                     color: preset,
                   })}
                   aria-pressed={selectedPreset === preset}
-                  className="relative size-8 rounded-full"
+                  className="relative size-8"
                   key={preset}
                   onClick={() => handlePresetClick(preset)}
                   style={{ backgroundColor: preset }}

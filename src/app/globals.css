@@ -17,9 +17,12 @@
   /**
    * Le site est tracé à l'équerre. Les rayons « moyens » tombent à zéro ici,
    * à la source : champs, onglets, menus, boîtes de dialogue, cartes et blocs
-   * de code suivent les boutons sans qu'un seul composant change. Les pilules
-   * et les cercles — étiquettes, portrait, points, curseurs — sont en
-   * `rounded-full`, que cette échelle ne touche pas.
+   * de code suivent les boutons sans qu'un seul composant change.
+   *
+   * `rounded-full` échappe à cette échelle, donc il a été RETIRÉ à la main des
+   * étiquettes, du portrait, des points et des curseurs : plus rien n'est rond
+   * hors de `src/registry/`, dont les composants distribués gardent leur
+   * propre dessin. `src/lib/square-corners.test.ts` refuse son retour.
    */
   --radius-xs: 0px;
   --radius-sm: 0px;
@@ -376,7 +379,7 @@
 
   ::-webkit-scrollbar-thumb {
     background: var(--scroll-thumb);
-    border-radius: 5px;
+    border-radius: 0;
   }
 
   * {

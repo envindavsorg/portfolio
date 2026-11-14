@@ -37,7 +37,7 @@ export const WritingsTagLinks = ({
           {tags.map((tag) => (
             <li key={tag}>
               <Link
-                className="flex items-center rounded-full border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme focus-visible:border-theme focus-visible:text-theme"
+                className="flex items-center border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme focus-visible:border-theme focus-visible:text-theme"
                 href={localizeHref(`/tags/${slugifyTag(tag)}`)}
                 // une pastille par sujet, chacune préchargée dès qu'elle entre
                 // à l'écran : des pages que presque personne n'ouvre, payées

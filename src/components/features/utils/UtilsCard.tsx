@@ -48,10 +48,7 @@ export const UtilsCard = ({
                 une seule page, que `prefers-reduced-motion` n'arrêtait pas.
                 Le battement reste à ce qui est « en cours » — le poste
                 actuel, un test de débit qui tourne. */}
-            <span
-              aria-hidden
-              className="size-2 shrink-0 rounded-full bg-theme"
-            />
+            <span aria-hidden className="size-2 shrink-0 bg-theme" />
             {/* `sr-only` et non `hidden` sous md : un point seul ne dit rien
                 à un lecteur d'écran */}
             <span className="text-sm text-theme max-md:sr-only">

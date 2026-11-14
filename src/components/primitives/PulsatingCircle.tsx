@@ -13,9 +13,9 @@ export const PulsatingCircle = () => (
         qui a demandé moins d'animations. Le point plein reste.
         `pauseOffScreen` : rien ne l'arrêtait non plus hors de l'écran. */}
     <span
-      className="absolute inline-flex size-3 rounded-full bg-theme opacity-50 motion-safe:animate-ping"
+      className="absolute inline-flex size-3 bg-theme opacity-50 motion-safe:animate-ping"
       ref={pauseOffScreen}
     />
-    <span className="relative inline-flex size-2 rounded-full bg-theme" />
+    <span className="relative inline-flex size-2 bg-theme" />
   </span>
 );

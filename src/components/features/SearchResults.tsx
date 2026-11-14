@@ -216,7 +216,7 @@ export const SearchResults = () => {
           </legend>
           {topics.map((topic) => (
             <button
-              className="cursor-pointer rounded-full border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme"
+              className="cursor-pointer border border-input px-3 py-1.5 text-sm lowercase transition-colors hover:border-theme hover:text-theme"
               key={topic}
               // `detail` vaut 0 quand le clic vient d'Entrée ou d'Espace
               onClick={(event) =>

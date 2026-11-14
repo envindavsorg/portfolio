@@ -133,17 +133,12 @@ const PulsatingCircle = memo(({ status }: { status: TestStatus }) => {
           demandé moins d'animations, ni hors de l'écran */}
       <span
         className={cn(
-          "absolute inline-flex size-3 rounded-full opacity-50 motion-safe:animate-ping",
+          "absolute inline-flex size-3 opacity-50 motion-safe:animate-ping",
           color
         )}
         ref={pauseOffScreen}
       />
-      <span
-        className={cn(
-          "relative inline-flex size-2 rounded-full",
-          color
-        )}
-      />
+      <span className={cn("relative inline-flex size-2", color)} />
     </span>
   );
 });

@@ -33,7 +33,7 @@ export const Header = ({
           className={cn(
             "relative shrink-0 border-edge border-r",
             "[&_img]:ring-1 [&_img]:ring-edge [&_img]:ring-offset-3 [&_img]:ring-offset-background",
-            "[&_img]:m-1 [&_img]:size-24 [&_img]:rounded-full [&_img]:object-cover [&_img]:object-top [&_img]:sm:size-40"
+            "[&_img]:m-1 [&_img]:size-24 [&_img]:object-cover [&_img]:object-top [&_img]:sm:size-40"
           )}
         >
           <Image

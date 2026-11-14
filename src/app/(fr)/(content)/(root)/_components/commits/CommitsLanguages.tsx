@@ -27,7 +27,7 @@ export const CommitsLanguages = ({
 
       <div
         aria-hidden="true"
-        className="flex h-2 w-full overflow-hidden rounded-full bg-accent"
+        className="flex h-2 w-full overflow-hidden bg-accent"
       >
         {languages.map((language) => (
           <span
@@ -48,7 +48,7 @@ export const CommitsLanguages = ({
           >
             <span
               aria-hidden="true"
-              className="size-2 shrink-0 rounded-full"
+              className="size-2 shrink-0"
               style={{ backgroundColor: language.color }}
             />
             <span className="font-medium">{language.name}</span>

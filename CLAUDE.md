@@ -266,9 +266,14 @@ src/app/
 - Corners are square site-wide, and at the source: the radius scale
   (`--radius-xs` to `--radius-3xl`) is zeroed in the `@theme` block of
   `globals.css`, so `rounded-md` and friends draw square without touching a
-  component. Only `rounded-full` stays round — tags, the portrait, dots,
-  sliders. Reach for `rounded-full` when something must be round; a
-  `rounded-lg` no longer rounds anything.
+  component. `rounded-full` does not read that scale, so it was REMOVED by
+  hand from the tags, the portrait, the dots and the sliders: nothing is round
+  any more outside `src/registry/`, whose distributed components keep their
+  own design (the OG cards and the CV template draw with inline styles and
+  were left alone). `src/lib/square-corners.test.ts` refuses `rounded-full`
+  and arbitrary radii anywhere else. Two tiny stacked buttons do not carry
+  brackets: the stepper arrows of `InputNumber` are part of the field
+  (`border-solid bg-none`), not two pieces.
 - Cards use the stretched link of `src/components/base/CardLink.tsx`: the anchor
   wraps ONLY the title — its accessible name IS its text — and a pseudo-element
   extends the click to the whole card. Never wrap a card in an anchor carrying an
