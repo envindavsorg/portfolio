@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { Rss } from "@/components/motion/Rss";
 import { Button } from "@/components/primitives/Button";
 import * as m from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 
 import { NavBarTooltip } from "./NavBarTooltip";
 
@@ -22,10 +23,11 @@ export const NavBarRss = () => {
       >
         {/* un `<a>` et non `next/link` : la cible est un gestionnaire de
             route, pas une page. `Link` la préchargeait sur chaque page vue,
-            pour un onglet que presque personne n'ouvre */}
+            pour un onglet que presque personne n'ouvre. Sous /en, le flux
+            anglais : le bouton ouvrait 22 éléments en français */}
         <a
           aria-label={m.nav_rss_aria()}
-          href="/api/rss"
+          href={getLocale() === "en" ? "/api/rss/en" : "/api/rss"}
           rel="noopener noreferrer"
           target="_blank"
         >

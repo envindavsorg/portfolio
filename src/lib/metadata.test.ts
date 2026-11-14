@@ -112,6 +112,43 @@ describe("createMetadata", () => {
     }
   });
 
+  // Les pages /en annonçaient les cinq flux FRANÇAIS sous des libellés
+  // anglais : 22 éléments en français, aucun lien vers /en.
+  it("n'annonce sous /en que les deux flux anglais", () => {
+    const { types } = createMetadata({
+      description: "d",
+      locale: "en",
+      title: "t",
+    }).alternates ?? { types: undefined };
+
+    expect(types?.["application/rss+xml"]).toEqual([
+      {
+        title: "florin cuzeac — all content",
+        url: "https://cuzeacflorin.fr/api/rss/en",
+      },
+    ]);
+    expect(types?.["application/feed+json"]).toEqual([
+      {
+        title: "florin cuzeac — JSON Feed",
+        url: "https://cuzeacflorin.fr/api/feed.en.json",
+      },
+    ]);
+  });
+
+  it("garde les cinq flux français sur l'arbre français", () => {
+    const rss = createMetadata({ description: "d", title: "t" })
+      .alternates?.types?.["application/rss+xml"];
+
+    expect(
+      Array.isArray(rss) && rss.map((entry) => String(entry.url))
+    ).toEqual([
+      "https://cuzeacflorin.fr/api/rss",
+      "https://cuzeacflorin.fr/api/rss/articles",
+      "https://cuzeacflorin.fr/api/rss/components",
+      "https://cuzeacflorin.fr/api/rss/utils",
+    ]);
+  });
+
   it("traduit les titres de flux selon la locale", () => {
     const fr = createMetadata({ description: "d", title: "t" });
     const en = createMetadata({

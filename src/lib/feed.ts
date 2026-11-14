@@ -1,4 +1,9 @@
-import type { Content, ContentCategory } from "@/lib/content";
+import type {
+  Content,
+  ContentCategory,
+  ContentLocale,
+} from "@/lib/content";
+import { tagLabel } from "@/lib/tags";
 
 export interface FeedItem {
   title: string;
@@ -16,10 +21,15 @@ export interface FeedMeta {
   title: string;
   description: string;
   siteUrl: string;
+  /**
+   * L'accueil dans la langue du flux, tel que le canonical l'écrit : la racine
+   * avec sa barre, `/en` sans — `/en/` est une redirection.
+   */
+  homeUrl: string;
   /** URL canonique du flux lui-même (atom:link rel="self") */
   feedUrl: string;
   author: string;
-  language: string;
+  language: ContentLocale;
   /** JSON Feed : image carrée du flux, grande (512 px) et petite (favicon) */
   icon?: string;
   favicon?: string;
@@ -43,12 +53,21 @@ export const escapeXml = (value: string): string =>
 export const toRfc822 = (value: Date | number | string): string =>
   new Date(value).toUTCString();
 
+/**
+ * `locale` est celle du FLUX : elle préfixe les liens. Un flux anglais dont les
+ * éléments mènent aux pages françaises n'est pas un flux anglais — c'est ce que
+ * les pages /en annonçaient, sous des libellés en anglais. Les tags, eux,
+ * suivent la langue du fichier servi, comme `article:tag` : un repli français
+ * garde ses libellés français.
+ */
 export const toFeedItems = (
   posts: Content[],
-  siteUrl: string
+  siteUrl: string,
+  locale: ContentLocale = "fr"
 ): FeedItem[] =>
   posts.map((post) => {
     const category = post.metadata.category ?? "articles";
+    const prefix = locale === "en" ? "/en" : "";
 
     return {
       category,
@@ -57,10 +76,12 @@ export const toFeedItems = (
         image: `${siteUrl}${post.metadata.image}`,
       }),
       published: new Date(post.metadata.createdAt),
-      tags: post.metadata.tags ?? [],
+      tags: (post.metadata.tags ?? []).map((tag) =>
+        tagLabel(tag, post.locale)
+      ),
       title: post.metadata.title,
       updated: new Date(post.metadata.updatedAt),
-      url: `${siteUrl}/${category}/${post.slug}`,
+      url: `${siteUrl}${prefix}/${category}/${post.slug}`,
     };
   });
 
@@ -101,7 +122,7 @@ ${item.tags.map((tag) => `      <category>${escapeXml(tag)}</category>`).join("\
   <channel>
     <title>${escapeXml(meta.title)}</title>
     <description>${escapeXml(meta.description)}</description>
-    <link>${escapeXml(meta.siteUrl)}/</link>
+    <link>${escapeXml(meta.homeUrl)}</link>
     <language>${escapeXml(meta.language)}</language>
     <lastBuildDate>${toRfc822(built)}</lastBuildDate>
     <atom:link href="${escapeXml(meta.feedUrl)}" rel="self" type="application/rss+xml"/>
@@ -129,7 +150,7 @@ export const toJsonFeed = (
       description: meta.description,
       ...(meta.favicon && { favicon: meta.favicon }),
       feed_url: meta.feedUrl,
-      home_page_url: `${meta.siteUrl}/`,
+      home_page_url: meta.homeUrl,
       ...(meta.icon && { icon: meta.icon }),
       items: items.map((item) => ({
         content_text: item.description,

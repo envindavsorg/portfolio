@@ -77,11 +77,38 @@ const FEED_LABELS: Record<
  * `application/rss` dans les documents servis, alors que les quatre flux
  * existent et fonctionnent.
  */
+/** le titre d'un flux, tel que le `<head>` l'annonce ET tel que le flux se nomme */
+export const feedTitle = (
+  locale: AppLocale,
+  feed: keyof (typeof FEED_LABELS)[AppLocale]
+): string =>
+  `${GLOBAL_DATA.USER.fullName} — ${FEED_LABELS[locale][feed]}`;
+
 const feedAlternates = (
   locale: AppLocale
 ): NonNullable<Metadata["alternates"]>["types"] => {
   const name = GLOBAL_DATA.USER.fullName;
-  const labels = FEED_LABELS[locale];
+
+  // L'arbre anglais n'annonce que SES flux. Il annonçait les cinq flux français
+  // sous des libellés traduits (« all content », « tools ») : un lecteur abonné
+  // depuis /en recevait 22 éléments en français, aux liens sans /en. Il n'existe
+  // pas de flux anglais par catégorie, donc aucun n'est annoncé.
+  if (locale === "en") {
+    return {
+      "application/feed+json": [
+        {
+          title: `${name} — JSON Feed`,
+          url: `${BASE_URL}/api/feed.en.json`,
+        },
+      ],
+      "application/rss+xml": [
+        {
+          title: feedTitle("en", "all"),
+          url: `${BASE_URL}/api/rss/en`,
+        },
+      ],
+    };
+  }
 
   return {
     "application/feed+json": [
@@ -92,19 +119,19 @@ const feedAlternates = (
     ],
     "application/rss+xml": [
       {
-        title: `${name} — ${labels.all}`,
+        title: feedTitle("fr", "all"),
         url: `${BASE_URL}/api/rss`,
       },
       {
-        title: `${name} — ${labels.articles}`,
+        title: feedTitle("fr", "articles"),
         url: `${BASE_URL}/api/rss/articles`,
       },
       {
-        title: `${name} — ${labels.components}`,
+        title: feedTitle("fr", "components"),
         url: `${BASE_URL}/api/rss/components`,
       },
       {
-        title: `${name} — ${labels.utils}`,
+        title: feedTitle("fr", "utils"),
         url: `${BASE_URL}/api/rss/utils`,
       },
     ],
