@@ -136,8 +136,12 @@ export const CommandItem = ({
     className={cn(
       "relative flex cursor-pointer select-none items-center gap-x-2 rounded-md text-sm outline-hidden",
       "px-3 py-2 data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground",
+      // le fond seul ne porte pas la sélection : `--accent` sur `--popover`
+      // mesure 1,04:1 en clair (1,19:1 en sombre). Le trait à la couleur du
+      // thème, lui, se voit dans les deux. Un pseudo-élément et non une ombre
+      // interne : celle-ci suivait l'arrondi et dessinait une parenthèse.
+      "before:absolute before:inset-y-2 before:left-0 before:w-0.5 before:bg-theme before:opacity-0 data-[selected=true]:before:opacity-100",
       "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-theme [&_svg]:mr-1",
-      "[&_span]:font-bold [&_span]:text-sm [&_span]:text-theme",
       className
     )}
     data-slot="command-item"

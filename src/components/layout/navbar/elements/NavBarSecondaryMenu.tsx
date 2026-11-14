@@ -11,7 +11,7 @@ import { localizeHref } from "@/paraglide/runtime";
 
 import { NAVIGATION_DATA } from "../data";
 import { isRouteActive } from "./functions";
-import { useNavBar } from "./NavBarContext";
+import { NAVBAR_MENU_ID, useNavBar } from "./NavBarContext";
 import { NavBarGitHub } from "./NavBarGitHub";
 import { NavBarLlm } from "./NavBarLlm";
 import { NavBarRss } from "./NavBarRss";
@@ -25,7 +25,10 @@ export const NavBarSecondaryMenu = () => {
   }
 
   return (
-    <nav className="relative border-edge border-x border-b backdrop-blur-lg">
+    <nav
+      className="relative border-edge border-x border-b backdrop-blur-lg"
+      id={NAVBAR_MENU_ID}
+    >
       <div className="pointer-events-none absolute inset-0 -z-1 grid grid-cols-1 gap-4 max-sm:hidden sm:grid-cols-2">
         <div className="border-edge border-r" />
         <div className="border-edge border-l" />
@@ -33,8 +36,7 @@ export const NavBarSecondaryMenu = () => {
 
       <div className="grid grid-cols-4 divide-x divide-edge">
         {NAVIGATION_DATA.map(({ title, link }, idx) => {
-          const href = localizeHref(link);
-          const active = isRouteActive(href, pathname);
+          const active = isRouteActive(link, pathname);
           const text: JSX.Element = (
             <TextAnimate
               animation="slideUp"
@@ -56,7 +58,7 @@ export const NavBarSecondaryMenu = () => {
             <Link
               aria-current={active ? "page" : undefined}
               className="pointer-events-auto py-3 text-center"
-              href={href}
+              href={localizeHref(link)}
               key={link}
               onClick={closeSecondaryMenu}
             >
