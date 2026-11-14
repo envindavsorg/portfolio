@@ -71,8 +71,12 @@ export const FooterClock = ({
     // remplace tout de suite le gabarit, même si le pied de page est loin
     tick();
 
-    const observer = new IntersectionObserver(([entry]) => {
-      isIntersecting = entry?.isIntersecting ?? false;
+    // Le DERNIER changement du lot : fil principal occupé, « à l'écran »
+    // puis « hors écran » arrivent dans un même rappel. Lire le premier
+    // relançait l'horloge sur un pied de page qui venait de sortir, et elle
+    // battait alors chaque seconde, sans fin, là où personne ne la lit.
+    const observer = new IntersectionObserver((entries) => {
+      isIntersecting = entries.at(-1)?.isIntersecting ?? false;
       sync();
     });
     if (rootRef.current) {

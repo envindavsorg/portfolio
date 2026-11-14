@@ -74,6 +74,8 @@
   "home_commits_tooltip_contribution_count": "{count} contribution{plural}",
   "home_commits_tooltip_full": "{label} le {date}",
   "home_commits_tooltip_no_contribution": "aucune contribution",
+  "home_cover_next_button": "Diapositive suivante",
+  "home_cover_previous_button": "Diapositive précédente",
   "home_cv_email_body": "Merci de votre intérêt pour mon profil. Vous trouverez en pièce jointe mon CV au format PDF. N'hésitez pas à me contacter si vous avez des questions.",
   "home_cv_email_heading": "Bonjour {firstName} !",
   "home_cv_error_button": "je comprends !",
