@@ -233,7 +233,16 @@ src/app/
   `src/components/utils/`.
 - `src/components/layout/SectionBoundary.tsx` wraps homepage sections: `<Suspense>`
   covers waiting, not failure, so a section that throws needs a real error
-  boundary or it takes the whole page down.
+  boundary or it takes the whole page down. `Commits` and `Repos` sit in NO
+  `<Suspense>`, on purpose. On a static page React moves any boundary over 500
+  bytes out of the flow once the document passes 12.8 KB, then reveals it by
+  script at least 300 ms after the first frame: on a deep link to
+  `/#my-experiences` everything below jumped (CLS 0.25 to 0.78 on 1 to 5 loads
+  in 10, depending on machine load and network). The boundary protected nothing
+  either — a section that throws during prerender fails the build with or
+  without it. Do not wrap a large in-flow section of a static page in
+  `<Suspense>`; `e2e/load-stability.spec.ts` reads the served HTML of `/` and
+  `/en` for a deferred boundary.
 - UI primitives: `src/components/base/` and `src/components/primitives/` —
   ALL built on Base UI (radix has been fully migrated out; see Tech Stack).
   `src/components/blocks/` (visual blocks), `src/components/motion/`
@@ -257,13 +266,19 @@ src/app/
   it. Use the underline / border, never `hover:text-theme` on a hovered row.
 - The cover (`cover/Cover.tsx`, `src/hooks/useGreetingsCarousel.ts`) advances its
   greeting loop only while it is on screen and the tab is visible; a step that
-  falls due off-screen is HELD and runs on return. `autoPlay` is separate from
-  embla's `loop` on purpose: under `prefers-reduced-motion` the greeting is
-  rendered already written (the `capture` path, remounted by key) and does not
-  advance by itself, while previous/next still cycle — `MotionConfig
-  reducedMotion="user"` does NOT cover `pathLength`. The three `CarouselItem`
-  share one box (`h-20 sm:h-30`): the greetings differ in height, and a viewport
-  resized per greeting shifted the layout every five seconds.
+  falls due off-screen is HELD and runs on return. There is NO carousel: the
+  hook holds an index and `src/lib/cycle.ts` steps it. Embla never showed a
+  slide — one greeting is mounted at a time — and removing it took 7 KiB of JS
+  off the homepage (it did NOT shorten hydration: see the Theme note).
+  `autoPlay` is separate from the loop on purpose: under
+  `prefers-reduced-motion` the greeting is rendered already written (the
+  `capture` path, remounted by key) and does not advance by itself, while
+  previous/next still cycle — `MotionConfig reducedMotion="user"` does NOT
+  cover `pathLength`. A manual step cancels the automatic one that was about to
+  fire. The greetings share ONE box (`h-20 sm:h-30`), which is also what the
+  hook observes: they differ in height, and a box resized per greeting shifted
+  the layout every five seconds. The two buttons are named through Paraglide
+  (`home_cover_previous_button`, `home_cover_next_button`).
 - What hydrates late reserves its box first. `Marquee` carries `min-h-12` (the
   size of a `MarqueeItem`): react-fast-marquee renders nothing on the server, and
   the stack section grew 96px after hydration (CLS 0.111 on a deep link to
@@ -290,12 +305,43 @@ src/app/
   ITSELF against a root whose top sits one pixel below the sticky line (read
   from the computed `top`, which is in rem). Two earlier sentinel-based versions
   were each wrong by one edge; `e2e/titles.spec.ts` scrolls by wheel steps, both
-  ways, to keep it honest. The swap itself measures nothing: `TextAnimate` takes
-  `presenceMode` (`popLayout` by default, `sync` here), and `TITLE_SWAP` in
-  `Panel.tsx` takes every child of the `<h2>` but the last out of flow with CSS.
-  `popLayout` measured the outgoing copy and injected a `<style>` into `<head>`
-  on every swap, mid-scroll, for eleven headers. Both copies are still mounted
-  together during the swap — the converging wait of the spec relies on it.
+  ways, to keep it honest. Its letters are plain `<span>` animated by CSS
+  transitions in `Panel.tsx` — no Motion component per letter, no `TextAnimate`
+  (215 Motion components gone from the homepage). Three rules come with it:
+  - The served HTML SHOWS every title. Motion wrote its start state into the
+    HTML, so 204 letters were served at opacity 0: blank bars for 2.6 to 2.9 s
+    on a phone, and forever without JavaScript. After hydration the first
+    report of an IntersectionObserver masks the titles that are off screen;
+    they play their entrance once when reached. A title already on screen is
+    left as served. The states live in the pure reducer
+    `src/lib/sticky-title.ts` (static / armed / live, plus the exiting form).
+  - `PanelHeader eager` is for the sticky header that can fall in the first
+    viewport (today only About): its entrance is played by CSS at first paint
+    through `@starting-style`, and it is the only title whose letters carry
+    inline timing in the HTML. A new first section must pass `eager`.
+  - Never stagger letters with one delay per letter: each start and each end is
+    a phase boundary handled on the main thread (670 to 790 ms for 46 letters,
+    against 230 to 300 on one shared timeline). All letters share one timeline
+    and each carries its delay in a `linear()` easing built by
+    `src/lib/stagger-easing.ts`. Their `transition-property` is `!important`,
+    and only that: the theme provider cuts every transition while it applies a
+    theme change, and a running transition is cancelled when its property
+    leaves the list. The class gives no duration — without the inline style a
+    state change applies at once, which is how a letter is masked without
+    animating.
+
+  Both copies are still mounted together during the swap (the leaving one is
+  `absolute`) — the converging wait of the spec relies on it. What a swap still
+  costs is the header's `transition-colors`: colour is inherited, so each frame
+  of the 300 ms fade re-styles every letter with a running transition. It is
+  part of the effect; removing it is the owner's call.
+- An `IntersectionObserver` callback reads the LAST entry of its batch
+  (`entries.at(-1)`), or every entry when it watches several targets — never
+  the first. Under main-thread pressure "on screen" then "off screen" arrive in
+  ONE callback, and the first says the opposite of the real state until the
+  next crossing: `PixelHeading`'s 50 ms tick restarted and never stopped
+  (reproduced 4/4). `src/lib/intersection-observers.test.ts` reads every
+  callback under `src/` as text and refuses the pattern.
 
 **RSC boundary pattern**: `Feature.tsx` (async RSC shell fetching data) +
 `FeatureContent.tsx` (`'use client'` receiving data as props).
@@ -638,7 +684,15 @@ End-to-end tests (Playwright, `e2e/`):
   horizontal overflow, the footer leads to the pages nothing else links to, and
   its RSS link — like the navbar's — opens the feed of the page's language
 - `titles.spec.ts` - homepage section titles stay visible, and their sticky form
-  follows the scroll position by wheel steps in both directions
+  follows the scroll position by wheel steps in both directions. Titles are
+  readable with JavaScript disabled, an off-screen title is masked after
+  hydration and enters when reached, and the letters keep their transition
+  under the theme provider's rule (with the header as control)
+- `load-stability.spec.ts` - no deferred boundary in the served HTML of `/` and
+  `/en`, the deep link at 390px, the pixel title's box with the four late fonts
+  blocked, the theme not re-applied at mount (plus toggle, system theme and
+  stored theme), and the pixel title stopping off-screen when two intersection
+  changes arrive together
 - `budget.spec.ts` - JS, font and CSS weight ceilings measured in the browser, plus
   the font-preload count. It runs with service workers BLOCKED: a response
   served through the site's own service worker reports a negative body size to
@@ -670,7 +724,24 @@ instrumented `requestAnimationFrame` / interval counts. On a shared machine only
 the COUNTS are reliable, and a saturated scroll cannot show a time gain. One
 loop is left running on purpose: `PixelHeading` ticks every 50 ms (`autoPlay`)
 for as long as a title is on screen — that is the heading's design, and
-changing it is the owner's call, not a performance fix.
+changing it is the owner's call, not a performance fix. At rest with the cover
+off screen, what remains is the sentence flip of the header (every 4 s, visible
+or not) and the four `animate-ping` halos.
+
+Three measuring lessons from the phone-fluidity work. A forced layout or style
+recalculation is charged to whoever READS layout first, not to whoever dirtied
+it: attribute by switching the suspect off, never from a profile's self time —
+embla was blamed for what next-themes caused. Scroll smoothness is judged on
+frames delivered with one frame forced per vsync, gaps over 50 ms and long
+tasks, confirmed by an interleaved A/B on ONE build: busy time saturates, and
+the same build gave 398 to 439 frames between runs. The deep-link shift is
+timing-dependent (0 to 5 loads in 10): measure it under several network
+profiles and guard its cause in the served HTML, not the CLS number.
+
+`page.waitForLoadState("networkidle")` on a SECOND load of a page already
+visited in the same context waits 28 to 36 s: the RSC prefetches reappear as
+requests Chromium leaves open and then aborts. The two arrow-key tests of
+`reading.spec.ts` are separate tests for that reason — do not merge them back.
 
 ### Admin space (`/admin`)
 
@@ -818,7 +889,23 @@ falling back to zeroed GitHub widgets rather than failing.
   Mono are declared locally too (`src/fonts/sans.ts`, `src/fonts/mono.ts`; the
   `geist` package is gone): Sans is drawn on one page and no longer preloaded,
   which brings the count to 2. Mono stays preloaded on purpose — see the note in
-  `mono.ts` before changing it
+  `mono.ts` before changing it. Turbopack names a `next/font/local` family
+  after its constant (`PixelSquare`, `GeistMono`), so the "Geist Mono" entry of
+  the fallback lists matches nothing. The four non-preloaded pixel fonts fall
+  back FIRST to `PixelSquare`: the five variants share line height and
+  advances, so a letter sits in its final place before its font arrives (until
+  then a title box was 42.5px high instead of 38.5: CLS 0.036 to 0.046 on
+  every load of a content page)
+- **Theme**: `src/components/providers/modules/ThemeProvider.tsx` passes an
+  EMPTY `value` map to next-themes and applies the class on `<html>` itself, in
+  `ThemeClass`, only when it changes, cutting transitions during the switch. Do
+  not put `disableTransitionOnChange` back and do not remove the empty map:
+  next-themes re-applied at every mount the theme its inline script had just
+  set, which invalidated the style of the whole document (2,900 elements on
+  the homepage) inside the hydration task — longest task 496 to 571 ms on a
+  phone profile, 308 to 425 without it. The lever relies on next-themes 0.4.6
+  (the inline script falls back to the theme name, the React side does not);
+  `e2e/load-stability.spec.ts` fails if an upgrade changes that
 - **Print**: the `@media print` block in `globals.css` covers `/cv` AND content
   pages. The chrome goes by element (`header`, `nav`, `footer`) and anything
   tagged `data-print="hide"` is dropped (ToC, pagination, share actions, tags,
