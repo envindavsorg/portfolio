@@ -32,7 +32,12 @@ export const NavBarTheme = () => {
 
   const handleClick = () => {
     if (document.startViewTransition) {
-      document.startViewTransition(switchTheme);
+      // une bascule lancée avant la fin de la précédente SAUTE celle-ci, et
+      // sa promesse `ready` est rejetée : dix-neuf erreurs non gérées pour
+      // vingt clics rapides. Le thème, lui, est bien posé à chaque fois.
+      document
+        .startViewTransition(switchTheme)
+        .ready.catch(() => undefined);
     } else {
       switchTheme();
     }

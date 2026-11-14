@@ -26,6 +26,7 @@ const THEME_TOGGLE = /changer de thème|toggle theme/u;
 const HYDRATED = "[data-slot='pixel-heading'] [data-state='active']";
 
 interface Probe {
+  __classAtReady?: string;
   __classLog?: string[];
   __shift?: number;
   __styleLog?: string[];
@@ -158,6 +159,13 @@ const watchTheme = async (page: Page) => {
     const probe = window as unknown as Probe;
     probe.__classLog = [];
     probe.__styleLog = [];
+    // la classe AVANT l'hydratation : seul le script en ligne a pu la poser.
+    // Lue après, elle peut venir de `ThemeClass`, et un script en ligne qui
+    // ne poserait plus rien — un éclair clair avant une page sombre —
+    // passerait pour sain.
+    document.addEventListener("DOMContentLoaded", () => {
+      probe.__classAtReady = document.documentElement.className;
+    });
     new MutationObserver((records) => {
       for (const record of records) {
         if (
@@ -204,6 +212,7 @@ const readThemeLog = async (page: Page) =>
   await page.evaluate(() => {
     const probe = window as unknown as Probe;
     return {
+      classAtReady: probe.__classAtReady ?? "",
       classLog: probe.__classLog ?? [],
       styleLog: probe.__styleLog ?? [],
     };
@@ -221,10 +230,13 @@ test.describe("thème", () => {
       await expect(page.locator(HYDRATED).first()).toBeAttached();
       await page.waitForTimeout(1000);
 
-      // TÉMOIN : le thème est bien posé, par le script en ligne
       await expect(page.locator("html")).toHaveClass(/\blight\b/u);
 
-      const { classLog, styleLog } = await readThemeLog(page);
+      const { classAtReady, classLog, styleLog } =
+        await readThemeLog(page);
+      // TÉMOIN : le thème est posé AVANT l'hydratation, donc par le script
+      // en ligne — c'est sur lui que repose la table vide de next-themes
+      expect(classAtReady).toMatch(/\blight\b/u);
       expect(themeWasDropped(classLog)).toBe(false);
       expect(styleLog).toEqual([]);
     });
@@ -300,10 +312,78 @@ test.describe("thème", () => {
     await expect(page.locator("html")).toHaveClass(/\bdark\b/u);
     await expect(page.locator(HYDRATED).first()).toBeAttached();
     await page.waitForTimeout(1000);
-    const { classLog, styleLog } = await readThemeLog(page);
+    const { classAtReady, classLog, styleLog } =
+      await readThemeLog(page);
+    expect(classAtReady).toMatch(/\bdark\b/u);
     expect(themeWasDropped(classLog)).toBe(false);
     expect(styleLog).toEqual([]);
   });
+
+  /**
+   * La table vide passée à next-themes n'a pas de prototype.
+   *
+   * Avec un `{}`, un thème enregistré nommé comme une propriété
+   * d'`Object.prototype` y trouvait une fonction, que next-themes passait à
+   * `classList.add` : l'effet levait et la page cédait la place à l'écran
+   * d'erreur, rechargement compris.
+   */
+  for (const stored of ["constructor", "toString", "__proto__"]) {
+    test(`un thème enregistré « ${stored} » ne fait pas tomber la page`, async ({
+      page,
+    }) => {
+      const errors: string[] = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      await page.addInitScript((value) => {
+        localStorage.setItem("theme", value);
+      }, stored);
+      await page.goto("/articles/how-i-write-css", {
+        waitUntil: "load",
+      });
+
+      await expect(page.locator(HYDRATED).first()).toBeAttached();
+      await page.waitForTimeout(1000);
+      await expect(
+        page.getByRole("button", { name: THEME_TOGGLE }).first()
+      ).toBeVisible();
+      expect(errors).toEqual([]);
+    });
+  }
+});
+
+/**
+ * Un stockage qui LÈVE n'emporte pas la page.
+ *
+ * Stockage du site bloqué, `getItem` et `setItem` jettent. La préférence de
+ * format de l'horloge du pied de page était lue sans garde dans un effet :
+ * chaque page du site devenait l'écran d'erreur. Une page d'outil écrivait de
+ * la même façon sa visite dans l'historique.
+ */
+test.describe("stockage du site bloqué", () => {
+  for (const path of ["/", "/articles", "/utils/regex-tester"]) {
+    test(`${path} s'affiche quand même`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      await page.addInitScript(() => {
+        const denied = () => {
+          throw new DOMException("denied", "SecurityError");
+        };
+        Storage.prototype.getItem = denied;
+        Storage.prototype.setItem = denied;
+        Storage.prototype.removeItem = denied;
+      });
+      await page.goto(path, { waitUntil: "load" });
+
+      await expect(page.locator(HYDRATED).first()).toBeAttached();
+      await page.waitForTimeout(1000);
+      // TÉMOIN : c'est bien la page, pas l'écran d'erreur — lui n'a ni pied
+      // de page ni bouton de thème
+      await expect(page.locator("footer")).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: THEME_TOGGLE }).first()
+      ).toBeVisible();
+      expect(errors).toEqual([]);
+    });
+  }
 });
 
 /** changements de police du titre pixel sur une fenêtre de temps */

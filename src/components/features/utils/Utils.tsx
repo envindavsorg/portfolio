@@ -11,6 +11,7 @@ import {
 
 import { Divider } from "@/components/base/Divider";
 import { useTagFilter } from "@/components/features/WritingsTagFilter";
+import { removeStorage } from "@/lib/safe-storage";
 import { matchesTag } from "@/lib/tags";
 
 import { getRecentSlugs, RECENT_KEY } from "./lib";
@@ -87,7 +88,7 @@ export const Utils = ({ contents }: UtilsProps) => {
   }, []);
 
   const clearRecent = useCallback(() => {
-    localStorage.removeItem(RECENT_KEY);
+    removeStorage(RECENT_KEY);
     setRecentSlugs([]);
   }, []);
 
