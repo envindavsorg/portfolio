@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import GLOBAL_DATA from "@/data/global";
 import type { Content, ContentCategory } from "@/lib/content";
 import type { AppLocale } from "@/lib/i18n";
+import { tagLabel } from "@/lib/tags";
 
 interface OpenGraphImageParams {
   description?: string;
@@ -223,7 +224,12 @@ export const createContentMetadata = (
     article: {
       modifiedTime: updatedAt.toISOString(),
       publishedTime: createdAt.toISOString(),
-      tags,
+      // le LIBELLÉ, pas la clé : un tag est écrit en français parce qu'il
+      // produit le slug, et `article:tag` d'un article anglais annonçait
+      // « retour d'expérience ». La locale est celle du contenu servi, comme
+      // pour les sujets affichés sous l'article : un repli français reste
+      // étiqueté en français.
+      tags: tags?.map((tag) => tagLabel(tag, content.locale)),
     },
     description,
     locale,

@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { createMetadata, openGraphImage } from "@/lib/metadata";
+import type { Content } from "@/lib/content";
+import {
+  createContentMetadata,
+  createMetadata,
+  openGraphImage,
+} from "@/lib/metadata";
 
 const titles = (
   meta: ReturnType<typeof createMetadata>
@@ -167,6 +172,53 @@ describe("createMetadata", () => {
     expect((meta.openGraph as Record<string, unknown>).type).toBe(
       "website"
     );
+  });
+});
+
+describe("createContentMetadata", () => {
+  const article = (locale: Content["locale"]): Content => ({
+    content: "",
+    locale,
+    metadata: {
+      category: "articles",
+      createdAt: new Date("2026-03-03T00:00:00.000Z"),
+      description: "d",
+      tags: ["css", "retour d'expérience"],
+      title: "t",
+      updatedAt: new Date("2026-03-04T00:00:00.000Z"),
+    } as Content["metadata"],
+    reading: { time: "8 min", words: 1077 },
+    slug: "how-i-write-css",
+  });
+
+  const tags = (content: Content, locale: "fr" | "en") =>
+    (
+      createContentMetadata(content, locale).openGraph as Record<
+        string,
+        unknown
+      >
+    ).tags;
+
+  // un tag est une CLÉ, écrite en français : `article:tag` d'un article
+  // anglais annonçait « retour d'expérience »
+  it("publie le libellé des tags dans la langue du contenu", () => {
+    expect(tags(article("en"), "en")).toEqual([
+      "css",
+      "lessons learned",
+    ]);
+    expect(tags(article("fr"), "fr")).toEqual([
+      "css",
+      "retour d'expérience",
+    ]);
+  });
+
+  // un article sans traduction est servi en français sous /en : ses sujets
+  // restent ceux qui sont affichés sous lui, en français
+  it("garde les clés pour un repli français servi sous /en", () => {
+    expect(tags(article("fr"), "en")).toEqual([
+      "css",
+      "retour d'expérience",
+    ]);
   });
 });
 

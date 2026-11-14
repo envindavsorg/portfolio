@@ -63,6 +63,35 @@ test.describe("contenus liés", () => {
       page.getByRole("heading", { level: 1 }).first()
     ).toBeVisible();
   });
+
+  /**
+   * Un tag est une CLÉ, écrite en français parce qu'elle produit le slug. La
+   * phrase destinée aux lecteurs d'écran l'imprimait telle quelle : sous /en,
+   * « 1 shared tag: retour d'expérience ».
+   */
+  test("les sujets en commun sont annoncés dans la langue de la page", async ({
+    page,
+  }) => {
+    const panel = (name: string) =>
+      page
+        .getByRole("heading", { name })
+        .locator("xpath=ancestor::*[@data-slot='panel'][1]");
+
+    // le témoin : la clé française est bien celle que ces articles partagent,
+    // sinon son absence sous /en ne prouverait rien
+    await page.goto(NEWER);
+    await expect(panel("à lire aussi")).toContainText(
+      /tags? en commun : .*retour d'expérience/u
+    );
+
+    await page.goto(`/en${NEWER}`);
+    await expect(panel("related reading")).toContainText(
+      /shared tags?: .*lessons learned/u
+    );
+    await expect(panel("related reading")).not.toContainText(
+      "retour d'expérience"
+    );
+  });
 });
 
 /**

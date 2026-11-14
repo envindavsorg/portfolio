@@ -4,6 +4,7 @@ import { Divider } from "@/components/base/Divider";
 import { Badge } from "@/components/primitives/Badge";
 import type { Content } from "@/lib/content";
 import { getRelatedContent } from "@/lib/related";
+import { tagLabel } from "@/lib/tags";
 import { m } from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
@@ -64,6 +65,9 @@ export const WritingsRelated = ({
                               own.toLowerCase() === tag.toLowerCase()
                           )
                         )
+                        // le libellé, pas la clé : sous /en la phrase
+                        // annonçait « shared tag: retour d'expérience »
+                        .map((tag) => tagLabel(tag, current.locale))
                         .join(", "),
                     })}
                   </span>
