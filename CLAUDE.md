@@ -691,8 +691,9 @@ End-to-end tests (Playwright, `e2e/`):
 - `titles.spec.ts` - homepage section titles stay visible, and their sticky form
   follows the scroll position by wheel steps in both directions. Titles are
   readable with JavaScript disabled, an off-screen title is masked after
-  hydration and enters when reached, and the letters keep their transition
-  under the theme provider's rule (with the header as control)
+  hydration and enters when reached, the letters keep their transition under
+  the theme provider's rule (with the title copy as control), and a sticky
+  title carries its own colour with no fade on the header
 - `load-stability.spec.ts` - no deferred boundary in the served HTML of `/` and
   `/en`, the deep link at 390px, the pixel title's box with the four late fonts
   blocked, the theme not re-applied at mount (plus toggle, system theme and
