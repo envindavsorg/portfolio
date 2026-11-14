@@ -14,12 +14,24 @@ import * as m from "@/paraglide/messages";
 
 export const buttonVariants = cva(
   [
-    "inline-flex items-center justify-center shrink-0 gap-2 rounded-full font-medium text-sm",
+    "inline-flex items-center justify-center shrink-0 gap-2 rounded-none font-medium text-sm",
     // pas de classe de focus : l'anneau vient de la règle `:focus-visible` de
     // globals.css. L'ancien `ring-offset-background` posait un liseré beige
     // autour du bouton sur le canevas blanc.
     "cursor-pointer select-none whitespace-nowrap transition-colors duration-200",
     "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+    // un bouton est une pièce du plan : coins vifs, équerres aux quatre coins
+    // (`corner-brackets`, globals.css)
+    "corner-brackets",
+    // le reflet du survol : une bande inclinée, rangée hors du bouton à
+    // gauche, qui le traverse une fois. Elle ne revient pas — la transition
+    // n'existe que pendant le survol — et ne bouge pas si le visiteur a
+    // demandé moins de mouvement. Seul `translate` est animé.
+    "relative overflow-hidden",
+    "after:pointer-events-none after:absolute after:-inset-y-1/2 after:left-0 after:w-1/2",
+    "after:-translate-x-[220%] after:skew-x-[-20deg]",
+    "after:bg-linear-to-r after:from-transparent after:via-current/20 after:to-transparent",
+    "motion-safe:hover:after:translate-x-[320%] motion-safe:hover:after:transition-transform motion-safe:hover:after:duration-500",
   ],
   {
     defaultVariants: {
@@ -30,34 +42,38 @@ export const buttonVariants = cva(
       size: {
         default: "h-8 px-4",
         icon: "size-8",
-        sm: "h-6 px-2 text-xs",
+        sm: "h-6 px-2 text-xs [--bracket:5px]",
       },
       variant: {
+        // plein, aux couleurs inversées du thème ; ses équerres sont celles
+        // du texte, à mi-force, pour marquer les coins sans les découper
         default: [
-          "bg-linear-to-b",
-          "text-shadow-xs text-white",
-          "from-zinc-700 dark:from-zinc-600",
-          "to-zinc-800 dark:to-zinc-700",
-          "hover:to-zinc-700 dark:hover:to-zinc-600",
-          "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/20",
+          "bg-foreground text-background hover:bg-foreground/85",
+          "[--bracket-color:color-mix(in_oklab,currentColor_55%,transparent)]",
         ],
         destructive: [
-          "border border-destructive",
+          "border border-destructive/50 border-dashed",
           "text-destructive",
-          "bg-transparent hover:bg-destructive/10",
-          "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-destructive/20",
+          "bg-transparent hover:border-destructive hover:bg-destructive/10",
         ],
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-foreground underline-offset-2 hover:bg-transparent hover:text-theme hover:underline",
+        // sans filet : les équerres n'apparaissent qu'au survol
+        ghost: [
+          "[--bracket-color:transparent]",
+          "hover:bg-accent hover:text-accent-foreground hover:[--bracket-color:currentColor]",
+        ],
+        // un lien n'est pas une pièce : ni équerres (`bg-none` les retire), ni
+        // reflet
+        link: "bg-none text-foreground underline-offset-2 after:hidden hover:bg-transparent hover:text-theme hover:underline",
         // `hover:bg-accent/40` seul était imperceptible : 1,03:1 contre le
         // canevas en clair, 1,08:1 en sombre. Le fond plein (1,10 / 1,26) ne
         // suffit toujours pas en clair, d'où le filet qui passe de 1,98:1 à
-        // 4,82:1 — c'est lui qui porte le survol.
+        // 4,82:1 — c'est lui qui porte le survol, avec les équerres qui
+        // prennent la couleur du thème.
         outline: [
-          "border border-foreground/30",
+          "border border-foreground/30 border-dashed",
           "text-foreground",
           "bg-transparent hover:border-foreground/60 hover:bg-accent",
-          "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15",
+          "hover:[--bracket-color:var(--color-theme)]",
         ],
       },
     },
