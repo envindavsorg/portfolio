@@ -91,11 +91,14 @@ const HEADER_PADDING = "px-3 py-1 sm:py-1.5";
  * Ce qui change, c'est qui le porte — le compositeur, sur une ligne de temps
  * commune (`lib/stagger-easing.ts`) ; les états sont dans `lib/sticky-title.ts`.
  *
- * ⚠️ Ce qui RESTE cher dans une bascule n'est pas ici : c'est le fondu de
- * couleur de l'en-tête (`transition-colors`). La couleur est héritée, donc
- * pendant 300 ms chaque image recalcule le style de chaque lettre en train de
- * bouger. Ce fondu coupé, le même aller-retour livre 530 à 540 images au lieu
- * de 400 à 440 ; il fait partie de l'effet, donc il reste.
+ * ⚠️ La couleur n'est PAS animée, et elle n'est pas héritée de l'en-tête :
+ * chaque copie porte la sienne (`TITLE_COLOR`). L'en-tête fondait sa couleur
+ * sur 300 ms (`transition-colors`) ; comme la couleur s'hérite, chaque image
+ * de ce fondu recalculait le style de chaque lettre en train de bouger — le
+ * premier coût d'une bascule. Ce fondu coupé, le même aller-retour livrait
+ * 530 à 540 images au lieu de 400 à 440. La copie qui sort garde sa couleur
+ * en s'effaçant, celle qui entre arrive dans la sienne : le fondu enchaîné
+ * est porté par l'opacité, que le compositeur anime seul.
  */
 const LETTER_MS = 300;
 const SPREAD_MS = 300;
@@ -108,6 +111,12 @@ const EXIT_MS = SPREAD_MS + LETTER_MS;
 
 /** ordre FIXE dans le DOM : une bascule ne déplace aucun nœud */
 const TITLE_FORMS: TitleForm[] = ["plain", "stuck"];
+
+/** la couleur appartient à la FORME, pas à l'en-tête : rien à hériter */
+const TITLE_COLOR: Record<TitleForm, string> = {
+  plain: "text-foreground",
+  stuck: "text-theme",
+};
 
 /**
  * `transition-property` est marquée `!important`, et elle seule.
@@ -205,6 +214,7 @@ const TitleCopy = ({
       // ne s'effondre ni ne double
       className={cn(
         "whitespace-pre-wrap transition-opacity duration-300 ease-[cubic-bezier(0.25,0.1,0.35,1)]",
+        TITLE_COLOR[form],
         leaving && "absolute inset-x-0 top-0 opacity-0"
       )}
     >
@@ -422,9 +432,8 @@ export const PanelHeader = forwardRef<
     return (
       <div
         className={cn(
-          "screen-line-after sticky top-14 z-20 bg-background transition-colors duration-300",
+          "screen-line-after sticky top-14 z-20 bg-background",
           HEADER_PADDING,
-          state.stuck ? "text-theme" : "text-foreground",
           className
         )}
         data-slot="panel-header"

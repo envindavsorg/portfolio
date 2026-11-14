@@ -331,10 +331,15 @@ src/app/
     animating.
 
   Both copies are still mounted together during the swap (the leaving one is
-  `absolute`) — the converging wait of the spec relies on it. What a swap still
-  costs is the header's `transition-colors`: colour is inherited, so each frame
-  of the 300 ms fade re-styles every letter with a running transition. It is
-  part of the effect; removing it is the owner's call.
+  `absolute`) — the converging wait of the spec relies on it. Colour is NOT
+  animated and NOT inherited from the header: each copy carries its own
+  (`TITLE_COLOR` — foreground at rest, theme when stuck), so the leaving copy
+  fades out in its colour while the entering one fades in in the other. The
+  header used to fade its colour over 300 ms (`transition-colors`); colour is
+  inherited, so each frame of that fade re-styled every letter with a running
+  transition — the main cost of a swap, hence of scrolling on a phone. Never
+  put a colour transition back on the header, nor a colour the copies would
+  inherit; `e2e/titles.spec.ts` checks both.
 - An `IntersectionObserver` callback reads the LAST entry of its batch
   (`entries.at(-1)`), or every entry when it watches several targets — never
   the first. Under main-thread pressure "on screen" then "off screen" arrive in

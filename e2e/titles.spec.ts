@@ -260,17 +260,13 @@ test.describe("titres de section", () => {
     });
 
     const properties = await page.evaluate(() => {
-      const header = document.querySelector(
-        "[data-slot='panel-header']"
+      const letter = document.querySelector(
+        "[data-slot='panel-header'] [data-slot='panel-title'] span[aria-hidden]"
       );
-      const letter = header?.querySelector(
-        "[data-slot='panel-title'] span[aria-hidden]"
-      );
+      const copy = letter?.parentElement;
 
       return {
-        header: header
-          ? getComputedStyle(header).transitionProperty
-          : "",
+        copy: copy ? getComputedStyle(copy).transitionProperty : "",
         letter: letter
           ? getComputedStyle(letter).transitionProperty
           : "",
@@ -278,9 +274,57 @@ test.describe("titres de section", () => {
     });
 
     // TÉMOIN : la règle injectée coupe bien les transitions ordinaires, à
-    // commencer par le fondu de couleur de l'en-tête
-    expect(properties.header).toBe("none");
+    // commencer par le fondu d'opacité de la copie qui porte les lettres
+    expect(properties.copy).toBe("none");
     expect(properties.letter).toBe("opacity, translate");
+  });
+
+  /**
+   * La couleur d'un titre collant ne s'anime pas et ne s'hérite pas.
+   *
+   * L'en-tête fondait sa couleur sur 300 ms. La couleur étant héritée, chaque
+   * image de ce fondu recalculait le style de chaque lettre en mouvement : le
+   * premier coût d'une bascule, donc du défilement sur téléphone. Chaque copie
+   * porte maintenant sa couleur ; un fondu remis sur l'en-tête, ou une couleur
+   * rendue à l'héritage, ramènerait ce coût sans rien casser de visible.
+   */
+  test("le titre collant porte sa couleur, sans fondu sur l'en-tête", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 844, width: 390 });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const headers = await page.evaluate(() =>
+      [
+        ...document.querySelectorAll<HTMLElement>(
+          "[data-slot='panel-header']"
+        ),
+      ]
+        .filter(
+          (header) => getComputedStyle(header).position === "sticky"
+        )
+        .map((header) => {
+          const copy = header.querySelector<HTMLElement>(
+            "[data-slot='panel-title'] p"
+          );
+
+          // TÉMOIN : une couleur que la copie hériterait suivrait celle-ci
+          header.style.color = "rgb(1, 2, 3)";
+
+          return {
+            color: copy ? getComputedStyle(copy).color : "",
+            duration: getComputedStyle(header).transitionDuration,
+          };
+        })
+    );
+
+    expect(headers.length).toBeGreaterThan(0);
+
+    for (const { color, duration } of headers) {
+      expect(duration).toBe("0s");
+      expect(color).not.toBe("rgb(1, 2, 3)");
+    }
   });
 
   /**
