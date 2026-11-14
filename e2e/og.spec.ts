@@ -169,6 +169,9 @@ test.describe("cartes sociales", () => {
       ["/projects/portfolio", "project"],
       ["/experience/wefix-by-fnac", "experience"],
       ["/", "homepage"],
+      // ni un article ni un index : ces pages portaient la pastille « blog »
+      ["/cv", "page"],
+      ["/tags/react", "page"],
     ];
 
     for (const [path, type] of cases) {

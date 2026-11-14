@@ -12,7 +12,7 @@ export const metadata: Metadata = createMetadata({
   ogImageParams: {
     description: pageDescription,
     title: "How much this site weighs",
-    type: "blog",
+    type: "page",
   },
   path: "/weight",
   title: "How much this site weighs",

@@ -72,7 +72,7 @@ export const buildTagMetadata = async ({
   return createMetadata({
     description,
     locale,
-    ogImageParams: { description, title, type: "blog" },
+    ogImageParams: { description, title, type: "page" },
     path: `/tags/${tag.slug}`,
     title,
   });

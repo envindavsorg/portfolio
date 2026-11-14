@@ -51,7 +51,7 @@ export const buildSeriesMetadata = async ({
   return createMetadata({
     description,
     locale,
-    ogImageParams: { description, title, type: "blog" },
+    ogImageParams: { description, title, type: "page" },
     path: `/series/${series.slug}`,
     title,
   });

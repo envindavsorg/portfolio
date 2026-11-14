@@ -33,7 +33,7 @@ export const metadata: Metadata = createMetadata({
   ogImageParams: {
     description: pageDescription,
     title: "CV",
-    type: "blog",
+    type: "page",
   },
   path: "/cv",
   title: "CV",

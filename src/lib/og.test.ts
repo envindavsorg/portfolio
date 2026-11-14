@@ -22,6 +22,7 @@ const TYPES: PageType[] = [
   "componentsArticle",
   "utils",
   "utilsArticle",
+  "page",
 ];
 
 describe("ogFamily", () => {
@@ -98,6 +99,16 @@ describe("ogBadge", () => {
     expect(ogBadge("utilsArticle", false)).toBe("outil");
     expect(ogBadge("utilsArticle", true)).toBe("tool");
     expect(ogBadge("experience", true)).toBe("experience");
+  });
+
+  // /cv, /uses, /now, /weight, la recherche, les sujets et les séries
+  // demandaient le type « blog » : la carte du CV portait la pastille « blog »
+  it("ne présente pas comme un blog une page qui n'en est pas un", () => {
+    expect(ogBadge("page", false)).toBe("page");
+    expect(ogBadge("page", true)).toBe("page");
+    expect(ogBadge("blog", false)).toBe("blog");
+    // la même carte que les écrits : pas de palette en plus à mesurer
+    expect(ogPalette("page")).toEqual(ogPalette("blog"));
   });
 
   it("couvre tous les types dans les deux langues", () => {

@@ -22,7 +22,7 @@ export const metadata: Metadata = createMetadata({
   ogImageParams: {
     description: pageDescription,
     title: "Tous les sujets",
-    type: "blog",
+    type: "page",
   },
   path: "/tags",
   title: "Tous les sujets",

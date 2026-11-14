@@ -129,6 +129,11 @@ const FAMILY_BY_TYPE: Record<PageType, OgFamily> = {
   componentsArticle: "components",
   experience: "experience",
   homepage: "home",
+  // Les pages qui ne sont d'aucune rubrique : /cv, /uses, /now, /weight, la
+  // recherche, les sujets et les séries. Elles demandaient le type « blog »,
+  // donc la carte du CV portait la pastille « blog ». Même carte que les
+  // écrits — pas de septième palette — sous un mot qui ne ment pas.
+  page: "writing",
   project: "project",
   utils: "tools",
   utilsArticle: "tools",
@@ -147,6 +152,7 @@ const BADGES_FR: Record<PageType, string> = {
   componentsArticle: "composant",
   experience: "expérience",
   homepage: "portfolio",
+  page: "page",
   project: "projet",
   utils: "outils",
   utilsArticle: "outil",
@@ -159,6 +165,7 @@ const BADGES_EN: Record<PageType, string> = {
   componentsArticle: "component",
   experience: "experience",
   homepage: "portfolio",
+  page: "page",
   project: "project",
   utils: "tools",
   utilsArticle: "tool",
