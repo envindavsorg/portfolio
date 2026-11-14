@@ -3,11 +3,12 @@ import { expect, test } from "@playwright/test";
 
 /**
  * Ce qui bouge — ou travaille — sans que le visiteur n'ait rien demandé, au
- * chargement. Deux causes mesurées, une garde chacune :
+ * chargement. Trois causes mesurées, une garde chacune :
  *
  * - les deux sections GitHub de l'accueil sortaient du flux HTML et revenaient
  *   300 ms après la première image, en poussant tout ce qui suit ;
- * - le titre pixel changeait de hauteur à l'arrivée de quatre polices.
+ * - le titre pixel changeait de hauteur à l'arrivée de quatre polices ;
+ * - le titre pixel pouvait rester à battre une fois hors de l'écran.
  */
 
 const PHONE = { height: 844, width: 390 };
@@ -133,5 +134,67 @@ test.describe("titre pixel", () => {
 
     expect(without.height).toBeCloseTo(loaded.height, 1);
     expect(without.width).toBeCloseTo(loaded.width, 1);
+  });
+});
+
+/** changements de police du titre pixel sur une fenêtre de temps */
+const countTitleTicks = async (page: Page, duration: number) =>
+  await page
+    .locator("[data-slot='pixel-heading']")
+    .first()
+    .evaluate(async (heading, wait) => {
+      let ticks = 0;
+      const observer = new MutationObserver((records) => {
+        ticks += records.length;
+      });
+      observer.observe(heading, {
+        attributeFilter: ["class"],
+        attributes: true,
+        subtree: true,
+      });
+      await new Promise((resolve) => setTimeout(resolve, wait));
+      observer.disconnect();
+      return ticks;
+    }, duration);
+
+test.describe("titre pixel hors écran", () => {
+  test.use({ viewport: PHONE });
+
+  test("ne bat plus, même si deux changements arrivent d'un coup", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "load" });
+
+    // TÉMOIN : à l'écran, le titre bat
+    await expect
+      .poll(async () => await countTitleTicks(page, 500))
+      .toBeGreaterThan(0);
+
+    // Fil principal occupé entre deux images : le titre revient à l'écran puis
+    // en ressort, et l'observateur reçoit les deux changements dans UN rappel.
+    await page.evaluate(() => window.scrollTo(0, 4000));
+    await expect
+      .poll(async () => await countTitleTicks(page, 300))
+      .toBe(0);
+    await page.evaluate(() => {
+      const channel = new MessageChannel();
+      let step = 0;
+      channel.port1.onmessage = () => {
+        window.scrollTo(0, step === 0 ? 0 : 4000);
+        step += 1;
+        const end = performance.now() + 150;
+        while (performance.now() < end) {
+          // occupé
+        }
+      };
+      channel.port2.postMessage(0);
+      channel.port2.postMessage(0);
+    });
+    await page.waitForTimeout(1000);
+
+    await expect(
+      page.locator("[data-slot='pixel-heading']").first()
+    ).not.toBeInViewport();
+    expect(await countTitleTicks(page, 1000)).toBe(0);
   });
 });

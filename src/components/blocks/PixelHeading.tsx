@@ -286,9 +286,14 @@ export const PixelHeading = ({
       }
     };
 
+    // Le DERNIER changement du lot, pas le premier : quand le fil principal
+    // est occupé (hydratation, défilement), « à l'écran » puis « hors écran »
+    // arrivent dans un même rappel. Lire le premier relançait le minuteur sur
+    // un titre qui venait de sortir, et il battait alors sans fin — vingt
+    // rendus par seconde, hors de l'écran.
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting && !document.hidden) {
+      (entries) => {
+        if (entries.at(-1)?.isIntersecting && !document.hidden) {
           start();
         } else {
           stop();
