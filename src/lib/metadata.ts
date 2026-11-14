@@ -242,6 +242,29 @@ const OG_TYPE_BY_CATEGORY: Record<ContentCategory, string> = {
 };
 
 /**
+ * La carte sociale d'un contenu — pour `og:image` ET pour l'`image` du JSON-LD.
+ *
+ * Les deux la construisaient chacun de leur côté, et seul `og:image` y mettait
+ * la ligne de méta : un composant ou un outil, qui n'ont pas d'image de
+ * couverture, publiaient donc deux URL de carte différentes sur la même page,
+ * soit deux rendus pour une image.
+ *
+ * La date et le temps de lecture s'affichent en pied de carte. Ils sont déjà
+ * calculés par `content.ts` et affichés sur la page : les porter jusqu'à
+ * l'aperçu ne coûte rien et répond à la question qu'on se pose devant un lien
+ * partagé — est-ce récent, et est-ce long.
+ */
+export const contentOgImageParams = ({
+  metadata: { category, createdAt, description, title },
+  reading,
+}: Content): OpenGraphImageParams => ({
+  description,
+  meta: `${reading.time} · ${createdAt.toISOString().slice(0, 10)}`,
+  title,
+  type: category ? OG_TYPE_BY_CATEGORY[category] : undefined,
+});
+
+/**
  * Métadonnées d'une page de contenu, pour les DEUX arbres de routes.
  *
  * Les six pages de détail (trois catégories × deux locales) construisaient le
@@ -269,19 +292,7 @@ export const createContentMetadata = (
     },
     description,
     locale,
-    ogImageParams: {
-      description,
-      /**
-       * La date et le temps de lecture, que la carte affiche en pied.
-       *
-       * Ils sont déjà calculés par `content.ts` et affichés sur la page : les
-       * porter jusqu'à l'aperçu ne coûte rien et répond à la question qu'on se
-       * pose devant un lien partagé — est-ce récent, et est-ce long.
-       */
-      meta: `${content.reading.time} · ${createdAt.toISOString().slice(0, 10)}`,
-      title,
-      type: category ? OG_TYPE_BY_CATEGORY[category] : undefined,
-    },
+    ogImageParams: contentOgImageParams(content),
     ...(category && { path: `/${category}/${content.slug}` }),
     title,
   });
