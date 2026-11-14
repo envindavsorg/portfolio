@@ -210,3 +210,28 @@ export const contributionWindow = (now: Date): ContributionWindow => {
 
   return { from, to: now };
 };
+
+/**
+ * La période que couvre le graphe, telle qu'on l'affiche : « 2026 », ou
+ * « 2025–2026 » quand la fenêtre chevauche deux années.
+ *
+ * Le libellé prenait l'année du PREMIER jour. Or la fenêtre est glissante —
+ * douze mois jusqu'à aujourd'hui — : en novembre 2026 elle commence en novembre
+ * 2025, et la page annonçait « contributions effectuées en 2025 » pour un
+ * graphe dont dix mois sur douze sont en 2026. L'année se lit dans la chaîne
+ * ISO plutôt que par un `Date` : un jour « 2026-01-01 » ne doit pas basculer
+ * sur 2025 selon le fuseau de qui construit la page.
+ */
+export const contributionPeriod = (
+  days: readonly { date: string }[],
+  fallbackYear: number
+): string => {
+  const first = days[0]?.date.slice(0, 4);
+  const last = days.at(-1)?.date.slice(0, 4);
+
+  if (!(first && last)) {
+    return String(fallbackYear);
+  }
+
+  return first === last ? first : `${first}–${last}`;
+};
