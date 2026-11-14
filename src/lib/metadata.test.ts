@@ -5,6 +5,7 @@ import {
   createContentMetadata,
   createMetadata,
   createRootMetadata,
+  homeIdentity,
   openGraphImage,
   TITLE_TEMPLATE,
 } from "@/lib/metadata";
@@ -252,6 +253,30 @@ describe("titre du document", () => {
     });
     expect(meta.openGraph?.title).toBe("florin cuzeac");
     expect(meta.twitter?.title).toBe("florin cuzeac");
+  });
+
+  // la description de l'accueil n'était que l'accroche : 48 caractères, sans
+  // nom ni métier. Rien n'est écrit, tout est composé de ce que la page affiche
+  it("compose le titre et la description de l'accueil", () => {
+    expect(
+      homeIdentity(
+        "développeur Full-Stack Senior",
+        "crée, code, innove. les petits détails comptent."
+      )
+    ).toEqual({
+      description:
+        "florin cuzeac — développeur Full-Stack Senior. crée, code, innove. les petits détails comptent.",
+      title: "florin cuzeac — développeur Full-Stack Senior",
+    });
+
+    expect(
+      homeIdentity(
+        "senior full-stack developer",
+        "creates, codes, innovates. the small details matter."
+      ).description
+    ).toBe(
+      "florin cuzeac — senior full-stack developer. creates, codes, innovates. the small details matter."
+    );
   });
 
   // `<meta name="author">` annonçait le pseudo GitHub quand `article:author`

@@ -299,6 +299,25 @@ export const createContentMetadata = (
  */
 export const TITLE_TEMPLATE = `%s — ${GLOBAL_DATA.USER.fullName}`;
 
+/**
+ * Titre et description de l'accueil, composés de ce qui est DÉJÀ publié.
+ *
+ * L'accueil n'avait pour description que l'accroche — 48 caractères, sans nom
+ * ni métier : « crée, code, innove. les petits détails comptent. » ne dit pas
+ * de qui est le site, ni de quoi il parle. Aucun texte n'est écrit ici : le nom,
+ * le métier et l'accroche sont ceux que la page affiche, dans sa langue. Le
+ * titre sort du gabarit (`absoluteTitle`) — l'accueil s'intitulerait sinon
+ * « florin cuzeac — florin cuzeac ».
+ */
+export const homeIdentity = (
+  jobTitle: string,
+  bio: string
+): { description: string; title: string } => {
+  const title = `${GLOBAL_DATA.USER.fullName} — ${jobTitle}`;
+
+  return { description: `${title}. ${bio}`, title };
+};
+
 // metadata du layout racine de chaque arbre de routes ((fr)/ et en/)
 export const createRootMetadata = (locale: AppLocale): Metadata => ({
   // autodécouverte des flux : sans ces <link rel="alternate">, un lecteur RSS

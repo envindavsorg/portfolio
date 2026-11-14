@@ -26,7 +26,7 @@ import { getAllContent } from "@/lib/content";
 import { latestUpdate } from "@/lib/content-dates";
 import { dayjs } from "@/lib/functions";
 import { PERSON_ID } from "@/lib/json-ld";
-import { createMetadata } from "@/lib/metadata";
+import { createMetadata, homeIdentity } from "@/lib/metadata";
 
 const About = dynamic(async () => {
   const mod = await import(
@@ -37,12 +37,16 @@ const About = dynamic(async () => {
 
 export const revalidate = 3600;
 
+const home = homeIdentity(
+  GLOBAL_DATA.WORK.title,
+  GLOBAL_DATA.USER.bio
+);
+
 export const metadata: Metadata = createMetadata({
-  // le nom puis le métier, hors gabarit : par le gabarit, l'accueil
-  // s'intitulerait « florin cuzeac — florin cuzeac »
-  absoluteTitle: `${GLOBAL_DATA.USER.fullName} — ${GLOBAL_DATA.WORK.title}`,
-  description: GLOBAL_DATA.USER.bio,
+  absoluteTitle: home.title,
+  description: home.description,
   ogImageParams: {
+    // la carte garde l'accroche seule : son pied porte déjà le métier
     description: GLOBAL_DATA.USER.bio,
     title: GLOBAL_DATA.USER.fullName,
     type: "homepage",
