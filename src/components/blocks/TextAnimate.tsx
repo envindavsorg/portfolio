@@ -34,6 +34,14 @@ interface TextAnimateProps extends MotionProps {
   animation?: AnimationVariant;
   accessible?: boolean;
   themed?: boolean;
+  /**
+   * `popLayout` (défaut) sort la copie sortante du flux en la MESURANT, puis en
+   * injectant une feuille de style dans `<head>` — une mise en page forcée et
+   * un recalcul de style de tout le document à chaque changement de texte.
+   * `sync` laisse les deux copies en place : à l'appelant de les superposer en
+   * CSS (voir `PanelHeader`).
+   */
+  presenceMode?: "popLayout" | "sync";
 }
 
 const staggerTimings: Record<AnimationType, number> = {
@@ -324,6 +332,7 @@ const TextAnimateBase = ({
   animation = "fadeIn",
   accessible = true,
   themed = false,
+  presenceMode = "popLayout",
   ...props
 }: TextAnimateProps) => {
   const MotionComponent = getMotionComponent(Component);
@@ -405,7 +414,7 @@ const TextAnimateBase = ({
   const finalVariants = getFinalVariants();
 
   return (
-    <AnimatePresence mode="popLayout">
+    <AnimatePresence mode={presenceMode}>
       {/**
        * La CLÉ dépend du texte.
        *

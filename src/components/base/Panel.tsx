@@ -60,6 +60,24 @@ const DEFAULT_STICKY_LINE = 56;
  */
 const HEADER_PADDING = "px-3 py-1 sm:py-1.5";
 
+/**
+ * La copie SORTANTE du titre sort du flux par le CSS, sans mesure.
+ *
+ * Quand le titre change de forme, l'ancienne copie s'efface pendant que la
+ * nouvelle entre : les deux sont montées ensemble une fraction de seconde.
+ * `AnimatePresence` en `popLayout` retirait l'ancienne du flux en mesurant sa
+ * boîte puis en injectant un `<style>` dans `<head>` — pour onze en-têtes
+ * collants, à chaque passage de la ligne d'accroche : une mise en page forcée
+ * et le style de toute la page invalidé au milieu du défilement.
+ *
+ * En mode `sync`, Motion garde la copie sortante DEVANT la nouvelle dans le
+ * `<h2>` : tout ce qui n'est pas le dernier enfant est posé en absolu sur la
+ * même boîte. Le rendu est le même — même place, même fondu —, et la barre
+ * garde exactement un enfant dans le flux : elle ne s'effondre ni ne double.
+ */
+const TITLE_SWAP =
+  "relative [&>:not(:last-child)]:absolute [&>:not(:last-child)]:inset-x-0 [&>:not(:last-child)]:top-0";
+
 interface PanelHeaderProps extends ComponentProps<"div"> {
   sticky?: boolean;
   title?: string;
@@ -189,6 +207,7 @@ export const PanelHeader = forwardRef<
           bascule, et tout ce qui suit dans la page remonte d'autant */}
         <PanelTitle
           className={cn(
+            TITLE_SWAP,
             isStuck &&
               "text-center text-xl leading-8 max-[359px]:text-lg sm:text-2xl sm:leading-9"
           )}
@@ -197,6 +216,7 @@ export const PanelHeader = forwardRef<
             animation="slideLeft"
             by="character"
             delay={isStuck ? 0 : 0.2}
+            presenceMode="sync"
           >
             {isStuck ? `-- ${title} --` : (title ?? "")}
           </TextAnimate>
