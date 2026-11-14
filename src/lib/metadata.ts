@@ -292,7 +292,8 @@ export const createRootMetadata = (locale: AppLocale): Metadata => ({
   description: GLOBAL_DATA.USER.description,
   icons: {
     apple: {
-      sizes: "180x180",
+      // la taille RÉELLE du fichier : il était déclaré en 180x180
+      sizes: "512x512",
       type: "image/png",
       url: "/apple-touch-icon.png",
     },
