@@ -29,24 +29,35 @@ export const Counter = memo(({ value, children }: CounterProps) => {
     let timer: ReturnType<typeof setInterval>;
     const interval = 600 / Math.ceil(value / step);
 
+    // Le DERNIER changement du lot : fil principal occupé, « hors écran »
+    // puis « à l'écran » arrivent dans un même rappel. Lire le premier
+    // laissait le compteur à zéro sous les yeux, jusqu'à sa prochaine sortie.
+    //
+    // Le décompte repart toujours de zéro, minuteur précédent arrêté : deux
+    // « à l'écran » de suite deviennent possibles, et le premier minuteur,
+    // arrivé au bout, aurait arrêté le second à sa place avant de tourner
+    // sans fin. Au fil normal rien ne change : une entrée suit toujours une
+    // sortie, donc un compteur déjà à zéro et sans minuteur.
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          let current = 0;
+      (entries) => {
+        clearInterval(timer);
+        setDisplayValue(0);
 
-          timer = setInterval(() => {
-            current += step;
-            if (current >= value) {
-              setDisplayValue(value);
-              clearInterval(timer);
-            } else {
-              setDisplayValue(current);
-            }
-          }, interval);
-        } else {
-          clearInterval(timer);
-          setDisplayValue(0);
+        if (!entries.at(-1)?.isIntersecting) {
+          return;
         }
+
+        let current = 0;
+
+        timer = setInterval(() => {
+          current += step;
+          if (current >= value) {
+            setDisplayValue(value);
+            clearInterval(timer);
+          } else {
+            setDisplayValue(current);
+          }
+        }, interval);
       },
       { threshold: 0.5 }
     );

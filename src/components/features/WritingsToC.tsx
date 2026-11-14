@@ -169,7 +169,17 @@ const Rail = ({ groups, activeUrl }: ContentProps) => {
     const offset = RAIL_STICKY_TOP + nav.offsetTop + nav.offsetHeight;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        // Le DERNIER changement du lot : fil principal occupé, « corps
+        // passé » puis « corps revenu » arrivent dans un même rappel. Lire
+        // le premier effaçait le rail au milieu de l'article, jusqu'au
+        // prochain franchissement.
+        const entry = entries.at(-1);
+
+        if (!entry) {
+          return;
+        }
+
         // `top < 0` : seulement quand le corps est AU-DESSUS, jamais parce
         // qu'il n'est pas encore entré dans une fenêtre très basse
         setIsPastBody(

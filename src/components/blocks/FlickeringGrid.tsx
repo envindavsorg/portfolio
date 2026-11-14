@@ -190,9 +190,16 @@ export const FlickeringGrid = ({
 
     resizeObserver.observe(container);
 
+    // Le DERNIER changement du lot : fil principal occupé, « à l'écran »
+    // puis « hors écran » arrivent dans un même rappel. Lire le premier
+    // déclarait la grille visible alors qu'elle venait de sortir. Elle ne
+    // restait pas allumée — l'effet se réabonne à chaque changement d'état,
+    // et un observateur neuf dit où en est le canvas — mais chaque lot
+    // coûtait deux tours d'effet pour rien : quatre réallocations du canvas,
+    // deux observateurs recréés, une à trois images dessinées hors écran.
     const intersectionObserver = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
+      (entries) => {
+        setIsInView(entries.at(-1)?.isIntersecting ?? false);
       },
       { threshold: 0 }
     );

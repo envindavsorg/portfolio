@@ -320,7 +320,17 @@ export const PanelHeader = forwardRef<
         DEFAULT_STICKY_LINE;
 
       const observer = new IntersectionObserver(
-        ([entry]) => {
+        (entries) => {
+          // Le DERNIER changement du lot : fil principal occupé, « collé »
+          // puis « décollé » arrivent dans un même rappel. Lire le premier
+          // laissait la forme « -- titre -- » à un en-tête revenu sous la
+          // ligne d'accroche, jusqu'au prochain franchissement.
+          const entry = entries.at(-1);
+
+          if (!entry) {
+            return;
+          }
+
           dispatch({
             stuck:
               entry.intersectionRatio < 1 &&
