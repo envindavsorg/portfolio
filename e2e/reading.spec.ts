@@ -177,6 +177,45 @@ test.describe("sommaire", () => {
     await expect(rail.locator("[aria-current]")).toHaveCount(1);
   });
 
+  test("la marque suit un saut, pas seulement un défilement", async ({
+    page,
+  }) => {
+    await page.goto(NEWER);
+    await expect(
+      page.getByRole("navigation", { name: TOC_NAME })
+    ).toBeVisible();
+
+    // par CSS et non par rôle : en bas de page le rail est `invisible`, donc
+    // absent de l'arbre d'accessibilité, alors que sa marque doit déjà être
+    // juste pour le moment où il réapparaît
+    const rail = page.locator(
+      'nav[aria-label*="points importants sur cette page" i]'
+    );
+    const marked = rail.locator("[aria-current]");
+
+    // au-dessus du premier titre, on n'est dans aucune section
+    await expect(marked).toHaveCount(0);
+
+    // un saut, sans passer par les titres : aucun ne « traverse » l'écran
+    await page.evaluate(() =>
+      window.scrollTo({
+        behavior: "instant",
+        top: document.documentElement.scrollHeight,
+      })
+    );
+    await expect(rail.locator("a").last()).toHaveAttribute(
+      "aria-current",
+      "location"
+    );
+    await expect(marked).toHaveCount(1);
+
+    // retour en haut d'un seul coup : la dernière section restait marquée
+    await page.evaluate(() =>
+      window.scrollTo({ behavior: "instant", top: 0 })
+    );
+    await expect(marked).toHaveCount(0);
+  });
+
   test("le rail s'efface une fois l'article passé", async ({
     page,
   }) => {

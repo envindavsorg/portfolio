@@ -193,9 +193,18 @@ const Rail = ({ groups, activeUrl }: ContentProps) => {
    */
   useEffect(() => {
     const nav = navRef.current;
-    const active = nav?.querySelector<HTMLElement>("[aria-current]");
 
-    if (!(nav && active && activeUrl)) {
+    if (!nav) {
+      return;
+    }
+
+    const active = activeUrl
+      ? nav.querySelector<HTMLElement>("[aria-current]")
+      : null;
+
+    if (!active) {
+      // remonté au-dessus du premier titre : un long sommaire repart du début
+      nav.scrollTop = 0;
       return;
     }
 
