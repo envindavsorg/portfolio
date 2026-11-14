@@ -53,21 +53,34 @@
  * l'avoir vu : c'est la trace `POIDS` de la CI qui l'a montré, sur le passage
  * qui validait la mise à jour.
  *
- * MISE À JOUR DU 14 NOVEMBRE. Première trace `POIDS` depuis que la mesure
- * bloque le service worker : celle de la CI sur la PR #19, fond de particules
- * compris sur chaque page (`particules=oui`). Toutes les valeurs ci-dessous en
- * sortent, et l'avertissement qui les disait périmées disparaît avec elles.
- * Elles ont bougé dans LES DEUX SENS, parce que deux effets se superposent.
- * À la hausse : les scripts servis par le service worker ne sont plus
- * soustraits, chaque octet reçu compte. À la baisse : la branche a retiré des
- * pages les locales de zod, le parseur markdown, tslog, le polyfill
- * URLPattern, le Pages Router, le catalogue de messages et une police
- * préchargée. `/articles` descend ainsi de 648 à 519 et `/` de 591 à 561,
- * quand `/series/parcours` monte de 448 à 536 et `/tags` de 453 à 485 ; les
- * polices tombent de 266 à 198 sur chaque page, le CSS passe de 24 à 26. Le
- * pire cas n'est plus `/articles` mais la page d'outil, à 613. Une seule
- * trace ne sépare pas les deux effets : ces chiffres disent ce que pèse une
- * première visite aujourd'hui, pas ce que chaque retrait a rapporté.
+ * MISE À JOUR DU 14 NOVEMBRE, en deux traces `POIDS` de la CI sur la PR #19 —
+ * les premières depuis que la mesure bloque le service worker, fond de
+ * particules compris sur chaque page (`particules=oui`). Toutes les valeurs
+ * ci-dessous sortent de la SECONDE ; l'avertissement qui les disait périmées
+ * avait disparu dès la première.
+ *
+ * Depuis le relevé d'août, elles ont bougé dans LES DEUX SENS, parce que deux
+ * effets se superposent. À la hausse : les scripts servis par le service
+ * worker ne sont plus soustraits, chaque octet reçu compte. À la baisse : la
+ * branche a retiré des pages les locales de zod, le parseur markdown, tslog,
+ * le polyfill URLPattern, le Pages Router, le catalogue de messages et une
+ * police préchargée. `/articles` descend ainsi de 648 à 520 et `/` de 591 à
+ * 562, quand `/series/parcours` monte de 448 à 536 et `/tags` de 453 à 486 ;
+ * les polices tombent de 266 à 198 sur chaque page, le CSS passe de 24 à 26.
+ * Une trace ne sépare pas ces deux effets : ces chiffres disent ce que pèse
+ * une première visite aujourd'hui, pas ce que chaque retrait a rapporté.
+ *
+ * Entre les deux traces du jour, UNE valeur a vraiment bougé, et sa cause est
+ * connue : la page d'outil passe de 613 à 533. Elle téléchargeait les
+ * quatorze widgets de /utils quel que soit l'outil affiché ; elle ne reçoit
+ * plus que le sien, soit 80 Kio de JS en moins. La première trace en faisait
+ * le pire cas du site : elle passe derrière `/series/parcours`, restée à
+ * 536, et LE PIRE CAS EST DÉSORMAIS L'ACCUEIL, `/` et `/en`, à 562. Toutes
+ * les pages publiées sauf ces deux-là — la page d'outil et
+ * `/series/parcours` — affichent 1 Kio de JS de plus : 561 à 562 sur
+ * l'accueil, 519 à 520 sur `/articles`. Les valeurs sont arrondies au
+ * kibioctet, et la trace ne dit pas quel commit l'apporte. Polices, CSS,
+ * images et documents sont identiques au kibioctet près.
  */
 
 export type PageKind =
@@ -98,7 +111,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 85,
     fonts: 198,
     images: 23,
-    js: 561,
+    js: 562,
     kind: "home",
     path: "/",
   },
@@ -107,7 +120,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 83,
     fonts: 198,
     images: 23,
-    js: 561,
+    js: 562,
     kind: "home",
     path: "/en",
   },
@@ -116,7 +129,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 23,
     fonts: 198,
     images: 27,
-    js: 519,
+    js: 520,
     kind: "index",
     path: "/articles",
   },
@@ -125,7 +138,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 41,
     fonts: 198,
     images: 0,
-    js: 519,
+    js: 520,
     kind: "article",
     path: "/articles/how-i-write-css",
   },
@@ -134,7 +147,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 47,
     fonts: 198,
     images: 0,
-    js: 613,
+    js: 533,
     kind: "tool",
     path: "/utils/regex-tester",
   },
@@ -143,7 +156,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 198,
     images: 0,
-    js: 485,
+    js: 486,
     kind: "index",
     path: "/tags",
   },
@@ -152,7 +165,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 17,
     fonts: 198,
     images: 0,
-    js: 493,
+    js: 494,
     kind: "index",
     path: "/search",
   },
@@ -170,7 +183,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 198,
     images: 0,
-    js: 485,
+    js: 486,
     kind: "showcase",
     path: "/projects",
   },
@@ -179,7 +192,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 19,
     fonts: 198,
     images: 0,
-    js: 485,
+    js: 486,
     kind: "showcase",
     path: "/projects/portfolio",
   },
@@ -188,7 +201,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 19,
     fonts: 198,
     images: 0,
-    js: 485,
+    js: 486,
     kind: "showcase",
     path: "/experience/wefix-by-fnac",
   },
@@ -197,7 +210,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 23,
     fonts: 198,
     images: 0,
-    js: 473,
+    js: 474,
     kind: "resume",
     path: "/cv",
   },
@@ -212,16 +225,16 @@ export const MEASURED_PAGES: MeasuredPage[] = [
  * — et n'auront pas de chiffre de CI tant qu'elles ne sont pas mesurées. Cette
  * liste casse le cercle : à verser dans `MEASURED_PAGES` dès la première trace.
  *
- * PREMIÈRE TRACE LE 14 NOVEMBRE, et elles restent ici. /components y pèse 539
- * Kio de JS et 119 d'IMAGES, le double du plafond de 60 : la publier ferait
- * échouer « aucune valeur publiée ne dépasse son plafond », et relever un
- * plafond pour faire entrer une page est ce que ce module interdit. Alléger
- * la liste ou borner les images par type de page est une décision, pas un
- * rafraîchissement. Les deux autres passent sous chaque plafond — la vue du
- * composant à 539 de JS et 40 de document, /utils à 468 et 22 — mais la
- * première demande un `PageKind` que /weight n'a pas. /utils peut entrer
- * telle quelle ; le relevé du 14 novembre n'a changé que des valeurs et ne
- * l'a pas versée.
+ * TRACÉES DEUX FOIS LE 14 NOVEMBRE, et elles restent ici. /components pèse
+ * dans les deux traces 539 Kio de JS et 119 d'IMAGES, le double du plafond de
+ * 60 : la publier ferait échouer « aucune valeur publiée ne dépasse son
+ * plafond », et relever un plafond pour faire entrer une page est ce que ce
+ * module interdit. Alléger la liste ou borner les images par type de page est
+ * une décision, pas un rafraîchissement. Les deux autres passent sous chaque
+ * plafond — dans la seconde trace, la vue du composant à 540 de JS et 40 de
+ * document, /utils à 469 et 22 — mais la première demande un `PageKind` que
+ * /weight n'a pas. /utils peut entrer telle quelle ; les deux relevés du 14
+ * novembre n'ont changé que des valeurs et ne l'ont pas versée.
  */
 export const LOGGED_PAGES: string[] = [
   "/components",
@@ -262,17 +275,20 @@ export const LOGGED_PAGES: string[] = [
  * Et il se relit à chaque fois que le pire cas bouge, pas seulement quand il
  * monte.
  *
- * RELUS LE 14 NOVEMBRE, sur la première trace prise service worker bloqué.
+ * RELUS LE 14 NOVEMBRE, sur les deux traces prises service worker bloqué.
  * Même règle, 15 à 20 % au-dessus du pire cas, appliquée aux nouveaux pires
  * cas ; un plafond ne bouge que s'il sort de cette bande, et aucun ne monte :
  *
- * - JS, 613 sur la page d'outil : 760 se retrouvait 24 % au-dessus
- *   (760 / 613 = 1,24), hors d'une bande qui va de 705 à 736. D'où 720, soit
- *   17,5 % ;
- * - polices, 198 sur chaque page : 300 était 52 % au-dessus (300 / 198 =
- *   1,52), pour une bande de 228 à 238. D'où 235, soit 18,7 %. À 300, la
- *   police préchargée en trop que cette branche a retirée — 266 contre 198 —
- *   tenait encore sous le plafond ;
+ * - JS, 562 sur l'accueil. La première trace donnait 613 sur la page
+ *   d'outil : 760 se retrouvait 24 % au-dessus (760 / 613 = 1,24), d'où 720.
+ *   La seconde ramène cette page à 533 et le pire cas à 562 : 720 se retrouve
+ *   à son tour 28 % au-dessus (720 / 562 = 1,28), hors d'une bande qui va de
+ *   646 à 674. D'où 660, soit 17,4 % — encore la marge d'un poids qu'on ne
+ *   porte plus ;
+ * - polices, 198 sur chaque page, dans les deux traces : 300 était 52 %
+ *   au-dessus (300 / 198 = 1,52), pour une bande de 228 à 238. D'où 235, soit
+ *   18,7 %. À 300, la police préchargée en trop que cette branche a retirée —
+ *   266 contre 198 — tenait encore sous le plafond ;
  * - CSS, 26 : 30 est à 15,4 %, dans la bande. Inchangé ;
  * - document, 85 sur l'accueil : 100 est à 17,6 %, dans la bande. Inchangé ;
  * - images, 27 sur /articles : 60 reste large à dessein. Inchangé.
@@ -282,7 +298,7 @@ export const WEIGHT_BUDGETS = {
   document: 100,
   fonts: 235,
   images: 60,
-  js: 720,
+  js: 660,
 } as const;
 
 export type WeightMetric = keyof typeof WEIGHT_BUDGETS;
