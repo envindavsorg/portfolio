@@ -10,6 +10,7 @@ import { LinkGrid } from "@/components/base/LinkGrid";
 import { Panel } from "@/components/base/Panel";
 import { Heart } from "@/components/motion/Heart";
 import GLOBAL_DATA from "@/data/global";
+import { rssFeedPath } from "@/lib/feed-path";
 import { formatDate, formatFromNow } from "@/lib/functions";
 import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
@@ -80,8 +81,13 @@ const getFooterLinks = (): LinkGridItem[] => [
     kind: "resource",
     label: m.footer_link_email(),
   },
-  // le libellé de l'icône de la barre de navigation, réemployé : même cible
-  { href: "/api/rss", kind: "resource", label: m.nav_rss_aria() },
+  // le libellé de l'icône de la barre de navigation, réemployé : même cible,
+  // donc le flux de la langue affichée
+  {
+    href: rssFeedPath(getLocale()),
+    kind: "resource",
+    label: m.nav_rss_aria(),
+  },
 ];
 
 export const Footer = async () => {

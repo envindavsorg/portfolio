@@ -4,6 +4,7 @@ import { useRef } from "react";
 
 import { Rss } from "@/components/motion/Rss";
 import { Button } from "@/components/primitives/Button";
+import { rssFeedPath } from "@/lib/feed-path";
 import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
@@ -27,7 +28,7 @@ export const NavBarRss = () => {
             anglais : le bouton ouvrait 22 éléments en français */}
         <a
           aria-label={m.nav_rss_aria()}
-          href={getLocale() === "en" ? "/api/rss/en" : "/api/rss"}
+          href={rssFeedPath(getLocale())}
           rel="noopener noreferrer"
           target="_blank"
         >

@@ -239,4 +239,40 @@ test.describe("liens du pied de page", () => {
       );
     });
   }
+
+  /**
+   * Le pied de /en ouvrait /api/rss : 22 éléments en français, aux liens sans
+   * /en. Le test part du lien RENDU puis lit ce qui est servi au bout — un
+   * href juste vers un flux dans l'autre langue serait le même défaut.
+   */
+  for (const [prefix, language] of [
+    ["", "fr"],
+    ["/en", "en"],
+  ] as const) {
+    test(`le pied de ${prefix || "/"} ouvre le flux RSS de sa langue`, async ({
+      page,
+      request,
+    }) => {
+      await page.goto(prefix || "/");
+
+      const feedLinks = (scope: string): Promise<string[]> =>
+        page
+          .locator(`${scope} a[href^="/api/rss"]`)
+          .evaluateAll((anchors) =>
+            anchors.map((anchor) => anchor.getAttribute("href") ?? "")
+          );
+
+      const feed = language === "en" ? "/api/rss/en" : "/api/rss";
+      expect(await feedLinks("footer nav")).toEqual([feed]);
+
+      // la barre de navigation mène au même flux que le pied, sur ses deux
+      // rendus (la rangée de la barre et celle du menu mobile)
+      const fromHeader = await feedLinks("header");
+      expect(fromHeader.length).toBeGreaterThan(0);
+      expect([...new Set(fromHeader)]).toEqual([feed]);
+
+      const xml = await (await request.get(feed)).text();
+      expect(xml).toContain(`<language>${language}</language>`);
+    });
+  }
 });
