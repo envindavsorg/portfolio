@@ -36,6 +36,9 @@ const About = dynamic(async () => {
 export const revalidate = 3600;
 
 export const metadata: Metadata = createMetadata({
+  // le nom puis le métier, hors gabarit : par le gabarit, l'accueil
+  // s'intitulerait « florin cuzeac — florin cuzeac »
+  absoluteTitle: `${GLOBAL_DATA.USER.fullName} — ${GLOBAL_DATA.WORK.title}`,
   description: GLOBAL_DATA.USER.bio,
   ogImageParams: {
     description: GLOBAL_DATA.USER.bio,

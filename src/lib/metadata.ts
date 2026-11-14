@@ -35,6 +35,14 @@ interface MetadataConfig {
   /** chemin SANS préfixe de locale, ex. "/articles" */
   path?: string;
   title: string;
+  /**
+   * Titre du DOCUMENT, posé tel quel, hors gabarit — pour l'accueil seulement.
+   *
+   * Son `title` est le nom du site : passé par le gabarit, il donnerait
+   * « florin cuzeac — florin cuzeac ». `og:title` et `twitter:title` gardent
+   * `title`.
+   */
+  absoluteTitle?: string;
   /** présent = la page est un article : `og:type` bascule et les dates sortent */
   article?: ArticleParams;
 }
@@ -137,6 +145,7 @@ export const openGraphImage = ({
 };
 
 export const createMetadata = ({
+  absoluteTitle,
   article,
   description,
   locale = "fr",
@@ -189,7 +198,7 @@ export const createMetadata = ({
           type: "article",
         }
       : { ...openGraphBase, type: "website" },
-    title,
+    title: absoluteTitle ? { absolute: absoluteTitle } : title,
     twitter: {
       card: "summary_large_image",
       description,
@@ -251,10 +260,17 @@ export const createContentMetadata = (
   });
 };
 
-const TITLE_TEMPLATES: Record<AppLocale, string> = {
-  en: "%s - Full-Stack Developer – Personal portfolio",
-  fr: "%s - Développeur Full-Stack – Portfolio personnel",
-};
+/**
+ * LE gabarit de titre du site : « titre de la page — nom ».
+ *
+ * Il y en avait quatre — deux ici, un par layout des écrits et par langue — et
+ * aucun ne portait le nom : sur 136 URL, seul le titre de l'accueil disait à qui
+ * appartient le site, et les suffixes (« Développeur Full-Stack – Portfolio
+ * personnel », « Articles, composants et outils web ») poussaient onze titres
+ * au-delà de 65 caractères, jusqu'à 98. Le nom ne se traduit pas : un seul
+ * gabarit sert les deux arbres, et aucun layout ne le redéfinit.
+ */
+export const TITLE_TEMPLATE = `%s — ${GLOBAL_DATA.USER.fullName}`;
 
 // metadata du layout racine de chaque arbre de routes ((fr)/ et en/)
 export const createRootMetadata = (locale: AppLocale): Metadata => ({
@@ -264,13 +280,15 @@ export const createRootMetadata = (locale: AppLocale): Metadata => ({
   alternates: {
     types: feedAlternates(locale),
   },
+  // le nom, pas le pseudo GitHub : `article:author` et le JSON-LD disent
+  // « florin cuzeac », et `<meta name="author">` annonçait quelqu'un d'autre
   authors: [
     {
-      name: "envindavsorg",
+      name: GLOBAL_DATA.USER.fullName,
       url: BASE_URL,
     },
   ],
-  creator: "envindavsorg",
+  creator: GLOBAL_DATA.USER.fullName,
   description: GLOBAL_DATA.USER.description,
   icons: {
     apple: {
@@ -311,6 +329,6 @@ export const createRootMetadata = (locale: AppLocale): Metadata => ({
   },
   title: {
     default: GLOBAL_DATA.USER.fullName,
-    template: TITLE_TEMPLATES[locale],
+    template: TITLE_TEMPLATE,
   },
 });

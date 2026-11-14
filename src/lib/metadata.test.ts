@@ -4,7 +4,9 @@ import type { Content } from "@/lib/content";
 import {
   createContentMetadata,
   createMetadata,
+  createRootMetadata,
   openGraphImage,
+  TITLE_TEMPLATE,
 } from "@/lib/metadata";
 
 const titles = (
@@ -172,6 +174,58 @@ describe("createMetadata", () => {
     expect((meta.openGraph as Record<string, unknown>).type).toBe(
       "website"
     );
+  });
+});
+
+describe("titre du document", () => {
+  // sur 136 URL, seul l'accueil portait le nom ; les quatre anciens gabarits
+  // finissaient par « Portfolio personnel » ou « Articles, composants et outils web »
+  it("n'a qu'un gabarit, qui porte le nom, pour les deux arbres", () => {
+    expect(TITLE_TEMPLATE).toBe("%s — florin cuzeac");
+
+    for (const locale of ["fr", "en"] as const) {
+      expect(createRootMetadata(locale).title).toEqual({
+        default: "florin cuzeac",
+        template: "%s — florin cuzeac",
+      });
+    }
+  });
+
+  it("laisse une page ordinaire passer par le gabarit", () => {
+    const meta = createMetadata({
+      description: "d",
+      title: "Projets",
+    });
+
+    // une chaîne : Next lui applique le gabarit du layout racine
+    expect(meta.title).toBe("Projets");
+  });
+
+  // l'accueil a pour titre le nom du site : par le gabarit, il s'intitulerait
+  // « florin cuzeac — florin cuzeac »
+  it("sort l'accueil du gabarit sans toucher au titre des cartes", () => {
+    const meta = createMetadata({
+      absoluteTitle: "florin cuzeac — développeur",
+      description: "d",
+      title: "florin cuzeac",
+    });
+
+    expect(meta.title).toEqual({
+      absolute: "florin cuzeac — développeur",
+    });
+    expect(meta.openGraph?.title).toBe("florin cuzeac");
+    expect(meta.twitter?.title).toBe("florin cuzeac");
+  });
+
+  // `<meta name="author">` annonçait le pseudo GitHub quand `article:author`
+  // et le JSON-LD donnent le nom
+  it("signe du nom, pas du pseudo", () => {
+    const root = createRootMetadata("fr");
+
+    expect(root.creator).toBe("florin cuzeac");
+    expect(root.authors).toEqual([
+      { name: "florin cuzeac", url: "https://cuzeacflorin.fr" },
+    ]);
   });
 });
 
