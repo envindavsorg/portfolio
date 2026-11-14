@@ -4,6 +4,7 @@ import { CERTS } from "@/app/(fr)/(content)/(root)/_components/certs/content";
 import { EXPERIENCES } from "@/app/(fr)/(content)/(root)/_components/experiences/content";
 import { PROJECTS } from "@/app/(fr)/(content)/(root)/_components/projects/content";
 import { getAllContent } from "@/lib/content";
+import { latestUpdate } from "@/lib/content-dates";
 import { dayjs } from "@/lib/functions";
 import { getSeriesIndex } from "@/lib/series";
 import { experiencePages, projectPages } from "@/lib/showcase";
@@ -61,21 +62,10 @@ const singleEntry = (
   entry: Omit<MetadataRoute.Sitemap[number], "url" | "alternates">
 ): MetadataRoute.Sitemap => [{ ...entry, url: toUrl(path, locale) }];
 
-const getLatestDate = (posts: ReturnType<typeof getAllContent>) => {
-  if (posts.length === 0) {
-    return dayjs().toISOString();
-  }
-
-  // getAllContent trie par createdAt : le premier élément n'est pas forcément
-  // le plus récemment mis à jour, il faut chercher le maximum
-  const latest = Math.max(
-    ...posts.map((post) =>
-      new Date(post.metadata.updatedAt).getTime()
-    )
-  );
-
-  return dayjs(latest).toISOString();
-};
+// le calcul vit dans `content-dates.ts` : l'accueil date son `ProfilePage` avec
+// la même fonction, pour que les deux signaux donnent la même date
+const getLatestDate = (posts: ReturnType<typeof getAllContent>) =>
+  latestUpdate(posts) ?? dayjs().toISOString();
 
 const sitemap = (): MetadataRoute.Sitemap => {
   const allPosts = getAllContent();

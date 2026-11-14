@@ -22,6 +22,8 @@ import { Tools } from "@/app/(fr)/(content)/(root)/_components/tools/Tools";
 import { Divider } from "@/components/base/Divider";
 import { SectionBoundary } from "@/components/layout/SectionBoundary";
 import GLOBAL_DATA from "@/data/global";
+import { getAllContent } from "@/lib/content";
+import { latestUpdate } from "@/lib/content-dates";
 import { dayjs } from "@/lib/functions";
 import { PERSON_ID } from "@/lib/json-ld";
 import { createMetadata } from "@/lib/metadata";
@@ -53,7 +55,10 @@ const getPageJsonLd = (): WithContext<PageSchema> => ({
   "@context": "https://schema.org",
   "@type": "ProfilePage",
   dateCreated: dayjs("2025-09-01").toISOString(),
-  dateModified: dayjs().toISOString(),
+  // La date du contenu le plus récemment mis à jour : celle que le sitemap
+  // donne à cette URL. `dayjs()` lisait l'horloge au rendu, donc la page se
+  // déclarait modifiée à chaque revalidation horaire, sans rien de changé.
+  dateModified: latestUpdate(getAllContent()),
   // référence au nœud Person du graphe racine, au lieu d'une TROISIÈME personne
   // anonyme nommée « florin » — le graphe en déclarait déjà deux différentes
   mainEntity: { "@id": PERSON_ID },

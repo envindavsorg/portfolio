@@ -69,9 +69,29 @@ describe("getSiteJsonLd", () => {
 
     // `knowsAbout` était figé à trois entrées écrites à la main
     expect((person.knowsAbout as string[]).length).toBeGreaterThan(3);
-    // les employeurs et les certifications n'étaient pas publiés du tout
-    expect((person.worksFor as unknown[]).length).toBe(3);
+    // les certifications n'étaient pas publiées du tout
     expect((person.hasCredential as unknown[]).length).toBe(4);
+  });
+
+  // `worksFor` déclarait trois employeurs ACTUELS, dont deux quittés en 2020 et
+  // en 2019 d'après les fiches du site lui-même
+  it("ne déclare comme employeur que le poste en cours", () => {
+    const person = node("fr", "Person");
+    const names = (key: string): string[] =>
+      (person[key] as { name: string }[]).map((entry) => entry.name);
+
+    expect(names("worksFor")).toEqual(["WeFix by Fnac"]);
+    expect(names("alumniOf")).toEqual([
+      "SpinalCom",
+      "Économat des Armées",
+    ]);
+    expect(person.worksFor).toEqual([
+      {
+        "@type": "Organization",
+        name: "WeFix by Fnac",
+        url: "https://wefix.net/",
+      },
+    ]);
   });
 
   it("expose une URL de vérification pour chaque certification", () => {

@@ -4,6 +4,7 @@ import type {
 } from "schema-dts";
 
 import { CERTS } from "@/app/(fr)/(content)/(root)/_components/certs/content";
+import { EXPERIENCES } from "@/app/(fr)/(content)/(root)/_components/experiences/content";
 import GLOBAL_DATA from "@/data/global";
 import type { AppLocale } from "@/lib/i18n";
 import * as m from "@/paraglide/messages";
@@ -33,6 +34,27 @@ export const PERSON_ID = `${BASE_URL}/#person`;
 
 const localeTag = (locale: AppLocale): string =>
   locale === "en" ? "en-US" : "fr-FR";
+
+/**
+ * Les employeurs, lus dans `EXPERIENCES` et non dans `GLOBAL_DATA.WORK.jobs`.
+ *
+ * `worksFor` publiait les trois entrées de `WORK.jobs` : SpinalCom et l'Économat
+ * des Armées y étaient déclarés employeurs ACTUELS sur chacune des pages, alors
+ * que les fiches du site les datent 2019 — 2020 et 2017 — 2019. `WORK.jobs` ne
+ * porte aucune période ; `EXPERIENCES` si, et c'est déjà la source du CV. Un
+ * poste sans `period.end` est en cours : lui seul va dans `worksFor`, les autres
+ * dans `alumniOf`.
+ */
+const employers = EXPERIENCES.filter((entry) => entry.kind === "job");
+
+const isCurrent = (job: (typeof EXPERIENCES)[number]): boolean =>
+  !job.period.end;
+
+const toOrganization = (job: (typeof EXPERIENCES)[number]) => ({
+  "@type": "Organization",
+  name: job.company,
+  ...(job.link && { url: job.link }),
+});
 
 /**
  * Le graphe du site, rendu une fois par le layout racine de chaque arbre.
@@ -69,6 +91,9 @@ export const getSiteJsonLd = (locale: AppLocale = "fr") => {
           "@type": "PostalAddress",
           addressLocality: GLOBAL_DATA.USER.location.city,
         },
+        alumniOf: employers
+          .filter((job) => !isCurrent(job))
+          .map(toOrganization),
         description: m.user_description(undefined, t),
         email: GLOBAL_DATA.USER.emailAddress,
         // les quatre certifications portent une URL de vérification publique :
@@ -94,11 +119,7 @@ export const getSiteJsonLd = (locale: AppLocale = "fr") => {
           GLOBAL_DATA.SOCIAL.linkedin,
         ].filter(Boolean),
         url: GLOBAL_DATA.SOCIAL.portfolio,
-        worksFor: GLOBAL_DATA.WORK.jobs.map((job) => ({
-          "@type": "Organization",
-          name: job.company,
-          url: job.website,
-        })),
+        worksFor: employers.filter(isCurrent).map(toOrganization),
       },
     ],
   };
