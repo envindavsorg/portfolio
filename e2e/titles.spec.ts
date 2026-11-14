@@ -5,22 +5,18 @@ import { expect, test } from "@playwright/test";
  * Les intitulés de section doivent être LISIBLES.
  *
  * Ils ne l'étaient pas : la page d'accueil affichait des bandes vides à la place
- * de plusieurs titres. Trois correctifs sont partis ensemble ; réintroduits UN
- * PAR UN sous ce test, ils ne pèsent pas du tout le même poids.
+ * de plusieurs titres. Les lettres étaient alors des composants Motion, et un
+ * texte qui changeait après sa première entrée dans le cadre (« titre » devenu
+ * « -- titre -- ») montait ses caractères masqués sans que rien ne les révèle.
+ * Ce test a été écrit contre ce défaut : il échouait à 23/25 caractères
+ * invisibles, définitivement.
  *
- * Ce qui tient tout : la CLÉ de `TextAnimate`. Sans `key={children}`, un texte
- * qui change après la première entrée dans le cadre monte ses caractères en
- * `hidden` et plus rien ne déclenche `show`. Retirée, ce test échoue à 23/25
- * caractères invisibles, définitivement — c'est LE garde-fou.
- *
- * Les deux autres sont réels mais ne causent pas l'invisibilité durable, et ce
- * test passe sans eux. La sentinelle inversée (`isStuck = !entry.isIntersecting`,
- * alors qu'une sentinelle est hors cadre dans deux cas OPPOSÉS) faisait afficher
- * la forme « -- titre -- » à des titres encore sous la ligne de flottaison :
- * c'est ce changement de texte qui ARMAIT le défaut de clé, pas lui qui le
- * produisait. Et `once` relève de l'affichage. Corriger la cause profonde a
- * rendu les deux autres invisibles au test — les noter évite de croire qu'ils
- * sont gardés.
+ * Les lettres sont aujourd'hui des `<span>` animés par des transitions CSS
+ * (`PanelHeader`, `lib/sticky-title.ts`). Le défaut d'origine ne peut plus se
+ * produire sous cette forme, mais son équivalent existe : une lettre n'est
+ * masquée que dans trois états — titre hors écran en attente de son entrée,
+ * copie qui vient d'être montée, copie qui sort — et chacun doit se terminer.
+ * Un état qui ne se termine pas, c'est de nouveau un titre absent.
  *
  * Le test ne vérifie pas l'animation — il vérifie qu'aucun titre visible à
  * l'écran ne RESTE transparent. C'est la propriété qui compte : une animation
@@ -31,15 +27,13 @@ import { expect, test } from "@playwright/test";
  * La première version attendait 900 ms puis affirmait. Elle passait ici et
  * échouait en CI, en signalant « 16/40 caractères invisibles » sur un titre de
  * 16 caractères : 40 spans, c'est la copie sortante et la copie entrante
- * montées ensemble par `AnimatePresence` pendant la bascule vers la forme
- * collée. Mesuré en local, un titre est à 16/17 invisibles juste après le
- * défilement et à 0/17 dès 300 ms. Le délai fixe ne testait donc pas
- * l'invisibilité durable, il testait la VITESSE de la machine — et un runner
- * partagé est plus lent qu'un poste de travail.
+ * montées ensemble pendant la bascule vers la forme collée. Le délai fixe ne
+ * testait donc pas l'invisibilité durable, il testait la VITESSE de la machine
+ * — et un runner partagé est plus lent qu'un poste de travail.
  *
- * `expect.poll` dit exactement ce qu'on veut dire. Le défaut d'origine laissait
- * les titres à `opacity: 0` pour toujours : il épuise le délai et échoue,
- * pendant qu'une entrée normale converge en une fraction de seconde.
+ * `expect.poll` dit exactement ce qu'on veut dire : un titre resté à
+ * `opacity: 0` épuise le délai et échoue, pendant qu'une entrée normale
+ * converge en moins d'une seconde.
  */
 
 /** large devant les 300 ms constatées, court devant « pour toujours » */
@@ -159,7 +153,187 @@ const PARCOURS: { top: number; sens: string }[] = [
   })),
 ];
 
+/** les lettres des titres COLLANTS, dans l'ordre de la page */
+const stickyLetters = async (page: Page) =>
+  await page.evaluate(() =>
+    [...document.querySelectorAll("[data-slot='panel-header']")]
+      .filter(
+        (header) => getComputedStyle(header).position === "sticky"
+      )
+      .map((header) => {
+        const letters = [
+          ...header.querySelectorAll(
+            "[data-slot='panel-title'] span[aria-hidden]"
+          ),
+        ];
+
+        return {
+          below:
+            header.getBoundingClientRect().top >= window.innerHeight,
+          hidden: letters.filter(
+            (letter) => getComputedStyle(letter).opacity === "0"
+          ).length,
+          letters: letters.length,
+          // la ligne de temps commune est une courbe `linear()` par lettre
+          timeline: letters.some((letter) =>
+            getComputedStyle(
+              letter
+            ).transitionTimingFunction.startsWith("linear(")
+          ),
+          top: Math.round(
+            header.getBoundingClientRect().top + window.scrollY
+          ),
+        };
+      })
+  );
+
 test.describe("titres de section", () => {
+  /**
+   * Le HTML servi montre les titres : ils n'attendent pas le JavaScript.
+   *
+   * Motion écrivait son état de départ dans le HTML, donc les 204 lettres
+   * arrivaient à `opacity: 0` et le restaient jusqu'à l'hydratation — 2,6 à
+   * 2,9 s sur un profil de téléphone pour une première peinture à 0,3 s, et
+   * pour toujours sans JavaScript. On coupe donc le JavaScript : ce qui est
+   * lisible ici l'est avant l'hydratation.
+   *
+   * Seul le premier titre collant porte une entrée, jouée par le CSS dès la
+   * première peinture (`eager`) : c'est le seul qui puisse tomber dans le
+   * premier écran, et lui retirer son entrée serait retirer un effet.
+   */
+  test("les titres sont lisibles sans JavaScript", async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({
+      javaScriptEnabled: false,
+      viewport: { height: 900, width: 1280 },
+    });
+    const page = await context.newPage();
+    await page.goto("/");
+
+    await expect
+      .poll(
+        async () =>
+          (await stickyLetters(page)).reduce(
+            (total, title) => total + title.hidden,
+            0
+          ),
+        {
+          message: "lettres de titre invisibles sans JavaScript",
+          timeout: SETTLE_TIMEOUT,
+        }
+      )
+      .toBe(0);
+
+    const titles = await stickyLetters(page);
+
+    // TÉMOIN : sans titre ni lettre, le zéro ci-dessus ne prouverait rien
+    expect(titles.length).toBeGreaterThan(5);
+    expect(titles.every((title) => title.letters > 0)).toBe(true);
+
+    // l'entrée servie : le premier titre, et lui seul
+    expect(titles.map((title) => title.timeline)).toEqual([
+      true,
+      ...titles.slice(1).map(() => false),
+    ]);
+
+    await context.close();
+  });
+
+  /**
+   * Poser le thème ne doit pas couper une entrée en cours.
+   *
+   * Le fournisseur de thème désactive toutes les transitions de la page le
+   * temps d'appliquer le thème, y compris au montage. Sur un écran rapide ce
+   * moment tombait en pleine entrée servie, qui s'arrêtait net à mi-course. On
+   * injecte ici la MÊME règle : les lettres doivent garder leur transition.
+   */
+  test("les lettres gardent leur transition quand le thème se pose", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    await page.addStyleTag({
+      content: "*,*::before,*::after{transition:none!important}",
+    });
+
+    const properties = await page.evaluate(() => {
+      const header = document.querySelector(
+        "[data-slot='panel-header']"
+      );
+      const letter = header?.querySelector(
+        "[data-slot='panel-title'] span[aria-hidden]"
+      );
+
+      return {
+        header: header
+          ? getComputedStyle(header).transitionProperty
+          : "",
+        letter: letter
+          ? getComputedStyle(letter).transitionProperty
+          : "",
+      };
+    });
+
+    // TÉMOIN : la règle injectée coupe bien les transitions ordinaires, à
+    // commencer par le fondu de couleur de l'en-tête
+    expect(properties.header).toBe("none");
+    expect(properties.letter).toBe("opacity, translate");
+  });
+
+  /**
+   * Servir les titres visibles ne doit pas coûter l'entrée.
+   *
+   * Une fois la page hydratée, un titre encore sous l'écran est masqué — personne
+   * ne le regarde — et joue son entrée en arrivant dans le cadre. Sans cette
+   * étape le test précédent passerait toujours, avec des titres simplement
+   * posés là : c'est l'effet qui aurait disparu, en silence.
+   */
+  test("un titre hors écran attend d'être vu pour entrer", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    await expect
+      .poll(
+        async () => {
+          const below = (await stickyLetters(page)).filter(
+            (title) => title.below
+          );
+
+          return (
+            below.length > 0 &&
+            below.every((title) => title.hidden === title.letters)
+          );
+        },
+        {
+          message:
+            "les titres sous l'écran ne sont pas masqués en attendant leur entrée",
+          timeout: SETTLE_TIMEOUT,
+        }
+      )
+      .toBe(true);
+
+    const target = (await stickyLetters(page)).findLast(
+      (title) => title.below
+    );
+    await page.evaluate(
+      (y) => window.scrollTo({ behavior: "instant", top: y }),
+      (target?.top ?? 0) - 300
+    );
+
+    await expect
+      .poll(() => hiddenTitles(page), {
+        message: "le titre arrivé à l'écran n'est pas entré",
+        timeout: SETTLE_TIMEOUT,
+      })
+      .toEqual([]);
+  });
+
   for (const path of ["/", "/en"]) {
     test(`aucun titre transparent en défilant ${path}`, async ({
       page,

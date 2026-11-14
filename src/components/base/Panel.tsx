@@ -6,11 +6,19 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useReducer,
   useRef,
   useState,
 } from "react";
 
-import { TextAnimate } from "@/components/blocks/TextAnimate";
+import type { StaggerTimeline } from "@/lib/stagger-easing";
+import { staggerDuration, staggerEasing } from "@/lib/stagger-easing";
+import type { TitleForm } from "@/lib/sticky-title";
+import {
+  INITIAL_TITLE,
+  titleForm,
+  titleReducer,
+} from "@/lib/sticky-title";
 import { cn } from "@/lib/utils";
 
 export const Panel = ({
@@ -61,24 +69,183 @@ const DEFAULT_STICKY_LINE = 56;
 const HEADER_PADDING = "px-3 py-1 sm:py-1.5";
 
 /**
- * La copie SORTANTE du titre sort du flux par le CSS, sans mesure.
+ * Les lettres du titre collant : des `<span>` et des transitions CSS.
  *
- * Quand le titre change de forme, l'ancienne copie s'efface pendant que la
- * nouvelle entre : les deux sont montées ensemble une fraction de seconde.
- * `AnimatePresence` en `popLayout` retirait l'ancienne du flux en mesurant sa
- * boîte puis en injectant un `<style>` dans `<head>` — pour onze en-têtes
- * collants, à chaque passage de la ligne d'accroche : une mise en page forcée
- * et le style de toute la page invalidé au milieu du défilement.
+ * Elles étaient onze `TextAnimate`, soit un composant Motion par lettre. Deux
+ * défauts en venaient, mesurés sur l'accueil à 390 px, CPU ×4.
  *
- * En mode `sync`, Motion garde la copie sortante DEVANT la nouvelle dans le
- * `<h2>` : tout ce qui n'est pas le dernier enfant est posé en absolu sur la
- * même boîte. Le rendu est le même — même place, même fondu —, et la barre
- * garde exactement un enfant dans le flux : elle ne s'effondre ni ne double.
+ * Au CHARGEMENT : Motion écrit l'état de départ dans le HTML, donc chaque
+ * titre arrivait à `opacity: 0` et le restait jusqu'à l'hydratation — une
+ * barre vide là où l'on attend un intitulé (lisible à 2,6-2,9 s pour une
+ * première peinture à 0,3 s), et pour toujours sans JavaScript.
+ *
+ * Au DÉFILEMENT : chaque passage d'un titre sur la ligne d'accroche démontait
+ * une vingtaine de composants, en montait vingt-six, puis animait les deux
+ * copies lettre à lettre — l'opacité par une animation à délai, le glissement
+ * image par image en JavaScript, sur le fil principal. Ces bascules sont le
+ * premier coût du défilement : les couper ramenait l'aller-retour à la molette
+ * de 9,4 à 5,2 s de fil principal, et ses tâches longues de 12 à 0 ou 1.
+ *
+ * Le mouvement est le même : 300 ms par lettre en `easeOut`, départs étalés
+ * sur 300 ms, 20 px de glissement, la copie sortante qui s'efface à rebours.
+ * Ce qui change, c'est qui le porte — le compositeur, sur une ligne de temps
+ * commune (`lib/stagger-easing.ts`) ; les états sont dans `lib/sticky-title.ts`.
+ *
+ * ⚠️ Ce qui RESTE cher dans une bascule n'est pas ici : c'est le fondu de
+ * couleur de l'en-tête (`transition-colors`). La couleur est héritée, donc
+ * pendant 300 ms chaque image recalcule le style de chaque lettre en train de
+ * bouger. Ce fondu coupé, le même aller-retour livre 530 à 540 images au lieu
+ * de 400 à 440 ; il fait partie de l'effet, donc il reste.
  */
-const TITLE_SWAP =
-  "relative [&>:not(:last-child)]:absolute [&>:not(:last-child)]:inset-x-0 [&>:not(:last-child)]:top-0";
+const LETTER_MS = 300;
+const SPREAD_MS = 300;
+
+/** la forme au repos laisse 200 ms d'avance à la forme collée qui sort */
+const PLAIN_DELAY_MS = 200;
+
+/** passé ce délai plus aucune lettre sortante ne bouge : on démonte la copie */
+const EXIT_MS = SPREAD_MS + LETTER_MS;
+
+/** ordre FIXE dans le DOM : une bascule ne déplace aucun nœud */
+const TITLE_FORMS: TitleForm[] = ["plain", "stuck"];
+
+/**
+ * `transition-property` est marquée `!important`, et elle seule.
+ *
+ * Le fournisseur de thème coupe toutes les transitions de la page le temps de
+ * poser le thème (`* { transition: none !important }`), y compris au montage.
+ * Sur un écran rapide ce moment tombe en pleine entrée servie : relevée à
+ * 1440×900, elle s'arrêtait net à 41 % d'opacité, 170 ms après l'hydratation.
+ * Une transition en cours ne s'annule que si sa propriété sort de la liste ; sa
+ * durée et sa courbe ne sont lues qu'au départ, donc elles n'ont pas à être
+ * protégées — et elles restent en ligne, lettre par lettre.
+ *
+ * La classe ne donne AUCUNE durée : sans style en ligne, un changement d'état
+ * s'applique d'un coup. C'est ce qui masque une lettre sans l'animer.
+ */
+const LETTER =
+  "inline-block whitespace-pre font-pixel-square [transition-property:opacity,translate]!";
+
+/** le glissement est réservé à qui accepte le mouvement ; le fondu reste */
+const LETTER_MASKED = "opacity-0 motion-safe:translate-x-[20px]";
+const LETTER_LEAVING = "opacity-0 motion-safe:-translate-x-[20px]";
+
+/**
+ * L'entrée jouée par le CSS seul, dès la première peinture — pour le titre
+ * qui peut se trouver dans le premier écran, bien avant que le JavaScript
+ * n'arrive. Sans `@starting-style`, le titre est simplement là.
+ */
+const LETTER_SERVED_ENTRANCE =
+  "starting:opacity-0 motion-safe:starting:translate-x-[20px]";
+
+interface TitleCopyProps {
+  /** montée par une bascule, donc à faire entrer */
+  appear: boolean;
+  form: TitleForm;
+  leaving: boolean;
+  masked: boolean;
+  servedEntrance: boolean;
+  text: string;
+  /** hors de l'état servi : les lettres visibles portent leur ligne de temps */
+  timed: boolean;
+}
+
+const TitleCopy = ({
+  appear,
+  form,
+  leaving,
+  masked,
+  servedEntrance,
+  text,
+  timed,
+}: TitleCopyProps) => {
+  const [ready, setReady] = useState(!appear);
+
+  /**
+   * Une copie qui apparaît entre en DEUX temps : montée masquée, puis révélée.
+   * Une transition part de la dernière valeur que le navigateur a calculée ;
+   * révélée dans la même image que son montage, la copie n'aurait jamais eu de
+   * valeur de départ et s'afficherait d'un bloc. Deux images garantissent
+   * qu'un calcul de style a bien eu lieu entre les deux.
+   */
+  useEffect(() => {
+    if (ready) {
+      return;
+    }
+
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setReady(true));
+    });
+
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
+  }, [ready]);
+
+  const letters = [...text];
+  const timeline: StaggerTimeline = {
+    count: letters.length,
+    delay: !leaving && form === "plain" ? PLAIN_DELAY_MS : 0,
+    duration: LETTER_MS,
+    reverse: leaving,
+    spread: SPREAD_MS,
+  };
+  const transitionDuration = `${Math.round(staggerDuration(timeline))}ms`;
+  const hidden = masked || !ready;
+
+  return (
+    <p
+      // le nom du titre vient du `sr-only` : les lettres sont décoratives, et
+      // une copie qui sort n'a plus rien à dire à un lecteur d'écran
+      aria-hidden={leaving ? true : undefined}
+      // le fondu du bloc est celui que Motion donnait par défaut à l'opacité ;
+      // la copie sortante quitte le flux : la barre garde un seul enfant, elle
+      // ne s'effondre ni ne double
+      className={cn(
+        "whitespace-pre-wrap transition-opacity duration-300 ease-[cubic-bezier(0.25,0.1,0.35,1)]",
+        leaving && "absolute inset-x-0 top-0 opacity-0"
+      )}
+    >
+      <span className="sr-only">{text}</span>
+      {letters.map((letter, index) => (
+        <span
+          aria-hidden
+          className={cn(
+            LETTER,
+            servedEntrance && LETTER_SERVED_ENTRANCE,
+            leaving && LETTER_LEAVING,
+            hidden && LETTER_MASKED
+          )}
+          // biome-ignore lint/suspicious/noArrayIndexKey: les lettres d'un titre ne changent ni d'ordre ni de nombre, et deux « e » n'ont que leur rang pour se distinguer
+          key={index}
+          style={
+            timed && !hidden
+              ? {
+                  transitionDuration,
+                  transitionTimingFunction: staggerEasing(
+                    index,
+                    timeline
+                  ),
+                }
+              : undefined
+          }
+        >
+          {letter}
+        </span>
+      ))}
+    </p>
+  );
+};
 
 interface PanelHeaderProps extends ComponentProps<"div"> {
+  /**
+   * Pour le titre collant qui peut tomber dans le PREMIER écran : son entrée
+   * est jouée par le CSS dès la première peinture. Les autres sont servis
+   * visibles et ne s'animent qu'une fois hydratés, à leur arrivée à l'écran.
+   */
+  eager?: boolean;
   sticky?: boolean;
   title?: string;
 }
@@ -88,11 +255,11 @@ export const PanelHeader = forwardRef<
   PanelHeaderProps
 >(
   (
-    { children, className, sticky, title, ...props },
+    { children, className, eager = false, sticky, title, ...props },
     forwardedRef
   ) => {
     const internalRef = useRef<HTMLDivElement | null>(null);
-    const [isStuck, setIsStuck] = useState(false);
+    const [state, dispatch] = useReducer(titleReducer, INITIAL_TITLE);
 
     useImperativeHandle(
       forwardedRef,
@@ -154,11 +321,13 @@ export const PanelHeader = forwardRef<
 
       const observer = new IntersectionObserver(
         ([entry]) => {
-          setIsStuck(
-            entry.intersectionRatio < 1 &&
+          dispatch({
+            stuck:
+              entry.intersectionRatio < 1 &&
               entry.boundingClientRect.top <
-                (entry.rootBounds?.top ?? stickyLine + 1)
-          );
+                (entry.rootBounds?.top ?? stickyLine + 1),
+            type: "stick",
+          });
         },
         {
           rootMargin: `-${stickyLine + 1}px 0px 100000px 0px`,
@@ -166,8 +335,51 @@ export const PanelHeader = forwardRef<
         }
       );
       observer.observe(header);
-      return () => observer.disconnect();
+
+      /**
+       * L'entrée ne se joue que pour qui peut la voir.
+       *
+       * Le HTML servi montre tous les titres. Au premier constat, ceux qui
+       * sont hors écran sont masqués — personne ne les regarde — et joueront
+       * leur entrée en arrivant dans le cadre, une seule fois. Un titre déjà à
+       * l'écran reste tel quel : le masquer pour le refaire entrer serait un
+       * clignotement, pas une animation.
+       *
+       * C'est l'observateur qui tranche, pas une mesure au montage : son
+       * premier rappel donne la position sans forcer de mise en page au
+       * milieu de l'hydratation.
+       */
+      let firstReport = true;
+      const entrance = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          dispatch({ type: "enter" });
+          entrance.disconnect();
+        } else if (firstReport) {
+          dispatch({ type: "arm" });
+        }
+
+        firstReport = false;
+      });
+      entrance.observe(header);
+
+      return () => {
+        observer.disconnect();
+        entrance.disconnect();
+      };
     }, [sticky]);
+
+    useEffect(() => {
+      if (!state.exiting) {
+        return;
+      }
+
+      const timer = setTimeout(
+        () => dispatch({ type: "exited" }),
+        EXIT_MS
+      );
+
+      return () => clearTimeout(timer);
+    }, [state.exiting]);
 
     if (!sticky) {
       return (
@@ -190,12 +402,19 @@ export const PanelHeader = forwardRef<
       );
     }
 
+    const current = titleForm(state.stuck);
+    const texts: Record<TitleForm, string> = {
+      plain: title ?? "",
+      stuck: `-- ${title} --`,
+    };
+    const served = state.phase === "static";
+
     return (
       <div
         className={cn(
           "screen-line-after sticky top-14 z-20 bg-background transition-colors duration-300",
           HEADER_PADDING,
-          isStuck ? "text-theme" : "text-foreground",
+          state.stuck ? "text-theme" : "text-foreground",
           className
         )}
         data-slot="panel-header"
@@ -207,19 +426,25 @@ export const PanelHeader = forwardRef<
           bascule, et tout ce qui suit dans la page remonte d'autant */}
         <PanelTitle
           className={cn(
-            TITLE_SWAP,
-            isStuck &&
+            "relative",
+            state.stuck &&
               "text-center text-xl leading-8 max-[359px]:text-lg sm:text-2xl sm:leading-9"
           )}
         >
-          <TextAnimate
-            animation="slideLeft"
-            by="character"
-            delay={isStuck ? 0 : 0.2}
-            presenceMode="sync"
-          >
-            {isStuck ? `-- ${title} --` : (title ?? "")}
-          </TextAnimate>
+          {TITLE_FORMS.filter(
+            (form) => form === current || form === state.exiting
+          ).map((form) => (
+            <TitleCopy
+              appear={!served}
+              form={form}
+              key={form}
+              leaving={form !== current}
+              masked={state.phase === "armed"}
+              servedEntrance={eager && served}
+              text={texts[form]}
+              timed={eager || !served}
+            />
+          ))}
         </PanelTitle>
       </div>
     );

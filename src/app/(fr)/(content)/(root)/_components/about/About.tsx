@@ -27,7 +27,9 @@ export const About = () => {
 
   return (
     <Panel id="about-me">
-      <PanelHeader sticky title={m.home_about_panel_title()} />
+      {/* premier titre collant de la page : il tombe dans le premier écran
+        d'une fenêtre haute (752 px à 1440×900), d'où `eager` */}
+      <PanelHeader eager sticky title={m.home_about_panel_title()} />
 
       <AboutContent expanded={isExpanded} />
 
