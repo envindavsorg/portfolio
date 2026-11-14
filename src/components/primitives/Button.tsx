@@ -10,12 +10,15 @@ import { Check } from "@/components/motion/Check";
 import { Copy } from "@/components/motion/Copy";
 import { X } from "@/components/motion/X";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 export const buttonVariants = cva(
   [
     "inline-flex items-center justify-center shrink-0 gap-2 rounded-full font-medium text-sm",
-    "cursor-pointer select-none whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    // pas de classe de focus : l'anneau vient de la règle `:focus-visible` de
+    // globals.css. L'ancien `ring-offset-background` posait un liseré beige
+    // autour du bouton sur le canevas blanc.
+    "cursor-pointer select-none whitespace-nowrap transition-colors duration-200",
     "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   ],
   {
@@ -45,11 +48,15 @@ export const buttonVariants = cva(
           "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-destructive/20",
         ],
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-foreground underline-offset-2 transition-colors hover:bg-transparent hover:text-theme hover:underline",
+        link: "text-foreground underline-offset-2 hover:bg-transparent hover:text-theme hover:underline",
+        // `hover:bg-accent/40` seul était imperceptible : 1,03:1 contre le
+        // canevas en clair, 1,08:1 en sombre. Le fond plein (1,10 / 1,26) ne
+        // suffit toujours pas en clair, d'où le filet qui passe de 1,98:1 à
+        // 4,82:1 — c'est lui qui porte le survol.
         outline: [
           "border border-foreground/30",
           "text-foreground",
-          "bg-transparent hover:bg-accent/40",
+          "bg-transparent hover:border-foreground/60 hover:bg-accent",
           "dark:inset-shadow-[1px_1px_1px,0px_0px_2px] dark:inset-shadow-white/15",
         ],
       },

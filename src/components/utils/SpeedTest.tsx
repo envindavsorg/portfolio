@@ -11,7 +11,7 @@ import {
   ItemTitle,
 } from "@/components/primitives/Item";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 type SpeedResult = ReturnType<
   typeof SpeedTestEngine.prototype.results.getSummary

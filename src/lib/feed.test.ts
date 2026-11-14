@@ -16,6 +16,7 @@ const meta: FeedMeta = {
   author: "Florin",
   description: "Un flux de test",
   feedUrl: `${SITE}/api/rss`,
+  homeUrl: `${SITE}/`,
   language: "fr",
   siteUrl: SITE,
   title: "Mon flux",
@@ -76,6 +77,59 @@ describe("toFeedItems", () => {
     );
   });
 
+  // les pages /en annonçaient un flux dont aucun lien ne menait à /en
+  it("préfixe les liens du flux anglais", () => {
+    expect(toFeedItems([post], SITE, "en")[0].url).toBe(
+      "https://example.test/en/utils/json-formatter"
+    );
+    expect(toFeedItems([post], SITE, "fr")[0].url).toBe(
+      "https://example.test/utils/json-formatter"
+    );
+  });
+
+  // un tag est une CLÉ, écrite en français : le flux publie son libellé, dans
+  // la langue du fichier servi
+  it("publie le libellé des tags dans la langue du contenu", () => {
+    const tagged = (locale: Content["locale"]) =>
+      ({
+        ...post,
+        locale,
+        metadata: {
+          ...post.metadata,
+          tags: ["css", "retour d'expérience"],
+        },
+      }) as Content;
+
+    expect(toFeedItems([tagged("en")], SITE, "en")[0].tags).toEqual([
+      "css",
+      "lessons learned",
+    ]);
+    expect(toFeedItems([tagged("fr")], SITE)[0].tags).toEqual([
+      "css",
+      "retour d'expérience",
+    ]);
+    // un repli français servi dans le flux anglais reste étiqueté en français
+    expect(toFeedItems([tagged("fr")], SITE, "en")[0].tags).toEqual([
+      "css",
+      "retour d'expérience",
+    ]);
+  });
+
+  it("rend l'image de couverture absolue, et n'en invente pas", () => {
+    const illustrated = {
+      ...post,
+      metadata: {
+        ...post.metadata,
+        image: "/images/articles/5.webp",
+      },
+    } as Content;
+
+    expect(toFeedItems([illustrated], SITE)[0].image).toBe(
+      "https://example.test/images/articles/5.webp"
+    );
+    expect(toFeedItems([post], SITE)[0].image).toBeUndefined();
+  });
+
   it("defaults a missing category to articles", () => {
     const untyped = {
       ...post,
@@ -113,6 +167,22 @@ describe("toRssXml", () => {
       `<atom:link href="${SITE}/api/rss" rel="self"`
     );
     expect(xml).toContain("<language>fr</language>");
+  });
+
+  // `/en/` est une redirection : le canal anglais pointe vers /en, sans barre
+  it("pointe le canal vers l'accueil de sa langue", () => {
+    expect(toRssXml([makeItem()], meta)).toContain(
+      "<link>https://example.test/</link>"
+    );
+
+    const english = toRssXml([makeItem()], {
+      ...meta,
+      homeUrl: `${SITE}/en`,
+      language: "en",
+    });
+
+    expect(english).toContain("<link>https://example.test/en</link>");
+    expect(english).toContain("<language>en</language>");
   });
 
   it("uses the most recent update as lastBuildDate", () => {
@@ -156,6 +226,60 @@ describe("toJsonFeed", () => {
     expect(parsed.items[0].date_published).toBe(
       "2025-06-01T00:00:00.000Z"
     );
+  });
+
+  // la version 1.1 exige `content_html` ou `content_text` sur chaque élément :
+  // les 22 du flux n'avaient ni l'un ni l'autre
+  it("donne un contenu à chaque élément", () => {
+    const parsed = JSON.parse(
+      toJsonFeed(
+        [makeItem({ description: "Ce que dit l'article" })],
+        meta
+      )
+    );
+
+    expect(parsed.items[0].content_text).toBe("Ce que dit l'article");
+    expect(parsed.items[0].summary).toBe("Ce que dit l'article");
+  });
+
+  it("publie l'image d'un élément et les icônes du flux quand elles existent", () => {
+    const parsed = JSON.parse(
+      toJsonFeed(
+        [makeItem({ image: "https://example.test/images/a.webp" })],
+        {
+          ...meta,
+          favicon: "https://example.test/favicon.ico",
+          icon: "https://example.test/icon-512x512.png",
+        }
+      )
+    );
+
+    expect(parsed.items[0].image).toBe(
+      "https://example.test/images/a.webp"
+    );
+    expect(parsed.icon).toBe("https://example.test/icon-512x512.png");
+    expect(parsed.favicon).toBe("https://example.test/favicon.ico");
+  });
+
+  it("n'écrit ni image ni icône vides", () => {
+    const parsed = JSON.parse(toJsonFeed([makeItem()], meta));
+
+    expect("image" in parsed.items[0]).toBe(false);
+    expect("icon" in parsed).toBe(false);
+    expect("favicon" in parsed).toBe(false);
+  });
+
+  it("déclare l'accueil et la langue du flux", () => {
+    const parsed = JSON.parse(
+      toJsonFeed([makeItem()], {
+        ...meta,
+        homeUrl: `${SITE}/en`,
+        language: "en",
+      })
+    );
+
+    expect(parsed.home_page_url).toBe("https://example.test/en");
+    expect(parsed.language).toBe("en");
   });
 
   it("merges category and tags", () => {

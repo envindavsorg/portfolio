@@ -15,7 +15,7 @@ import type { ContentLocale } from "@/lib/content";
 import { getContentByCategory } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
 import { getTagData } from "@/lib/tags";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 const pageDescription =
@@ -131,6 +131,7 @@ export const ArticlesIndex = ({
                       createdAt={createdAt}
                       description={description}
                       image={image}
+                      locale={locale}
                       // seule la PREMIÈRE vignette : elle est au-dessus de la
                       // ligne de flottaison et c'est très probablement
                       // l'élément LCP de la page. `loading="lazy"` empêche

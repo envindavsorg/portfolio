@@ -1,7 +1,7 @@
 import { Badge } from "@/components/primitives/Badge";
 import { formatDate } from "@/lib/functions";
 import type { ContributionStats } from "@/lib/github-stats";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface CommitsStatsProps {
   stats: ContributionStats;
@@ -18,7 +18,7 @@ export const CommitsStats = ({ stats }: CommitsStatsProps) => {
   }
 
   return (
-    <div className="screen-line-before flex flex-wrap items-center gap-2 px-2 py-2 sm:gap-4 sm:px-4">
+    <div className="screen-line-before flex flex-wrap items-center gap-2 px-3 py-2 sm:gap-4">
       <span className="text-theme">---</span>
 
       <div className="flex flex-wrap items-center gap-2 sm:gap-4">

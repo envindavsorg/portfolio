@@ -1,5 +1,5 @@
 import type { Message } from "@/lib/i18n";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 /**
  * Ce que j'utilise.
@@ -112,7 +112,7 @@ export const USES: UsesGroup[] = [
         name: "typescript-language-server",
       },
       // `.node-version`
-      { link: "https://nodejs.org/", name: "Node.js 25" },
+      { link: "https://nodejs.org/", name: "Node.js 24" },
       // `.editorconfig` : tabulations, LF, UTF-8
       { link: "https://editorconfig.org/", name: "EditorConfig" },
       // `.claude/settings.json` : `pnpm fix` après chaque écriture

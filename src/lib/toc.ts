@@ -1,4 +1,3 @@
-import { getTableOfContents } from "fumadocs-core/content/toc";
 import type { TOCItemType } from "fumadocs-core/toc";
 
 export interface TocGroup {
@@ -7,14 +6,20 @@ export interface TocGroup {
 }
 
 /**
- * Extrait le sommaire d'un contenu MDX. À appeler depuis un composant serveur :
- * `getTableOfContents` embarque un parseur markdown complet (remark/micromark),
- * qu'on ne veut pas dans le bundle client — et le corps de l'article n'a pas à
- * être reparsé à l'hydratation.
+ * Ce module ne fait QUE regrouper des entrées déjà extraites, et n'importe de
+ * fumadocs qu'un type.
+ *
+ * `getContentToc` vivait ici, avec son import de `fumadocs-core/content/toc` en
+ * tête de fichier. Or `WritingsToC` — un composant client — importe
+ * `groupTocItems` depuis ce même module : le parseur markdown complet partait
+ * donc dans le bundle de chaque page de contenu, alors que le commentaire d'à
+ * côté disait précisément ne pas le vouloir. Un import en tête de module suit
+ * tout ce qui importe le module, pas seulement la fonction qui s'en sert.
+ *
+ * fumadocs-core 16.19 a rendu la fuite visible : `remark-heading` y tire acorn,
+ * et les pages de contenu ont pris 81 Kio de JS d'un coup. L'extraction est
+ * désormais dans `content-toc.ts`, que seules les pages serveur importent.
  */
-export const getContentToc = (content: string): TOCItemType[] =>
-  getTableOfContents(content);
-
 export const groupTocItems = (items: TOCItemType[]): TocGroup[] => {
   if (items.length === 0) {
     return [];

@@ -11,7 +11,7 @@ import { Input } from "@/components/primitives/Input";
 import { Spinner } from "@/components/primitives/Spinner";
 import type useEmailForm from "@/hooks/useEmailForm";
 import type { EmailFormData } from "@/hooks/useEmailForm";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface CvForm {
   form: ReturnType<typeof useEmailForm>["form"];

@@ -2,8 +2,6 @@
 
 import { useEffect } from "react";
 
-import { logger } from "@/lib/logger";
-
 /**
  * Enregistre le service worker, en production uniquement.
  *
@@ -21,8 +19,9 @@ const attemptRegistration = async () => {
   try {
     await navigator.serviceWorker.register("/sw.js", { scope: "/" });
   } catch (error) {
-    // un échec n'a aucune conséquence visible : le site fonctionne sans
-    logger.warn("service worker non enregistré", error);
+    // un échec n'a aucune conséquence visible : le site fonctionne sans.
+    // console et non `logger` : tslog pèse 27 Kio dans un bundle client
+    console.warn("service worker non enregistré", error);
   }
 };
 

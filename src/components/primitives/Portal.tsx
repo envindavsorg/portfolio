@@ -29,7 +29,7 @@ import { RemoveScroll } from "react-remove-scroll";
 
 import useDelay, { useFnDelay } from "@/hooks/useDelay";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { TextAnimate } from "../blocks/TextAnimate";
 import { Eye } from "../motion/Eye";
@@ -349,10 +349,18 @@ export const PortalImage = forwardRef<
         data-open={dataOpen}
         data-slot="dialog-image"
         decoding="async"
+        // `priority` ne pose plus que le préchargement (Next 16) : la première
+        // vignette de /articles, élément LCP de la page, n'était marquée nulle
+        // part comme prioritaire
+        fetchPriority={props.priority ? "high" : undefined}
         layoutId={`dialog-image-${id}-${wrapperLayoutId}`}
         // `loading="eager"` faisait telecharger toutes les vignettes de la liste
         // des le chargement ; `rel` n'est de toute facon pas valide sur <img>.
-        loading="lazy"
+        // Pas de `lazy` quand l'appelant demande `priority` : next/image refuse
+        // les deux ensemble et LEVE en developpement — /articles repondait 500
+        // sous `pnpm dev`, alors que le build de production, qui saute ce
+        // controle, passait sans rien dire.
+        loading={props.priority ? undefined : "lazy"}
         sizes={sizes}
         transition={{ ...transitionDialog, ...transition }}
         whileHover={animatedOpen || dataOpen ? undefined : whileHover}

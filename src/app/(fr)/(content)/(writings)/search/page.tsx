@@ -7,7 +7,7 @@ import { SearchResults } from "@/components/features/SearchResults";
 import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { Prose } from "@/components/primitives/Typography";
 import { createMetadata } from "@/lib/metadata";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 const pageDescription =
@@ -18,7 +18,7 @@ export const metadata: Metadata = createMetadata({
   ogImageParams: {
     description: pageDescription,
     title: "Rechercher",
-    type: "blog",
+    type: "page",
   },
   path: "/search",
   title: "Rechercher",
@@ -59,7 +59,11 @@ export const SearchPage = () => (
 
     <Divider before={false} border={false} type="half" />
 
-    <SearchResults />
+    {/* `pt-3` : le libellé du champ touchait la bande hachurée, alors que
+        chaque autre bloc de la page a 12 px au-dessus de lui */}
+    <div className="pt-3">
+      <SearchResults />
+    </div>
   </div>
 );
 

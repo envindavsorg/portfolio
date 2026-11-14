@@ -10,7 +10,7 @@ import {
 } from "@/components/base/Tooltip";
 import { getMonthLabels } from "@/lib/commits";
 import { formatDate } from "@/lib/functions";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { BLOCK_MARGIN, BLOCK_SIZE } from "./config";
 import { useContributionGraph } from "./Graph";
@@ -98,7 +98,20 @@ export const GraphCalendar = ({
 
   return (
     <div className="relative p-3" ref={containerRef} {...props}>
-      <div className="no-scrollbar max-w-full overflow-x-auto overflow-y-hidden">
+      {/*
+        L'année glissante fait 53 semaines, soit 844 px, dans un cadre de 742 px
+        au mieux (348 px à 390 px de large). Le défilement partait de la gauche :
+        ce qui restait caché derrière la barre masquée, c'étaient les semaines
+        les PLUS RÉCENTES — 6 sur ordinateur, 31 sur téléphone.
+
+        `direction: rtl` place la position initiale à droite sans une ligne de
+        JavaScript ; le SVG repasse en `ltr`, sinon ses libellés de mois
+        s'ancrent par l'autre bout. À partir de `sm` il n'y a plus rien à faire
+        défiler : `max-w-full` + `h-auto` réduisent l'année entière à la largeur
+        disponible (cases de 10,5 px). En dessous on garde le défilement — à
+        l'échelle, les cases tomberaient à 4,9 px.
+      */}
+      <div className="no-scrollbar max-w-full overflow-x-auto overflow-y-hidden [direction:rtl]">
         {/*
           UNE image nommée, et non 365 rectangles anonymes.
           Le graphe est une redite visuelle : ses chiffres sont déjà dans le DOM
@@ -118,7 +131,7 @@ export const GraphCalendar = ({
         {/* biome-ignore lint/a11y/useKeyWithMouseEvents: infobulle de confort sur une image nommée, dont les chiffres sont déjà en texte */}
         <svg
           aria-label={m.home_commits_graph_aria({ totalCount, year })}
-          className="block overflow-visible"
+          className="block overflow-visible [direction:ltr] sm:h-auto sm:max-w-full"
           height={height}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseOver}

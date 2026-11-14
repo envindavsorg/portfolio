@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import {
   BLOCK_RADIUS,

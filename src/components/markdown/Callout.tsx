@@ -9,7 +9,7 @@ import type { ComponentProps } from "react";
 
 import type { AlertKind } from "@/lib/remark-alert";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 /**
  * Un encart d'avertissement, produit par `remark-alert`.
@@ -98,7 +98,9 @@ export const Callout = ({
         {label()}
       </p>
 
-      <div className="[&>*:last-child]:mb-0 [&>p]:my-1 text-sm">
+      {/* un cran sous le corps de lecture (15/16px), pas deux : à 14px contre
+          16px l'encart se lisait comme une note de bas de page */}
+      <div className="text-sm leading-relaxed sm:text-[15px] [&>*:last-child]:mb-0 [&>p]:my-1">
         {children}
       </div>
     </div>

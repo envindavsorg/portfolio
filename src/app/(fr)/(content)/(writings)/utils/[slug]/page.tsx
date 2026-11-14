@@ -6,6 +6,7 @@ import { WritingsBreadcrumb } from "@/components/features/WritingsBreadcrumb";
 import { WritingsByline } from "@/components/features/WritingsByline";
 import { WritingsHeading } from "@/components/features/WritingsHeading";
 import { WritingsLocaleNotice } from "@/components/features/WritingsLocaleNotice";
+import { WritingsPrevNext } from "@/components/features/WritingsPrevNext";
 import { WritingsReadingAids } from "@/components/features/WritingsReadingAids";
 import { WritingsRelated } from "@/components/features/WritingsRelated";
 import { WritingsSeries } from "@/components/features/WritingsSeries";
@@ -20,11 +21,10 @@ import {
   getContentByCategory,
   getContentBySlug,
 } from "@/lib/content";
+import { getContentToc } from "@/lib/content-toc";
 import { getPageJsonLd } from "@/lib/json-ld";
 import { createContentMetadata } from "@/lib/metadata";
-import { getContentToc } from "@/lib/toc";
-import { m } from "@/paraglide/messages";
-import { localizeHref } from "@/paraglide/runtime";
+import * as m from "@/paraglide/messages";
 
 export const generateStaticParams = async () => {
   const utils = getContentByCategory("utils");
@@ -65,14 +65,11 @@ export const UtilView = ({
     <>
       <WritingsBreadcrumb
         items={[
-          {
-            href: localizeHref("/"),
-            label: m.writings_breadcrumb_homepage(),
-          },
-          {
-            href: localizeHref("/utils"),
-            label: m.writings_utils_title(),
-          },
+          // « accueil », comme les huit autres pages d'écrits : celle-ci
+          // seule disait « page d'accueil ». Et pas de `localizeHref` ici —
+          // le fil d'Ariane localise déjà ses liens.
+          { href: "/", label: m.writings_breadcrumb_home() },
+          { href: "/utils", label: m.writings_utils_title() },
           { label: title },
         ]}
       />
@@ -94,7 +91,11 @@ export const UtilView = ({
 
       <Divider border={false} after={false} type="half" />
 
-      <Mdx code={content} components={getUtilWidgets(slug)} />
+      <Mdx
+        code={content}
+        components={getUtilWidgets(slug)}
+        locale={item.locale}
+      />
 
       <script
         dangerouslySetInnerHTML={{
@@ -107,6 +108,8 @@ export const UtilView = ({
       {locale === "en" && item.locale === "fr" && (
         <WritingsLocaleNotice />
       )}
+
+      <WritingsPrevNext item={item} items={utils} />
 
       <WritingsTagLinks current={item} />
 

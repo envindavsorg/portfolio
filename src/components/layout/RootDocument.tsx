@@ -1,12 +1,9 @@
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 
-import { TooltipProvider } from "@/components/base/Tooltip";
 import { LocaleProvider } from "@/components/providers/modules/LocaleProvider";
 import { Providers } from "@/components/providers/Providers";
 import { META_THEME_COLORS } from "@/data/theme";
+import { GeistMono } from "@/fonts/mono";
 import {
   PixelCircle,
   PixelGrid,
@@ -14,8 +11,9 @@ import {
   PixelSquare,
   PixelTriangle,
 } from "@/fonts/pixel";
+import { GeistSans } from "@/fonts/sans";
 import type { AppLocale } from "@/lib/i18n";
-import { setServerLocale } from "@/lib/i18n";
+import { setServerLocale } from "@/lib/i18n-server";
 import { getSiteJsonLd } from "@/lib/json-ld";
 import { cn } from "@/lib/utils";
 
@@ -88,13 +86,9 @@ export const RootDocument = ({
       </head>
 
       <body className="font-pixel-square">
-        <NuqsAdapter>
-          <LocaleProvider locale={locale}>
-            <Providers>
-              <TooltipProvider>{children}</TooltipProvider>
-            </Providers>
-          </LocaleProvider>
-        </NuqsAdapter>
+        <LocaleProvider locale={locale}>
+          <Providers>{children}</Providers>
+        </LocaleProvider>
       </body>
     </html>
   );

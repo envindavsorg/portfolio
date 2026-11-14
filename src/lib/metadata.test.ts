@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { createMetadata, openGraphImage } from "@/lib/metadata";
+import type { Content } from "@/lib/content";
+import {
+  createContentMetadata,
+  createMetadata,
+  createRootMetadata,
+  homeIdentity,
+  openGraphImage,
+  TITLE_TEMPLATE,
+} from "@/lib/metadata";
 
 const titles = (
   meta: ReturnType<typeof createMetadata>
@@ -105,6 +113,43 @@ describe("createMetadata", () => {
     }
   });
 
+  // Les pages /en annonçaient les cinq flux FRANÇAIS sous des libellés
+  // anglais : 22 éléments en français, aucun lien vers /en.
+  it("n'annonce sous /en que les deux flux anglais", () => {
+    const { types } = createMetadata({
+      description: "d",
+      locale: "en",
+      title: "t",
+    }).alternates ?? { types: undefined };
+
+    expect(types?.["application/rss+xml"]).toEqual([
+      {
+        title: "florin cuzeac — all content",
+        url: "https://cuzeacflorin.fr/api/rss/en",
+      },
+    ]);
+    expect(types?.["application/feed+json"]).toEqual([
+      {
+        title: "florin cuzeac — JSON Feed",
+        url: "https://cuzeacflorin.fr/api/feed.en.json",
+      },
+    ]);
+  });
+
+  it("garde les cinq flux français sur l'arbre français", () => {
+    const rss = createMetadata({ description: "d", title: "t" })
+      .alternates?.types?.["application/rss+xml"];
+
+    expect(
+      Array.isArray(rss) && rss.map((entry) => String(entry.url))
+    ).toEqual([
+      "https://cuzeacflorin.fr/api/rss",
+      "https://cuzeacflorin.fr/api/rss/articles",
+      "https://cuzeacflorin.fr/api/rss/components",
+      "https://cuzeacflorin.fr/api/rss/utils",
+    ]);
+  });
+
   it("traduit les titres de flux selon la locale", () => {
     const fr = createMetadata({ description: "d", title: "t" });
     const en = createMetadata({
@@ -167,6 +212,129 @@ describe("createMetadata", () => {
     expect((meta.openGraph as Record<string, unknown>).type).toBe(
       "website"
     );
+  });
+});
+
+describe("titre du document", () => {
+  // sur 136 URL, seul l'accueil portait le nom ; les quatre anciens gabarits
+  // finissaient par « Portfolio personnel » ou « Articles, composants et outils web »
+  it("n'a qu'un gabarit, qui porte le nom, pour les deux arbres", () => {
+    expect(TITLE_TEMPLATE).toBe("%s — florin cuzeac");
+
+    for (const locale of ["fr", "en"] as const) {
+      expect(createRootMetadata(locale).title).toEqual({
+        default: "florin cuzeac",
+        template: "%s — florin cuzeac",
+      });
+    }
+  });
+
+  it("laisse une page ordinaire passer par le gabarit", () => {
+    const meta = createMetadata({
+      description: "d",
+      title: "Projets",
+    });
+
+    // une chaîne : Next lui applique le gabarit du layout racine
+    expect(meta.title).toBe("Projets");
+  });
+
+  // l'accueil a pour titre le nom du site : par le gabarit, il s'intitulerait
+  // « florin cuzeac — florin cuzeac »
+  it("sort l'accueil du gabarit sans toucher au titre des cartes", () => {
+    const meta = createMetadata({
+      absoluteTitle: "florin cuzeac — développeur",
+      description: "d",
+      title: "florin cuzeac",
+    });
+
+    expect(meta.title).toEqual({
+      absolute: "florin cuzeac — développeur",
+    });
+    expect(meta.openGraph?.title).toBe("florin cuzeac");
+    expect(meta.twitter?.title).toBe("florin cuzeac");
+  });
+
+  // la description de l'accueil n'était que l'accroche : 48 caractères, sans
+  // nom ni métier. Rien n'est écrit, tout est composé de ce que la page affiche
+  it("compose le titre et la description de l'accueil", () => {
+    expect(
+      homeIdentity(
+        "développeur Full-Stack Senior",
+        "crée, code, innove. les petits détails comptent."
+      )
+    ).toEqual({
+      description:
+        "florin cuzeac — développeur Full-Stack Senior. crée, code, innove. les petits détails comptent.",
+      title: "florin cuzeac — développeur Full-Stack Senior",
+    });
+
+    expect(
+      homeIdentity(
+        "senior full-stack developer",
+        "creates, codes, innovates. the small details matter."
+      ).description
+    ).toBe(
+      "florin cuzeac — senior full-stack developer. creates, codes, innovates. the small details matter."
+    );
+  });
+
+  // `<meta name="author">` annonçait le pseudo GitHub quand `article:author`
+  // et le JSON-LD donnent le nom
+  it("signe du nom, pas du pseudo", () => {
+    const root = createRootMetadata("fr");
+
+    expect(root.creator).toBe("florin cuzeac");
+    expect(root.authors).toEqual([
+      { name: "florin cuzeac", url: "https://cuzeacflorin.fr" },
+    ]);
+  });
+});
+
+describe("createContentMetadata", () => {
+  const article = (locale: Content["locale"]): Content => ({
+    content: "",
+    locale,
+    metadata: {
+      category: "articles",
+      createdAt: new Date("2026-03-03T00:00:00.000Z"),
+      description: "d",
+      tags: ["css", "retour d'expérience"],
+      title: "t",
+      updatedAt: new Date("2026-03-04T00:00:00.000Z"),
+    } as Content["metadata"],
+    reading: { time: "8 min", words: 1077 },
+    slug: "how-i-write-css",
+  });
+
+  const tags = (content: Content, locale: "fr" | "en") =>
+    (
+      createContentMetadata(content, locale).openGraph as Record<
+        string,
+        unknown
+      >
+    ).tags;
+
+  // un tag est une CLÉ, écrite en français : `article:tag` d'un article
+  // anglais annonçait « retour d'expérience »
+  it("publie le libellé des tags dans la langue du contenu", () => {
+    expect(tags(article("en"), "en")).toEqual([
+      "css",
+      "lessons learned",
+    ]);
+    expect(tags(article("fr"), "fr")).toEqual([
+      "css",
+      "retour d'expérience",
+    ]);
+  });
+
+  // un article sans traduction est servi en français sous /en : ses sujets
+  // restent ceux qui sont affichés sous lui, en français
+  it("garde les clés pour un repli français servi sous /en", () => {
+    expect(tags(article("fr"), "en")).toEqual([
+      "css",
+      "retour d'expérience",
+    ]);
   });
 });
 

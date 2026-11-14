@@ -1,4 +1,9 @@
-import type { Content, ContentCategory } from "@/lib/content";
+import type {
+  Content,
+  ContentCategory,
+  ContentLocale,
+} from "@/lib/content";
+import { tagLabel } from "@/lib/tags";
 
 export interface FeedItem {
   title: string;
@@ -8,16 +13,26 @@ export interface FeedItem {
   published: Date;
   updated: Date;
   tags: string[];
+  /** URL absolue de l'image de couverture, quand le contenu en déclare une */
+  image?: string;
 }
 
 export interface FeedMeta {
   title: string;
   description: string;
   siteUrl: string;
+  /**
+   * L'accueil dans la langue du flux, tel que le canonical l'écrit : la racine
+   * avec sa barre, `/en` sans — `/en/` est une redirection.
+   */
+  homeUrl: string;
   /** URL canonique du flux lui-même (atom:link rel="self") */
   feedUrl: string;
   author: string;
-  language: string;
+  language: ContentLocale;
+  /** JSON Feed : image carrée du flux, grande (512 px) et petite (favicon) */
+  icon?: string;
+  favicon?: string;
 }
 
 /**
@@ -38,21 +53,35 @@ export const escapeXml = (value: string): string =>
 export const toRfc822 = (value: Date | number | string): string =>
   new Date(value).toUTCString();
 
+/**
+ * `locale` est celle du FLUX : elle préfixe les liens. Un flux anglais dont les
+ * éléments mènent aux pages françaises n'est pas un flux anglais — c'est ce que
+ * les pages /en annonçaient, sous des libellés en anglais. Les tags, eux,
+ * suivent la langue du fichier servi, comme `article:tag` : un repli français
+ * garde ses libellés français.
+ */
 export const toFeedItems = (
   posts: Content[],
-  siteUrl: string
+  siteUrl: string,
+  locale: ContentLocale = "fr"
 ): FeedItem[] =>
   posts.map((post) => {
     const category = post.metadata.category ?? "articles";
+    const prefix = locale === "en" ? "/en" : "";
 
     return {
       category,
       description: post.metadata.description,
+      ...(post.metadata.image && {
+        image: `${siteUrl}${post.metadata.image}`,
+      }),
       published: new Date(post.metadata.createdAt),
-      tags: post.metadata.tags ?? [],
+      tags: (post.metadata.tags ?? []).map((tag) =>
+        tagLabel(tag, post.locale)
+      ),
       title: post.metadata.title,
       updated: new Date(post.metadata.updatedAt),
-      url: `${siteUrl}/${category}/${post.slug}`,
+      url: `${siteUrl}${prefix}/${category}/${post.slug}`,
     };
   });
 
@@ -93,7 +122,7 @@ ${item.tags.map((tag) => `      <category>${escapeXml(tag)}</category>`).join("\
   <channel>
     <title>${escapeXml(meta.title)}</title>
     <description>${escapeXml(meta.description)}</description>
-    <link>${escapeXml(meta.siteUrl)}/</link>
+    <link>${escapeXml(meta.homeUrl)}</link>
     <language>${escapeXml(meta.language)}</language>
     <lastBuildDate>${toRfc822(built)}</lastBuildDate>
     <atom:link href="${escapeXml(meta.feedUrl)}" rel="self" type="application/rss+xml"/>
@@ -103,7 +132,14 @@ ${entries}
 `;
 };
 
-/** JSON Feed 1.1 — https://jsonfeed.org/version/1.1 */
+/**
+ * JSON Feed 1.1 — https://jsonfeed.org/version/1.1
+ *
+ * Chaque élément porte `content_text` : la spécification exige `content_html`
+ * ou `content_text`, et les 22 éléments du flux n'avaient ni l'un ni l'autre —
+ * un lecteur strict les rejette, un lecteur tolérant affiche un titre sans
+ * corps. C'est le texte que le RSS publie déjà dans `<description>`.
+ */
 export const toJsonFeed = (
   items: FeedItem[],
   meta: FeedMeta
@@ -112,12 +148,16 @@ export const toJsonFeed = (
     {
       authors: [{ name: meta.author, url: `${meta.siteUrl}/` }],
       description: meta.description,
+      ...(meta.favicon && { favicon: meta.favicon }),
       feed_url: meta.feedUrl,
-      home_page_url: `${meta.siteUrl}/`,
+      home_page_url: meta.homeUrl,
+      ...(meta.icon && { icon: meta.icon }),
       items: items.map((item) => ({
+        content_text: item.description,
         date_modified: item.updated.toISOString(),
         date_published: item.published.toISOString(),
         id: item.url,
+        ...(item.image && { image: item.image }),
         summary: item.description,
         tags: [item.category, ...item.tags],
         title: item.title,

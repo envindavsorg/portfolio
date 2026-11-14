@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import type React from "react";
 
-import { Divider } from "@/components/base/Divider";
+import { PageColumn } from "@/components/layout/PageColumn";
 
+// pas de `title` ici : un gabarit déclaré par ce layout remplacerait celui du
+// layout racine (`TITLE_TEMPLATE`), et les écrits perdraient le nom du site
 export const metadata: Metadata = {
   description:
     "Explorations techniques sur React, Next.js et TypeScript : articles, composants réutilisables et outils pour le développement web moderne.",
-  title: {
-    default: "Articles",
-    template: "%s | Articles, composants et outils web",
-  },
 };
 
 type DocsLayoutProps = Readonly<{
@@ -17,11 +15,7 @@ type DocsLayoutProps = Readonly<{
 }>;
 
 const WritingsLayout = ({ children }: DocsLayoutProps) => (
-  <div className="mx-auto min-h-svh border-edge border-x md:max-w-3xl">
-    <Divider before={false} border={false} type="half" />
-
-    {children}
-  </div>
+  <PageColumn>{children}</PageColumn>
 );
 
 export default WritingsLayout;

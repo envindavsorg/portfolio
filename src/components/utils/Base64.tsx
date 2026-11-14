@@ -8,7 +8,7 @@ import { Button, CopyButton } from "@/components/primitives/Button";
 import { TabsAnimated } from "@/components/primitives/Tabs";
 import { Textarea } from "@/components/primitives/Textarea";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const encodeToBase64 = (
   text: string

@@ -1,5 +1,5 @@
 import { CopyButton } from "@/components/primitives/Button";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const BRANDING_COLORS: { hex: string; label: () => string }[] = [
   { hex: "#F3B993", label: m.home_branding_color_primary_label },

@@ -11,11 +11,17 @@ import { Divider } from "@/components/base/Divider";
 import { DotPattern } from "@/components/blocks/DotPattern";
 import { Badge } from "@/components/primitives/Badge";
 import { Button } from "@/components/primitives/Button";
+import { accessibleName } from "@/lib/accessible-name";
 import { formatDate } from "@/lib/functions";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
+import {
+  ROW_CHEVRON,
+  ROW_META,
+  ROW_TITLE_HOVER,
+} from "../shared/row";
 import type { Cert } from "./content";
 
 interface CertItemProps {
@@ -35,9 +41,9 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
 
   return (
     <CollapsibleWithContext>
-      <article className="screen-line-before flex items-center hover:bg-accent2">
-        <CollapsibleTrigger className="flex w-full flex-1 cursor-pointer items-center">
-          <div className="pointer-events-none relative m-4 flex size-6 shrink-0 items-center justify-center sm:size-8">
+      <article className="group/row screen-line-before flex items-center hover:bg-accent2">
+        <CollapsibleTrigger className="flex w-full flex-1 cursor-pointer items-center -outline-offset-2">
+          <div className="pointer-events-none relative mx-3 my-4 flex size-6 shrink-0 items-center justify-center sm:size-8">
             {Icon && (
               <Icon aria-hidden="true" className="size-6 sm:size-8" />
             )}
@@ -47,18 +53,45 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
               width={8}
             />
           </div>
-          <div className="flex-1 border-edge border-l p-4 md:border-r">
-            <h2 className="text-start font-pixel-square text-base lowercase sm:text-xl">
+          <div className="flex-1 border-edge border-x px-3 py-4">
+            <h2
+              className={cn(
+                "text-start font-pixel-square text-base lowercase sm:text-xl",
+                ROW_TITLE_HOVER
+              )}
+            >
               {title}
             </h2>
           </div>
-          <div className="relative m-4 hidden size-6 shrink-0 items-center justify-center sm:flex sm:size-8">
+          {/* visible à toutes les largeurs : masqué sous `sm`, il laissait les
+            certifications sans aucun signe qu'elles se déplient, alors que les
+            expériences et les projets, juste dessous, en montrent un */}
+          <div className={ROW_CHEVRON}>
             <CollapsibleChevronsIcon />
           </div>
         </CollapsibleTrigger>
       </article>
 
+      {/* AVANT le contenu déplié, comme pour les expériences et les projets :
+        après lui, l'organisme et la date se retrouvaient à 480 px du titre
+        qu'ils décrivent dès qu'on ouvrait la certification */}
+      <div className={ROW_META}>
+        <span className="shrink-0 text-theme max-sm:hidden">---</span>
+        <div className="flex flex-1 flex-wrap items-center justify-end gap-2 sm:gap-x-4">
+          <Badge className="lowercase">
+            {getLocale() === "en" ? "issuer:" : "organisme:"}{" "}
+            <span>{issuer}</span>
+          </Badge>
+          <Badge className="lowercase">
+            {getLocale() === "en" ? "issued:" : "obtenu:"}{" "}
+            <span>{formatDate(issueDate, "ddd DD MMMM YYYY")}</span>
+          </Badge>
+        </div>
+      </div>
+
       <CollapsibleContent className="group overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+        {/* 16 px et non 12 : l'anneau de l'image déborde de 4 px
+          (`ring-offset-3` + `ring-1`), c'est LUI qui tombe sur le rail */}
         <div className="border-edge border-t p-4 duration-300 group-data-[state=closed]:animate-fade-out group-data-[state=open]:animate-fade-in">
           <Image
             alt={title}
@@ -76,7 +109,12 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
         <div className="screen-line-before flex justify-between gap-3 px-3 py-2 max-sm:flex-col sm:justify-end">
           <Button asChild variant="outline">
             <Link
-              aria-label={title}
+              // le titre reste dans le nom : tous ces liens affichent le même
+              // texte et mènent chacun à une certification différente
+              aria-label={accessibleName(
+                m.home_certs_item_view_button(),
+                title
+              )}
               href={credentialURL}
               rel="noopener"
               target="_blank"
@@ -86,20 +124,6 @@ export const CertItem = ({ cert, isLast = false }: CertItemProps) => {
           </Button>
         </div>
       </CollapsibleContent>
-
-      <div className="screen-line-before flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
-        <span className="text-theme">---</span>
-        <div className="flex items-center gap-2 sm:gap-4">
-          <Badge className="lowercase">
-            {getLocale() === "en" ? "issuer:" : "organisme:"}{" "}
-            <span>{issuer}</span>
-          </Badge>
-          <Badge className="lowercase">
-            {getLocale() === "en" ? "issued:" : "obtenu:"}{" "}
-            <span>{formatDate(issueDate, "ddd DD MMMM YYYY")}</span>
-          </Badge>
-        </div>
-      </div>
 
       {!isLast && (
         <Divider after={false} border={false} type="half" />

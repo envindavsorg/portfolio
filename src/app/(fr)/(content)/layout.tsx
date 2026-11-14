@@ -3,7 +3,7 @@ import type React from "react";
 import { Particles } from "@/components/blocks/Particles";
 import { Footer } from "@/components/layout/footer/Footer";
 import { NavBar } from "@/components/layout/navbar/NavBar";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface AppLayoutProps {
   children: React.ReactNode;

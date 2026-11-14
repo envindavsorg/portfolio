@@ -138,3 +138,141 @@ test.describe("intégrité des liens rendus", () => {
     });
   }
 });
+
+test.describe("pages introuvables", () => {
+  /**
+   * Une adresse inconnue sous `/en` ne correspondait à aucune route : elle
+   * sortait de l'arbre anglais et recevait le 404 global, qui est français.
+   * `/en/projects/inconnu`, qui correspond à une route, était bien en anglais —
+   * d'où un défaut invisible tant qu'on ne teste que des slugs inconnus.
+   */
+  for (const { lang, path, wayOut } of [
+    {
+      lang: "fr",
+      path: "/cette-page-n-existe-pas",
+      wayOut: "/articles",
+    },
+    {
+      lang: "en",
+      path: "/en/cette-page-n-existe-pas",
+      wayOut: "/en/articles",
+    },
+    {
+      lang: "en",
+      path: "/en/deux/segments-inconnus",
+      wayOut: "/en/articles",
+    },
+  ]) {
+    test(`${path} répond 404 dans la bonne langue`, async ({
+      page,
+    }) => {
+      const response = await page.goto(path);
+      expect(response?.status()).toBe(404);
+
+      await expect(page.locator("html")).toHaveAttribute(
+        "lang",
+        lang
+      );
+
+      // le titre était un h2 : la page n'avait aucun h1
+      await expect(page.locator("h1")).toHaveCount(1);
+
+      // la page n'a ni barre de navigation ni pied de page : sans ces liens,
+      // sa seule issue était l'accueil
+      await expect(
+        page.locator(`main a[href='${wayOut}']`)
+      ).toBeVisible();
+
+      // les filets d'écran font 200vw : rendue hors du gabarit qui les rogne,
+      // la page défilait de 349 px à l'horizontale
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth
+      );
+      expect(overflow).toBeLessThanOrEqual(0);
+    });
+  }
+
+  test("l'attrape-tout anglais ne masque pas le miroir texte", async ({
+    request,
+  }) => {
+    // `/en/<catégorie>/<slug>.mdx` n'existe que par une réécriture : si
+    // l'attrape-tout `en/[...rest]` passait avant elle, « Copy Markdown »
+    // recevrait un 404 sur tout l'arbre anglais
+    const response = await request.get(
+      "/en/articles/my-work-journey.mdx"
+    );
+    expect(response.status()).toBe(200);
+    expect(await response.text()).not.toContain("<html");
+  });
+});
+
+test.describe("liens du pied de page", () => {
+  /**
+   * `/cv`, `/now`, `/uses` et `/weight` ne recevaient AUCUN lien de toute
+   * l'interface : au sitemap, donc indexées, mais introuvables en naviguant. Le
+   * pied de page est leur seule entrée — ce test échoue si elle disparaît.
+   */
+  for (const prefix of ["", "/en"]) {
+    test(`le pied de ${prefix || "/"} mène aux pages sans autre entrée`, async ({
+      page,
+      request,
+    }) => {
+      await page.goto(prefix || "/");
+
+      const hrefs = await page
+        .locator("footer nav a")
+        .evaluateAll((anchors) =>
+          anchors.map((anchor) => anchor.getAttribute("href") ?? "")
+        );
+
+      for (const target of ["/cv", "/now", "/uses", "/weight"]) {
+        expect(hrefs).toContain(`${prefix}${target}`);
+      }
+
+      // tout ce qui est interne doit répondre, flux compris
+      await expectAllReachable(
+        request,
+        hrefs.filter((href) => href.startsWith("/")),
+        { canonical: false }
+      );
+    });
+  }
+
+  /**
+   * Le pied de /en ouvrait /api/rss : 22 éléments en français, aux liens sans
+   * /en. Le test part du lien RENDU puis lit ce qui est servi au bout — un
+   * href juste vers un flux dans l'autre langue serait le même défaut.
+   */
+  for (const [prefix, language] of [
+    ["", "fr"],
+    ["/en", "en"],
+  ] as const) {
+    test(`le pied de ${prefix || "/"} ouvre le flux RSS de sa langue`, async ({
+      page,
+      request,
+    }) => {
+      await page.goto(prefix || "/");
+
+      const feedLinks = (scope: string): Promise<string[]> =>
+        page
+          .locator(`${scope} a[href^="/api/rss"]`)
+          .evaluateAll((anchors) =>
+            anchors.map((anchor) => anchor.getAttribute("href") ?? "")
+          );
+
+      const feed = language === "en" ? "/api/rss/en" : "/api/rss";
+      expect(await feedLinks("footer nav")).toEqual([feed]);
+
+      // la barre de navigation mène au même flux que le pied, sur ses deux
+      // rendus (la rangée de la barre et celle du menu mobile)
+      const fromHeader = await feedLinks("header");
+      expect(fromHeader.length).toBeGreaterThan(0);
+      expect([...new Set(fromHeader)]).toEqual([feed]);
+
+      const xml = await (await request.get(feed)).text();
+      expect(xml).toContain(`<language>${language}</language>`);
+    });
+  }
+});

@@ -2,9 +2,21 @@
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
+/**
+ * `dark:` suit la CLASSE posée par next-themes, pas le système.
+ *
+ * Tailwind 4 branche par défaut cette variante sur `prefers-color-scheme`. Le
+ * site, lui, bascule par la classe `.dark` : toutes les utilités `dark:`
+ * obéissaient donc au réglage de l'OS et ignoraient le bouton de thème. Thème
+ * sombre choisi sur un système clair, les jetons Shiki gardaient leur couleur
+ * claire sur fond sombre — 1,28:1 mesuré dans un bloc de code.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-theme: var(--theme);
   --color-background: var(--background);
+  --color-canvas: var(--canvas);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -104,7 +116,16 @@
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.191 0.002 106.586);
   --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
+  /**
+   * Un cran plus sombre que le zinc-500 d'origine (0.552), en clair seulement.
+   *
+   * #71717b tenait 4,83:1 sur le canevas mais 4,39:1 sur `--accent`, le fond
+   * que prennent les lignes de liste au survol ET au focus — état qu'axe ne
+   * scanne jamais. #65656f mesure 5,76 sur le canevas, 5,47 sur `--background`
+   * et 5,24 sur `--accent`. Le sombre a de la marge (5,68:1 au pire) et ne
+   * bouge pas.
+   */
+  --muted-foreground: oklch(0.51 0.016 285.938);
   --card: oklch(0.982 0.004 91.446);
   --card-foreground: oklch(0.191 0.002 106.586);
   --popover: oklch(0.982 0.004 91.446);
@@ -115,12 +136,30 @@
     transparent
   );
   --accent: oklch(0.967 0.001 286.375);
+  /**
+   * Le fond de survol des lignes (`hover:bg-accent2`, douze emplois).
+   *
+   * En clair il ne PEUT PAS foncer : l'accent #306fdb mesure 4,51:1 sur ce
+   * fond (#f9f9fa) et plusieurs lignes portent du texte `text-theme`. Un point
+   * de plus et ce texte passe sous 4,5:1. Le survol clair doit donc être porté
+   * par autre chose que le fond (soulignement, chevron), pas par ce jeton. Le
+   * sombre avait de la marge : voir `.dark`.
+   */
   --accent2: color-mix(in oklab, var(--accent) 50%, transparent);
   --accent-foreground: oklch(0.21 0.006 285.885);
   --border: oklch(0.92 0.004 286.32);
   --edge: color-mix(in oklab, var(--border) 64%, var(--background));
   --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.705 0.015 286.067);
+  /**
+   * L'anneau de focus prend la couleur d'accent, dans les deux thèmes.
+   *
+   * Il était gris : #9f9fa9 sur blanc = 2,62:1, et les liens — qui ne portent
+   * aucune classe de focus — héritaient de `outline-ring/50`, soit 1,55:1 en
+   * clair et 1,88:1 en sombre. WCAG 1.4.11 demande 3:1 à un indicateur de
+   * focus. L'accent mesure 4,75:1 sur le canevas clair et 13,88:1 sur le
+   * sombre (4,32:1 au pire, sur un fond `--accent`).
+   */
+  --ring: var(--theme);
   --info: oklch(0.67 0.17 244.98);
   /**
    * `--warning` n'existait pas, et `--info` n'était déclaré qu'ici — donc en
@@ -138,9 +177,32 @@
   --code-foreground: oklch(0.191 0.002 106.586);
   --code-number: oklch(0.705 0.015 286.067);
   --code-highlight: oklch(0.967 0.001 286.375);
-  --selection: oklch(0.191 0.002 106.586);
-  --selection-foreground: oklch(0.985 0 0);
-  --shadow-popover: 0 6px 24px rgba(0, 0, 0, 0.25);
+  /**
+   * La sélection est une teinte de l'accent, pas une inversion noir/blanc.
+   *
+   * Le mélange se fait avec `--canvas` et non avec `transparent` : `::selection`
+   * remplace le fond, il ne se superpose pas, donc une couleur translucide
+   * donnerait un rendu différent selon ce qu'il y a dessous. Texte sélectionné :
+   * 13,27:1 en clair (#141413 sur #cadcf9), 10,27:1 en sombre (#faf9f6 sur
+   * #433c38). `.dark` n'a rien à redéclarer — les deux jetons suivent `--theme`,
+   * `--canvas` et `--foreground`.
+   */
+  --selection: color-mix(in oklab, var(--theme) 25%, var(--canvas));
+  --selection-foreground: var(--foreground);
+  /* 0.25 d'opacité posait une ombre de fenêtre système sous un panneau beige ;
+     le sombre garde 0.5, sur #121212 une ombre plus légère ne se voit pas */
+  --shadow-popover: 0 8px 30px rgba(0, 0, 0, 0.12);
+  /**
+   * Le curseur de défilement était peint en `--border` : 1,27:1 sur le canevas
+   * clair, 1,26:1 sur le sombre — présent, mais introuvable dans un bloc de code
+   * ou la palette. Un quart de `--foreground` donne 1,74:1 et 2,15:1 : il se
+   * repère sans devenir un élément du décor.
+   */
+  --scroll-thumb: color-mix(
+    in oklab,
+    var(--foreground) 25%,
+    transparent
+  );
 }
 
 .dark {
@@ -159,11 +221,13 @@
   --popover-foreground: oklch(0.985 0 0);
   --popover-border: oklch(0.37 0.013 285.805);
   --accent: oklch(0.274 0.006 286.033);
-  --accent2: color-mix(in oklab, var(--accent) 20%, transparent);
+  /* 20 % donnait #161616 sur #121212, soit 1,04:1 : un survol que personne
+     ne voit. Le sombre a la marge que le clair n'a pas. */
+  --accent2: color-mix(in oklab, var(--accent) 45%, transparent);
   --accent-foreground: oklch(0.985 0 0);
   --border: oklch(0.274 0.006 286.033);
   --input: oklch(0.274 0.006 286.033);
-  --ring: oklch(0.552 0.016 285.938);
+  --ring: var(--theme);
   --info: oklch(0.75 0.14 244.98);
   --warning: oklch(0.79 0.14 62);
   --success: oklch(0.723 0.219 149.579);
@@ -173,8 +237,6 @@
   --code-foreground: oklch(0.985 0 0);
   --code-number: oklch(0.552 0.016 285.938);
   --code-highlight: oklch(0.274 0.006 286.033);
-  --selection: oklch(0.985 0 0);
-  --selection-foreground: oklch(0.191 0.002 106.586);
   --shadow-popover: 0 0 24px rgba(0, 0, 0, 0.5);
 }
 
@@ -213,7 +275,21 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
+  }
+
+  /**
+   * Un seul anneau de focus pour tout le site.
+   *
+   * Sans cette règle, tout ce qui n'est pas un `Button` (liens, fil d'Ariane,
+   * blocs de code défilables) gardait le `outline: auto 1px` du navigateur.
+   * Elle vit dans `@layer base` exprès : une utilité (`outline-none`,
+   * `outline-hidden`) l'emporte toujours, donc un composant qui dessine son
+   * propre indicateur n'en reçoit pas deux.
+   */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 
   ::selection {
@@ -239,13 +315,13 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--border);
+    background: var(--scroll-thumb);
     border-radius: 5px;
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: var(--scroll-thumb) transparent;
   }
 
   form {
@@ -329,6 +405,27 @@
     color: var(--muted-foreground) !important;
   }
 
+  /**
+   * Le corps de lecture (`Mdx`) porte une couleur plus dense que les lignes
+   * d'accroche, qui gardent `--muted-foreground`.
+   *
+   * `--muted-foreground` mesure 4,83:1 sur le fond clair : conforme, mais c'est
+   * la teinte d'une légende, pas celle d'un texte de plusieurs minutes. Le
+   * mélange reste en retrait des titres (`--foreground`) et passe à plus de
+   * 10:1 dans les deux thèmes. Il se mélange à `--canvas`, le fond réellement
+   * peint, et non à `--background`.
+   *
+   * La règle vit ICI et non en utilité : celle du dessus est `!important` dans
+   * `@layer base`, et un `!important` d'un calque plus tardif perd contre elle.
+   */
+  .prose[data-longform] {
+    color: color-mix(
+      in oklab,
+      var(--foreground) 78%,
+      var(--canvas)
+    ) !important;
+  }
+
   .prose,
   .prose span,
   .prose i {
@@ -358,8 +455,11 @@
       @apply overflow-x-auto p-3;
     }
 
+    /* 13/14px : le code était à 16px sous un corps à 14px. Geist Mono à 14px
+       tient ~84 colonnes dans les 708px utiles, de quoi couvrir les 70 du dépôt
+       sans défilement horizontal. */
     code {
-      @apply text-sm sm:text-base normal-case;
+      @apply text-[13px] sm:text-sm normal-case;
     }
   }
 
@@ -367,8 +467,17 @@
     @apply py-0.5;
   }
 
+  /**
+   * `font-mono` ICI, et pas seulement sur `code` : la règle `.prose span` du
+   * calque `base` atteint les spans de jetons de Shiki, et le `not-prose` de la
+   * figure n'arrête pas un sélecteur descendant ordinaire. Le code coloré
+   * sortait donc en PixelSquare, police proportionnelle (i = 6px, m = 12px) —
+   * alors que le code en ligne et les blocs de commande, sans span, restaient
+   * en Geist Mono. Deux polices de code sur la même page, et plus aucun
+   * alignement de colonnes. Le calque `components` l'emporte sur `base`.
+   */
   [data-line] span {
-    @apply text-(--shiki-light) dark:text-(--shiki-dark);
+    @apply font-mono text-(--shiki-light) dark:text-(--shiki-dark);
   }
 
   /**
@@ -423,7 +532,7 @@
   /* `[!code focus]` : le reste du bloc s'atténue, et redevient net au survol,
      sinon un extrait long devient illisible pour qui veut le contexte */
   [data-rehype-pretty-code-figure]:has([data-focused])
-  [data-line]:not([data-focused]) {
+    [data-line]:not([data-focused]) {
     @apply opacity-40 transition-opacity;
   }
 
@@ -476,8 +585,12 @@
     color: #000000 !important;
   }
 
-  /* le chrome du site n'apporte rien sur papier */
+  /* le chrome du site n'apporte rien sur papier. `header` en toutes lettres :
+     aucun élément ne porte `data-slot="navbar-wrapper"`, donc seul le menu
+     (`nav`) partait — le logo et les six boutons de la barre s'imprimaient en
+     tête du CV */
   [data-slot="navbar-wrapper"],
+  header,
   nav,
   footer,
   [data-slot="reading-progress"],

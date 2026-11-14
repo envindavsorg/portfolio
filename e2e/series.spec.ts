@@ -122,7 +122,7 @@ test.describe("index des séries", () => {
 
     const link = page.getByRole("link", { name: /mon parcours/iu });
     await expect(link).toBeVisible();
-    await expect(link).toContainText("3 partie(s)");
+    await expect(link).toContainText("3 parties");
 
     await link.click();
     await expect(page).toHaveURL("/series/parcours");

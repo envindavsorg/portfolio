@@ -10,7 +10,7 @@ import { Input } from "@/components/primitives/Input";
 import { Textarea } from "@/components/primitives/Textarea";
 import type { ControlValues } from "@/lib/playground";
 import { defaultValues, toJsx, toProps } from "@/lib/playground";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import type { PlaygroundDefinition } from "@/registry/playgrounds";
 
 interface ComponentPlaygroundProps {

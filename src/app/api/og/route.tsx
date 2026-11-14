@@ -21,6 +21,7 @@ import {
   ogTitleSize,
   truncate,
 } from "@/lib/og";
+import * as m from "@/paraglide/messages";
 
 /**
  * Les cartes sociales, une par famille de page.
@@ -595,10 +596,7 @@ const HomeCard = ({
           fontSize: 26,
         }}
       >
-        <MetaRow
-          meta={meta.length > 0 ? meta : [GLOBAL_DATA.WORK.title]}
-          palette={palette}
-        />
+        <MetaRow meta={meta} palette={palette} />
       </div>
     </div>
   </Shell>
@@ -622,6 +620,7 @@ export const GET = async (req: NextRequest) => {
   const rawType = searchParams.get("type") ?? "homepage";
   const type: PageType = isPageType(rawType) ? rawType : "homepage";
   const palette = ogPalette(type);
+  const isEnglish = searchParams.get("locale") === "en";
 
   try {
     const title = truncate(
@@ -632,16 +631,29 @@ export const GET = async (req: NextRequest) => {
       searchParams.get("description") || GLOBAL_DATA.USER.bio,
       MAX_DESCRIPTION_LENGTH
     );
-    const meta = ogMetaParts(
+    const family = ogFamily(type);
+    const metaParts = ogMetaParts(
       truncate(searchParams.get("meta") ?? "", MAX_META_LENGTH)
     );
+    // Sans méta, la carte d'accueil remplit son pied avec le métier — dans la
+    // langue de la PAGE partagée : la carte de /en affichait « développeur
+    // full-stack senior » sous une accroche en anglais. La locale est passée
+    // explicitement, une route n'a pas de locale ambiante.
+    const meta =
+      family === "home" && metaParts.length === 0
+        ? [
+            m.user_job_title(undefined, {
+              locale: isEnglish ? "en" : "fr",
+            }),
+          ]
+        : metaParts;
 
     const font = await loadFont();
-    const Card = CARDS[ogFamily(type)];
+    const Card = CARDS[family];
 
     return new ImageResponse(
       <Card
-        badge={ogBadge(type, searchParams.get("locale") === "en")}
+        badge={ogBadge(type, isEnglish)}
         description={description}
         meta={meta}
         palette={palette}
@@ -675,7 +687,7 @@ export const GET = async (req: NextRequest) => {
      */
     return new ImageResponse(
       <StandardCard
-        badge={ogBadge(type, searchParams.get("locale") === "en")}
+        badge={ogBadge(type, isEnglish)}
         description={GLOBAL_DATA.USER.bio}
         meta={[]}
         palette={palette}

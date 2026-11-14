@@ -7,7 +7,7 @@ import { AudioLines } from "@/components/motion/AudioLines";
 import { Play } from "@/components/motion/Play";
 import { Button } from "@/components/primitives/Button";
 import { soundManager } from "@/lib/sound-manager";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const MotionButton = motion.create(Button);
 

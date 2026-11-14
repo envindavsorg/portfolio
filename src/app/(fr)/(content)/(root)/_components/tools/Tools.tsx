@@ -10,7 +10,7 @@ import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory, toContentLocale } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { ToolItem } from "./ToolItem";
@@ -73,10 +73,7 @@ export const Tools = () => {
 
       <PanelFooter>
         <Button asChild variant="outline">
-          <Link
-            aria-label={m.home_tools_footer_aria_label()}
-            href={localizeHref("/utils")}
-          >
+          <Link href={localizeHref("/utils")}>
             {m.home_tools_footer_button()}
           </Link>
         </Button>

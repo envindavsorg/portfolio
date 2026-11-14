@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import useAnimatedRef from "@/hooks/useAnimatedRef";
 import { copyText, getPrompt } from "@/lib/functions";
 import { soundManager } from "@/lib/sound-manager";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import {
   DropdownMenu,
@@ -175,7 +175,7 @@ export const WritingsActions = ({
   }, []);
 
   return (
-    <div className="flex items-center gap-x-3">
+    <div className="flex items-center gap-x-2 sm:gap-x-3">
       <Tooltip>
         <TooltipTrigger
           render={

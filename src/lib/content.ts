@@ -117,10 +117,18 @@ const readMDXFile = (path: string) => {
 };
 
 const WORDS_PER_MINUTE = 150;
-const readingTime = (content: string) => {
+
+/**
+ * « min » et non « minutes » : la chaîne est produite ICI, hors de Paraglide,
+ * puis affichée telle quelle dans les deux locales (signature, listes, carte
+ * OG). Le pluriel en dur donnait « 1 minutes » sur chaque contenu de moins de
+ * 150 mots. L'abréviation ne s'accorde pas et se lit pareil en français et en
+ * anglais : pas de clé de message ni de règle de pluriel à maintenir.
+ */
+export const readingTime = (content: string) => {
   const words = content.trim().split(/\s+/u).length;
   const minutes = Math.ceil(words / WORDS_PER_MINUTE);
-  return { time: `${minutes} minutes`, words };
+  return { time: `${minutes} min`, words };
 };
 
 const getMDXData = (dir: string, locale: ContentLocale) =>

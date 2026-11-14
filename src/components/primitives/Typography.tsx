@@ -3,7 +3,7 @@ import type React from "react";
 import type { ReactElement } from "react";
 
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const PROSE_CLASSNAME = cn(
   "prose prose-sm prose-zinc dark:prose-invert max-w-none",

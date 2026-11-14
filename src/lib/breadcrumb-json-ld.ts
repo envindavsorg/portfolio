@@ -8,6 +8,18 @@ export interface BreadcrumbEntry {
 }
 
 /**
+ * L'adresse d'un maillon, sans barre finale — sauf la racine.
+ *
+ * `localizeHref("/")` rend « /en/ », que le serveur redirige (308) vers
+ * « /en » : le lien « home » de chaque page anglaise et l'`item` du balisage
+ * passaient par cette redirection, alors que le canonical et le sitemap disent
+ * « /en ». `next/link` retire cette barre lui-même ; le fil d'Ariane rend une
+ * ancre nue.
+ */
+export const breadcrumbHref = (href: string): string =>
+  href.length > 1 ? href.replace(/\/$/u, "") : href;
+
+/**
  * Le fil d'Ariane, à partir des mêmes éléments que ceux rendus à l'écran.
  *
  * Module à part, et non dans `json-ld.ts` : le fil d'Ariane est émis depuis un
@@ -30,6 +42,8 @@ export const getBreadcrumbJsonLd = (
     position: index + 1,
     // le dernier élément est la page courante : schema.org attend qu'il n'ait
     // pas d'`item`, sans quoi la page se déclare comme un lien vers elle-même
-    ...(item.href && { item: `${BASE_URL}${item.href}` }),
+    ...(item.href && {
+      item: `${BASE_URL}${breadcrumbHref(item.href)}`,
+    }),
   })),
 });

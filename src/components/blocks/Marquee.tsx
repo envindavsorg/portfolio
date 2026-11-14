@@ -8,10 +8,23 @@ import FastMarquee from "react-fast-marquee";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 
+/**
+ * `min-h-12` réserve la rangée AVANT que la bibliothèque ne monte.
+ *
+ * react-fast-marquee ne rend rien côté serveur : la bande faisait 0 px dans le
+ * HTML servi, puis 48 px (la taille d'un `MarqueeItem`) une fois hydratée. Avec
+ * deux rangées, la section « stack » grandissait de 96 px et poussait tout ce
+ * qui suit — sur un lien direct vers `/#my-experiences`, la section visée
+ * finissait 88 px plus bas que là où le navigateur avait défilé (CLS 0,111 sur
+ * un profil de téléphone, le seul au-dessus de 0,1).
+ */
 export const Marquee = memo(
   ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
     <div
-      className={cn("relative w-full overflow-hidden", className)}
+      className={cn(
+        "relative min-h-12 w-full overflow-hidden",
+        className
+      )}
       {...props}
     />
   )

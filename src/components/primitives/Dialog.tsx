@@ -143,7 +143,9 @@ export const DialogOverlay = ({
     <Primitive.Backdrop
       className={cn(
         "pointer-events-none fixed inset-0 z-50 select-none",
-        "hidden bg-background/50 backdrop-blur-xs sm:block",
+        // `bg-canvas`, pas `bg-background` : le voile teintait la page blanche
+        // en beige à l'ouverture, en clair seulement
+        "hidden bg-canvas/50 backdrop-blur-xs sm:block",
         "transition-opacity duration-300 ease-out",
         "data-[ending-style]:opacity-0 data-[starting-style]:opacity-0",
         className
@@ -185,7 +187,10 @@ export const DialogContent = ({
       <Primitive.Popup
         className={cn(
           "fixed sm:top-auto sm:right-0 sm:bottom-0 sm:left-auto sm:m-6 sm:translate-x-0 sm:translate-y-0",
-          "rounded-md border border-input p-5 outline-none focus:outline-none",
+          // le fond est posé ICI : sans lui, une modale dont l'appelant ne passe
+          // pas de `bg-*` (la feuille de raccourcis) était transparente, son texte
+          // posé à même la page floutée
+          "rounded-md border border-popover-border bg-popover p-5 text-popover-foreground shadow-popover outline-none focus:outline-none",
           "z-50 hidden w-full max-w-[calc(100%-2rem)] sm:grid sm:max-w-100",
           "transition-[opacity,transform,scale] duration-600 ease-out",
           "data-[ending-style]:fade-out-0 data-[ending-style]:zoom-out-95 data-[ending-style]:duration-300",

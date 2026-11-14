@@ -1,5 +1,5 @@
 import { CopyButton } from "@/components/primitives/Button";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import {
   BrandingAssetMark,

@@ -10,7 +10,9 @@ import { Button } from "@/components/primitives/Button";
 import { META_THEME_COLORS } from "@/data/theme";
 import useMetaColor from "@/hooks/useMetaColor";
 import { soundManager } from "@/lib/sound-manager";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
+
+import { NavBarTooltip } from "./NavBarTooltip";
 
 export const NavBarTheme = () => {
   const { resolvedTheme, setTheme } = useTheme();
@@ -49,19 +51,24 @@ export const NavBarTheme = () => {
   useHotkeys("alt+d", handleClick);
 
   return (
-    <Button
-      onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      size="icon"
-      variant="outline"
-    >
-      <Moon
-        className="hidden [html.dark_&]:block"
-        ref={moonIconRef}
-      />
-      <Sun className="hidden [html.light_&]:block" ref={sunIconRef} />
-      <span className="sr-only">{m.nav_theme_toggle()}</span>
-    </Button>
+    <NavBarTooltip label={m.nav_theme_toggle()} shortcut="alt D">
+      <Button
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        size="icon"
+        variant="outline"
+      >
+        <Moon
+          className="hidden [html.dark_&]:block"
+          ref={moonIconRef}
+        />
+        <Sun
+          className="hidden [html.light_&]:block"
+          ref={sunIconRef}
+        />
+        <span className="sr-only">{m.nav_theme_toggle()}</span>
+      </Button>
+    </NavBarTooltip>
   );
 };

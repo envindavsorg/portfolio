@@ -20,11 +20,10 @@ export const Checkbox = forwardRef<
   <Primitive.Root
     className={cn(
       "peer grid size-4 shrink-0 place-content-center rounded-sm",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       "data-[checked]:bg-primary",
       "data-[checked]:text-primary-foreground",
       "disabled:cursor-not-allowed disabled:opacity-50",
-      "border border-primary ring-offset-background",
+      "border border-primary",
       className
     )}
     ref={ref}
@@ -115,8 +114,7 @@ export const CheckboxAnimated = ({
   const trigger = (
     <motion.button
       className={cn(
-        "peer size-4 shrink-0 cursor-pointer rounded-sm border border-input outline-none",
-        "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        "peer size-4 shrink-0 cursor-pointer rounded-sm border border-input",
         "disabled:cursor-not-allowed disabled:opacity-50",
         "aria-invalid:border-destructive aria-invalid:ring-destructive/20",
         "data-[checked]:border-theme data-[checked]:bg-theme data-[checked]:text-background",

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import GLOBAL_DATA from "@/data/global";
 import type { Content, ContentCategory } from "@/lib/content";
 import type { AppLocale } from "@/lib/i18n";
+import { tagLabel } from "@/lib/tags";
 
 interface OpenGraphImageParams {
   description?: string;
@@ -34,6 +35,14 @@ interface MetadataConfig {
   /** chemin SANS préfixe de locale, ex. "/articles" */
   path?: string;
   title: string;
+  /**
+   * Titre du DOCUMENT, posé tel quel, hors gabarit — pour l'accueil seulement.
+   *
+   * Son `title` est le nom du site : passé par le gabarit, il donnerait
+   * « florin cuzeac — florin cuzeac ». `og:title` et `twitter:title` gardent
+   * `title`.
+   */
+  absoluteTitle?: string;
   /** présent = la page est un article : `og:type` bascule et les dates sortent */
   article?: ArticleParams;
 }
@@ -68,11 +77,38 @@ const FEED_LABELS: Record<
  * `application/rss` dans les documents servis, alors que les quatre flux
  * existent et fonctionnent.
  */
+/** le titre d'un flux, tel que le `<head>` l'annonce ET tel que le flux se nomme */
+export const feedTitle = (
+  locale: AppLocale,
+  feed: keyof (typeof FEED_LABELS)[AppLocale]
+): string =>
+  `${GLOBAL_DATA.USER.fullName} — ${FEED_LABELS[locale][feed]}`;
+
 const feedAlternates = (
   locale: AppLocale
 ): NonNullable<Metadata["alternates"]>["types"] => {
   const name = GLOBAL_DATA.USER.fullName;
-  const labels = FEED_LABELS[locale];
+
+  // L'arbre anglais n'annonce que SES flux. Il annonçait les cinq flux français
+  // sous des libellés traduits (« all content », « tools ») : un lecteur abonné
+  // depuis /en recevait 22 éléments en français, aux liens sans /en. Il n'existe
+  // pas de flux anglais par catégorie, donc aucun n'est annoncé.
+  if (locale === "en") {
+    return {
+      "application/feed+json": [
+        {
+          title: `${name} — JSON Feed`,
+          url: `${BASE_URL}/api/feed.en.json`,
+        },
+      ],
+      "application/rss+xml": [
+        {
+          title: feedTitle("en", "all"),
+          url: `${BASE_URL}/api/rss/en`,
+        },
+      ],
+    };
+  }
 
   return {
     "application/feed+json": [
@@ -83,19 +119,19 @@ const feedAlternates = (
     ],
     "application/rss+xml": [
       {
-        title: `${name} — ${labels.all}`,
+        title: feedTitle("fr", "all"),
         url: `${BASE_URL}/api/rss`,
       },
       {
-        title: `${name} — ${labels.articles}`,
+        title: feedTitle("fr", "articles"),
         url: `${BASE_URL}/api/rss/articles`,
       },
       {
-        title: `${name} — ${labels.components}`,
+        title: feedTitle("fr", "components"),
         url: `${BASE_URL}/api/rss/components`,
       },
       {
-        title: `${name} — ${labels.utils}`,
+        title: feedTitle("fr", "utils"),
         url: `${BASE_URL}/api/rss/utils`,
       },
     ],
@@ -136,6 +172,7 @@ export const openGraphImage = ({
 };
 
 export const createMetadata = ({
+  absoluteTitle,
   article,
   description,
   locale = "fr",
@@ -188,7 +225,7 @@ export const createMetadata = ({
           type: "article",
         }
       : { ...openGraphBase, type: "website" },
-    title,
+    title: absoluteTitle ? { absolute: absoluteTitle } : title,
     twitter: {
       card: "summary_large_image",
       description,
@@ -203,6 +240,29 @@ const OG_TYPE_BY_CATEGORY: Record<ContentCategory, string> = {
   components: "componentsArticle",
   utils: "utilsArticle",
 };
+
+/**
+ * La carte sociale d'un contenu — pour `og:image` ET pour l'`image` du JSON-LD.
+ *
+ * Les deux la construisaient chacun de leur côté, et seul `og:image` y mettait
+ * la ligne de méta : un composant ou un outil, qui n'ont pas d'image de
+ * couverture, publiaient donc deux URL de carte différentes sur la même page,
+ * soit deux rendus pour une image.
+ *
+ * La date et le temps de lecture s'affichent en pied de carte. Ils sont déjà
+ * calculés par `content.ts` et affichés sur la page : les porter jusqu'à
+ * l'aperçu ne coûte rien et répond à la question qu'on se pose devant un lien
+ * partagé — est-ce récent, et est-ce long.
+ */
+export const contentOgImageParams = ({
+  metadata: { category, createdAt, description, title },
+  reading,
+}: Content): OpenGraphImageParams => ({
+  description,
+  meta: `${reading.time} · ${createdAt.toISOString().slice(0, 10)}`,
+  title,
+  type: category ? OG_TYPE_BY_CATEGORY[category] : undefined,
+});
 
 /**
  * Métadonnées d'une page de contenu, pour les DEUX arbres de routes.
@@ -223,31 +283,50 @@ export const createContentMetadata = (
     article: {
       modifiedTime: updatedAt.toISOString(),
       publishedTime: createdAt.toISOString(),
-      tags,
+      // le LIBELLÉ, pas la clé : un tag est écrit en français parce qu'il
+      // produit le slug, et `article:tag` d'un article anglais annonçait
+      // « retour d'expérience ». La locale est celle du contenu servi, comme
+      // pour les sujets affichés sous l'article : un repli français reste
+      // étiqueté en français.
+      tags: tags?.map((tag) => tagLabel(tag, content.locale)),
     },
     description,
     locale,
-    ogImageParams: {
-      description,
-      /**
-       * La date et le temps de lecture, que la carte affiche en pied.
-       *
-       * Ils sont déjà calculés par `content.ts` et affichés sur la page : les
-       * porter jusqu'à l'aperçu ne coûte rien et répond à la question qu'on se
-       * pose devant un lien partagé — est-ce récent, et est-ce long.
-       */
-      meta: `${content.reading.time} · ${createdAt.toISOString().slice(0, 10)}`,
-      title,
-      type: category ? OG_TYPE_BY_CATEGORY[category] : undefined,
-    },
+    ogImageParams: contentOgImageParams(content),
     ...(category && { path: `/${category}/${content.slug}` }),
     title,
   });
 };
 
-const TITLE_TEMPLATES: Record<AppLocale, string> = {
-  en: "%s - Full-Stack Developer – Personal portfolio",
-  fr: "%s - Développeur Full-Stack – Portfolio personnel",
+/**
+ * LE gabarit de titre du site : « titre de la page — nom ».
+ *
+ * Il y en avait quatre — deux ici, un par layout des écrits et par langue — et
+ * aucun ne portait le nom : sur 136 URL, seul le titre de l'accueil disait à qui
+ * appartient le site, et les suffixes (« Développeur Full-Stack – Portfolio
+ * personnel », « Articles, composants et outils web ») poussaient onze titres
+ * au-delà de 65 caractères, jusqu'à 98. Le nom ne se traduit pas : un seul
+ * gabarit sert les deux arbres, et aucun layout ne le redéfinit.
+ */
+export const TITLE_TEMPLATE = `%s — ${GLOBAL_DATA.USER.fullName}`;
+
+/**
+ * Titre et description de l'accueil, composés de ce qui est DÉJÀ publié.
+ *
+ * L'accueil n'avait pour description que l'accroche — 48 caractères, sans nom
+ * ni métier : « crée, code, innove. les petits détails comptent. » ne dit pas
+ * de qui est le site, ni de quoi il parle. Aucun texte n'est écrit ici : le nom,
+ * le métier et l'accroche sont ceux que la page affiche, dans sa langue. Le
+ * titre sort du gabarit (`absoluteTitle`) — l'accueil s'intitulerait sinon
+ * « florin cuzeac — florin cuzeac ».
+ */
+export const homeIdentity = (
+  jobTitle: string,
+  bio: string
+): { description: string; title: string } => {
+  const title = `${GLOBAL_DATA.USER.fullName} — ${jobTitle}`;
+
+  return { description: `${title}. ${bio}`, title };
 };
 
 // metadata du layout racine de chaque arbre de routes ((fr)/ et en/)
@@ -258,17 +337,20 @@ export const createRootMetadata = (locale: AppLocale): Metadata => ({
   alternates: {
     types: feedAlternates(locale),
   },
+  // le nom, pas le pseudo GitHub : `article:author` et le JSON-LD disent
+  // « florin cuzeac », et `<meta name="author">` annonçait quelqu'un d'autre
   authors: [
     {
-      name: "envindavsorg",
+      name: GLOBAL_DATA.USER.fullName,
       url: BASE_URL,
     },
   ],
-  creator: "envindavsorg",
+  creator: GLOBAL_DATA.USER.fullName,
   description: GLOBAL_DATA.USER.description,
   icons: {
     apple: {
-      sizes: "180x180",
+      // la taille RÉELLE du fichier : il était déclaré en 180x180
+      sizes: "512x512",
       type: "image/png",
       url: "/apple-touch-icon.png",
     },
@@ -305,6 +387,6 @@ export const createRootMetadata = (locale: AppLocale): Metadata => ({
   },
   title: {
     default: GLOBAL_DATA.USER.fullName,
-    template: TITLE_TEMPLATES[locale],
+    template: TITLE_TEMPLATE,
   },
 });

@@ -97,3 +97,27 @@ export const selectRepos = (
     .map(toCard)
     .toSorted(byInterest)
     .slice(0, Math.max(0, limit));
+
+/**
+ * Ne garde que de quoi remplir des rangées ENTIÈRES de la grille.
+ *
+ * Avec cinq dépôts affichables sur une grille à deux colonnes, la dernière
+ * carte restait seule sur sa ligne, à côté d'une cellule vide — invisible en
+ * local et en CI, où le jeton GitHub factice ne rend aucun dépôt, et vu
+ * seulement sur l'aperçu de déploiement. On retire donc le reliquat ; le bouton
+ * « tous mes dépôts » mène au reste. Moins d'une rangée reste affichée telle
+ * quelle : mieux vaut une carte seule qu'une section vide.
+ *
+ * C'est une règle de MISE EN PAGE, tenue hors de `selectRepos` : le classement
+ * ne doit pas dépendre du nombre de colonnes de la grille qui l'affiche.
+ */
+export const fullRows = <T>(
+  items: readonly T[],
+  columns: number
+): T[] => {
+  if (columns < 2 || items.length < columns) {
+    return [...items];
+  }
+
+  return items.slice(0, items.length - (items.length % columns));
+};

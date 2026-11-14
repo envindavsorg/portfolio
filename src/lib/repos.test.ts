@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { DEFAULT_LANGUAGE_COLOR } from "./github-stats";
-import { selectRepos } from "./repos";
+import { fullRows, selectRepos } from "./repos";
 
 /**
  * Aucun jeton GitHub valide n'existe en test ni en intégration continue : la
@@ -226,5 +226,45 @@ describe("selectRepos", () => {
 
   it("rend un tableau vide quand l'API n'a rien renvoyé", () => {
     expect(selectRepos([])).toEqual([]);
+  });
+});
+
+describe("fullRows", () => {
+  const cards = (count: number) =>
+    Array.from({ length: count }, (_, index) => `carte-${index}`);
+
+  it("retire la carte qui resterait seule sur sa ligne", () => {
+    // le cas réel : cinq dépôts affichables, grille à deux colonnes
+    expect(fullRows(cards(5), 2)).toEqual([
+      "carte-0",
+      "carte-1",
+      "carte-2",
+      "carte-3",
+    ]);
+  });
+
+  it("ne touche pas à des rangées déjà pleines", () => {
+    expect(fullRows(cards(6), 2)).toHaveLength(6);
+    expect(fullRows(cards(4), 2)).toHaveLength(4);
+  });
+
+  it("garde une carte seule plutôt que de vider la section", () => {
+    expect(fullRows(cards(1), 2)).toEqual(["carte-0"]);
+    expect(fullRows(cards(0), 2)).toEqual([]);
+  });
+
+  it("vaut pour toute largeur de grille", () => {
+    expect(fullRows(cards(7), 3)).toHaveLength(6);
+    expect(fullRows(cards(2), 3)).toHaveLength(2);
+  });
+
+  it("laisse tout passer sur une seule colonne", () => {
+    expect(fullRows(cards(5), 1)).toHaveLength(5);
+  });
+
+  it("ne modifie pas le tableau reçu", () => {
+    const source = cards(5);
+    fullRows(source, 2);
+    expect(source).toHaveLength(5);
   });
 });

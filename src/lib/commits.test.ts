@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { contributionWindow } from "@/lib/commits";
+import {
+  contributionPeriod,
+  contributionWindow,
+} from "@/lib/commits";
 
 const DAY = 86_400_000;
 
@@ -52,5 +55,36 @@ describe("contributionWindow", () => {
     const b = contributionWindow(new Date("2026-09-13T10:00:00Z"));
 
     expect(b.from.getTime()).toBeGreaterThan(a.from.getTime());
+  });
+});
+
+describe("contributionPeriod", () => {
+  const day = (date: string) => ({ date });
+
+  it("donne l'année seule quand la fenêtre tient dans une année", () => {
+    expect(
+      contributionPeriod([day("2026-01-01"), day("2026-12-31")], 1999)
+    ).toBe("2026");
+  });
+
+  it("donne les deux années quand la fenêtre en chevauche deux", () => {
+    // le cas réel : douze mois glissants lus un 14 novembre
+    expect(
+      contributionPeriod(
+        [day("2025-11-10"), day("2026-03-01"), day("2026-11-14")],
+        1999
+      )
+    ).toBe("2025–2026");
+  });
+
+  it("ne dépend que du premier et du dernier jour", () => {
+    expect(contributionPeriod([day("2026-06-15")], 1999)).toBe(
+      "2026"
+    );
+  });
+
+  it("retombe sur l'année fournie quand il n'y a aucune donnée", () => {
+    // API GitHub indisponible : le graphe est vide, le libellé reste lisible
+    expect(contributionPeriod([], 2026)).toBe("2026");
   });
 });

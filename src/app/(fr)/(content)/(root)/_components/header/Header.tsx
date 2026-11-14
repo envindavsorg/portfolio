@@ -5,7 +5,7 @@ import { FlickeringGrid } from "@/components/blocks/FlickeringGrid";
 import { PixelHeading } from "@/components/blocks/PixelHeading";
 import GLOBAL_DATA from "@/data/global";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { FlipSentences } from "@/registry/flip-sentences";
 
 import { HeaderPronounce } from "./HeaderPronounce";
@@ -38,6 +38,10 @@ export const Header = ({
         >
           <Image
             alt={USER.fullName}
+            // `priority` ne pose plus que le préchargement (Next 16) : sans cet
+            // attribut, le portrait — l'élément LCP de l'accueil à 1440 px —
+            // attend derrière les polices et les scripts sur un vrai réseau
+            fetchPriority="high"
             height={1404}
             priority
             sizes="(max-width: 640px) 104px, (max-width: 1024px) 128px, 160px"
@@ -46,7 +50,9 @@ export const Header = ({
           />
           {!capture && (
             <HeaderPronounce
-              className="absolute right-1 bottom-1 sm:hidden"
+              // fond plein : posé sur la photo, le bouton transparent dessinait
+              // son icône blanche sur la chemise blanche
+              className="absolute right-1 bottom-1 bg-background sm:hidden"
               pronunciation={USER.pronunciation}
             />
           )}

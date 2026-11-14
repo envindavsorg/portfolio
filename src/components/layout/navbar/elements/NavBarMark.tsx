@@ -1,13 +1,15 @@
 "use client";
 
 import { useMotionValueEvent, useScroll } from "motion/react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ComponentProps } from "react";
 import { forwardRef, useEffect, useRef } from "react";
 
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
+
+import { isHomePath } from "./functions";
+import { NavBarIntentLink } from "./NavBarIntentLink";
 
 const StaticMark = forwardRef<SVGSVGElement, ComponentProps<"svg">>(
   (props, ref) => (
@@ -132,15 +134,15 @@ export const NavBarMark = () => {
 
   return (
     <div className="flex shrink-0 items-center">
-      {pathname === "/" ? (
+      {isHomePath(pathname) ? (
         <MotionMark />
       ) : (
-        <Link
+        <NavBarIntentLink
           aria-label={m.nav_mark_home_aria()}
           href={localizeHref("/")}
         >
           <StaticMark />
-        </Link>
+        </NavBarIntentLink>
       )}
     </div>
   );

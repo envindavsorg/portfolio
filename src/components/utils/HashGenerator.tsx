@@ -14,7 +14,7 @@ import {
   randomUuid,
 } from "@/lib/hash";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 export const HashGenerator = () => {
   const [text, setText] = useState("");
@@ -65,7 +65,7 @@ export const HashGenerator = () => {
   }, []);
 
   return (
-    <div className="flex w-full flex-col gap-y-6 py-4">
+    <div className="not-prose flex w-full flex-col gap-y-6 py-4">
       <div className="flex flex-col gap-y-2">
         <Label htmlFor="hash-input">
           {m.utils_hash_input_label()}

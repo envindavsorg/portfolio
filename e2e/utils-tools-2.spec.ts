@@ -238,7 +238,9 @@ test.describe("testeur d'expressions régulières", () => {
       .fill("2026-08 puis 2027-01");
 
     await expect(
-      widget(page, "regex-tester").getByText("2 correspondance(s)")
+      widget(page, "regex-tester").getByText("2 correspondances", {
+        exact: true,
+      })
     ).toBeVisible();
 
     const marks = widget(page, "regex-tester").locator("mark");
@@ -275,7 +277,9 @@ test.describe("testeur d'expressions régulières", () => {
 
     // sans avancée forcée de lastIndex, la page figerait ici
     await expect(
-      widget(page, "regex-tester").getByText(/correspondance\(s\)/iu)
+      widget(page, "regex-tester").getByText(
+        /^\d+ correspondances?$/iu
+      )
     ).toBeVisible();
     await expect(
       widget(page, "regex-tester").locator("mark")
@@ -289,14 +293,18 @@ test.describe("testeur d'expressions régulières", () => {
     await page.getByLabel("texte à analyser").fill("ABC abc");
 
     await expect(
-      widget(page, "regex-tester").getByText("1 correspondance(s)")
+      widget(page, "regex-tester").getByText("1 correspondance", {
+        exact: true,
+      })
     ).toBeVisible();
 
     await page
       .getByRole("button", { exact: true, name: "i" })
       .click();
     await expect(
-      widget(page, "regex-tester").getByText("2 correspondance(s)")
+      widget(page, "regex-tester").getByText("2 correspondances", {
+        exact: true,
+      })
     ).toBeVisible();
   });
 
@@ -481,5 +489,43 @@ test.describe("conversion de casse", () => {
     await expect(
       widget(page, "case-converter").getByText("camelCase")
     ).toBeHidden();
+  });
+});
+
+/**
+ * Le générateur de lorem ipsum est le seul outil dont la configuration vit dans
+ * l'URL (nuqs), et son adaptateur n'enveloppe plus que lui : sans adaptateur,
+ * `useQueryState` lève une erreur et l'outil entier disparaît. Les deux sens
+ * sont donc vérifiés — une URL partagée restaure la configuration, et la
+ * modifier réécrit l'URL.
+ */
+test.describe("générateur de lorem ipsum", () => {
+  test("la configuration se lit et s'écrit dans l'URL", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/utils/lorem-ipsum-generator?count=3&unit=words"
+    );
+
+    const amount = page.locator("#lorem-amount");
+    const output = page.locator("#lorem-output");
+
+    await expect(amount).toHaveValue("3");
+    await expect
+      .poll(async () => {
+        const text = await output.inputValue();
+        return text.trim().split(/\s+/u).length;
+      })
+      .toBe(3);
+
+    await amount.fill("5");
+    await expect(page).toHaveURL(/[?&]count=5(?:&|$)/u);
+    await expect(page).toHaveURL(/[?&]unit=words(?:&|$)/u);
+    await expect
+      .poll(async () => {
+        const text = await output.inputValue();
+        return text.trim().split(/\s+/u).length;
+      })
+      .toBe(5);
   });
 });

@@ -10,7 +10,7 @@ import {
   useCollapsible,
 } from "@/components/base/Collapsible";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 // le contenu reste toujours monté : fermé = clippé en hauteur avec un
 // dégradé "tout afficher", ouvert = hauteur libre

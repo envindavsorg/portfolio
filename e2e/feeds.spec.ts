@@ -86,7 +86,13 @@ test.describe("JSON Feed", () => {
       title: string;
       home_page_url: string;
       feed_url: string;
-      items: { id: string; url: string; title: string }[];
+      items: {
+        id: string;
+        url: string;
+        title: string;
+        content_text?: string;
+        content_html?: string;
+      }[];
     };
 
     expect(feed.version).toBe("https://jsonfeed.org/version/1.1");
@@ -99,7 +105,145 @@ test.describe("JSON Feed", () => {
       expect(item.id).toMatch(/^https:\/\//u);
       expect(item.url).toMatch(/^https:\/\//u);
       expect(item.title).toBeTruthy();
+      // la version 1.1 exige l'un des deux : sans corps, un lecteur strict
+      // rejette l'élément
+      expect(item.content_text ?? item.content_html).toBeTruthy();
     }
+  });
+});
+
+/**
+ * Les flux de l'arbre anglais.
+ *
+ * Chaque page /en annonçait les flux français sous des libellés anglais. Ces
+ * tests partent de ce que la page DÉCLARE dans son `<head>`, puis lisent ce qui
+ * est servi au bout : c'est l'écart entre les deux qui était le défaut.
+ */
+test.describe("flux de l'arbre anglais", () => {
+  const alternates = (html: string, type: string): string[] =>
+    [...html.matchAll(/<link rel="alternate"[^>]*>/gu)]
+      .map(([tag]) => tag)
+      .filter((tag) => tag.includes(`type="${type}"`))
+      .map((tag) => /href="([^"]+)"/u.exec(tag)?.[1] ?? "");
+
+  test("une page /en n'annonce que des flux anglais", async ({
+    request,
+  }) => {
+    const html = await (
+      await request.get("/en/articles/how-i-write-css")
+    ).text();
+
+    expect(alternates(html, "application/rss+xml")).toEqual([
+      "https://cuzeacflorin.fr/api/rss/en",
+    ]);
+    expect(alternates(html, "application/feed+json")).toEqual([
+      "https://cuzeacflorin.fr/api/feed.en.json",
+    ]);
+  });
+
+  test("une page française garde ses cinq flux", async ({
+    request,
+  }) => {
+    const html = await (
+      await request.get("/articles/how-i-write-css")
+    ).text();
+
+    expect(alternates(html, "application/rss+xml")).toEqual([
+      "https://cuzeacflorin.fr/api/rss",
+      "https://cuzeacflorin.fr/api/rss/articles",
+      "https://cuzeacflorin.fr/api/rss/components",
+      "https://cuzeacflorin.fr/api/rss/utils",
+    ]);
+    expect(alternates(html, "application/feed+json")).toEqual([
+      "https://cuzeacflorin.fr/api/feed.json",
+    ]);
+  });
+
+  test("le flux RSS anglais sert du contenu et des liens anglais", async ({
+    request,
+  }) => {
+    const response = await request.get("/api/rss/en");
+
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toContain(
+      "application/rss+xml"
+    );
+
+    const xml = await response.text();
+    expect(xml).toContain("<language>en</language>");
+    expect(xml).toContain(
+      '<atom:link href="https://cuzeacflorin.fr/api/rss/en" rel="self"'
+    );
+    // l'accueil anglais sous son URL canonique : /en/ est une redirection
+    expect(xml).toContain("<link>https://cuzeacflorin.fr/en</link>");
+    // le titre traduit, pas « Comment j'écris du CSS »
+    expect(xml).toContain("<title>How I Write CSS</title>");
+    expect(xml).not.toContain("j&apos;écris");
+
+    const links = [
+      ...xml.matchAll(/<guid[^>]*>([^<]+)<\/guid>/gu),
+    ].map(([, url]) => url ?? "");
+
+    expect(links.length).toBeGreaterThan(0);
+    for (const link of links) {
+      expect(link).toMatch(/^https:\/\/cuzeacflorin\.fr\/en\//u);
+    }
+  });
+
+  test("les deux flux RSS portent les mêmes contenus, chacun dans sa langue", async ({
+    request,
+  }) => {
+    const guids = async (path: string): Promise<string[]> =>
+      [
+        ...(await (await request.get(path)).text()).matchAll(
+          /<guid[^>]*>([^<]+)<\/guid>/gu
+        ),
+      ].map(([, url]) => url ?? "");
+
+    const french = await guids("/api/rss");
+    const english = await guids("/api/rss/en");
+
+    // le flux français n'a pas bougé : aucun lien vers /en
+    expect(french.some((url) => url.includes("/en/"))).toBe(false);
+    // les mêmes contenus des deux côtés — triés, l'ordre d'un flux suivant la
+    // date de création de chaque fichier
+    expect(
+      english.map((url) => url.replace("/en/", "/")).toSorted()
+    ).toEqual(french.toSorted());
+  });
+
+  test("le JSON Feed anglais se déclare en anglais", async ({
+    request,
+  }) => {
+    const response = await request.get("/api/feed.en.json");
+
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toContain(
+      "application/feed+json"
+    );
+
+    const feed = (await response.json()) as {
+      language: string;
+      feed_url: string;
+      home_page_url: string;
+      items: { url: string; title: string; content_text?: string }[];
+    };
+
+    expect(feed.language).toBe("en");
+    expect(feed.feed_url).toBe(
+      "https://cuzeacflorin.fr/api/feed.en.json"
+    );
+    expect(feed.home_page_url).toBe("https://cuzeacflorin.fr/en");
+    expect(feed.items.length).toBeGreaterThan(0);
+
+    for (const item of feed.items) {
+      expect(item.url).toMatch(/^https:\/\/cuzeacflorin\.fr\/en\//u);
+      expect(item.content_text).toBeTruthy();
+    }
+
+    expect(feed.items.map((item) => item.title)).toContain(
+      "How I Write CSS"
+    );
   });
 });
 

@@ -10,18 +10,30 @@ import { Button } from "@/components/primitives/Button";
 import { Prose } from "@/components/primitives/Typography";
 import { getContentByCategory, toContentLocale } from "@/lib/content";
 import { dayjs } from "@/lib/functions";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale, localizeHref } from "@/paraglide/runtime";
 
 import { ArticleItem } from "./ArticleItem";
+
+/**
+ * Un nombre PAIR : la grille a deux colonnes.
+ *
+ * Elle affichait tous les articles — cinq aujourd'hui —, donc une dernière
+ * rangée d'une seule carte à côté d'une case vide de 375 × 445 px, et une
+ * section qui pesait 23 % de la hauteur de la page. Le bouton du pied mène au
+ * reste.
+ */
+const HOME_ARTICLES = 4;
 
 export const Articles = () => {
   const articles = getContentByCategory(
     "articles",
     toContentLocale(getLocale())
-  ).toSorted((a, b) =>
-    dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
-  );
+  )
+    .toSorted((a, b) =>
+      dayjs(b.metadata.createdAt).diff(dayjs(a.metadata.createdAt))
+    )
+    .slice(0, HOME_ARTICLES);
 
   return (
     <Panel>
@@ -73,10 +85,7 @@ export const Articles = () => {
 
       <PanelFooter>
         <Button asChild variant="outline">
-          <Link
-            aria-label={m.home_articles_footer_aria_label()}
-            href={localizeHref("/articles")}
-          >
+          <Link href={localizeHref("/articles")}>
             {m.home_articles_footer_button()}
           </Link>
         </Button>

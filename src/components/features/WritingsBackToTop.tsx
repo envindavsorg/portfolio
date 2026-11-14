@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/primitives/Button";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 /** au-delà de deux hauteurs d'écran, remonter à la main devient pénible */
 const REVEAL_AFTER_SCREENS = 2;

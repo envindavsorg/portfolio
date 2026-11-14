@@ -22,9 +22,11 @@ import { Tools } from "@/app/(fr)/(content)/(root)/_components/tools/Tools";
 import { Divider } from "@/components/base/Divider";
 import { SectionBoundary } from "@/components/layout/SectionBoundary";
 import GLOBAL_DATA from "@/data/global";
+import { getAllContent } from "@/lib/content";
+import { latestUpdate } from "@/lib/content-dates";
 import { dayjs } from "@/lib/functions";
 import { PERSON_ID } from "@/lib/json-ld";
-import { createMetadata } from "@/lib/metadata";
+import { createMetadata, homeIdentity } from "@/lib/metadata";
 
 const About = dynamic(async () => {
   const mod = await import(
@@ -35,9 +37,16 @@ const About = dynamic(async () => {
 
 export const revalidate = 3600;
 
+const home = homeIdentity(
+  GLOBAL_DATA.WORK.title,
+  GLOBAL_DATA.USER.bio
+);
+
 export const metadata: Metadata = createMetadata({
-  description: GLOBAL_DATA.USER.bio,
+  absoluteTitle: home.title,
+  description: home.description,
   ogImageParams: {
+    // la carte garde l'accroche seule : son pied porte déjà le métier
     description: GLOBAL_DATA.USER.bio,
     title: GLOBAL_DATA.USER.fullName,
     type: "homepage",
@@ -50,7 +59,10 @@ const getPageJsonLd = (): WithContext<PageSchema> => ({
   "@context": "https://schema.org",
   "@type": "ProfilePage",
   dateCreated: dayjs("2025-09-01").toISOString(),
-  dateModified: dayjs().toISOString(),
+  // La date du contenu le plus récemment mis à jour : celle que le sitemap
+  // donne à cette URL. `dayjs()` lisait l'horloge au rendu, donc la page se
+  // déclarait modifiée à chaque revalidation horaire, sans rien de changé.
+  dateModified: latestUpdate(getAllContent()),
   // référence au nœud Person du graphe racine, au lieu d'une TROISIÈME personne
   // anonyme nommée « florin » — le graphe en déclarait déjà deux différentes
   mainEntity: { "@id": PERSON_ID },
@@ -74,8 +86,9 @@ const Page = () => (
       <Header />
       <Divider />
       <Overview />
-      <Divider />
-      <Cv />
+      {/* pas de séparateur ici : les deux boutons du CV ferment le bloc de
+        contact. Le panneau complet, avec son titre, est en bas de page */}
+      <Cv compact />
       <Divider />
       <About />
       <Divider />

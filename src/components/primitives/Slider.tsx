@@ -59,7 +59,11 @@ export const Slider = ({
       <Primitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
         <Primitive.Indicator className="absolute h-full rounded-full bg-theme" />
       </Primitive.Track>
-      <Primitive.Thumb className="block size-5 cursor-pointer rounded-full border-2 border-theme bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[dragging]:cursor-grabbing" />
+      {/* `has-[:focus-visible]` et non `focus-visible:` : Base UI donne le
+          focus à l'<input type="range"> masqué DANS le curseur, jamais au
+          curseur lui-même. L'ancien `focus-visible:ring-2` ne s'appliquait donc
+          jamais — calculé au clavier : `outline: none`, `box-shadow: none`. */}
+      <Primitive.Thumb className="block size-5 cursor-pointer rounded-full border-2 border-theme bg-background transition-colors disabled:pointer-events-none disabled:opacity-50 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 data-[dragging]:cursor-grabbing" />
     </Primitive.Control>
   </Primitive.Root>
 );

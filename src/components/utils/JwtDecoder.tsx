@@ -10,7 +10,7 @@ import { Textarea } from "@/components/primitives/Textarea";
 import { formatDate } from "@/lib/functions";
 import type { JwtErrorCode } from "@/lib/jwt";
 import { decodeJwt } from "@/lib/jwt";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 const ERROR_MESSAGES: Record<JwtErrorCode, () => string> = {
   empty: () => "",
@@ -56,7 +56,7 @@ export const JwtDecoder = () => {
   const value = decoded.ok ? decoded.value : null;
 
   return (
-    <div className="flex w-full flex-col gap-y-4 py-4">
+    <div className="not-prose flex w-full flex-col gap-y-4 py-4">
       <div className="flex flex-col gap-y-2">
         <div className="flex items-center justify-between gap-x-2">
           <Label htmlFor="jwt-input">

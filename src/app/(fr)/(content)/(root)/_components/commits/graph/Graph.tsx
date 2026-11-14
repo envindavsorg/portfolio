@@ -3,7 +3,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { createContext, useContext, useMemo } from "react";
 
-import { groupByWeeks } from "@/lib/commits";
+import { contributionPeriod, groupByWeeks } from "@/lib/commits";
 import { dayjs } from "@/lib/functions";
 
 import {
@@ -18,7 +18,8 @@ interface GraphContextType {
   width: number;
   height: number;
   totalCount: number;
-  year: number;
+  /** « 2026 », ou « 2025–2026 » : voir `contributionPeriod` */
+  year: string;
 }
 
 const GraphContext = createContext<GraphContextType | null>(null);
@@ -39,8 +40,7 @@ export type GraphProps = HTMLAttributes<HTMLDivElement> & {
 export const Graph = ({ data, children, ...props }: GraphProps) => {
   const value = useMemo(() => {
     const weeks = groupByWeeks(data, WEEK_START);
-    const year =
-      data.length > 0 ? dayjs(data[0].date).year() : dayjs().year();
+    const year = contributionPeriod(data, dayjs().year());
     const totalCount = data.reduce(
       (sum, activity) => sum + activity.count,
       0

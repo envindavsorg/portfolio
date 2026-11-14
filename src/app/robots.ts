@@ -14,6 +14,7 @@ const robots = (): MetadataRoute.Robots => ({
         "/api/rss",
         "/api/rss/*",
         "/api/feed.json",
+        "/api/feed.en.json",
         "/api/vcard",
       ],
       // `/admin` porte déjà `noindex` dans ses métadonnées, mais un en-tête que

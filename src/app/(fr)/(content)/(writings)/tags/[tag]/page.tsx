@@ -18,7 +18,7 @@ import {
   getTagBySlug,
   getTagIndex,
 } from "@/lib/tags";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 /**
@@ -72,7 +72,7 @@ export const buildTagMetadata = async ({
   return createMetadata({
     description,
     locale,
-    ogImageParams: { description, title, type: "blog" },
+    ogImageParams: { description, title, type: "page" },
     path: `/tags/${tag.slug}`,
     title,
   });
@@ -129,7 +129,10 @@ export const TagView = async ({
 
       <PanelContent className="screen-line-after screen-line-before">
         <Prose>
-          {m.writings_tag_content_count({ count: tag.count })}
+          {m.writings_tag_content_count({
+            count: tag.count,
+            plural: tag.count > 1 ? "s" : "",
+          })}
         </Prose>
 
         {/* deux orthographes peuvent produire le même slug ; le dire évite de
@@ -169,10 +172,7 @@ export const TagView = async ({
         </Button>
 
         <Button asChild size="sm" variant="outline">
-          <Link
-            aria-label={m.writings_tag_feed_aria({ tag: tag.label })}
-            href={`/api/rss/tag/${tag.slug}`}
-          >
+          <Link href={`/api/rss/tag/${tag.slug}`}>
             {m.writings_tag_feed()}
           </Link>
         </Button>

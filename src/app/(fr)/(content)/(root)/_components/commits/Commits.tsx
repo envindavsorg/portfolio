@@ -10,8 +10,9 @@ import {
   aggregateLanguages,
   getContributionStats,
 } from "@/lib/github-stats";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
+import { ROW_META } from "../shared/row";
 import { CommitsContent } from "./CommitsContent";
 import { CommitsLanguages } from "./CommitsLanguages";
 import { CommitsStats } from "./CommitsStats";
@@ -38,7 +39,7 @@ export const Commits = async () => {
 
       <CommitsLanguages languages={languages} />
 
-      <div className="screen-line-before flex items-center justify-between gap-2 px-2 py-2 sm:gap-4 sm:px-4">
+      <div className={ROW_META}>
         <span className="text-theme">---</span>
         <div className="flex items-center gap-2 sm:gap-4">
           <Badge className="text-theme lowercase">

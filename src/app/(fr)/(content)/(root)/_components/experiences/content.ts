@@ -1,5 +1,5 @@
 import type { Message } from "@/lib/i18n";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 export interface Experience {
   id: string;

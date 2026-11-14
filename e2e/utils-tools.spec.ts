@@ -216,13 +216,13 @@ test.describe("comparateur de textes", () => {
     // « deux » remplacé (1 supprimée + 1 ajoutée), « cinq » ajoutée,
     // « un », « trois » et « quatre » inchangées
     await expect(
-      page.getByText("2 ligne(s) ajoutée(s)")
+      page.getByText("2 lignes ajoutées", { exact: true })
     ).toBeVisible();
     await expect(
-      page.getByText("1 ligne(s) supprimée(s)")
+      page.getByText("1 ligne supprimée", { exact: true })
     ).toBeVisible();
     await expect(
-      page.getByText("3 ligne(s) inchangée(s)")
+      page.getByText("3 lignes inchangées", { exact: true })
     ).toBeVisible();
   });
 
@@ -269,14 +269,16 @@ test.describe("comparateur de textes", () => {
     await page.getByLabel("texte original").fill("alpha\nbeta");
     await page.getByLabel("texte modifié").fill("alpha\nbeta");
 
+    // zéro reste au singulier en français : « 0 ligne ajoutée », là où
+    // l'ancien « ligne(s) » évitait de trancher
     await expect(
-      page.getByText("0 ligne(s) ajoutée(s)")
+      page.getByText("0 ligne ajoutée", { exact: true })
     ).toBeVisible();
     await expect(
-      page.getByText("0 ligne(s) supprimée(s)")
+      page.getByText("0 ligne supprimée", { exact: true })
     ).toBeVisible();
     await expect(
-      page.getByText("2 ligne(s) inchangée(s)")
+      page.getByText("2 lignes inchangées", { exact: true })
     ).toBeVisible();
   });
 });

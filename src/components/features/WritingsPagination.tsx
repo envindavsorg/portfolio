@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import useAnimatedRef from "@/hooks/useAnimatedRef";
 import type { Content } from "@/lib/content";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { localizeHref } from "@/paraglide/runtime";
 
 import {
@@ -29,7 +29,9 @@ export const WritingsPagination = ({
   const arrowRight = useAnimatedRef();
 
   return (
-    <div className="flex items-center gap-x-3">
+    // 8 px sous 640 : à 320 px, sept boutons de 32 px espacés de 12
+    // dépassaient la colonne de 6 px
+    <div className="flex items-center gap-x-2 sm:gap-x-3">
       {previous && (
         <Tooltip>
           <TooltipTrigger

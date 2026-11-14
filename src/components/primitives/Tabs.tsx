@@ -106,7 +106,6 @@ export const TabsTrigger = ({
     "data-[state=active]:text-theme",
     "[&_svg:not([class*='size-'])]:size-5 [&_svg]:pointer-events-none [&_svg]:shrink-0",
     "transition-[color] disabled:pointer-events-none disabled:opacity-50",
-    "focus-visible:border-ring focus-visible:outline-1 focus-visible:outline-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
     className
   );
 
@@ -331,7 +330,6 @@ export const TabsAnimated = ({
               className={cn(
                 "relative flex items-center justify-center px-3 py-2",
                 "cursor-pointer rounded-md border border-edge font-medium text-sm transition",
-                "focus-visible:outline-none focus-visible:outline-1 focus-visible:ring-1",
                 isActive ? "text-theme" : "text-foreground"
               )}
               id={`tab-${tab.id}`}

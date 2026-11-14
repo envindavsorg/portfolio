@@ -8,7 +8,7 @@ export const GraphFooter = () => {
   const { totalCount, year } = useContributionGraph();
 
   return (
-    <div className="screen-line-before flex gap-y-2 px-3 py-2 max-sm:flex-col-reverse sm:items-center sm:justify-between">
+    <div className="screen-line-before flex gap-x-4 gap-y-2 px-3 py-2 max-sm:flex-col-reverse sm:items-center sm:justify-between">
       <p className="text-muted-foreground text-xs max-sm:ms-auto sm:text-sm">
         <span className="font-medium text-theme">
           {/* pas de toLocaleString ici : "1,234" repasse en Number() -> NaN,

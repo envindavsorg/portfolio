@@ -16,7 +16,7 @@ import { NextJSIcon } from "@/components/svgs/stack/Next";
 import { ReactIcon } from "@/components/svgs/stack/React";
 import { TailwindIcon } from "@/components/svgs/stack/Tailwind";
 import { TypeScriptIcon } from "@/components/svgs/stack/TypeScript";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 export interface Stack {
@@ -89,7 +89,9 @@ export const AboutContent = memo(
         {expanded && (
           <motion.div
             animate={{ height: "auto", opacity: 1 }}
-            className="space-y-3 overflow-hidden"
+            // même pas que `PanelContent` : à 12 px, la suite dépliée
+            // changeait de rythme par rapport aux trois phrases du dessus (6 px)
+            className="space-y-1.5 overflow-hidden"
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}
             key="about-expanded"

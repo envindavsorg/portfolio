@@ -104,6 +104,25 @@ test.describe("cartes sociales", () => {
     expect(fr.equals(en)).toBe(false);
   });
 
+  /**
+   * La pastille de l'accueil dit « portfolio » dans les deux langues : sans le
+   * pied de carte, rien ne distinguait la carte de /en de celle de /, et son
+   * métier y restait écrit en français sous une accroche en anglais.
+   */
+  test("la carte d'accueil écrit le métier dans la langue de la page", async ({
+    request,
+  }) => {
+    const card = {
+      description: "creates, codes, innovates.",
+      title: "florin cuzeac",
+      type: "homepage",
+    };
+    const fr = await fetchImage(request, card);
+    const en = await fetchImage(request, { ...card, locale: "en" });
+
+    expect(fr.equals(en)).toBe(false);
+  });
+
   test("la ligne de méta apparaît sur la carte", async ({
     request,
   }) => {
@@ -150,6 +169,9 @@ test.describe("cartes sociales", () => {
       ["/projects/portfolio", "project"],
       ["/experience/wefix-by-fnac", "experience"],
       ["/", "homepage"],
+      // ni un article ni un index : ces pages portaient la pastille « blog »
+      ["/cv", "page"],
+      ["/tags/react", "page"],
     ];
 
     for (const [path, type] of cases) {

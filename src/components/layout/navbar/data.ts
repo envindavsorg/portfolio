@@ -1,4 +1,4 @@
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 interface NavigationData {
   title: () => string;

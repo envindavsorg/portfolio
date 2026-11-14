@@ -1,6 +1,6 @@
 import { Divider } from "@/components/base/Divider";
 import { Panel, PanelHeader } from "@/components/base/Panel";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
 import { BrandingColors } from "./BrandingColors";
 import { BrandingMark } from "./BrandingMark";

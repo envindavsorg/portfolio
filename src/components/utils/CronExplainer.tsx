@@ -20,7 +20,7 @@ import {
   parseCron,
 } from "@/lib/cron";
 import { formatInZone } from "@/lib/datetime";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
 const NEXT_RUN_COUNT = 5;
@@ -117,7 +117,7 @@ export const CronExplainer = () => {
 
   return (
     <div
-      className="flex w-full flex-col gap-y-6 py-4"
+      className="not-prose flex w-full flex-col gap-y-6 py-4"
       data-slot="utils-cron-explainer"
     >
       <div className="flex flex-col gap-y-2">

@@ -122,7 +122,8 @@ type PageType =
   | "components"
   | "componentsArticle"
   | "utils"
-  | "utilsArticle";
+  | "utilsArticle"
+  | "page";
 
 // types for browser hook
 type Browser =

@@ -10,9 +10,13 @@ import { Layers } from "@/components/motion/Layers";
 import { Search } from "@/components/motion/Search";
 import { User } from "@/components/motion/User";
 import GLOBAL_DATA from "@/data/global";
-import { m } from "@/paraglide/messages";
+import * as m from "@/paraglide/messages";
 
-import type { CommandGroupDef, CommandKind } from "./types";
+import type {
+  CommandGroupDef,
+  CommandItemProps,
+  CommandKind,
+} from "./types";
 
 export const LABELS: Record<CommandKind, () => string> = {
   article: m.nav_command_label_article,
@@ -120,22 +124,32 @@ export const COMMANDS: CommandGroupDef[] = [
   },
 ];
 
+// une icône par catégorie : un contenu sans icône retombait sur un numéro, et
+// ce numéro était l'index AVANT filtrage — « css » listait « 1. 2. 5. »
 export const CATEGORY: Record<
   string,
-  { route: string; heading: () => string; kind: CommandKind }
+  {
+    route: string;
+    heading: () => string;
+    icon: NonNullable<CommandItemProps["icon"]>;
+    kind: CommandKind;
+  }
 > = {
   articles: {
     heading: m.nav_command_group_latest_articles,
+    icon: Book,
     kind: "article",
     route: "articles",
   },
   components: {
     heading: m.nav_command_group_latest_snippets,
+    icon: Code,
     kind: "components",
     route: "components",
   },
   utils: {
     heading: m.nav_command_group_latest_utils,
+    icon: Cog,
     kind: "utils",
     route: "utils",
   },
