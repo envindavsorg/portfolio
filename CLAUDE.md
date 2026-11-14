@@ -247,6 +247,17 @@ src/app/
   ALL built on Base UI (radix has been fully migrated out; see Tech Stack).
   `src/components/blocks/` (visual blocks), `src/components/motion/`
   (animated icons).
+- A `Button` is a piece of the blueprint: square corners, a DASHED rule, four
+  corner brackets and a slanted shine that crosses it once on hover. The
+  brackets are the `corner-brackets` utility of `globals.css` — eight flat
+  gradients on the border box, no extra node, no pseudo-element; `--bracket`
+  sets their length and `--bracket-color` their colour (the text colour by
+  default, the theme colour on a hovered outline button, transparent on a
+  ghost button until hovered). A `bg-linear-*` or `bg-none` on the same box
+  REPLACES them, which is how the `link` variant drops them. The shine is the
+  button's `::after` (only `translate` animates, under `motion-safe`), so a
+  caller must not put its own `after:` on a `Button`. The outline border keeps
+  its two strengths (30 % then 60 %): it still carries the hover.
 - Cards use the stretched link of `src/components/base/CardLink.tsx`: the anchor
   wraps ONLY the title — its accessible name IS its text — and a pseudo-element
   extends the click to the whole card. Never wrap a card in an anchor carrying an
@@ -588,6 +599,10 @@ the component registry:
   client component `WritingsToC` can use it. The extraction (`getContentToc`)
   lives in `content-toc.ts`, server-only: in one module, the whole markdown
   parser shipped in the bundle of every content page.
+- `safe-storage.ts` - `localStorage` that returns its failure instead of
+  throwing it (see Storage under Important Notes)
+- `pause-off-screen.ts` - `pauseOffScreen`, the shared-observer ref callback
+  for infinite CSS animations (see Testing, "at rest")
 - `accessible-name.ts` - `accessibleName(visible, detail)` builds a label that
   STARTS with the visible text (WCAG 2.5.3): `aria-label` replaces the content,
   and someone driving the browser by voice says what they read.
@@ -697,8 +712,11 @@ End-to-end tests (Playwright, `e2e/`):
 - `load-stability.spec.ts` - no deferred boundary in the served HTML of `/` and
   `/en`, the deep link at 390px, the pixel title's box with the four late fonts
   blocked, the theme not re-applied at mount (plus toggle, system theme and
-  stored theme), and the pixel title stopping off-screen when two intersection
-  changes arrive together
+  stored theme — the witness is the class read at `DOMContentLoaded`, which
+  only the inline script can have set), a stored theme named like an
+  `Object.prototype` key, pages rendering with a storage that throws, the
+  pixel title stopping off-screen when two intersection changes arrive
+  together, and the header sentence and halos at rest off screen
 - `budget.spec.ts` - JS, font and CSS weight ceilings measured in the browser, plus
   the font-preload count. It runs with service workers BLOCKED: a response
   served through the site's own service worker reports a negative body size to
@@ -731,8 +749,28 @@ the COUNTS are reliable, and a saturated scroll cannot show a time gain. One
 loop is left running on purpose: `PixelHeading` ticks every 50 ms (`autoPlay`)
 for as long as a title is on screen — that is the heading's design, and
 changing it is the owner's call, not a performance fix. At rest with the cover
-off screen, what remains is the sentence flip of the header (every 4 s, visible
-or not) and the four `animate-ping` halos.
+off screen NOTHING else runs on the main thread: 2 to 16 ms and 0 to 1 style
+recalculation per 5 s on a phone profile, where the sentence flip of the header
+and four `animate-ping` halos cost 212 to 447 ms and 39 to 62 recalculations.
+Two rules keep it so:
+
+- `FlipSentences` (a registry component: `pnpm registry:build` after any
+  change) observes its own root. A flip that falls due off screen, or with the
+  document hidden, is HELD and the interval stops; on return it runs at once,
+  by ONE step, and the 4 s rhythm restarts. It stays self-contained
+  (`motion/react`, `react`, `cn`).
+- An infinite CSS animation that can sit off screen takes `pauseOffScreen`
+  (`src/lib/pause-off-screen.ts`) as its `ref`: ONE shared IntersectionObserver
+  (rootMargin 200px) sets inline `animation-play-state: paused` off screen and
+  removes it before the element enters. `PulsatingCircle` is a client component
+  for that one reason — a ref cannot cross a Server Component boundary — and
+  its served HTML is unchanged. Two CSS-only routes were measured and do NOT
+  work: `content-visibility: auto` (Chromium still animates content 1191px
+  below an 844px viewport) and a `view()` timeline toggling a custom property
+  read by `animation-play-state` (an animated custom property is ignored inside
+  `animation-*`, so the halo stays paused on screen too). To see whether an
+  animation ticks, count style recalculations through CDP:
+  `document.getAnimations()` still reports `running` for skipped content.
 
 Three measuring lessons from the phone-fluidity work. A forced layout or style
 recalculation is charged to whoever READS layout first, not to whoever dirtied
@@ -911,7 +949,19 @@ falling back to zeroed GitHub widgets rather than failing.
   the homepage) inside the hydration task — longest task 496 to 571 ms on a
   phone profile, 308 to 425 without it. The lever relies on next-themes 0.4.6
   (the inline script falls back to the theme name, the React side does not);
-  `e2e/load-stability.spec.ts` fails if an upgrade changes that
+  `e2e/load-stability.spec.ts` fails if an upgrade changes that. The map is
+  built with `Object.create(null)`: with a plain `{}`, a stored theme named
+  like an `Object.prototype` key (`constructor`, `toString`, `__proto__`) found
+  a function in it, next-themes passed it to `classList.add`, and the whole
+  page became the error screen. `NavBarTheme` handles the rejected `ready` of a
+  skipped view transition (19 unhandled errors for 20 fast clicks)
+- **Storage**: `localStorage` THROWS when site storage is blocked — it is not
+  merely empty. Read and write through `src/lib/safe-storage.ts`
+  (`readStorage`, `writeStorage`, `removeStorage`), never `localStorage`
+  directly: one unguarded `getItem` in an effect of `FooterClock` replaced
+  EVERY page of the site with the error screen, and a tool page wrote its
+  visit the same way. `e2e/load-stability.spec.ts` loads three page types with
+  a throwing storage
 - **Print**: the `@media print` block in `globals.css` covers `/cv` AND content
   pages. The chrome goes by element (`header`, `nav`, `footer`) and anything
   tagged `data-print="hide"` is dropped (ToC, pagination, share actions, tags,
