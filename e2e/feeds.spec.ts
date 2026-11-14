@@ -86,7 +86,13 @@ test.describe("JSON Feed", () => {
       title: string;
       home_page_url: string;
       feed_url: string;
-      items: { id: string; url: string; title: string }[];
+      items: {
+        id: string;
+        url: string;
+        title: string;
+        content_text?: string;
+        content_html?: string;
+      }[];
     };
 
     expect(feed.version).toBe("https://jsonfeed.org/version/1.1");
@@ -99,6 +105,9 @@ test.describe("JSON Feed", () => {
       expect(item.id).toMatch(/^https:\/\//u);
       expect(item.url).toMatch(/^https:\/\//u);
       expect(item.title).toBeTruthy();
+      // la version 1.1 exige l'un des deux : sans corps, un lecteur strict
+      // rejette l'élément
+      expect(item.content_text ?? item.content_html).toBeTruthy();
     }
   });
 });

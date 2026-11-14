@@ -76,6 +76,21 @@ describe("toFeedItems", () => {
     );
   });
 
+  it("rend l'image de couverture absolue, et n'en invente pas", () => {
+    const illustrated = {
+      ...post,
+      metadata: {
+        ...post.metadata,
+        image: "/images/articles/5.webp",
+      },
+    } as Content;
+
+    expect(toFeedItems([illustrated], SITE)[0].image).toBe(
+      "https://example.test/images/articles/5.webp"
+    );
+    expect(toFeedItems([post], SITE)[0].image).toBeUndefined();
+  });
+
   it("defaults a missing category to articles", () => {
     const untyped = {
       ...post,
@@ -156,6 +171,47 @@ describe("toJsonFeed", () => {
     expect(parsed.items[0].date_published).toBe(
       "2025-06-01T00:00:00.000Z"
     );
+  });
+
+  // la version 1.1 exige `content_html` ou `content_text` sur chaque élément :
+  // les 22 du flux n'avaient ni l'un ni l'autre
+  it("donne un contenu à chaque élément", () => {
+    const parsed = JSON.parse(
+      toJsonFeed(
+        [makeItem({ description: "Ce que dit l'article" })],
+        meta
+      )
+    );
+
+    expect(parsed.items[0].content_text).toBe("Ce que dit l'article");
+    expect(parsed.items[0].summary).toBe("Ce que dit l'article");
+  });
+
+  it("publie l'image d'un élément et les icônes du flux quand elles existent", () => {
+    const parsed = JSON.parse(
+      toJsonFeed(
+        [makeItem({ image: "https://example.test/images/a.webp" })],
+        {
+          ...meta,
+          favicon: "https://example.test/favicon.ico",
+          icon: "https://example.test/icon-512x512.png",
+        }
+      )
+    );
+
+    expect(parsed.items[0].image).toBe(
+      "https://example.test/images/a.webp"
+    );
+    expect(parsed.icon).toBe("https://example.test/icon-512x512.png");
+    expect(parsed.favicon).toBe("https://example.test/favicon.ico");
+  });
+
+  it("n'écrit ni image ni icône vides", () => {
+    const parsed = JSON.parse(toJsonFeed([makeItem()], meta));
+
+    expect("image" in parsed.items[0]).toBe(false);
+    expect("icon" in parsed).toBe(false);
+    expect("favicon" in parsed).toBe(false);
   });
 
   it("merges category and tags", () => {

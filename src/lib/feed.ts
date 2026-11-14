@@ -8,6 +8,8 @@ export interface FeedItem {
   published: Date;
   updated: Date;
   tags: string[];
+  /** URL absolue de l'image de couverture, quand le contenu en déclare une */
+  image?: string;
 }
 
 export interface FeedMeta {
@@ -18,6 +20,9 @@ export interface FeedMeta {
   feedUrl: string;
   author: string;
   language: string;
+  /** JSON Feed : image carrée du flux, grande (512 px) et petite (favicon) */
+  icon?: string;
+  favicon?: string;
 }
 
 /**
@@ -48,6 +53,9 @@ export const toFeedItems = (
     return {
       category,
       description: post.metadata.description,
+      ...(post.metadata.image && {
+        image: `${siteUrl}${post.metadata.image}`,
+      }),
       published: new Date(post.metadata.createdAt),
       tags: post.metadata.tags ?? [],
       title: post.metadata.title,
@@ -103,7 +111,14 @@ ${entries}
 `;
 };
 
-/** JSON Feed 1.1 — https://jsonfeed.org/version/1.1 */
+/**
+ * JSON Feed 1.1 — https://jsonfeed.org/version/1.1
+ *
+ * Chaque élément porte `content_text` : la spécification exige `content_html`
+ * ou `content_text`, et les 22 éléments du flux n'avaient ni l'un ni l'autre —
+ * un lecteur strict les rejette, un lecteur tolérant affiche un titre sans
+ * corps. C'est le texte que le RSS publie déjà dans `<description>`.
+ */
 export const toJsonFeed = (
   items: FeedItem[],
   meta: FeedMeta
@@ -112,12 +127,16 @@ export const toJsonFeed = (
     {
       authors: [{ name: meta.author, url: `${meta.siteUrl}/` }],
       description: meta.description,
+      ...(meta.favicon && { favicon: meta.favicon }),
       feed_url: meta.feedUrl,
       home_page_url: `${meta.siteUrl}/`,
+      ...(meta.icon && { icon: meta.icon }),
       items: items.map((item) => ({
+        content_text: item.description,
         date_modified: item.updated.toISOString(),
         date_published: item.published.toISOString(),
         id: item.url,
+        ...(item.image && { image: item.image }),
         summary: item.description,
         tags: [item.category, ...item.tags],
         title: item.title,

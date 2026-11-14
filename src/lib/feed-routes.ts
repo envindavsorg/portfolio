@@ -26,7 +26,9 @@ export const feedMeta = ({
 }): FeedMeta => ({
   author: GLOBAL_DATA.USER.fullName,
   description,
+  favicon: `${BASE_URL}/favicon.ico`,
   feedUrl: `${BASE_URL}${path}`,
+  icon: `${BASE_URL}/icon-512x512.png`,
   language: "fr",
   siteUrl: BASE_URL,
   title,
