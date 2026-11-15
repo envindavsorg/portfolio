@@ -694,6 +694,15 @@ End-to-end tests (Playwright, `e2e/`):
   a page whose scripts never load reports no violations and would otherwise pass
 - `search.spec.ts` - ⌘K palette: shortcuts, full-text match on body-only words,
   diacritic-insensitivity, navigation, EN index
+- `palette-lazy.spec.ts` - the ⌘K panel arrives on demand. Two markers
+  (`command-dialog-content` from the panel, `cmdk-input` from cmdk) are absent
+  from the scripts four page types download at load, with a CONTROL: both
+  arrive when the palette opens. A ⌘K pressed while the panel chunk is held
+  back opens the palette once it lands and a second press does not cancel it;
+  under 768px the drawer takes the keystrokes on its very first opening; a
+  panel chunk that fails leaves no page error, no unhandled rejection and no
+  hint toast, and the next ⌘K opens the palette. Service workers are blocked: a
+  request the worker serves escapes `page.route`
 - `feeds.spec.ts` - RSS/JSON Feed shape, per-category filtering, escaping, and the
   plain-text mirror in both languages. Its English block starts from the
   `<link rel="alternate">` a `/en` page DECLARES, then reads what is served
@@ -1101,7 +1110,31 @@ falling back to zeroed GitHub widgets rather than failing.
   `bottom: 0` rounds to zero height). Escape closes the mobile menu and returns
   focus to its toggle — unless a layer above it (palette, shortcuts sheet) has
   already consumed the key (`event.defaultPrevented`). Under 768px both of those
-  layers are drawers
+  layers are drawers.
+  The ⌘K palette is in two pieces. `NavBarCommand` — the trigger button and the
+  keydown listener — stays in the navbar chunk; `NavBarCommandPanel` (cmdk, the
+  ranking of `lib/search.ts`, the dialog or drawer body, the shortcuts sheet)
+  arrives by an `import()` written in `NavBarCommand.tsx`, client code, the only
+  place where it splits a chunk. Measured on a local build: 13 KiB of JS less
+  on `/` (the CV dialog keeps Base UI's dialog and vaul there), 37 on
+  `/articles`, an article and a tool page, 50 to 53 on the pages with no other
+  dialog. The panel loads on INTENT only — pointerenter, focus and touchstart
+  on the trigger, keydown of Meta or Control alone outside a field — never at
+  idle, which would only move the bytes. `open` and `shortcutsOpen` say what is
+  REQUESTED and the panel renders once it has arrived: a ⌘K or a `?` pressed
+  before the chunk is held, and pressing again confirms the request instead of
+  toggling it off. A failed import is not kept (the next intent asks again) and
+  it DROPS the held request and its hint toast — otherwise the next hover,
+  loading the panel, would open by itself a palette asked for earlier.
+  Turbopack's runtime retries a failed chunk once on its own, 200 to 600 ms
+  later: cutting a single request makes no import fail. The two slots around
+  the trigger stay, sheet before and palette after, empty or not: the `id` Base
+  UI gives the button comes from `useId`, which depends on the button's place
+  among its siblings — with two slots the served HTML of the trigger changed.
+  `functions.ts` holds only the route helpers the menus import; what the
+  palette alone calls is in `command-palette.ts`, so nothing the navbar loads
+  up front reaches `lib/search.ts` or the icons of `content.ts`. Never import
+  `NavBarCommandPanel` statically: `e2e/palette-lazy.spec.ts` fails on it
 - **Offline**: `public/sw.js` caches `/_next/static/**`, fonts and images
   cache-first (their URLs are content-hashed), and HTML **network-first**. Never
   serve HTML from cache while the network answers: a stale document references
