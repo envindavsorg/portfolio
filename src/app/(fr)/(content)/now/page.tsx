@@ -141,7 +141,11 @@ export const NowPage = ({
               {m.now_current_role(
                 {
                   company: role.company,
-                  start: role.period.split(" — ")[0],
+                  // la date d'entrée en toutes lettres quand le poste la
+                  // donne, l'année de la période sinon
+                  start:
+                    current?.since?.(undefined, options) ??
+                    role.period.split(" — ")[0],
                   title: role.title,
                 },
                 options

@@ -23,7 +23,7 @@ describe("buildCv", () => {
   it("sépare les postes des formations", () => {
     const cv = build("fr");
 
-    expect(cv.jobs).toHaveLength(3);
+    expect(cv.jobs).toHaveLength(4);
     expect(cv.education).toHaveLength(3);
     expect(cv.credentials).toHaveLength(4);
   });

@@ -39,6 +39,10 @@ const WORK = {
   experience: "avec 7 ans d'expérience",
   jobs: [
     {
+      company: "Cospal",
+      title: "Développeur Full-Stack",
+    },
+    {
       company: "WeFix by Fnac",
       title: "Développeur Front-End Senior",
       website: "https://wefix.net/",

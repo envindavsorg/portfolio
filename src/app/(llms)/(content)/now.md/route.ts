@@ -37,7 +37,11 @@ const buildContent = (): string => {
 
   const sections = [
     role
-      ? `## Au travail\n\n${role.title} chez ${role.company}, ${role.period}.`
+      ? `## Au travail\n\n${role.title} chez ${role.company}, ${
+          current?.since
+            ? `depuis ${current.since(undefined, { locale: MIRROR_LOCALE })}`
+            : role.period
+        }.`
       : "",
     articles.length > 0
       ? `## Ce que je construis\n\n${articles

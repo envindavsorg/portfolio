@@ -149,8 +149,9 @@ test.describe("données structurées", () => {
       (person[key] as { name: string }[]).map((entry) => entry.name);
 
     // SpinalCom et l'Économat des Armées étaient déclarés employeurs actuels
-    expect(names("worksFor")).toEqual(["WeFix by Fnac"]);
+    expect(names("worksFor")).toEqual(["Cospal"]);
     expect(names("alumniOf")).toEqual([
+      "WeFix by Fnac",
       "SpinalCom",
       "Économat des Armées",
     ]);
