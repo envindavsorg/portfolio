@@ -1,173 +1,99 @@
 "use client";
 
-import { useCommandState } from "cmdk";
-import { usePathname, useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
-import type { MouseEvent, RefObject } from "react";
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import type { MouseEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { Copy } from "@/components/motion/Copy";
-import { Keyboard } from "@/components/motion/Keyboard";
-import { Link } from "@/components/motion/Link";
-import { Moon } from "@/components/motion/Moon";
 import { Search } from "@/components/motion/Search";
 import { Button } from "@/components/primitives/Button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/primitives/Command";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/primitives/Dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerTitle,
-} from "@/components/primitives/Drawer";
-import { Kbd } from "@/components/primitives/Kbd";
-import { Separator } from "@/components/primitives/Separator";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import {
-  prefetchSearchIndex,
-  useSearchIndex,
-} from "@/hooks/useSearchIndex";
-import { copyText } from "@/lib/functions";
-import { cn } from "@/lib/utils";
+import { prefetchSearchIndex } from "@/hooks/useSearchIndex";
 import * as m from "@/paraglide/messages";
-import { getLocale, localizeHref } from "@/paraglide/runtime";
 
-import { CATEGORY, LABELS } from "./content";
-import {
-  buildKindMap,
-  buildPostGroups,
-  commandFilter,
-  getFilteredGroups,
-  isHomePath,
-} from "./functions";
-import { NavBarShortcuts } from "./NavBarShortcuts";
 import { NavBarTooltip } from "./NavBarTooltip";
-import type { CommandItemProps, CommandKind } from "./types";
 
-interface CommandFooterProps {
-  kindMap: Map<string, CommandKind>;
-}
+type PanelModule = typeof import("./NavBarCommandPanel");
 
-const CommandFooter = memo(({ kindMap }: CommandFooterProps) => {
-  const kind = useCommandState(
-    (state) => kindMap.get(state.value) ?? "page"
-  );
+const HINT_TOAST = "command-hint";
 
-  return (
-    // des `<div>` et non `KbdGroup` : celui-ci est un `<kbd>`, et le libellé
-    // qu'il englobait héritait de sa police à chasse fixe — le seul texte en
-    // Geist Mono de toute la barre. Un libellé n'est pas une touche.
-    <div className="hidden h-12 items-center justify-end gap-x-4 border-input border-t px-4 sm:flex">
-      <div className="flex items-center gap-x-2">
-        <span className="font-medium text-xs">{LABELS[kind]()}</span>
-        <Kbd>↵</Kbd>
-      </div>
+let pending: Promise<PanelModule> | undefined;
 
-      <Separator
-        className="data-[orientation=vertical]:h-4"
-        orientation="vertical"
-      />
+/**
+ * Le panneau de la palette, chargé à la demande.
+ *
+ * cmdk, le classement de `lib/search.ts`, le tiroir et la feuille des
+ * raccourcis voyageaient dans le JavaScript de CHAQUE page, pour une palette
+ * que la plupart des visites n'ouvrent pas. L'`import()` est écrit ici, dans
+ * du code client : c'est le seul endroit où il découpe un chunk (la leçon de
+ * `UtilWidget.tsx`).
+ *
+ * Un échec — hors ligne, ou un chunk disparu après un déploiement — ne lève
+ * rien et n'est pas gardé : la promesse rejetée est oubliée, et la tentative
+ * suivante refait la demande. Une seule demande vole à la fois, quel que soit
+ * le nombre de signaux d'intention reçus.
+ */
+const loadPanel = async (): Promise<PanelModule | undefined> => {
+  pending ??= import("./NavBarCommandPanel");
+  const attempt = pending;
 
-      <div className="flex items-center gap-x-2">
-        <span className="font-medium text-xs">
-          {m.nav_command_close()}
-        </span>
-        <Kbd>esc</Kbd>
-      </div>
-    </div>
-  );
-});
-
-interface CommandRowProps {
-  item: CommandItemProps;
-  onSelect: (item: CommandItemProps) => void;
-}
-
-const CommandRow = memo(({ item, onSelect }: CommandRowProps) => {
-  const iconRef = useRef<AnimatedIconHandle>(null);
-  const Icon = item.icon;
-  const title = item.title();
-
-  return (
-    <CommandItem
-      keywords={item.keywords}
-      onMouseEnter={() => iconRef.current?.startAnimation?.()}
-      onMouseLeave={() => iconRef.current?.stopAnimation?.()}
-      onSelect={() => onSelect(item)}
-      value={title}
-    >
-      {/* plus de numéro de repli : c'était l'index d'AVANT le filtrage, et
-          « css » affichait « 1. 2. 5. ». Chaque item porte une icône. */}
-      {Icon && (
-        <Icon
-          ref={iconRef as RefObject<AnimatedIconHandle>}
-          size={16}
-        />
-      )}
-      <p className="lowercase">{title}</p>
-    </CommandItem>
-  );
-});
-
-interface CommandLinkGroupProps {
-  heading: string;
-  items: CommandItemProps[];
-  onSelect: (item: CommandItemProps) => void;
-}
-
-const CommandLinkGroup = memo(
-  ({ heading, items, onSelect }: CommandLinkGroupProps) => (
-    <CommandGroup heading={heading}>
-      {items.map((item) => (
-        <CommandRow
-          item={item}
-          key={item.title()}
-          onSelect={onSelect}
-        />
-      ))}
-    </CommandGroup>
-  )
-);
+  try {
+    return await attempt;
+  } catch {
+    if (pending === attempt) {
+      pending = undefined;
+    }
+    return undefined;
+  }
+};
 
 export const NavBarCommand = () => {
-  const router = useRouter();
-  const pathname = usePathname();
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [panel, setPanel] = useState<PanelModule | null>(null);
   const [open, setOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
-  // vaul n'envoie pas le focus dans le tiroir (`autoFocus` vaut false : au
-  // doigt, le clavier virtuel recouvrirait la liste). Ouverte AU CLAVIER, la
-  // palette doit pourtant recevoir la frappe : sous 768px, ⌘K ouvrait un
-  // tiroir où taper ne faisait rien et où Tab parcourait la page derrière.
   const [openedByKeyboard, setOpenedByKeyboard] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const { resolvedTheme, setTheme } = useTheme();
 
-  // l'index n'est plus une prop : il était sérialisé dans le payload RSC de
-  // chaque page du site, pour une palette que la plupart des visiteurs
-  // n'ouvrent jamais. Il se charge à la première ouverture, et au survol du
-  // déclencheur — donc il est déjà là au moment du clic.
-  const { docs: posts } = useSearchIndex(open);
+  /**
+   * `open` et `shortcutsOpen` disent ce qui est DEMANDÉ ; le panneau n'est
+   * rendu qu'une fois arrivé. Une ouverture demandée avant lui est donc tenue,
+   * pas perdue : elle s'affiche au montage.
+   *
+   * `wanted` est le signal d'intention qui fait partir l'import. Un échec le
+   * remet à faux — c'est ce qui laisse le signal suivant refaire la demande —
+   * et abandonne ce qui était tenu : sinon le prochain survol du bouton, en
+   * chargeant le panneau, ouvrirait tout seul une palette demandée plus tôt.
+   */
+  const [wanted, setWanted] = useState(false);
+
+  useEffect(() => {
+    if (!wanted || panel) {
+      return;
+    }
+
+    let cancelled = false;
+
+    void (async () => {
+      const loaded = await loadPanel();
+      if (cancelled) {
+        return;
+      }
+
+      if (loaded) {
+        setPanel(loaded);
+        return;
+      }
+
+      setWanted(false);
+      setOpen(false);
+      setShortcutsOpen(false);
+      toast.dismiss(HINT_TOAST);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [wanted, panel]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -179,11 +105,31 @@ export const NavBarCommand = () => {
         return;
       }
 
+      // ⌘ ou Ctrl enfoncée seule précède le K d'un instant : le panneau part
+      // à ce moment-là, sans rien ouvrir. Hors d'un champ uniquement — un
+      // copier-coller dans un outil n'annonce pas la palette.
+      if (event.key === "Meta" || event.key === "Control") {
+        // sans `repeat` : hors ligne, une touche tenue relancerait la demande
+        // après chaque échec
+        if (!event.repeat) {
+          setWanted(true);
+        }
+        return;
+      }
+
       // « ? » ouvre l'aide : c'est la convention, et c'était le seul moyen de
       // rendre découvrables cinq raccourcis dont aucun n'était documenté
       if (event.key === "?") {
         event.preventDefault();
-        setShortcutsOpen((prev) => !prev);
+        // la touche ne referme que ce qui est à l'écran. Tant que le panneau
+        // n'est pas là, la répéter confirme la demande : en bascule, deux
+        // appuis impatients s'annulaient et rien ne s'ouvrait.
+        if (shortcutsOpen && panel) {
+          setShortcutsOpen(false);
+          return;
+        }
+        setShortcutsOpen(true);
+        setWanted(true);
         return;
       }
 
@@ -192,138 +138,29 @@ export const NavBarCommand = () => {
         event.key === "/"
       ) {
         event.preventDefault();
-        setOpenedByKeyboard(true);
-        setOpen((prev) => {
+
+        if (open && panel) {
           // fermer au clavier ne déclenche pas onOpenChange : sans ça le toast
           // à durée infinie posé par handleOpen restait affiché pour toujours
-          if (prev) {
-            toast.dismiss("command-hint");
-            triggerRef.current?.focus();
-          }
-          return !prev;
-        });
+          toast.dismiss(HINT_TOAST);
+          triggerRef.current?.focus();
+          setOpen(false);
+          return;
+        }
+
+        setOpenedByKeyboard(true);
+        setOpen(true);
+        // l'index part en même temps que le panneau, pas après lui
+        prefetchSearchIndex();
+        setWanted(true);
       }
     };
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [open, panel, shortcutsOpen]);
 
-  const kindMap = useMemo(() => buildKindMap(posts), [posts]);
-  const postGroups = useMemo(() => buildPostGroups(posts), [posts]);
-  const filteredGroups = useMemo(
-    () => getFilteredGroups(pathname),
-    [pathname]
-  );
-
-  /**
-   * Les ACTIONS de la palette.
-   *
-   * `kind: "command"` était déclaré dans types.ts et son libellé traduit dans
-   * les deux locales, mais aucun item ne s'en servait : la palette ne savait que
-   * naviguer. Ces items s'exécutent au lieu d'aller quelque part.
-   *
-   * Ils vivent ici et non dans `content.ts`, qui est un module de DONNÉES : une
-   * action a besoin des hooks de thème et de route.
-   */
-  const actions = useMemo<CommandItemProps[]>(
-    () => [
-      {
-        icon: Moon,
-        keywords: ["theme", "thème", "dark", "sombre", "clair"],
-        kind: "command",
-        run: () =>
-          setTheme(resolvedTheme === "dark" ? "light" : "dark"),
-        title: m.nav_command_action_theme,
-      },
-      {
-        icon: Link,
-        keywords: ["langue", "language", "locale", "fr", "en"],
-        kind: "command",
-        run: () => {
-          const target = getLocale() === "fr" ? "en" : "fr";
-          // même chemin que NavBarLocale : une seconde façon de changer de
-          // langue finirait par diverger de la première
-          const href =
-            localizeHref(pathname, { locale: target }).replace(
-              /\/$/u,
-              ""
-            ) || "/";
-          router.push(href);
-        },
-        title: m.nav_command_action_language,
-      },
-      {
-        icon: Copy,
-        keywords: ["copier", "copy", "lien", "link", "url"],
-        kind: "command",
-        run: () => {
-          void (async () => {
-            if (await copyText(window.location.href)) {
-              toast.success(m.writings_actions_toast_link_copied());
-            }
-          })();
-        },
-        title: m.nav_command_action_copy_link,
-      },
-      {
-        icon: Keyboard,
-        keywords: ["raccourcis", "shortcuts", "clavier", "keyboard"],
-        kind: "command",
-        run: () => setShortcutsOpen(true),
-        title: m.nav_command_action_shortcuts,
-      },
-    ],
-    [pathname, resolvedTheme, router, setTheme]
-  );
-
-  const handleSelect = useCallback(
-    (item: CommandItemProps) => {
-      setOpen(false);
-
-      // une ACTION s'exécute au lieu de naviguer : c'est ce que le
-      // `kind: "command"` déclaré dans types.ts désignait depuis le début
-      if (item.run) {
-        item.run();
-        return;
-      }
-
-      const href = item.url;
-      if (!href) {
-        return;
-      }
-
-      if (item.openInNewTab) {
-        window.open(href, "_blank", "noopener");
-        return;
-      }
-
-      if (href.startsWith("/#")) {
-        const hash = href.slice(1);
-        if (!isHomePath(pathname)) {
-          window.location.href = localizeHref(href);
-          return;
-        }
-        document
-          .querySelector(hash)
-          ?.scrollIntoView({ behavior: "smooth" });
-        window.history.pushState(null, "", hash);
-        return;
-      }
-
-      router.push(localizeHref(href));
-    },
-    [router, pathname]
-  );
-
-  const Wrapper = isDesktop ? Dialog : Drawer;
-  const Content = isDesktop ? DialogContent : DrawerContent;
-  const Title = isDesktop ? DialogTitle : DrawerTitle;
-  const Description = isDesktop
-    ? DialogDescription
-    : DrawerDescription;
-
-  const handleOpen = useCallback((event: MouseEvent) => {
+  const handleOpen = (event: MouseEvent) => {
     // `detail` vaut 0 quand le clic vient d'Entrée ou d'Espace
     setOpenedByKeyboard(event.detail === 0);
     // pas de blur ici : retirer le focus du déclencheur avant l'ouverture ne
@@ -333,45 +170,41 @@ export const NavBarCommand = () => {
     toast.info("", {
       description: m.nav_command_drawer_hint(),
       duration: Number.POSITIVE_INFINITY,
-      id: "command-hint",
+      id: HINT_TOAST,
     });
-  }, []);
+    setWanted(true);
+  };
 
-  // le tiroir retient le focus tant qu'il est monté : celui que
-  // `handleOpenChange` rend au déclencheur est repris aussitôt, puis perdu
-  // avec le champ. On le rend donc une seconde fois, au démontage.
-  const restoreTriggerFocus = useCallback((event: Event) => {
-    event.preventDefault();
-    triggerRef.current?.focus();
-  }, []);
-
-  const handleOpenChange = useCallback((value: boolean) => {
-    setOpen(value);
-    if (!value) {
-      toast.dismiss("command-hint");
-      // la palette n'est pas montée via DialogTrigger : la restauration
-      // automatique du focus par Base UI n'a pas de cible, on la fait à la main
-      triggerRef.current?.focus();
-    }
-  }, []);
+  // le temps d'amener la souris ou le doigt jusqu'au bouton puis d'appuyer,
+  // l'index et le panneau sont déjà là : le focus couvre le même besoin au
+  // clavier. Pas de chargement au repos sur chaque page — il ne ferait que
+  // déplacer les octets.
+  const prefetch = () => {
+    prefetchSearchIndex();
+    setWanted(true);
+  };
 
   return (
     <>
-      <NavBarShortcuts
-        fallbackFocusRef={triggerRef}
-        isDesktop={isDesktop}
-        onOpenChange={setShortcutsOpen}
-        open={shortcutsOpen}
-      />
+      {/* la feuille reste AVANT le déclencheur, la palette après, absentes
+          ou non : l'`id` que Base UI donne au bouton vient de `useId`, qui
+          dépend de la place du bouton parmi ses voisins. Deux emplacements
+          au lieu de trois, et le HTML servi du déclencheur changeait. */}
+      {panel && (
+        <panel.NavBarShortcuts
+          fallbackFocusRef={triggerRef}
+          isDesktop={isDesktop}
+          onOpenChange={setShortcutsOpen}
+          open={shortcutsOpen}
+        />
+      )}
 
       <NavBarTooltip label={m.nav_command_search()} shortcut="⌘K">
         <Button
           onClick={handleOpen}
-          // le temps d'amener la souris jusqu'au bouton puis de cliquer,
-          // l'index est déjà chargé : le focus couvre le même besoin au
-          // clavier
-          onFocus={prefetchSearchIndex}
-          onPointerEnter={prefetchSearchIndex}
+          onFocus={prefetch}
+          onPointerEnter={prefetch}
+          onTouchStart={prefetch}
           ref={triggerRef}
           size="icon"
           variant="ghost"
@@ -381,74 +214,16 @@ export const NavBarCommand = () => {
         </Button>
       </NavBarTooltip>
 
-      <Wrapper
-        onOpenChange={handleOpenChange}
-        open={open}
-        {...(!isDesktop && { autoFocus: openedByKeyboard })}
-      >
-        <Content
-          className={cn(
-            "overflow-hidden bg-popover p-0 backdrop-blur-lg supports-backdrop-filter:bg-popover/90",
-            isDesktop && "max-sm:top-16 max-sm:translate-y-0"
-          )}
-          {...(isDesktop
-            ? { "data-slot": "command-dialog-content", overlay: true }
-            : { onCloseAutoFocus: restoreTriggerFocus })}
-        >
-          <div className="sr-only">
-            <Title>{m.nav_command_dialog_title()}</Title>
-            <Description>
-              {m.nav_command_dialog_description()}
-            </Description>
-          </div>
-
-          <Command filter={commandFilter}>
-            <CommandInput
-              className={cn(
-                "border-input sm:border-b",
-                "max-sm:mx-4 max-sm:mt-2 max-sm:mb-4 max-sm:border"
-              )}
-            />
-
-            <CommandList className="max-sm:border-input max-sm:border-t max-sm:py-2">
-              <CommandEmpty />
-
-              <div className="max-sm:mx-2">
-                <CommandLinkGroup
-                  heading={m.nav_command_group_actions()}
-                  items={actions}
-                  onSelect={handleSelect}
-                />
-
-                {filteredGroups.map(({ heading, items }) => (
-                  <CommandLinkGroup
-                    heading={heading()}
-                    items={items}
-                    key={heading()}
-                    onSelect={handleSelect}
-                  />
-                ))}
-              </div>
-
-              <div className="max-sm:mx-2">
-                {Object.entries(CATEGORY).map(
-                  ([category, config]) =>
-                    postGroups[category]?.length > 0 && (
-                      <CommandLinkGroup
-                        heading={config.heading()}
-                        items={postGroups[category]}
-                        key={category}
-                        onSelect={handleSelect}
-                      />
-                    )
-                )}
-              </div>
-            </CommandList>
-
-            <CommandFooter kindMap={kindMap} />
-          </Command>
-        </Content>
-      </Wrapper>
+      {panel && (
+        <panel.NavBarCommandPanel
+          isDesktop={isDesktop}
+          onOpenChange={setOpen}
+          onShowShortcuts={() => setShortcutsOpen(true)}
+          open={open}
+          openedByKeyboard={openedByKeyboard}
+          triggerRef={triggerRef}
+        />
+      )}
     </>
   );
 };
