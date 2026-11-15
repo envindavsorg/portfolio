@@ -211,6 +211,49 @@ test.describe("la palette à la demande s'ouvre comme avant", () => {
     ).toBeVisible();
   });
 
+  test("ce qui est tapé pendant l'attente du panneau arrive dans le champ", async ({
+    page,
+  }) => {
+    const panelChunk = await findPanelChunk(page);
+
+    let release: () => void = () => undefined;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route(
+      (url) => url.pathname === panelChunk,
+      async (route) => {
+        await gate;
+        await route.continue();
+      }
+    );
+
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const input = page.getByPlaceholder(PLACEHOLDER);
+    const requested = page.waitForRequest(
+      (request) => new URL(request.url()).pathname === panelChunk
+    );
+
+    await page.keyboard.press("ControlOrMeta+k");
+    await requested;
+    // sur une connexion lente la recherche est tapée avant que le panneau
+    // n'arrive : sans mémoire, « tailwind » ouvrait la palette sur « wind »
+    await page.keyboard.type("subgridx");
+    await page.keyboard.press("Backspace");
+    await expect(input).toBeHidden();
+
+    release();
+
+    await expect(input).toBeVisible();
+    await expect(input).toBeFocused();
+    await expect(input).toHaveValue("subgrid");
+    await expect(
+      page.getByRole("option", { name: CSS_ARTICLE })
+    ).toBeVisible();
+  });
+
   test("Échap abandonne un ⌘K tenu : la palette ne s'ouvre pas après coup", async ({
     page,
   }) => {

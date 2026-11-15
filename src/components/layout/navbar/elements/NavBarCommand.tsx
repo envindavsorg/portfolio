@@ -66,6 +66,17 @@ export const NavBarCommand = () => {
    */
   const [wanted, setWanted] = useState(false);
 
+  /**
+   * Ce qui est tapé entre la demande d'ouverture et l'arrivée du panneau.
+   *
+   * La palette s'ouvrait autrefois dans la même tâche que ⌘K : on tapait sa
+   * recherche aussitôt. Chargé à la demande, le panneau arrive quelques
+   * centaines de millisecondes plus tard sur une connexion lente, et cette
+   * frappe n'avait aucun champ où aller — « tailwind » ouvrait la palette sur
+   * « wind ». Elle est gardée ici et rendue au champ à son montage.
+   */
+  const [heldQuery, setHeldQuery] = useState("");
+
   useEffect(() => {
     if (!wanted || panel) {
       return;
@@ -86,6 +97,7 @@ export const NavBarCommand = () => {
 
       setWanted(false);
       setOpen(false);
+      setHeldQuery("");
       setShortcutsOpen(false);
       toast.dismiss(HINT_TOAST);
     })();
@@ -110,6 +122,7 @@ export const NavBarCommand = () => {
       ) {
         toast.dismiss(HINT_TOAST);
         setOpen(false);
+        setHeldQuery("");
         setShortcutsOpen(false);
         return;
       }
@@ -120,6 +133,31 @@ export const NavBarCommand = () => {
         target.matches("input, textarea, select")
       ) {
         return;
+      }
+
+      // palette demandée, panneau pas encore là : la frappe est gardée pour
+      // le champ. Avant « ? » et « / », qui sont alors des caractères de la
+      // recherche et non des raccourcis, comme ils le sont dans le champ.
+      if (
+        open &&
+        !panel &&
+        !(
+          event.metaKey ||
+          event.ctrlKey ||
+          event.altKey ||
+          event.isComposing
+        )
+      ) {
+        if (event.key === "Backspace") {
+          event.preventDefault();
+          setHeldQuery((query) => query.slice(0, -1));
+          return;
+        }
+        if (event.key.length === 1) {
+          event.preventDefault();
+          setHeldQuery((query) => query + event.key);
+          return;
+        }
       }
 
       // ⌘ ou Ctrl enfoncée seule précède le K d'un instant : le panneau part
@@ -162,6 +200,7 @@ export const NavBarCommand = () => {
           toast.dismiss(HINT_TOAST);
           triggerRef.current?.focus();
           setOpen(false);
+          setHeldQuery("");
           return;
         }
 
@@ -233,8 +272,14 @@ export const NavBarCommand = () => {
 
       {panel && (
         <panel.NavBarCommandPanel
+          initialQuery={heldQuery}
           isDesktop={isDesktop}
-          onOpenChange={setOpen}
+          onOpenChange={(value) => {
+            setOpen(value);
+            if (!value) {
+              setHeldQuery("");
+            }
+          }}
           onShowShortcuts={() => setShortcutsOpen(true)}
           open={open}
           openedByKeyboard={openedByKeyboard}

@@ -4,7 +4,7 @@ import { useCommandState } from "cmdk";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import type { RefObject } from "react";
-import { memo, useCallback, useMemo, useRef } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Copy } from "@/components/motion/Copy";
@@ -138,7 +138,35 @@ const CommandLinkGroup = memo(
   )
 );
 
+interface PaletteInputProps {
+  className: string;
+  initialQuery: string;
+}
+
+/**
+ * Le champ de la palette, amorcé par ce qui a été tapé avant son arrivée
+ * (`heldQuery` dans `NavBarCommand`). L'état vit ici, sous le contenu du
+ * dialogue : il repart de zéro à chaque ouverture, comme le champ non
+ * contrôlé qu'il remplace.
+ */
+const PaletteInput = ({
+  className,
+  initialQuery,
+}: PaletteInputProps) => {
+  const [search, setSearch] = useState(initialQuery);
+
+  return (
+    <CommandInput
+      className={className}
+      onValueChange={setSearch}
+      value={search}
+    />
+  );
+};
+
 interface NavBarCommandPanelProps {
+  /** la frappe faite pendant le chargement du panneau, vide le reste du temps */
+  initialQuery: string;
   /** même requête que la feuille des raccourcis : `Dialog` ou `Drawer` */
   isDesktop: boolean;
   open: boolean;
@@ -163,6 +191,7 @@ interface NavBarCommandPanelProps {
  * (`e2e/palette-lazy.spec.ts` le refuse).
  */
 export const NavBarCommandPanel = ({
+  initialQuery,
   isDesktop,
   open,
   openedByKeyboard,
@@ -342,11 +371,12 @@ export const NavBarCommandPanel = ({
         </div>
 
         <Command filter={commandFilter}>
-          <CommandInput
+          <PaletteInput
             className={cn(
               "border-input sm:border-b",
               "max-sm:mx-4 max-sm:mt-2 max-sm:mb-4 max-sm:border"
             )}
+            initialQuery={initialQuery}
           />
 
           <CommandList className="max-sm:border-input max-sm:border-t max-sm:py-2">

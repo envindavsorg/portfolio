@@ -1124,7 +1124,9 @@ falling back to zeroed GitHub widgets rather than failing.
   idle, which would only move the bytes. `open` and `shortcutsOpen` say what is
   REQUESTED and the panel renders once it has arrived: a ⌘K or a `?` pressed
   before the chunk is held, and pressing again confirms the request instead of
-  toggling it off. Escape DROPS a held request: until the panel lands there is
+  toggling it off. What is typed between the request and the panel's arrival
+  is held too (`heldQuery`) and seeds the field at mount: on a slow connection
+  « tailwind » opened the palette on « wind ». Escape DROPS a held request: until the panel lands there is
   no dialog to hear the key, so on a slow connection the palette opened after
   it had been cancelled (and over a mobile menu Escape had just closed). A
   failed import is not kept (the next intent asks again) and
