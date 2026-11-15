@@ -5,7 +5,7 @@ bannerDark: /images/blog/flip-sentences-demo/dark.webp
 bannerLight: /images/blog/flip-sentences-demo/light.webp
 category: components
 createdAt: 2025-03-10
-updatedAt: 2025-03-10
+updatedAt: 2026-11-15
 tags: ["react"]
 author: "Cuzeac Florin"
 isNew: true
@@ -46,10 +46,10 @@ npm install motion clsx tailwind-merge
 
 ```ts title="sentences.ts" {2-5}
 const EXAMPLE_SENTENCES = [
-  "Imagine, code, crée, inspire.",
-  "Chaque petit pixel compte !",
-  "Chaque petit détail compte !",
-  "Du concept au déploiement !",
+  "Imagine, code, create, inspire.",
+  "Every little pixel counts!",
+  "Every little detail counts!",
+  "From concept to deployment!",
 ];
 ```
 
@@ -70,7 +70,7 @@ Update the import paths of your dependencies to match your project's structure s
 ```tsx
 "use client";
 
-import { FlipSentences } from "@/components/flip-sentences";
+import { FlipSentences } from "@/components/FlipSentences";
 
 <FlipSentences sentences={EXAMPLE_SENTENCES} />;
 ```
