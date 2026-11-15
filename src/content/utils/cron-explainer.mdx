@@ -3,7 +3,7 @@ title: Expressions cron
 description: Décortiquez une expression cron champ par champ, voyez ses cinq prochaines exécutions en UTC et évitez le piège du jour du mois et du jour de la semaine
 category: utils
 createdAt: 2026-08-12
-updatedAt: 2026-08-12
+updatedAt: 2026-11-15
 tags: ["cron", "texte"]
 author: Florin Cuzeac
 isNew: true
@@ -68,10 +68,11 @@ Dès qu'un seul des deux champs est restreint, la règle redevient intuitive :
 
 ## Fuseau horaire
 
-Cet outil interprète les champs en **UTC**, comme cron système, GitHub Actions et
-Vercel. Un ordonnanceur qui interprète en heure locale pose deux questions sans
-bonne réponse : au passage à l'heure d'été, une tâche à 02:30 n'existe pas ; au
-passage à l'heure d'hiver, elle existe deux fois.
+Cet outil interprète les champs en **UTC**, comme GitHub Actions et Vercel ; le
+cron système, lui, suit le fuseau horaire de la machine. Un ordonnanceur qui
+interprète en heure locale pose deux questions sans bonne réponse : au passage à
+l'heure d'été, une tâche à 02:30 n'existe pas ; au passage à l'heure d'hiver,
+elle existe deux fois.
 
 D'où une règle simple : **planifiez en UTC** et convertissez à l'affichage. Une
 tâche à 9 h heure de Paris se planifie à `0 8 * * *` l'hiver et `0 7 * * *` l'été
@@ -91,12 +92,12 @@ bissextiles — donc une fois tous les quatre ans.
 
 ## Vérifier un cron dans un projet
 
-```javascript
-// GitHub Actions : les minutes exactes sont déconseillées, le planificateur
-// est surchargé à :00 et peut décaler de plusieurs minutes
+```yaml
+# GitHub Actions : les minutes exactes sont déconseillées, le planificateur
+# est surchargé à :00 et peut décaler de plusieurs minutes
 on:
   schedule:
-    - cron: "17 3 * * *" // plutôt que "0 3 * * *"
+    - cron: "17 3 * * *" # plutôt que "0 3 * * *"
 ```
 
 Un cron GitHub Actions n'est pas garanti à la minute : c'est une file d'attente

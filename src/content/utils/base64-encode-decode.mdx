@@ -3,7 +3,7 @@ title: Encodeur / décodeur Base64
 description: Encodez et décodez vos textes en Base64, idéal pour les API et le développement, avec des exemples de code en JavaScript, TypeScript et Rust
 category: utils
 createdAt: 2025-08-10
-updatedAt: 2025-09-10
+updatedAt: 2026-11-15
 tags: ["base64"]
 author: Florin Cuzeac
 ---
@@ -46,6 +46,8 @@ const encoded = "SGVsbG8sIHdvcmxkIQ==";
 const decoded = atob(encoded);
 console.log(decoded); // Résultat: "Hello, world!"
 ```
+
+**btoa** n'accepte que les caractères Latin-1 : pour tout autre texte (un emoji, par exemple), encodez-le d'abord en UTF-8 avec **TextEncoder**, comme le fait cet outil.
 
 ## Utiliser Base64 en TypeScript (Node.js) :
 

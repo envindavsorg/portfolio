@@ -3,7 +3,7 @@ title: Regex Tester
 description: Test a pattern, see highlighted matches, captured groups and the result of a replacement
 category: utils
 createdAt: 2026-08-12
-updatedAt: 2026-08-12
+updatedAt: 2026-11-15
 tags: ["regex", "texte"]
 author: Florin Cuzeac
 isNew: true
@@ -93,9 +93,9 @@ Neither case throws. A typo in a group name therefore goes completely unnoticed.
 ```
 
 A nested quantifier over an alternative that fails forces the engine to try every
-possible split. JavaScript offers no way to interrupt a running regex: the only
-protection in the browser is to bound the input size, which is what this tool
-does.
+possible split. JavaScript offers no way to interrupt a running regex from its
+own thread: in the browser, you can bound the input size, which is what this tool
+does, or run the regex in a Web Worker that you terminate after a delay.
 
 For patterns coming from a user, the real answer is a finite-automaton engine (RE2)
 running server-side with a time limit.

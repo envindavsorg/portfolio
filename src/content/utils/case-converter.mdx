@@ -3,7 +3,7 @@ title: Conversion de casse
 description: Convertissez un texte en camelCase, snake_case, kebab-case et sept autres formats, ligne par ligne, acronymes, chiffres et accents compris
 category: utils
 createdAt: 2026-08-12
-updatedAt: 2026-08-12
+updatedAt: 2026-11-15
 tags: ["casse", "texte"]
 author: Florin Cuzeac
 isNew: true
@@ -33,6 +33,8 @@ ne les fusionne pas en un seul identifiant.
 | Title Case    | `Creer Un Element` | titres                                |
 | Sentence case | `Creer un element` | phrases, libellés                     |
 | slug          | `creer-un-element` | segments d'URL                        |
+| MAJUSCULES    | `CRÉER UN ÉLÉMENT` | tout en capitales, accents conservés  |
+| minuscules    | `créer un élément` | tout en minuscules, accents conservés |
 
 `kebab-case` et `slug` se ressemblent mais ne font pas la même chose : le slug
 traite la ponctuation comme un **séparateur**, la conversion de casse la
@@ -54,9 +56,9 @@ et la plupart des implémentations naïves échouent sur trois cas.
 "Élément"; // → element   (et non e, lement)
 ```
 
-Les accents ne doivent être retirés **qu'après** le découpage : normaliser
-d'abord fait perdre la majuscule initiale, et le mot ne se distingue plus de sa
-version minuscule.
+Les accents ne doivent être retirés **qu'après** le découpage : la normalisation
+passe aussi le texte en minuscules, donc normaliser d'abord fait perdre la
+majuscule initiale, et `nouvelÉlément` ne se découpe plus en deux mots.
 
 ## Une conversion doit être idempotente
 

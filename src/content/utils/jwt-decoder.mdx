@@ -3,7 +3,7 @@ title: Décodeur de JWT
 description: Inspectez l'en-tête, la charge utile et les dates d'un jeton JWT, sans qu'il quitte votre navigateur
 category: utils
 createdAt: 2026-08-12
-updatedAt: 2026-08-12
+updatedAt: 2026-11-15
 tags: ["jwt", "auth", "base64"]
 author: Florin Cuzeac
 isNew: true
@@ -38,10 +38,12 @@ Les deux premières sont du **base64url**, un simple encodage — pas un
 chiffrement. N'importe qui peut les lire. La troisième est la signature, et
 c'est elle seule qui garantit que le jeton n'a pas été modifié.
 
-Cet outil ne vérifie **pas** la signature : cela exigerait la clé secrète, qui
-n'a rien à faire dans un navigateur. Autrement dit, le contenu affiché ici est
-ce que le jeton _prétend_ être. Côté serveur, il faut toujours valider la
-signature avant de faire confiance au moindre claim.
+Cet outil ne vérifie **pas** la signature : avec un algorithme HMAC comme
+HS256, cela exigerait la clé secrète, qui n'a rien à faire dans un navigateur
+(RS256 et ES256 se vérifient, eux, avec la clé publique de l'émetteur).
+Autrement dit, le contenu affiché ici est ce que le jeton _prétend_ être. Côté
+serveur, il faut toujours valider la signature avant de faire confiance au
+moindre claim.
 
 ## Les claims standards
 
@@ -67,16 +69,16 @@ const [header, payload] = token
   .slice(0, 2)
   .map((part) => {
     const base64 = part.replaceAll("-", "+").replaceAll("_", "/");
-    const padded = base64.padEnd(
-      base64.length + ((4 - (base64.length % 4)) % 4),
-      "="
+    const bytes = Uint8Array.from(atob(base64), (char) =>
+      char.codePointAt(0)
     );
-    return JSON.parse(atob(padded));
+    return JSON.parse(new TextDecoder().decode(bytes));
   });
 ```
 
-Le padding doit être reconstitué : les JWT omettent les `=` finaux, alors
-qu'`atob` les attend.
+L'alphabet doit être rétabli : `atob` refuse les `-` et `_` du base64url, alors
+qu'il se passe des `=` finaux que les JWT omettent. Il rend ensuite des octets :
+sans `TextDecoder`, un « é » dans la charge utile ressort abîmé.
 
 ## Vérifier un JWT en Node.js
 
@@ -88,11 +90,15 @@ const expected = createHmac("sha256", secret)
   .update(`${rawHeader}.${rawPayload}`)
   .digest("base64url");
 
-const valid = timingSafeEqual(
-  Buffer.from(signature),
-  Buffer.from(expected)
-);
+const received = Buffer.from(signature);
+const wanted = Buffer.from(expected);
+
+const valid =
+  received.length === wanted.length &&
+  timingSafeEqual(received, wanted);
 ```
 
 La comparaison passe par `timingSafeEqual` : un `===` classique s'arrête au
-premier octet différent, ce qui laisse fuir de l'information exploitable.
+premier octet différent, ce qui laisse fuir de l'information exploitable. Les
+longueurs sont comparées d'abord, car `timingSafeEqual` lève une exception
+quand elles diffèrent.

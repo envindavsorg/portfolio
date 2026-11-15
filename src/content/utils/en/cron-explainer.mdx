@@ -3,7 +3,7 @@ title: Cron Expressions
 description: Break a cron expression down field by field, see its next five runs in UTC and avoid the day-of-month and day-of-week trap
 category: utils
 createdAt: 2026-08-12
-updatedAt: 2026-08-12
+updatedAt: 2026-11-15
 tags: ["cron", "texte"]
 author: Florin Cuzeac
 isNew: true
@@ -67,10 +67,10 @@ again: `0 9 * * 1-5` does mean "at 9am, Monday to Friday".
 
 ## Time zone
 
-This tool reads the fields as **UTC**, the way system cron, GitHub Actions and
-Vercel do. A scheduler that reads them in local time raises two questions with no
-good answer: when clocks spring forward, a task at 02:30 does not exist; when they
-fall back, it exists twice.
+This tool reads the fields as **UTC**, the way GitHub Actions and Vercel do;
+system cron follows the machine's time zone. A scheduler that reads them in local
+time raises two questions with no good answer: when clocks spring forward, a task
+at 02:30 does not exist; when they fall back, it exists twice.
 
 Hence a simple rule: **schedule in UTC** and convert for display. A task at 9am
 Paris time is `0 8 * * *` in winter and `0 7 * * *` in summer — or, better, is
@@ -90,12 +90,12 @@ years.
 
 ## Checking a cron in a project
 
-```javascript
-// GitHub Actions: exact minutes are discouraged, the scheduler is
-// congested at :00 and can drift by several minutes
+```yaml
+# GitHub Actions: exact minutes are discouraged, the scheduler is
+# congested at :00 and can drift by several minutes
 on:
   schedule:
-    - cron: "17 3 * * *" // rather than "0 3 * * *"
+    - cron: "17 3 * * *" # rather than "0 3 * * *"
 ```
 
 A GitHub Actions cron is not guaranteed to the minute: it is a shared queue. For a

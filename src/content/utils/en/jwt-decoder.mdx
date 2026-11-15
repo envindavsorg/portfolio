@@ -3,7 +3,7 @@ title: JWT decoder
 description: Inspect the header, payload and dates of a JWT without the token ever leaving your browser
 category: utils
 createdAt: 2026-08-12
-updatedAt: 2026-08-12
+updatedAt: 2026-11-15
 tags: ["jwt", "auth", "base64"]
 author: Florin Cuzeac
 isNew: true
@@ -36,10 +36,11 @@ The first two are **base64url** — an encoding, not encryption. Anyone can read
 them. The third is the signature, and it alone guarantees the token has not been
 tampered with.
 
-This tool does **not** verify the signature: that would require the secret key,
-which has no business being in a browser. In other words, what you see here is
-what the token _claims_ to be. On the server, always validate the signature
-before trusting a single claim.
+This tool does **not** verify the signature: with an HMAC algorithm such as
+HS256, that would require the secret key, which has no business being in a
+browser (RS256 and ES256 are verified with the issuer's public key instead). In
+other words, what you see here is what the token _claims_ to be. On the server,
+always validate the signature before trusting a single claim.
 
 ## Standard claims
 
@@ -64,16 +65,16 @@ const [header, payload] = token
   .slice(0, 2)
   .map((part) => {
     const base64 = part.replaceAll("-", "+").replaceAll("_", "/");
-    const padded = base64.padEnd(
-      base64.length + ((4 - (base64.length % 4)) % 4),
-      "="
+    const bytes = Uint8Array.from(atob(base64), (char) =>
+      char.codePointAt(0)
     );
-    return JSON.parse(atob(padded));
+    return JSON.parse(new TextDecoder().decode(bytes));
   });
 ```
 
-The padding has to be restored: JWTs omit trailing `=` characters, while `atob`
-expects them.
+The alphabet has to be restored: `atob` rejects the `-` and `_` of base64url,
+while it does without the trailing `=` characters JWTs omit. It then returns
+bytes: without `TextDecoder`, an "é" in the payload comes out mangled.
 
 ## Verifying a JWT in Node.js
 
@@ -85,11 +86,14 @@ const expected = createHmac("sha256", secret)
   .update(`${rawHeader}.${rawPayload}`)
   .digest("base64url");
 
-const valid = timingSafeEqual(
-  Buffer.from(signature),
-  Buffer.from(expected)
-);
+const received = Buffer.from(signature);
+const wanted = Buffer.from(expected);
+
+const valid =
+  received.length === wanted.length &&
+  timingSafeEqual(received, wanted);
 ```
 
 The comparison goes through `timingSafeEqual`: a plain `===` short-circuits on
-the first differing byte, which leaks exploitable timing information.
+the first differing byte, which leaks exploitable timing information. The
+lengths are compared first, because `timingSafeEqual` throws when they differ.

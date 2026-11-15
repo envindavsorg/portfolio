@@ -3,7 +3,7 @@ title: Testeur d'expressions régulières
 description: Testez un motif, voyez les correspondances surlignées, les groupes capturés et le résultat d'un remplacement
 category: utils
 createdAt: 2026-08-12
-updatedAt: 2026-08-12
+updatedAt: 2026-11-15
 tags: ["regex", "texte"]
 author: Florin Cuzeac
 isNew: true
@@ -98,8 +98,9 @@ un nom de groupe passe donc totalement inaperçue.
 
 Un quantificateur imbriqué sur une alternative qui échoue force le moteur à
 essayer toutes les découpes possibles. JavaScript n'offre aucun moyen
-d'interrompre une regex en cours d'exécution : la seule protection côté navigateur
-est de borner la taille de l'entrée, ce que fait cet outil.
+d'interrompre une regex en cours d'exécution depuis son propre thread : côté
+navigateur, on peut borner la taille de l'entrée, ce que fait cet outil, ou
+exécuter la regex dans un Web Worker que l'on arrête au bout d'un délai.
 
 Pour des motifs venant d'un utilisateur, la vraie réponse est un moteur à automate
 fini (RE2) exécuté côté serveur, avec une limite de temps.

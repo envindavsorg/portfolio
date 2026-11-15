@@ -3,7 +3,7 @@ title: Comparateur de textes
 description: Comparez deux textes ligne à ligne et repérez d'un coup d'œil les ajouts et les suppressions, sans passer par un dépôt Git
 category: utils
 createdAt: 2026-08-12
-updatedAt: 2026-08-12
+updatedAt: 2026-11-15
 tags: ["diff", "git", "texte"]
 author: Florin Cuzeac
 isNew: true
@@ -63,8 +63,16 @@ Pour des structures de données plutôt que du texte, comparer les représentati
 JSON _normalisées_ évite les faux positifs dus à l'ordre des clés :
 
 ```javascript
-const normalize = (value) =>
-  JSON.stringify(value, Object.keys(value).sort(), 2);
+const sortKeys = (_key, value) =>
+  value && typeof value === "object" && !Array.isArray(value)
+    ? Object.fromEntries(
+        Object.keys(value)
+          .sort()
+          .map((key) => [key, value[key]])
+      )
+    : value;
+
+const normalize = (value) => JSON.stringify(value, sortKeys, 2);
 
 const identical = normalize(a) === normalize(b);
 ```

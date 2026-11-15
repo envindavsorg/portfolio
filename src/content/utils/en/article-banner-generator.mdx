@@ -1,9 +1,9 @@
 ---
 title: Banner Generator
-description: Create professional banners for your blog articles in just a few clicks, with the title, background image and font of your choice, to download as PNG
+description: Create professional banners for your blog articles in just a few clicks, with the title, background image and font of your choice, to download as PNG or WebP
 category: utils
 createdAt: 2026-02-26
-updatedAt: 2026-02-26
+updatedAt: 2026-11-15
 tags: ["design"]
 isNew: true
 author: Florin Cuzeac
@@ -17,14 +17,14 @@ author: Florin Cuzeac
 
 Use this free article banner generator to create eye-catching header images
 for your blog posts.
-Customize every aspect of your banner — title, subtitle, background image, font, alignment and colors — then download the result as a high-resolution PNG.
+Customize every aspect of your banner — title, subtitle, background image, font, alignment and colors — then download the result as a high-resolution PNG or WebP.
 No sign-up required — set up your banner and download it instantly.
 
 ## How to use the banner generator:
 
 Fill in your title and subtitle in the provided fields, then adjust the visual settings to your liking.
 Pick from the preset background images, choose a font and an alignment, then tweak the text size, overlay opacity and banner height using the sliders.
-The preview updates in real time. Once you're happy, click the download button to get your banner as a PNG (1400px wide).
+The preview updates in real time. Once you're happy, click one of the two download buttons to get your banner as a PNG or WebP (1400px wide).
 
 ## Use cases:
 
@@ -50,7 +50,7 @@ ctx.font = "bold 64px Georgia";
 ctx.fillStyle = "#ffffff";
 ctx.textAlign = "center";
 ctx.fillText(
-  "Mon titre d'article",
+  "My article title",
   canvas.width / 2,
   canvas.height / 2
 );
@@ -79,14 +79,14 @@ ctx.font = "bold 64px Georgia";
 ctx.fillStyle = "#ffffff";
 ctx.textAlign = "center";
 ctx.fillText(
-  "Mon titre d'article",
+  "My article title",
   canvas.width / 2,
   canvas.height / 2
 );
 
 const buffer: Buffer = canvas.toBuffer("image/png");
 writeFileSync("banner.png", buffer);
-console.log("Bannière générée : banner.png");
+console.log("Banner generated: banner.png");
 ```
 
 Install the dependency:
@@ -113,7 +113,7 @@ fn main() {
     }
 
     img.save("banner.png").unwrap();
-    println!("Bannière générée : banner.png");
+    println!("Banner generated: banner.png");
 }
 ```
 
