@@ -59,7 +59,6 @@ const container = {
 };
 
 const logo = {
-  borderRadius: 21,
   height: 42,
   width: 42,
 };

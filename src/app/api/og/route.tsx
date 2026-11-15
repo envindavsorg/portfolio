@@ -130,7 +130,6 @@ const Badge = ({
     style={{
       alignSelf: "flex-start",
       backgroundColor: palette.accentSoft,
-      borderRadius: 999,
       color: palette.accentInk,
       display: "flex",
       fontSize: 26,
@@ -157,7 +156,6 @@ const Brand = ({ palette }: { palette: OgPalette }): JSX.Element => (
     <div
       style={{
         backgroundColor: palette.accent,
-        borderRadius: "50%",
         display: "flex",
         height: 10,
         marginRight: 12,
@@ -500,8 +498,7 @@ const ChipsCard = ({
           <div
             key={chip}
             style={{
-              border: `1px solid ${palette.guide}`,
-              borderRadius: 999,
+              border: `1px dashed ${palette.guide}`,
               color: palette.muted,
               display: "flex",
               fontSize: 24,

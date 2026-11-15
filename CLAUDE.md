@@ -280,9 +280,12 @@ src/app/
   component. `rounded-full` does not read that scale, so it was REMOVED by
   hand from the tags, the portrait, the dots and the sliders: nothing is round
   any more outside `src/registry/`, whose distributed components keep their
-  own design (the OG cards and the CV template draw with inline styles and
-  were left alone). `src/lib/square-corners.test.ts` refuses `rounded-full`
-  and arbitrary radii anywhere else. Two tiny stacked buttons do not carry
+  own design. The OG cards and the CV email draw with inline styles and are
+  square too (the chips of a card carry the dashed rule of an outline
+  button). `src/lib/square-corners.test.ts` refuses `rounded-full`, arbitrary
+  radii and an inline `borderRadius` anywhere else. The CV PDF itself
+  (`public/documents/resume.pdf`) is a Figma export: nothing in this repo
+  draws it, so neither its shapes nor its text follow the data. Two tiny stacked buttons do not carry
   brackets: the stepper arrows of `InputNumber` are part of the field
   (`border-solid bg-none`), not two pieces.
 - Cards use the stretched link of `src/components/base/CardLink.tsx`: the anchor

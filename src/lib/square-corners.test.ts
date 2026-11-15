@@ -14,14 +14,17 @@ import { describe, expect, it } from "vitest";
  * milieu de boîtes carrées se voit tout de suite, mais seulement une fois en
  * ligne.
  *
- * Trois endroits gardent leur dessin, et pour une raison chacun : les
- * composants de `src/registry/` sont distribués et installés ailleurs ; les
- * cartes sociales de `/api/og` et le gabarit du CV sont des images et un PDF,
- * dessinés en styles en ligne.
+ * Un seul endroit garde son dessin : les composants de `src/registry/`,
+ * distribués et installés ailleurs. Les cartes sociales de `/api/og` et le
+ * mail du CV sont dessinés en styles en ligne, hors de portée des classes :
+ * ils sont à l'équerre eux aussi, et un `borderRadius` en ligne est refusé au
+ * même titre qu'une classe ronde.
  */
 const SRC = "src";
 
 const ROUND = /\brounded-(?:full|\[[^\]]+\])/gu;
+
+const INLINE_RADIUS = /\bborderRadius\b/gu;
 
 const exempt = (path: string) =>
   path.startsWith("registry/") ||
@@ -41,17 +44,22 @@ const SOURCES = readdirSync(SRC, {
   .map((entry) => relative(SRC, join(entry.parentPath, entry.name)))
   .filter((path) => !exempt(path));
 
+const occurrences = (pattern: RegExp): string[] =>
+  SOURCES.flatMap((path) => {
+    const text = readFileSync(join(SRC, path), "utf-8");
+    return [...text.matchAll(pattern)].map(
+      (match) =>
+        `${path}:${text.slice(0, match.index).split("\n").length} — ${match[0]}`
+    );
+  });
+
 describe("coins du site", () => {
   it("aucune classe ronde hors du registre", () => {
-    const round = SOURCES.flatMap((path) => {
-      const text = readFileSync(join(SRC, path), "utf-8");
-      return [...text.matchAll(ROUND)].map(
-        (match) =>
-          `${path}:${text.slice(0, match.index).split("\n").length} — ${match[0]}`
-      );
-    });
+    expect(occurrences(ROUND)).toEqual([]);
+  });
 
-    expect(round).toEqual([]);
+  it("aucun rayon en ligne hors du registre", () => {
+    expect(occurrences(INLINE_RADIUS)).toEqual([]);
   });
 
   it("l'échelle des rayons est à zéro dans le thème", () => {
