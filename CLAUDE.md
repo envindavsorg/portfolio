@@ -1004,7 +1004,8 @@ falling back to zeroed GitHub widgets rather than failing.
   what `text-transform` makes of them, and what rendering adds without the
   sources containing it — U+00A0 and U+202F (the French spacing plugin,
   `Intl`), typographic quotes, dashes, the ellipsis, the keys of the shortcuts
-  sheet. A font only keeps what its source HAS: no Geist source carries
+  sheet, the back arrow of a footnote (remark-gfm writes it at render, so
+  the guard below cannot see it). A font only keeps what its source HAS: no Geist source carries
   U+202F nor the ⌘ ⌥ ⌃ ⎋ keys, so the browser handled those before and still
   does. Text that is not in the repository — what a visitor types in a tool,
   what GitHub returns — is drawn by the system font outside that set: that

@@ -59,6 +59,8 @@ const RENDERED: readonly Span[] = [
   [0x22_1e, 0x22_1e],
   // flèches des raccourcis clavier
   [0x21_90, 0x21_93],
+  // flèche de retour des notes de bas de page (remark-gfm l'écrit au rendu)
+  [0x21_a9, 0x21_a9],
   // retour, majuscule, tabulation
   [0x21_b5, 0x21_b5],
   [0x21_e5, 0x21_e5],

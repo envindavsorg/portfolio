@@ -1,6 +1,6 @@
 {
   "geist-pixel/GeistPixel-Circle.woff2": {
-    "bytes": 20372,
+    "bytes": 20528,
     "codePoints": [
       "0020-007E",
       "00A0-0113",
@@ -19,13 +19,14 @@
       "2026",
       "2039-203A",
       "2190-2193",
+      "21A9",
       "21B5",
       "21E5",
       "21E7",
       "2212",
       "221E"
     ],
-    "sha256": "eef867996c20a28170e1849d3450791a9d71e32d45f155ddd680f893e4a2bfd5",
+    "sha256": "bbfd603757a4e5b8aba6289ddf4c8a3a18ccb43ce0dd3fdcabc0f72ac2b5e94d",
     "source": {
       "bytes": 28044,
       "codePoints": [
@@ -103,7 +104,7 @@
     }
   },
   "geist-pixel/GeistPixel-Grid.woff2": {
-    "bytes": 20372,
+    "bytes": 20460,
     "codePoints": [
       "0020-007E",
       "00A0-0113",
@@ -122,13 +123,14 @@
       "2026",
       "2039-203A",
       "2190-2193",
+      "21A9",
       "21B5",
       "21E5",
       "21E7",
       "2212",
       "221E"
     ],
-    "sha256": "3f8e9ddf6e4fd87effad9cffda03de3b18693981cb771a16bebacd0086224692",
+    "sha256": "c45be1f0668078a6bd01be2cda2e58a4db4a4ecc6ebb3b0d2646434c935c449f",
     "source": {
       "bytes": 28368,
       "codePoints": [
@@ -206,7 +208,7 @@
     }
   },
   "geist-pixel/GeistPixel-Line.woff2": {
-    "bytes": 12660,
+    "bytes": 12696,
     "codePoints": [
       "0020-007E",
       "00A0-0113",
@@ -225,13 +227,14 @@
       "2026",
       "2039-203A",
       "2190-2193",
+      "21A9",
       "21B5",
       "21E5",
       "21E7",
       "2212",
       "221E"
     ],
-    "sha256": "7d51588eda455fe84656fa2f852d30126e779b3f5e360717014ede4c3742185a",
+    "sha256": "defd84c90779b8ae974277869d7ffd89018fbfa70ef2b73f0e3555227accfb8c",
     "source": {
       "bytes": 18120,
       "codePoints": [
@@ -309,7 +312,7 @@
     }
   },
   "geist-pixel/GeistPixel-Square.woff2": {
-    "bytes": 20348,
+    "bytes": 20404,
     "codePoints": [
       "0020-007E",
       "00A0-0113",
@@ -328,13 +331,14 @@
       "2026",
       "2039-203A",
       "2190-2193",
+      "21A9",
       "21B5",
       "21E5",
       "21E7",
       "2212",
       "221E"
     ],
-    "sha256": "8d1053971e8f6b0d949bd8a158d9b86390585cd004eeeebcf02052896d174783",
+    "sha256": "0a0674baabc54d9c0cc4654334357eeedfcf463ba9d8c25f6569cfdedf436a93",
     "source": {
       "bytes": 28540,
       "codePoints": [
@@ -412,7 +416,7 @@
     }
   },
   "geist-pixel/GeistPixel-Triangle.woff2": {
-    "bytes": 20048,
+    "bytes": 20160,
     "codePoints": [
       "0020-007E",
       "00A0-0113",
@@ -431,13 +435,14 @@
       "2026",
       "2039-203A",
       "2190-2193",
+      "21A9",
       "21B5",
       "21E5",
       "21E7",
       "2212",
       "221E"
     ],
-    "sha256": "9a2fa2a7288cdc529ce33d88849a3f38487a15a20c6a5d887bd1b6602dd453d9",
+    "sha256": "cd07e62f55738f4e1f5131493963a45dbffd382b084f62a65c170cc3e315bdb7",
     "source": {
       "bytes": 28760,
       "codePoints": [
@@ -515,7 +520,7 @@
     }
   },
   "geist/Geist-Variable.woff2": {
-    "bytes": 31560,
+    "bytes": 31632,
     "codePoints": [
       "0020-007E",
       "00A0-00AC",
@@ -535,13 +540,14 @@
       "2026",
       "2039-203A",
       "2190-2193",
+      "21A9",
       "21B5",
       "21E5",
       "21E7",
       "2212",
       "221E"
     ],
-    "sha256": "bab7b0c6a4d574c7802e41fae0edc322d9dedadb7d6fd75e7e27eb7b4d06cefa",
+    "sha256": "6ae4325eefae3cd566f0cdf49590557b104adadd5ce6c787f70e3841dba101bb",
     "source": {
       "bytes": 69488,
       "codePoints": [
@@ -664,7 +670,7 @@
     }
   },
   "geist/GeistMono-Variable.woff2": {
-    "bytes": 25120,
+    "bytes": 25280,
     "codePoints": [
       "0020-007E",
       "00A0-00AC",
@@ -685,6 +691,7 @@
       "2026",
       "2039-203A",
       "2190-2193",
+      "21A9",
       "21B5",
       "21E5",
       "21E7",
@@ -695,7 +702,7 @@
       "2502",
       "250C"
     ],
-    "sha256": "a94be4609ca47359a5eb2c1251cc785653bb616b0172997ca29ab4c9ffff8071",
+    "sha256": "3681923a5d40f67612271a174f511b6a4f87030527ee4b4cb596029eddba6eae",
     "source": {
       "bytes": 71212,
       "codePoints": [
