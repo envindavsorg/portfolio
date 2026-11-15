@@ -1,6 +1,6 @@
 ---
 title: Conversion de casse
-description: Convertissez un texte en camelCase, snake_case, kebab-case et sept autres formats, ligne par ligne
+description: Convertissez un texte en camelCase, snake_case, kebab-case et sept autres formats, ligne par ligne, acronymes, chiffres et accents compris
 category: utils
 createdAt: 2026-08-12
 updatedAt: 2026-08-12
@@ -40,8 +40,8 @@ traite la ponctuation comme un **séparateur**, la conversion de casse la
 
 ## Le découpage est le vrai travail
 
-Recoller des mots est trivial. Les découper correctement est là où tout se joue,
-et la plupart des implémentations naïves échouent sur trois cas.
+Recoller des mots est trivial. C'est en les découpant correctement que tout se
+joue, et la plupart des implémentations naïves échouent sur trois cas.
 
 ```javascript
 // acronyme suivi d'un mot
@@ -55,7 +55,7 @@ et la plupart des implémentations naïves échouent sur trois cas.
 ```
 
 Les accents ne doivent être retirés **qu'après** le découpage : normaliser
-d'abord fait perdre la majuscule initiale, et le mot devient indistinct de sa
+d'abord fait perdre la majuscule initiale, et le mot ne se distingue plus de sa
 version minuscule.
 
 ## Une conversion doit être idempotente

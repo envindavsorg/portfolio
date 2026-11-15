@@ -1,6 +1,6 @@
 ---
 title: Expressions cron
-description: Décortiquez une expression cron champ par champ et voyez ses cinq prochaines exécutions
+description: Décortiquez une expression cron champ par champ, voyez ses cinq prochaines exécutions en UTC et évitez le piège du jour du mois et du jour de la semaine
 category: utils
 createdAt: 2026-08-12
 updatedAt: 2026-08-12
@@ -32,21 +32,21 @@ lequel pose problème le cas échéant, et calcule les cinq prochaines exécutio
 * * * * *
 ```
 
-| Syntaxe   | Sens                                  |
-| --------- | ------------------------------------- |
-| `*`       | toutes les valeurs                    |
-| `5`       | uniquement 5                          |
-| `1-5`     | de 1 à 5 inclus                       |
-| `*/15`    | toutes les 15 unités, à partir du min |
-| `5/10`    | à partir de 5, puis tous les 10       |
-| `1,15,30` | ces valeurs précisément               |
+| Syntaxe   | Sens                                      |
+| --------- | ----------------------------------------- |
+| `*`       | toutes les valeurs                        |
+| `5`       | uniquement 5                              |
+| `1-5`     | de 1 à 5 inclus                           |
+| `*/15`    | toutes les 15 unités, à partir du minimum |
+| `5/10`    | à partir de 5, puis tous les 10           |
+| `1,15,30` | ces valeurs précisément                   |
 
 `7` est accepté comme alias de dimanche, en plus de `0` : `crontab(5)` le
 documente explicitement.
 
 ## Le piège du jour du mois et du jour de la semaine
 
-C'est **la** source de bug des expressions cron. Quand les deux champs de jour
+C'est **la** source de bugs des expressions cron. Quand les deux champs de jour
 sont restreints — ni l'un ni l'autre à `*` — cron déclenche dès que **l'un des
 deux** correspond, pas quand les deux correspondent.
 
