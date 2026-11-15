@@ -180,6 +180,18 @@ describe("polices taillées", () => {
     expect(drawnCodePoints("a\tb\n").has(0x09)).toBe(false);
   });
 
+  it("les échappements CSS comptent aussi", () => {
+    const found = drawnCodePoints(
+      String.raw`content: "\21A9"; after:content-['\\2192'] "\201C" \d\d \bar`
+    );
+
+    for (const codePoint of [0x21_a9, 0x21_92, 0x20_1c]) {
+      expect(found.has(codePoint)).toBe(true);
+    }
+    // `\d`, `\b` : des classes d'expression régulière, pas des caractères
+    expect(found.has(0xba)).toBe(false);
+  });
+
   it("les plages se relisent à l'identique", () => {
     const codePoints = [0x20, 0x21, 0x22, 0x41, 0x20_2f, 0x1_f6_00];
 

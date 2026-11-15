@@ -146,8 +146,17 @@ const ENTITIES: Record<string, number> = {
   uarr: 0x21_91,
 };
 
+/**
+ * La dernière branche est l'échappement CSS (`content: "\21A9"`,
+ * `after:content-['\\2192']`) : c'est la façon ordinaire d'écrire un caractère
+ * dans une feuille de style, et sans elle il entrait dans le site sans entrer
+ * dans les polices. Trois chiffres au moins : en dessous tout est dans le
+ * latin gardé en entier, et `\d`, `\b` suivis d'une lettre ne sont plus pris
+ * pour un caractère. Un faux positif ne coûte rien — il faut que la source le
+ * dessine pour qu'il compte.
+ */
 const ESCAPE =
-  /\\u(d[89ab][0-9a-f]{2})\\u(d[c-f][0-9a-f]{2})|\\u\{([0-9a-f]{1,6})\}|\\u([0-9a-f]{4})|\\x([0-9a-f]{2})|&#x([0-9a-f]{1,6});|&#(\d{1,7});|&([a-z][a-z0-9]*);/giu;
+  /\\u(d[89ab][0-9a-f]{2})\\u(d[c-f][0-9a-f]{2})|\\u\{([0-9a-f]{1,6})\}|\\u([0-9a-f]{4})|\\x([0-9a-f]{2})|&#x([0-9a-f]{1,6});|&#(\d{1,7});|&([a-z][a-z0-9]*);|\\{1,2}([0-9a-f]{3,6})(?![0-9a-f])/giu;
 
 const SURROGATE_BASE = 0xd8_00;
 const LOW_SURROGATE_BASE = 0xdc_00;
@@ -166,6 +175,7 @@ const escapedCodePoint = (
     hexEntity,
     decEntity,
     named,
+    css,
   ] = match;
 
   if (high && low) {
@@ -176,7 +186,7 @@ const escapedCodePoint = (
     );
   }
 
-  const hex = braced ?? four ?? two ?? hexEntity;
+  const hex = braced ?? four ?? two ?? hexEntity ?? css;
   if (hex) {
     return Number.parseInt(hex, 16);
   }
@@ -195,7 +205,7 @@ const isDrawable = (codePoint: number): boolean =>
 
 /**
  * Les points de code d'un texte : ceux qui y sont écrits, et ceux que ses
- * échappements (` `, `&nbsp;`, `&#8594;`) désignent.
+ * échappements (` `, `&nbsp;`, `&#8594;`, `\2192` en CSS) désignent.
  */
 export const drawnCodePoints = (text: string): Set<number> => {
   const codePoints = new Set<number>();
