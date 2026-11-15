@@ -39,7 +39,8 @@ const BASE64URL = /^[A-Za-z0-9_-]*$/u;
 
 /**
  * Décode un segment base64url : alphabet `-_` au lieu de `+/`, et padding
- * omis — `atob` exige les deux conversions.
+ * omis. `atob` refuse `-` et `_` ; il accepte en revanche une entrée sans
+ * `=` final.
  */
 const decodeSegment = (segment: string): string | null => {
   if (!BASE64URL.test(segment)) {

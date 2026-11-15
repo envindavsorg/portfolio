@@ -31,8 +31,9 @@ const SEPARATORS = /[\s_\-.,/\\:;!?'"()[\]{}]+/u;
 /**
  * Découpe une chaîne en mots, quelle que soit la casse d'origine.
  *
- * Les accents ne sont retirés qu'après le découpage : sinon « Élément » perdrait
- * sa majuscule initiale et deviendrait un seul mot indistinct de « élément ».
+ * Les accents ne sont retirés qu'après le découpage : la normalisation passe
+ * aussi en minuscules, et « nouvelÉlément », privé de sa majuscule, ne se
+ * découperait plus en deux mots.
  */
 export const toWords = (value: string): string[] => {
   let spaced = value;

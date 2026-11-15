@@ -1,8 +1,9 @@
 /**
  * Analyse d'expressions cron à cinq champs et calcul des prochaines exécutions.
  *
- * Tout est interprété en **UTC**, comme le font la plupart des ordonnanceurs
- * (cron système, GitHub Actions, Vercel). Interpréter les champs dans un fuseau
+ * Tout est interprété en **UTC**, comme le font les ordonnanceurs hébergés
+ * (GitHub Actions, Vercel) ; le cron système suit, lui, le fuseau de sa
+ * machine. Interpréter les champs dans un fuseau
  * local ouvrirait la question des changements d'heure : à un passage à l'heure
  * d'été, une exécution à 02:30 n'existe pas, et au passage à l'heure d'hiver elle
  * existe deux fois. Mieux vaut un modèle honnête et un affichage traduit qu'un

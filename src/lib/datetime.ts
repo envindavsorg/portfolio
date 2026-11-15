@@ -39,7 +39,7 @@ const MILLIS_IN_SECOND = 1000;
  * Le nombre de chiffres départage secondes et millisecondes : c'est la seule
  * heuristique fiable, puisque les deux sont de simples entiers. Douze chiffres
  * ou plus valent des millisecondes — un horodatage en secondes n'atteindra pas
- * cette longueur avant l'an 33 658.
+ * cette longueur avant l'an 5138.
  */
 export const detectTimestamp = (input: string): DetectedTimestamp => {
   const value = input.trim();

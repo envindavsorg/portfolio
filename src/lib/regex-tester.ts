@@ -52,7 +52,9 @@ export const MAX_MATCHES = 500;
 /**
  * Un motif comme `(a+)+b` sur une longue chaîne provoque un retour sur trace
  * exponentiel, et JavaScript n'offre aucun moyen d'interrompre une exécution de
- * regex. Borner l'entrée est la seule protection possible côté navigateur.
+ * regex. Borner l'entrée limite les dégâts sans les empêcher : `(a+)+b` sur
+ * trente « a » suffit à occuper le fil de longues secondes. La protection
+ * complète serait d'exécuter le motif dans un Web Worker arrêté après un délai.
  */
 export const MAX_TEXT_LENGTH = 20_000;
 
