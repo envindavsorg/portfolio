@@ -18,7 +18,7 @@ Mais avoir du bon CSS natif ne suffit pas. Ce qui compte, c'est ce que l'utilisa
 
 Avant de parler DX, je pars toujours de l'UX. Qu'est-ce qu'un bon chargement de styles ?
 
-Les feuilles de style doivent être les plus légères possible. Elles ne doivent pas être re-téléchargées si rien n'a changé. Le contenu ne doit jamais sauter — pas de layout shift. Les fonts doivent se charger vite et minimiser le CLS.
+Les feuilles de style doivent être les plus légères possible. Elles ne doivent pas être retéléchargées si rien n'a changé. Le contenu ne doit jamais sauter — pas de layout shift. Les fonts doivent se charger vite et minimiser le CLS.
 
 Tout le reste en découle. Si un outil de styling ne m'aide pas à atteindre ces objectifs, il ne fait pas partie de ma stack.
 
@@ -40,7 +40,7 @@ Pas de fichier `.module.css` séparé. Pas de va-et-vient entre deux fichiers po
 
 ### Un budget CSS fixe
 
-Tailwind utilise un compilateur qui ne génère que les classes utilisées. Peu importe combien de classes existent dans le framework — seules celles présentes dans le code finissent dans le bundle. Le résultat : une borne supérieure fixe sur la taille du CSS généré, qui est ensuite minifié, compressé et caché.
+Tailwind utilise un compilateur qui ne génère que les classes utilisées. Peu importe combien de classes existent dans le framework — seules celles présentes dans le code finissent dans le bundle. Le résultat : une borne supérieure fixe sur la taille du CSS généré, qui est ensuite minifié, compressé et mis en cache.
 
 En pratique, mon CSS final est minuscule. Et il ne grossit pas proportionnellement à la taille du projet.
 
@@ -95,11 +95,11 @@ Si le besoin peut être couvert nativement avec Tailwind et du HTML sémantique,
 
 Avec Next.js et le streaming SSR, les styles doivent être scopés ou atomiques pour ne pas affecter le contenu déjà affiché quand un nouveau chunk arrive.
 
-Tailwind génère des classes atomiques compilées dans une seule feuille de style, chargée avant que n'importe quelle classe ne soit utilisée. Pas de flash, pas de layout shift au milieu du stream. C'est compatible par design avec le modèle de rendu de React et Next.js.
+Tailwind génère des classes atomiques compilées dans une seule feuille de style, chargée avant que la moindre classe ne soit utilisée. Pas de flash, pas de layout shift au milieu du stream. C'est compatible par design avec le modèle de rendu de React et Next.js.
 
 ## 7. Mon setup éditeur
 
-L'extension Tailwind CSS IntelliSense dans VS Code (ou Cursor) est non négociable. Autocomplétion des classes, preview des couleurs, linting des conflits — c'est ce qui transforme Tailwind d'un framework "il faut tout retenir" en un framework "l'éditeur te guide."
+L'extension Tailwind CSS IntelliSense dans VS Code (ou Cursor) est non négociable. Autocomplétion des classes, preview des couleurs, linting des conflits — c'est ce qui transforme Tailwind d'un framework "il faut tout retenir" en un framework "l'éditeur te guide".
 
 Côté formatage, Biome.js gère le code, et l'ordre des classes Tailwind reste lisible grâce à une convention simple : layout → spacing → sizing → typography → colors → states. Pas besoin de plugin Prettier supplémentaire quand la discipline est là.
 

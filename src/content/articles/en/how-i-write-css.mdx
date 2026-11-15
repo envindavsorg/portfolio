@@ -63,7 +63,7 @@ Never. `@apply` creates a useless layer of indirection. If I need to reuse style
 
 ### No custom CSS files
 
-My only CSS file is Tailwind v4's `globals.css` — the entry point with the `@import`s and the few unavoidable global variables (custom fonts, complex animations). Everything else is utility-based, directly in the JSX.
+My only CSS file is Tailwind v4's `globals.css` — the entry point with the `@import`s and any unavoidable global variables (custom fonts, complex animations). Everything else is utility-based, directly in the JSX.
 
 ### Built-in values first
 
@@ -89,7 +89,7 @@ They inject styles at runtime, which has a measurable performance cost. Incompat
 
 ### Heavy UI libraries
 
-If the need can be covered natively with Tailwind and semantic HTML, that's what I do. UI overlays add weight, design opinions, and abstractions to work around. When I need accessible components, I start from headless primitives and style them with Tailwind.
+If the need can be covered natively with Tailwind and semantic HTML, that's what I do. UI layers add weight, design opinions, and abstractions to work around. When I need accessible components, I start from headless primitives and style them with Tailwind.
 
 ## 6. Streaming and Tailwind
 
@@ -99,7 +99,7 @@ Tailwind generates atomic classes compiled into a single stylesheet, loaded befo
 
 ## 7. My editor setup
 
-The Tailwind CSS IntelliSense extension in VS Code (or Cursor) is non-negotiable. Class autocompletion, color previews, conflict linting — it's what turns Tailwind from a "you have to memorize everything" framework into an "the editor guides you" framework.
+The Tailwind CSS IntelliSense extension in VS Code (or Cursor) is non-negotiable. Class autocompletion, color previews, conflict linting — it's what turns Tailwind from a "you have to memorize everything" framework into a "the editor guides you" framework.
 
 On the formatting side, Biome.js handles the code, and the order of Tailwind classes stays readable thanks to a simple convention: layout → spacing → sizing → typography → colors → states. No need for an extra Prettier plugin when the discipline is there.
 
