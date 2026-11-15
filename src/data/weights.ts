@@ -104,6 +104,12 @@
  * retenue de la phrase de l'en-tête et le stockage qui ne lève plus. Deux
  * documents gagnent 1 Kio (`/en`, la page d'un poste). Le pire cas reste
  * l'accueil.
+ *
+ * TRACE DE LA PR #22, le même jour : un poste de plus dans le parcours. Deux
+ * documents passent un kibioctet, `/tags` (18 à 19) et la page d'outil (47 à
+ * 48) : chaque page porte le graphe de la personne, qui compte désormais un
+ * employeur de plus. Rien d'autre ne bouge, et le pire cas de document reste
+ * l'accueil, à 85.
  */
 
 export type PageKind =
@@ -167,7 +173,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
   },
   {
     css: 26,
-    document: 47,
+    document: 48,
     fonts: 198,
     images: 0,
     js: 537,
@@ -176,7 +182,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
   },
   {
     css: 26,
-    document: 18,
+    document: 19,
     fonts: 198,
     images: 0,
     js: 490,

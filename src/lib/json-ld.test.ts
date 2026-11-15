@@ -81,16 +81,17 @@ describe("getSiteJsonLd", () => {
     const names = (key: string): string[] =>
       (person[key] as { name: string }[]).map((entry) => entry.name);
 
-    expect(names("worksFor")).toEqual(["WeFix by Fnac"]);
+    expect(names("worksFor")).toEqual(["Cospal"]);
     expect(names("alumniOf")).toEqual([
+      "WeFix by Fnac",
       "SpinalCom",
       "Économat des Armées",
     ]);
     expect(person.worksFor).toEqual([
       {
         "@type": "Organization",
-        name: "WeFix by Fnac",
-        url: "https://wefix.net/",
+        name: "Cospal",
+        url: "https://decleor.com/",
       },
     ]);
   });

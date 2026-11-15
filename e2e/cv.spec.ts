@@ -31,8 +31,9 @@ test.describe("page CV", () => {
 
       const body = page.locator("body");
 
-      // les trois employeurs et les trois établissements
+      // les quatre employeurs et les trois établissements
       for (const name of [
+        "Cospal",
         "WeFix by Fnac",
         "SpinalCom",
         "Économat des Armées",

@@ -35,7 +35,7 @@ interface WORK {
   jobs: {
     title: string;
     company: string;
-    website: string;
+    website?: string;
   }[];
 }
 

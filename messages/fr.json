@@ -97,6 +97,8 @@
   "home_cv_success_title": "le mail est en route !",
   "home_cv_view_button": "voir et télécharger",
   "home_exp_bac_title": "Baccalauréat Scientifique (Bac), spécialité Biologie",
+  "home_exp_cospal_since": "le 1er avril 2026",
+  "home_exp_cospal_title": "Développeur Full-Stack",
   "home_exp_economat_desc_1": "Création d'un intranet sécurisé pour le ministère des Armées avec authentification SSO.",
   "home_exp_economat_desc_2": "Création d'un annuaire interne optimisé.",
   "home_exp_economat_desc_3": "Optimisation architecture front-end.",

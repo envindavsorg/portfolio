@@ -22,9 +22,31 @@ export interface Experience {
   skills?: string[];
   description?: Message[];
   isCurrentEmployer?: boolean;
+  /**
+   * Date d'entrée, en toutes lettres, pour la page /now (« depuis le 1er avril
+   * 2026 »). Les périodes du site ne portent que l'année : sans ce champ, un
+   * poste commencé en cours d'année s'annonce « depuis 2026 ».
+   */
+  since?: Message;
 }
 
 export const EXPERIENCES: Experience[] = [
+  {
+    // ni missions ni stack pour l'instant : le poste vient de commencer, et
+    // rien n'est écrit ici qui n'ait été dicté. Sans `description`, il n'a
+    // pas de fiche propre (`experiencePages`).
+    company: "Cospal",
+    id: "cospal",
+    isCurrentEmployer: true,
+    kind: "job",
+    link: "https://decleor.com/",
+    period: {
+      start: "2026",
+    },
+    since: m.home_exp_cospal_since,
+    title: m.home_exp_cospal_title,
+    type: m.home_exp_wefix_type,
+  },
   {
     company: "WeFix by Fnac",
     description: [
@@ -38,10 +60,11 @@ export const EXPERIENCES: Experience[] = [
       m.home_exp_wefix_desc_8,
     ],
     id: "wefix-by-fnac",
-    isCurrentEmployer: true,
+    isCurrentEmployer: false,
     kind: "job",
     link: "https://wefix.net/",
     period: {
+      end: "2026",
       start: "2020",
     },
     skills: [
