@@ -58,7 +58,7 @@ const digest = async (text, algorithm = "SHA-256") => {
 
 Encoding goes through `TextEncoder`: we hash **UTF-8 bytes**, not UTF-16 code
 units. Without that, "é" would not produce the same digest as in other
-languages.
+programming languages.
 
 ## Computing a digest in Node.js
 
