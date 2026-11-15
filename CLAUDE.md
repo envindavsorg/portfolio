@@ -946,7 +946,13 @@ falling back to zeroed GitHub widgets rather than failing.
   document is visible, and sets the time once before it resumes. It re-rendered
   every second on every page, footer off-screen or tab in the background. The
   server placeholder is still replaced at mount
-- **Sound**: `src/lib/sound-manager.ts` plays sounds on certain interactions
+- **Sound**: `src/lib/sound-manager.ts` plays sounds on certain interactions.
+  The two effects are MP3 (`public/audio/click.mp3`, `notification.mp3`,
+  encoded with `ffmpeg -codec:a libmp3lame -q:a 2`): 23 KB where the WAV
+  files weighed 229, downloaded at the first theme switch or toast. Chromium
+  decodes them to the same length and the same first-sound instant as the WAV
+  (the LAME header carries the encoder delay), and the true peak is within
+  0.1 dB — compare both before replacing a sound
 - **CV delivery**: PDF emailed via Resend with React Email template.
   `@react-email/components` is DEPRECATED upstream with nowhere to migrate to —
   `1.0.12` is the last published version, the individual packages

@@ -42,9 +42,9 @@ class SoundManager {
     await waitForEnded(audio);
   };
 
-  playThemeSound = () => this.playAudio("/audio/click.wav");
+  playThemeSound = () => this.playAudio("/audio/click.mp3");
 
-  playToastSound = () => this.playAudio("/audio/notification.wav");
+  playToastSound = () => this.playAudio("/audio/notification.mp3");
 
   preload = (urls: string[]) => {
     if (!this.isClient) {
