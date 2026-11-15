@@ -263,6 +263,17 @@ src/app/
   so on a box whose border is opaque the brackets were invisible (dark theme);
   inside the padding box they always show. The navbar's icon buttons are
   `ghost` — six bracketed squares in a row out-shouted the menu next to them.
+  Four states the drawing must not erase, each measured by a review: a pressed
+  toggle (`aria-pressed` on the outline variant) is a SOLID, doubled frame in
+  the theme colour with its label — as a one-pixel dashed frame it was the
+  weakest box of its row, and a tinted fill is not an option (the theme label
+  on a 10 % tint falls to 4.17:1); a disabled button takes no pointer events
+  and dims, or the hover fill and the shine played on a control that cannot
+  act; a ghost button gets a border under `forced-colors`, a mode that drops
+  background images and therefore the brackets; and the shine peaks at 12 % of
+  the label colour — at 20 % a coloured label fell to 2.86:1 while it passed.
+  A `<span>` inside a button needs `text-current`: `.prose span` gives every
+  span the foreground colour, so the label did not follow a pressed button.
 - Corners are square site-wide, and at the source: the radius scale
   (`--radius-xs` to `--radius-3xl`) is zeroed in the `@theme` block of
   `globals.css`, so `rounded-md` and friends draw square without touching a
@@ -733,6 +744,9 @@ End-to-end tests (Playwright, `e2e/`):
   `Object.prototype` key, pages rendering with a storage that throws, the
   pixel title stopping off-screen when two intersection changes arrive
   together, and the header sentence and halos at rest off screen
+- `buttons.spec.ts` - a pressed toggle reads by its solid frame and its label
+  (with the resting toggle as control), and a disabled button takes no pointer
+  events
 - `budget.spec.ts` - JS, font and CSS weight ceilings measured in the browser, plus
   the font-preload count. It runs with service workers BLOCKED: a response
   served through the site's own service worker reports a negative body size to
