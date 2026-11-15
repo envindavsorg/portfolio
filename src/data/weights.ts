@@ -155,7 +155,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
   },
   {
     css: 26,
-    document: 23,
+    document: 24,
     fonts: 198,
     images: 27,
     js: 524,
@@ -164,7 +164,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
   },
   {
     css: 26,
-    document: 41,
+    document: 42,
     fonts: 198,
     images: 0,
     js: 524,

@@ -1,6 +1,6 @@
 ---
 title: Conversion de casse
-description: Convertissez un texte en camelCase, snake_case, kebab-case et sept autres formats, ligne par ligne
+description: Convertissez un texte en camelCase, snake_case, kebab-case et sept autres formats, ligne par ligne, acronymes, chiffres et accents compris
 category: utils
 createdAt: 2026-08-12
 updatedAt: 2026-08-12
@@ -55,7 +55,7 @@ et la plupart des implémentations naïves échouent sur trois cas.
 ```
 
 Les accents ne doivent être retirés **qu'après** le découpage : normaliser
-d'abord fait perdre la majuscule initiale, et le mot devient indistinct de sa
+d'abord fait perdre la majuscule initiale, et le mot ne se distingue plus de sa
 version minuscule.
 
 ## Une conversion doit être idempotente

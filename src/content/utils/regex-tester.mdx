@@ -49,7 +49,7 @@ regex.test("42"); // false — lastIndex vaut 2, la recherche repart de la fin
 
 C'est pour cette raison qu'une regex avec `g` ne doit jamais être déclarée en
 constante partagée puis réutilisée avec `test` ou `exec`. Soit on la recrée, soit
-on remet `lastIndex` à zéro, soit on utilise `matchAll` qui travaille sur une
+on remet `lastIndex` à zéro, soit on utilise `matchAll`, qui travaille sur une
 copie.
 
 ## Correspondances vides
