@@ -93,6 +93,17 @@
  * effets ; les relevés locaux, commit par commit, donnaient 7 Kio de moins
  * pour le carrousel. LE PIRE CAS RESTE L'ACCUEIL, à 558. Polices, CSS, images
  * et documents sont identiques au kibioctet près.
+ *
+ * TRACE DU 15 NOVEMBRE, sur la PR #21 : le site passe à l'équerre (boutons
+ * en pièces de plan, plus rien de rond) et ne fait plus rien tourner hors de
+ * l'écran. Le nouveau dessin ne pèse RIEN en CSS — 26 Kio avant comme après :
+ * les équerres sont un utilitaire de huit dégradés, et les rayons sont remis
+ * à zéro dans le thème, pas ajoutés règle par règle. Le JS prend 1 Kio sur
+ * chaque page publiée (559 sur l'accueil, 524 sur `/articles`), 2 sur
+ * `/series/parcours` (539 à 541) : c'est l'observateur partagé des halos, la
+ * retenue de la phrase de l'en-tête et le stockage qui ne lève plus. Deux
+ * documents gagnent 1 Kio (`/en`, la page d'un poste). Le pire cas reste
+ * l'accueil.
  */
 
 export type PageKind =
@@ -115,7 +126,7 @@ export interface MeasuredPage {
 }
 
 /** jour de la mesure, affiché à côté des chiffres */
-export const MEASURED_ON = "2026-11-14";
+export const MEASURED_ON = "2026-11-15";
 
 export const MEASURED_PAGES: MeasuredPage[] = [
   {
@@ -123,16 +134,16 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 85,
     fonts: 198,
     images: 23,
-    js: 558,
+    js: 559,
     kind: "home",
     path: "/",
   },
   {
     css: 26,
-    document: 83,
+    document: 84,
     fonts: 198,
     images: 23,
-    js: 558,
+    js: 559,
     kind: "home",
     path: "/en",
   },
@@ -141,7 +152,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 23,
     fonts: 198,
     images: 27,
-    js: 523,
+    js: 524,
     kind: "index",
     path: "/articles",
   },
@@ -150,7 +161,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 41,
     fonts: 198,
     images: 0,
-    js: 523,
+    js: 524,
     kind: "article",
     path: "/articles/how-i-write-css",
   },
@@ -159,7 +170,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 47,
     fonts: 198,
     images: 0,
-    js: 536,
+    js: 537,
     kind: "tool",
     path: "/utils/regex-tester",
   },
@@ -168,7 +179,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 198,
     images: 0,
-    js: 489,
+    js: 490,
     kind: "index",
     path: "/tags",
   },
@@ -177,7 +188,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 17,
     fonts: 198,
     images: 0,
-    js: 497,
+    js: 498,
     kind: "index",
     path: "/search",
   },
@@ -186,7 +197,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 198,
     images: 0,
-    js: 539,
+    js: 541,
     kind: "index",
     path: "/series/parcours",
   },
@@ -195,7 +206,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 18,
     fonts: 198,
     images: 0,
-    js: 489,
+    js: 490,
     kind: "showcase",
     path: "/projects",
   },
@@ -204,16 +215,16 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 19,
     fonts: 198,
     images: 0,
-    js: 489,
+    js: 490,
     kind: "showcase",
     path: "/projects/portfolio",
   },
   {
     css: 26,
-    document: 19,
+    document: 20,
     fonts: 198,
     images: 0,
-    js: 489,
+    js: 490,
     kind: "showcase",
     path: "/experience/wefix-by-fnac",
   },
@@ -222,7 +233,7 @@ export const MEASURED_PAGES: MeasuredPage[] = [
     document: 23,
     fonts: 198,
     images: 0,
-    js: 477,
+    js: 478,
     kind: "resume",
     path: "/cv",
   },
@@ -308,6 +319,11 @@ export const LOGGED_PAGES: string[] = [
  * RELUS SUR LA TRACE DE LA PR #20 : le pire cas de JS passe de 562 à 558,
  * toujours sur l'accueil. 660 est à 18,3 % (660 / 558 = 1,183), dans la
  * bande de 642 à 670. Inchangé, comme les quatre autres.
+ *
+ * RELUS SUR LA TRACE DE LA PR #21 : pire cas de JS à 559, toujours sur
+ * l'accueil. 660 est à 18,1 % (660 / 559 = 1,181), dans la bande de 643 à
+ * 671. Polices 198, CSS 26, document 85, images 27 : aucun pire cas ne
+ * bouge, aucun plafond non plus.
  */
 export const WEIGHT_BUDGETS = {
   css: 30,
