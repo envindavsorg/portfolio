@@ -374,7 +374,7 @@ export const NavBarCommand = () => {
           onPointerEnter={prefetchSearchIndex}
           ref={triggerRef}
           size="icon"
-          variant="outline"
+          variant="ghost"
         >
           <Search />
           <span className="sr-only">{m.nav_command_search()}</span>
@@ -406,7 +406,7 @@ export const NavBarCommand = () => {
             <CommandInput
               className={cn(
                 "border-input sm:border-b",
-                "max-sm:mx-4 max-sm:mt-2 max-sm:mb-4 max-sm:rounded-full max-sm:border"
+                "max-sm:mx-4 max-sm:mt-2 max-sm:mb-4 max-sm:border"
               )}
             />
 

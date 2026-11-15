@@ -14,6 +14,24 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
+  /**
+   * Le site est tracé à l'équerre. Les rayons « moyens » tombent à zéro ici,
+   * à la source : champs, onglets, menus, boîtes de dialogue, cartes et blocs
+   * de code suivent les boutons sans qu'un seul composant change.
+   *
+   * `rounded-full` échappe à cette échelle, donc il a été RETIRÉ à la main des
+   * étiquettes, du portrait, des points et des curseurs : plus rien n'est rond
+   * hors de `src/registry/`, dont les composants distribués gardent leur
+   * propre dessin. `src/lib/square-corners.test.ts` refuse son retour.
+   */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+
   --color-theme: var(--theme);
   --color-background: var(--background);
   --color-canvas: var(--canvas);
@@ -269,6 +287,51 @@
   @apply after:-z-1 after:h-[0.5px] after:w-[200vw] after:bg-edge;
 }
 
+/**
+ * Quatre équerres aux coins d'une boîte, comme les repères d'un plan.
+ *
+ * Huit dégradés unis, deux par coin, posés sur la boîte de BORDURE : ils
+ * tombent donc exactement sur le filet, pointillé ou non, sans un seul nœud de
+ * plus dans le DOM et sans pseudo-élément — ceux du bouton restent libres pour
+ * son reflet. La couleur de fond n'est pas touchée (`background-color` et
+ * `background-image` sont deux propriétés), mais un `bg-linear-*` ou un
+ * `bg-none` posé sur la même boîte remplace les équerres.
+ *
+ * `--bracket` règle leur longueur, `--bracket-color` leur couleur (par défaut
+ * celle du texte) : un survol change la variable, pas la règle.
+ */
+@utility corner-brackets {
+  --bracket-stroke: linear-gradient(
+    var(--bracket-color, currentColor),
+    var(--bracket-color, currentColor)
+  );
+  background-image:
+    var(--bracket-stroke), var(--bracket-stroke),
+    var(--bracket-stroke), var(--bracket-stroke),
+    var(--bracket-stroke), var(--bracket-stroke),
+    var(--bracket-stroke), var(--bracket-stroke);
+  background-origin: var(--bracket-origin, border-box);
+  background-position:
+    top left,
+    top left,
+    top right,
+    top right,
+    bottom left,
+    bottom left,
+    bottom right,
+    bottom right;
+  background-repeat: no-repeat;
+  background-size:
+    var(--bracket, 7px) 1px,
+    1px var(--bracket, 7px),
+    var(--bracket, 7px) 1px,
+    1px var(--bracket, 7px),
+    var(--bracket, 7px) 1px,
+    1px var(--bracket, 7px),
+    var(--bracket, 7px) 1px,
+    1px var(--bracket, 7px);
+}
+
 @layer base {
   *,
   ::after,
@@ -316,7 +379,7 @@
 
   ::-webkit-scrollbar-thumb {
     background: var(--scroll-thumb);
-    border-radius: 5px;
+    border-radius: 0;
   }
 
   * {

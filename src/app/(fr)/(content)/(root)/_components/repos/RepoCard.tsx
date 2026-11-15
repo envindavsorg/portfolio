@@ -82,7 +82,7 @@ export const RepoCard = ({ repo }: RepoCardProps) => {
             <li className="flex items-center gap-x-1.5">
               <span
                 aria-hidden="true"
-                className="size-2 shrink-0 rounded-full"
+                className="size-2 shrink-0"
                 style={{ backgroundColor: repo.language.color }}
               />
               <span className="font-medium">

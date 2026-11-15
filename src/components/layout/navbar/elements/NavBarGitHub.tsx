@@ -20,7 +20,7 @@ export const NavBarGitHub = () => {
         onMouseEnter={() => iconRef.current?.startAnimation()}
         onMouseLeave={() => iconRef.current?.stopAnimation()}
         size="icon"
-        variant="outline"
+        variant="ghost"
       >
         <Link
           aria-label={m.nav_github_aria()}

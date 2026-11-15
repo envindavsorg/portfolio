@@ -17,6 +17,7 @@ import {
   normalizeColor,
   trimColorString,
 } from "@/lib/palette";
+import { cn } from "@/lib/utils";
 import * as m from "@/paraglide/messages";
 
 import { Check } from "../motion/Check";
@@ -203,7 +204,7 @@ export const ColorPicker = ({
     <Popover onOpenChange={setIsOpen} open={isOpen}>
       <PopoverTrigger
         asChild
-        className="[&_span]:size-4 [&_span]:rounded-full [&_span]:border [&_span]:border-foreground"
+        className="[&_span]:size-4 [&_span]:border [&_span]:border-foreground"
       >
         <Button
           className="flex w-full items-center justify-start [&_p]:text-foreground"
@@ -245,7 +246,7 @@ export const ColorPicker = ({
             }}
           >
             <motion.div
-              className="absolute size-4 rounded-full border-2 border-white shadow-md"
+              className="absolute size-4 border-2 border-white shadow-md"
               style={{
                 backgroundColor: `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`,
                 left: `${hsl[1]}%`,
@@ -269,7 +270,13 @@ export const ColorPicker = ({
 
           <motion.input
             aria-label={m.color_picker_hue_label()}
-            className="h-3 w-full cursor-pointer appearance-none rounded-full"
+            className={cn(
+              "h-3 w-full cursor-pointer appearance-none",
+              // la poignée native est ronde : dessinée comme celle de la
+              // zone de couleur, un carré cerclé de blanc
+              "[&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-transparent [&::-webkit-slider-thumb]:shadow-md",
+              "[&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-transparent [&::-moz-range-thumb]:shadow-md"
+            )}
             max="360"
             min="0"
             onChange={(e) => handleHueChange(Number(e.target.value))}
@@ -311,7 +318,7 @@ export const ColorPicker = ({
                     color: preset,
                   })}
                   aria-pressed={selectedPreset === preset}
-                  className="relative size-8 rounded-full"
+                  className="relative size-8"
                   key={preset}
                   onClick={() => handlePresetClick(preset)}
                   style={{ backgroundColor: preset }}

@@ -194,7 +194,7 @@ export const ContrastChecker = () => {
                   </p>
                   <span
                     aria-hidden="true"
-                    className="size-6 rounded-full border border-input"
+                    className="size-6 border border-input"
                     style={{
                       backgroundColor: toHexColor(suggestion),
                     }}

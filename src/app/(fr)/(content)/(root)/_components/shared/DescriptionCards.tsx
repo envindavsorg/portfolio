@@ -47,7 +47,7 @@ export const DescriptionCards = ({
             {idx + 1}
           </span>
           <div className="z-10 flex items-center gap-2">
-            <span className="flex h-6 items-center justify-center rounded-full bg-theme/10 px-2.5 font-bold text-[10px] text-theme">
+            <span className="flex h-6 items-center justify-center bg-theme/10 px-2.5 font-bold text-[10px] text-theme">
               {(idx + 1).toString().padStart(2, "0")}
             </span>
             <div className="h-px w-8 bg-theme" />

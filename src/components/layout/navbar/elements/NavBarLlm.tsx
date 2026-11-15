@@ -18,7 +18,7 @@ export const NavBarLlm = () => {
         onMouseEnter={() => iconRef.current?.startAnimation()}
         onMouseLeave={() => iconRef.current?.stopAnimation()}
         size="icon"
-        variant="outline"
+        variant="ghost"
       >
         {/* un `<a>` et non `next/link` : la cible est un gestionnaire de
             route, pas une page. `Link` la préchargeait sur chaque page vue,

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/primitives/Button";
 import { getIntlLocale } from "@/lib/i18n";
+import { readStorage, writeStorage } from "@/lib/safe-storage";
 import { cn } from "@/lib/utils";
 
 interface FooterClockProps {
@@ -18,7 +19,9 @@ export const FooterClock = ({
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const savedPreference = localStorage.getItem("clock-format");
+    // `readStorage`, pas `localStorage.getItem` : stockage du site bloqué, la
+    // lecture lève, et cet effet remplaçait chaque page par l'écran d'erreur
+    const savedPreference = readStorage("clock-format");
     if (savedPreference !== null) {
       setIs24Hour(savedPreference === "24h");
     }
@@ -93,7 +96,7 @@ export const FooterClock = ({
 
   const handleFormatChange = useCallback((use24h: boolean) => {
     setIs24Hour(use24h);
-    localStorage.setItem("clock-format", use24h ? "24h" : "12h");
+    writeStorage("clock-format", use24h ? "24h" : "12h");
   }, []);
 
   /**

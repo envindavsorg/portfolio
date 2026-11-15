@@ -54,7 +54,7 @@ export const DrawerContent = forwardRef<
       {...props}
     >
       <div className="flex h-6 items-center justify-center border-edge border-t">
-        <div className="h-1 w-16 rounded-full bg-theme/25" />
+        <div className="h-1 w-16 bg-theme/25" />
       </div>
 
       {children}

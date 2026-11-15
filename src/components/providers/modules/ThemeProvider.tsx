@@ -16,8 +16,18 @@ const THEME_CLASSES = ["light", "dark"];
  * à la classe — c'est `ThemeClass` qui s'en charge, et seulement quand elle
  * change. `e2e/load-stability.spec.ts` échoue si une version de next-themes
  * cesse de se comporter ainsi.
+ *
+ * SANS PROTOTYPE. Avec un `{}`, un thème enregistré qui porte le nom d'une
+ * propriété d'`Object.prototype` — `constructor`, `toString`, `__proto__` —
+ * trouvait une valeur dans la table : next-themes passait alors une fonction
+ * à `classList.add`, qui levait dans un effet, et la page entière cédait la
+ * place à l'écran d'erreur. La valeur doit être écrite à la main, par une
+ * extension ou par une autre application sur la même origine ; il suffit
+ * d'une fois. `JSON.stringify` rend toujours `{}` : le script en ligne ne
+ * change pas.
  */
-const NO_CLASS_FROM_NEXT_THEMES: Record<string, string> = {};
+const NO_CLASS_FROM_NEXT_THEMES: Record<string, string> =
+  Object.create(null);
 
 /**
  * Coupe les transitions le temps d'un changement de thème, comme le faisait
