@@ -97,6 +97,23 @@ export const NavBarCommand = () => {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      // Échap abandonne une ouverture encore TENUE. Avant l'arrivée du panneau
+      // il n'y a ni dialogue ni tiroir pour entendre la touche : sur une
+      // connexion lente, la palette s'ouvrait une seconde après avoir été
+      // annulée — et menu mobile ouvert, Échap fermait le menu puis la palette
+      // arrivait par-dessus. Le panneau continue d'arriver : seule la demande
+      // d'ouverture tombe, et la touche n'est pas consommée.
+      if (
+        event.key === "Escape" &&
+        !panel &&
+        (open || shortcutsOpen)
+      ) {
+        toast.dismiss(HINT_TOAST);
+        setOpen(false);
+        setShortcutsOpen(false);
+        return;
+      }
+
       const target = event.target as HTMLElement;
       if (
         target.isContentEditable ||

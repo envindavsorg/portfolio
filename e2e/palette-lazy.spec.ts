@@ -40,6 +40,7 @@ const CMDK_MARKER = "cmdk-input";
 const PLACEHOLDER = /tapez une commande ou cherchez/iu;
 const CSS_ARTICLE = /comment j'écris du css/iu;
 const HINT = /glissez vers le bas/iu;
+const SHORTCUTS_SHEET = /raccourcis clavier/iu;
 
 const SANS_PANNEAU = [
   "/",
@@ -208,6 +209,56 @@ test.describe("la palette à la demande s'ouvre comme avant", () => {
     await expect(
       page.getByRole("option", { name: CSS_ARTICLE })
     ).toBeVisible();
+  });
+
+  test("Échap abandonne un ⌘K tenu : la palette ne s'ouvre pas après coup", async ({
+    page,
+  }) => {
+    const panelChunk = await findPanelChunk(page);
+
+    let release: () => void = () => undefined;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route(
+      (url) => url.pathname === panelChunk,
+      async (route) => {
+        await gate;
+        await route.continue();
+      }
+    );
+
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const input = page.getByPlaceholder(PLACEHOLDER);
+    const sheet = page
+      .getByRole("dialog")
+      .filter({ hasText: SHORTCUTS_SHEET });
+    const requested = page.waitForRequest(
+      (request) => new URL(request.url()).pathname === panelChunk
+    );
+
+    await page.keyboard.press("ControlOrMeta+k");
+    await requested;
+    await page.keyboard.press("Escape");
+    // TÉMOIN de l'arrivée du panneau : « ? » est tenu à son tour, et la
+    // feuille ne peut s'afficher qu'une fois le panneau monté. Sans ce repère,
+    // « la palette est cachée » serait vrai avant même que le chunk arrive.
+    await page.keyboard.press("?");
+
+    release();
+
+    await expect(sheet).toBeVisible();
+    await expect(input).toBeHidden();
+
+    await page.keyboard.press("Escape");
+    await expect(sheet).toBeHidden();
+
+    // la demande abandonnée n'a rien cassé : le panneau est là, ⌘K l'ouvre
+    await page.keyboard.press("ControlOrMeta+k");
+    await expect(input).toBeVisible();
+    await expect(input).toBeFocused();
   });
 
   test("sous 768px, ⌘K ouvre le tiroir, la frappe y arrive et Échap rend le focus", async ({

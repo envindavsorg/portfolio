@@ -698,7 +698,8 @@ End-to-end tests (Playwright, `e2e/`):
   (`command-dialog-content` from the panel, `cmdk-input` from cmdk) are absent
   from the scripts four page types download at load, with a CONTROL: both
   arrive when the palette opens. A ⌘K pressed while the panel chunk is held
-  back opens the palette once it lands and a second press does not cancel it;
+  back opens the palette once it lands and a second press does not cancel it,
+  while Escape does (the held `?` sheet is the control that the panel landed);
   under 768px the drawer takes the keystrokes on its very first opening; a
   panel chunk that fails leaves no page error, no unhandled rejection and no
   hint toast, and the next ⌘K opens the palette. Service workers are blocked: a
@@ -1123,7 +1124,10 @@ falling back to zeroed GitHub widgets rather than failing.
   idle, which would only move the bytes. `open` and `shortcutsOpen` say what is
   REQUESTED and the panel renders once it has arrived: a ⌘K or a `?` pressed
   before the chunk is held, and pressing again confirms the request instead of
-  toggling it off. A failed import is not kept (the next intent asks again) and
+  toggling it off. Escape DROPS a held request: until the panel lands there is
+  no dialog to hear the key, so on a slow connection the palette opened after
+  it had been cancelled (and over a mobile menu Escape had just closed). A
+  failed import is not kept (the next intent asks again) and
   it DROPS the held request and its hint toast — otherwise the next hover,
   loading the panel, would open by itself a palette asked for earlier.
   Turbopack's runtime retries a failed chunk once on its own, 200 to 600 ms
