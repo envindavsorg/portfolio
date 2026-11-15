@@ -140,7 +140,10 @@ export const RegexTester = () => {
               title={FLAG_LABELS[flag]()}
               variant="outline"
             >
-              <span className="font-mono">{flag}</span>
+              {/* `text-current` : la règle `.prose span` de globals.css donne
+                  sa couleur à tout span, donc la lettre ne suivait pas celle
+                  du bouton — enfoncé, seul le cadre le disait */}
+              <span className="font-mono text-current">{flag}</span>
             </Button>
           ))}
         </div>

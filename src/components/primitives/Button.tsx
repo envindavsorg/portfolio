@@ -30,8 +30,14 @@ export const buttonVariants = cva(
     "relative overflow-hidden",
     "after:pointer-events-none after:absolute after:-inset-y-1/2 after:left-0 after:w-1/2",
     "after:-translate-x-[220%] after:skew-x-[-20deg]",
-    "after:bg-linear-to-r after:from-transparent after:via-current/20 after:to-transparent",
+    // 12 %, pas 20 : la bande est de la couleur du libellé, et au plus fort de
+    // son passage un libellé coloré (destructif, bascule enfoncée) tombait à
+    // 2,86:1 en thème clair
+    "after:bg-linear-to-r after:from-transparent after:via-current/12 after:to-transparent",
     "motion-safe:hover:after:translate-x-[320%] motion-safe:hover:after:transition-transform motion-safe:hover:after:duration-500",
+    // un bouton désactivé ne répond plus au pointeur : sans cela le fond de
+    // survol ET le reflet jouaient sur un contrôle qui ne peut rien faire
+    "disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
   ],
   {
     defaultVariants: {
@@ -52,14 +58,20 @@ export const buttonVariants = cva(
           "[--bracket-color:color-mix(in_oklab,currentColor_55%,transparent)]",
         ],
         destructive: [
-          "border border-destructive/50 border-dashed",
+          // filet à pleine force : à 50 % il tombait de 4,76:1 à 2,56:1 en clair.
+          // Les pointillés suffisent à porter le nouveau dessin.
+          "border border-destructive border-dashed",
           "text-destructive",
-          "bg-transparent hover:border-destructive hover:bg-destructive/10",
+          "bg-transparent hover:bg-destructive/10",
         ],
         // sans filet : les équerres n'apparaissent qu'au survol
         ghost: [
           "[--bracket-color:transparent]",
           "hover:bg-accent hover:text-accent-foreground hover:[--bracket-color:currentColor]",
+          // couleurs forcées : les images de fond tombent, donc les équerres
+          // aussi, et le fond de survol devient celui de la page. Sans filet
+          // il ne restait qu'une icône nue, au repos comme au survol.
+          "forced-colors:border",
         ],
         // un lien n'est pas une pièce : ni équerres (`bg-none` les retire), ni
         // reflet
@@ -74,6 +86,12 @@ export const buttonVariants = cva(
           "text-foreground",
           "bg-transparent hover:border-foreground/60 hover:bg-accent",
           "hover:[--bracket-color:var(--color-theme)]",
+          // bascule enfoncée : un cadre PLEIN et doublé, dans la couleur du
+          // thème, avec son libellé. En pointillés d'un pixel, elle était la
+          // boîte la plus faible de sa rangée, à côté d'équerres à pleine
+          // force. Pas de fond teinté : le libellé du thème y tombe à 4,17:1.
+          "aria-pressed:border-theme aria-pressed:border-solid aria-pressed:text-theme",
+          "aria-pressed:inset-ring-1 aria-pressed:inset-ring-theme",
         ],
       },
     },

@@ -17,6 +17,7 @@ import {
   normalizeColor,
   trimColorString,
 } from "@/lib/palette";
+import { cn } from "@/lib/utils";
 import * as m from "@/paraglide/messages";
 
 import { Check } from "../motion/Check";
@@ -269,7 +270,13 @@ export const ColorPicker = ({
 
           <motion.input
             aria-label={m.color_picker_hue_label()}
-            className="h-3 w-full cursor-pointer appearance-none"
+            className={cn(
+              "h-3 w-full cursor-pointer appearance-none",
+              // la poignée native est ronde : dessinée comme celle de la
+              // zone de couleur, un carré cerclé de blanc
+              "[&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-transparent [&::-webkit-slider-thumb]:shadow-md",
+              "[&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-transparent [&::-moz-range-thumb]:shadow-md"
+            )}
             max="360"
             min="0"
             onChange={(e) => handleHueChange(Number(e.target.value))}
