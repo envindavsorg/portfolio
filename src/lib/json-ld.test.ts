@@ -88,11 +88,10 @@ describe("getSiteJsonLd", () => {
       "Économat des Armées",
     ]);
     expect(person.worksFor).toEqual([
-      // pas d'`url` : le poste n'a pas encore de lien, et la clé est omise
-      // plutôt que publiée vide
       {
         "@type": "Organization",
         name: "Cospal",
+        url: "https://decleor.com/",
       },
     ]);
   });

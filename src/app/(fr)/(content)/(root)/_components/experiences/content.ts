@@ -32,13 +32,14 @@ export interface Experience {
 
 export const EXPERIENCES: Experience[] = [
   {
-    // ni missions, ni stack, ni lien pour l'instant : le poste vient de
-    // commencer, et rien n'est écrit ici qui n'ait été dicté. Sans
-    // `description`, il n'a pas de fiche propre (`experiencePages`).
+    // ni missions ni stack pour l'instant : le poste vient de commencer, et
+    // rien n'est écrit ici qui n'ait été dicté. Sans `description`, il n'a
+    // pas de fiche propre (`experiencePages`).
     company: "Cospal",
     id: "cospal",
     isCurrentEmployer: true,
     kind: "job",
+    link: "https://decleor.com/",
     period: {
       start: "2026",
     },

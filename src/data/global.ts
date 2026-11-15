@@ -41,6 +41,7 @@ const WORK = {
     {
       company: "Cospal",
       title: "Développeur Full-Stack",
+      website: "https://decleor.com/",
     },
     {
       company: "WeFix by Fnac",
