@@ -71,6 +71,10 @@ const SPEED_METRICS = [
 const createSpeedTestEngine = () =>
   new SpeedTestEngine({
     autoStart: false,
+    // par défaut le moteur envoie les résultats finaux à Cloudflare
+    // (`https://speed.cloudflare.com/__results`). La page promet « pas de
+    // tracking » : rien ne part au-delà des requêtes de mesure elles-mêmes.
+    logAimApiUrl: null,
     measurements: [
       { numPackets: 5, type: "latency" },
       {
